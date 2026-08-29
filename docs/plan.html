@@ -1,0 +1,1093 @@
+<title>OpenTransit Israel Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Literata:opsz,wght@7..72,400;7..72,500;7..72,600&display=swap">
+
+<style>
+:root{
+  --ground:#EEF1F5;
+  --surface:#FFFFFF;
+  --surface-2:#F6F8FB;
+  --ink:#101722;
+  --ink-2:#3C4756;
+  --muted:#67748A;
+  --rule:#D6DCE6;
+  --rule-soft:#E6EAF1;
+
+  --accent:#1B4AC4;
+  --accent-soft:#E4EAFA;
+
+  --l0:#B0700A;
+  --l1:#1B4AC4;
+  --l2:#0B7A6E;
+  --l3:#9C2A6B;
+  --l4:#1B6B45;
+
+  --pass:#14724A;
+  --pass-bg:#E1F1E8;
+  --stop:#AF2418;
+  --stop-bg:#FAE5E2;
+  --hold:#8A6206;
+  --hold-bg:#F8EEDA;
+
+  --shadow:0 1px 2px rgba(16,23,34,.06), 0 8px 24px -16px rgba(16,23,34,.28);
+
+  --display:"Barlow Condensed", "Arial Narrow", system-ui, sans-serif;
+  --ui:"Barlow", system-ui, -apple-system, sans-serif;
+  --body:"Literata", Georgia, "Times New Roman", serif;
+  --mono:"IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0D1219;
+    --surface:#151C26;
+    --surface-2:#1B2430;
+    --ink:#E8EDF5;
+    --ink-2:#C2CCDA;
+    --muted:#8E9BAE;
+    --rule:#2A3542;
+    --rule-soft:#222C38;
+
+    --accent:#7FA5FF;
+    --accent-soft:#1C2740;
+
+    --l0:#E0A73F;
+    --l1:#7FA5FF;
+    --l2:#3FB8A6;
+    --l3:#E077AE;
+    --l4:#5CBF8C;
+
+    --pass:#5CBF8C;
+    --pass-bg:#16301F;
+    --stop:#F08076;
+    --stop-bg:#361A19;
+    --hold:#E0A73F;
+    --hold-bg:#332711;
+
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -18px rgba(0,0,0,.9);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0D1219;
+  --surface:#151C26;
+  --surface-2:#1B2430;
+  --ink:#E8EDF5;
+  --ink-2:#C2CCDA;
+  --muted:#8E9BAE;
+  --rule:#2A3542;
+  --rule-soft:#222C38;
+
+  --accent:#7FA5FF;
+  --accent-soft:#1C2740;
+
+  --l0:#E0A73F;
+  --l1:#7FA5FF;
+  --l2:#3FB8A6;
+  --l3:#E077AE;
+  --l4:#5CBF8C;
+
+  --pass:#5CBF8C;
+  --pass-bg:#16301F;
+  --stop:#F08076;
+  --stop-bg:#361A19;
+  --hold:#E0A73F;
+  --hold-bg:#332711;
+
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -18px rgba(0,0,0,.9);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--ground);
+  color:var(--ink);
+  font-family:var(--body);
+  font-size:16.5px;
+  line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+p{margin:0}
+h1,h2,h3,h4{margin:0; text-wrap:balance; font-family:var(--display); font-weight:600; line-height:1.05; letter-spacing:.002em}
+
+.page{max-width:1180px; margin:0 auto; padding:0 28px 96px}
+.cols{display:grid; grid-template-columns:1fr; gap:0}
+@media (min-width:1040px){
+  .cols{grid-template-columns:190px minmax(0,1fr); gap:56px}
+}
+
+/* ---------- masthead ---------- */
+.mast{padding:64px 0 34px; border-bottom:1px solid var(--rule)}
+.strip{display:flex; align-items:center; gap:0; margin-bottom:26px}
+.strip .seg{height:7px; flex:1; border-radius:99px}
+.strip .seg:nth-child(1){background:var(--l0); flex:2}
+.strip .seg:nth-child(2){background:var(--l1)}
+.strip .seg:nth-child(3){background:var(--l2)}
+.strip .seg:nth-child(4){background:var(--l3)}
+.strip .seg:nth-child(5){background:var(--l4)}
+.strip .gap{width:6px}
+
+.eyebrow{
+  font-family:var(--ui); font-size:12px; font-weight:600;
+  letter-spacing:.16em; text-transform:uppercase; color:var(--muted);
+}
+h1{font-size:clamp(46px,7.4vw,86px); letter-spacing:-.015em; margin:14px 0 0; font-weight:700}
+h1 .thin{font-weight:400; color:var(--muted)}
+.lede{margin-top:20px; max-width:64ch; font-size:19px; color:var(--ink-2)}
+.meta{display:flex; flex-wrap:wrap; gap:8px; margin-top:26px}
+.chip{
+  font-family:var(--ui); font-size:12.5px; font-weight:500; letter-spacing:.02em;
+  padding:5px 11px; border-radius:99px; border:1px solid var(--rule);
+  background:var(--surface); color:var(--ink-2);
+}
+.chip.no{color:var(--muted); text-decoration:line-through; text-decoration-thickness:1px; opacity:.85}
+
+/* ---------- side rail ---------- */
+.rail{display:none}
+@media (min-width:1040px){
+  .rail{display:block; position:sticky; top:0; align-self:start; padding-top:52px; height:100vh}
+  .rail ol{list-style:none; margin:0; padding:0; position:relative}
+  .rail ol::before{
+    content:""; position:absolute; left:5px; top:8px; bottom:8px; width:2px;
+    background:var(--rule); border-radius:2px;
+  }
+  .rail li{position:relative; padding:0 0 0 24px; margin-bottom:15px}
+  .rail a{
+    font-family:var(--ui); font-size:13px; font-weight:500; letter-spacing:.01em;
+    color:var(--muted); text-decoration:none; display:block; line-height:1.25;
+  }
+  .rail a::before{
+    content:""; position:absolute; left:0; top:5px; width:12px; height:12px;
+    border-radius:50%; background:var(--ground); border:2px solid var(--rule);
+  }
+  .rail a:hover{color:var(--ink)}
+  .rail a:focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:3px}
+  .rail a.on{color:var(--ink); font-weight:600}
+  .rail a.on::before{border-color:currentColor; background:currentColor}
+  .rail li[data-line="0"] a.on{color:var(--l0)}
+  .rail li[data-line="1"] a.on{color:var(--l1)}
+  .rail li[data-line="2"] a.on{color:var(--l2)}
+  .rail li[data-line="3"] a.on{color:var(--l3)}
+  .rail li[data-line="4"] a.on{color:var(--l4)}
+}
+
+/* ---------- sections ---------- */
+section{padding-top:62px}
+.sechead{display:flex; align-items:baseline; gap:14px; margin-bottom:8px}
+.sechead .num{
+  font-family:var(--mono); font-size:12px; font-weight:600; color:var(--muted);
+  letter-spacing:.06em; padding-top:6px;
+}
+h2{font-size:clamp(28px,3.4vw,38px); letter-spacing:-.01em}
+h3{font-family:var(--ui); font-weight:600; font-size:17px; letter-spacing:.005em; line-height:1.3}
+.sub{color:var(--muted); font-size:16px; margin-top:10px; max-width:66ch}
+.prose{max-width:66ch; margin-top:16px; color:var(--ink-2)}
+.prose + .prose{margin-top:12px}
+
+.card{
+  background:var(--surface); border:1px solid var(--rule-soft);
+  border-radius:12px; box-shadow:var(--shadow);
+}
+.grid{display:grid; gap:14px; margin-top:24px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+
+/* ---------- the gate ---------- */
+.gate{
+  margin-top:30px; padding:26px 28px; border-radius:12px;
+  background:var(--surface); border:1px solid var(--rule-soft);
+  border-left:6px solid var(--l0); box-shadow:var(--shadow);
+}
+.gate .k{font-family:var(--ui); font-size:12px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:var(--l0)}
+.gate .r{font-family:var(--display); font-size:clamp(24px,3.2vw,32px); font-weight:600; margin-top:8px; line-height:1.12}
+.gate p{margin-top:12px; color:var(--ink-2); max-width:62ch}
+
+/* ---------- POC stations ---------- */
+.stations{display:grid; gap:0; margin-top:28px}
+.st{
+  display:grid; grid-template-columns:96px minmax(0,1fr); gap:24px;
+  position:relative; padding:22px 0;
+  border-top:1px solid var(--rule-soft);
+}
+.st:last-child{border-bottom:1px solid var(--rule-soft)}
+.st .mark{position:relative; padding-left:22px}
+.st .mark::before{
+  content:""; position:absolute; left:0; top:6px; width:13px; height:13px; border-radius:50%;
+  background:var(--surface); border:3px solid var(--l0);
+}
+.st .mark::after{
+  content:""; position:absolute; left:5.5px; top:19px; bottom:-45px; width:2px; background:var(--l0); opacity:.35;
+}
+.st:last-child .mark::after{display:none}
+.st .code{font-family:var(--mono); font-size:12.5px; font-weight:600; color:var(--l0); letter-spacing:.04em}
+.st h3{margin-bottom:6px}
+.st .body{color:var(--ink-2); font-size:15.5px; max-width:62ch}
+.st .facts{display:flex; flex-wrap:wrap; gap:8px; margin-top:12px}
+.tag{
+  font-family:var(--ui); font-size:12px; font-weight:600; letter-spacing:.05em; text-transform:uppercase;
+  padding:4px 9px; border-radius:5px;
+}
+.tag.pass{background:var(--pass-bg); color:var(--pass)}
+.tag.stop{background:var(--stop-bg); color:var(--stop)}
+.tag.src{background:var(--surface-2); color:var(--muted); border:1px solid var(--rule-soft); text-transform:none; letter-spacing:.01em; font-weight:500}
+.crit{
+  margin-top:10px; font-family:var(--ui); font-size:14px; color:var(--ink-2);
+  display:flex; gap:9px; align-items:baseline;
+}
+.crit b{font-family:var(--ui); font-weight:600; color:var(--ink)}
+
+/* ---------- checklist board ---------- */
+.board{margin-top:24px; overflow-x:auto; border-radius:12px; border:1px solid var(--rule-soft); background:var(--surface); box-shadow:var(--shadow)}
+table{border-collapse:collapse; width:100%; min-width:520px}
+th,td{text-align:left; padding:11px 18px; border-bottom:1px solid var(--rule-soft)}
+th{
+  font-family:var(--ui); font-size:11.5px; font-weight:600; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--muted); background:var(--surface-2);
+}
+tbody tr:last-child td{border-bottom:none}
+td{font-family:var(--ui); font-size:15px; color:var(--ink-2)}
+td.st-cell{font-family:var(--mono); font-size:12.5px; font-variant-numeric:tabular-nums; white-space:nowrap; width:1%}
+.dot{display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--muted); margin-right:9px; vertical-align:1px}
+.dot.req{background:var(--l0)}
+
+/* ---------- journey card ---------- */
+.journey{margin-top:24px; padding:22px 24px; border-radius:12px; background:var(--surface); border:1px solid var(--rule-soft); box-shadow:var(--shadow)}
+.journey .jh{display:flex; flex-wrap:wrap; align-items:baseline; gap:12px; padding-bottom:16px; border-bottom:1px solid var(--rule-soft)}
+.journey .jh .q{font-family:var(--mono); font-size:13px; color:var(--muted)}
+.journey .jh .t{font-family:var(--display); font-size:26px; font-weight:600}
+.legs{display:grid; gap:0; margin-top:4px}
+.leg{display:grid; grid-template-columns:62px 14px minmax(0,1fr); gap:16px; padding:13px 0; align-items:start}
+.leg + .leg{border-top:1px dashed var(--rule-soft)}
+.leg .time{font-family:var(--mono); font-size:14px; font-variant-numeric:tabular-nums; color:var(--ink); padding-top:2px}
+.leg .bar{width:8px; border-radius:99px; align-self:stretch; margin-top:3px; margin-left:3px}
+.leg[data-mode="walk"] .bar{background:repeating-linear-gradient(to bottom, var(--muted) 0 4px, transparent 4px 8px); width:4px; margin-left:5px}
+.leg[data-mode="bus"] .bar{background:var(--l1)}
+.leg[data-mode="rail"] .bar{background:var(--l3)}
+.leg[data-mode="end"] .bar{background:var(--l4)}
+.leg .what{font-family:var(--ui); font-size:15.5px; font-weight:600; color:var(--ink)}
+.leg .det{font-family:var(--ui); font-size:14px; color:var(--muted); margin-top:2px}
+.live{
+  font-family:var(--ui); font-size:11.5px; font-weight:600; letter-spacing:.08em; text-transform:uppercase;
+  padding:2px 8px; border-radius:99px; background:var(--pass-bg); color:var(--pass); margin-left:8px;
+}
+.live.late{background:var(--hold-bg); color:var(--hold)}
+.jfoot{margin-top:16px; padding-top:14px; border-top:1px solid var(--rule-soft); display:flex; flex-wrap:wrap; gap:8px}
+
+/* ---------- diagrams ---------- */
+.figure{margin-top:24px; padding:22px; border-radius:12px; background:var(--surface); border:1px solid var(--rule-soft); box-shadow:var(--shadow); overflow-x:auto}
+.figure svg{display:block; width:100%; min-width:520px; height:auto}
+.cap{font-family:var(--ui); font-size:13.5px; color:var(--muted); margin-top:14px}
+svg .box{fill:var(--surface-2); stroke:var(--rule); stroke-width:1.25}
+svg .box-a{fill:var(--accent-soft); stroke:var(--accent); stroke-width:1.25}
+svg .lbl{fill:var(--ink); font-family:"Barlow", system-ui, sans-serif; font-size:14px; font-weight:600}
+svg .lbl-s{fill:var(--muted); font-family:"IBM Plex Mono", monospace; font-size:11px}
+svg .link{stroke:var(--rule); stroke-width:1.5; fill:none}
+svg .link-a{stroke:var(--accent); stroke-width:1.75; fill:none}
+svg .link-x{stroke:var(--stop); stroke-width:1.5; fill:none; stroke-dasharray:4 4}
+svg .link-c{stroke:var(--muted); stroke-width:1.5; fill:none; stroke-dasharray:5 4}
+svg .bound{fill:none; stroke:var(--accent); stroke-width:1.5; stroke-dasharray:7 5; opacity:.8}
+svg .lbl-a{fill:var(--accent); font-family:"Barlow", system-ui, sans-serif; font-size:11.5px; font-weight:600; letter-spacing:.08em}
+
+/* ---------- roadmap ---------- */
+.phases{display:grid; gap:14px; margin-top:26px}
+.phase{
+  display:grid; grid-template-columns:minmax(0,1fr); gap:6px;
+  padding:20px 22px; border-radius:12px; background:var(--surface);
+  border:1px solid var(--rule-soft); border-top:4px solid var(--pc); box-shadow:var(--shadow);
+}
+.phase .pn{font-family:var(--mono); font-size:12px; font-weight:600; color:var(--pc); letter-spacing:.06em}
+.phase h3{margin-top:2px}
+.phase .goal{font-family:var(--body); font-size:15px; color:var(--ink-2); margin-top:6px}
+.phase ul{margin:12px 0 0; padding-left:0; list-style:none; display:flex; flex-wrap:wrap; gap:6px}
+.phase li{font-family:var(--ui); font-size:13px; color:var(--ink-2); background:var(--surface-2); border:1px solid var(--rule-soft); padding:3px 9px; border-radius:5px}
+@media (min-width:820px){ .phases{grid-template-columns:repeat(2,minmax(0,1fr))} .phase.wide{grid-column:1 / -1} }
+
+/* ---------- scope ---------- */
+.scope{display:grid; gap:14px; margin-top:24px}
+@media (min-width:760px){ .scope{grid-template-columns:1fr 1fr} }
+.scope .col{padding:20px 22px; border-radius:12px; background:var(--surface); border:1px solid var(--rule-soft); box-shadow:var(--shadow)}
+.scope h3{margin-bottom:12px}
+.scope ul{margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:7px}
+.scope li{font-family:var(--ui); font-size:15px; color:var(--ink-2); display:flex; gap:10px; align-items:baseline}
+.scope li::before{content:"—"; color:var(--pass); font-family:var(--mono); font-size:12px}
+.scope .out li::before{content:"×"; color:var(--stop); font-family:var(--mono); font-size:13px}
+
+/* ---------- kill / metric ---------- */
+.kill{margin-top:24px; display:grid; gap:10px}
+.kill .k{
+  display:grid; grid-template-columns:26px minmax(0,1fr); gap:14px; align-items:baseline;
+  padding:14px 18px; border-radius:10px; background:var(--surface);
+  border:1px solid var(--rule-soft); border-left:4px solid var(--stop);
+}
+.kill .k span{font-family:var(--mono); font-size:12.5px; color:var(--stop); font-weight:600}
+.kill .k p{font-family:var(--ui); font-size:15px; color:var(--ink-2)}
+
+.metric{
+  margin-top:30px; padding:34px 32px; border-radius:12px;
+  background:var(--surface); border:1px solid var(--rule-soft); box-shadow:var(--shadow);
+  border-left:6px solid var(--l4);
+}
+.metric .k{font-family:var(--ui); font-size:12px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:var(--muted)}
+.metric .q{font-family:var(--display); font-size:clamp(26px,4vw,40px); font-weight:600; line-height:1.1; margin-top:12px; max-width:22ch}
+.metric p{margin-top:14px; color:var(--ink-2); max-width:60ch}
+
+/* ---------- access status ---------- */
+.status2{display:grid; gap:14px; margin-top:26px}
+@media (min-width:820px){ .status2{grid-template-columns:1fr 1fr} }
+.scard{padding:22px 24px; border-radius:12px; background:var(--surface); border:1px solid var(--rule-soft); border-top:5px solid var(--sc); box-shadow:var(--shadow)}
+.scard .hd{display:flex; align-items:baseline; justify-content:space-between; gap:12px; flex-wrap:wrap}
+.scard h3{font-size:19px}
+.scard .verdict{font-family:var(--ui); font-size:11.5px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--sc)}
+.scard .why{font-size:15px; color:var(--ink-2); margin-top:10px}
+.scard dl{margin:16px 0 0; display:grid; grid-template-columns:auto 1fr; gap:7px 14px; align-items:baseline}
+.scard dt{font-family:var(--ui); font-size:12px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--muted)}
+.scard dd{margin:0; font-family:var(--mono); font-size:12.5px; color:var(--ink-2); font-variant-numeric:tabular-nums; overflow-wrap:anywhere}
+.ask{margin-top:22px; padding:22px 24px; border-radius:12px; background:var(--surface); border:1px solid var(--rule-soft); border-left:6px solid var(--accent); box-shadow:var(--shadow)}
+.ask .k{font-family:var(--ui); font-size:12px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:var(--accent)}
+.ask h3{margin-top:8px; font-family:var(--display); font-size:24px; font-weight:600}
+.ask .addr{font-family:var(--mono); font-size:15px; color:var(--ink); background:var(--accent-soft); padding:2px 8px; border-radius:5px}
+.ask ol{margin:14px 0 0; padding-left:20px; display:flex; flex-direction:column; gap:7px}
+.ask li{font-family:var(--ui); font-size:15px; color:var(--ink-2)}
+.tracks{display:grid; gap:14px; margin-top:22px}
+@media (min-width:820px){ .tracks{grid-template-columns:1fr 1fr} }
+.track{padding:20px 22px; border-radius:12px; background:var(--surface-2); border:1px solid var(--rule-soft)}
+.track .tk{font-family:var(--mono); font-size:12px; font-weight:600; letter-spacing:.06em; color:var(--tc)}
+.track h3{margin-top:4px}
+.track ul{margin:12px 0 0; padding:0; list-style:none; display:flex; flex-direction:column; gap:6px}
+.track li{font-family:var(--ui); font-size:14.5px; color:var(--ink-2); display:flex; gap:9px; align-items:baseline}
+.track li::before{content:"›"; color:var(--tc); font-family:var(--mono)}
+.st .stat{display:inline-block; margin-left:8px; font-family:var(--ui); font-size:11px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; padding:2px 8px; border-radius:99px; vertical-align:2px}
+.st .stat.ok{background:var(--pass-bg); color:var(--pass)}
+.st .stat.blocked{background:var(--stop-bg); color:var(--stop)}
+.st .stat.part{background:var(--hold-bg); color:var(--hold)}
+
+footer{margin-top:70px; padding-top:22px; border-top:1px solid var(--rule); display:flex; flex-wrap:wrap; gap:10px 22px; align-items:baseline}
+footer span{font-family:var(--ui); font-size:13px; color:var(--muted)}
+</style>
+
+<div class="page">
+  <header class="mast">
+    <div class="strip">
+      <div class="seg"></div><div class="gap"></div>
+      <div class="seg"></div><div class="gap"></div>
+      <div class="seg"></div><div class="gap"></div>
+      <div class="seg"></div><div class="gap"></div>
+      <div class="seg"></div>
+    </div>
+    <div class="eyebrow">Product plan · Initial PRD</div>
+    <h1>OpenTransit <span class="thin">Israel</span></h1>
+    <p class="lede">An open-source journey planner for Israeli public transport — buses, Israel Railways, light rail, walking and transfers. Fast, ad-free, privacy-conscious, and built on public data. The plan below is gated: nothing gets built until the data proves it can be built. As of 28 August 2026 the schedule data is verified open and the Ministry's realtime feed is the one thing standing between this plan and a working app. The first thing built is not an app — it is a backend fast enough that a client only has to render it.</p>
+    <div class="meta">
+      <span class="chip">API first</span>
+      <span class="chip">Open source</span>
+      <span class="chip">Self-hostable backend</span>
+      <span class="chip">No account required</span>
+      <span class="chip no">Ads</span>
+      <span class="chip no">Fare payment</span>
+      <span class="chip no">Ride hailing</span>
+    </div>
+  </header>
+
+  <div class="cols">
+    <nav class="rail" aria-label="Sections">
+      <ol>
+        <li data-line="0"><a href="#vision">Vision &amp; principles</a></li>
+        <li data-line="0"><a href="#gate">The Phase 0 gate</a></li>
+        <li data-line="0"><a href="#access">Access reality check</a></li>
+        <li data-line="0"><a href="#poc">Six feasibility proofs</a></li>
+        <li data-line="0"><a href="#gonogo">Go / No-Go board</a></li>
+        <li data-line="0"><a href="#accept">Acceptance journey</a></li>
+        <li data-line="1"><a href="#arch">System design</a></li>
+        <li data-line="1"><a href="#cost">What it costs</a></li>
+        <li data-line="1"><a href="#pipelines">Data pipelines</a></li>
+        <li data-line="2"><a href="#roadmap">Roadmap</a></li>
+        <li data-line="3"><a href="#scope">Scope boundary</a></li>
+        <li data-line="3"><a href="#kill">Kill criteria</a></li>
+        <li data-line="4"><a href="#metric">Success metric</a></li>
+      </ol>
+    </nav>
+
+    <main>
+      <section id="vision">
+        <div class="sechead"><span class="num">01</span><h2>One question, answered fast</h2></div>
+        <p class="prose">The product exists to answer a single question: <em>what is the best way for me to get there using public transportation?</em> Open app, pick a destination, see routes, follow the journey. It is optimised for the same trip made every day, not for tourism.</p>
+        <p class="prose">The underlying network already exists, and so does most of the data. The opportunity is a better interface and a better engineering layer on top of Israel's open transport ecosystem.</p>
+
+        <div class="grid g3">
+          <div class="card" style="padding:20px 22px">
+            <h3>Speed is a feature</h3>
+            <p class="sub" style="font-size:15px">Startup under 2s perceived. Search results under 500ms. Route request target under 2s. Saved places open instantly.</p>
+          </div>
+          <div class="card" style="padding:20px 22px">
+            <h3>Honest realtime</h3>
+            <p class="sub" style="font-size:15px">Scheduled, predicted, delayed, cancelled and unknown are five different states. Uncertain data never gets to look authoritative.</p>
+          </div>
+          <div class="card" style="padding:20px 22px">
+            <h3>No hidden lock-in</h3>
+            <p class="sub" style="font-size:15px">No proprietary transport API where an open one exists. Every external service sits behind a replaceable interface.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="gate">
+        <div class="sechead"><span class="num">02</span><h2>Phase 0 is a gate, not a warm-up</h2></div>
+        <div class="gate">
+          <div class="k">Hard rule</div>
+          <div class="r">Frontend product development does not begin until Phase 0 passes.</div>
+          <p>Phase 0 answers one question: can an independent application actually obtain enough usable Israeli transport data to reproduce core journey planning? It deliberately has almost no UI — a CLI, a Swagger page or an ugly debug endpoint is enough. Finding a fatal problem here is a <em>successful</em> outcome; finding it after months of app work is not.</p>
+        </div>
+      </section>
+
+      <section id="access">
+        <div class="sechead"><span class="num">03</span><h2>Two of the six are the real questions</h2></div>
+        <p class="sub">Routing and geocoding are standard engineering — solved problems with open engines. The Moovit-specific unknowns are the two data dependencies: nationwide schedules and Ministry realtime. Both were checked against the live sources on 28 August 2026, and they came back in very different shape.</p>
+
+        <div class="status2">
+          <div class="scard" style="--sc:var(--pass)">
+            <div class="hd"><h3>Static GTFS</h3><span class="verdict">Open · verified</span></div>
+            <p class="why">A plain unauthenticated HTTP directory, refreshed nightly. No key, no registration, no application. This is not a research question — it is an afternoon of parsing work.</p>
+            <dl>
+              <dt>Endpoint</dt><dd>gtfs.mot.gov.il/gtfsfiles/</dd>
+              <dt>Main feed</dt><dd>israel-public-transportation.zip · 164,212,282 B · 27 Aug 19:45</dd>
+              <dt>10-day feed</dt><dd>Gtfs_10_days.zip · 261,407,983 B · 28 Aug 03:43</dd>
+              <dt>Trip map</dt><dd>TripIdToDate.zip · 7,640,228 B · separate download</dd>
+              <dt>Open item</dt><dd>record the exact dataset licence text</dd>
+            </dl>
+          </div>
+
+          <div class="scard" style="--sc:var(--stop)">
+            <div class="hd"><h3>MOT SIRI realtime</h3><span class="verdict">Gated · two locks</span></div>
+            <p class="why">Not a public API in any sense. The address, RequestorRef and key are emailed to a named developer on application, and the hosts refuse connections from ordinary networks — so a whitelisted, probably Israeli, egress IP is likely needed too.</p>
+            <dl>
+              <dt>Lock 1</dt><dd>key + base address issued by MOT on request</dd>
+              <dt>Lock 2</dt><dd>moran.mot.gov.il :443 → refused</dd>
+              <dt></dt><dd>moran-t.mot.gov.il :443 → refused</dd>
+              <dt>Control</dt><dd>gtfs.mot.gov.il :443 → connected</dd>
+              <dt>Corroborates</dt><dd>reference client tunnels via a fixed server IP</dd>
+            </dl>
+          </div>
+        </div>
+
+        <div class="grid g2">
+          <div class="card" style="padding:20px 22px">
+            <h3>What SIRI gives you once you are in</h3>
+            <p class="sub" style="font-size:15px">Worth the chase. SIRI-Lite over HTTP GET, JSON, one nationwide request per poll, 15s minimum interval.</p>
+            <div class="board" style="margin-top:14px; box-shadow:none">
+              <table>
+                <thead><tr><th>Snapshot filter</th><th>Gives</th><th>Refresh</th></tr></thead>
+                <tbody>
+                  <tr><td>AllActiveTrips · normal</td><td>every vehicle on an active trip, with position</td><td class="st-cell">15 s</td></tr>
+                  <tr><td>AllActiveTrips · calls</td><td>the same, plus predictions for every onward stop</td><td class="st-cell">30 s</td></tr>
+                  <tr><td>AllPlannedTrips</td><td>trips departing within the next 4 hours</td><td class="st-cell">60 s</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="cap">MOT's own document calls these the equivalent of GTFS-Realtime VehiclePositions and TripUpdates. That is exactly the product's requirement, nationwide, in one call.</p>
+          </div>
+
+          <div class="card" style="padding:20px 22px">
+            <h3>Reconciliation is documented, not guesswork</h3>
+            <p class="sub" style="font-size:15px">The riskiest proof got cheaper: MOT publishes the field mapping, so the trip-identity join has an official answer.</p>
+            <div class="board" style="margin-top:14px; box-shadow:none">
+              <table>
+                <thead><tr><th>SIRI</th><th>GTFS</th></tr></thead>
+                <tbody>
+                  <tr><td class="st-cell">FramedVehicleJourneyRef</td><td class="st-cell">TripId in TripIdToDate.txt</td></tr>
+                  <tr><td class="st-cell">LineRef</td><td class="st-cell">route_id</td></tr>
+                  <tr><td class="st-cell">OperatorRef</td><td class="st-cell">agency_id</td></tr>
+                  <tr><td class="st-cell">StopPointRef</td><td class="st-cell">stop_code</td></tr>
+                  <tr><td class="st-cell">Order</td><td class="st-cell">stop_sequence</td></tr>
+                  <tr><td class="st-cell">OriginAimedDepartureTime</td><td class="st-cell">departure_time</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="cap">The open question is now the match <em>rate</em> in practice, not whether a mapping exists.</p>
+          </div>
+        </div>
+
+        <div class="gate" style="border-left-color:var(--hold)">
+          <div class="k" style="color:var(--hold)">The fallback is thinner than assumed</div>
+          <div class="r" style="font-size:clamp(20px,2.6vw,26px)">Open Bus Stride is live, but its GTFS linkage came back empty.</div>
+          <p>Sampled today: current SIRI rides with vehicle references are flowing. But <code style="font-family:var(--mono); font-size:13px">gtfs_ride_id</code> was null on every record checked at 8 hours, 3 days and 30 days old, <code style="font-family:var(--mono); font-size:13px">gtfs_stop_id</code> was null, and the GTFS rides endpoint returned a 500. It may be an API-layer problem rather than a pipeline one — worth asking Hasadna before concluding anything. Either way the planning consequence holds: prototyping on Open Bus does not save the reconciliation work. That matcher is ours to write whichever source feeds it.</p>
+        </div>
+
+        <div class="ask">
+          <div class="k">Blocking first action</div>
+          <h3>One email opens both locked doors — <span class="addr">ptsupport@mot.gov.il</span></h3>
+          <p class="sub" style="font-size:15px">Service alerts are gated behind the same address as SIRI, so ask for everything at once. Nothing else in the project can resolve this, and the calendar cost of asking late is the entire schedule.</p>
+          <ol>
+            <li>SIRI-SM 2.8 access — base address, RequestorRef and key, for a non-commercial open-source app.</li>
+            <li>The GTFS-Realtime Service Alerts feed URL.</li>
+            <li>Is the key bound to a source IP or to Israeli geography?</li>
+            <li>What are the usage terms for an openly distributed, open-source application?</li>
+          </ol>
+        </div>
+
+        <div class="tracks">
+          <div class="track" style="--tc:var(--pass)">
+            <div class="tk">TRACK A · STARTS TODAY</div>
+            <h3>Needs nobody's permission</h3>
+            <ul>
+              <li>GTFS ingest, including TripIdToDate and the 10-day vs 60-day choice</li>
+              <li>Routing graph on MOTIS or OpenTripPlanner</li>
+              <li>Geocoding</li>
+              <li>The matcher itself, unit-tested against static data</li>
+            </ul>
+          </div>
+          <div class="track" style="--tc:var(--stop)">
+            <div class="tk">TRACK B · GATED ON THE REPLY</div>
+            <h3>Waiting on MOT</h3>
+            <ul>
+              <li>Realtime against MOT SIRI when the key arrives</li>
+              <li>Meanwhile: develop and measure the matcher on Stride's raw SIRI</li>
+              <li>Service alerts — entirely gated, no public URL exists</li>
+              <li>Decide hosting egress once the IP question is answered</li>
+            </ul>
+          </div>
+        </div>
+
+        <p class="cap">If there is no usable answer within four weeks, Phase 0 has to choose explicitly: Open Bus as a permanent volunteer dependency, a static-only planner, or stopping under kill criterion 3. That decision, not the code, is the real output of Phase 0.</p>
+      </section>
+
+      <section id="poc">
+        <div class="sechead"><span class="num">04</span><h2>Six proofs to clear</h2></div>
+        <p class="sub">Each proof has an explicit pass bar and an explicit stop condition. They run in order, because each one consumes the output of the last.</p>
+
+        <div class="stations">
+          <div class="st">
+            <div class="mark"><div class="code">POC-1</div></div>
+            <div>
+              <h3>Static nationwide schedule data <span class="stat ok">verified open</span></h3>
+              <p class="body">Download, extract and parse the Ministry of Transport GTFS: agencies, routes, trips, stops, stop times, calendars and shapes. Load it, query it, and verify known lines and stations in Tel Aviv, Jerusalem, Haifa, Israel Railways and several bus operators.</p>
+              <div class="facts"><span class="tag src">Source: MOT GTFS</span></div>
+              <p class="crit"><b>Pass</b> The latest official dataset refreshes automatically — no manual editing anywhere in the loop.</p>
+              <p class="crit"><b>Stop</b> Nationwide schedule data cannot be consumed legally and reliably.</p>
+            </div>
+          </div>
+
+          <div class="st">
+            <div class="mark"><div class="code">POC-2</div></div>
+            <div>
+              <h3>Journey routing on Israeli data <span class="stat ok">unblocked</span></h3>
+              <p class="body">Turn that GTFS into a routing graph with an existing open engine rather than hand-writing transit routing. MOTIS first, OpenTripPlanner as the alternative, self-hostable either way. Transitous already runs MOTIS with Israeli GTFS coverage — useful as reference architecture and as a comparison implementation.</p>
+              <div class="facts"><span class="tag src">MOTIS / OpenTripPlanner</span><span class="tag src">10 test journeys</span></div>
+              <p class="crit"><b>Pass</b> 9 of 10 representative journeys return reasonable, usable routes — including bus↔train, a transfer, late night, a service-day boundary, and one journey with no sensible transit route at all. Checked by hand against Moovit, Google Maps and BetterRail; logical correctness matters, exact agreement does not.</p>
+              <p class="crit"><b>Stop</b> No self-hostable open engine routes Israeli GTFS reliably. Try another engine — do not start the app.</p>
+            </div>
+          </div>
+
+          <div class="st">
+            <div class="mark"><div class="code">POC-3</div></div>
+            <div>
+              <h3>Realtime arrivals, matched to schedule <span class="stat blocked">gated on MOT</span></h3>
+              <p class="body">The riskiest proof. Pull SIRI-SM predictions, identify route, vehicle, trip and predicted stop, then reconcile each realtime trip against its static GTFS trip. Vehicle positions map to a route and a point on the map. That reconciliation layer is our own code and gets tested hardest.</p>
+              <div class="facts"><span class="tag src">MOT SIRI (production)</span><span class="tag src">Open Bus Stride (prototype)</span></div>
+              <p class="crit"><b>Pass</b> Route 18 shows scheduled 18:04, realtime 18:11, delay +7 min — and the trip identity is provably the same trip in both feeds.</p>
+              <p class="crit"><b>Also required</b> Either direct Ministry SIRI access, or another source whose terms and sustainability are acceptable for production. Open Bus is fine for experiments; depending on a volunteer service permanently has to be a deliberate architectural decision, not an accident.</p>
+              <p class="crit"><b>Stop</b> No sustainable realtime source. A schedule-only planner could exist, but it would not be this product.</p>
+            </div>
+          </div>
+
+          <div class="st">
+            <div class="mark"><div class="code">POC-4</div></div>
+            <div>
+              <h3>Service alerts <span class="stat blocked">gated on MOT</span></h3>
+              <p class="body">Read the GTFS-Realtime Service Alerts feed, decode the protobuf, resolve the affected routes, stops and trips, and attach the alert to a planned journey that touches them.</p>
+              <div class="facts"><span class="tag src">GTFS-RT Service Alerts</span></div>
+              <p class="crit"><b>Pass</b> A live or recent alert parses and links to real transport entities — “Route 18 does not serve Arlozorov A/B, 18:00–21:00”.</p>
+            </div>
+          </div>
+
+          <div class="st">
+            <div class="mark"><div class="code">POC-5</div></div>
+            <div>
+              <h3>Address and place search <span class="stat ok">unblocked</span></h3>
+              <p class="body">Nobody types coordinates. “Dizengoff Center” has to become 32.075, 34.774, and “HaShalom Station” has to land on the right platform area. Hebrew and English, street addresses, stops, stations, major POIs and current GPS position.</p>
+              <div class="facts"><span class="tag src">OSM-derived geocoder</span></div>
+              <p class="crit"><b>Pass</b> 20 representative Israeli queries resolve well enough to start routing.</p>
+              <p class="crit"><b>Constraint</b> Public Nominatim is for experiments only — 1 request/second and no client-side autocomplete. Production needs a hosted or self-hosted geocoder.</p>
+            </div>
+          </div>
+
+          <div class="st">
+            <div class="mark"><div class="code">POC-6</div></div>
+            <div>
+              <h3>One end-to-end journey <span class="stat part">partly gated</span></h3>
+              <p class="body">The actual acceptance test. A single command chains every proof together: address search → coordinates → transit routing → GTFS journey → realtime enrichment → alert enrichment → journey response.</p>
+              <div class="facts"><span class="tag pass">Phase 0 acceptance</span></div>
+              <p class="crit"><b>Pass</b> <code style="font-family:var(--mono); font-size:13px">route --from "Dizengoff Center" --to "Technion" --depart-now</code> returns a real multi-modal journey. It does not have to look good. It has to be real.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="gonogo">
+        <div class="sechead"><span class="num">05</span><h2>Go / No-Go board</h2></div>
+        <p class="sub">Ten capabilities. Every one is required — the table has no optional rows. Application development starts only when the whole board is green.</p>
+        <div class="board">
+          <table>
+            <thead>
+              <tr><th>Capability</th><th>Proof</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><span class="dot req"></span>Download current nationwide GTFS</td><td class="st-cell">POC-1</td><td class="st-cell">required</td></tr>
+              <tr><td><span class="dot req"></span>Parse GTFS into a queryable store</td><td class="st-cell">POC-1</td><td class="st-cell">required</td></tr>
+              <tr><td><span class="dot req"></span>Route using Israeli GTFS</td><td class="st-cell">POC-2</td><td class="st-cell">required</td></tr>
+              <tr><td><span class="dot req"></span>Walking + transit + transfers</td><td class="st-cell">POC-2</td><td class="st-cell">required</td></tr>
+              <tr><td><span class="dot req"></span>Obtain realtime arrivals</td><td class="st-cell">POC-3</td><td class="st-cell">required</td></tr>
+              <tr><td><span class="dot req"></span>Match realtime ↔ GTFS trips</td><td class="st-cell">POC-3</td><td class="st-cell">required</td></tr>
+              <tr><td><span class="dot req"></span>Obtain service alerts</td><td class="st-cell">POC-4</td><td class="st-cell">required</td></tr>
+              <tr><td><span class="dot req"></span>Resolve Israeli addresses and places</td><td class="st-cell">POC-5</td><td class="st-cell">required</td></tr>
+              <tr><td><span class="dot req"></span>Run the full end-to-end query</td><td class="st-cell">POC-6</td><td class="st-cell">required</td></tr>
+              <tr><td><span class="dot req"></span>Confirm acceptable data-usage terms</td><td class="st-cell">legal</td><td class="st-cell">required</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="cap">Deliverable: a <code style="font-family:var(--mono); font-size:12.5px">/poc</code> area with gtfs, routing, realtime, alerts, geocoding and integration-tests, a docker-compose, and a README recording dependency status, every tested journey and every known data problem — translations.txt sanitisation, missing VehicleRef, unmatchable trips. That README is the project's technical foundation.</p>
+      </section>
+
+      <section id="accept">
+        <div class="sechead"><span class="num">06</span><h2>What passing actually looks like</h2></div>
+        <p class="sub">Deliberately ugly, entirely real. Every value below has to come from a source with a credible path into the production app.</p>
+        <div class="journey">
+          <div class="jh">
+            <span class="q">from</span><span class="t">Dizengoff Center</span>
+            <span class="q">to</span><span class="t">Technion</span>
+            <span class="q">depart now</span>
+          </div>
+          <div class="legs">
+            <div class="leg" data-mode="walk">
+              <div class="time">17:42</div><div class="bar"></div>
+              <div><div class="what">Walk 5 min</div><div class="det">to Ibn Gabirol / Arlozorov</div></div>
+            </div>
+            <div class="leg" data-mode="bus">
+              <div class="time">17:47</div><div class="bar"></div>
+              <div><div class="what">Bus 5 <span class="live late">3 min late</span></div><div class="det">Ibn Gabirol → Tel Aviv Savidor</div></div>
+            </div>
+            <div class="leg" data-mode="walk">
+              <div class="time">18:01</div><div class="bar"></div>
+              <div><div class="what">Walk 4 min</div><div class="det">to platform</div></div>
+            </div>
+            <div class="leg" data-mode="rail">
+              <div class="time">18:08</div><div class="bar"></div>
+              <div><div class="what">Train <span class="live">on time</span></div><div class="det">Tel Aviv Savidor → Haifa Center</div></div>
+            </div>
+            <div class="leg" data-mode="bus">
+              <div class="time">19:12</div><div class="bar"></div>
+              <div><div class="what">Bus 17 <span class="live">live</span></div><div class="det">Haifa Center → Technion</div></div>
+            </div>
+            <div class="leg" data-mode="end">
+              <div class="time">19:32</div><div class="bar"></div>
+              <div><div class="what">Arrive</div><div class="det">no active service alerts on this journey</div></div>
+            </div>
+          </div>
+          <div class="jfoot">
+            <span class="tag pass">geocoded</span>
+            <span class="tag pass">walking legs</span>
+            <span class="tag pass">correct stops</span>
+            <span class="tag pass">scheduled times</span>
+            <span class="tag pass">transfers</span>
+            <span class="tag pass">realtime + delays</span>
+            <span class="tag pass">alerts</span>
+            <span class="tag pass">journey geometry</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="arch">
+        <div class="sechead"><span class="num">07</span><h2>The backend is the product first</h2></div>
+        <p class="sub">No client work begins until the API is finished, deployed and fast. Every client is a thin renderer over the same endpoints, and speed is decided entirely on the server — a client cannot make a slow API feel fast, but a fast API makes an ordinary client feel excellent.</p>
+
+        <div class="gate" style="border-left-color:var(--accent)">
+          <div class="k" style="color:var(--accent)">The one rule</div>
+          <div class="r">No request on the hot path may make a call that leaves the machine.</div>
+          <p>Journey planning, departures, place search and realtime enrichment are answered from memory or from a process on loopback. Nothing on the hot path talks to Postgres, to object storage, to MOT, or to another availability zone. Everything slow — feeds, graph builds, SIRI polling, archiving — runs on a schedule, and its only output is a data structure the hot path reads with a pointer dereference.</p>
+        </div>
+
+        <div class="grid g2">
+          <div class="card" style="padding:20px 22px">
+            <h3>Server-side latency budget</h3>
+            <p class="sub" style="font-size:15px">Measured at the API process. The PRD's "under 2 seconds" is a client target; these are the numbers the backend is built against.</p>
+            <div class="board" style="margin-top:14px; box-shadow:none">
+              <table>
+                <thead><tr><th>Endpoint</th><th>p50</th><th>p95</th><th>p99</th></tr></thead>
+                <tbody>
+                  <tr><td>/v1/places</td><td class="st-cell">8 ms</td><td class="st-cell">40 ms</td><td class="st-cell">90 ms</td></tr>
+                  <tr><td>/v1/journeys</td><td class="st-cell">90 ms</td><td class="st-cell">350 ms</td><td class="st-cell">800 ms</td></tr>
+                  <tr><td>/v1/stops/{id}/departures</td><td class="st-cell">6 ms</td><td class="st-cell">40 ms</td><td class="st-cell">90 ms</td></tr>
+                  <tr><td>/v1/vehicles</td><td class="st-cell">5 ms</td><td class="st-cell">25 ms</td><td class="st-cell">60 ms</td></tr>
+                  <tr><td>/v1/alerts</td><td class="st-cell">2 ms</td><td class="st-cell">10 ms</td><td class="st-cell">25 ms</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card" style="padding:20px 22px">
+            <h3>Where a journey request spends its time</h3>
+            <p class="sub" style="font-size:15px">One step is expensive and the rest are rounding errors — which means performance work has exactly one target.</p>
+            <div class="board" style="margin-top:14px; box-shadow:none">
+              <table>
+                <thead><tr><th>Step</th><th>Cost</th></tr></thead>
+                <tbody>
+                  <tr><td>Parse and validate</td><td class="st-cell">1 ms</td></tr>
+                  <tr><td>Resolve endpoints (cached)</td><td class="st-cell">2 ms</td></tr>
+                  <tr><td>MOTIS query over loopback</td><td class="st-cell">40–250 ms</td></tr>
+                  <tr><td>Realtime overlay — hash lookups</td><td class="st-cell">1 ms</td></tr>
+                  <tr><td>Alert overlay</td><td class="st-cell">&lt;1 ms</td></tr>
+                  <tr><td>Rank and serialize</td><td class="st-cell">5 ms</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="cap">Add ~20 ms RTT for an Israeli client to an Israeli region and results land in well under half a second.</p>
+          </div>
+        </div>
+
+        <div class="figure">
+          <svg viewBox="0 0 760 442" role="img" aria-label="Deployment topology: users reach Cloudflare, then a single application host in an Israeli region containing the API with MOTIS, Photon and Redis on loopback, plus a single ingester process that is the only component talking to MOT and to object storage and Postgres.">
+            <rect class="box" x="320" y="6" width="120" height="30" rx="8"/>
+            <text class="lbl" x="380" y="26" text-anchor="middle">Israeli users</text>
+            <path class="link-a" d="M380 36 L380 54"/><path class="link-a" d="M374 48 L380 56 L386 48"/>
+            <rect class="box" x="290" y="56" width="180" height="34" rx="8"/>
+            <text class="lbl" x="380" y="78" text-anchor="middle">Cloudflare — TLS · cache · WAF</text>
+            <path class="link-a" d="M380 90 L380 114"/><path class="link-a" d="M374 108 L380 116 L386 108"/>
+
+            <rect class="bound" x="8" y="116" width="524" height="264" rx="14"/>
+            <text class="lbl-a" x="24" y="136">APPLICATION HOST · ISRAEL REGION · HOT PATH STAYS INSIDE</text>
+
+            <rect class="box-a" x="24" y="146" width="492" height="54" rx="8"/>
+            <text class="lbl" x="270" y="170" text-anchor="middle">Transit.Api — ASP.NET Core 9</text>
+            <text class="lbl-s" x="270" y="187" text-anchor="middle">immutable realtime snapshot · alert set · in-process stop index · LRU caches</text>
+
+            <path class="link-a" d="M100 200 L100 222 M270 200 L270 222 M440 200 L440 222"/>
+            <rect class="box" x="24" y="222" width="152" height="52" rx="8"/>
+            <text class="lbl" x="100" y="244" text-anchor="middle">MOTIS</text>
+            <text class="lbl-s" x="100" y="260" text-anchor="middle">graph + geocoding · ~2 GB</text>
+            <rect class="box" x="194" y="222" width="152" height="52" rx="8"/>
+            <text class="lbl" x="270" y="244" text-anchor="middle">Photon</text>
+            <text class="lbl-s" x="270" y="260" text-anchor="middle">only if MOTIS falls short</text>
+            <rect class="box" x="364" y="222" width="152" height="52" rx="8"/>
+            <text class="lbl" x="440" y="244" text-anchor="middle">Redis</text>
+            <text class="lbl-s" x="440" y="260" text-anchor="middle">fan-out · cache</text>
+            <text class="lbl-s" x="270" y="290" text-anchor="middle">loopback only — no network hop, no load balancer</text>
+
+            <rect class="box" x="24" y="302" width="492" height="62" rx="8"/>
+            <text class="lbl" x="270" y="326" text-anchor="middle">Transit.Ingest — the only process holding the MOT key</text>
+            <text class="lbl-s" x="270" y="344" text-anchor="middle">SIRI every 15–30 s · alerts every 5 min · GTFS nightly · exactly one instance</text>
+            <path class="link-a" d="M440 302 L440 280"/><path class="link-a" d="M434 286 L440 278 L446 286"/>
+
+            <path class="link-c" d="M516 333 L546 333 M546 333 L546 173 M546 173 L556 173 M546 247 L556 247 M546 333 L556 333"/>
+
+            <rect class="box" x="556" y="146" width="196" height="54" rx="8"/>
+            <text class="lbl" x="654" y="170" text-anchor="middle">Postgres + PostGIS</text>
+            <text class="lbl-s" x="654" y="187" text-anchor="middle">history — off the hot path</text>
+            <rect class="box" x="556" y="222" width="196" height="52" rx="8"/>
+            <text class="lbl" x="654" y="244" text-anchor="middle">Object storage (S3 API)</text>
+            <text class="lbl-s" x="654" y="260" text-anchor="middle">feeds · graphs · snapshots</text>
+            <rect class="box" x="556" y="302" width="196" height="62" rx="8"/>
+            <text class="lbl" x="654" y="326" text-anchor="middle">MOT — SIRI · alerts · GTFS</text>
+            <text class="lbl-s" x="654" y="344" text-anchor="middle">needs the whitelisted IP</text>
+
+            <path class="link-a" d="M40 404 L86 404"/>
+            <text class="lbl-s" x="94" y="408">hot path — user is waiting</text>
+            <path class="link-c" d="M300 404 L346 404"/>
+            <text class="lbl-s" x="354" y="408">cold path — scheduled, nobody is waiting</text>
+          </svg>
+          <p class="cap">One box to start, and deliberately so: MOTIS on the same host as the API is what buys the latency. Scaling out means more API instances sharing one ingester through Redis — never a second poller, because MOT permits one request per 15 seconds on a single key.</p>
+        </div>
+
+        <div class="board">
+          <table>
+            <thead><tr><th>Concern</th><th>Choice</th><th>Why this one</th></tr></thead>
+            <tbody>
+              <tr><td class="st-cell">Region</td><td class="st-cell">AWS il-central-1</td><td>Israeli egress IP for MOT, 10–20 ms to users</td></tr>
+              <tr><td class="st-cell">Compute</td><td class="st-cell">1 × 2–4 vCPU / 8 GB</td><td>MOTIS loads a country's full-year timetable in under 2 GB; 32 GB was an error</td></tr>
+              <tr><td class="st-cell">Egress IP</td><td class="st-cell">Elastic IP, never released</td><td>this is the address registered with MOT — a production asset</td></tr>
+              <tr><td class="st-cell">Objects</td><td class="st-cell">S3 or Cloudflare R2</td><td>S3-compatible API only, so R2 / B2 / MinIO all drop in</td></tr>
+              <tr><td class="st-cell">Database</td><td class="st-cell">Postgres + PostGIS</td><td>history and analytics; never touched by a journey request</td></tr>
+              <tr><td class="st-cell">Runtime</td><td class="st-cell">.NET 9 minimal APIs</td><td>top-tier latency, and it matches the module naming already in the PRD</td></tr>
+              <tr><td class="st-cell">Orchestration</td><td class="st-cell">Docker Compose + systemd</td><td>no Kubernetes — one box, one operator, reproducible for contributors</td></tr>
+              <tr><td class="st-cell">Edge</td><td class="st-cell">Cloudflare free tier</td><td>TLS, WAF, Tel Aviv PoP, caching for search and status</td></tr>
+              <tr><td class="st-cell">Telemetry</td><td class="st-cell">OpenTelemetry → Grafana</td><td>feed age, realtime lag, match rate, routing p95</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="cap">Nothing here requires a specific cloud — GCP me-west1 and Azure Israel Central substitute directly, object storage is used through the S3 API only, and the whole stack is containers.</p>
+      </section>
+
+      <section id="cost">
+        <div class="sechead"><span class="num">08</span><h2>What each price range buys</h2></div>
+        <p class="sub">An earlier draft of this page said $230–310/month. That was wrong by roughly a factor of five, for one reason: MOTIS loads an entire country's full-year timetable in under 2 GB of RAM, and its built-in geocoder likely removes the Elasticsearch dependency entirely. The real box is 8 GB, not 32.</p>
+
+        <div class="board">
+          <table>
+            <thead><tr><th>Budget</th><th>Shape</th><th>What runs</th><th>What you can't do</th><th>Right when</th></tr></thead>
+            <tbody>
+              <tr>
+                <td class="st-cell">$0</td>
+                <td>Dev machine, Docker Compose</td>
+                <td>The entire stack on localhost — GTFS ingest, MOTIS graph, routing, geocoding, API, realtime replayed from fixtures</td>
+                <td>Unreachable from a phone; no live SIRI unless MOT whitelists your own IP; dies when the laptop sleeps</td>
+                <td>All of Phase 0 Track A, and API milestones M1–M4</td>
+              </tr>
+              <tr>
+                <td class="st-cell">~$5</td>
+                <td>+ smallest Israeli VPS, 1 vCPU / 1–2 GB</td>
+                <td>The SIRI ingester alone, 24/7, from a stable Israeli IP — polling, archiving, alerts</td>
+                <td>Cannot hold the graph or serve the API. It is a collector, not a service</td>
+                <td>The day the key arrives — SIRI cannot be backfilled, and Phase 4 is worth nothing without the archive</td>
+              </tr>
+              <tr>
+                <td class="st-cell">~$15–25</td>
+                <td>One box, 2 vCPU / 4–8 GB, Israel</td>
+                <td>The whole stack, publicly reachable, with live realtime</td>
+                <td>No headroom — graph builds must run off-box; a reboot is downtime; no staging</td>
+                <td>Private beta and dogfooding — the “I use this instead of Moovit” milestone</td>
+              </tr>
+              <tr>
+                <td class="st-cell">~$40–75</td>
+                <td>One box, 2–4 vCPU / 8 GB + 100 GB + object storage + Cloudflare</td>
+                <td>Comfortable public v1: atomic graph swaps, Postgres container, telemetry, compacted archive</td>
+                <td>Still one machine — a host failure is an outage, and there is no staging environment</td>
+                <td><strong>The recommended free-to-the-public tier.</strong> Tens of thousands of daily users</td>
+              </tr>
+              <tr>
+                <td class="st-cell">~$120–160</td>
+                <td>Two boxes — serving and ingest/build</td>
+                <td>Graph builds never touch the serving host; blue/green deploys; staging; managed backups</td>
+                <td>Still single-region, still not highly available</td>
+                <td>When downtime costs something other than pride</td>
+              </tr>
+              <tr>
+                <td class="st-cell">~$250–400</td>
+                <td>Two API instances, managed Postgres, dedicated ingest</td>
+                <td>Survives a host failure; real alerting; headroom for spikes</td>
+                <td>—</td>
+                <td>Only once someone else's commute breaks when it goes down</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="cap">Two things worth noticing: the jump from nothing to a working public service is about <strong>$40</strong>, and the expensive jump is the one after it, because redundancy means buying a second of everything. And the thing that actually gates this project cannot be bought at any price — the MOT key is free, and no budget makes it arrive sooner.</p>
+
+        <div class="grid g2">
+          <div class="card" style="padding:20px 22px">
+            <h3>Why free-to-use is sustainable</h3>
+            <p class="sub" style="font-size:15px">The expensive artifact — the routing graph — is built once and shared by everyone, so cost is nearly flat in users. Ten thousand daily users at five requests each is 0.6 req/s average with commute peaks around 20–30, which one 8 GB box absorbs without noticing. A journey response is 3–5 KB compressed, so 50k requests a day is about 7.5 GB of egress a month, most of it served by Cloudflare and never reaching the origin.</p>
+            <p class="sub" style="font-size:15px; margin-top:12px"><strong>Running cost is roughly $40–70/month whether the service has 100 users or 50,000.</strong> The only thing that truly scales with popularity is map tiles — and PMTiles on R2 removes that bill by construction, because R2 charges nothing for egress.</p>
+          </div>
+          <div class="card" style="padding:20px 22px">
+            <h3>The traps that create $300 bills</h3>
+            <div class="board" style="margin-top:12px; box-shadow:none">
+              <table>
+                <thead><tr><th>Trap</th><th>Cost</th></tr></thead>
+                <tbody>
+                  <tr><td>NAT Gateway</td><td class="st-cell">~$35/mo + per-GB</td></tr>
+                  <tr><td>Load balancer for one box</td><td class="st-cell">~$18–25/mo</td></tr>
+                  <tr><td>Managed Kubernetes</td><td class="st-cell">~$70/mo control plane</td></tr>
+                  <tr><td>Managed Postgres, early</td><td class="st-cell">~$25–35/mo</td></tr>
+                  <tr><td>Elasticsearch for geocoding</td><td class="st-cell">a bigger instance</td></tr>
+                  <tr><td>Raw SIRI kept forever</td><td class="st-cell">3–8 GB/day</td></tr>
+                  <tr><td>Tiles served from origin</td><td class="st-cell">the one bill that scales</td></tr>
+                  <tr><td>Multi-AZ by reflex</td><td class="st-cell">double compute + transfer</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="cap">Every one is a default somebody accepts without noticing. The decision that controls the bill is <em>one box or many</em> — not which cloud.</p>
+          </div>
+        </div>
+
+        <p class="cap">Paths to actually zero, in order of leverage: partner with Hasadna, the Public Knowledge Workshop — they already run Israeli transit infrastructure as a nonprofit, already hold MOT access, and already pay for hosting, which answers the hosting question and the access question at once. Then sponsorship, where $50/month is a realistic ask for a daily-use transit app. Then credit programmes — AWS Activate and Open Data, Google Cloud, Microsoft for Startups, Cloudflare's open-source plans. Oracle's Always Free tier is worth an attempt but not a plan: it was cut from 4 OCPU/24 GB to 2 OCPU/12 GB in 2026 and Ampere capacity is frequently unavailable. Treat it as a lottery ticket.</p>
+
+        <div class="grid g2">
+          <div class="card" style="padding:20px 22px">
+            <h3>Realtime is a pointer swap, not a query</h3>
+            <p class="sub" style="font-size:15px">Every 15–30 s the ingester parses a nationwide SIRI response into a brand-new immutable snapshot — trips by key, pre-sorted departure boards, vehicle positions — validates it against the previous one, and atomically replaces the reference. Readers take a local copy of the pointer and are done: no locks, no contention, no allocation. Staleness is a field on every response, so when the snapshot ages past 90 seconds the API stops claiming live data instead of serving confident nonsense.</p>
+          </div>
+          <div class="card" style="padding:20px 22px">
+            <h3>Contributors have no MOT key</h3>
+            <p class="sub" style="font-size:15px">So the realtime source is an interface with two implementations: live SIRI, and replay from recorded snapshots. The repo ships a fixture bundle — a GTFS extract, TripIdToDate rows, a few hours of SIRI, a sample alerts package — and <code style="font-family:var(--mono); font-size:13px">docker compose up</code> runs the entire stack against it with a pinnable clock. Integration tests run on fixtures in CI; only a nightly job touches live MOT.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="pipelines">
+        <div class="sechead"><span class="num">09</span><h2>Never break the running graph</h2></div>
+        <p class="sub">External transport data is assumed to be wrong sometimes: malformed feeds, duplicated trips, stale positions, impossible coordinates, unreachable APIs. The pipelines are built so bad input degrades the service instead of breaking it.</p>
+        <div class="figure">
+          <svg viewBox="0 0 760 250" role="img" aria-label="GTFS pipeline: a new feed is downloaded, validated, normalised and versioned into a new graph which is health-checked and atomically swapped in; a failed validation keeps the previous graph online. Realtime pipeline: SIRI is ingested, normalised, reconciled against GTFS, cached and served.">
+            <text class="lbl-s" x="0" y="14">SCHEDULE PIPELINE — daily</text>
+            <rect class="box" x="0" y="26" width="104" height="38" rx="8"/>
+            <text class="lbl" x="52" y="50" text-anchor="middle">MOT feed</text>
+            <path class="link" d="M104 45 L136 45"/><path class="link" d="M130 40 L138 45 L130 50"/>
+            <rect class="box" x="138" y="26" width="104" height="38" rx="8"/>
+            <text class="lbl" x="190" y="50" text-anchor="middle">Validate</text>
+            <path class="link" d="M242 45 L274 45"/><path class="link" d="M268 40 L276 45 L268 50"/>
+            <rect class="box" x="276" y="26" width="124" height="38" rx="8"/>
+            <text class="lbl" x="338" y="50" text-anchor="middle">Normalise · version</text>
+            <path class="link" d="M400 45 L432 45"/><path class="link" d="M426 40 L434 45 L426 50"/>
+            <rect class="box" x="434" y="26" width="114" height="38" rx="8"/>
+            <text class="lbl" x="491" y="50" text-anchor="middle">Build graph</text>
+            <path class="link" d="M548 45 L580 45"/><path class="link" d="M574 40 L582 45 L574 50"/>
+            <rect class="box-a" x="582" y="26" width="178" height="38" rx="8"/>
+            <text class="lbl" x="671" y="50" text-anchor="middle">Health check → atomic swap</text>
+
+            <path class="link-x" d="M190 64 L190 104 L52 104 L52 128"/>
+            <rect class="box" x="0" y="128" width="240" height="42" rx="8"/>
+            <text class="lbl" x="120" y="148" text-anchor="middle">Invalid feed → keep previous graph</text>
+            <text class="lbl-s" x="120" y="163" text-anchor="middle">current version stays online, alert raised</text>
+
+            <text class="lbl-s" x="400" y="128">REALTIME PIPELINE — continuous</text>
+            <rect class="box" x="400" y="140" width="80" height="36" rx="8"/>
+            <text class="lbl" x="440" y="163" text-anchor="middle">SIRI</text>
+            <path class="link" d="M480 158 L508 158"/><path class="link" d="M502 153 L510 158 L502 163"/>
+            <rect class="box" x="510" y="140" width="98" height="36" rx="8"/>
+            <text class="lbl" x="559" y="163" text-anchor="middle">Normalise</text>
+            <path class="link" d="M608 158 L636 158"/><path class="link" d="M630 153 L638 158 L630 163"/>
+            <rect class="box-a" x="638" y="140" width="122" height="36" rx="8"/>
+            <text class="lbl" x="699" y="158" text-anchor="middle">Reconcile</text>
+            <text class="lbl-s" x="699" y="171" text-anchor="middle">SIRI trip ↔ GTFS trip</text>
+            <path class="link" d="M699 176 L699 198 L440 198 L440 210"/>
+            <rect class="box" x="360" y="210" width="160" height="36" rx="8"/>
+            <text class="lbl" x="440" y="233" text-anchor="middle">Cache → journey API</text>
+
+            <rect class="box" x="0" y="196" width="300" height="50" rx="8"/>
+            <text class="lbl" x="150" y="217" text-anchor="middle">Realtime unavailable?</text>
+            <text class="lbl-s" x="150" y="233" text-anchor="middle">fall back to scheduled arrival, say so in the UI</text>
+          </svg>
+          <p class="cap">The backend keeps its own normalised realtime shape — tripId, vehicleId, delaySeconds, expectedArrival, location — so SIRI structures never leak through the application. Health is measured: GTFS age, feed lag, matched/unmatched trip percentage, routing p95, geocoding latency, API error rate.</p>
+        </div>
+      </section>
+
+      <section id="roadmap">
+        <div class="sechead"><span class="num">10</span><h2>Five phases after the gate</h2></div>
+        <p class="sub">Each phase has a single, testable goal. The app is now Phase 2, not Phase 1 — the first shippable thing is a fast API that a terminal can use.</p>
+        <div class="phases">
+          <div class="phase wide" style="--pc:var(--l0)">
+            <div class="pn">PHASE 0 · GO / NO-GO</div>
+            <h3>Feasibility</h3>
+            <p class="goal">GTFS ingestion, routing, realtime, alerts, geocoding, end-to-end integration — across the two tracks above. No frontend, no design, and no architecture work beyond what a proof requires.</p>
+            <ul><li>/poc repo area</li><li>docker-compose</li><li>10 documented journeys</li><li>known-data-problems log</li><li>a decision on the realtime source</li></ul>
+          </div>
+          <div class="phase wide" style="--pc:var(--l1)">
+            <div class="pn">PHASE 1 · THE FIRST PRODUCT</div>
+            <h3>OpenTransit API v1</h3>
+            <p class="goal">The backend, finished and deployed: journeys, places, departures, trips, vehicles, alerts and a public status endpoint. Eight milestones, each ending in something callable over HTTP — never in “a library that will be useful later”. <strong>No client of any kind is written during this phase.</strong></p>
+            <ul><li>M1 skeleton</li><li>M2 GTFS ingest</li><li>M3 routing</li><li>M4 search</li><li>M5 realtime</li><li>M6 alerts</li><li>M7 hardening</li><li>M8 deploy</li></ul>
+            <p class="goal" style="margin-top:14px"><strong>Done when:</strong> a plain <code style="font-family:var(--mono); font-size:13px">curl</code> plans Dizengoff Center → Technion with live delays in under 400 ms p95, repeatedly, on a weekday evening, from a deployed environment rather than a laptop.</p>
+          </div>
+          <div class="phase" style="--pc:var(--l2)">
+            <div class="pn">PHASE 2</div>
+            <h3>First client</h3>
+            <p class="goal">Now the app: “Where to?”, three ranked alternatives, a readable journey timeline, live arrivals, a map. A thin renderer over /v1 that holds no transport logic of its own.</p>
+            <ul><li>destination search (HE/EN)</li><li>journey results + detail</li><li>MapLibre + OSM</li><li>stop departures</li><li>on-device favourites</li></ul>
+          </div>
+          <div class="phase" style="--pc:var(--l3)">
+            <div class="pn">PHASE 3</div>
+            <h3>Realtime-aware routing</h3>
+            <p class="goal">Realtime stops being decoration and starts affecting the ranking — in the backend, where the live state already lives. A 37-minute journey with a 2-minute transfer and a 9-minute delay loses to a 42-minute journey with none.</p>
+            <ul><li>live journey mode</li><li>vehicle positions</li><li>transfer risk</li><li>ranking layer</li></ul>
+          </div>
+          <div class="phase" style="--pc:var(--l4)">
+            <div class="pn">PHASE 4</div>
+            <h3>Reliability intelligence</h3>
+            <p class="goal">The archived SIRI observations the ingester has been collecting since Phase 1 turn the planner from “fastest on paper” into “fastest that actually works”.</p>
+            <ul><li>delay history</li><li>reliability scores</li><li>transfer confidence</li><li>realistic ranking</li></ul>
+          </div>
+          <div class="phase" style="--pc:var(--accent)">
+            <div class="pn">PHASE 5</div>
+            <h3>Public open-source product</h3>
+            <p class="goal">Something other people can run, trust and contribute to without private knowledge from the original author.</p>
+            <ul><li>stable deployment</li><li>CI/CD</li><li>contributor docs</li><li>monitoring</li><li>app store distribution</li></ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="scope">
+        <div class="sechead"><span class="num">11</span><h2>The scope boundary</h2></div>
+        <p class="sub">The non-goals are load-bearing. Everything on the right is a common reason transit apps get slow, cluttered and monetised — none of it ships without a clear transportation benefit.</p>
+        <div class="scope">
+          <div class="col">
+            <h3>In scope for V1</h3>
+            <ul>
+              <li>Buses, Israel Railways, light rail where data exists</li>
+              <li>Walking segments and transfers</li>
+              <li>Destination search in Hebrew and English</li>
+              <li>Three ranked journey alternatives</li>
+              <li>Journey timeline with stops and exits</li>
+              <li>Live arrivals and delays</li>
+              <li>Stop departure boards, favourite stops</li>
+              <li>Service alerts attached to journeys</li>
+              <li>Map with route, stops and transfer points</li>
+              <li>On-device favourites, no account</li>
+            </ul>
+          </div>
+          <div class="col out">
+            <h3>Explicitly not built</h3>
+            <ul>
+              <li>Fare payment and Rav-Kav management</li>
+              <li>Credit cards and loyalty programmes</li>
+              <li>Taxis, scooters, bikes, car and ride sharing</li>
+              <li>Advertising and promotions</li>
+              <li>Social feeds, chat, user posts</li>
+              <li>AI assistant</li>
+              <li>Complex account systems</li>
+              <li>Server-side location or commute history</li>
+              <li>Cloud sync in V1</li>
+            </ul>
+          </div>
+        </div>
+        <p class="cap">Privacy default: location → route query → response → discard. No stored GPS trail, no commute history, no home or work address on a server, no identity. Live journey tracking stays on-device wherever practical.</p>
+      </section>
+
+      <section id="kill">
+        <div class="sechead"><span class="num">12</span><h2>When to stop on purpose</h2></div>
+        <p class="sub">Any one of these turns Phase 0 from a build into a decision. Discovering one is a successful feasibility test, not a failure.</p>
+        <div class="kill">
+          <div class="k"><span>01</span><p>Nationwide GTFS cannot be sustainably consumed.</p></div>
+          <div class="k"><span>02</span><p>No practical routing engine correctly processes Israeli transport data.</p></div>
+          <div class="k"><span>03</span><p>No sustainable realtime source can be obtained.</p></div>
+          <div class="k"><span>04</span><p>Realtime cannot be matched to static trips reliably enough to be useful.</p></div>
+          <div class="k"><span>05</span><p>The required datasets cannot legally be used in an open-source application.</p></div>
+          <div class="k"><span>06</span><p>A fundamental dependency requires an unsustainable commercial service.</p></div>
+        </div>
+      </section>
+
+      <section id="metric">
+        <div class="sechead"><span class="num">13</span><h2>How success gets measured</h2></div>
+        <div class="metric">
+          <div class="k">Primary metric</div>
+          <p class="q">Can the developer use OpenTransit every day without opening Moovit?</p>
+          <p>Not downloads. If the answer is yes, the core product works. Everything else — realtime coverage per journey, routing success rate, crash-free sessions, result latency, returning users, contributors, stars, issues closed — is a secondary metric that only becomes meaningful afterwards.</p>
+          <p style="margin-top:18px; padding-top:16px; border-top:1px solid var(--rule-soft)"><strong>Because the app now arrives a phase later, Phase 1 gets its own single metric:</strong> is the API fast and truthful enough that a client would only have to render it? Concretely — journeys at p95 under 350 ms server-side, realtime snapshot lag under 45 s, and a SIRI↔GTFS match rate above 90 %. All three published on <code style="font-family:var(--mono); font-size:13px">/v1/status</code> rather than asserted in a document.</p>
+        </div>
+      </section>
+
+      <footer>
+        <span>OpenTransit Israel · Initial PRD</span>
+        <span>Fast · Reliable · No ads · Open source</span>
+        <span>PRD.md · docs/system-design.md · docs/data-access-findings.md</span>
+        <span>Data access checked 28 Aug 2026</span>
+      </footer>
+    </main>
+  </div>
+</div>
+
+<script>
+(function(){
+  var links = Array.prototype.slice.call(document.querySelectorAll('.rail a'));
+  if(!links.length || !('IntersectionObserver' in window)) return;
+  var map = {};
+  links.forEach(function(a){
+    var el = document.querySelector(a.getAttribute('href'));
+    if(el) map[el.id] = a;
+  });
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        links.forEach(function(a){ a.classList.remove('on'); });
+        if(map[e.target.id]) map[e.target.id].classList.add('on');
+      }
+    });
+  }, { rootMargin: '-10% 0px -70% 0px', threshold: 0 });
+  Object.keys(map).forEach(function(id){ obs.observe(document.getElementById(id)); });
+})();
+</script>
