@@ -7,7 +7,8 @@
     "category_mix": "docs/phase-0-mvp-plan.md §F0.2 table.",
     "coordinates": "APPROXIMATE, hand-entered, NOT yet validated against the real GTFS stop set. Agent A snaps each to the nearest real stop and rewrites this file with a resolved_stop_id. Until then treat lat/lon as a hint, not truth.",
     "durations": "min/max bands are the plan author's estimates, not measurements. They exist to catch absurd results (a 4-hour Tel Aviv bus ride), not to grade quality. Widen freely during review.",
-    "calendar_shape": "The 10-day feed has NO calendar.txt. It uses calendar_dates.txt only, with one service_id per date (service_id == the date). Valid GTFS, but any code assuming calendar.txt exists will break on it. The 60-day feed is the opposite: calendar.txt weekly patterns, no calendar_dates.txt."
+    "calendar_shape": "The 10-day feed has NO calendar.txt. It uses calendar_dates.txt only, with one service_id per date (service_id == the date). Valid GTFS, but any code assuming calendar.txt exists will break on it. The 60-day feed is the opposite: calendar.txt weekly patterns, no calendar_dates.txt.",
+    "corpus_fixes_4_sep": "J17/J21 airport coordinate and J23 origin were both wrong in the Wave 0 hand-entered set and were corrected from real feed data after Agent B's run. Journey results recorded before this fix are not comparable for those three cases."
   },
   "depart_rules": {
     "note": "Resolved against the FEED'S OWN service window from feed_info.txt, not against wall-clock 'next Monday'. The 10-day feed is regenerated nightly and its window slides, so calendar-relative rules go stale within days. Each rule means: the first matching weekday inside feed_start_date..feed_end_date, at the given local time.",
@@ -518,9 +519,10 @@
       },
       "to": {
         "name": "Ben Gurion Airport T3",
-        "name_he": "נמל תעופה בן גוריון",
-        "lat": 32.0114,
-        "lon": 34.8867
+        "name_he": "נתב\"ג טרמינל 3",
+        "lat": 32.0004,
+        "lon": 34.8705,
+        "corpus_fix": "was 32.0114,34.8867 which is 1532 m from the nearest stop of any kind. Replaced with GTFS stop 10971 נתב\"ג from feed 08c168da. Fix derived from the feed, not re-guessed."
       },
       "depart": "weekday_morning",
       "expect": {
@@ -626,9 +628,10 @@
       },
       "to": {
         "name": "Ben Gurion Airport T3",
-        "name_he": "נמל תעופה בן גוריון",
-        "lat": 32.0114,
-        "lon": 34.8867
+        "name_he": "נתב\"ג טרמינל 3",
+        "lat": 32.0004,
+        "lon": 34.8705,
+        "corpus_fix": "was 32.0114,34.8867 which is 1532 m from the nearest stop of any kind. Replaced with GTFS stop 10971 נתב\"ג from feed 08c168da. Fix derived from the feed, not re-guessed."
       },
       "depart": "late_night",
       "expect": {
@@ -672,10 +675,10 @@
       "category": "no-reasonable-route",
       "prd_ref": "PRD §7 #10 no reasonable transit route",
       "from": {
-        "name": "Mitzpe Ramon",
-        "name_he": "מצפה רמון",
-        "lat": 30.61,
-        "lon": 34.8017
+        "name": "Har Karkom, central Negev",
+        "name_he": "הר כרכום",
+        "lat": 30.28,
+        "lon": 34.74
       },
       "to": {
         "name": "Metula",
@@ -687,7 +690,8 @@
       "expect": {
         "outcome": "no-route"
       },
-      "human_review": "Desert to the Lebanese border at 02:30. A returned itinerary here means the engine is inventing service. A clear 'no route' is the PASS."
+      "human_review": "Origin is 23.5 km from the nearest stop in the feed — measured, not assumed. No walking budget reaches transit, so 'no route' is the only correct answer. An itinerary here means the engine is inventing access.",
+      "corpus_fix": "ORIGINAL CASE WAS INVALID. It asserted Mitzpe Ramon -> Metula was unroutable; MOTIS returned a real 6h49m itinerary on real lines (Metropoline 64/370, Egged 845/12/20). The engine was right and the premise was wrong: Israel is too well connected for two towns to be mutually unreachable. Rebuilt around an origin with no stop in range, measured against feed 08c168da: nearest stop 23,491 m."
     },
     {
       "id": "J24",

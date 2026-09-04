@@ -36,37 +36,100 @@ services:
       retries: 20
     shm_size: 1gb
 
+  # ---------------------------------------------------------------------------
+  # MOTIS command lines, corrected in POC-2.
+  #
+  # The Wave 0 scaffold used command: ["server"] and command: ["import"]. Both
+  # were wrong. The published image
+  #   ghcr.io/motis-project/motis:latest  (verified 2026-09-04 = MOTIS v2.11.2,
+  #   digest sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330)
+  # declares NO entrypoint. Its default is Cmd ["/motis","server","/data"], so a
+  # compose `command:` replaces argv entirely and Docker tried to exec a binary
+  # literally named "server". The binary path /motis has to be argv[0].
+  #
+  # The verbs themselves were right -- MOTIS v2 really does have `config`,
+  # `import` and `server`. What the scaffold missed is that both subcommands
+  # take flags:
+  #   import  -c <config.yml>  -d <data dir>
+  #   server  -d <data dir>
+  # `motis import` writes the preprocessed graph AND a copy of config.yml into
+  # the data dir, and `motis server` then needs only that dir -- which is why
+  # the serving container below does not mount ./data at all. That is the
+  # "ship the artifact" shape system-design 320 describes, and mounting the
+  # 371 MB of raw feeds into the serving container would have quietly
+  # misrepresented it.
+  # ---------------------------------------------------------------------------
+
   motis:
     image: ghcr.io/motis-project/motis:latest
     container_name: poc-motis
-    command: ["server"]
-    working_dir: /data
+    command: ["/motis", "server", "-d", "/data"]
     ports:
       - "58080:8080"
     volumes:
-      - ./routing/graph:/data
-      - ./data:/input:ro
+      # The built graph, and nothing else. No raw feeds: after `import`, the
+      # data directory is self-contained. See the motisgraph note below for why
+      # this is a named volume rather than ./routing/graph.
+      - motisgraph:/data
     # ---- production serving envelope, do not raise ----
     mem_limit: 8g
     memswap_limit: 8g
     # --------------------------------------------------
+    # The healthcheck asks for an actual route, Tel Aviv Savidor -> Ramat Gan
+    # Bursa, rather than pinging the root page. A MOTIS process whose graph
+    # failed to load still serves the root page perfectly well, so a liveness
+    # check there would report healthy while every journey query returned
+    # nothing. This asks the question the service exists to answer.
+    #
+    # It must be 127.0.0.1, NOT localhost. The image's /etc/hosts maps localhost
+    # to both 127.0.0.1 and ::1, wget tries the IPv6 address first, and MOTIS
+    # binds IPv4 only ("listening on 0.0.0.0:8080"). With `localhost` the
+    # container reports unhealthy forever while serving traffic fine -- which is
+    # exactly what happened here before this was fixed.
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/ >/dev/null 2>&1 || exit 1"]
-      interval: 10s
-      timeout: 5s
-      retries: 30
+      test: ["CMD-SHELL", "wget -qO- 'http://127.0.0.1:8080/api/v6/plan?fromPlace=32.0836,34.7981&toPlace=32.0838,34.8044' >/dev/null 2>&1 || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 20
+      start_period: 60s
     profiles: ["serve"]
 
   # Graph build. Uncapped by design -- see the note above.
+  #
+  # ./routing/config.yml is mounted read-only at /config.yml. It is a modified
+  # copy of what `motis config` generates; the modifications and the reasons for
+  # each are documented at the top of that file.
   motis-build:
     image: ghcr.io/motis-project/motis:latest
     container_name: poc-motis-build
-    command: ["import"]
-    working_dir: /data
+    command: ["/motis", "import", "-c", "/config.yml", "-d", "/data"]
     volumes:
-      - ./routing/graph:/data
+      - motisgraph:/data
+      - ./routing/config.yml:/config.yml:ro
       - ./data:/input:ro
     profiles: ["build"]
 
 volumes:
   pgdata:
+
+  # The MOTIS data directory MUST be a named volume, not a bind mount to
+  # ./routing/graph. This is not a preference.
+  #
+  # Observed 2026-09-04 on this machine: with ./routing/graph bind-mounted,
+  # `motis import` died 3.7 s in with `unable to import: resize error`, at 0% of
+  # the `osr` (street routing) task, leaving every .bin file it had created at
+  # zero length. MOTIS stores its graph in cista memory-mapped vectors, which
+  # grow by ftruncate-ing the backing file and re-mmapping it. Docker Desktop on
+  # Windows exposes a bind mount through its filesystem-sharing layer, which
+  # does not support that, so the very first resize fails.
+  #
+  # A named volume lives on ext4 inside the WSL2 VM and behaves normally. This
+  # is the same class of trap as the WSL2 memory ceiling: a Windows-host Docker
+  # configuration issue, not a MOTIS defect and not a finding about Israeli
+  # data. It IS a real deployment constraint worth carrying forward -- the graph
+  # artifact needs a real filesystem, so a production "ship the artifact" step
+  # (system-design 320) must land it on a volume, not a shared folder.
+  #
+  # To copy the built graph out for inspection:
+  #   docker run --rm -v poc_motisgraph:/data -v "$PWD/routing:/out"   #     alpine sh -c "cd /data && tar cf /out/graph.tar ."
+  motisgraph:

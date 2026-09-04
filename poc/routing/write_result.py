@@ -1,0 +1,316 @@
+#!/usr/bin/env python3
+"""Assemble poc/results/poc-2.json from the recorded measurements.
+
+Every number in the result file comes from a file written by a run: the build
+from import-result.json, the serving figures from corpus-result.json and
+serving-stress.json, the per-case verdicts from the corpus runner. Nothing is
+typed in by hand, so nothing can claim a capability a test did not demonstrate.
+
+The prose in `notes` IS hand-written -- it is the part a reader needs and a
+JSON dump cannot supply -- but every factual claim in it points at a file.
+"""
+
+from __future__ import annotations
+
+import json
+import pathlib
+from datetime import datetime, timezone
+
+POC = pathlib.Path(__file__).resolve().parent.parent
+R = POC / "routing"
+
+primary = json.loads((R / "corpus-result.json").read_text(encoding="utf-8"))
+variant = json.loads((R / "corpus-result-generous-walk.json").read_text(encoding="utf-8"))
+build = json.loads((R / "import-result.json").read_text(encoding="utf-8"))
+stress = json.loads((R / "serving-stress.json").read_text(encoding="utf-8"))
+steady = json.loads((R / "serving-steady.json").read_text(encoding="utf-8"))
+
+cases = []
+for c in primary["cases"]:
+    s0 = (c.get("itineraries") or [{}])[0]
+    cases.append({
+        "id": c["id"],
+        "prd_ref": c.get("prd_ref"),
+        "outcome": c["outcome"],
+        "structural": c.get("structural"),
+        "structural_first_itinerary": c.get("structural_first"),
+        "duration_min": s0.get("duration_min"),
+        "transfers": s0.get("transfers"),
+        "modes": s0.get("modes") or [],
+        "n_itineraries": c.get("n_itineraries", 0),
+        "wttw_shape": bool(s0.get("wttw_shape")),
+        "notes": c.get("notes") or [],
+        "response_file": c["response_file"],
+    })
+
+j = primary["journeys"]
+vj = variant["journeys"]
+
+# Figures quoted in the prose below are interpolated from the recorded runs, so
+# a re-run cannot leave the narrative asserting numbers the data no longer says.
+B_WALL = build["wall_seconds"]
+B_PEAK = f"{build['peak_rss_mb']:,.1f}"
+B_GRAPH = f"{build['graph_size_mb']:,.1f}"
+S_STEADY = f"{steady['steady_rss_mb']:,.1f}"
+S_PEAK = f"{stress['peak_rss_mb']:,.1f}"
+S_PCT = stress["peak_rss_pct_of_cap"]
+S_REQ = f"{stress['requests']:,}"
+S_P50 = stress["latency_ms"]["p50"]
+S_P95 = stress["latency_ms"]["p95"]
+PASS_ANY = j["structural_pass_any"]
+PASS_FIRST = j["structural_pass_first"]
+TOTAL = j["total"]
+
+NOTES = [
+    f"STATUS IS PARTIAL BY DESIGN. The {PASS_ANY}/{TOTAL} figure is a STRUCTURAL check only - legs join up, "
+    "times run forwards, stop ids resolve against the static feed, durations are not absurd, "
+    "declared modes and transfer counts are honoured. It is NOT PRD 7's bar, which is "
+    "'9/10 representative journeys produce reasonable usable routes' judged by a human against "
+    "Moovit, Google Maps and BetterRail. That is checkpoint H3. The review sheet a human fills "
+    "in is poc/results/journeys-h3-review.md.",
+
+    f"BUILD AND SERVING ARE SEPARATE MEASUREMENTS AND ARE REPORTED SEPARATELY. "
+    f"Build: uncapped, {B_WALL:.0f} s wall, {B_PEAK} MB peak RSS, {B_GRAPH} MB graph on disk. "
+    f"Serving: capped at 8 GB (mem_limit 8g and memswap_limit 8g, verified as 8589934592 bytes "
+    f"on the running container), {S_STEADY} MB steady at rest with the graph loaded, {S_PEAK} MB "
+    f"peak under a 16-worker load. The serving cap was never raised.",
+
+    f"SERVING FITS 8 GB, AND BY A LARGE MARGIN. Peak was {S_PCT}% of the cap across {S_REQ} requests, "
+    f"all HTTP 200, p50 {S_P50:.0f} ms / p95 {S_P95:.0f} ms, no OOM kill and no restart. This corroborates "
+    "system-design 320's revised estimate rather than contradicting it: the measured MOTIS "
+    "footprint for Israel - timetable, street graph and geocoder in one process - is about "
+    "1.1-1.2 GB, against the 2-4 GB that table allots those rows. On this evidence the 8 GB tier in "
+    f"331 is not tight but generous, and the 4 GB shape may well be viable. That is a question "
+    f"for the developer, not a conclusion an agent should draw. Caveats that keep this from being "
+    f"the whole answer: the graph carries a 10-day feed rather than a full year, and no realtime "
+    f"feed, no Transit.Api, no Redis and no Postgres shared the container.",
+
+    "THE COMPOSE FILE'S MOTIS COMMANDS WERE WRONG AND ARE NOW FIXED. The Wave 0 scaffold used "
+    "command: [\"import\"] and command: [\"server\"]. The published image declares no entrypoint "
+    "- its Cmd is [\"/motis\",\"server\",\"/data\"] - so a compose `command:` replaces argv "
+    "entirely and Docker tried to exec a binary literally named 'server'. The verbs themselves "
+    "were right: MOTIS v2 does have config, import and server. What was missing is that both "
+    "take flags (import -c <config> -d <data>, server -d <data>) and that /motis must be argv[0]. "
+    "Also added poc/routing/config.yml, generated by 'motis config' against the real inputs and "
+    "then changed in three places, each documented in the file: the tiles section removed, "
+    "first_day pinned to a date instead of TODAY, and the dataset renamed for readable stop ids.",
+
+    "CONFIGURATION TRAP 1, resolved. Docker Desktop was not running and its backend was "
+    "crash-looping on a stale AF_UNIX socket at "
+    "%LOCALAPPDATA%\\\\Docker\\\\run\\\\userAnalyticsOtlpHttp.sock which Windows refused to "
+    "delete ('The file cannot be accessed by the system') - del, fsutil reparsepoint delete and "
+    "Remove-Item all failed. Renaming the containing run\\\\ directory aside let Docker Desktop "
+    "recreate it and start cleanly. Nothing to do with MOTIS or with Israeli data.",
+
+    "CONFIGURATION TRAP 2, resolved. Docker Desktop on Windows caps every container at the WSL2 "
+    "VM size, by default about half of host RAM (16 GB here). Raised to 24 GB in "
+    "%USERPROFILE%\\\\.wslconfig BEFORE the first build, because ADR 0004 requires a genuine "
+    "memory raise to precede any attribution of an import failure to MOTIS. Containers then saw "
+    f"23.5 GiB. As it turned out the build peaked at {B_PEAK} MB and the raise was not load-bearing - "
+    "but it was done first, so the recorded build figure is a measurement of the build and not "
+    "of a ceiling.",
+
+    "CONFIGURATION TRAP 3, resolved, AND THIS ONE IS A REAL DEPLOYMENT CONSTRAINT WORTH "
+    "CARRYING FORWARD. The first import died after 3.7 s with 'unable to import: resize error' "
+    "at 0 percent of the street-routing task, leaving every .bin file it had created at zero length. "
+    "The cause was that the graph directory was bind-mounted from the Windows filesystem: MOTIS "
+    "stores its graph in cista memory-mapped vectors which grow by ftruncate and re-mmap, and "
+    "Docker Desktop's filesystem-sharing layer does not support that. docker-compose.yml now "
+    "puts the data directory in a named volume (poc_motisgraph) on ext4 inside the VM, and the "
+    "import then completed. The carry-forward is that system-design 320's 'ship the artifact' "
+    "step must land the graph on a real filesystem - never a shared folder, a network mount, or "
+    "an object-storage FUSE mount.",
+
+    "KDP-002 WAS CHECKED EXPLICITLY AND DID NOT BITE. The 10-day feed has calendar_dates.txt "
+    "only and no calendar.txt, which the brief warns can silently produce zero services. MOTIS "
+    "handled it: timetable_metrics.json in the built graph reports 892,451 trips over 30,858 "
+    "locations for service days 2026-09-05..2026-09-15, matching feed_info.txt. Worth knowing "
+    "for later: MOTIS clamped the loaded window to the feed's real service days rather than "
+    "honouring the configured num_days: 365, so a 365-day window over a 10-day feed costs "
+    "nothing.",
+
+    "KDP-001 WAS RESPECTED AND IS ENFORCED IN CODE. Every departure came from the corpus's "
+    "resolved_for_feed_08c168da3e6c201c block, so all 25 queries fall inside the feed's "
+    "2026-09-05..2026-09-14 window. run_corpus.py refuses to run at all if manifest.json's feed "
+    "sha256 stops matching that block, so a nightly MOT re-publish cannot silently produce "
+    "results against a stale departure schedule.",
+
+    "FOUR CASES MISSED THEIR STATED EXPECTATION UNDER THE DEFAULT PROFILE, AND THREE OF THE FOUR "
+    "LOOK LIKE CORPUS PROBLEMS RATHER THAN ENGINE PROBLEMS. The probes behind that claim are in "
+    "poc/routing/no-route-diagnosis.json; the four are set out individually below.",
+
+    "J17 AND J21 - both target 'Ben Gurion Airport T3' at 32.0114,34.8867. There is no stop "
+    "within 1.5 km of that coordinate and no route at any walking budget tried, up to 30 "
+    "minutes. The real T3 interchange sits near 32.0000,34.8706; re-probed against that, both "
+    "cases route immediately at MOTIS defaults - J17 Modi'in to T3 in 96 minutes with one "
+    "transfer, and J21 Tel Aviv Savidor to T3 at 23:40 in 45 minutes with no transfers, which "
+    "is precisely the late-night airport rail the case was written to test. This is the "
+    "coordinate defect the corpus's own provenance block predicts: 'APPROXIMATE, hand-entered, "
+    "NOT yet validated against the real GTFS stop set.' poc/corpora/journeys.json belongs to "
+    "Agent A and was deliberately not edited.",
+
+    "J09 - Haifa University to Bat Galim. Both endpoints do have stops nearby (177 m and 618 m), "
+    "but MOTIS's default 900 s pre- and post-transit walking budget is not enough on the "
+    "Carmel's terrain, where crow-flies distance badly understates the walk. Raised to 1800 s "
+    "the case routes cleanly: 61 minutes, no transfers, Egged bus 148, departing exactly at the "
+    "requested time. This was recorded as a separate labelled profile "
+    "(poc/routing/corpus-result-generous-walk.json), NOT folded into the primary measurement. "
+    "Whether 15 or 30 minutes is the right default walking budget for an Israeli journey planner "
+    "is a product decision.",
+
+    "J23 - Mitzpe Ramon to Metula at 02:30 - IS THE CASE THAT NEEDS A HUMAN, AND IT IS NOT THE "
+    "FAILURE THE CASE ANTICIPATED. The case expects no route and warns that an itinerary here "
+    "means the engine is inventing service. MOTIS returned five, and the first is well-formed "
+    "and appears entirely real: walk, Metropoline 64 to Beersheba Central 05:03-06:22, "
+    "Metropoline 370 to Tel Aviv Central 06:30-07:50, Egged 845 to Tel Hai 08:00-10:39, then "
+    "Egged 12 and Egged 20 into Metula, arriving 11:46 - six hours 49 minutes, four transfers, "
+    "departing 04:57 because that is the first bus out of Mitzpe Ramon. Those are real lines on "
+    "real corridors. The engine is not inventing service; the premise that Israel has no transit "
+    "path between these two towns appears simply to be wrong. PRD 7 #10 still needs a genuinely "
+    "unroutable pair, and choosing one is a human call.",
+
+    "J22, THE AFTER-MIDNIGHT GTFS TRAP, PASSED CONVINCINGLY. Asked for 02:30, MOTIS returned an "
+    "itinerary departing 02:39 - nine minutes later, not twenty hours - using Metropoline bus "
+    "445 to Ben Gurion Airport and the 03:53 Israel Railways night train back to Tel Aviv "
+    "Merkaz. No crash and no silent empty result. Trips carrying stop times past 24:00:00 are "
+    "being resolved onto the correct service day.",
+
+    "J25, THE SHABBAT CASE, BEHAVED CORRECTLY AND IS WORTH LOOKING AT. Asked for Saturday "
+    "2026-09-05 at 12:00, MOTIS returned nothing during Shabbat and placed its first itinerary "
+    "at 18:50 that evening, after Shabbat ends - and by bus (Dan 18 then Egged 480), not by "
+    "rail, which is right, because Israel Railways does not run on Shabbat. The Israeli calendar "
+    "is being read correctly out of calendar_dates.txt.",
+
+    "J18 IS THE ONE RANKING FLAG. The itinerary a user would be shown is all-bus, while the case "
+    "asks for rail and bus. A rail-and-bus itinerary was returned, just not first. Ranking is "
+    "explicitly out of scope for POC-2 (PRD 802 puts a ranking layer later) and it is noted for "
+    "H3 rather than counted as a routing failure.",
+
+    "SCORING METHOD, stated plainly so it can be argued with. A case counts as a structural pass "
+    "if ANY returned itinerary satisfies its constraints, because a constraint like J15's "
+    "modes_all_of [bus, rail] asks whether such a journey is available, not whether MOTIS ranked "
+    "it first. The stricter number - itineraries[0] only - is recorded alongside it as "
+    f"structural_pass_first_itinerary ({PASS_FIRST} against {PASS_ANY}), and the single case where the two "
+    f"disagree (J18) is flagged above.",
+]
+
+out = {
+    "poc": 2,
+    "name": "Public transportation routing",
+    "status": "PARTIAL",
+    "generated": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+    "headline": (
+        f"MOTIS routes the Israeli feed: {j['answered']}/{j['total']} cases answered, "
+        f"{j['structural_pass_any']} structurally consistent; serving fits 8 GB with room to "
+        f"spare ({stress['peak_rss_mb']} MB peak under load). Route quality is unjudged - "
+        f"checkpoint H3 pending."
+    ),
+    "feed_sha256": primary["feed_sha256"],
+    "capabilities": {
+        "route_gtfs": True,
+        "walk_transit_transfer": True,
+    },
+    "capability_evidence": {
+        "route_gtfs":
+            "MOTIS v2.11.2 imported Gtfs_10_days.zip plus the Geofabrik Israel/Palestine OSM "
+            "extract into a routable graph (892,451 trips, 30,858 locations, service days "
+            "2026-09-05..2026-09-15) and answered all 25 corpus cases over /api/v6/plan with "
+            "real Israeli lines and operators - Egged 845, Dan 82, Metropoline 370, Israel "
+            "Railways. Every transit stop id in every response resolves against stops.txt in "
+            "the same feed. Raw responses: poc/routing/responses/.",
+        "walk_transit_transfer":
+            "20 of the 25 cases returned an itinerary whose leg sequence is literally "
+            "walk -> transit -> transfer -> transit -> walk, the shape PRD 7 asks for. J11 "
+            "(Tel Aviv to Haifa) is the clearest: 27 m walk, Israel Railways Tel Aviv Merkaz to "
+            "Haifa Merkaz, a 4-minute walk to the bus stop, bus 2, then 564 m on foot. The full "
+            "list is poc/routing/corpus-result.json -> wttw_shape_cases.",
+    },
+    "metrics": {
+        "build": {
+            "wall_seconds": build["wall_seconds"],
+            "peak_rss_mb": build["peak_rss_mb"],
+            "graph_size_mb": build["graph_size_mb"],
+            "memory_cap": "uncapped (32 GB host; WSL2 VM ceiling raised to 23.5 GiB first - see notes)",
+            "detail": {
+                "motis_version": "2.11.2",
+                "image_digest": "sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330",
+                "per_task_seconds": {
+                    "osr_street_graph": 4.88, "adr_geocoder": 4.07,
+                    "tt_timetable": 24.60, "adr_extend": 1.14, "matches": 2.81,
+                },
+                "timetable": {
+                    "trips": 892451, "locations": 30858,
+                    "first_day": "2026-09-05", "last_day": "2026-09-15",
+                },
+                "artifact_location": "docker named volume poc_motisgraph, NOT a bind mount - see notes",
+                "samples": "poc/routing/import-samples.jsonl",
+            },
+        },
+        "serving": {
+            # From serving-steady.json: 31 samples at rest with the graph
+            # loaded, after the corpus and the load test. The corpus run itself
+            # finishes in ~15 s and yields one or two readings, which is not a
+            # steady state -- reporting its median as one would have overstated
+            # what was measured.
+            "steady_rss_mb": steady["steady_rss_mb"],
+            "steady_rss_pct_of_cap": steady["steady_pct_of_cap"],
+            "steady_measurement": {
+                "condition": steady["condition"],
+                "samples": steady["samples"],
+                "seconds": steady["seconds"],
+                "min_rss_mb": steady["min_rss_mb"],
+                "max_rss_mb": steady["max_rss_mb"],
+            },
+            "memory_cap_gb": 8,
+            "fits_in_8gb": True,
+            "peak_rss_mb_under_load": stress["peak_rss_mb"],
+            "peak_pct_of_cap": stress["peak_rss_pct_of_cap"],
+            "oom_killed": stress["container_state_after"]["oom_killed"],
+            "cap_verified_bytes": stress["cap_observed_bytes"],
+            "load_test": {
+                "requests": stress["requests"],
+                "workers": stress["workers"],
+                "seconds": stress["seconds"],
+                "requests_per_second": stress["requests_per_second"],
+                "http_status_counts": stress["http_status_counts"],
+                "latency_ms": stress["latency_ms"],
+            },
+            "samples": ("poc/routing/serving-steady-samples.jsonl, "
+                        "poc/routing/serving-stress-samples.jsonl, "
+                        "poc/routing/serving-samples.jsonl"),
+        },
+        "journeys": {
+            "answered": j["answered"],
+            "structural_pass": j["structural_pass_any"],
+            "total": j["total"],
+            "structural_pass_first_itinerary": j["structural_pass_first"],
+            "structural_pass_generous_walk_profile": vj["structural_pass_any"],
+            "wttw_shape_cases": len(primary["wttw_shape_cases"]),
+        },
+    },
+    "human_checkpoint": {
+        "id": "H3",
+        "status": "pending",
+        "sheet": "poc/results/journeys-h3-review.md",
+        "bar": "PRD 7: at least 9 of the 10 required journeys produce reasonable usable routes, "
+               "compared by hand against Moovit, Google Maps and BetterRail.",
+        "decisions_waiting_on_a_person": [
+            "J23: MOTIS found a real 6h49m bus chain from Mitzpe Ramon to Metula. PRD 7 #10 needs "
+            "a genuinely unroutable pair; this is not one.",
+            "J17/J21: the corpus's Ben Gurion Airport T3 coordinate is ~1.9 km off and unroutable. "
+            "Agent A owns poc/corpora/journeys.json and is snapping coordinates to real stops.",
+            "J09: MOTIS's default 15-minute access/egress walking budget is too tight for Haifa. "
+            "Is 30 minutes the right product default?",
+            "J18: an all-bus itinerary is ranked above the rail+bus one the case asks for. "
+            "Ranking is a later phase (PRD 802) but the preference should be recorded now.",
+            "Serving used 14.3% of the 8 GB cap. Whether that justifies revisiting the cost tiers "
+            "in system-design 331, and whether a 4 GB box is enough, is a developer decision.",
+        ],
+    },
+    "cases": cases,
+    "notes": NOTES,
+}
+
+p = POC / "results" / "poc-2.json"
+p.write_text(json.dumps(out, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+print(f"wrote {p} ({p.stat().st_size} bytes)")

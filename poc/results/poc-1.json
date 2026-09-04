@@ -1,0 +1,117 @@
+{
+  "poc": 1,
+  "name": "Static Israeli transportation data",
+  "status": "PASS",
+  "generated": "2026-09-04",
+  "headline": "892,451 trips / 32,367,255 stop_times parsed, 5 tables in Postgres, 10/10 integrity checks pass; TripIdToDate unjoinable (KDP-008); licence terms unread (H2)",
+  "feed_sha256": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468",
+  "capabilities": {
+    "download_gtfs": true,
+    "parse_gtfs": true,
+    "usage_terms_confirmed": false
+  },
+  "metrics": {
+    "rows_parsed": {
+      "agency": 36,
+      "routes": 6804,
+      "stops": 30858,
+      "calendar": 0,
+      "calendar_dates": 10,
+      "services": 10,
+      "trips": 892451,
+      "stop_times": 32367255,
+      "shapes": 7058126,
+      "translations": 1979930,
+      "fare_attributes": 355,
+      "fare_rules": 1726708,
+      "networks": 73,
+      "levels": 4
+    },
+    "rows_loaded": {
+      "routes": 6804,
+      "trips": 892451,
+      "stops": 30858,
+      "calendars": 10,
+      "trip_id_to_date": 1961317
+    },
+    "cold_refresh_seconds": 338.0,
+    "peak_rss_mb": 1269.7,
+    "ingest_seconds_offline": 218.4,
+    "seven_prd_groups": {
+      "agency": 36,
+      "routes": 6804,
+      "trips": 892451,
+      "stops": 30858,
+      "stop_times": 32367255,
+      "calendar": 10,
+      "shapes": 7058126
+    }
+  },
+  "validation_examples": {
+    "tel_aviv": true,
+    "jerusalem": true,
+    "haifa": true,
+    "israel_railways": true,
+    "multiple_bus_operators": true
+  },
+  "edge_case_results": [
+    {
+      "id": "E01",
+      "result": "pass",
+      "detail": "HEAD reported Content-Length 3382 (text/html; charset=utf-8); GET delivered 9,781,611 bytes (application/x-zip-compressed). Change detection uses GET + sha256 + zip validation only. Two consecutive GETs of TripIdToDate.zip into an empty directory reported 'new' then 'unchanged'."
+    },
+    {
+      "id": "E02",
+      "result": "pass",
+      "detail": "816,056 of 32,367,255 stop_times rows are at or past 24:00:00. Largest observed 30:05:00 = 108300s = service day +1d 06:05:00; round trip exact: True."
+    },
+    {
+      "id": "E03",
+      "result": "pass",
+      "detail": "30 Hebrew names compared byte-for-byte after download -> extract -> parse -> Postgres -> read; 0 mismatches. Coverage: doubled_quote=5, single_quote=7, apostrophe_geresh=5, hebrew_plus_latin=5, hebrew_plus_digits=7, hebrew_latin_digits=0, plain_hebrew=30. Not present anywhere in this feed's stop, route or agency names, so untestable here: hebrew_latin_digits."
+    },
+    {
+      "id": "E04",
+      "result": "pass",
+      "detail": "translations.txt parsed: 1,979,930 rows, schema 'gtfs-official (table_name/field_name/language/record_id)', languages ['AR', 'EN']. No sanitisation is applied — the rules would have to be written down first, and nothing in the file required cleaning to parse."
+    },
+    {
+      "id": "E05",
+      "result": "pass",
+      "detail": "Pairing is decided by trip-id overlap. Primary feed: 0 of 892,451 join keys matched (0.0000%) -> REJECTED. Comparison feed: 100.0000% -> ACCEPTED. A deliberately mismatched pair raised FeedPairingError: True."
+    },
+    {
+      "id": "E06",
+      "result": "pass",
+      "detail": "Both feeds row-counted side by side. 10-day: 892,451 trips / 32,367,255 stop_times. 60-day: 544,338 trips / 20,100,370 stop_times. Only the 10-day feed is loaded (D5)."
+    },
+    {
+      "id": "E07",
+      "result": "pass",
+      "detail": "Service is not a flat weekly pattern: 2026-09-05 (Sat) 18.3%, 2026-09-11 (Fri) 49.8%, 2026-09-12 (Sat) 6.2%, 2026-09-13 (Sun) 42.9% against a peak of 126,047 trips/day."
+    },
+    {
+      "id": "E08",
+      "result": "pass",
+      "detail": "No dangling references in any counted class."
+    },
+    {
+      "id": "E09",
+      "result": "pass",
+      "detail": "location_type distribution {'0': 30634, '1': 224}: 224 stations, 772 stops with a parent (2.5% of all stops). S08 resolves to station 15071 with 7 platforms grouped under it. S01 resolves to 10945 (תל אביב מרכז), which has no platform children; the nearest station to it is 14966 with 3 platforms, 162 m away. Of the 6 rail corpus entries, 0 resolved to a stop with platform children — parent/child grouping in this feed is a bus-terminal construct, not a rail-station model (KDP-011)."
+    },
+    {
+      "id": "E10",
+      "result": "pass",
+      "detail": "Cold run from an empty data directory: started_empty=True, downloaded 262.2 MB, wall time 338.0s, exit status 0, resulting database queryable: True, manual steps: 0."
+    }
+  ],
+  "notes": [
+    "TripIdToDate.zip does not pair with the 10-day feed: 0 of 773,670 of its TripId values appear in the feed's trip_ids, while every 60-day-feed trip id matches after stripping the _ddmmyy suffix. It is loaded here for row-count evidence only and must not be used to resolve trips against the 10-day feed. See KDP-008.",
+    "Feed window 20260905..20260914 (KDP-001: the 10-day feed's window opens the day after publication, so PRD §39's --depart-now has no data on the day the feed is downloaded). That is a developer decision, not an agent one — ADR 0005 is reopened.",
+    "stop_times and shapes are parsed, counted and integrity-checked but deliberately not loaded into Postgres (ADR 0003 / system-design §173).",
+    "agency.txt is parsed but not given its own table; agency_name is denormalised onto routes so operator queries work without widening the load set beyond the five tables ADR 0003 names.",
+    "usage_terms_confirmed is false and cannot be set by an agent: gov.il returns 403 to automated fetches, so checkpoint H2 needs a human to read and record the licence text.",
+    "Cold run: 338.0s from an empty directory to a queryable database, 262 MB downloaded, zero manual steps."
+  ]
+}

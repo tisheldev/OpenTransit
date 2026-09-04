@@ -1,0 +1,54 @@
+{
+  "started_empty": true,
+  "data_dir": "C:\\Users\\nhenr\\AppData\\Local\\Temp\\opentransit-cold-h2ai2zc6",
+  "schema": "coldrun",
+  "manual_steps": 0,
+  "command": "python poc/gtfs/ingest.py --data-dir <empty dir>",
+  "wall_seconds": 338.0,
+  "exit_status": 0,
+  "queryable": true,
+  "query_probe": {
+    "stops": 30858,
+    "trips": 892451,
+    "routes": 6804
+  },
+  "downloaded_bytes": 262232964,
+  "downloaded_sha256": {
+    "Gtfs_10_days.zip": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468",
+    "israel-public-transportation.zip": null,
+    "TripIdToDate.zip": "97a4b424e1837ae8e772673253aec91ec42ab1e9c32a5da4fb9cfba187163307"
+  },
+  "refresh": {
+    "Gtfs_10_days.zip": {
+      "name": "Gtfs_10_days.zip",
+      "url": "https://gtfs.mot.gov.il/gtfsfiles/Gtfs_10_days.zip",
+      "status": "new",
+      "sha256": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468",
+      "size_bytes": 252451353,
+      "seconds": 127.93737580000015,
+      "http_status": 200,
+      "last_modified": "Fri, 04 Sep 2026 00:28:38 GMT",
+      "etag": "\"ddce765443cdd1:0\"",
+      "previous_sha256": null,
+      "zip_valid": true,
+      "error": null
+    },
+    "TripIdToDate.zip": {
+      "name": "TripIdToDate.zip",
+      "url": "https://gtfs.mot.gov.il/gtfsfiles/TripIdToDate.zip",
+      "status": "new",
+      "sha256": "97a4b424e1837ae8e772673253aec91ec42ab1e9c32a5da4fb9cfba187163307",
+      "size_bytes": 9781611,
+      "seconds": 5.769348899993929,
+      "http_status": 200,
+      "last_modified": "Thu, 03 Sep 2026 16:58:42 GMT",
+      "etag": "\"c8384679c53bdd1:0\"",
+      "previous_sha256": null,
+      "zip_valid": true,
+      "error": null
+    }
+  },
+  "peak_rss_mb": 768.9,
+  "note": "The cold run downloads whatever MOT is publishing at that moment, so its hashes may differ from poc/data/manifest.json. The recorded row counts and edge-case results come from the manifest bytes, not from this run.",
+  "data_dir_removed": true
+}

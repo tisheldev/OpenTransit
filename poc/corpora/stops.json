@@ -12,111 +12,363 @@
       "id": "S01",
       "name": "Tel Aviv Savidor Center",
       "name_he": "תל אביב סבידור מרכז",
-      "lat": 32.0836, "lon": 34.7981,
+      "lat": 32.0836,
+      "lon": 34.7981,
       "mode": "rail",
       "expect_min_services_per_hour": 6,
       "expect_routes": null,
-      "resolved_stop_id": null,
-      "note": "Busiest rail interchange in the country. If this returns thin service, the calendar is being misread."
+      "resolved_stop_id": "10945",
+      "note": "Busiest rail interchange in the country. If this returns thin service, the calendar is being misread.",
+      "resolution": {
+        "rule": "name+mode",
+        "resolved_stop_name": "תל אביב מרכז",
+        "distance_m": 18.8,
+        "name_token_score": 0.75,
+        "location_type": "0",
+        "platform_count": 0,
+        "expected_route_type": "2",
+        "observed_route_types": [
+          "2"
+        ],
+        "mode_matches_feed": true,
+        "observed_route_count": 99,
+        "observed_departures_in_feed_window": 3498,
+        "observed_peak_departures_per_hour": 28,
+        "meets_expect_min_services_per_hour": true,
+        "geometric_nearest": {
+          "stop_id": "10945",
+          "stop_name": "תל אביב מרכז",
+          "distance_m": 18.8
+        },
+        "low_confidence": false,
+        "feed_sha256": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468"
+      }
     },
     {
       "id": "S02",
       "name": "Tel Aviv HaShalom",
       "name_he": "תל אביב השלום",
-      "lat": 32.0731, "lon": 34.7925,
+      "lat": 32.0731,
+      "lon": 34.7925,
       "mode": "rail",
       "expect_min_services_per_hour": 6,
       "expect_routes": null,
-      "resolved_stop_id": null,
-      "note": "Azrieli interchange; heavy commuter load."
+      "resolved_stop_id": "10949",
+      "note": "Azrieli interchange; heavy commuter load.",
+      "resolution": {
+        "rule": "name+mode",
+        "resolved_stop_name": "השלום",
+        "distance_m": 76.3,
+        "name_token_score": 0.333,
+        "location_type": "0",
+        "platform_count": 0,
+        "expected_route_type": "2",
+        "observed_route_types": [
+          "2"
+        ],
+        "mode_matches_feed": true,
+        "observed_route_count": 86,
+        "observed_departures_in_feed_window": 3320,
+        "observed_peak_departures_per_hour": 28,
+        "meets_expect_min_services_per_hour": true,
+        "geometric_nearest": {
+          "stop_id": "13316",
+          "stop_name": "ת. רכבת השלום",
+          "distance_m": 52.7
+        },
+        "low_confidence": false,
+        "feed_sha256": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468"
+      }
     },
     {
       "id": "S03",
       "name": "Yitzhak Navon Station, Jerusalem",
       "name_he": "תחנת יצחק נבון",
-      "lat": 31.7888, "lon": 35.2027,
+      "lat": 31.7888,
+      "lon": 35.2027,
       "mode": "rail",
       "expect_min_services_per_hour": 2,
       "expect_routes": null,
-      "resolved_stop_id": null,
-      "note": "Deep underground; the fast line terminus."
+      "resolved_stop_id": "10990",
+      "note": "Deep underground; the fast line terminus.",
+      "resolution": {
+        "rule": "name+mode",
+        "resolved_stop_name": "ירושלים/יצחק נבון",
+        "distance_m": 83.4,
+        "name_token_score": 1.0,
+        "location_type": "0",
+        "platform_count": 0,
+        "expected_route_type": "2",
+        "observed_route_types": [
+          "2"
+        ],
+        "mode_matches_feed": true,
+        "observed_route_count": 7,
+        "observed_departures_in_feed_window": 896,
+        "observed_peak_departures_per_hour": 8,
+        "meets_expect_min_services_per_hour": true,
+        "geometric_nearest": {
+          "stop_id": "3523",
+          "stop_name": "ת. מרכזית ירושלים/יפו",
+          "distance_m": 24.1
+        },
+        "low_confidence": false,
+        "feed_sha256": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468"
+      }
     },
     {
       "id": "S04",
       "name": "Haifa Center HaShmona",
       "name_he": "חיפה מרכז השמונה",
-      "lat": 32.8206, "lon": 34.9985,
+      "lat": 32.8206,
+      "lon": 34.9985,
       "mode": "rail",
       "expect_min_services_per_hour": 2,
       "expect_routes": null,
-      "resolved_stop_id": null,
-      "note": ""
+      "resolved_stop_id": "10934",
+      "note": "",
+      "resolution": {
+        "rule": "name+mode",
+        "resolved_stop_name": "חיפה מרכז",
+        "distance_m": 226.4,
+        "name_token_score": 0.667,
+        "location_type": "0",
+        "platform_count": 0,
+        "expected_route_type": "2",
+        "observed_route_types": [
+          "2"
+        ],
+        "mode_matches_feed": true,
+        "observed_route_count": 47,
+        "observed_departures_in_feed_window": 1479,
+        "observed_peak_departures_per_hour": 13,
+        "meets_expect_min_services_per_hour": true,
+        "geometric_nearest": {
+          "stop_id": "30113",
+          "stop_name": "תחנת רכבת חיפה מרכז השמונה",
+          "distance_m": 116.5
+        },
+        "low_confidence": false,
+        "feed_sha256": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468"
+      }
     },
     {
       "id": "S05",
       "name": "Beersheba Central",
       "name_he": "באר שבע מרכז",
-      "lat": 31.2430, "lon": 34.7983,
+      "lat": 31.243,
+      "lon": 34.7983,
       "mode": "rail",
       "expect_min_services_per_hour": 1,
       "expect_routes": null,
-      "resolved_stop_id": null,
-      "note": "Southern hub; lower frequency is expected and correct."
+      "resolved_stop_id": "10968",
+      "note": "Southern hub; lower frequency is expected and correct.",
+      "resolution": {
+        "rule": "name+mode",
+        "resolved_stop_name": "באר שבע מרכז",
+        "distance_m": 26.6,
+        "name_token_score": 1.0,
+        "location_type": "0",
+        "platform_count": 0,
+        "expected_route_type": "2",
+        "observed_route_types": [
+          "2"
+        ],
+        "mode_matches_feed": true,
+        "observed_route_count": 28,
+        "observed_departures_in_feed_window": 879,
+        "observed_peak_departures_per_hour": 8,
+        "meets_expect_min_services_per_hour": true,
+        "geometric_nearest": {
+          "stop_id": "10968",
+          "stop_name": "באר שבע מרכז",
+          "distance_m": 26.6
+        },
+        "low_confidence": false,
+        "feed_sha256": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468"
+      }
     },
     {
       "id": "S06",
       "name": "Ben Gurion Airport T3",
       "name_he": "נמל תעופה בן גוריון",
-      "lat": 32.0114, "lon": 34.8867,
+      "lat": 32.0004,
+      "lon": 34.8705,
       "mode": "rail",
       "expect_min_services_per_hour": 1,
       "expect_routes": null,
-      "resolved_stop_id": null,
-      "note": "Runs deep into the night — a good probe for late-night service-day handling."
+      "resolved_stop_id": "10971",
+      "note": "Runs deep into the night — a good probe for late-night service-day handling.",
+      "resolution": {
+        "rule": "mode",
+        "resolved_stop_name": "נתב\"ג",
+        "distance_m": 1961.1,
+        "name_token_score": 0.0,
+        "location_type": "0",
+        "platform_count": 0,
+        "expected_route_type": "2",
+        "observed_route_types": [
+          "2"
+        ],
+        "mode_matches_feed": true,
+        "observed_route_count": 34,
+        "observed_departures_in_feed_window": 1266,
+        "observed_peak_departures_per_hour": 9,
+        "meets_expect_min_services_per_hour": true,
+        "geometric_nearest": {
+          "stop_id": "22648",
+          "stop_name": "כנף",
+          "distance_m": 1532.3
+        },
+        "low_confidence": true,
+        "feed_sha256": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468"
+      },
+      "corpus_fix": "was 32.0114,34.8867, 1961 m from the stop it resolved to. Corrected to GTFS stop 10971."
     },
     {
       "id": "S07",
       "name": "Jerusalem Central Bus Station",
       "name_he": "תחנה מרכזית ירושלים",
-      "lat": 31.7887, "lon": 35.2030,
+      "lat": 31.7887,
+      "lon": 35.203,
       "mode": "bus",
       "expect_min_services_per_hour": 20,
       "expect_routes": null,
-      "resolved_stop_id": null,
-      "note": "Very high bus volume; tests that a busy stop does not blow up the departures query."
+      "resolved_stop_id": "3527",
+      "note": "Very high bus volume; tests that a busy stop does not blow up the departures query.",
+      "resolution": {
+        "rule": "name+mode+station",
+        "resolved_stop_name": "ת. מרכזית ירושלים קומה 3/רציפים",
+        "distance_m": 108.8,
+        "name_token_score": 1.0,
+        "location_type": "1",
+        "platform_count": 16,
+        "expected_route_type": "3",
+        "observed_route_types": [
+          "3"
+        ],
+        "mode_matches_feed": true,
+        "observed_route_count": 52,
+        "observed_departures_in_feed_window": 5049,
+        "observed_peak_departures_per_hour": 51,
+        "meets_expect_min_services_per_hour": true,
+        "geometric_nearest": {
+          "stop_id": "3523",
+          "stop_name": "ת. מרכזית ירושלים/יפו",
+          "distance_m": 40.0
+        },
+        "low_confidence": false,
+        "feed_sha256": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468"
+      }
     },
     {
       "id": "S08",
       "name": "Tel Aviv Central Bus Station",
       "name_he": "התחנה המרכזית תל אביב",
-      "lat": 32.0570, "lon": 34.7800,
+      "lat": 32.057,
+      "lon": 34.78,
       "mode": "bus",
       "expect_min_services_per_hour": 20,
       "expect_routes": null,
-      "resolved_stop_id": null,
-      "note": "Sprawling multi-level station — stop grouping and parent_station handling matter here."
+      "resolved_stop_id": "15071",
+      "note": "Sprawling multi-level station — stop grouping and parent_station handling matter here.",
+      "resolution": {
+        "rule": "name+mode+station",
+        "resolved_stop_name": "ת.מרכזית תל אביב קומה 6/רציפים",
+        "distance_m": 66.0,
+        "name_token_score": 0.5,
+        "location_type": "1",
+        "platform_count": 7,
+        "expected_route_type": "3",
+        "observed_route_types": [
+          "3"
+        ],
+        "mode_matches_feed": true,
+        "observed_route_count": 14,
+        "observed_departures_in_feed_window": 1765,
+        "observed_peak_departures_per_hour": 19,
+        "meets_expect_min_services_per_hour": false,
+        "geometric_nearest": {
+          "stop_id": "15071",
+          "stop_name": "ת.מרכזית תל אביב קומה 6/רציפים",
+          "distance_m": 66.0
+        },
+        "low_confidence": false,
+        "feed_sha256": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468"
+      }
     },
     {
       "id": "S09",
       "name": "Mount Herzl (light rail)",
       "name_he": "הר הרצל",
-      "lat": 31.7736, "lon": 35.1806,
+      "lat": 31.7736,
+      "lon": 35.1806,
       "mode": "light_rail",
       "expect_min_services_per_hour": 4,
       "expect_routes": null,
-      "resolved_stop_id": null,
-      "note": "Jerusalem light rail terminus; confirms light rail appears as its own mode."
+      "resolved_stop_id": "4519",
+      "note": "Jerusalem light rail terminus; confirms light rail appears as its own mode.",
+      "resolution": {
+        "rule": "name+mode",
+        "resolved_stop_name": "הר הרצל",
+        "distance_m": 315.3,
+        "name_token_score": 1.0,
+        "location_type": "0",
+        "platform_count": 0,
+        "expected_route_type": "0",
+        "observed_route_types": [
+          "0"
+        ],
+        "mode_matches_feed": true,
+        "observed_route_count": 2,
+        "observed_departures_in_feed_window": 1551,
+        "observed_peak_departures_per_hour": 12,
+        "meets_expect_min_services_per_hour": true,
+        "geometric_nearest": {
+          "stop_id": "364",
+          "stop_name": "הזיכרון/שדרות הרצל",
+          "distance_m": 182.7
+        },
+        "low_confidence": false,
+        "feed_sha256": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468"
+      }
     },
     {
       "id": "S10",
       "name": "Mitzpe Ramon",
       "name_he": "מצפה רמון",
-      "lat": 30.6100, "lon": 34.8017,
+      "lat": 30.61,
+      "lon": 34.8017,
       "mode": "bus",
       "expect_min_services_per_hour": 0,
       "expect_routes": null,
-      "resolved_stop_id": null,
-      "note": "Deliberate sparse-service control. A stop with almost no departures must still resolve and return an empty-but-valid result, not an error."
+      "resolved_stop_id": "8769",
+      "note": "Deliberate sparse-service control. A stop with almost no departures must still resolve and return an empty-but-valid result, not an error.",
+      "resolution": {
+        "rule": "name+mode",
+        "resolved_stop_name": "מרכז מסחרי/מצפה רמון",
+        "distance_m": 323.4,
+        "name_token_score": 1.0,
+        "location_type": "0",
+        "platform_count": 0,
+        "expected_route_type": "3",
+        "observed_route_types": [
+          "3"
+        ],
+        "mode_matches_feed": true,
+        "observed_route_count": 21,
+        "observed_departures_in_feed_window": 679,
+        "observed_peak_departures_per_hour": 11,
+        "meets_expect_min_services_per_hour": true,
+        "geometric_nearest": {
+          "stop_id": "8754",
+          "stop_name": "הספרייה",
+          "distance_m": 44.6
+        },
+        "low_confidence": false,
+        "feed_sha256": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468"
+      }
     }
-  ]
+  ],
+  "resolution_note": "resolved_stop_id and resolution written by poc/gtfs/ingest.py from the feed recorded in poc/data/manifest.json. Resolution is mode-aware: see the module docstring of poc/gtfs/corpus.py. expect_routes remains null by design — the corpus reserves it for human confirmation (checkpoint H4), and entries with low_confidence true are the ones to check first."
 }

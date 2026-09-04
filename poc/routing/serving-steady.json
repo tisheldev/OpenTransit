@@ -1,0 +1,14 @@
+{
+  "generated": "2026-09-04T13:31:43.779831+00:00",
+  "condition": "at rest, graph loaded, after serving the corpus and a 16-worker load test",
+  "seconds": 120,
+  "interval_s": 3.0,
+  "samples": 25,
+  "memory_cap_gb": 8,
+  "cap_observed_bytes": 8589934592.0,
+  "steady_rss_bytes": 983354572,
+  "steady_rss_mb": 937.8,
+  "min_rss_mb": 916.5,
+  "max_rss_mb": 1062.9,
+  "steady_pct_of_cap": 11.4
+}

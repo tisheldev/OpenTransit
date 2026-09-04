@@ -150,11 +150,11 @@
       "category": "station",
       "expect": {
         "place": "TLV Airport",
-        "lat": 32.0114,
-        "lon": 34.8867,
-        "tol_m": 900
+        "lat": 32.0004,
+        "lon": 34.8705,
+        "tol_m": 1500
       },
-      "note": "airport terminal vs station ambiguity"
+      "note": "corrected 4 Sep from GTFS stop 10971; the Wave 0 coordinate was 1961 m out. Tolerance widened to 1500 m because the terminal complex and the rail stop are legitimately different points"
     },
     {
       "id": "P012",
@@ -163,10 +163,11 @@
       "category": "station",
       "expect": {
         "place": "TLV Airport",
-        "lat": 32.0114,
-        "lon": 34.8867,
-        "tol_m": 900
-      }
+        "lat": 32.0004,
+        "lon": 34.8705,
+        "tol_m": 1500
+      },
+      "note": "see P011"
     },
     {
       "id": "P013",
