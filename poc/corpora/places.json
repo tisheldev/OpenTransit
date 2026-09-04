@@ -6,7 +6,8 @@
   "provenance": {
     "coordinates": "APPROXIMATE, hand-entered, NOT validated against GTFS or OSM. Targets with a tolerance, not ground truth.",
     "tolerance": "tol_m is generous by design. PRD §10 asks whether a query resolves well enough to start routing, not whether it hits a stop centroid.",
-    "near_dependent": "P095-P100 include a `near` bias point. P095/P096 and P097/P098 are the same query string with different correct answers — an engine that ignores `near` cannot pass both."
+    "near_dependent": "P095-P100 include a `near` bias point. P095/P096 and P097/P098 are the same query string with different correct answers — an engine that ignores `near` cannot pass both.",
+    "corrections": "Coordinates proved wrong against Gtfs_10_days.zip sha256 08c168da… are corrected here, never by widening a tolerance. Wave 0: P011/P012. POC-5, 4 Sep: P013 (778 m), P016 (3,244 m), P017 (2,626 m), P020 (1,386 m), P032 (966 m), P034 (2,562 m), P084 (1,961 m — the same stale airport coordinate P011/P012 had, not propagated at the time). Each corrected case carries the GTFS stop_id it was snapped to in its note."
   },
   "category_counts": {
     "station": 20,
@@ -176,10 +177,11 @@
       "category": "station",
       "expect": {
         "place": "Herzliya",
-        "lat": 32.1656,
-        "lon": 34.8095,
+        "lat": 32.163558,
+        "lon": 34.817406,
         "tol_m": 500
-      }
+      },
+      "note": "corrected 4 Sep (POC-5) from GTFS stop 10943 הרצליה; the hand-entered coordinate was 778 m out"
     },
     {
       "id": "P014",
@@ -213,11 +215,12 @@
       "lang": "en",
       "category": "station",
       "expect": {
-        "place": "Ashdod",
-        "lat": 31.794,
-        "lon": 34.641,
+        "place": "Ashdod Ad Halom",
+        "lat": 31.774059,
+        "lon": 34.666058,
         "tol_m": 600
-      }
+      },
+      "note": "corrected 4 Sep (POC-5) from GTFS stop 10961 אשדוד עד הלום- מטרופול; the hand-entered coordinate was 3,244 m out and pointed at Ashdod Central Bus Station, a different station from the one the query names"
     },
     {
       "id": "P017",
@@ -226,10 +229,11 @@
       "category": "station",
       "expect": {
         "place": "Bat Galim",
-        "lat": 32.8283,
-        "lon": 34.9539,
+        "lat": 32.830498,
+        "lon": 34.981888,
         "tol_m": 500
-      }
+      },
+      "note": "corrected 4 Sep (POC-5) from GTFS stop 10935 בת גלים; the hand-entered coordinate was 2,626 m out, in the sea west of the station"
     },
     {
       "id": "P018",
@@ -262,10 +266,11 @@
       "category": "station",
       "expect": {
         "place": "PT Kiryat Arye",
-        "lat": 32.0956,
-        "lon": 34.8556,
+        "lat": 32.106273,
+        "lon": 34.863205,
         "tol_m": 500
-      }
+      },
+      "note": "corrected 4 Sep (POC-5) from GTFS stop 10947 קרית אריה; the hand-entered coordinate was 1,386 m out"
     },
     {
       "id": "P021",
@@ -409,10 +414,11 @@
       "category": "poi_hospital",
       "expect": {
         "place": "Beilinson",
-        "lat": 32.087,
-        "lon": 34.858,
+        "lat": 32.091462,
+        "lon": 34.866804,
         "tol_m": 700
-      }
+      },
+      "note": "corrected 4 Sep (POC-5) from GTFS stop 21432 בלינסון; the hand-entered coordinate was 966 m out"
     },
     {
       "id": "P033",
@@ -433,10 +439,11 @@
       "category": "poi_hospital",
       "expect": {
         "place": "Hadassah EK",
-        "lat": 31.7658,
-        "lon": 35.1206,
+        "lat": 31.764771,
+        "lon": 35.147678,
         "tol_m": 900
-      }
+      },
+      "note": "corrected 4 Sep (POC-5) from GTFS stop 1794 הדסה עין כרם; the hand-entered coordinate was 2,562 m out and 1,044 m from any stop in the feed"
     },
     {
       "id": "P035",
@@ -1047,10 +1054,11 @@
       "category": "misspelling",
       "expect": {
         "place": "TLV Airport",
-        "lat": 32.0114,
-        "lon": 34.8867,
-        "tol_m": 900
-      }
+        "lat": 32.0004,
+        "lon": 34.8705,
+        "tol_m": 1500
+      },
+      "note": "corrected 4 Sep (POC-5): this case still carried the uncorrected Wave 0 airport coordinate, exactly 1,961 m from GTFS stop 10971 נתב\"ג — the same error that was fixed in P011/P012 but not propagated here. Now aligned with P011/P012, tolerance included"
     },
     {
       "id": "P085",
