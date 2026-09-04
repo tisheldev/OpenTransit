@@ -1,0 +1,144 @@
+{
+  "schema_version": 1,
+  "generated_utc": "2026-09-04T12:38:55.137662+00:00",
+  "note": "MOT rewrites these feeds nightly. Any result produced from this data must cite the sha256 recorded here, not the filename.",
+  "files": {
+    "Gtfs_10_days.zip": {
+      "present": true,
+      "description": "MOT 10-day GTFS \u2014 primary input (ADR 0005)",
+      "source": "https://gtfs.mot.gov.il/gtfsfiles/Gtfs_10_days.zip",
+      "size_bytes": 252451353,
+      "sha256": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468",
+      "retrieved_utc": "2026-09-04T12:34:12.582595+00:00",
+      "zip_valid": true,
+      "members": [
+        {
+          "name": "calendar_dates.txt",
+          "size": 242
+        },
+        {
+          "name": "trips.txt",
+          "size": 61019564
+        },
+        {
+          "name": "stop_times.txt",
+          "size": 1770642811
+        },
+        {
+          "name": "stops.txt",
+          "size": 4698851
+        },
+        {
+          "name": "routes.txt",
+          "size": 640499
+        },
+        {
+          "name": "agency.txt",
+          "size": 3934
+        },
+        {
+          "name": "translations.txt",
+          "size": 126836299
+        },
+        {
+          "name": "shapes.txt",
+          "size": 239549602
+        },
+        {
+          "name": "fare_attributes.txt",
+          "size": 8404
+        },
+        {
+          "name": "fare_rules.txt",
+          "size": 35253060
+        },
+        {
+          "name": "feed_info.txt",
+          "size": 302
+        },
+        {
+          "name": "networks.txt",
+          "size": 2370
+        },
+        {
+          "name": "levels.txt",
+          "size": 42
+        }
+      ]
+    },
+    "israel-public-transportation.zip": {
+      "present": true,
+      "description": "MOT 60-day GTFS \u2014 comparison only (ADR 0005)",
+      "source": "https://gtfs.mot.gov.il/gtfsfiles/israel-public-transportation.zip",
+      "size_bytes": 184227099,
+      "sha256": "f26b63c21ac86704c1ad89ce137eee8f2d12a35aa10e34373dcbd36b0e083a93",
+      "retrieved_utc": "2026-09-04T12:36:36.757842+00:00",
+      "zip_valid": true,
+      "members": [
+        {
+          "name": "agency.txt",
+          "size": 2962
+        },
+        {
+          "name": "calendar.txt",
+          "size": 2472872
+        },
+        {
+          "name": "fare_attributes.txt",
+          "size": 398
+        },
+        {
+          "name": "fare_rules.txt",
+          "size": 18039570
+        },
+        {
+          "name": "routes.txt",
+          "size": 979998
+        },
+        {
+          "name": "shapes.txt",
+          "size": 229422513
+        },
+        {
+          "name": "stop_times.txt",
+          "size": 1066581537
+        },
+        {
+          "name": "stops.txt",
+          "size": 5019537
+        },
+        {
+          "name": "translations.txt",
+          "size": 6202205
+        },
+        {
+          "name": "trips.txt",
+          "size": 37578715
+        }
+      ]
+    },
+    "TripIdToDate.zip": {
+      "present": true,
+      "description": "MOT trip-id to date mapping \u2014 required for realtime matching",
+      "source": "https://gtfs.mot.gov.il/gtfsfiles/TripIdToDate.zip",
+      "size_bytes": 9781611,
+      "sha256": "97a4b424e1837ae8e772673253aec91ec42ab1e9c32a5da4fb9cfba187163307",
+      "retrieved_utc": "2026-09-04T12:36:43.081633+00:00",
+      "zip_valid": true,
+      "members": [
+        {
+          "name": "TripIdToDate.txt",
+          "size": 147177866
+        }
+      ]
+    },
+    "israel-and-palestine-latest.osm.pbf": {
+      "present": true,
+      "description": "Geofabrik OSM extract \u2014 walking legs for MOTIS",
+      "source": "https://download.geofabrik.de/asia/israel-and-palestine-latest.osm.pbf",
+      "size_bytes": 119241930,
+      "sha256": "8a34b30f91a63ef9239961ba0e4d660ae22deda2f6da4b85ba4772a6b7c4c74f",
+      "retrieved_utc": "2026-09-04T12:38:12.753731+00:00"
+    }
+  }
+}

@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "generated": "2026-09-04",
+  "purpose": "Ten known stops with expected upcoming services. Used by POC-1 (do these stops exist and resolve?) and, if the departures endpoint is built, by the stretch departures check.",
+  "status": "PARTIAL BY DESIGN",
+  "provenance": {
+    "why_partial": "The `expect_routes` field cannot be filled honestly before the feed is parsed — inventing plausible-looking Israeli line numbers would create fake ground truth, which is worse than an empty field. Agent A fills expect_routes from the real feed; a human confirms the list is sane. That confirmation is a sub-step of checkpoint H4.",
+    "coordinates": "APPROXIMATE. Agent A snaps each to the nearest real stop and records resolved_stop_id."
+  },
+  "stops": [
+    {
+      "id": "S01",
+      "name": "Tel Aviv Savidor Center",
+      "name_he": "תל אביב סבידור מרכז",
+      "lat": 32.0836, "lon": 34.7981,
+      "mode": "rail",
+      "expect_min_services_per_hour": 6,
+      "expect_routes": null,
+      "resolved_stop_id": null,
+      "note": "Busiest rail interchange in the country. If this returns thin service, the calendar is being misread."
+    },
+    {
+      "id": "S02",
+      "name": "Tel Aviv HaShalom",
+      "name_he": "תל אביב השלום",
+      "lat": 32.0731, "lon": 34.7925,
+      "mode": "rail",
+      "expect_min_services_per_hour": 6,
+      "expect_routes": null,
+      "resolved_stop_id": null,
+      "note": "Azrieli interchange; heavy commuter load."
+    },
+    {
+      "id": "S03",
+      "name": "Yitzhak Navon Station, Jerusalem",
+      "name_he": "תחנת יצחק נבון",
+      "lat": 31.7888, "lon": 35.2027,
+      "mode": "rail",
+      "expect_min_services_per_hour": 2,
+      "expect_routes": null,
+      "resolved_stop_id": null,
+      "note": "Deep underground; the fast line terminus."
+    },
+    {
+      "id": "S04",
+      "name": "Haifa Center HaShmona",
+      "name_he": "חיפה מרכז השמונה",
+      "lat": 32.8206, "lon": 34.9985,
+      "mode": "rail",
+      "expect_min_services_per_hour": 2,
+      "expect_routes": null,
+      "resolved_stop_id": null,
+      "note": ""
+    },
+    {
+      "id": "S05",
+      "name": "Beersheba Central",
+      "name_he": "באר שבע מרכז",
+      "lat": 31.2430, "lon": 34.7983,
+      "mode": "rail",
+      "expect_min_services_per_hour": 1,
+      "expect_routes": null,
+      "resolved_stop_id": null,
+      "note": "Southern hub; lower frequency is expected and correct."
+    },
+    {
+      "id": "S06",
+      "name": "Ben Gurion Airport T3",
+      "name_he": "נמל תעופה בן גוריון",
+      "lat": 32.0114, "lon": 34.8867,
+      "mode": "rail",
+      "expect_min_services_per_hour": 1,
+      "expect_routes": null,
+      "resolved_stop_id": null,
+      "note": "Runs deep into the night — a good probe for late-night service-day handling."
+    },
+    {
+      "id": "S07",
+      "name": "Jerusalem Central Bus Station",
+      "name_he": "תחנה מרכזית ירושלים",
+      "lat": 31.7887, "lon": 35.2030,
+      "mode": "bus",
+      "expect_min_services_per_hour": 20,
+      "expect_routes": null,
+      "resolved_stop_id": null,
+      "note": "Very high bus volume; tests that a busy stop does not blow up the departures query."
+    },
+    {
+      "id": "S08",
+      "name": "Tel Aviv Central Bus Station",
+      "name_he": "התחנה המרכזית תל אביב",
+      "lat": 32.0570, "lon": 34.7800,
+      "mode": "bus",
+      "expect_min_services_per_hour": 20,
+      "expect_routes": null,
+      "resolved_stop_id": null,
+      "note": "Sprawling multi-level station — stop grouping and parent_station handling matter here."
+    },
+    {
+      "id": "S09",
+      "name": "Mount Herzl (light rail)",
+      "name_he": "הר הרצל",
+      "lat": 31.7736, "lon": 35.1806,
+      "mode": "light_rail",
+      "expect_min_services_per_hour": 4,
+      "expect_routes": null,
+      "resolved_stop_id": null,
+      "note": "Jerusalem light rail terminus; confirms light rail appears as its own mode."
+    },
+    {
+      "id": "S10",
+      "name": "Mitzpe Ramon",
+      "name_he": "מצפה רמון",
+      "lat": 30.6100, "lon": 34.8017,
+      "mode": "bus",
+      "expect_min_services_per_hour": 0,
+      "expect_routes": null,
+      "resolved_stop_id": null,
+      "note": "Deliberate sparse-service control. A stop with almost no departures must still resolve and return an empty-but-valid result, not an error."
+    }
+  ]
+}

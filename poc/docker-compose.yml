@@ -1,0 +1,72 @@
+# Phase 0 POC infrastructure.
+#
+# Two services, both matching the production spec named in system-design.md
+# rather than a convenient local substitute (see poc-execution-plan §3.1a).
+#
+#   postgres  - cold storage (ADR 0003). Holds routes, trips, stops, calendars
+#               and TripIdToDate. stop_times deliberately stays out.
+#   motis     - routing and geocoding (ADR 0004, 0006).
+#
+# MEMORY IS THE POINT. system-design §320 puts the production serving box at
+# 8 GB, not the 32 GB of this dev machine. The motis service is capped at 8 GB
+# so that "the 25 journeys answer" means "they answer on production hardware".
+# Raising this cap invalidates the POC-2 serving measurement -- if it does not
+# fit, that is a finding for system-design §331, not a number to adjust.
+#
+# The graph BUILD may legitimately use the whole machine (system-design §320:
+# build on a dev box, ship the artifact). Run the build with the motis-build
+# profile, which carries no cap.
+
+services:
+  postgres:
+    image: postgis/postgis:16-3.4
+    container_name: poc-postgres
+    environment:
+      POSTGRES_USER: poc
+      POSTGRES_PASSWORD: poc
+      POSTGRES_DB: opentransit_poc
+    ports:
+      - "55432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U poc -d opentransit_poc"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    shm_size: 1gb
+
+  motis:
+    image: ghcr.io/motis-project/motis:latest
+    container_name: poc-motis
+    command: ["server"]
+    working_dir: /data
+    ports:
+      - "58080:8080"
+    volumes:
+      - ./routing/graph:/data
+      - ./data:/input:ro
+    # ---- production serving envelope, do not raise ----
+    mem_limit: 8g
+    memswap_limit: 8g
+    # --------------------------------------------------
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/ >/dev/null 2>&1 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+    profiles: ["serve"]
+
+  # Graph build. Uncapped by design -- see the note above.
+  motis-build:
+    image: ghcr.io/motis-project/motis:latest
+    container_name: poc-motis-build
+    command: ["import"]
+    working_dir: /data
+    volumes:
+      - ./routing/graph:/data
+      - ./data:/input:ro
+    profiles: ["build"]
+
+volumes:
+  pgdata:

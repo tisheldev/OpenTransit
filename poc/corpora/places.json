@@ -1,0 +1,1283 @@
+{
+  "schema_version": 1,
+  "generated": "2026-09-04",
+  "generator": "poc/corpora/build_places.py",
+  "purpose": "POC-5 geocoding corpus. PRD §10 PASS bar is >=20 correct resolutions; this corpus is 100 so the per-category breakdown is meaningful.",
+  "provenance": {
+    "coordinates": "APPROXIMATE, hand-entered, NOT validated against GTFS or OSM. Targets with a tolerance, not ground truth.",
+    "tolerance": "tol_m is generous by design. PRD §10 asks whether a query resolves well enough to start routing, not whether it hits a stop centroid.",
+    "near_dependent": "P095-P100 include a `near` bias point. P095/P096 and P097/P098 are the same query string with different correct answers — an engine that ignores `near` cannot pass both."
+  },
+  "category_counts": {
+    "station": 20,
+    "poi_university": 9,
+    "poi_hospital": 5,
+    "poi_mall": 4,
+    "poi_landmark": 12,
+    "address": 15,
+    "neighborhood": 10,
+    "misspelling": 10,
+    "translit": 9,
+    "near_dependent": 6
+  },
+  "total": 100,
+  "cases": [
+    {
+      "id": "P001",
+      "query": "Tel Aviv Savidor Center",
+      "lang": "en",
+      "category": "station",
+      "expect": {
+        "place": "TA Savidor",
+        "lat": 32.0836,
+        "lon": 34.7981,
+        "tol_m": 400
+      }
+    },
+    {
+      "id": "P002",
+      "query": "תחנת רכבת תל אביב סבידור מרכז",
+      "lang": "he",
+      "category": "station",
+      "expect": {
+        "place": "TA Savidor",
+        "lat": 32.0836,
+        "lon": 34.7981,
+        "tol_m": 400
+      }
+    },
+    {
+      "id": "P003",
+      "query": "HaShalom Station",
+      "lang": "en",
+      "category": "station",
+      "expect": {
+        "place": "TA HaShalom",
+        "lat": 32.0731,
+        "lon": 34.7925,
+        "tol_m": 400
+      },
+      "note": "PRD §10 names this one explicitly"
+    },
+    {
+      "id": "P004",
+      "query": "תחנת השלום",
+      "lang": "he",
+      "category": "station",
+      "expect": {
+        "place": "TA HaShalom",
+        "lat": 32.0731,
+        "lon": 34.7925,
+        "tol_m": 400
+      }
+    },
+    {
+      "id": "P005",
+      "query": "Yitzhak Navon",
+      "lang": "en",
+      "category": "station",
+      "expect": {
+        "place": "JLM Navon",
+        "lat": 31.7888,
+        "lon": 35.2027,
+        "tol_m": 500
+      }
+    },
+    {
+      "id": "P006",
+      "query": "תחנת יצחק נבון",
+      "lang": "he",
+      "category": "station",
+      "expect": {
+        "place": "JLM Navon",
+        "lat": 31.7888,
+        "lon": 35.2027,
+        "tol_m": 500
+      }
+    },
+    {
+      "id": "P007",
+      "query": "Haifa Center HaShmona",
+      "lang": "en",
+      "category": "station",
+      "expect": {
+        "place": "Haifa Center",
+        "lat": 32.8206,
+        "lon": 34.9985,
+        "tol_m": 500
+      }
+    },
+    {
+      "id": "P008",
+      "query": "חיפה מרכז השמונה",
+      "lang": "he",
+      "category": "station",
+      "expect": {
+        "place": "Haifa Center",
+        "lat": 32.8206,
+        "lon": 34.9985,
+        "tol_m": 500
+      }
+    },
+    {
+      "id": "P009",
+      "query": "Beersheba Central Station",
+      "lang": "en",
+      "category": "station",
+      "expect": {
+        "place": "BS Central",
+        "lat": 31.243,
+        "lon": 34.7983,
+        "tol_m": 500
+      }
+    },
+    {
+      "id": "P010",
+      "query": "באר שבע מרכז",
+      "lang": "he",
+      "category": "station",
+      "expect": {
+        "place": "BS Central",
+        "lat": 31.243,
+        "lon": 34.7983,
+        "tol_m": 500
+      }
+    },
+    {
+      "id": "P011",
+      "query": "Ben Gurion Airport",
+      "lang": "en",
+      "category": "station",
+      "expect": {
+        "place": "TLV Airport",
+        "lat": 32.0114,
+        "lon": 34.8867,
+        "tol_m": 900
+      },
+      "note": "airport terminal vs station ambiguity"
+    },
+    {
+      "id": "P012",
+      "query": "נמל תעופה בן גוריון",
+      "lang": "he",
+      "category": "station",
+      "expect": {
+        "place": "TLV Airport",
+        "lat": 32.0114,
+        "lon": 34.8867,
+        "tol_m": 900
+      }
+    },
+    {
+      "id": "P013",
+      "query": "Herzliya Station",
+      "lang": "en",
+      "category": "station",
+      "expect": {
+        "place": "Herzliya",
+        "lat": 32.1656,
+        "lon": 34.8095,
+        "tol_m": 500
+      }
+    },
+    {
+      "id": "P014",
+      "query": "Modi'in Center",
+      "lang": "en",
+      "category": "station",
+      "expect": {
+        "place": "Modiin Center",
+        "lat": 31.9017,
+        "lon": 35.0074,
+        "tol_m": 600
+      },
+      "note": "apostrophe handling"
+    },
+    {
+      "id": "P015",
+      "query": "Nahariya",
+      "lang": "en",
+      "category": "station",
+      "expect": {
+        "place": "Nahariya",
+        "lat": 33.0079,
+        "lon": 35.0938,
+        "tol_m": 700
+      },
+      "note": "northern terminus"
+    },
+    {
+      "id": "P016",
+      "query": "Ashdod Ad Halom",
+      "lang": "en",
+      "category": "station",
+      "expect": {
+        "place": "Ashdod",
+        "lat": 31.794,
+        "lon": 34.641,
+        "tol_m": 600
+      }
+    },
+    {
+      "id": "P017",
+      "query": "Bat Galim",
+      "lang": "en",
+      "category": "station",
+      "expect": {
+        "place": "Bat Galim",
+        "lat": 32.8283,
+        "lon": 34.9539,
+        "tol_m": 500
+      }
+    },
+    {
+      "id": "P018",
+      "query": "Jerusalem Central Bus Station",
+      "lang": "en",
+      "category": "station",
+      "expect": {
+        "place": "JLM CBS",
+        "lat": 31.7887,
+        "lon": 35.203,
+        "tol_m": 500
+      }
+    },
+    {
+      "id": "P019",
+      "query": "תחנה מרכזית ירושלים",
+      "lang": "he",
+      "category": "station",
+      "expect": {
+        "place": "JLM CBS",
+        "lat": 31.7887,
+        "lon": 35.203,
+        "tol_m": 500
+      }
+    },
+    {
+      "id": "P020",
+      "query": "Petah Tikva Kiryat Arye",
+      "lang": "en",
+      "category": "station",
+      "expect": {
+        "place": "PT Kiryat Arye",
+        "lat": 32.0956,
+        "lon": 34.8556,
+        "tol_m": 500
+      }
+    },
+    {
+      "id": "P021",
+      "query": "Technion",
+      "lang": "en",
+      "category": "poi_university",
+      "expect": {
+        "place": "Technion",
+        "lat": 32.7767,
+        "lon": 35.0217,
+        "tol_m": 900
+      },
+      "note": "PRD §39 demo destination"
+    },
+    {
+      "id": "P022",
+      "query": "הטכניון",
+      "lang": "he",
+      "category": "poi_university",
+      "expect": {
+        "place": "Technion",
+        "lat": 32.7767,
+        "lon": 35.0217,
+        "tol_m": 900
+      }
+    },
+    {
+      "id": "P023",
+      "query": "Tel Aviv University",
+      "lang": "en",
+      "category": "poi_university",
+      "expect": {
+        "place": "TAU",
+        "lat": 32.1133,
+        "lon": 34.8044,
+        "tol_m": 900
+      }
+    },
+    {
+      "id": "P024",
+      "query": "אוניברסיטת תל אביב",
+      "lang": "he",
+      "category": "poi_university",
+      "expect": {
+        "place": "TAU",
+        "lat": 32.1133,
+        "lon": 34.8044,
+        "tol_m": 900
+      }
+    },
+    {
+      "id": "P025",
+      "query": "Hebrew University Mount Scopus",
+      "lang": "en",
+      "category": "poi_university",
+      "expect": {
+        "place": "HUJI Scopus",
+        "lat": 31.7936,
+        "lon": 35.2444,
+        "tol_m": 900
+      }
+    },
+    {
+      "id": "P026",
+      "query": "Ben Gurion University",
+      "lang": "en",
+      "category": "poi_university",
+      "expect": {
+        "place": "BGU",
+        "lat": 31.262,
+        "lon": 34.8016,
+        "tol_m": 900
+      }
+    },
+    {
+      "id": "P027",
+      "query": "Bar-Ilan University",
+      "lang": "en",
+      "category": "poi_university",
+      "expect": {
+        "place": "Bar-Ilan",
+        "lat": 32.07,
+        "lon": 34.8433,
+        "tol_m": 900
+      },
+      "note": "hyphen handling"
+    },
+    {
+      "id": "P028",
+      "query": "Haifa University",
+      "lang": "en",
+      "category": "poi_university",
+      "expect": {
+        "place": "Haifa U",
+        "lat": 32.7614,
+        "lon": 35.0207,
+        "tol_m": 900
+      }
+    },
+    {
+      "id": "P029",
+      "query": "Weizmann Institute",
+      "lang": "en",
+      "category": "poi_university",
+      "expect": {
+        "place": "Weizmann",
+        "lat": 31.907,
+        "lon": 34.8102,
+        "tol_m": 900
+      }
+    },
+    {
+      "id": "P030",
+      "query": "Ichilov",
+      "lang": "en",
+      "category": "poi_hospital",
+      "expect": {
+        "place": "Sourasky",
+        "lat": 32.08,
+        "lon": 34.79,
+        "tol_m": 700
+      },
+      "note": "colloquial name, not the official one"
+    },
+    {
+      "id": "P031",
+      "query": "איכילוב",
+      "lang": "he",
+      "category": "poi_hospital",
+      "expect": {
+        "place": "Sourasky",
+        "lat": 32.08,
+        "lon": 34.79,
+        "tol_m": 700
+      }
+    },
+    {
+      "id": "P032",
+      "query": "Beilinson Hospital",
+      "lang": "en",
+      "category": "poi_hospital",
+      "expect": {
+        "place": "Beilinson",
+        "lat": 32.087,
+        "lon": 34.858,
+        "tol_m": 700
+      }
+    },
+    {
+      "id": "P033",
+      "query": "Rambam Medical Center",
+      "lang": "en",
+      "category": "poi_hospital",
+      "expect": {
+        "place": "Rambam",
+        "lat": 32.8347,
+        "lon": 34.9857,
+        "tol_m": 700
+      }
+    },
+    {
+      "id": "P034",
+      "query": "Hadassah Ein Kerem",
+      "lang": "en",
+      "category": "poi_hospital",
+      "expect": {
+        "place": "Hadassah EK",
+        "lat": 31.7658,
+        "lon": 35.1206,
+        "tol_m": 900
+      }
+    },
+    {
+      "id": "P035",
+      "query": "Dizengoff Center",
+      "lang": "en",
+      "category": "poi_mall",
+      "expect": {
+        "place": "Dizengoff Ctr",
+        "lat": 32.0757,
+        "lon": 34.7748,
+        "tol_m": 500
+      },
+      "note": "PRD §39 demo origin"
+    },
+    {
+      "id": "P036",
+      "query": "דיזנגוף סנטר",
+      "lang": "he",
+      "category": "poi_mall",
+      "expect": {
+        "place": "Dizengoff Ctr",
+        "lat": 32.0757,
+        "lon": 34.7748,
+        "tol_m": 500
+      }
+    },
+    {
+      "id": "P037",
+      "query": "Azrieli Center",
+      "lang": "en",
+      "category": "poi_mall",
+      "expect": {
+        "place": "Azrieli",
+        "lat": 32.0742,
+        "lon": 34.7925,
+        "tol_m": 500
+      }
+    },
+    {
+      "id": "P038",
+      "query": "Malha Mall",
+      "lang": "en",
+      "category": "poi_mall",
+      "expect": {
+        "place": "Malha",
+        "lat": 31.7513,
+        "lon": 35.1875,
+        "tol_m": 700
+      }
+    },
+    {
+      "id": "P039",
+      "query": "Mahane Yehuda Market",
+      "lang": "en",
+      "category": "poi_landmark",
+      "expect": {
+        "place": "Mahane Yehuda",
+        "lat": 31.7853,
+        "lon": 35.2124,
+        "tol_m": 500
+      }
+    },
+    {
+      "id": "P040",
+      "query": "Western Wall",
+      "lang": "en",
+      "category": "poi_landmark",
+      "expect": {
+        "place": "Kotel",
+        "lat": 31.7767,
+        "lon": 35.2345,
+        "tol_m": 500
+      }
+    },
+    {
+      "id": "P041",
+      "query": "הכותל המערבי",
+      "lang": "he",
+      "category": "poi_landmark",
+      "expect": {
+        "place": "Kotel",
+        "lat": 31.7767,
+        "lon": 35.2345,
+        "tol_m": 500
+      }
+    },
+    {
+      "id": "P042",
+      "query": "Jaffa Clock Tower",
+      "lang": "en",
+      "category": "poi_landmark",
+      "expect": {
+        "place": "Jaffa Clock",
+        "lat": 32.0542,
+        "lon": 34.7522,
+        "tol_m": 500
+      }
+    },
+    {
+      "id": "P043",
+      "query": "מגדל השעון יפו",
+      "lang": "he",
+      "category": "poi_landmark",
+      "expect": {
+        "place": "Jaffa Clock",
+        "lat": 32.0542,
+        "lon": 34.7522,
+        "tol_m": 500
+      }
+    },
+    {
+      "id": "P044",
+      "query": "Yad Vashem",
+      "lang": "en",
+      "category": "poi_landmark",
+      "expect": {
+        "place": "Yad Vashem",
+        "lat": 31.7742,
+        "lon": 35.1753,
+        "tol_m": 700
+      }
+    },
+    {
+      "id": "P045",
+      "query": "Mount Herzl",
+      "lang": "en",
+      "category": "poi_landmark",
+      "expect": {
+        "place": "Har Herzl",
+        "lat": 31.7736,
+        "lon": 35.1806,
+        "tol_m": 600
+      }
+    },
+    {
+      "id": "P046",
+      "query": "Sarona Market",
+      "lang": "en",
+      "category": "poi_landmark",
+      "expect": {
+        "place": "Sarona",
+        "lat": 32.0714,
+        "lon": 34.7869,
+        "tol_m": 500
+      }
+    },
+    {
+      "id": "P047",
+      "query": "Habima Theatre",
+      "lang": "en",
+      "category": "poi_landmark",
+      "expect": {
+        "place": "Habima",
+        "lat": 32.0724,
+        "lon": 34.7803,
+        "tol_m": 500
+      }
+    },
+    {
+      "id": "P048",
+      "query": "Bloomfield Stadium",
+      "lang": "en",
+      "category": "poi_landmark",
+      "expect": {
+        "place": "Bloomfield",
+        "lat": 32.0517,
+        "lon": 34.7614,
+        "tol_m": 600
+      }
+    },
+    {
+      "id": "P049",
+      "query": "Masada",
+      "lang": "en",
+      "category": "poi_landmark",
+      "expect": {
+        "place": "Masada",
+        "lat": 31.3156,
+        "lon": 35.3539,
+        "tol_m": 2000
+      },
+      "note": "remote; large tolerance"
+    },
+    {
+      "id": "P050",
+      "query": "Mitzpe Ramon",
+      "lang": "en",
+      "category": "poi_landmark",
+      "expect": {
+        "place": "Mitzpe Ramon",
+        "lat": 30.61,
+        "lon": 34.8017,
+        "tol_m": 2000
+      },
+      "note": "remote desert town"
+    },
+    {
+      "id": "P051",
+      "query": "Dizengoff 100 Tel Aviv",
+      "lang": "en",
+      "category": "address",
+      "expect": {
+        "place": "Dizengoff St",
+        "lat": 32.0793,
+        "lon": 34.774,
+        "tol_m": 700
+      }
+    },
+    {
+      "id": "P052",
+      "query": "דיזנגוף 100 תל אביב",
+      "lang": "he",
+      "category": "address",
+      "expect": {
+        "place": "Dizengoff St",
+        "lat": 32.0793,
+        "lon": 34.774,
+        "tol_m": 700
+      }
+    },
+    {
+      "id": "P053",
+      "query": "Rothschild Boulevard 1 Tel Aviv",
+      "lang": "en",
+      "category": "address",
+      "expect": {
+        "place": "Rothschild",
+        "lat": 32.0637,
+        "lon": 34.7699,
+        "tol_m": 700
+      }
+    },
+    {
+      "id": "P054",
+      "query": "שדרות רוטשילד 1 תל אביב",
+      "lang": "he",
+      "category": "address",
+      "expect": {
+        "place": "Rothschild",
+        "lat": 32.0637,
+        "lon": 34.7699,
+        "tol_m": 700
+      }
+    },
+    {
+      "id": "P055",
+      "query": "Ibn Gabirol 30 Tel Aviv",
+      "lang": "en",
+      "category": "address",
+      "expect": {
+        "place": "Ibn Gabirol",
+        "lat": 32.0805,
+        "lon": 34.781,
+        "tol_m": 700
+      },
+      "note": "PRD §39 demo street"
+    },
+    {
+      "id": "P056",
+      "query": "Jaffa Street 97 Jerusalem",
+      "lang": "en",
+      "category": "address",
+      "expect": {
+        "place": "Jaffa St JLM",
+        "lat": 31.7857,
+        "lon": 35.211,
+        "tol_m": 700
+      },
+      "note": "'Jaffa St' exists in several cities"
+    },
+    {
+      "id": "P057",
+      "query": "יפו 97 ירושלים",
+      "lang": "he",
+      "category": "address",
+      "expect": {
+        "place": "Jaffa St JLM",
+        "lat": 31.7857,
+        "lon": 35.211,
+        "tol_m": 700
+      }
+    },
+    {
+      "id": "P058",
+      "query": "King George 15 Jerusalem",
+      "lang": "en",
+      "category": "address",
+      "expect": {
+        "place": "King George",
+        "lat": 31.78,
+        "lon": 35.2178,
+        "tol_m": 700
+      }
+    },
+    {
+      "id": "P059",
+      "query": "Herzl 50 Haifa",
+      "lang": "en",
+      "category": "address",
+      "expect": {
+        "place": "Herzl Haifa",
+        "lat": 32.8156,
+        "lon": 34.9942,
+        "tol_m": 800
+      },
+      "note": "'Herzl' street in most cities"
+    },
+    {
+      "id": "P060",
+      "query": "Ben Yehuda 20 Tel Aviv",
+      "lang": "en",
+      "category": "address",
+      "expect": {
+        "place": "Ben Yehuda TA",
+        "lat": 32.079,
+        "lon": 34.7686,
+        "tol_m": 700
+      },
+      "note": "also a Jerusalem street"
+    },
+    {
+      "id": "P061",
+      "query": "Allenby 40 Tel Aviv",
+      "lang": "en",
+      "category": "address",
+      "expect": {
+        "place": "Allenby",
+        "lat": 32.0654,
+        "lon": 34.7702,
+        "tol_m": 700
+      }
+    },
+    {
+      "id": "P062",
+      "query": "HaNevi'im 20 Jerusalem",
+      "lang": "en",
+      "category": "address",
+      "expect": {
+        "place": "HaNeviim",
+        "lat": 31.7828,
+        "lon": 35.22,
+        "tol_m": 700
+      },
+      "note": "apostrophe + transliteration"
+    },
+    {
+      "id": "P063",
+      "query": "Sokolov 30 Ramat Gan",
+      "lang": "en",
+      "category": "address",
+      "expect": {
+        "place": "Sokolov RG",
+        "lat": 32.0836,
+        "lon": 34.811,
+        "tol_m": 800
+      }
+    },
+    {
+      "id": "P064",
+      "query": "Rager Boulevard Beersheba",
+      "lang": "en",
+      "category": "address",
+      "expect": {
+        "place": "Rager Blvd",
+        "lat": 31.253,
+        "lon": 34.795,
+        "tol_m": 900
+      }
+    },
+    {
+      "id": "P065",
+      "query": "הרצל 50 חיפה",
+      "lang": "he",
+      "category": "address",
+      "expect": {
+        "place": "Herzl Haifa",
+        "lat": 32.8156,
+        "lon": 34.9942,
+        "tol_m": 800
+      }
+    },
+    {
+      "id": "P066",
+      "query": "Florentin",
+      "lang": "en",
+      "category": "neighborhood",
+      "expect": {
+        "place": "Florentin TA",
+        "lat": 32.057,
+        "lon": 34.769,
+        "tol_m": 1200
+      }
+    },
+    {
+      "id": "P067",
+      "query": "פלורנטין",
+      "lang": "he",
+      "category": "neighborhood",
+      "expect": {
+        "place": "Florentin TA",
+        "lat": 32.057,
+        "lon": 34.769,
+        "tol_m": 1200
+      }
+    },
+    {
+      "id": "P068",
+      "query": "Neve Tzedek",
+      "lang": "en",
+      "category": "neighborhood",
+      "expect": {
+        "place": "Neve Tzedek",
+        "lat": 32.062,
+        "lon": 34.762,
+        "tol_m": 1000
+      }
+    },
+    {
+      "id": "P069",
+      "query": "Ramat Aviv",
+      "lang": "en",
+      "category": "neighborhood",
+      "expect": {
+        "place": "Ramat Aviv",
+        "lat": 32.11,
+        "lon": 34.796,
+        "tol_m": 1500
+      }
+    },
+    {
+      "id": "P070",
+      "query": "Rehavia",
+      "lang": "en",
+      "category": "neighborhood",
+      "expect": {
+        "place": "Rehavia JLM",
+        "lat": 31.775,
+        "lon": 35.211,
+        "tol_m": 1200
+      }
+    },
+    {
+      "id": "P071",
+      "query": "Nachlaot",
+      "lang": "en",
+      "category": "neighborhood",
+      "expect": {
+        "place": "Nachlaot",
+        "lat": 31.783,
+        "lon": 35.21,
+        "tol_m": 1000
+      }
+    },
+    {
+      "id": "P072",
+      "query": "Hadar HaCarmel",
+      "lang": "en",
+      "category": "neighborhood",
+      "expect": {
+        "place": "Hadar",
+        "lat": 32.81,
+        "lon": 34.995,
+        "tol_m": 1500
+      }
+    },
+    {
+      "id": "P073",
+      "query": "Ramot",
+      "lang": "en",
+      "category": "neighborhood",
+      "expect": {
+        "place": "Ramot JLM",
+        "lat": 31.813,
+        "lon": 35.19,
+        "tol_m": 2000
+      },
+      "note": "ambiguous: also Ramot in Haifa area"
+    },
+    {
+      "id": "P074",
+      "query": "Old City Jerusalem",
+      "lang": "en",
+      "category": "neighborhood",
+      "expect": {
+        "place": "Old City",
+        "lat": 31.7767,
+        "lon": 35.23,
+        "tol_m": 1200
+      }
+    },
+    {
+      "id": "P075",
+      "query": "העיר העתיקה ירושלים",
+      "lang": "he",
+      "category": "neighborhood",
+      "expect": {
+        "place": "Old City",
+        "lat": 31.7767,
+        "lon": 35.23,
+        "tol_m": 1200
+      }
+    },
+    {
+      "id": "P076",
+      "query": "Dizengof Center",
+      "lang": "en",
+      "category": "misspelling",
+      "expect": {
+        "place": "Dizengoff Ctr",
+        "lat": 32.0757,
+        "lon": 34.7748,
+        "tol_m": 500
+      },
+      "note": "one f"
+    },
+    {
+      "id": "P077",
+      "query": "Technyon",
+      "lang": "en",
+      "category": "misspelling",
+      "expect": {
+        "place": "Technion",
+        "lat": 32.7767,
+        "lon": 35.0217,
+        "tol_m": 900
+      }
+    },
+    {
+      "id": "P078",
+      "query": "Jerusalim",
+      "lang": "en",
+      "category": "misspelling",
+      "expect": {
+        "place": "Jerusalem",
+        "lat": 31.7857,
+        "lon": 35.211,
+        "tol_m": 3000
+      }
+    },
+    {
+      "id": "P079",
+      "query": "Beer Sheva",
+      "lang": "en",
+      "category": "misspelling",
+      "expect": {
+        "place": "BS Central",
+        "lat": 31.243,
+        "lon": 34.7983,
+        "tol_m": 2000
+      },
+      "note": "space variant"
+    },
+    {
+      "id": "P080",
+      "query": "Herzliyya",
+      "lang": "en",
+      "category": "misspelling",
+      "expect": {
+        "place": "Herzliya",
+        "lat": 32.1656,
+        "lon": 34.8095,
+        "tol_m": 2000
+      },
+      "note": "double y"
+    },
+    {
+      "id": "P081",
+      "query": "Netania",
+      "lang": "en",
+      "category": "misspelling",
+      "expect": {
+        "place": "Netanya",
+        "lat": 32.3097,
+        "lon": 34.8619,
+        "tol_m": 2000
+      }
+    },
+    {
+      "id": "P082",
+      "query": "Rishon Lezion",
+      "lang": "en",
+      "category": "misspelling",
+      "expect": {
+        "place": "Rishon",
+        "lat": 31.964,
+        "lon": 34.804,
+        "tol_m": 3000
+      },
+      "note": "casing + spacing"
+    },
+    {
+      "id": "P083",
+      "query": "Savidor Merkaz",
+      "lang": "en",
+      "category": "misspelling",
+      "expect": {
+        "place": "TA Savidor",
+        "lat": 32.0836,
+        "lon": 34.7981,
+        "tol_m": 400
+      },
+      "note": "mixed transliteration"
+    },
+    {
+      "id": "P084",
+      "query": "Ben Gurion Airoport",
+      "lang": "en",
+      "category": "misspelling",
+      "expect": {
+        "place": "TLV Airport",
+        "lat": 32.0114,
+        "lon": 34.8867,
+        "tol_m": 900
+      }
+    },
+    {
+      "id": "P085",
+      "query": "Machne Yehuda",
+      "lang": "en",
+      "category": "misspelling",
+      "expect": {
+        "place": "Mahane Yehuda",
+        "lat": 31.7853,
+        "lon": 35.2124,
+        "tol_m": 500
+      }
+    },
+    {
+      "id": "P086",
+      "query": "Petah Tikva",
+      "lang": "en",
+      "category": "translit",
+      "expect": {
+        "place": "Petah Tikva",
+        "lat": 32.087,
+        "lon": 34.887,
+        "tol_m": 3000
+      },
+      "note": "variant 1 of 3"
+    },
+    {
+      "id": "P087",
+      "query": "Petach Tikwa",
+      "lang": "en",
+      "category": "translit",
+      "expect": {
+        "place": "Petah Tikva",
+        "lat": 32.087,
+        "lon": 34.887,
+        "tol_m": 3000
+      },
+      "note": "variant 2 of 3"
+    },
+    {
+      "id": "P088",
+      "query": "Petah Tiqwa",
+      "lang": "en",
+      "category": "translit",
+      "expect": {
+        "place": "Petah Tikva",
+        "lat": 32.087,
+        "lon": 34.887,
+        "tol_m": 3000
+      },
+      "note": "variant 3 of 3"
+    },
+    {
+      "id": "P089",
+      "query": "Rishon LeTsiyon",
+      "lang": "en",
+      "category": "translit",
+      "expect": {
+        "place": "Rishon",
+        "lat": 31.964,
+        "lon": 34.804,
+        "tol_m": 3000
+      },
+      "note": "ts vs tz"
+    },
+    {
+      "id": "P090",
+      "query": "Rishon LeZion",
+      "lang": "en",
+      "category": "translit",
+      "expect": {
+        "place": "Rishon",
+        "lat": 31.964,
+        "lon": 34.804,
+        "tol_m": 3000
+      }
+    },
+    {
+      "id": "P091",
+      "query": "Kfar Saba",
+      "lang": "en",
+      "category": "translit",
+      "expect": {
+        "place": "Kfar Saba",
+        "lat": 32.175,
+        "lon": 34.907,
+        "tol_m": 3000
+      }
+    },
+    {
+      "id": "P092",
+      "query": "Kefar Sava",
+      "lang": "en",
+      "category": "translit",
+      "expect": {
+        "place": "Kfar Saba",
+        "lat": 32.175,
+        "lon": 34.907,
+        "tol_m": 3000
+      },
+      "note": "b/v and vowel variant"
+    },
+    {
+      "id": "P093",
+      "query": "Akko",
+      "lang": "en",
+      "category": "translit",
+      "expect": {
+        "place": "Akko",
+        "lat": 32.928,
+        "lon": 35.082,
+        "tol_m": 3000
+      }
+    },
+    {
+      "id": "P094",
+      "query": "Acre",
+      "lang": "en",
+      "category": "translit",
+      "expect": {
+        "place": "Akko",
+        "lat": 32.928,
+        "lon": 35.082,
+        "tol_m": 3000
+      },
+      "note": "English exonym, not a transliteration"
+    },
+    {
+      "id": "P095",
+      "query": "Central Station",
+      "lang": "en",
+      "category": "near_dependent",
+      "expect": {
+        "place": "TA CBS",
+        "lat": 32.057,
+        "lon": 34.78,
+        "tol_m": 1500
+      },
+      "near": {
+        "lat": 32.08,
+        "lon": 34.78
+      },
+      "note": "near=Tel Aviv"
+    },
+    {
+      "id": "P096",
+      "query": "Central Station",
+      "lang": "en",
+      "category": "near_dependent",
+      "expect": {
+        "place": "JLM CBS",
+        "lat": 31.7887,
+        "lon": 35.203,
+        "tol_m": 1500
+      },
+      "near": {
+        "lat": 31.7857,
+        "lon": 35.211
+      },
+      "note": "near=Jerusalem — same string, different answer"
+    },
+    {
+      "id": "P097",
+      "query": "Herzl",
+      "lang": "en",
+      "category": "near_dependent",
+      "expect": {
+        "place": "Herzl TA area",
+        "lat": 32.08,
+        "lon": 34.77,
+        "tol_m": 3000
+      },
+      "near": {
+        "lat": 32.08,
+        "lon": 34.78
+      },
+      "note": "near=Tel Aviv"
+    },
+    {
+      "id": "P098",
+      "query": "Herzl",
+      "lang": "en",
+      "category": "near_dependent",
+      "expect": {
+        "place": "Herzl Haifa",
+        "lat": 32.8156,
+        "lon": 34.9942,
+        "tol_m": 3000
+      },
+      "near": {
+        "lat": 32.8156,
+        "lon": 34.9942
+      },
+      "note": "near=Haifa"
+    },
+    {
+      "id": "P099",
+      "query": "HaTachana",
+      "lang": "en",
+      "category": "near_dependent",
+      "expect": {
+        "place": "HaTachana TA",
+        "lat": 32.061,
+        "lon": 34.762,
+        "tol_m": 2000
+      },
+      "near": {
+        "lat": 32.08,
+        "lon": 34.78
+      },
+      "note": "near=Tel Aviv; common stop name nationwide"
+    },
+    {
+      "id": "P100",
+      "query": "University",
+      "lang": "en",
+      "category": "near_dependent",
+      "expect": {
+        "place": "Haifa U",
+        "lat": 32.7614,
+        "lon": 35.0207,
+        "tol_m": 3000
+      },
+      "near": {
+        "lat": 32.794,
+        "lon": 34.9896
+      },
+      "note": "near=Haifa"
+    }
+  ]
+}

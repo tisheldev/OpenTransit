@@ -1,0 +1,7 @@
+data/*.zip
+data/*.pbf
+data/*.osm
+*.pyc
+__pycache__/
+.venv/
+routing/graph/

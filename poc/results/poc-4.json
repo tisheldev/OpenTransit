@@ -1,0 +1,13 @@
+{
+  "poc": 4,
+  "name": "Service alerts",
+  "status": "BLOCKED_ON_ACCESS",
+  "generated": "2026-09-04",
+  "headline": "No public feed URL exists; gated on MOT reply",
+  "capabilities": { "obtain_alerts": false },
+  "notes": [
+    "The Service Alerts feed URL is issued only on request to ptsupport@mot.gov.il (ICD 2.2 §4.4). No self-service endpoint exists.",
+    "Developer deferred the MOT request on 4 Sep 2026 (checkpoint H1), so the four-week clock has not started.",
+    "Agent E can still build and test the parser against the published ICD and synthetic fixtures."
+  ]
+}
