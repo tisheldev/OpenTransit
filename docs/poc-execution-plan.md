@@ -1,5 +1,7 @@
 # Phase 0 POC — Autonomous Execution Plan
 
+> **Historical execution plan:** Waves 0–1 produced the September 4 evidence; H3/H4 remain pending. Use [the current continuation plan](next-steps.md) for remaining work. ADR 0005 now accepts the 60-day primary with TripIdToDate compatibility enforced.
+
 **Status:** Proposed
 **Governs:** PRD §5–§13 (POC-1 … POC-6) and the Go/No-Go table in PRD §12
 **Operating model:** Subagents do the building; the developer sends one email, makes six decisions, and judges route quality
@@ -85,7 +87,7 @@ Change detection must use `GET` plus zip validation.
 | D3 | Cold storage | Postgres + PostGIS, in a container | system-design §169: the named production cold store. The POC uses the production component, not a local substitute |
 | D3a | What goes in it | routes, trips, stops, calendars, `TripIdToDate` | system-design §173: `stop_times` stays out — ~100M rows for the 60-day feed, and MOTIS answers journeys *and* departures from RAM |
 | D4 | Routing engine | MOTIS | PRD §7 initial candidate; Transitous proves Israeli coverage |
-| D5 | GTFS feed | `Gtfs_10_days.zip` | Findings §1: the accurate feed for a journey planner |
+| D5 | GTFS feed | `israel-public-transportation.zip` + `TripIdToDate.zip` | Accepted ADR 0005 amendment; ten-day comparison only |
 | D6 | Geocoder | MOTIS built-in first | Avoids a second service; Nominatim only as bounded comparison |
 
 D2 was settled by the developer on 4 Sep 2026: Python for the POC, revisitable for the
@@ -169,7 +171,7 @@ Run directly, because everything downstream depends on it being right.
 
 1. Scaffold `/poc` per PRD §13.
 2. Write ADRs for D1–D6.
-3. Acquire and checksum inputs once, to a shared path: `Gtfs_10_days.zip`,
+3. Acquire and checksum inputs once, to a shared path: `israel-public-transportation.zip`, `Gtfs_10_days.zip` (comparison only),
    `israel-public-transportation.zip`, `TripIdToDate.zip`, and the Geofabrik
    Israel + Palestine OSM extract. Record sizes, hashes, and retrieval timestamps.
 4. Build the corpora in §4.
@@ -203,7 +205,7 @@ rows) to `poc/docs/known-data-problems.md`.
 editing, and `results/poc-1.json` records per-file row counts, the five required
 validation examples resolving, and the load/parse split actually taken.
 
-**Agent B brief.** Stand up MOTIS in Docker against the 10-day GTFS plus the OSM
+**Agent B brief.** Stand up MOTIS in Docker against the 60-day GTFS plus the OSM
 extract. Two distinct measurements, and conflating them is the failure mode this brief
 exists to prevent:
 

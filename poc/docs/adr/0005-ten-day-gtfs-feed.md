@@ -1,43 +1,30 @@
-# D5 — The 10-day GTFS feed is the primary input
+# D5 — The 60-day GTFS feed is the primary input
 
-**Status:** Accepted
-**Date:** 2026-09-04
+**Status:** Accepted amendment, 5 September 2026, by explicit user instruction.
+The historical filename is retained so existing links continue to resolve.
 
-## Context
+`israel-public-transportation.zip` plus `TripIdToDate.zip` is the executable
+primary feed for ingestion, MOTIS routing and geocoding. `Gtfs_10_days.zip`
+is an explicit comparison input only. There is no fallback to it.
 
-MOT publishes two different products. `israel-public-transportation.zip` (~157 MB) is the
-long-horizon planned feed; `Gtfs_10_days.zip` (~249 MB) is the near-term one and is larger.
-`docs/data-access-findings.md` §1: "for a journey planner the 10-day feed is the accurate
-one, the 60-day one is for 'will this line exist in October'."
+The sampled 60-day product has 246,042/246,042 normalized mapping keys in
+TripIdToDate; the ten-day sample has zero overlap. Preserve full GTFS trip IDs;
+strip the `_ddmmyy` suffix only for mapping lookup. Normalized keys are not
+unique journey identities.
 
-## Decision
+Ingest and graph build reject incomplete key coverage and absent or disjoint
+date windows before loading. Input hashes are pinned together. This proves
+content compatibility, not identical publication versions or successful realtime
+matching: TripIdToDate contains no publication identifier, and per-service-date
+mapping ambiguity remains an integration check.
 
-`Gtfs_10_days.zip` is the primary input. The 60-day feed is downloaded and row-counted for
-comparison so the decision is evidenced rather than asserted (corpus check E06).
+Derive the corpus and graph window from `calendar.txt` plus
+`calendar_dates.txt` exceptions. Do not require `feed_info.txt`; the sampled
+primary lacks it. Use `Asia/Jerusalem` for local departure offsets. Disable
+calendar extension. The sampled actual window is 2026-09-04..2026-10-04;
+the product name does not guarantee sixty days of service.
 
-## Consequences
-
-- Journey correctness is judged against near-term data, which is what a user experiences.
-- `TripIdToDate.zip` must be versioned in lockstep with whichever feed is loaded (E05).
-- Both feeds change nightly, so every result records the feed hash it was produced from.
-
----
-
-## Amendment, 4 Sep 2026 — this decision is now contested
-
-Wave 0 inspection of the real feeds found two facts that were not available when this ADR
-was written:
-
-1. **The 10-day feed does not cover the current day.** Downloaded 4 Sep, its window is
-   `20260905..20260914`. The 60-day feed does cover 4 Sep. See KDP-001.
-2. **The two feeds express service days incompatibly** — `calendar_dates.txt` only versus
-   `calendar.txt` only. See KDP-002.
-
-Fact 1 undercuts the premise. `data-access-findings.md` §1 argued the 10-day feed is "the
-accurate one" for a journey planner, which remains true about *accuracy*, but a feed whose
-window opens tomorrow cannot answer PRD §39's `--depart-now` on its own.
-
-**Status:** the primary-input choice is reopened and belongs to the developer, not to an
-agent. Until it is decided, POC-1 loads the 10-day feed as written above and additionally
-row-counts the 60-day feed, so the comparison is evidenced either way. POC-2 must state
-which feed produced each journey result.
+The original results and corpus are preserved in
+`poc/comparisons/ten-day-2026-09-04/`. Current ingest/routing results and the H3
+sheet are generated from the primary. See [rerun findings](../primary-feed-rerun.md).
+H3 route quality and H4 search quality still require human review.

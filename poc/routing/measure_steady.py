@@ -24,6 +24,8 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 
+from feed_context import verified_context
+
 ROUTING = Path(__file__).resolve().parent
 OUT = ROUTING / "serving-steady.json"
 SAMPLES = ROUTING / "serving-steady-samples.jsonl"
@@ -49,6 +51,7 @@ def main() -> int:
     ap.add_argument("--interval", type=float, default=3.0)
     args = ap.parse_args()
 
+    feed_sha, _ = verified_context()
     vals: list[float] = []
     limit = None
     print(f"sampling {CONTAINER} at rest for {args.seconds}s every {args.interval}s")
@@ -83,6 +86,7 @@ def main() -> int:
         return 1
 
     res = {
+        "feed_sha256": feed_sha,
         "generated": datetime.now(timezone.utc).isoformat(),
         "condition": "at rest, graph loaded, after serving the corpus and a 16-worker load test",
         "seconds": args.seconds, "interval_s": args.interval, "samples": len(vals),

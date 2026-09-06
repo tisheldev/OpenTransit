@@ -11,9 +11,10 @@
     },
     "to": {
       "name": "Ben Gurion Airport T3",
-      "name_he": "נמל תעופה בן גוריון",
-      "lat": 32.0114,
-      "lon": 34.8867
+      "name_he": "נתב\"ג טרמינל 3",
+      "lat": 32.0004,
+      "lon": 34.8705,
+      "corpus_fix": "was 32.0114,34.8867 which is 1532 m from the nearest stop of any kind. Replaced with GTFS stop 10971 נתב\"ג from feed 08c168da. Fix derived from the feed, not re-guessed."
     },
     "depart": "late_night",
     "expect": {
@@ -29,38 +30,38 @@
     "human_review": "Airport rail runs deep into the night. Does the engine know that?"
   },
   "request": {
-    "url": "http://localhost:58080/api/v6/plan?fromPlace=32.0836%2C34.7981&toPlace=32.0114%2C34.8867&time=2026-09-08T23%3A40%3A00%2B03%3A00&arriveBy=false&numItineraries=5&timetableView=true&maxPreTransitTime=1800&maxPostTransitTime=1800",
+    "url": "http://localhost:58080/api/v6/plan?fromPlace=32.0836%2C34.7981&toPlace=32.0004%2C34.8705&time=2026-09-08T23%3A40%3A00%2B03%3A00&arriveBy=false&numItineraries=5&timetableView=true&maxPreTransitTime=1800&maxPostTransitTime=1800",
     "requested_time_local": "2026-09-08T23:40:00+03:00",
     "http_status": 200,
-    "latency_ms": 24.9
+    "latency_ms": 28.8
   },
   "response": {
     "requestParameters": {},
     "debugOutput": {
       "algorithm": 1,
       "direct": 0,
-      "execute_time": 0,
+      "execute_time": 18,
       "fares": 0,
       "fastest_direct": 0,
-      "fp_update_prevented_by_lower_bound": 0,
+      "fp_update_prevented_by_lower_bound": 2095,
       "interval_extensions": 0,
-      "lb_time": 0,
-      "n_dest_offsets": 0,
-      "n_earliest_arrival_updated_by_footpath": 0,
-      "n_earliest_arrival_updated_by_route": 0,
-      "n_earliest_trip_calls": 0,
+      "lb_time": 1,
+      "n_dest_offsets": 7,
+      "n_earliest_arrival_updated_by_footpath": 19436,
+      "n_earliest_arrival_updated_by_route": 53902,
+      "n_earliest_trip_calls": 229207,
       "n_events_skipped_by_early_termination": 0,
-      "n_execute_bwd": 0,
-      "n_execute_fwd": 1,
-      "n_footpaths_visited": 0,
-      "n_routes_visited": 621,
+      "n_execute_bwd": 5,
+      "n_execute_fwd": 5,
+      "n_footpaths_visited": 50558,
+      "n_routes_visited": 32481,
       "n_routing_time": 0,
       "n_start_offsets": 195,
       "n_td_dest_offsets": 0,
       "n_td_start_offsets": 0,
-      "prepare": 3,
+      "prepare": 5,
       "prepare_backward_WALK": 0,
-      "prepare_forward_WALK": 3,
+      "prepare_forward_WALK": 4,
       "route_update_prevented_by_lower_bound": 0,
       "search_interval_reduction_by_early_termination": 0
     },
@@ -72,13 +73,1670 @@
     },
     "to": {
       "name": "END",
-      "lat": 32.0114,
-      "lon": 34.8867,
+      "lat": 32.0004,
+      "lon": 34.8705,
       "vertexType": "NORMAL"
     },
     "direct": [],
-    "itineraries": [],
+    "itineraries": [
+      {
+        "duration": 1440,
+        "startTime": "2026-09-08T20:40:00Z",
+        "endTime": "2026-09-08T21:04:00Z",
+        "transfers": 0,
+        "id": "ClEhCfmgZ7MKQEApA3gLJChmQUAyDm1vdDYwZGF5XzM3MzU4OaOXUSy3CkBAQaiQK/UsZkFASKDlgdUGUNzlgdUGWgRXQUxLYAFxAAAAAAAAAAAK2QEKS9eU16jXptec15nXlC3XlNeo16bXnNeZ15Q8LT7Xmdeo15XXqdec15nXnS/Xmdem15fXpyDXoNeR15XXny3Xmdeo15XXqdec15nXnRIgMjAyNjA5MDhfMjM6MjlfbW90NjBkYXlfMV81MDExOTUaDm1vdDYwZGF5XzM3MzU4IaOXUSy3CkBAKaiQK/UsZkFAMg5tb3Q2MGRheV8zNzMwNjkAHebLCwBAQEEJZeHra29BQEjc5YHVBlCE8IHVBloNUkVHSU9OQUxfUkFJTGABaQAAAAAAAAAACkgaDm1vdDYwZGF5XzM3MzA2IQAd5ssLAEBAKQll4etrb0FAOY51cRsNAEBAQYGVQ4tsb0FASITwgdUGUMDwgdUGWgRXQUxLYAE=",
+        "legs": [
+          {
+            "mode": "WALK",
+            "from": {
+              "name": "START",
+              "lat": 32.0836,
+              "lon": 34.7981,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-08T20:40:00Z",
+              "scheduledDeparture": "2026-09-08T20:40:00Z",
+              "vertexType": "NORMAL"
+            },
+            "to": {
+              "name": "תל אביב מרכז",
+              "stopId": "mot60day_37358",
+              "importance": 1.0,
+              "lat": 32.083715000000005,
+              "lon": 34.798247,
+              "level": 0.0,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-08T20:41:00Z",
+              "scheduledArrival": "2026-09-08T20:41:00Z",
+              "stopCode": "17038",
+              "vertexType": "TRANSIT",
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "duration": 60,
+            "startTime": "2026-09-08T20:40:00Z",
+            "endTime": "2026-09-08T20:41:00Z",
+            "scheduledStartTime": "2026-09-08T20:40:00Z",
+            "scheduledEndTime": "2026-09-08T20:41:00Z",
+            "realTime": false,
+            "scheduled": false,
+            "distance": 27.0,
+            "legGeometry": {
+              "points": "ygfe|@ia|jaATD??L}@??BY??NkA??gHsA",
+              "precision": 6,
+              "length": 10
+            },
+            "steps": [
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 2.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "toOsmNode": 12968943913,
+                "polyline": {
+                  "points": "ygfe|@ia|jaATD",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 3.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1411385667,
+                "fromOsmNode": 12968943913,
+                "toOsmNode": 12968943916,
+                "polyline": {
+                  "points": "cgfe|@ca|jaAL}@",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 1.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1411385667,
+                "fromOsmNode": 12968943916,
+                "toOsmNode": 12968943915,
+                "polyline": {
+                  "points": "uffe|@ac|jaABY",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 4.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1411385667,
+                "fromOsmNode": 12968943915,
+                "toOsmNode": 12968943914,
+                "polyline": {
+                  "points": "qffe|@{c|jaANkA",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 17.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "fromOsmNode": 12968943914,
+                "polyline": {
+                  "points": "affe|@gf|jaAgHsA",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              }
+            ]
+          },
+          {
+            "mode": "REGIONAL_RAIL",
+            "from": {
+              "name": "תל אביב מרכז",
+              "stopId": "mot60day_37358",
+              "importance": 1.0,
+              "lat": 32.083715000000005,
+              "lon": 34.798247,
+              "level": 0.0,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-08T20:41:00Z",
+              "scheduledDeparture": "2026-09-08T20:41:00Z",
+              "stopCode": "17038",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "to": {
+              "name": "נתב''ג",
+              "stopId": "mot60day_37306",
+              "importance": 0.3637464940547943,
+              "lat": 32.00036,
+              "lon": 34.87048099999999,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-08T21:03:00Z",
+              "scheduledArrival": "2026-09-08T21:03:00Z",
+              "stopCode": "17090",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "duration": 1320,
+            "startTime": "2026-09-08T20:41:00Z",
+            "endTime": "2026-09-08T21:03:00Z",
+            "scheduledStartTime": "2026-09-08T20:41:00Z",
+            "scheduledEndTime": "2026-09-08T21:03:00Z",
+            "realTime": false,
+            "scheduled": true,
+            "interlineWithPreviousLeg": false,
+            "headsign": "785",
+            "tripFrom": {
+              "name": "הרצליה",
+              "stopId": "mot60day_37362",
+              "importance": 0.7568499445915222,
+              "lat": 32.16355800000001,
+              "lon": 34.81740599999999,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-08T20:29:00Z",
+              "scheduledDeparture": "2026-09-08T20:29:00Z",
+              "stopCode": "17034",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NOT_ALLOWED",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "tripTo": {
+              "name": "ירושלים/יצחק נבון",
+              "stopId": "mot60day_42286",
+              "importance": 0.2589934766292572,
+              "lat": 31.788061999999996,
+              "lon": 35.20254500000001,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-08T21:29:00Z",
+              "scheduledArrival": "2026-09-08T21:29:00Z",
+              "stopCode": "17118",
+              "vertexType": "TRANSIT",
+              "pickupType": "NOT_ALLOWED",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "routeId": "mot60day_38462",
+            "routeUrl": "",
+            "directionId": "1",
+            "routeType": 2,
+            "agencyName": "רכבת ישראל",
+            "agencyUrl": "http://www.rail.co.il",
+            "agencyFareUrl": "",
+            "agencyId": "2",
+            "tripId": "20260908_23:29_mot60day_1_501195",
+            "routeShortName": "",
+            "routeLongName": "הרצליה-הרצליה<->ירושלים/יצחק נבון-ירושלים",
+            "tripShortName": "",
+            "displayName": "הרצליה-הרצליה<->ירושלים/יצחק נבון-ירושלים",
+            "cancelled": false,
+            "source": "/input/israel-public-transportation.zip/stop_times.txt:1534:1540",
+            "intermediateStops": [
+              {
+                "name": "השלום",
+                "stopId": "mot60day_37350",
+                "importance": 0.9470642805099487,
+                "lat": 32.073346,
+                "lon": 34.79325600000001,
+                "level": 0.0,
+                "tz": "Asia/Jerusalem",
+                "arrival": "2026-09-08T20:46:00Z",
+                "departure": "2026-09-08T20:46:00Z",
+                "scheduledArrival": "2026-09-08T20:46:00Z",
+                "scheduledDeparture": "2026-09-08T20:46:00Z",
+                "stopCode": "17046",
+                "vertexType": "TRANSIT",
+                "pickupType": "NORMAL",
+                "dropoffType": "NORMAL",
+                "cancelled": false,
+                "modes": [
+                  "REGIONAL_RAIL"
+                ]
+              },
+              {
+                "name": "תל אביב ההגנה",
+                "stopId": "mot60day_37292",
+                "importance": 0.9475302696228027,
+                "lat": 32.053978,
+                "lon": 34.784839,
+                "tz": "Asia/Jerusalem",
+                "arrival": "2026-09-08T20:52:00Z",
+                "departure": "2026-09-08T20:52:00Z",
+                "scheduledArrival": "2026-09-08T20:52:00Z",
+                "scheduledDeparture": "2026-09-08T20:52:00Z",
+                "stopCode": "17104",
+                "vertexType": "TRANSIT",
+                "pickupType": "NORMAL",
+                "dropoffType": "NORMAL",
+                "cancelled": false,
+                "modes": [
+                  "REGIONAL_RAIL"
+                ]
+              }
+            ],
+            "legGeometry": {
+              "points": "eofe|@mi|jaA`gS|vHnyd@`mObvgBsgfD",
+              "precision": 6,
+              "length": 4
+            },
+            "bikesAllowed": false,
+            "wheelchairAccessible": "NOT_ACCESSIBLE",
+            "reservation": "NONE",
+            "alternatives": []
+          },
+          {
+            "mode": "WALK",
+            "from": {
+              "name": "נתב''ג",
+              "stopId": "mot60day_37306",
+              "importance": 0.3637464940547943,
+              "lat": 32.00036,
+              "lon": 34.87048099999999,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-08T21:03:00Z",
+              "departure": "2026-09-08T21:03:00Z",
+              "scheduledArrival": "2026-09-08T21:03:00Z",
+              "scheduledDeparture": "2026-09-08T21:03:00Z",
+              "stopCode": "17090",
+              "vertexType": "TRANSIT",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "to": {
+              "name": "END",
+              "lat": 32.0004,
+              "lon": 34.8705,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-08T21:04:00Z",
+              "scheduledArrival": "2026-09-08T21:04:00Z",
+              "vertexType": "NORMAL"
+            },
+            "duration": 60,
+            "startTime": "2026-09-08T21:03:00Z",
+            "endTime": "2026-09-08T21:04:00Z",
+            "scheduledStartTime": "2026-09-08T21:03:00Z",
+            "scheduledEndTime": "2026-09-08T21:04:00Z",
+            "realTime": false,
+            "scheduled": false,
+            "distance": 4.0,
+            "legGeometry": {
+              "points": "ouc`|@alioaAoAe@",
+              "precision": 6,
+              "length": 2
+            },
+            "steps": [
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 4.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "polyline": {
+                  "points": "ouc`|@alioaAoAe@",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "duration": 1200,
+        "startTime": "2026-09-08T21:36:00Z",
+        "endTime": "2026-09-08T21:56:00Z",
+        "transfers": 0,
+        "id": "ClEhCfmgZ7MKQEApA3gLJChmQUAyDm1vdDYwZGF5XzM3MzU4OaOXUSy3CkBAQaiQK/UsZkFASMD/gdUGUPz/gdUGWgRXQUxLYAFxAAAAAAAAAAAK4AEKUteg15TXqNeZ15Qt16DXlNeo15nXlDwtPtee15XXk9eZ16LXmdefINee16jXm9eWLdee15XXk9eZ16LXmdefINee15vXkdeZ150g16jXoteV16oSIDIwMjYwOTA4XzIyOjQ0X21vdDYwZGF5XzFfNTA1ODkwGg5tb3Q2MGRheV8zNzM1OCGjl1EstwpAQCmokCv1LGZBQDIObW90NjBkYXlfMzczMDY5AB3mywsAQEBBCWXh62tvQUBI/P+B1QZQtIiC1QZaDVJFR0lPTkFMX1JBSUxgAWkAAAAAAAAAAApIGg5tb3Q2MGRheV8zNzMwNiEAHebLCwBAQCkJZeHra29BQDmOdXEbDQBAQEGBlUOLbG9BQEi0iILVBlDwiILVBloEV0FMS2AB",
+        "legs": [
+          {
+            "mode": "WALK",
+            "from": {
+              "name": "START",
+              "lat": 32.0836,
+              "lon": 34.7981,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-08T21:36:00Z",
+              "scheduledDeparture": "2026-09-08T21:36:00Z",
+              "vertexType": "NORMAL"
+            },
+            "to": {
+              "name": "תל אביב מרכז",
+              "stopId": "mot60day_37358",
+              "importance": 1.0,
+              "lat": 32.083715000000005,
+              "lon": 34.798247,
+              "level": 0.0,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-08T21:37:00Z",
+              "scheduledArrival": "2026-09-08T21:37:00Z",
+              "stopCode": "17038",
+              "vertexType": "TRANSIT",
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "duration": 60,
+            "startTime": "2026-09-08T21:36:00Z",
+            "endTime": "2026-09-08T21:37:00Z",
+            "scheduledStartTime": "2026-09-08T21:36:00Z",
+            "scheduledEndTime": "2026-09-08T21:37:00Z",
+            "realTime": false,
+            "scheduled": false,
+            "distance": 27.0,
+            "legGeometry": {
+              "points": "ygfe|@ia|jaATD??L}@??BY??NkA??gHsA",
+              "precision": 6,
+              "length": 10
+            },
+            "steps": [
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 2.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "toOsmNode": 12968943913,
+                "polyline": {
+                  "points": "ygfe|@ia|jaATD",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 3.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1411385667,
+                "fromOsmNode": 12968943913,
+                "toOsmNode": 12968943916,
+                "polyline": {
+                  "points": "cgfe|@ca|jaAL}@",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 1.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1411385667,
+                "fromOsmNode": 12968943916,
+                "toOsmNode": 12968943915,
+                "polyline": {
+                  "points": "uffe|@ac|jaABY",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 4.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1411385667,
+                "fromOsmNode": 12968943915,
+                "toOsmNode": 12968943914,
+                "polyline": {
+                  "points": "qffe|@{c|jaANkA",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 17.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "fromOsmNode": 12968943914,
+                "polyline": {
+                  "points": "affe|@gf|jaAgHsA",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              }
+            ]
+          },
+          {
+            "mode": "REGIONAL_RAIL",
+            "from": {
+              "name": "תל אביב מרכז",
+              "stopId": "mot60day_37358",
+              "importance": 1.0,
+              "lat": 32.083715000000005,
+              "lon": 34.798247,
+              "level": 0.0,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-08T21:37:00Z",
+              "scheduledDeparture": "2026-09-08T21:37:00Z",
+              "stopCode": "17038",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "to": {
+              "name": "נתב''ג",
+              "stopId": "mot60day_37306",
+              "importance": 0.3637464940547943,
+              "lat": 32.00036,
+              "lon": 34.87048099999999,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-08T21:55:00Z",
+              "scheduledArrival": "2026-09-08T21:55:00Z",
+              "stopCode": "17090",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "duration": 1080,
+            "startTime": "2026-09-08T21:37:00Z",
+            "endTime": "2026-09-08T21:55:00Z",
+            "scheduledStartTime": "2026-09-08T21:37:00Z",
+            "scheduledEndTime": "2026-09-08T21:55:00Z",
+            "realTime": false,
+            "scheduled": true,
+            "interlineWithPreviousLeg": false,
+            "headsign": "137",
+            "tripFrom": {
+              "name": "נהריה",
+              "stopId": "mot60day_37382",
+              "importance": 0.21062441170215607,
+              "lat": 33.005075000000005,
+              "lon": 35.09871000000001,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-08T19:44:00Z",
+              "scheduledDeparture": "2026-09-08T19:44:00Z",
+              "stopCode": "17014",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NOT_ALLOWED",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "tripTo": {
+              "name": "מודיעין מרכז",
+              "stopId": "mot60day_37394",
+              "importance": 0.250232994556427,
+              "lat": 31.901238,
+              "lon": 35.00571200000001,
+              "level": -2.0,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-08T22:16:00Z",
+              "scheduledArrival": "2026-09-08T22:16:00Z",
+              "stopCode": "17002",
+              "vertexType": "TRANSIT",
+              "pickupType": "NOT_ALLOWED",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "routeId": "mot60day_35492",
+            "routeUrl": "",
+            "directionId": "1",
+            "routeType": 2,
+            "agencyName": "רכבת ישראל",
+            "agencyUrl": "http://www.rail.co.il",
+            "agencyFareUrl": "",
+            "agencyId": "2",
+            "tripId": "20260908_22:44_mot60day_1_505890",
+            "routeShortName": "",
+            "routeLongName": "נהריה-נהריה<->מודיעין מרכז-מודיעין מכבים רעות",
+            "tripShortName": "",
+            "displayName": "נהריה-נהריה<->מודיעין מרכז-מודיעין מכבים רעות",
+            "cancelled": false,
+            "source": "/input/israel-public-transportation.zip/stop_times.txt:10862:10882",
+            "intermediateStops": [
+              {
+                "name": "השלום",
+                "stopId": "mot60day_37350",
+                "importance": 0.9470642805099487,
+                "lat": 32.073346,
+                "lon": 34.79325600000001,
+                "level": 0.0,
+                "tz": "Asia/Jerusalem",
+                "arrival": "2026-09-08T21:42:00Z",
+                "departure": "2026-09-08T21:42:00Z",
+                "scheduledArrival": "2026-09-08T21:42:00Z",
+                "scheduledDeparture": "2026-09-08T21:42:00Z",
+                "stopCode": "17046",
+                "vertexType": "TRANSIT",
+                "pickupType": "NORMAL",
+                "dropoffType": "NORMAL",
+                "cancelled": false,
+                "modes": [
+                  "REGIONAL_RAIL"
+                ]
+              },
+              {
+                "name": "תל אביב ההגנה",
+                "stopId": "mot60day_37292",
+                "importance": 0.9475302696228027,
+                "lat": 32.053978,
+                "lon": 34.784839,
+                "tz": "Asia/Jerusalem",
+                "arrival": "2026-09-08T21:46:00Z",
+                "departure": "2026-09-08T21:46:00Z",
+                "scheduledArrival": "2026-09-08T21:46:00Z",
+                "scheduledDeparture": "2026-09-08T21:46:00Z",
+                "stopCode": "17104",
+                "vertexType": "TRANSIT",
+                "pickupType": "NORMAL",
+                "dropoffType": "NORMAL",
+                "cancelled": false,
+                "modes": [
+                  "REGIONAL_RAIL"
+                ]
+              }
+            ],
+            "legGeometry": {
+              "points": "eofe|@mi|jaA`gS|vHnyd@`mObvgBsgfD",
+              "precision": 6,
+              "length": 4
+            },
+            "bikesAllowed": false,
+            "wheelchairAccessible": "NOT_ACCESSIBLE",
+            "reservation": "NONE",
+            "alternatives": []
+          },
+          {
+            "mode": "WALK",
+            "from": {
+              "name": "נתב''ג",
+              "stopId": "mot60day_37306",
+              "importance": 0.3637464940547943,
+              "lat": 32.00036,
+              "lon": 34.87048099999999,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-08T21:55:00Z",
+              "departure": "2026-09-08T21:55:00Z",
+              "scheduledArrival": "2026-09-08T21:55:00Z",
+              "scheduledDeparture": "2026-09-08T21:55:00Z",
+              "stopCode": "17090",
+              "vertexType": "TRANSIT",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "to": {
+              "name": "END",
+              "lat": 32.0004,
+              "lon": 34.8705,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-08T21:56:00Z",
+              "scheduledArrival": "2026-09-08T21:56:00Z",
+              "vertexType": "NORMAL"
+            },
+            "duration": 60,
+            "startTime": "2026-09-08T21:55:00Z",
+            "endTime": "2026-09-08T21:56:00Z",
+            "scheduledStartTime": "2026-09-08T21:55:00Z",
+            "scheduledEndTime": "2026-09-08T21:56:00Z",
+            "realTime": false,
+            "scheduled": false,
+            "distance": 4.0,
+            "legGeometry": {
+              "points": "ouc`|@alioaAoAe@",
+              "precision": 6,
+              "length": 2
+            },
+            "steps": [
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 4.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "polyline": {
+                  "points": "ouc`|@alioaAoAe@",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "duration": 960,
+        "startTime": "2026-09-08T21:46:00Z",
+        "endTime": "2026-09-08T22:02:00Z",
+        "transfers": 0,
+        "id": "ClEhCfmgZ7MKQEApA3gLJChmQUAyDm1vdDYwZGF5XzM3MzU4OaOXUSy3CkBAQaiQK/UsZkFASJiEgtUGUNSEgtUGWgRXQUxLYAFxAAAAAAAAAAAK2AEKSteU16jXptec15nXlC3XlNeo16bXnNeZ15Q8LT7XoNeq15EnJ9eSLdeg157XnCDXqtei15XXpNeUINeR158g15LXldeo15nXldefEiAyMDI2MDkwOV8wMDo0MF9tb3Q2MGRheV8xXzQ4Nzc0NRoObW90NjBkYXlfMzczNTgho5dRLLcKQEApqJAr9SxmQUAyDm1vdDYwZGF5XzM3MzA2OQAd5ssLAEBAQQll4etrb0FASNSEgtUGUJyLgtUGWg1SRUdJT05BTF9SQUlMYAFpAAAAAAAAAAAKSBoObW90NjBkYXlfMzczMDYhAB3mywsAQEApCWXh62tvQUA5jnVxGw0AQEBBgZVDi2xvQUBInIuC1QZQ2IuC1QZaBFdBTEtgAQ==",
+        "legs": [
+          {
+            "mode": "WALK",
+            "from": {
+              "name": "START",
+              "lat": 32.0836,
+              "lon": 34.7981,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-08T21:46:00Z",
+              "scheduledDeparture": "2026-09-08T21:46:00Z",
+              "vertexType": "NORMAL"
+            },
+            "to": {
+              "name": "תל אביב מרכז",
+              "stopId": "mot60day_37358",
+              "importance": 1.0,
+              "lat": 32.083715000000005,
+              "lon": 34.798247,
+              "level": 0.0,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-08T21:47:00Z",
+              "scheduledArrival": "2026-09-08T21:47:00Z",
+              "stopCode": "17038",
+              "vertexType": "TRANSIT",
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "duration": 60,
+            "startTime": "2026-09-08T21:46:00Z",
+            "endTime": "2026-09-08T21:47:00Z",
+            "scheduledStartTime": "2026-09-08T21:46:00Z",
+            "scheduledEndTime": "2026-09-08T21:47:00Z",
+            "realTime": false,
+            "scheduled": false,
+            "distance": 27.0,
+            "legGeometry": {
+              "points": "ygfe|@ia|jaATD??L}@??BY??NkA??gHsA",
+              "precision": 6,
+              "length": 10
+            },
+            "steps": [
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 2.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "toOsmNode": 12968943913,
+                "polyline": {
+                  "points": "ygfe|@ia|jaATD",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 3.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1411385667,
+                "fromOsmNode": 12968943913,
+                "toOsmNode": 12968943916,
+                "polyline": {
+                  "points": "cgfe|@ca|jaAL}@",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 1.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1411385667,
+                "fromOsmNode": 12968943916,
+                "toOsmNode": 12968943915,
+                "polyline": {
+                  "points": "uffe|@ac|jaABY",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 4.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1411385667,
+                "fromOsmNode": 12968943915,
+                "toOsmNode": 12968943914,
+                "polyline": {
+                  "points": "qffe|@{c|jaANkA",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 17.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "fromOsmNode": 12968943914,
+                "polyline": {
+                  "points": "affe|@gf|jaAgHsA",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              }
+            ]
+          },
+          {
+            "mode": "REGIONAL_RAIL",
+            "from": {
+              "name": "תל אביב מרכז",
+              "stopId": "mot60day_37358",
+              "importance": 1.0,
+              "lat": 32.083715000000005,
+              "lon": 34.798247,
+              "level": 0.0,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-08T21:47:00Z",
+              "scheduledDeparture": "2026-09-08T21:47:00Z",
+              "stopCode": "17038",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "to": {
+              "name": "נתב''ג",
+              "stopId": "mot60day_37306",
+              "importance": 0.3637464940547943,
+              "lat": 32.00036,
+              "lon": 34.87048099999999,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-08T22:01:00Z",
+              "scheduledArrival": "2026-09-08T22:01:00Z",
+              "stopCode": "17090",
+              "vertexType": "TRANSIT",
+              "pickupType": "NOT_ALLOWED",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "duration": 840,
+            "startTime": "2026-09-08T21:47:00Z",
+            "endTime": "2026-09-08T22:01:00Z",
+            "scheduledStartTime": "2026-09-08T21:47:00Z",
+            "scheduledEndTime": "2026-09-08T22:01:00Z",
+            "realTime": false,
+            "scheduled": true,
+            "interlineWithPreviousLeg": false,
+            "headsign": "9701",
+            "tripFrom": {
+              "name": "הרצליה",
+              "stopId": "mot60day_37362",
+              "importance": 0.7568499445915222,
+              "lat": 32.16355800000001,
+              "lon": 34.81740599999999,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-08T21:40:00Z",
+              "scheduledDeparture": "2026-09-08T21:40:00Z",
+              "stopCode": "17034",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NOT_ALLOWED",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "tripTo": {
+              "name": "נתב''ג",
+              "stopId": "mot60day_37306",
+              "importance": 0.3637464940547943,
+              "lat": 32.00036,
+              "lon": 34.87048099999999,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-08T22:01:00Z",
+              "scheduledArrival": "2026-09-08T22:01:00Z",
+              "stopCode": "17090",
+              "vertexType": "TRANSIT",
+              "pickupType": "NOT_ALLOWED",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "routeId": "mot60day_35185",
+            "routeUrl": "",
+            "directionId": "1",
+            "routeType": 2,
+            "agencyName": "רכבת ישראל",
+            "agencyUrl": "http://www.rail.co.il",
+            "agencyFareUrl": "",
+            "agencyId": "2",
+            "tripId": "20260909_00:40_mot60day_1_487745",
+            "routeShortName": "",
+            "routeLongName": "הרצליה-הרצליה<->נתב''ג-נמל תעופה בן גוריון",
+            "tripShortName": "",
+            "displayName": "הרצליה-הרצליה<->נתב''ג-נמל תעופה בן גוריון",
+            "cancelled": false,
+            "source": "/input/israel-public-transportation.zip/stop_times.txt:335:337",
+            "intermediateStops": [],
+            "legGeometry": {
+              "points": "eofe|@mi|jaAtxaDsalC",
+              "precision": 6,
+              "length": 2
+            },
+            "bikesAllowed": false,
+            "wheelchairAccessible": "NOT_ACCESSIBLE",
+            "reservation": "NONE",
+            "alternatives": []
+          },
+          {
+            "mode": "WALK",
+            "from": {
+              "name": "נתב''ג",
+              "stopId": "mot60day_37306",
+              "importance": 0.3637464940547943,
+              "lat": 32.00036,
+              "lon": 34.87048099999999,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-08T22:01:00Z",
+              "departure": "2026-09-08T22:01:00Z",
+              "scheduledArrival": "2026-09-08T22:01:00Z",
+              "scheduledDeparture": "2026-09-08T22:01:00Z",
+              "stopCode": "17090",
+              "vertexType": "TRANSIT",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "to": {
+              "name": "END",
+              "lat": 32.0004,
+              "lon": 34.8705,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-08T22:02:00Z",
+              "scheduledArrival": "2026-09-08T22:02:00Z",
+              "vertexType": "NORMAL"
+            },
+            "duration": 60,
+            "startTime": "2026-09-08T22:01:00Z",
+            "endTime": "2026-09-08T22:02:00Z",
+            "scheduledStartTime": "2026-09-08T22:01:00Z",
+            "scheduledEndTime": "2026-09-08T22:02:00Z",
+            "realTime": false,
+            "scheduled": false,
+            "distance": 4.0,
+            "legGeometry": {
+              "points": "ouc`|@alioaAoAe@",
+              "precision": 6,
+              "length": 2
+            },
+            "steps": [
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 4.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "polyline": {
+                  "points": "ouc`|@alioaAoAe@",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "duration": 1020,
+        "startTime": "2026-09-08T22:31:00Z",
+        "endTime": "2026-09-08T22:48:00Z",
+        "transfers": 0,
+        "id": "ClEhCfmgZ7MKQEApA3gLJChmQUAyDm1vdDYwZGF5XzM3MzU4OaOXUSy3CkBAQaiQK/UsZkFASKSZgtUGUOCZgtUGWgRXQUxLYAFxAAAAAAAAAAAK4AEKUteg15TXqNeZ15Qt16DXlNeo15nXlDwtPtee15XXk9eZ16LXmdefINee16jXm9eWLdee15XXk9eZ16LXmdefINee15vXkdeZ150g16jXoteV16oSIDIwMjYwOTA4XzIzOjU0X21vdDYwZGF5XzFfNTA1ODg5Gg5tb3Q2MGRheV8zNzM1OCGjl1EstwpAQCmokCv1LGZBQDIObW90NjBkYXlfMzczMDY5AB3mywsAQEBBCWXh62tvQUBI4JmC1QZQ5KCC1QZaDVJFR0lPTkFMX1JBSUxgAWkAAAAAAAAAAApIGg5tb3Q2MGRheV8zNzMwNiEAHebLCwBAQCkJZeHra29BQDmOdXEbDQBAQEGBlUOLbG9BQEjkoILVBlCgoYLVBloEV0FMS2AB",
+        "legs": [
+          {
+            "mode": "WALK",
+            "from": {
+              "name": "START",
+              "lat": 32.0836,
+              "lon": 34.7981,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-08T22:31:00Z",
+              "scheduledDeparture": "2026-09-08T22:31:00Z",
+              "vertexType": "NORMAL"
+            },
+            "to": {
+              "name": "תל אביב מרכז",
+              "stopId": "mot60day_37358",
+              "importance": 1.0,
+              "lat": 32.083715000000005,
+              "lon": 34.798247,
+              "level": 0.0,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-08T22:32:00Z",
+              "scheduledArrival": "2026-09-08T22:32:00Z",
+              "stopCode": "17038",
+              "vertexType": "TRANSIT",
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "duration": 60,
+            "startTime": "2026-09-08T22:31:00Z",
+            "endTime": "2026-09-08T22:32:00Z",
+            "scheduledStartTime": "2026-09-08T22:31:00Z",
+            "scheduledEndTime": "2026-09-08T22:32:00Z",
+            "realTime": false,
+            "scheduled": false,
+            "distance": 27.0,
+            "legGeometry": {
+              "points": "ygfe|@ia|jaATD??L}@??BY??NkA??gHsA",
+              "precision": 6,
+              "length": 10
+            },
+            "steps": [
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 2.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "toOsmNode": 12968943913,
+                "polyline": {
+                  "points": "ygfe|@ia|jaATD",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 3.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1411385667,
+                "fromOsmNode": 12968943913,
+                "toOsmNode": 12968943916,
+                "polyline": {
+                  "points": "cgfe|@ca|jaAL}@",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 1.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1411385667,
+                "fromOsmNode": 12968943916,
+                "toOsmNode": 12968943915,
+                "polyline": {
+                  "points": "uffe|@ac|jaABY",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 4.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1411385667,
+                "fromOsmNode": 12968943915,
+                "toOsmNode": 12968943914,
+                "polyline": {
+                  "points": "qffe|@{c|jaANkA",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 17.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "fromOsmNode": 12968943914,
+                "polyline": {
+                  "points": "affe|@gf|jaAgHsA",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              }
+            ]
+          },
+          {
+            "mode": "REGIONAL_RAIL",
+            "from": {
+              "name": "תל אביב מרכז",
+              "stopId": "mot60day_37358",
+              "importance": 1.0,
+              "lat": 32.083715000000005,
+              "lon": 34.798247,
+              "level": 0.0,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-08T22:32:00Z",
+              "scheduledDeparture": "2026-09-08T22:32:00Z",
+              "stopCode": "17038",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "to": {
+              "name": "נתב''ג",
+              "stopId": "mot60day_37306",
+              "importance": 0.3637464940547943,
+              "lat": 32.00036,
+              "lon": 34.87048099999999,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-08T22:47:00Z",
+              "scheduledArrival": "2026-09-08T22:47:00Z",
+              "stopCode": "17090",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "duration": 900,
+            "startTime": "2026-09-08T22:32:00Z",
+            "endTime": "2026-09-08T22:47:00Z",
+            "scheduledStartTime": "2026-09-08T22:32:00Z",
+            "scheduledEndTime": "2026-09-08T22:47:00Z",
+            "realTime": false,
+            "scheduled": true,
+            "interlineWithPreviousLeg": false,
+            "headsign": "139",
+            "tripFrom": {
+              "name": "נהריה",
+              "stopId": "mot60day_37382",
+              "importance": 0.21062441170215607,
+              "lat": 33.005075000000005,
+              "lon": 35.09871000000001,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-08T20:54:00Z",
+              "scheduledDeparture": "2026-09-08T20:54:00Z",
+              "stopCode": "17014",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NOT_ALLOWED",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "tripTo": {
+              "name": "מודיעין מרכז",
+              "stopId": "mot60day_37394",
+              "importance": 0.250232994556427,
+              "lat": 31.901238,
+              "lon": 35.00571200000001,
+              "level": -2.0,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-08T23:06:00Z",
+              "scheduledArrival": "2026-09-08T23:06:00Z",
+              "stopCode": "17002",
+              "vertexType": "TRANSIT",
+              "pickupType": "NOT_ALLOWED",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "routeId": "mot60day_41684",
+            "routeUrl": "",
+            "directionId": "1",
+            "routeType": 2,
+            "agencyName": "רכבת ישראל",
+            "agencyUrl": "http://www.rail.co.il",
+            "agencyFareUrl": "",
+            "agencyId": "2",
+            "tripId": "20260908_23:54_mot60day_1_505889",
+            "routeShortName": "",
+            "routeLongName": "נהריה-נהריה<->מודיעין מרכז-מודיעין מכבים רעות",
+            "tripShortName": "",
+            "displayName": "נהריה-נהריה<->מודיעין מרכז-מודיעין מכבים רעות",
+            "cancelled": false,
+            "source": "/input/israel-public-transportation.zip/stop_times.txt:10850:10861",
+            "intermediateStops": [],
+            "legGeometry": {
+              "points": "eofe|@mi|jaAtxaDsalC",
+              "precision": 6,
+              "length": 2
+            },
+            "bikesAllowed": false,
+            "wheelchairAccessible": "NOT_ACCESSIBLE",
+            "reservation": "NONE",
+            "alternatives": []
+          },
+          {
+            "mode": "WALK",
+            "from": {
+              "name": "נתב''ג",
+              "stopId": "mot60day_37306",
+              "importance": 0.3637464940547943,
+              "lat": 32.00036,
+              "lon": 34.87048099999999,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-08T22:47:00Z",
+              "departure": "2026-09-08T22:47:00Z",
+              "scheduledArrival": "2026-09-08T22:47:00Z",
+              "scheduledDeparture": "2026-09-08T22:47:00Z",
+              "stopCode": "17090",
+              "vertexType": "TRANSIT",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "to": {
+              "name": "END",
+              "lat": 32.0004,
+              "lon": 34.8705,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-08T22:48:00Z",
+              "scheduledArrival": "2026-09-08T22:48:00Z",
+              "vertexType": "NORMAL"
+            },
+            "duration": 60,
+            "startTime": "2026-09-08T22:47:00Z",
+            "endTime": "2026-09-08T22:48:00Z",
+            "scheduledStartTime": "2026-09-08T22:47:00Z",
+            "scheduledEndTime": "2026-09-08T22:48:00Z",
+            "realTime": false,
+            "scheduled": false,
+            "distance": 4.0,
+            "legGeometry": {
+              "points": "ouc`|@alioaAoAe@",
+              "precision": 6,
+              "length": 2
+            },
+            "steps": [
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 4.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "polyline": {
+                  "points": "ouc`|@alioaAoAe@",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "duration": 960,
+        "startTime": "2026-09-08T22:46:00Z",
+        "endTime": "2026-09-08T23:02:00Z",
+        "transfers": 0,
+        "id": "ClEhCfmgZ7MKQEApA3gLJChmQUAyDm1vdDYwZGF5XzM3MzU4OaOXUSy3CkBAQaiQK/UsZkFASKiggtUGUOSggtUGWgRXQUxLYAFxAAAAAAAAAAAK2AEKSteU16jXptec15nXlC3XlNeo16bXnNeZ15Q8LT7XoNeq15EnJ9eSLdeg157XnCDXqtei15XXpNeUINeR158g15LXldeo15nXldefEiAyMDI2MDkwOV8wMTo0MF9tb3Q2MGRheV8xXzQ4Nzc0MxoObW90NjBkYXlfMzczNTgho5dRLLcKQEApqJAr9SxmQUAyDm1vdDYwZGF5XzM3MzA2OQAd5ssLAEBAQQll4etrb0FASOSggtUGUKyngtUGWg1SRUdJT05BTF9SQUlMYAFpAAAAAAAAAAAKSBoObW90NjBkYXlfMzczMDYhAB3mywsAQEApCWXh62tvQUA5jnVxGw0AQEBBgZVDi2xvQUBIrKeC1QZQ6KeC1QZaBFdBTEtgAQ==",
+        "legs": [
+          {
+            "mode": "WALK",
+            "from": {
+              "name": "START",
+              "lat": 32.0836,
+              "lon": 34.7981,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-08T22:46:00Z",
+              "scheduledDeparture": "2026-09-08T22:46:00Z",
+              "vertexType": "NORMAL"
+            },
+            "to": {
+              "name": "תל אביב מרכז",
+              "stopId": "mot60day_37358",
+              "importance": 1.0,
+              "lat": 32.083715000000005,
+              "lon": 34.798247,
+              "level": 0.0,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-08T22:47:00Z",
+              "scheduledArrival": "2026-09-08T22:47:00Z",
+              "stopCode": "17038",
+              "vertexType": "TRANSIT",
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "duration": 60,
+            "startTime": "2026-09-08T22:46:00Z",
+            "endTime": "2026-09-08T22:47:00Z",
+            "scheduledStartTime": "2026-09-08T22:46:00Z",
+            "scheduledEndTime": "2026-09-08T22:47:00Z",
+            "realTime": false,
+            "scheduled": false,
+            "distance": 27.0,
+            "legGeometry": {
+              "points": "ygfe|@ia|jaATD??L}@??BY??NkA??gHsA",
+              "precision": 6,
+              "length": 10
+            },
+            "steps": [
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 2.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "toOsmNode": 12968943913,
+                "polyline": {
+                  "points": "ygfe|@ia|jaATD",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 3.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1411385667,
+                "fromOsmNode": 12968943913,
+                "toOsmNode": 12968943916,
+                "polyline": {
+                  "points": "cgfe|@ca|jaAL}@",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 1.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1411385667,
+                "fromOsmNode": 12968943916,
+                "toOsmNode": 12968943915,
+                "polyline": {
+                  "points": "uffe|@ac|jaABY",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 4.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1411385667,
+                "fromOsmNode": 12968943915,
+                "toOsmNode": 12968943914,
+                "polyline": {
+                  "points": "qffe|@{c|jaANkA",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 17.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "fromOsmNode": 12968943914,
+                "polyline": {
+                  "points": "affe|@gf|jaAgHsA",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              }
+            ]
+          },
+          {
+            "mode": "REGIONAL_RAIL",
+            "from": {
+              "name": "תל אביב מרכז",
+              "stopId": "mot60day_37358",
+              "importance": 1.0,
+              "lat": 32.083715000000005,
+              "lon": 34.798247,
+              "level": 0.0,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-08T22:47:00Z",
+              "scheduledDeparture": "2026-09-08T22:47:00Z",
+              "stopCode": "17038",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "to": {
+              "name": "נתב''ג",
+              "stopId": "mot60day_37306",
+              "importance": 0.3637464940547943,
+              "lat": 32.00036,
+              "lon": 34.87048099999999,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-08T23:01:00Z",
+              "scheduledArrival": "2026-09-08T23:01:00Z",
+              "stopCode": "17090",
+              "vertexType": "TRANSIT",
+              "pickupType": "NOT_ALLOWED",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "duration": 840,
+            "startTime": "2026-09-08T22:47:00Z",
+            "endTime": "2026-09-08T23:01:00Z",
+            "scheduledStartTime": "2026-09-08T22:47:00Z",
+            "scheduledEndTime": "2026-09-08T23:01:00Z",
+            "realTime": false,
+            "scheduled": true,
+            "interlineWithPreviousLeg": false,
+            "headsign": "9703",
+            "tripFrom": {
+              "name": "הרצליה",
+              "stopId": "mot60day_37362",
+              "importance": 0.7568499445915222,
+              "lat": 32.16355800000001,
+              "lon": 34.81740599999999,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-08T22:40:00Z",
+              "scheduledDeparture": "2026-09-08T22:40:00Z",
+              "stopCode": "17034",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NOT_ALLOWED",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "tripTo": {
+              "name": "נתב''ג",
+              "stopId": "mot60day_37306",
+              "importance": 0.3637464940547943,
+              "lat": 32.00036,
+              "lon": 34.87048099999999,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-08T23:01:00Z",
+              "scheduledArrival": "2026-09-08T23:01:00Z",
+              "stopCode": "17090",
+              "vertexType": "TRANSIT",
+              "pickupType": "NOT_ALLOWED",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "routeId": "mot60day_38570",
+            "routeUrl": "",
+            "directionId": "1",
+            "routeType": 2,
+            "agencyName": "רכבת ישראל",
+            "agencyUrl": "http://www.rail.co.il",
+            "agencyFareUrl": "",
+            "agencyId": "2",
+            "tripId": "20260909_01:40_mot60day_1_487743",
+            "routeShortName": "",
+            "routeLongName": "הרצליה-הרצליה<->נתב''ג-נמל תעופה בן גוריון",
+            "tripShortName": "",
+            "displayName": "הרצליה-הרצליה<->נתב''ג-נמל תעופה בן גוריון",
+            "cancelled": false,
+            "source": "/input/israel-public-transportation.zip/stop_times.txt:329:331",
+            "intermediateStops": [],
+            "legGeometry": {
+              "points": "eofe|@mi|jaAtxaDsalC",
+              "precision": 6,
+              "length": 2
+            },
+            "bikesAllowed": false,
+            "wheelchairAccessible": "NOT_ACCESSIBLE",
+            "reservation": "NONE",
+            "alternatives": []
+          },
+          {
+            "mode": "WALK",
+            "from": {
+              "name": "נתב''ג",
+              "stopId": "mot60day_37306",
+              "importance": 0.3637464940547943,
+              "lat": 32.00036,
+              "lon": 34.87048099999999,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-08T23:01:00Z",
+              "departure": "2026-09-08T23:01:00Z",
+              "scheduledArrival": "2026-09-08T23:01:00Z",
+              "scheduledDeparture": "2026-09-08T23:01:00Z",
+              "stopCode": "17090",
+              "vertexType": "TRANSIT",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "to": {
+              "name": "END",
+              "lat": 32.0004,
+              "lon": 34.8705,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-08T23:02:00Z",
+              "scheduledArrival": "2026-09-08T23:02:00Z",
+              "vertexType": "NORMAL"
+            },
+            "duration": 60,
+            "startTime": "2026-09-08T23:01:00Z",
+            "endTime": "2026-09-08T23:02:00Z",
+            "scheduledStartTime": "2026-09-08T23:01:00Z",
+            "scheduledEndTime": "2026-09-08T23:02:00Z",
+            "realTime": false,
+            "scheduled": false,
+            "distance": 4.0,
+            "legGeometry": {
+              "points": "ouc`|@alioaAoAe@",
+              "precision": 6,
+              "length": 2
+            },
+            "steps": [
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 4.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "polyline": {
+                  "points": "ouc`|@alioaAoAe@",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              }
+            ]
+          }
+        ]
+      }
+    ],
     "previousPageCursor": "EARLIER|1788900000",
-    "nextPageCursor": "LATER|1788900000"
+    "nextPageCursor": "LATER|1788907620"
   }
 }

@@ -65,10 +65,12 @@ import zipfile
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
+from feed_context import verified_context, departure_iso
+
 ROUTING = Path(__file__).resolve().parent
 POC = ROUTING.parent
 CORPUS = POC / "corpora" / "journeys.json"
-FEED = POC / "data" / "Gtfs_10_days.zip"
+FEED = POC / "data" / "israel-public-transportation.zip"
 MANIFEST = POC / "data" / "manifest.json"
 STOPIDS = ROUTING / "feed-stop-ids.json"
 
@@ -93,13 +95,6 @@ PROFILES = {
 
 BASE = "http://localhost:58080"
 CONTAINER = "poc-motis"
-
-# Israel is on IDT (UTC+3) throughout the Gtfs_10_days.zip service window of
-# 2026-09-05..2026-09-14 (KDP-001); the switch to IST is late October. The
-# offset is written literally rather than via zoneinfo so this does not depend
-# on a tzdata package being present on a Windows Python.
-IL_OFFSET = timezone(timedelta(hours=3))
-IL_OFFSET_STR = "+03:00"
 
 # MOTIS mode enum -> the vocabulary poc/corpora/journeys.json uses.
 # MOTIS renamed METRO to SUBURBAN in 2.5.0; both are mapped so this survives a
@@ -137,10 +132,8 @@ def now() -> str:
 # --------------------------------------------------------------------------
 
 def feed_stop_ids() -> set[str]:
-    """Every stop_id in Gtfs_10_days.zip. Cached, because unzipping a 4.7 MB
+    """Every stop_id in israel-public-transportation.zip. Cached, because unzipping a 4.7 MB
     member out of a 252 MB archive is not free and this is called per leg."""
-    if STOPIDS.exists():
-        return set(json.loads(STOPIDS.read_text(encoding="utf-8")))
     ids: set[str] = set()
     with zipfile.ZipFile(FEED) as z:
         with z.open("stops.txt") as fh:
@@ -156,9 +149,9 @@ def feed_stop_ids() -> set[str]:
 
 def strip_prefix(stop_id: str) -> str:
     """MOTIS namespaces stop ids with the dataset tag from config.yml
-    (`mot10day`). Strip it so ids can be compared against the raw feed."""
+    (`mot60day`). Strip it so ids can be compared against the raw feed."""
     for sep in ("_", ":", "-"):
-        pre = "mot10day" + sep
+        pre = "mot60day" + sep
         if stop_id.startswith(pre):
             return stop_id[len(pre):]
     return stop_id
@@ -479,20 +472,8 @@ def main() -> int:
     print(f"profile={profile} extra params={extra or '(none)'}")
 
     corpus = json.loads(CORPUS.read_text(encoding="utf-8"))
-    manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
-    feed_sha = manifest["files"]["Gtfs_10_days.zip"]["sha256"]
-
-    rules = corpus["depart_rules"]
-    resolved_key = next(k for k in rules if k.startswith("resolved_for_feed_"))
-    resolved = rules[resolved_key]
-    if not feed_sha.startswith(resolved_key[len("resolved_for_feed_"):]):
-        print(f"REFUSING TO RUN: the corpus resolves departures for "
-              f"{resolved_key} but poc/data/manifest.json records feed sha256 "
-              f"{feed_sha}. The feed has been re-downloaded and the resolved "
-              f"departure dates may no longer fall inside its service window "
-              f"(KDP-001). Re-resolve the corpus first.", file=sys.stderr)
-        return 2
-    print(f"feed sha256 {feed_sha[:16]}..  window {resolved['feed_window']}")
+    feed_sha, resolved = verified_context()
+    print(f"feed sha256 {feed_sha[:16]}.. window {resolved['feed_window']}")
 
     known_stops = feed_stop_ids()
     print(f"{len(known_stops)} stop ids loaded from the static feed")
@@ -513,7 +494,7 @@ def main() -> int:
         if not local:
             print(f"{cid}: no resolved departure for rule {rule!r}", file=sys.stderr)
             continue
-        depart_iso = local.replace(" ", "T") + ":00" + IL_OFFSET_STR
+        depart_iso = departure_iso(local)
 
         body, meta = plan(plan_path, case, depart_iso, extra)
         (responses / f"{cid}.json").write_text(

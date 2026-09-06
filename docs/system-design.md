@@ -1,5 +1,7 @@
 # OpenTransit Israel — System Design
 
+> **Post-PoC status — 5 September 2026:** Read [the current plan](next-steps.md) before implementing this proposal. ADR 0005 now accepts the 60-day feed plus TripIdToDate; see the current rerun evidence. MOTIS routing/search are PARTIAL pending quality review; Latin addresses need work. Full-stack capacity, 4 GB viability, pricing and daily-user estimates below are unverified. The API runtime, GET/POST journey contract and search solution remain open. No cloud purchase is implied.
+
 **Status:** Design proposal, v1
 **Scope:** the backend. The API *is* the product until it is finished; clients come after.
 **Written:** 28 August 2026
@@ -259,7 +261,7 @@ Step 2 is the only step that can be slow, which means performance work has exact
 ### Nightly GTFS build, with an atomic swap
 
 ```
-03:30  GET gtfs.mot.gov.il/gtfsfiles/Gtfs_10_days.zip        (GET, not HEAD — see findings)
+03:30  GET gtfs.mot.gov.il/gtfsfiles/israel-public-transportation.zip        (GET, not HEAD — see findings)
        GET .../TripIdToDate.zip
        sha256 → already seen? stop.
        archive raw bytes to S3
@@ -531,7 +533,7 @@ Only then does a client get written.
 
 Things this document deliberately does not settle, because the answer depends on Phase 0:
 
-1. **10-day vs 60-day feed** for the routing graph. Probably the 10-day one for accuracy, with the 60-day feed loaded only for far-future queries.
+1. **Primary feed:** 60-day plus TripIdToDate (accepted ADR 0005). The 10-day feed is comparison only; no dual-feed fallback.
 2. **Whether MOTIS or OTP** survives the routing bake-off.
 3. **Whether the ingester can run in-region** or needs a separate whitelisted host — MOT's answer decides the deployment shape.
 4. **Poll rate**: `calls` detail every 30 s is the assumption; if the payload is much larger than estimated, drop to 60 s and use `normal` for positions.

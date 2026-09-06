@@ -1,5 +1,7 @@
 # poc/routing — POC-2, public transportation routing
 
+> **Current primary:** `israel-public-transportation.zip` + compatible `TripIdToDate.zip`. See [rerun measurements](../docs/primary-feed-rerun.md). Ten-day evidence is archived under `poc/comparisons/ten-day-2026-09-04`. Import replaces only the MOTIS graph volume and leaves Postgres intact.
+
 MOTIS, Israeli GTFS, and two memory measurements that must not be confused.
 
 The result file is [`../results/poc-2.json`](../results/poc-2.json).
@@ -15,8 +17,8 @@ They are separate on purpose, because system-design.md §320 says the graph is
 | --- | --- | --- |
 | Compose profile | `build` (`motis-build`) | `serve` (`motis`) |
 | Memory | uncapped, by design | `mem_limit: 8g`, **do not raise** |
-| Measured | 40 s wall, 3,738.6 MB peak RSS, 910.8 MB graph | 937.8 MB steady, 1,129.5 MB peak under load |
-| Verdict | fine on this machine | **fits, at 13.8 % of the cap** |
+| Measured | `import-result.json` | `serving-steady.json` and `serving-stress.json` |
+| Verdict | See current rerun report | See current rerun report |
 
 Raising the 8 GB cap would produce a number that is true only on this desk. If
 Israel had not fitted, `fits_in_8gb: false` was the correct result to record —
@@ -24,10 +26,13 @@ it is a finding about §331's cost tiers, not a knob.
 
 ## Running it
 
-Everything assumes Docker Desktop is up and `poc/data/` holds the feeds listed
+Requires Python 3.13 with requests, psycopg, psutil and tzdata. Everything assumes Docker Desktop is up and `poc/data/` holds the feeds listed
 in `poc/data/manifest.json`.
 
 ```
+# 0. Ingest the primary and explicitly row-count the ten-day comparison.
+python poc/gtfs/run_poc1.py
+
 # 1. Build the graph. Uncapped. Takes about a minute on a 16-core box.
 #    Runs long enough that it should be launched and left alone.
 python poc/routing/run_import.py
@@ -111,3 +116,5 @@ entirely and Docker tried to exec a binary named `server`. `/motis` has to be
 serving container needs only that directory — which is why it no longer mounts
 `./data` at all. That absence is deliberate: it is what "ship the artifact"
 means.
+
+The import preflight verifies input hashes, TripIdToDate compatibility and resolves corpus dates from the primary service calendars. Corpus and load runners reject mixed input/build hashes. Keep comparison inputs out of the routing config. Stop IDs are read afresh so a prior feed cache cannot leak into a rerun.

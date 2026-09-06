@@ -48,7 +48,7 @@
       "id": "E06",
       "name": "10-day and 60-day feeds are different products",
       "area": "feed-selection",
-      "expect": "Only the 10-day feed is loaded (decision D5). If both are parsed for comparison, the difference in trip and stop_times counts is recorded.",
+      "expect": "Only the 60-day feed plus compatible TripIdToDate is loaded (decision D5). The 10-day feed is comparison only. If both are parsed for comparison, the difference in trip and stop_times counts is recorded.",
       "evidence_required": "Row counts for both feeds side by side, so the D5 decision is evidenced rather than asserted.",
       "source": "data-access-findings §1."
     },

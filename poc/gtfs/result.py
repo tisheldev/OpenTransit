@@ -82,7 +82,7 @@ def build(report: dict, cold: dict | None, notes: list[str]) -> tuple[dict, dict
         "status": status,
         "generated": date.today().isoformat(),
         "headline": headline,
-        "feed_sha256": report.get("sha256", {}).get("Gtfs_10_days.zip"),
+        "feed_sha256": report.get("sha256", {}).get("israel-public-transportation.zip"),
         "capabilities": capabilities,
         "metrics": {
             "rows_parsed": parsed,

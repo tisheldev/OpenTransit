@@ -1,0 +1,84 @@
+{
+  "case": {
+    "id": "J21",
+    "category": "late-night",
+    "prd_ref": "PRD §7 #8 late night",
+    "from": {
+      "name": "Tel Aviv Savidor Center",
+      "name_he": "תל אביב סבידור מרכז",
+      "lat": 32.0836,
+      "lon": 34.7981
+    },
+    "to": {
+      "name": "Ben Gurion Airport T3",
+      "name_he": "נמל תעופה בן גוריון",
+      "lat": 32.0114,
+      "lon": 34.8867
+    },
+    "depart": "late_night",
+    "expect": {
+      "outcome": "route",
+      "modes_any_of": [
+        "rail",
+        "bus"
+      ],
+      "min_duration_min": 10,
+      "max_duration_min": 120,
+      "max_transfers": 2
+    },
+    "human_review": "Airport rail runs deep into the night. Does the engine know that?"
+  },
+  "request": {
+    "url": "http://localhost:58080/api/v6/plan?fromPlace=32.0836%2C34.7981&toPlace=32.0114%2C34.8867&time=2026-09-08T23%3A40%3A00%2B03%3A00&arriveBy=false&numItineraries=5&timetableView=true",
+    "requested_time_local": "2026-09-08T23:40:00+03:00",
+    "http_status": 200,
+    "latency_ms": 5.5
+  },
+  "response": {
+    "requestParameters": {},
+    "debugOutput": {
+      "algorithm": 1,
+      "direct": 0,
+      "execute_time": 1,
+      "fares": 0,
+      "fastest_direct": 0,
+      "fp_update_prevented_by_lower_bound": 0,
+      "interval_extensions": 0,
+      "lb_time": 0,
+      "n_dest_offsets": 0,
+      "n_earliest_arrival_updated_by_footpath": 0,
+      "n_earliest_arrival_updated_by_route": 0,
+      "n_earliest_trip_calls": 0,
+      "n_events_skipped_by_early_termination": 0,
+      "n_execute_bwd": 0,
+      "n_execute_fwd": 1,
+      "n_footpaths_visited": 0,
+      "n_routes_visited": 512,
+      "n_routing_time": 0,
+      "n_start_offsets": 68,
+      "n_td_dest_offsets": 0,
+      "n_td_start_offsets": 0,
+      "prepare": 1,
+      "prepare_backward_WALK": 0,
+      "prepare_forward_WALK": 1,
+      "route_update_prevented_by_lower_bound": 0,
+      "search_interval_reduction_by_early_termination": 0
+    },
+    "from": {
+      "name": "START",
+      "lat": 32.0836,
+      "lon": 34.7981,
+      "vertexType": "NORMAL"
+    },
+    "to": {
+      "name": "END",
+      "lat": 32.0114,
+      "lon": 34.8867,
+      "vertexType": "NORMAL"
+    },
+    "direct": [],
+    "itineraries": [],
+    "previousPageCursor": "EARLIER|1788900000",
+    "nextPageCursor": "LATER|1788900000"
+  }
+}

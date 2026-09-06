@@ -302,7 +302,8 @@ def e04(fp, other=None) -> dict:
 
 def e05(pair_primary: dict, pair_comparison: dict | None,
         negative_control: dict | None, hashes: dict) -> dict:
-    ok = negative_control is not None and negative_control.get("raised") is True
+    ok = (pair_primary["verdict"] == "ACCEPTED" and negative_control is not None
+          and negative_control.get("raised") is True)
     detail = (f"Pairing is decided by trip-id overlap. Primary feed: "
               f"{pair_primary['matched_join_keys']:,} of "
               f"{pair_primary['feed_distinct_join_keys']:,} join keys matched "
@@ -324,29 +325,29 @@ def e05(pair_primary: dict, pair_comparison: dict | None,
 
 def e06(primary, comparison) -> dict:
     if comparison is None:
-        return _r("E06", "not_observed", "The 60-day feed was not parsed in this run.")
-    keys = sorted(set(primary.rows) | set(comparison.rows))
-    table = {k: {"ten_day": primary.rows.get(k), "sixty_day": comparison.rows.get(k)}
+        return _r("E06", "not_observed", "The 10-day comparison feed was not parsed in this run.")
+    keys = sorted(set(comparison.rows) | set(primary.rows))
+    table = {k: {"ten_day": comparison.rows.get(k), "sixty_day": primary.rows.get(k)}
              for k in keys}
     return _r("E06", "pass",
               f"Both feeds row-counted side by side. 10-day: "
-              f"{primary.rows.get('trips', 0):,} trips / "
-              f"{primary.rows.get('stop_times', 0):,} stop_times. 60-day: "
               f"{comparison.rows.get('trips', 0):,} trips / "
-              f"{comparison.rows.get('stop_times', 0):,} stop_times. "
-              f"Only the 10-day feed is loaded (D5).",
+              f"{comparison.rows.get('stop_times', 0):,} stop_times. 60-day: "
+              f"{primary.rows.get('trips', 0):,} trips / "
+              f"{primary.rows.get('stop_times', 0):,} stop_times. "
+              f"Only the 60-day feed is loaded (D5).",
               row_counts=table,
-              ten_day_sha256=primary.sha256, sixty_day_sha256=comparison.sha256,
+              ten_day_sha256=comparison.sha256, sixty_day_sha256=primary.sha256,
               ten_day_service_shape=("calendar_dates only"
-                                     if primary.services.has_calendar_dates
-                                     and not primary.services.has_calendar
+                                     if comparison.services.has_calendar_dates
+                                     and not comparison.services.has_calendar
                                      else "calendar present"),
               sixty_day_service_shape=("calendar only"
-                                       if comparison.services.has_calendar
-                                       and not comparison.services.has_calendar_dates
+                                       if primary.services.has_calendar
+                                       and not primary.services.has_calendar_dates
                                        else "calendar_dates present"),
-              uncompressed_sizes={"ten_day": primary.members,
-                                  "sixty_day": comparison.members})
+              uncompressed_sizes={"ten_day": comparison.members,
+                                  "sixty_day": primary.members})
 
 
 # ---------------------------------------------------------------------------

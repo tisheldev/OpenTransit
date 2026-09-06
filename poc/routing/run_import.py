@@ -150,16 +150,18 @@ def main() -> int:
         print("docker not on PATH", file=sys.stderr)
         return 2
 
+    from feed_context import prepare
+    context = prepare()
+
     # A previous partial import leaves a half-written data dir that `motis
     # import` will happily reuse -- its task table records which steps are
     # already "current". Start from an empty volume so the build measurement is
     # a build and not a resume.
-    subprocess.run(["docker", "compose", "-f", str(COMPOSE), "--profile", "serve",
-                    "--profile", "build", "down", "-v", "--remove-orphans"],
-                   cwd=str(POC), capture_output=True, text=True, timeout=180)
-    subprocess.run(["docker", "volume", "rm", "-f", VOLUME],
-                   capture_output=True, text=True, timeout=120)
-    print(f"cleared volume {VOLUME}")
+    # Rebuild only the routing volume. Never delete the Postgres volume.
+    subprocess.run(["docker", "compose", "-f", str(COMPOSE), "rm", "-s", "-f", "motis"],
+                   check=True, capture_output=True, text=True, timeout=180)
+    subprocess.run(["docker", "volume", "rm", VOLUME],
+                   check=True, capture_output=True, text=True, timeout=120)
 
     # Record what the machine was actually willing to give a container. This is
     # the number that matters when reading an OOM: Docker Desktop on Windows
@@ -201,6 +203,7 @@ def main() -> int:
         pass
 
     result = {
+        **context,
         "measurement": "build",
         "memory_cap": f"uncapped (WSL2 VM ceiling {int(vm_mem) / 1024**3:.1f} GiB on a 32 GB host)",
         "started_utc": started_iso,

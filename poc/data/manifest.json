@@ -5,7 +5,7 @@
   "files": {
     "Gtfs_10_days.zip": {
       "present": true,
-      "description": "MOT 10-day GTFS \u2014 primary input (ADR 0005)",
+      "description": "MOT 10-day GTFS \u2014 comparison input (ADR 0005)",
       "source": "https://gtfs.mot.gov.il/gtfsfiles/Gtfs_10_days.zip",
       "size_bytes": 252451353,
       "sha256": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468",
@@ -64,11 +64,12 @@
           "name": "levels.txt",
           "size": 42
         }
-      ]
+      ],
+      "role": "comparison"
     },
     "israel-public-transportation.zip": {
       "present": true,
-      "description": "MOT 60-day GTFS \u2014 comparison only (ADR 0005)",
+      "description": "MOT 60-day GTFS \u2014 primary input (ADR 0005)",
       "source": "https://gtfs.mot.gov.il/gtfsfiles/israel-public-transportation.zip",
       "size_bytes": 184227099,
       "sha256": "f26b63c21ac86704c1ad89ce137eee8f2d12a35aa10e34373dcbd36b0e083a93",
@@ -115,7 +116,8 @@
           "name": "trips.txt",
           "size": 37578715
         }
-      ]
+      ],
+      "role": "primary"
     },
     "TripIdToDate.zip": {
       "present": true,

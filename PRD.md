@@ -1,5 +1,7 @@
 # OpenTransit Israel — Product Requirements Document
 
+> **Implementation status — 5 September 2026:** Phase 0 remains incomplete (5/10 recorded capabilities). See [the current next-step plan](docs/next-steps.md) and [PoC status](poc/README.md). Historical access notes and capacity/cost estimates below are not fresh verification or production measurements.
+
 **Working name:** OpenTransit Israel
 **Product concept:** "BetterRail, but for all Israeli public transport."
 **Status:** Initial PRD

@@ -1,0 +1,22 @@
+# Local runtime and editor output
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.DS_Store
+Thumbs.db
+
+# Local configuration; examples remain reviewable
+.env
+.env.*
+!.env.example
+
+# Redirected command output; structured PoC evidence remains tracked
+poc/routing/run_import.out
+
+# Prepared/private Ministry application copies and PDF working files
+output/pdf/
+tmp/pdfs/

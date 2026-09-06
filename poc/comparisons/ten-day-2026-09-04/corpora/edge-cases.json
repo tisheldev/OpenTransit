@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "generated": "2026-09-04",
+  "purpose": "Data-integrity expectations for POC-1. These are checks on the feed itself, not on journeys — journey-level edge cases live in journeys.json as J22 (service-day boundary), J23 (no route), J24 (long walk), J25 (Shabbat).",
+  "provenance": "Derived from docs/data-access-findings.md and the GTFS spec. Each check is a known way Israeli GTFS ingestion goes wrong quietly. Agent A must record a result for every one; 'not observed' is a valid, useful result.",
+  "checks": [
+    {
+      "id": "E01",
+      "name": "HEAD returns a bogus Content-Length",
+      "area": "download",
+      "expect": "Change detection uses GET plus zip validation. A HEAD-based size check must not appear anywhere in the ingester.",
+      "evidence_required": "The refresh code path, plus a recorded HEAD vs GET size comparison proving the discrepancy still exists.",
+      "source": "data-access-findings §1 — HEAD returned 3382 bytes against an actual 164 MB file."
+    },
+    {
+      "id": "E02",
+      "name": "Times beyond 24:00:00",
+      "area": "stop_times",
+      "expect": "Times like 25:30:00 parse as 'service day + 1h30m', never as an error and never truncated to 01:30 on the wrong day.",
+      "evidence_required": "Count of stop_times rows with hour >= 24, and a round-trip test on the largest observed value.",
+      "source": "GTFS spec; the single most common transit-data bug."
+    },
+    {
+      "id": "E03",
+      "name": "Hebrew encoding round-trip",
+      "area": "encoding",
+      "expect": "Hebrew stop and route names survive download → extract → parse → Postgres → read unchanged, byte for byte.",
+      "evidence_required": "Explicit assertion on at least 20 Hebrew names including ones with quotes, apostrophes (גוריון), and mixed Hebrew/Latin/digits.",
+      "source": "Plan §8 risk register — this corrupts silently and is found late."
+    },
+    {
+      "id": "E04",
+      "name": "translations.txt sanitisation",
+      "area": "translations",
+      "expect": "Documented behaviour, whatever it is. If the file needs cleaning, the cleaning rules are written down rather than applied ad hoc.",
+      "evidence_required": "Row count, distinct languages present, and any malformed rows quoted verbatim in known-data-problems.md.",
+      "source": "PRD §13 names this as an expected known data problem."
+    },
+    {
+      "id": "E05",
+      "name": "TripIdToDate is versioned with the feed",
+      "area": "realtime-readiness",
+      "expect": "The ingester refuses to pair a TripIdToDate snapshot with a GTFS snapshot from a different publication.",
+      "evidence_required": "A test that a mismatched pair is rejected, plus the recorded hashes of the matched pair actually used.",
+      "source": "data-access-findings §1 and §3 — this file is what makes realtime matching possible."
+    },
+    {
+      "id": "E06",
+      "name": "10-day and 60-day feeds are different products",
+      "area": "feed-selection",
+      "expect": "Only the 10-day feed is loaded (decision D5). If both are parsed for comparison, the difference in trip and stop_times counts is recorded.",
+      "evidence_required": "Row counts for both feeds side by side, so the D5 decision is evidenced rather than asserted.",
+      "source": "data-access-findings §1."
+    },
+    {
+      "id": "E07",
+      "name": "Service exceptions in calendar_dates",
+      "area": "calendar",
+      "expect": "Shabbat, festival and exception days are honoured. Israeli service is not a simple weekly pattern.",
+      "evidence_required": "Count of calendar_dates rows by exception_type, and the set of dates in the active window with materially reduced service.",
+      "source": "Directly determines whether journeys.json J25 can pass."
+    },
+    {
+      "id": "E08",
+      "name": "Orphan and dangling references",
+      "area": "referential-integrity",
+      "expect": "Every trip references a real route and service; every stop_time references a real trip and stop. Violations are counted, not silently dropped.",
+      "evidence_required": "A count per violation class. Zero is a fine answer; an unreported non-zero is a failure of the check.",
+      "source": "Standard GTFS integrity; a silent drop here becomes a mysterious no-route later."
+    },
+    {
+      "id": "E09",
+      "name": "Parent stations and stop grouping",
+      "area": "stops",
+      "expect": "Multi-platform stations (Savidor, Tel Aviv CBS) resolve as a station rather than as unrelated scattered platforms.",
+      "evidence_required": "location_type distribution, and the platform list resolved for corpora stop S01 and S08.",
+      "source": "stops.json S08 note — sprawling stations are where this breaks."
+    },
+    {
+      "id": "E10",
+      "name": "Refresh is genuinely automatic",
+      "area": "refresh",
+      "expect": "A cold run on an empty data directory reaches a queryable database with no manual editing. PRD §6 makes this the PASS condition.",
+      "evidence_required": "A recorded cold run from an empty directory, with wall time and exit status.",
+      "source": "PRD §6 PASS criterion; also kill criterion #1."
+    }
+  ]
+}

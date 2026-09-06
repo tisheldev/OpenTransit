@@ -50,7 +50,6 @@ class Args:
         self.offline = False
         self.skip_comparison = False
         self.head_probe = False
-        self.allow_unpaired_trip_id_to_date = True
         self.write_corpus = False
         self.report = None
         self.timeout = 1800
@@ -133,6 +132,8 @@ def main(argv=None) -> int:
     cold_path = Path(args.cold_json)
     if args.skip_cold:
         cold = json.loads(cold_path.read_text(encoding="utf-8")) if cold_path.exists() else None
+        if cold and not (cold.get("downloaded_sha256") or {}).get(ingest.PRIMARY):
+            cold = None
         if cold is None:
             ingest.log("no recorded cold run and --skip-cold given: E10 will be not_observed")
     else:
@@ -158,23 +159,8 @@ def main(argv=None) -> int:
 
 def build_notes(report: dict, cold: dict | None) -> list[str]:
     notes: list[str] = []
-    t2d = report.get("trip_id_to_date", {})
-    if t2d and not t2d.get("paired_with_primary"):
-        notes.append(
-            "TripIdToDate.zip does not pair with the 10-day feed: 0 of "
-            f"{t2d.get('distinct_trip_ids', 0):,} of its TripId values appear in the "
-            "feed's trip_ids, while every 60-day-feed trip id matches after stripping "
-            "the _ddmmyy suffix. It is loaded here for row-count evidence only and "
-            "must not be used to resolve trips against the 10-day feed. See KDP-008."
-        )
-    fi = report.get("feed_info", {})
-    if fi.get("feed_start_date"):
-        notes.append(
-            f"Feed window {fi.get('feed_start_date')}..{fi.get('feed_end_date')} "
-            "(KDP-001: the 10-day feed's window opens the day after publication, so "
-            "PRD §39's --depart-now has no data on the day the feed is downloaded). "
-            "That is a developer decision, not an agent one — ADR 0005 is reopened."
-        )
+    notes.append(f"Primary: {ingest.PRIMARY}; TripIdToDate compatibility enforced before load. "
+                 f"Service window: {report.get('service_window')}. 10-day feed is comparison only.")
     notes.append(
         "stop_times and shapes are parsed, counted and integrity-checked but "
         "deliberately not loaded into Postgres (ADR 0003 / system-design §173)."

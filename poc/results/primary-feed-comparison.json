@@ -1,0 +1,554 @@
+{
+  "primary_feed_sha256": "f26b63c21ac86704c1ad89ce137eee8f2d12a35aa10e34373dcbd36b0e083a93",
+  "comparison_feed_sha256": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468",
+  "metrics": {
+    "Structural pass (any itinerary)": [
+      21,
+      24
+    ],
+    "Structural pass (first itinerary)": [
+      20,
+      22
+    ],
+    "Generous-walk structural pass": [
+      22,
+      25
+    ],
+    "Build wall seconds": [
+      40.0,
+      34.0
+    ],
+    "Build sampled peak MB": [
+      3738.6,
+      3272.7
+    ],
+    "Graph MB": [
+      910.8,
+      681.2
+    ],
+    "Idle median MB": [
+      937.8,
+      726.8
+    ],
+    "Load peak MB": [
+      1129.5,
+      941.3
+    ],
+    "Load p95 ms": [
+      256.6,
+      162.9
+    ],
+    "Load requests/second": [
+      168.8,
+      219.9
+    ]
+  },
+  "cases": [
+    {
+      "id": "J01",
+      "old_outcome": "route",
+      "new_outcome": "route",
+      "old_pass": "pass",
+      "new_pass": "pass",
+      "old_first_pass": "pass",
+      "new_first_pass": "pass",
+      "old_duration_min": 18.0,
+      "new_duration_min": 18.0,
+      "old_transfers": 0,
+      "new_transfers": 0,
+      "old_modes": [
+        "bus"
+      ],
+      "new_modes": [
+        "bus"
+      ],
+      "changed_corpus_inputs": []
+    },
+    {
+      "id": "J02",
+      "old_outcome": "route",
+      "new_outcome": "route",
+      "old_pass": "pass",
+      "new_pass": "pass",
+      "old_first_pass": "pass",
+      "new_first_pass": "pass",
+      "old_duration_min": 26.0,
+      "new_duration_min": 26.0,
+      "old_transfers": 1,
+      "new_transfers": 1,
+      "old_modes": [
+        "bus"
+      ],
+      "new_modes": [
+        "bus"
+      ],
+      "changed_corpus_inputs": []
+    },
+    {
+      "id": "J03",
+      "old_outcome": "route",
+      "new_outcome": "route",
+      "old_pass": "pass",
+      "new_pass": "pass",
+      "old_first_pass": "pass",
+      "new_first_pass": "pass",
+      "old_duration_min": 31.0,
+      "new_duration_min": 31.0,
+      "old_transfers": 0,
+      "new_transfers": 0,
+      "old_modes": [
+        "bus"
+      ],
+      "new_modes": [
+        "bus"
+      ],
+      "changed_corpus_inputs": []
+    },
+    {
+      "id": "J04",
+      "old_outcome": "route",
+      "new_outcome": "route",
+      "old_pass": "pass",
+      "new_pass": "pass",
+      "old_first_pass": "pass",
+      "new_first_pass": "pass",
+      "old_duration_min": 35.0,
+      "new_duration_min": 35.0,
+      "old_transfers": 1,
+      "new_transfers": 1,
+      "old_modes": [
+        "bus",
+        "light_rail"
+      ],
+      "new_modes": [
+        "bus",
+        "light_rail"
+      ],
+      "changed_corpus_inputs": []
+    },
+    {
+      "id": "J05",
+      "old_outcome": "route",
+      "new_outcome": "route",
+      "old_pass": "pass",
+      "new_pass": "pass",
+      "old_first_pass": "pass",
+      "new_first_pass": "pass",
+      "old_duration_min": 25.0,
+      "new_duration_min": 25.0,
+      "old_transfers": 0,
+      "new_transfers": 0,
+      "old_modes": [
+        "light_rail"
+      ],
+      "new_modes": [
+        "light_rail"
+      ],
+      "changed_corpus_inputs": []
+    },
+    {
+      "id": "J06",
+      "old_outcome": "route",
+      "new_outcome": "route",
+      "old_pass": "pass",
+      "new_pass": "pass",
+      "old_first_pass": "pass",
+      "new_first_pass": "pass",
+      "old_duration_min": 27.0,
+      "new_duration_min": 27.0,
+      "old_transfers": 1,
+      "new_transfers": 1,
+      "old_modes": [
+        "bus"
+      ],
+      "new_modes": [
+        "bus"
+      ],
+      "changed_corpus_inputs": []
+    },
+    {
+      "id": "J07",
+      "old_outcome": "route",
+      "new_outcome": "route",
+      "old_pass": "pass",
+      "new_pass": "pass",
+      "old_first_pass": "pass",
+      "new_first_pass": "pass",
+      "old_duration_min": 23.0,
+      "new_duration_min": 23.0,
+      "old_transfers": 0,
+      "new_transfers": 0,
+      "old_modes": [
+        "bus"
+      ],
+      "new_modes": [
+        "bus"
+      ],
+      "changed_corpus_inputs": []
+    },
+    {
+      "id": "J08",
+      "old_outcome": "route",
+      "new_outcome": "route",
+      "old_pass": "pass",
+      "new_pass": "pass",
+      "old_first_pass": "pass",
+      "new_first_pass": "pass",
+      "old_duration_min": 39.0,
+      "new_duration_min": 39.0,
+      "old_transfers": 2,
+      "new_transfers": 2,
+      "old_modes": [
+        "bus",
+        "funicular"
+      ],
+      "new_modes": [
+        "bus",
+        "funicular"
+      ],
+      "changed_corpus_inputs": []
+    },
+    {
+      "id": "J09",
+      "old_outcome": "no-route",
+      "new_outcome": "no-route",
+      "old_pass": "fail",
+      "new_pass": "fail",
+      "old_first_pass": "fail",
+      "new_first_pass": "fail",
+      "old_duration_min": null,
+      "new_duration_min": null,
+      "old_transfers": null,
+      "new_transfers": null,
+      "old_modes": null,
+      "new_modes": null,
+      "changed_corpus_inputs": []
+    },
+    {
+      "id": "J10",
+      "old_outcome": "route",
+      "new_outcome": "route",
+      "old_pass": "pass",
+      "new_pass": "pass",
+      "old_first_pass": "pass",
+      "new_first_pass": "pass",
+      "old_duration_min": 44.0,
+      "new_duration_min": 44.0,
+      "old_transfers": 0,
+      "new_transfers": 0,
+      "old_modes": [
+        "bus"
+      ],
+      "new_modes": [
+        "bus"
+      ],
+      "changed_corpus_inputs": []
+    },
+    {
+      "id": "J11",
+      "old_outcome": "route",
+      "new_outcome": "route",
+      "old_pass": "pass",
+      "new_pass": "pass",
+      "old_first_pass": "pass",
+      "new_first_pass": "pass",
+      "old_duration_min": 82.0,
+      "new_duration_min": 84.0,
+      "old_transfers": 1,
+      "new_transfers": 1,
+      "old_modes": [
+        "bus",
+        "rail"
+      ],
+      "new_modes": [
+        "bus",
+        "rail"
+      ],
+      "changed_corpus_inputs": []
+    },
+    {
+      "id": "J12",
+      "old_outcome": "route",
+      "new_outcome": "route",
+      "old_pass": "pass",
+      "new_pass": "pass",
+      "old_first_pass": "pass",
+      "new_first_pass": "pass",
+      "old_duration_min": 49.0,
+      "new_duration_min": 51.0,
+      "old_transfers": 0,
+      "new_transfers": 0,
+      "old_modes": [
+        "rail"
+      ],
+      "new_modes": [
+        "rail"
+      ],
+      "changed_corpus_inputs": []
+    },
+    {
+      "id": "J13",
+      "old_outcome": "route",
+      "new_outcome": "route",
+      "old_pass": "pass",
+      "new_pass": "pass",
+      "old_first_pass": "pass",
+      "new_first_pass": "pass",
+      "old_duration_min": 98.0,
+      "new_duration_min": 100.0,
+      "old_transfers": 0,
+      "new_transfers": 0,
+      "old_modes": [
+        "rail"
+      ],
+      "new_modes": [
+        "rail"
+      ],
+      "changed_corpus_inputs": []
+    },
+    {
+      "id": "J14",
+      "old_outcome": "route",
+      "new_outcome": "route",
+      "old_pass": "pass",
+      "new_pass": "pass",
+      "old_first_pass": "pass",
+      "new_first_pass": "pass",
+      "old_duration_min": 171.0,
+      "new_duration_min": 171.0,
+      "old_transfers": 1,
+      "new_transfers": 1,
+      "old_modes": [
+        "bus",
+        "rail"
+      ],
+      "new_modes": [
+        "bus",
+        "rail"
+      ],
+      "changed_corpus_inputs": []
+    },
+    {
+      "id": "J15",
+      "old_outcome": "route",
+      "new_outcome": "route",
+      "old_pass": "pass",
+      "new_pass": "pass",
+      "old_first_pass": "pass",
+      "new_first_pass": "fail",
+      "old_duration_min": 136.0,
+      "new_duration_min": 154.0,
+      "old_transfers": 3,
+      "new_transfers": 3,
+      "old_modes": [
+        "bus",
+        "rail"
+      ],
+      "new_modes": [
+        "bus"
+      ],
+      "changed_corpus_inputs": []
+    },
+    {
+      "id": "J16",
+      "old_outcome": "route",
+      "new_outcome": "route",
+      "old_pass": "pass",
+      "new_pass": "pass",
+      "old_first_pass": "pass",
+      "new_first_pass": "pass",
+      "old_duration_min": 85.0,
+      "new_duration_min": 87.0,
+      "old_transfers": 1,
+      "new_transfers": 1,
+      "old_modes": [
+        "bus",
+        "rail"
+      ],
+      "new_modes": [
+        "bus",
+        "rail"
+      ],
+      "changed_corpus_inputs": []
+    },
+    {
+      "id": "J17",
+      "old_outcome": "no-route",
+      "new_outcome": "route",
+      "old_pass": "fail",
+      "new_pass": "pass",
+      "old_first_pass": "fail",
+      "new_first_pass": "pass",
+      "old_duration_min": null,
+      "new_duration_min": 30.0,
+      "old_transfers": null,
+      "new_transfers": 1,
+      "old_modes": null,
+      "new_modes": [
+        "bus",
+        "rail"
+      ],
+      "changed_corpus_inputs": [
+        "to"
+      ]
+    },
+    {
+      "id": "J18",
+      "old_outcome": "route",
+      "new_outcome": "route",
+      "old_pass": "pass",
+      "new_pass": "pass",
+      "old_first_pass": "fail",
+      "new_first_pass": "fail",
+      "old_duration_min": 124.0,
+      "new_duration_min": 124.0,
+      "old_transfers": 3,
+      "new_transfers": 3,
+      "old_modes": [
+        "bus"
+      ],
+      "new_modes": [
+        "bus"
+      ],
+      "changed_corpus_inputs": []
+    },
+    {
+      "id": "J19",
+      "old_outcome": "route",
+      "new_outcome": "route",
+      "old_pass": "pass",
+      "new_pass": "pass",
+      "old_first_pass": "pass",
+      "new_first_pass": "pass",
+      "old_duration_min": 71.0,
+      "new_duration_min": 71.0,
+      "old_transfers": 1,
+      "new_transfers": 1,
+      "old_modes": [
+        "bus"
+      ],
+      "new_modes": [
+        "bus"
+      ],
+      "changed_corpus_inputs": []
+    },
+    {
+      "id": "J20",
+      "old_outcome": "route",
+      "new_outcome": "route",
+      "old_pass": "pass",
+      "new_pass": "pass",
+      "old_first_pass": "pass",
+      "new_first_pass": "pass",
+      "old_duration_min": 130.0,
+      "new_duration_min": 130.0,
+      "old_transfers": 2,
+      "new_transfers": 2,
+      "old_modes": [
+        "bus"
+      ],
+      "new_modes": [
+        "bus"
+      ],
+      "changed_corpus_inputs": []
+    },
+    {
+      "id": "J21",
+      "old_outcome": "no-route",
+      "new_outcome": "route",
+      "old_pass": "fail",
+      "new_pass": "pass",
+      "old_first_pass": "fail",
+      "new_first_pass": "pass",
+      "old_duration_min": null,
+      "new_duration_min": 24.0,
+      "old_transfers": null,
+      "new_transfers": 0,
+      "old_modes": null,
+      "new_modes": [
+        "rail"
+      ],
+      "changed_corpus_inputs": [
+        "to"
+      ]
+    },
+    {
+      "id": "J22",
+      "old_outcome": "route",
+      "new_outcome": "route",
+      "old_pass": "pass",
+      "new_pass": "pass",
+      "old_first_pass": "pass",
+      "new_first_pass": "pass",
+      "old_duration_min": 100.0,
+      "new_duration_min": 100.0,
+      "old_transfers": 1,
+      "new_transfers": 1,
+      "old_modes": [
+        "bus",
+        "rail"
+      ],
+      "new_modes": [
+        "bus",
+        "rail"
+      ],
+      "changed_corpus_inputs": []
+    },
+    {
+      "id": "J23",
+      "old_outcome": "route",
+      "new_outcome": "no-route",
+      "old_pass": "fail",
+      "new_pass": "pass",
+      "old_first_pass": "fail",
+      "new_first_pass": "pass",
+      "old_duration_min": 409.0,
+      "new_duration_min": null,
+      "old_transfers": 4,
+      "new_transfers": null,
+      "old_modes": [
+        "bus"
+      ],
+      "new_modes": null,
+      "changed_corpus_inputs": [
+        "from"
+      ]
+    },
+    {
+      "id": "J24",
+      "old_outcome": "no-route",
+      "new_outcome": "no-route",
+      "old_pass": "pass",
+      "new_pass": "pass",
+      "old_first_pass": "pass",
+      "new_first_pass": "pass",
+      "old_duration_min": null,
+      "new_duration_min": null,
+      "old_transfers": null,
+      "new_transfers": null,
+      "old_modes": null,
+      "new_modes": null,
+      "changed_corpus_inputs": []
+    },
+    {
+      "id": "J25",
+      "old_outcome": "route",
+      "new_outcome": "route",
+      "old_pass": "pass",
+      "new_pass": "pass",
+      "old_first_pass": "pass",
+      "new_first_pass": "pass",
+      "old_duration_min": 80.0,
+      "new_duration_min": 74.0,
+      "old_transfers": 1,
+      "new_transfers": 1,
+      "old_modes": [
+        "bus"
+      ],
+      "new_modes": [
+        "bus"
+      ],
+      "changed_corpus_inputs": []
+    }
+  ]
+}

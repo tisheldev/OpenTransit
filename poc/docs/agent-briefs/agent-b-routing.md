@@ -48,7 +48,7 @@ Run via `docker compose --profile serve up -d motis`, port 58080.
 
 ## Inputs
 
-- `poc/data/Gtfs_10_days.zip` — primary feed (ADR 0005)
+- `poc/data/israel-public-transportation.zip` + `TripIdToDate.zip` — primary feed (ADR 0005)
 - `poc/data/israel-and-palestine-latest.osm.pbf` — walking legs
 
 The import is long (plausibly 30–90 minutes). **Run it as a monitored background command,

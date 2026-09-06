@@ -17,7 +17,7 @@
       "mode": "rail",
       "expect_min_services_per_hour": 6,
       "expect_routes": null,
-      "resolved_stop_id": "10945",
+      "resolved_stop_id": "37358",
       "note": "Busiest rail interchange in the country. If this returns thin service, the calendar is being misread.",
       "resolution": {
         "rule": "name+mode",
@@ -31,17 +31,17 @@
           "2"
         ],
         "mode_matches_feed": true,
-        "observed_route_count": 99,
-        "observed_departures_in_feed_window": 3498,
+        "observed_route_count": 718,
+        "observed_departures_in_feed_window": 733,
         "observed_peak_departures_per_hour": 28,
         "meets_expect_min_services_per_hour": true,
         "geometric_nearest": {
-          "stop_id": "10945",
+          "stop_id": "37358",
           "stop_name": "תל אביב מרכז",
           "distance_m": 18.8
         },
         "low_confidence": false,
-        "feed_sha256": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468"
+        "feed_sha256": "f26b63c21ac86704c1ad89ce137eee8f2d12a35aa10e34373dcbd36b0e083a93"
       }
     },
     {
@@ -53,7 +53,7 @@
       "mode": "rail",
       "expect_min_services_per_hour": 6,
       "expect_routes": null,
-      "resolved_stop_id": "10949",
+      "resolved_stop_id": "37350",
       "note": "Azrieli interchange; heavy commuter load.",
       "resolution": {
         "rule": "name+mode",
@@ -67,17 +67,17 @@
           "2"
         ],
         "mode_matches_feed": true,
-        "observed_route_count": 86,
-        "observed_departures_in_feed_window": 3320,
+        "observed_route_count": 649,
+        "observed_departures_in_feed_window": 657,
         "observed_peak_departures_per_hour": 28,
         "meets_expect_min_services_per_hour": true,
         "geometric_nearest": {
-          "stop_id": "13316",
+          "stop_id": "12823",
           "stop_name": "ת. רכבת השלום",
           "distance_m": 52.7
         },
         "low_confidence": false,
-        "feed_sha256": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468"
+        "feed_sha256": "f26b63c21ac86704c1ad89ce137eee8f2d12a35aa10e34373dcbd36b0e083a93"
       }
     },
     {
@@ -89,7 +89,7 @@
       "mode": "rail",
       "expect_min_services_per_hour": 2,
       "expect_routes": null,
-      "resolved_stop_id": "10990",
+      "resolved_stop_id": "42286",
       "note": "Deep underground; the fast line terminus.",
       "resolution": {
         "rule": "name+mode",
@@ -103,17 +103,17 @@
           "2"
         ],
         "mode_matches_feed": true,
-        "observed_route_count": 7,
-        "observed_departures_in_feed_window": 896,
+        "observed_route_count": 185,
+        "observed_departures_in_feed_window": 191,
         "observed_peak_departures_per_hour": 8,
         "meets_expect_min_services_per_hour": true,
         "geometric_nearest": {
-          "stop_id": "3523",
+          "stop_id": "10754",
           "stop_name": "ת. מרכזית ירושלים/יפו",
           "distance_m": 24.1
         },
         "low_confidence": false,
-        "feed_sha256": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468"
+        "feed_sha256": "f26b63c21ac86704c1ad89ce137eee8f2d12a35aa10e34373dcbd36b0e083a93"
       }
     },
     {
@@ -125,7 +125,7 @@
       "mode": "rail",
       "expect_min_services_per_hour": 2,
       "expect_routes": null,
-      "resolved_stop_id": "10934",
+      "resolved_stop_id": "37380",
       "note": "",
       "resolution": {
         "rule": "name+mode",
@@ -139,17 +139,17 @@
           "2"
         ],
         "mode_matches_feed": true,
-        "observed_route_count": 47,
-        "observed_departures_in_feed_window": 1479,
+        "observed_route_count": 311,
+        "observed_departures_in_feed_window": 325,
         "observed_peak_departures_per_hour": 13,
         "meets_expect_min_services_per_hour": true,
         "geometric_nearest": {
-          "stop_id": "30113",
+          "stop_id": "35832",
           "stop_name": "תחנת רכבת חיפה מרכז השמונה",
           "distance_m": 116.5
         },
         "low_confidence": false,
-        "feed_sha256": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468"
+        "feed_sha256": "f26b63c21ac86704c1ad89ce137eee8f2d12a35aa10e34373dcbd36b0e083a93"
       }
     },
     {
@@ -161,7 +161,7 @@
       "mode": "rail",
       "expect_min_services_per_hour": 1,
       "expect_routes": null,
-      "resolved_stop_id": "10968",
+      "resolved_stop_id": "37312",
       "note": "Southern hub; lower frequency is expected and correct.",
       "resolution": {
         "rule": "name+mode",
@@ -175,17 +175,17 @@
           "2"
         ],
         "mode_matches_feed": true,
-        "observed_route_count": 28,
-        "observed_departures_in_feed_window": 879,
+        "observed_route_count": 172,
+        "observed_departures_in_feed_window": 172,
         "observed_peak_departures_per_hour": 8,
         "meets_expect_min_services_per_hour": true,
         "geometric_nearest": {
-          "stop_id": "10968",
+          "stop_id": "37312",
           "stop_name": "באר שבע מרכז",
           "distance_m": 26.6
         },
         "low_confidence": false,
-        "feed_sha256": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468"
+        "feed_sha256": "f26b63c21ac86704c1ad89ce137eee8f2d12a35aa10e34373dcbd36b0e083a93"
       }
     },
     {
@@ -197,12 +197,12 @@
       "mode": "rail",
       "expect_min_services_per_hour": 1,
       "expect_routes": null,
-      "resolved_stop_id": "10971",
+      "resolved_stop_id": "37306",
       "note": "Runs deep into the night — a good probe for late-night service-day handling.",
       "resolution": {
         "rule": "mode",
-        "resolved_stop_name": "נתב\"ג",
-        "distance_m": 1961.1,
+        "resolved_stop_name": "נתב''ג",
+        "distance_m": 4.8,
         "name_token_score": 0.0,
         "location_type": "0",
         "platform_count": 0,
@@ -211,17 +211,17 @@
           "2"
         ],
         "mode_matches_feed": true,
-        "observed_route_count": 34,
-        "observed_departures_in_feed_window": 1266,
+        "observed_route_count": 302,
+        "observed_departures_in_feed_window": 317,
         "observed_peak_departures_per_hour": 9,
         "meets_expect_min_services_per_hour": true,
         "geometric_nearest": {
-          "stop_id": "22648",
-          "stop_name": "כנף",
-          "distance_m": 1532.3
+          "stop_id": "37306",
+          "stop_name": "נתב''ג",
+          "distance_m": 4.8
         },
-        "low_confidence": true,
-        "feed_sha256": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468"
+        "low_confidence": false,
+        "feed_sha256": "f26b63c21ac86704c1ad89ce137eee8f2d12a35aa10e34373dcbd36b0e083a93"
       },
       "corpus_fix": "was 32.0114,34.8867, 1961 m from the stop it resolved to. Corrected to GTFS stop 10971."
     },
@@ -234,7 +234,7 @@
       "mode": "bus",
       "expect_min_services_per_hour": 20,
       "expect_routes": null,
-      "resolved_stop_id": "3527",
+      "resolved_stop_id": "10758",
       "note": "Very high bus volume; tests that a busy stop does not blow up the departures query.",
       "resolution": {
         "rule": "name+mode+station",
@@ -242,23 +242,23 @@
         "distance_m": 108.8,
         "name_token_score": 1.0,
         "location_type": "1",
-        "platform_count": 16,
+        "platform_count": 39,
         "expected_route_type": "3",
         "observed_route_types": [
           "3"
         ],
         "mode_matches_feed": true,
         "observed_route_count": 52,
-        "observed_departures_in_feed_window": 5049,
+        "observed_departures_in_feed_window": 2442,
         "observed_peak_departures_per_hour": 51,
         "meets_expect_min_services_per_hour": true,
         "geometric_nearest": {
-          "stop_id": "3523",
+          "stop_id": "10754",
           "stop_name": "ת. מרכזית ירושלים/יפו",
           "distance_m": 40.0
         },
         "low_confidence": false,
-        "feed_sha256": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468"
+        "feed_sha256": "f26b63c21ac86704c1ad89ce137eee8f2d12a35aa10e34373dcbd36b0e083a93"
       }
     },
     {
@@ -270,7 +270,7 @@
       "mode": "bus",
       "expect_min_services_per_hour": 20,
       "expect_routes": null,
-      "resolved_stop_id": "15071",
+      "resolved_stop_id": "14592",
       "note": "Sprawling multi-level station — stop grouping and parent_station handling matter here.",
       "resolution": {
         "rule": "name+mode+station",
@@ -278,23 +278,23 @@
         "distance_m": 66.0,
         "name_token_score": 0.5,
         "location_type": "1",
-        "platform_count": 7,
+        "platform_count": 9,
         "expected_route_type": "3",
         "observed_route_types": [
           "3"
         ],
         "mode_matches_feed": true,
         "observed_route_count": 14,
-        "observed_departures_in_feed_window": 1765,
+        "observed_departures_in_feed_window": 1156,
         "observed_peak_departures_per_hour": 19,
         "meets_expect_min_services_per_hour": false,
         "geometric_nearest": {
-          "stop_id": "15071",
+          "stop_id": "14592",
           "stop_name": "ת.מרכזית תל אביב קומה 6/רציפים",
           "distance_m": 66.0
         },
         "low_confidence": false,
-        "feed_sha256": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468"
+        "feed_sha256": "f26b63c21ac86704c1ad89ce137eee8f2d12a35aa10e34373dcbd36b0e083a93"
       }
     },
     {
@@ -306,7 +306,7 @@
       "mode": "light_rail",
       "expect_min_services_per_hour": 4,
       "expect_routes": null,
-      "resolved_stop_id": "4519",
+      "resolved_stop_id": "35162",
       "note": "Jerusalem light rail terminus; confirms light rail appears as its own mode.",
       "resolution": {
         "rule": "name+mode",
@@ -321,16 +321,16 @@
         ],
         "mode_matches_feed": true,
         "observed_route_count": 2,
-        "observed_departures_in_feed_window": 1551,
+        "observed_departures_in_feed_window": 542,
         "observed_peak_departures_per_hour": 12,
         "meets_expect_min_services_per_hour": true,
         "geometric_nearest": {
-          "stop_id": "364",
+          "stop_id": "39139",
           "stop_name": "הזיכרון/שדרות הרצל",
           "distance_m": 182.7
         },
         "low_confidence": false,
-        "feed_sha256": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468"
+        "feed_sha256": "f26b63c21ac86704c1ad89ce137eee8f2d12a35aa10e34373dcbd36b0e083a93"
       }
     },
     {
@@ -342,7 +342,7 @@
       "mode": "bus",
       "expect_min_services_per_hour": 0,
       "expect_routes": null,
-      "resolved_stop_id": "8769",
+      "resolved_stop_id": "26674",
       "note": "Deliberate sparse-service control. A stop with almost no departures must still resolve and return an empty-but-valid result, not an error.",
       "resolution": {
         "rule": "name+mode",
@@ -357,16 +357,16 @@
         ],
         "mode_matches_feed": true,
         "observed_route_count": 21,
-        "observed_departures_in_feed_window": 679,
+        "observed_departures_in_feed_window": 504,
         "observed_peak_departures_per_hour": 11,
         "meets_expect_min_services_per_hour": true,
         "geometric_nearest": {
-          "stop_id": "8754",
+          "stop_id": "26668",
           "stop_name": "הספרייה",
           "distance_m": 44.6
         },
         "low_confidence": false,
-        "feed_sha256": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468"
+        "feed_sha256": "f26b63c21ac86704c1ad89ce137eee8f2d12a35aa10e34373dcbd36b0e083a93"
       }
     }
   ],

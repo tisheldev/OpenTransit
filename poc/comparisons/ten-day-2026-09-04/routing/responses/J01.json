@@ -1,0 +1,3778 @@
+{
+  "case": {
+    "id": "J01",
+    "category": "tel-aviv-urban-bus",
+    "prd_ref": "PRD §7 #1 Tel Aviv → Ramat Gan",
+    "from": {
+      "name": "Dizengoff Center",
+      "name_he": "דיזנגוף סנטר",
+      "lat": 32.0757,
+      "lon": 34.7748
+    },
+    "to": {
+      "name": "Ramat Gan Bursa",
+      "name_he": "רמת גן בורסה",
+      "lat": 32.0838,
+      "lon": 34.8044
+    },
+    "depart": "weekday_morning",
+    "expect": {
+      "outcome": "route",
+      "modes_any_of": [
+        "bus",
+        "light_rail"
+      ],
+      "min_duration_min": 10,
+      "max_duration_min": 55,
+      "max_transfers": 2
+    },
+    "human_review": "Would a Tel Aviv resident actually take this? Compare against Moovit."
+  },
+  "request": {
+    "url": "http://localhost:58080/api/v6/plan?fromPlace=32.0757%2C34.7748&toPlace=32.0838%2C34.8044&time=2026-09-07T08%3A00%3A00%2B03%3A00&arriveBy=false&numItineraries=5&timetableView=true",
+    "requested_time_local": "2026-09-07T08:00:00+03:00",
+    "http_status": 200,
+    "latency_ms": 24.2
+  },
+  "response": {
+    "requestParameters": {},
+    "debugOutput": {
+      "algorithm": 1,
+      "direct": 0,
+      "execute_time": 9,
+      "fares": 0,
+      "fastest_direct": 0,
+      "fp_update_prevented_by_lower_bound": 1286,
+      "interval_extensions": 0,
+      "lb_time": 0,
+      "n_dest_offsets": 66,
+      "n_earliest_arrival_updated_by_footpath": 4728,
+      "n_earliest_arrival_updated_by_route": 16334,
+      "n_earliest_trip_calls": 62737,
+      "n_events_skipped_by_early_termination": 0,
+      "n_execute_bwd": 5,
+      "n_execute_fwd": 4,
+      "n_footpaths_visited": 9364,
+      "n_routes_visited": 10178,
+      "n_routing_time": 0,
+      "n_start_offsets": 47,
+      "n_td_dest_offsets": 0,
+      "n_td_start_offsets": 0,
+      "prepare": 2,
+      "prepare_backward_WALK": 1,
+      "prepare_forward_WALK": 1,
+      "route_update_prevented_by_lower_bound": 0,
+      "search_interval_reduction_by_early_termination": 0
+    },
+    "from": {
+      "name": "START",
+      "lat": 32.0757,
+      "lon": 34.7748,
+      "vertexType": "NORMAL"
+    },
+    "to": {
+      "name": "END",
+      "lat": 32.0838,
+      "lon": 34.8044,
+      "vertexType": "NORMAL"
+    },
+    "direct": [],
+    "itineraries": [
+      {
+        "duration": 1080,
+        "startTime": "2026-09-07T05:06:00Z",
+        "endTime": "2026-09-07T05:24:00Z",
+        "transfers": 0,
+        "id": "CkghUiegibAJQEApbHh6pSxjQUAyDm1vdDEwZGF5XzEzMTk5OWhiuhCrCUBAQeY9zjRhY0FASLiM+dQGUOSO+dQGWgRXQUxLYAEKfwoCODISIjIwMjYwOTA3XzA4OjAwX21vdDEwZGF5XzE2OTIyNzczODkaDm1vdDEwZGF5XzEzMTk5IWhiuhCrCUBAKeY9zjRhY0FAMg5tb3QxMGRheV8xMzY5Mjl968N6owpAQEGJ0t7gC2dBQEjkjvnUBlCAk/nUBloDQlVTYAEKSBoObW90MTBkYXlfMTM2OTIhfevDeqMKQEApidLe4AtnQUA50LNZ9bkKQEBBgnNGlPZmQUBIgJP51AZQ8JT51AZaBFdBTEtgAQ==",
+        "legs": [
+          {
+            "mode": "WALK",
+            "from": {
+              "name": "START",
+              "lat": 32.0757,
+              "lon": 34.7748,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-07T05:06:00Z",
+              "scheduledDeparture": "2026-09-07T05:06:00Z",
+              "vertexType": "NORMAL"
+            },
+            "to": {
+              "name": "דיזנגוף סנטר/המלך ג'ורג'",
+              "stopId": "mot10day_13199",
+              "importance": 0.05052601546049118,
+              "lat": 32.07553300000001,
+              "lon": 34.776404,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T05:11:00Z",
+              "scheduledArrival": "2026-09-07T05:11:00Z",
+              "stopCode": "20785",
+              "description": "Street: המלך ג'ורג' City: תל אביב יפו Platform:  Floor:",
+              "vertexType": "TRANSIT",
+              "modes": [
+                "BUS"
+              ]
+            },
+            "duration": 300,
+            "startTime": "2026-09-07T05:06:00Z",
+            "endTime": "2026-09-07T05:11:00Z",
+            "scheduledStartTime": "2026-09-07T05:06:00Z",
+            "scheduledEndTime": "2026-09-07T05:11:00Z",
+            "realTime": false,
+            "scheduled": false,
+            "distance": 294.0,
+            "legGeometry": {
+              "points": "q{vd|@{rniaA}DrByC|A??Oo@??WcA??fD}AfK{FNKxAaAxAcA`P{K??xImK~CsDPWxAsBbCoDpDaH??NcE??s@c@}k@iZ",
+              "precision": 6,
+              "length": 26
+            },
+            "steps": [
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 26.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "toOsmNode": 6434511040,
+                "polyline": {
+                  "points": "q{vd|@{rniaA}DrByC|A",
+                  "precision": 6,
+                  "length": 3
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 2.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 686487782,
+                "fromOsmNode": 6434511040,
+                "toOsmNode": 9332520456,
+                "polyline": {
+                  "points": "ifwd|@ilniaAOo@",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 3.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 686487782,
+                "fromOsmNode": 9332520456,
+                "toOsmNode": 6434511042,
+                "polyline": {
+                  "points": "yfwd|@ymniaAWcA",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 84.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1113400111,
+                "fromOsmNode": 6434511042,
+                "toOsmNode": 6434395319,
+                "polyline": {
+                  "points": "qgwd|@}oniaAfD}AfK{FNKxAaAxAcA`P{K",
+                  "precision": 6,
+                  "length": 7
+                },
+                "streetName": "דיזנגוף",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 76.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1113400111,
+                "fromOsmNode": 6434395319,
+                "toOsmNode": 2469848033,
+                "polyline": {
+                  "points": "{~ud|@eloiaAxImK~CsDPWxAsBbCoDpDaH",
+                  "precision": 6,
+                  "length": 7
+                },
+                "streetName": "דיזנגוף",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 9.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1134725827,
+                "fromOsmNode": 2469848033,
+                "toOsmNode": 2144017098,
+                "polyline": {
+                  "points": "_bud|@eqpiaANcE",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "דיזנגוף",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 94.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "fromOsmNode": 2144017098,
+                "polyline": {
+                  "points": "oaud|@iwpiaAs@c@}k@iZ",
+                  "precision": 6,
+                  "length": 3
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              }
+            ]
+          },
+          {
+            "mode": "BUS",
+            "from": {
+              "name": "דיזנגוף סנטר/המלך ג'ורג'",
+              "stopId": "mot10day_13199",
+              "importance": 0.05052601546049118,
+              "lat": 32.07553300000001,
+              "lon": 34.776404,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-07T05:11:00Z",
+              "scheduledDeparture": "2026-09-07T05:11:00Z",
+              "stopCode": "20785",
+              "description": "Street: המלך ג'ורג' City: תל אביב יפו Platform:  Floor:",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "to": {
+              "name": "ת.רק\"ל אבא הלל/דרך ז'בוטינסקי",
+              "stopId": "mot10day_13692",
+              "importance": 0.11061178147792816,
+              "lat": 32.083114,
+              "lon": 34.80505,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T05:20:00Z",
+              "scheduledArrival": "2026-09-07T05:20:00Z",
+              "stopCode": "21644",
+              "description": "Street: דרך זאב ז'בוטינסקי 12 City: רמת גן Platform:  Floor:",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "duration": 540,
+            "startTime": "2026-09-07T05:11:00Z",
+            "endTime": "2026-09-07T05:20:00Z",
+            "scheduledStartTime": "2026-09-07T05:11:00Z",
+            "scheduledEndTime": "2026-09-07T05:20:00Z",
+            "realTime": false,
+            "scheduled": true,
+            "interlineWithPreviousLeg": false,
+            "headsign": "פתח תקווה_בית רבקה",
+            "tripFrom": {
+              "name": "מסוף כרמלית",
+              "stopId": "mot10day_13978",
+              "importance": 0.036843910813331604,
+              "lat": 32.066804,
+              "lon": 34.76590200000001,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-07T05:00:00Z",
+              "scheduledDeparture": "2026-09-07T05:00:00Z",
+              "stopCode": "25358",
+              "description": "Street: כרמלית City: תל אביב יפו Platform:  Floor:",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NOT_ALLOWED",
+              "cancelled": false,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "tripTo": {
+              "name": "בית רבקה",
+              "stopId": "mot10day_21777",
+              "importance": 0.025145797058939934,
+              "lat": 32.072294,
+              "lon": 34.892393000000006,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T05:49:00Z",
+              "scheduledArrival": "2026-09-07T05:49:00Z",
+              "stopCode": "36667",
+              "description": "Street:   City: פתח תקווה Platform:  Floor:",
+              "vertexType": "TRANSIT",
+              "pickupType": "NOT_ALLOWED",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "routeId": "mot10day_2567",
+            "routeUrl": "",
+            "directionId": "1",
+            "routeColor": "ffffff",
+            "routeTextColor": "000000",
+            "routeType": 3,
+            "agencyName": "דן",
+            "agencyUrl": "http://www.dan.co.il",
+            "agencyFareUrl": "http://www.dan.co.il",
+            "agencyId": "5",
+            "tripId": "20260907_08:00_mot10day_1692277389",
+            "routeShortName": "82",
+            "routeLongName": "תל אביב יפו: מסוף כרמלית - פתח תקווה: בית רבקה",
+            "tripShortName": "",
+            "displayName": "82",
+            "cancelled": false,
+            "source": "/input/Gtfs_10_days.zip/stop_times.txt:26212836:26212881",
+            "intermediateStops": [
+              {
+                "name": "הנביאים/שמריהו לוין",
+                "stopId": "mot10day_13153",
+                "importance": 0.0292452834546566,
+                "lat": 32.075873,
+                "lon": 34.77873300000001,
+                "tz": "Asia/Jerusalem",
+                "arrival": "2026-09-07T05:12:00Z",
+                "departure": "2026-09-07T05:12:00Z",
+                "scheduledArrival": "2026-09-07T05:12:00Z",
+                "scheduledDeparture": "2026-09-07T05:12:00Z",
+                "stopCode": "20739",
+                "description": "Street: הנביאים 18 City: תל אביב יפו Platform:  Floor:",
+                "vertexType": "TRANSIT",
+                "pickupType": "NORMAL",
+                "dropoffType": "NORMAL",
+                "cancelled": false,
+                "modes": [
+                  "BUS"
+                ]
+              },
+              {
+                "name": "לונדון מיניסטור/שד' שאול המלך",
+                "stopId": "mot10day_13351",
+                "importance": 0.05415094271302223,
+                "lat": 32.075465,
+                "lon": 34.78282,
+                "tz": "Asia/Jerusalem",
+                "arrival": "2026-09-07T05:13:00Z",
+                "departure": "2026-09-07T05:13:00Z",
+                "scheduledArrival": "2026-09-07T05:13:00Z",
+                "scheduledDeparture": "2026-09-07T05:13:00Z",
+                "stopCode": "21100",
+                "description": "Street: שדרות שאול המלך 4 City: תל אביב יפו Platform:  Floor:",
+                "vertexType": "TRANSIT",
+                "pickupType": "NORMAL",
+                "dropoffType": "NORMAL",
+                "cancelled": false,
+                "modes": [
+                  "BUS"
+                ]
+              },
+              {
+                "name": "האופרה/שד' שאול המלך",
+                "stopId": "mot10day_14129",
+                "importance": 0.03313321992754936,
+                "lat": 32.075623,
+                "lon": 34.784788999999996,
+                "tz": "Asia/Jerusalem",
+                "arrival": "2026-09-07T05:14:00Z",
+                "departure": "2026-09-07T05:14:00Z",
+                "scheduledArrival": "2026-09-07T05:14:00Z",
+                "scheduledDeparture": "2026-09-07T05:14:00Z",
+                "stopCode": "25722",
+                "description": "Street: שדרות שאול המלך City: תל אביב יפו Platform:  Floor:",
+                "vertexType": "TRANSIT",
+                "pickupType": "NORMAL",
+                "dropoffType": "NORMAL",
+                "cancelled": false,
+                "modes": [
+                  "BUS"
+                ]
+              },
+              {
+                "name": "בית המשפט/שד' שאול המלך",
+                "stopId": "mot10day_13823",
+                "importance": 0.05493996664881706,
+                "lat": 32.076734,
+                "lon": 34.788446,
+                "tz": "Asia/Jerusalem",
+                "arrival": "2026-09-07T05:15:00Z",
+                "departure": "2026-09-07T05:15:00Z",
+                "scheduledArrival": "2026-09-07T05:15:00Z",
+                "scheduledDeparture": "2026-09-07T05:15:00Z",
+                "stopCode": "23025",
+                "description": "Street: שדרות שאול המלך City: תל אביב יפו Platform:  Floor:",
+                "vertexType": "TRANSIT",
+                "pickupType": "NORMAL",
+                "dropoffType": "NORMAL",
+                "cancelled": false,
+                "modes": [
+                  "BUS"
+                ]
+              },
+              {
+                "name": "בית הדר דפנה/שד' שאול המלך",
+                "stopId": "mot10day_13483",
+                "importance": 0.05949113890528679,
+                "lat": 32.07742,
+                "lon": 34.790544000000004,
+                "tz": "Asia/Jerusalem",
+                "arrival": "2026-09-07T05:16:00Z",
+                "departure": "2026-09-07T05:16:00Z",
+                "scheduledArrival": "2026-09-07T05:16:00Z",
+                "scheduledDeparture": "2026-09-07T05:16:00Z",
+                "stopCode": "21303",
+                "description": "Street: שדרות שאול המלך City: תל אביב יפו Platform:  Floor:",
+                "vertexType": "TRANSIT",
+                "pickupType": "NORMAL",
+                "dropoffType": "NORMAL",
+                "cancelled": false,
+                "modes": [
+                  "BUS"
+                ]
+              },
+              {
+                "name": "ת. רכבת תל אביב סבידור/על פרשת דרכים",
+                "stopId": "mot10day_13383",
+                "importance": 0.06695826351642609,
+                "lat": 32.082162000000004,
+                "lon": 34.795464,
+                "tz": "Asia/Jerusalem",
+                "arrival": "2026-09-07T05:17:00Z",
+                "departure": "2026-09-07T05:17:00Z",
+                "scheduledArrival": "2026-09-07T05:17:00Z",
+                "scheduledDeparture": "2026-09-07T05:17:00Z",
+                "stopCode": "21140",
+                "description": "Street: על פרשת דרכים City: תל אביב יפו Platform:  Floor:",
+                "vertexType": "TRANSIT",
+                "pickupType": "NORMAL",
+                "dropoffType": "NORMAL",
+                "cancelled": false,
+                "modes": [
+                  "BUS"
+                ]
+              },
+              {
+                "name": "הבורסה/דרך ז'בוטינסקי",
+                "stopId": "mot10day_15112",
+                "importance": 0.05686106160283089,
+                "lat": 32.082534,
+                "lon": 34.800723999999995,
+                "tz": "Asia/Jerusalem",
+                "arrival": "2026-09-07T05:19:00Z",
+                "departure": "2026-09-07T05:19:00Z",
+                "scheduledArrival": "2026-09-07T05:19:00Z",
+                "scheduledDeparture": "2026-09-07T05:19:00Z",
+                "stopCode": "28665",
+                "description": "Street: דרך זאב ז'בוטינסקי City: רמת גן Platform:  Floor:",
+                "vertexType": "TRANSIT",
+                "pickupType": "NORMAL",
+                "dropoffType": "NORMAL",
+                "cancelled": false,
+                "modes": [
+                  "BUS"
+                ]
+              }
+            ],
+            "legGeometry": {
+              "points": "yovd|@gtqiaAblEumaF}eThoiD",
+              "precision": 6,
+              "length": 3
+            },
+            "bikesAllowed": false,
+            "wheelchairAccessible": "ACCESSIBLE",
+            "reservation": "NONE",
+            "alternatives": []
+          },
+          {
+            "mode": "WALK",
+            "from": {
+              "name": "ת.רק\"ל אבא הלל/דרך ז'בוטינסקי",
+              "stopId": "mot10day_13692",
+              "importance": 0.11061178147792816,
+              "lat": 32.083114,
+              "lon": 34.80505,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T05:20:00Z",
+              "departure": "2026-09-07T05:20:00Z",
+              "scheduledArrival": "2026-09-07T05:20:00Z",
+              "scheduledDeparture": "2026-09-07T05:20:00Z",
+              "stopCode": "21644",
+              "description": "Street: דרך זאב ז'בוטינסקי 12 City: רמת גן Platform:  Floor:",
+              "vertexType": "TRANSIT",
+              "cancelled": false,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "to": {
+              "name": "END",
+              "lat": 32.0838,
+              "lon": 34.8044,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T05:24:00Z",
+              "scheduledArrival": "2026-09-07T05:24:00Z",
+              "vertexType": "NORMAL"
+            },
+            "duration": 240,
+            "startTime": "2026-09-07T05:20:00Z",
+            "endTime": "2026-09-07T05:24:00Z",
+            "scheduledStartTime": "2026-09-07T05:20:00Z",
+            "scheduledEndTime": "2026-09-07T05:24:00Z",
+            "realTime": false,
+            "scheduled": false,
+            "distance": 240.0,
+            "legGeometry": {
+              "points": "_lee|@wqikaA}EwY??k@gDi@aD??uDxD??kF~AcHrB??uHzBgBl@cAf@eAv@??MjAa@`Aq@p@??jDhHbCpI??~FxZ",
+              "precision": 6,
+              "length": 24
+            },
+            "steps": [
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 46.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "toOsmNode": 13948624978,
+                "polyline": {
+                  "points": "_lee|@wqikaA}EwY",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 16.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 966536261,
+                "fromOsmNode": 13948624978,
+                "toOsmNode": 8264758519,
+                "polyline": {
+                  "points": "}ree|@oljkaAk@gDi@aD",
+                  "precision": 6,
+                  "length": 3
+                },
+                "streetName": "זאב ז'בוטינסקי",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 13.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1117672068,
+                "fromOsmNode": 8264758519,
+                "toOsmNode": 9695348699,
+                "polyline": {
+                  "points": "suee|@yvjkaAuDxD",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "הרי הגלעד",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 31.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 370292854,
+                "fromOsmNode": 9695348699,
+                "toOsmNode": 9695348701,
+                "polyline": {
+                  "points": "i{ee|@_qjkaAkF~AcHrB",
+                  "precision": 6,
+                  "length": 3
+                },
+                "streetName": "הרי הגלעד",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 33.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 370292854,
+                "fromOsmNode": 9695348701,
+                "toOsmNode": 3491417624,
+                "polyline": {
+                  "points": "ykfe|@kjjkaAuHzBgBl@cAf@eAv@",
+                  "precision": 6,
+                  "length": 5
+                },
+                "streetName": "הרי הגלעד",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 11.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 342112642,
+                "fromOsmNode": 3491417624,
+                "toOsmNode": 1857101805,
+                "polyline": {
+                  "points": "a}fe|@abjkaAMjAa@`Aq@p@",
+                  "precision": 6,
+                  "length": 4
+                },
+                "streetName": "כיכר הגבורה",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 35.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 175063768,
+                "fromOsmNode": 1857101805,
+                "toOsmNode": 3709931745,
+                "polyline": {
+                  "points": "c`ge|@a|ikaAjDhHbCpI",
+                  "precision": 6,
+                  "length": 3
+                },
+                "streetName": "היוזמה",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 55.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "fromOsmNode": 3709931745,
+                "polyline": {
+                  "points": "svfe|@ehikaA~FxZ",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "duration": 1140,
+        "startTime": "2026-09-07T05:14:00Z",
+        "endTime": "2026-09-07T05:33:00Z",
+        "transfers": 0,
+        "id": "CkghUiegibAJQEApbHh6pSxjQUAyDm1vdDEwZGF5XzE0MDU1OZj9utOdCUBAQVgm/FI/Y0FASJiQ+dQGUMyR+dQGWgRXQUxLYAEKgAEKAzIzOBIiMjAyNjA5MDdfMDg6MTBfbW90MTBkYXlfMTY4ODAwMzUzMRoObW90MTBkYXlfMTQwNTUhmP26050JQEApWCb8Uj9jQUAyDm1vdDEwZGF5XzE0NDEwOToCuFm8CkBAQfawFwrYZkFASMyR+dQGUJyX+dQGWgNCVVNgAQpIGg5tb3QxMGRheV8xNDQxMCE6ArhZvApAQCn2sBcK2GZBQDnQs1n1uQpAQEGCc0aU9mZBQEicl/nUBlCMmfnUBloEV0FMS2AB",
+        "legs": [
+          {
+            "mode": "WALK",
+            "from": {
+              "name": "START",
+              "lat": 32.0757,
+              "lon": 34.7748,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-07T05:14:00Z",
+              "scheduledDeparture": "2026-09-07T05:14:00Z",
+              "vertexType": "NORMAL"
+            },
+            "to": {
+              "name": "דיזנגוף סנטר/דיזנגוף",
+              "stopId": "mot10day_14055",
+              "importance": 0.06339622288942337,
+              "lat": 32.075129000000004,
+              "lon": 34.77537000000001,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T05:17:00Z",
+              "scheduledArrival": "2026-09-07T05:17:00Z",
+              "stopCode": "25565",
+              "description": "Street: דיזנגוף 53 City: תל אביב יפו Platform:  Floor:",
+              "vertexType": "TRANSIT",
+              "modes": [
+                "BUS"
+              ]
+            },
+            "duration": 180,
+            "startTime": "2026-09-07T05:14:00Z",
+            "endTime": "2026-09-07T05:17:00Z",
+            "scheduledStartTime": "2026-09-07T05:14:00Z",
+            "scheduledEndTime": "2026-09-07T05:17:00Z",
+            "realTime": false,
+            "scheduled": false,
+            "distance": 135.0,
+            "legGeometry": {
+              "points": "q{vd|@{rniaA}DrByC|A??Oo@??WcA??fD}AfK{FNKxAaAxAcA`P{K??jFqG",
+              "precision": 6,
+              "length": 16
+            },
+            "steps": [
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 26.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "toOsmNode": 6434511040,
+                "polyline": {
+                  "points": "q{vd|@{rniaA}DrByC|A",
+                  "precision": 6,
+                  "length": 3
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 2.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 686487782,
+                "fromOsmNode": 6434511040,
+                "toOsmNode": 9332520456,
+                "polyline": {
+                  "points": "ifwd|@ilniaAOo@",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 3.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 686487782,
+                "fromOsmNode": 9332520456,
+                "toOsmNode": 6434511042,
+                "polyline": {
+                  "points": "yfwd|@ymniaAWcA",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 84.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1113400111,
+                "fromOsmNode": 6434511042,
+                "toOsmNode": 6434395319,
+                "polyline": {
+                  "points": "qgwd|@}oniaAfD}AfK{FNKxAaAxAcA`P{K",
+                  "precision": 6,
+                  "length": 7
+                },
+                "streetName": "דיזנגוף",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 20.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "fromOsmNode": 6434395319,
+                "polyline": {
+                  "points": "{~ud|@eloiaAjFqG",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              }
+            ]
+          },
+          {
+            "mode": "BUS",
+            "from": {
+              "name": "דיזנגוף סנטר/דיזנגוף",
+              "stopId": "mot10day_14055",
+              "importance": 0.06339622288942337,
+              "lat": 32.075129000000004,
+              "lon": 34.77537000000001,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-07T05:17:00Z",
+              "scheduledDeparture": "2026-09-07T05:17:00Z",
+              "stopCode": "25565",
+              "description": "Street: דיזנגוף 53 City: תל אביב יפו Platform:  Floor:",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "to": {
+              "name": "ת.רק\"ל אבא הלל",
+              "stopId": "mot10day_14410",
+              "importance": 0.015906231477856636,
+              "lat": 32.083873,
+              "lon": 34.803467999999995,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T05:29:00Z",
+              "scheduledArrival": "2026-09-07T05:29:00Z",
+              "stopCode": "26248",
+              "description": "Street: דרך אבא הלל 4 City: רמת גן Platform:  Floor:",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "duration": 720,
+            "startTime": "2026-09-07T05:17:00Z",
+            "endTime": "2026-09-07T05:29:00Z",
+            "scheduledStartTime": "2026-09-07T05:17:00Z",
+            "scheduledEndTime": "2026-09-07T05:29:00Z",
+            "realTime": false,
+            "scheduled": true,
+            "interlineWithPreviousLeg": false,
+            "headsign": "פתח תקווה_הדר גנים",
+            "tripFrom": {
+              "name": "הכובשים/דניאל",
+              "stopId": "mot10day_13981",
+              "importance": 0.030022870749235153,
+              "lat": 32.068527,
+              "lon": 34.76553400000001,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-07T05:10:00Z",
+              "scheduledDeparture": "2026-09-07T05:10:00Z",
+              "stopCode": "25364",
+              "description": "Street: הכובשים 52 City: תל אביב יפו Platform:  Floor:",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NOT_ALLOWED",
+              "cancelled": false,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "tripTo": {
+              "name": "דרך מנחם בגין/קופת חולים",
+              "stopId": "mot10day_17566",
+              "importance": 0.0209205262362957,
+              "lat": 32.069320000000005,
+              "lon": 34.915226,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T06:10:00Z",
+              "scheduledArrival": "2026-09-07T06:10:00Z",
+              "stopCode": "32446",
+              "description": "Street: דרך מנחם בגין City: פתח תקווה Platform:  Floor:",
+              "vertexType": "TRANSIT",
+              "pickupType": "NOT_ALLOWED",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "routeId": "mot10day_17827",
+            "routeUrl": "",
+            "directionId": "1",
+            "routeColor": "ffffff",
+            "routeTextColor": "000000",
+            "routeType": 3,
+            "agencyName": "דן",
+            "agencyUrl": "http://www.dan.co.il",
+            "agencyFareUrl": "http://www.dan.co.il",
+            "agencyId": "5",
+            "tripId": "20260907_08:10_mot10day_1688003531",
+            "routeShortName": "238",
+            "routeLongName": "תל אביב יפו: מסוף כרמלית - פתח תקווה: הדר גנים",
+            "tripShortName": "",
+            "displayName": "238",
+            "cancelled": false,
+            "source": "/input/Gtfs_10_days.zip/stop_times.txt:12222876:12222929",
+            "intermediateStops": [
+              {
+                "name": "דיזנגוף סנטר/שדרות בן ציון",
+                "stopId": "mot10day_14076",
+                "importance": 0.07580903172492981,
+                "lat": 32.073756,
+                "lon": 34.775586000000004,
+                "tz": "Asia/Jerusalem",
+                "arrival": "2026-09-07T05:18:00Z",
+                "departure": "2026-09-07T05:18:00Z",
+                "scheduledArrival": "2026-09-07T05:18:00Z",
+                "scheduledDeparture": "2026-09-07T05:18:00Z",
+                "stopCode": "25608",
+                "description": "Street: שדרות בן ציון 4 City: תל אביב יפו Platform:  Floor:",
+                "vertexType": "TRANSIT",
+                "pickupType": "NORMAL",
+                "dropoffType": "NORMAL",
+                "cancelled": false,
+                "modes": [
+                  "BUS"
+                ]
+              },
+              {
+                "name": "הבימה/שד' רוטשילד",
+                "stopId": "mot10day_14069",
+                "importance": 0.07864493876695633,
+                "lat": 32.071428,
+                "lon": 34.778882,
+                "tz": "Asia/Jerusalem",
+                "arrival": "2026-09-07T05:20:00Z",
+                "departure": "2026-09-07T05:20:00Z",
+                "scheduledArrival": "2026-09-07T05:20:00Z",
+                "scheduledDeparture": "2026-09-07T05:20:00Z",
+                "stopCode": "25592",
+                "description": "Street: שדרות רוטשילד 135 City: תל אביב יפו Platform:  Floor:",
+                "vertexType": "TRANSIT",
+                "pickupType": "NORMAL",
+                "dropoffType": "NORMAL",
+                "cancelled": false,
+                "modes": [
+                  "BUS"
+                ]
+              },
+              {
+                "name": "החשמונאים/יהודה הלוי",
+                "stopId": "mot10day_13491",
+                "importance": 0.015654658898711205,
+                "lat": 32.06998,
+                "lon": 34.780606999999996,
+                "tz": "Asia/Jerusalem",
+                "arrival": "2026-09-07T05:21:00Z",
+                "departure": "2026-09-07T05:21:00Z",
+                "scheduledArrival": "2026-09-07T05:21:00Z",
+                "scheduledDeparture": "2026-09-07T05:21:00Z",
+                "stopCode": "21316",
+                "description": "Street: החשמונאים 70 City: תל אביב יפו Platform:  Floor:",
+                "vertexType": "TRANSIT",
+                "pickupType": "NORMAL",
+                "dropoffType": "NORMAL",
+                "cancelled": false,
+                "modes": [
+                  "BUS"
+                ]
+              },
+              {
+                "name": "החשמונאים/קרליבך",
+                "stopId": "mot10day_13720",
+                "importance": 0.0407661534845829,
+                "lat": 32.069472000000005,
+                "lon": 34.783648,
+                "tz": "Asia/Jerusalem",
+                "arrival": "2026-09-07T05:22:00Z",
+                "departure": "2026-09-07T05:22:00Z",
+                "scheduledArrival": "2026-09-07T05:22:00Z",
+                "scheduledDeparture": "2026-09-07T05:22:00Z",
+                "stopCode": "21729",
+                "description": "Street: החשמונאים 84 City: תל אביב יפו Platform:  Floor:",
+                "vertexType": "TRANSIT",
+                "pickupType": "NORMAL",
+                "dropoffType": "NORMAL",
+                "cancelled": false,
+                "modes": [
+                  "BUS"
+                ]
+              },
+              {
+                "name": "ת.רק\"ל יהודית/דרך מנחם בגין",
+                "stopId": "mot10day_13141",
+                "importance": 0.11578044295310974,
+                "lat": 32.069862,
+                "lon": 34.78812500000001,
+                "tz": "Asia/Jerusalem",
+                "arrival": "2026-09-07T05:24:00Z",
+                "departure": "2026-09-07T05:24:00Z",
+                "scheduledArrival": "2026-09-07T05:24:00Z",
+                "scheduledDeparture": "2026-09-07T05:24:00Z",
+                "stopCode": "20727",
+                "description": "Street: דרך מנחם בגין 106 City: תל אביב יפו Platform:  Floor:",
+                "vertexType": "TRANSIT",
+                "pickupType": "NORMAL",
+                "dropoffType": "NORMAL",
+                "cancelled": false,
+                "modes": [
+                  "BUS"
+                ]
+              },
+              {
+                "name": "קניון עזריאלי/דרך מנחם בגין",
+                "stopId": "mot10day_13814",
+                "importance": 0.25328758358955383,
+                "lat": 32.074453,
+                "lon": 34.79111600000001,
+                "tz": "Asia/Jerusalem",
+                "arrival": "2026-09-07T05:25:00Z",
+                "departure": "2026-09-07T05:25:00Z",
+                "scheduledArrival": "2026-09-07T05:25:00Z",
+                "scheduledDeparture": "2026-09-07T05:25:00Z",
+                "stopCode": "23014",
+                "description": "Street: דרך מנחם בגין 132 City: תל אביב יפו Platform:  Floor:",
+                "vertexType": "TRANSIT",
+                "pickupType": "NORMAL",
+                "dropoffType": "NORMAL",
+                "cancelled": false,
+                "modes": [
+                  "BUS"
+                ]
+              },
+              {
+                "name": "דרך מנחם בגין/דרך נמיר",
+                "stopId": "mot10day_2320",
+                "importance": 0.018839336931705475,
+                "lat": 32.078791,
+                "lon": 34.793691,
+                "tz": "Asia/Jerusalem",
+                "arrival": "2026-09-07T05:27:00Z",
+                "departure": "2026-09-07T05:27:00Z",
+                "scheduledArrival": "2026-09-07T05:27:00Z",
+                "scheduledDeparture": "2026-09-07T05:27:00Z",
+                "stopCode": "2321",
+                "description": "Street:   City: תל אביב יפו Platform:  Floor:",
+                "vertexType": "TRANSIT",
+                "pickupType": "NORMAL",
+                "dropoffType": "NORMAL",
+                "cancelled": false,
+                "modes": [
+                  "BUS"
+                ]
+              },
+              {
+                "name": "מתחם מידטאון/דרך מנחם בגין",
+                "stopId": "mot10day_13731",
+                "importance": 0.048376213759183884,
+                "lat": 32.079711,
+                "lon": 34.79510300000001,
+                "tz": "Asia/Jerusalem",
+                "arrival": "2026-09-07T05:27:00Z",
+                "departure": "2026-09-07T05:27:00Z",
+                "scheduledArrival": "2026-09-07T05:27:00Z",
+                "scheduledDeparture": "2026-09-07T05:27:00Z",
+                "stopCode": "21764",
+                "description": "Street: דרך מנחם בגין City: תל אביב יפו Platform:  Floor:",
+                "vertexType": "TRANSIT",
+                "pickupType": "NORMAL",
+                "dropoffType": "NORMAL",
+                "cancelled": false,
+                "modes": [
+                  "BUS"
+                ]
+              },
+              {
+                "name": "ת. רכבת תל אביב - סבידור/דרך מנחם בגין",
+                "stopId": "mot10day_14831",
+                "importance": 0.024928530678153038,
+                "lat": 32.081303999999996,
+                "lon": 34.797967,
+                "tz": "Asia/Jerusalem",
+                "arrival": "2026-09-07T05:28:00Z",
+                "departure": "2026-09-07T05:28:00Z",
+                "scheduledArrival": "2026-09-07T05:28:00Z",
+                "scheduledDeparture": "2026-09-07T05:28:00Z",
+                "stopCode": "27010",
+                "description": "Street: דרך מנחם בגין City: תל אביב יפו Platform:  Floor:",
+                "vertexType": "TRANSIT",
+                "pickupType": "NORMAL",
+                "dropoffType": "NORMAL",
+                "cancelled": false,
+                "modes": [
+                  "BUS"
+                ]
+              },
+              {
+                "name": "הבורסה/דרך ז'בוטינסקי",
+                "stopId": "mot10day_15112",
+                "importance": 0.05686106160283089,
+                "lat": 32.082534,
+                "lon": 34.800723999999995,
+                "tz": "Asia/Jerusalem",
+                "arrival": "2026-09-07T05:29:00Z",
+                "departure": "2026-09-07T05:29:00Z",
+                "scheduledArrival": "2026-09-07T05:29:00Z",
+                "scheduledDeparture": "2026-09-07T05:29:00Z",
+                "stopCode": "28665",
+                "description": "Street: דרך זאב ז'בוטינסקי City: רמת גן Platform:  Floor:",
+                "vertexType": "TRANSIT",
+                "pickupType": "NORMAL",
+                "dropoffType": "NORMAL",
+                "cancelled": false,
+                "modes": [
+                  "BUS"
+                ]
+              }
+            ],
+            "legGeometry": {
+              "points": "qvud|@ssoiaAjhJmgpG{j[hkyE",
+              "precision": 6,
+              "length": 3
+            },
+            "bikesAllowed": false,
+            "wheelchairAccessible": "ACCESSIBLE",
+            "reservation": "NONE",
+            "alternatives": []
+          },
+          {
+            "mode": "WALK",
+            "from": {
+              "name": "ת.רק\"ל אבא הלל",
+              "stopId": "mot10day_14410",
+              "importance": 0.015906231477856636,
+              "lat": 32.083873,
+              "lon": 34.803467999999995,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T05:29:00Z",
+              "departure": "2026-09-07T05:29:00Z",
+              "scheduledArrival": "2026-09-07T05:29:00Z",
+              "scheduledDeparture": "2026-09-07T05:29:00Z",
+              "stopCode": "26248",
+              "description": "Street: דרך אבא הלל 4 City: רמת גן Platform:  Floor:",
+              "vertexType": "TRANSIT",
+              "cancelled": false,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "to": {
+              "name": "END",
+              "lat": 32.0838,
+              "lon": 34.8044,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T05:33:00Z",
+              "scheduledArrival": "2026-09-07T05:33:00Z",
+              "vertexType": "NORMAL"
+            },
+            "duration": 240,
+            "startTime": "2026-09-07T05:29:00Z",
+            "endTime": "2026-09-07T05:33:00Z",
+            "scheduledStartTime": "2026-09-07T05:29:00Z",
+            "scheduledEndTime": "2026-09-07T05:33:00Z",
+            "realTime": false,
+            "scheduled": false,
+            "distance": 250.0,
+            "legGeometry": {
+              "points": "gyfe|@mmfkaAr@BzEFdRH??nRY??@uBZk@??EmEeBqWaCaZ??oOV??_Ln@??Q}@",
+              "precision": 6,
+              "length": 19
+            },
+            "steps": [
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 52.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "toOsmNode": 3711111014,
+                "polyline": {
+                  "points": "gyfe|@mmfkaAr@BzEFdRH",
+                  "precision": 6,
+                  "length": 4
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 35.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 184659637,
+                "fromOsmNode": 3711111014,
+                "toOsmNode": 3711111013,
+                "polyline": {
+                  "points": "q}ee|@wlfkaAnRY",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "אבא הלל סילבר",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 8.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1133268308,
+                "fromOsmNode": 3711111013,
+                "toOsmNode": 10565928938,
+                "polyline": {
+                  "points": "ajee|@qmfkaA@uBZk@",
+                  "precision": 6,
+                  "length": 3
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 89.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1412282387,
+                "fromOsmNode": 10565928938,
+                "toOsmNode": 4697990836,
+                "polyline": {
+                  "points": "ciee|@srfkaAEmEeBqWaCaZ",
+                  "precision": 6,
+                  "length": 4
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 29.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 476151215,
+                "fromOsmNode": 4697990836,
+                "toOsmNode": 4697990837,
+                "polyline": {
+                  "points": "qpee|@ulhkaAoOV",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "STAIRS",
+                "distance": 23.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 476151216,
+                "fromOsmNode": 4697990837,
+                "toOsmNode": 4697990838,
+                "polyline": {
+                  "points": "aafe|@}khkaA_Ln@",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 14.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "fromOsmNode": 4697990838,
+                "polyline": {
+                  "points": "anfe|@mjhkaAQ}@",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "duration": 1080,
+        "startTime": "2026-09-07T05:17:00Z",
+        "endTime": "2026-09-07T05:35:00Z",
+        "transfers": 0,
+        "id": "CkghUiegibAJQEApbHh6pSxjQUAyDm1vdDEwZGF5XzEzMTk5OWhiuhCrCUBAQeY9zjRhY0FASMyR+dQGUPiT+dQGWgRXQUxLYAEKfwoCODISIjIwMjYwOTA3XzA4OjExX21vdDEwZGF5XzE2OTIyNzczOTAaDm1vdDEwZGF5XzEzMTk5IWhiuhCrCUBAKeY9zjRhY0FAMg5tb3QxMGRheV8xMzY5Mjl968N6owpAQEGJ0t7gC2dBQEj4k/nUBlCUmPnUBloDQlVTYAEKSBoObW90MTBkYXlfMTM2OTIhfevDeqMKQEApidLe4AtnQUA50LNZ9bkKQEBBgnNGlPZmQUBIlJj51AZQhJr51AZaBFdBTEtgAQ==",
+        "legs": [
+          {
+            "mode": "WALK",
+            "from": {
+              "name": "START",
+              "lat": 32.0757,
+              "lon": 34.7748,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-07T05:17:00Z",
+              "scheduledDeparture": "2026-09-07T05:17:00Z",
+              "vertexType": "NORMAL"
+            },
+            "to": {
+              "name": "דיזנגוף סנטר/המלך ג'ורג'",
+              "stopId": "mot10day_13199",
+              "importance": 0.05052601546049118,
+              "lat": 32.07553300000001,
+              "lon": 34.776404,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T05:22:00Z",
+              "scheduledArrival": "2026-09-07T05:22:00Z",
+              "stopCode": "20785",
+              "description": "Street: המלך ג'ורג' City: תל אביב יפו Platform:  Floor:",
+              "vertexType": "TRANSIT",
+              "modes": [
+                "BUS"
+              ]
+            },
+            "duration": 300,
+            "startTime": "2026-09-07T05:17:00Z",
+            "endTime": "2026-09-07T05:22:00Z",
+            "scheduledStartTime": "2026-09-07T05:17:00Z",
+            "scheduledEndTime": "2026-09-07T05:22:00Z",
+            "realTime": false,
+            "scheduled": false,
+            "distance": 294.0,
+            "legGeometry": {
+              "points": "q{vd|@{rniaA}DrByC|A??Oo@??WcA??fD}AfK{FNKxAaAxAcA`P{K??xImK~CsDPWxAsBbCoDpDaH??NcE??s@c@}k@iZ",
+              "precision": 6,
+              "length": 26
+            },
+            "steps": [
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 26.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "toOsmNode": 6434511040,
+                "polyline": {
+                  "points": "q{vd|@{rniaA}DrByC|A",
+                  "precision": 6,
+                  "length": 3
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 2.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 686487782,
+                "fromOsmNode": 6434511040,
+                "toOsmNode": 9332520456,
+                "polyline": {
+                  "points": "ifwd|@ilniaAOo@",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 3.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 686487782,
+                "fromOsmNode": 9332520456,
+                "toOsmNode": 6434511042,
+                "polyline": {
+                  "points": "yfwd|@ymniaAWcA",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 84.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1113400111,
+                "fromOsmNode": 6434511042,
+                "toOsmNode": 6434395319,
+                "polyline": {
+                  "points": "qgwd|@}oniaAfD}AfK{FNKxAaAxAcA`P{K",
+                  "precision": 6,
+                  "length": 7
+                },
+                "streetName": "דיזנגוף",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 76.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1113400111,
+                "fromOsmNode": 6434395319,
+                "toOsmNode": 2469848033,
+                "polyline": {
+                  "points": "{~ud|@eloiaAxImK~CsDPWxAsBbCoDpDaH",
+                  "precision": 6,
+                  "length": 7
+                },
+                "streetName": "דיזנגוף",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 9.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1134725827,
+                "fromOsmNode": 2469848033,
+                "toOsmNode": 2144017098,
+                "polyline": {
+                  "points": "_bud|@eqpiaANcE",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "דיזנגוף",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 94.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "fromOsmNode": 2144017098,
+                "polyline": {
+                  "points": "oaud|@iwpiaAs@c@}k@iZ",
+                  "precision": 6,
+                  "length": 3
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              }
+            ]
+          },
+          {
+            "mode": "BUS",
+            "from": {
+              "name": "דיזנגוף סנטר/המלך ג'ורג'",
+              "stopId": "mot10day_13199",
+              "importance": 0.05052601546049118,
+              "lat": 32.07553300000001,
+              "lon": 34.776404,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-07T05:22:00Z",
+              "scheduledDeparture": "2026-09-07T05:22:00Z",
+              "stopCode": "20785",
+              "description": "Street: המלך ג'ורג' City: תל אביב יפו Platform:  Floor:",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "to": {
+              "name": "ת.רק\"ל אבא הלל/דרך ז'בוטינסקי",
+              "stopId": "mot10day_13692",
+              "importance": 0.11061178147792816,
+              "lat": 32.083114,
+              "lon": 34.80505,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T05:31:00Z",
+              "scheduledArrival": "2026-09-07T05:31:00Z",
+              "stopCode": "21644",
+              "description": "Street: דרך זאב ז'בוטינסקי 12 City: רמת גן Platform:  Floor:",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "duration": 540,
+            "startTime": "2026-09-07T05:22:00Z",
+            "endTime": "2026-09-07T05:31:00Z",
+            "scheduledStartTime": "2026-09-07T05:22:00Z",
+            "scheduledEndTime": "2026-09-07T05:31:00Z",
+            "realTime": false,
+            "scheduled": true,
+            "interlineWithPreviousLeg": false,
+            "headsign": "פתח תקווה_בית רבקה",
+            "tripFrom": {
+              "name": "מסוף כרמלית",
+              "stopId": "mot10day_13978",
+              "importance": 0.036843910813331604,
+              "lat": 32.066804,
+              "lon": 34.76590200000001,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-07T05:11:00Z",
+              "scheduledDeparture": "2026-09-07T05:11:00Z",
+              "stopCode": "25358",
+              "description": "Street: כרמלית City: תל אביב יפו Platform:  Floor:",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NOT_ALLOWED",
+              "cancelled": false,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "tripTo": {
+              "name": "בית רבקה",
+              "stopId": "mot10day_21777",
+              "importance": 0.025145797058939934,
+              "lat": 32.072294,
+              "lon": 34.892393000000006,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T06:00:00Z",
+              "scheduledArrival": "2026-09-07T06:00:00Z",
+              "stopCode": "36667",
+              "description": "Street:   City: פתח תקווה Platform:  Floor:",
+              "vertexType": "TRANSIT",
+              "pickupType": "NOT_ALLOWED",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "routeId": "mot10day_2567",
+            "routeUrl": "",
+            "directionId": "1",
+            "routeColor": "ffffff",
+            "routeTextColor": "000000",
+            "routeType": 3,
+            "agencyName": "דן",
+            "agencyUrl": "http://www.dan.co.il",
+            "agencyFareUrl": "http://www.dan.co.il",
+            "agencyId": "5",
+            "tripId": "20260907_08:11_mot10day_1692277390",
+            "routeShortName": "82",
+            "routeLongName": "תל אביב יפו: מסוף כרמלית - פתח תקווה: בית רבקה",
+            "tripShortName": "",
+            "displayName": "82",
+            "cancelled": false,
+            "source": "/input/Gtfs_10_days.zip/stop_times.txt:26212974:26213019",
+            "intermediateStops": [
+              {
+                "name": "הנביאים/שמריהו לוין",
+                "stopId": "mot10day_13153",
+                "importance": 0.0292452834546566,
+                "lat": 32.075873,
+                "lon": 34.77873300000001,
+                "tz": "Asia/Jerusalem",
+                "arrival": "2026-09-07T05:23:00Z",
+                "departure": "2026-09-07T05:23:00Z",
+                "scheduledArrival": "2026-09-07T05:23:00Z",
+                "scheduledDeparture": "2026-09-07T05:23:00Z",
+                "stopCode": "20739",
+                "description": "Street: הנביאים 18 City: תל אביב יפו Platform:  Floor:",
+                "vertexType": "TRANSIT",
+                "pickupType": "NORMAL",
+                "dropoffType": "NORMAL",
+                "cancelled": false,
+                "modes": [
+                  "BUS"
+                ]
+              },
+              {
+                "name": "לונדון מיניסטור/שד' שאול המלך",
+                "stopId": "mot10day_13351",
+                "importance": 0.05415094271302223,
+                "lat": 32.075465,
+                "lon": 34.78282,
+                "tz": "Asia/Jerusalem",
+                "arrival": "2026-09-07T05:24:00Z",
+                "departure": "2026-09-07T05:24:00Z",
+                "scheduledArrival": "2026-09-07T05:24:00Z",
+                "scheduledDeparture": "2026-09-07T05:24:00Z",
+                "stopCode": "21100",
+                "description": "Street: שדרות שאול המלך 4 City: תל אביב יפו Platform:  Floor:",
+                "vertexType": "TRANSIT",
+                "pickupType": "NORMAL",
+                "dropoffType": "NORMAL",
+                "cancelled": false,
+                "modes": [
+                  "BUS"
+                ]
+              },
+              {
+                "name": "האופרה/שד' שאול המלך",
+                "stopId": "mot10day_14129",
+                "importance": 0.03313321992754936,
+                "lat": 32.075623,
+                "lon": 34.784788999999996,
+                "tz": "Asia/Jerusalem",
+                "arrival": "2026-09-07T05:25:00Z",
+                "departure": "2026-09-07T05:25:00Z",
+                "scheduledArrival": "2026-09-07T05:25:00Z",
+                "scheduledDeparture": "2026-09-07T05:25:00Z",
+                "stopCode": "25722",
+                "description": "Street: שדרות שאול המלך City: תל אביב יפו Platform:  Floor:",
+                "vertexType": "TRANSIT",
+                "pickupType": "NORMAL",
+                "dropoffType": "NORMAL",
+                "cancelled": false,
+                "modes": [
+                  "BUS"
+                ]
+              },
+              {
+                "name": "בית המשפט/שד' שאול המלך",
+                "stopId": "mot10day_13823",
+                "importance": 0.05493996664881706,
+                "lat": 32.076734,
+                "lon": 34.788446,
+                "tz": "Asia/Jerusalem",
+                "arrival": "2026-09-07T05:26:00Z",
+                "departure": "2026-09-07T05:26:00Z",
+                "scheduledArrival": "2026-09-07T05:26:00Z",
+                "scheduledDeparture": "2026-09-07T05:26:00Z",
+                "stopCode": "23025",
+                "description": "Street: שדרות שאול המלך City: תל אביב יפו Platform:  Floor:",
+                "vertexType": "TRANSIT",
+                "pickupType": "NORMAL",
+                "dropoffType": "NORMAL",
+                "cancelled": false,
+                "modes": [
+                  "BUS"
+                ]
+              },
+              {
+                "name": "בית הדר דפנה/שד' שאול המלך",
+                "stopId": "mot10day_13483",
+                "importance": 0.05949113890528679,
+                "lat": 32.07742,
+                "lon": 34.790544000000004,
+                "tz": "Asia/Jerusalem",
+                "arrival": "2026-09-07T05:27:00Z",
+                "departure": "2026-09-07T05:27:00Z",
+                "scheduledArrival": "2026-09-07T05:27:00Z",
+                "scheduledDeparture": "2026-09-07T05:27:00Z",
+                "stopCode": "21303",
+                "description": "Street: שדרות שאול המלך City: תל אביב יפו Platform:  Floor:",
+                "vertexType": "TRANSIT",
+                "pickupType": "NORMAL",
+                "dropoffType": "NORMAL",
+                "cancelled": false,
+                "modes": [
+                  "BUS"
+                ]
+              },
+              {
+                "name": "ת. רכבת תל אביב סבידור/על פרשת דרכים",
+                "stopId": "mot10day_13383",
+                "importance": 0.06695826351642609,
+                "lat": 32.082162000000004,
+                "lon": 34.795464,
+                "tz": "Asia/Jerusalem",
+                "arrival": "2026-09-07T05:28:00Z",
+                "departure": "2026-09-07T05:28:00Z",
+                "scheduledArrival": "2026-09-07T05:28:00Z",
+                "scheduledDeparture": "2026-09-07T05:28:00Z",
+                "stopCode": "21140",
+                "description": "Street: על פרשת דרכים City: תל אביב יפו Platform:  Floor:",
+                "vertexType": "TRANSIT",
+                "pickupType": "NORMAL",
+                "dropoffType": "NORMAL",
+                "cancelled": false,
+                "modes": [
+                  "BUS"
+                ]
+              },
+              {
+                "name": "הבורסה/דרך ז'בוטינסקי",
+                "stopId": "mot10day_15112",
+                "importance": 0.05686106160283089,
+                "lat": 32.082534,
+                "lon": 34.800723999999995,
+                "tz": "Asia/Jerusalem",
+                "arrival": "2026-09-07T05:30:00Z",
+                "departure": "2026-09-07T05:30:00Z",
+                "scheduledArrival": "2026-09-07T05:30:00Z",
+                "scheduledDeparture": "2026-09-07T05:30:00Z",
+                "stopCode": "28665",
+                "description": "Street: דרך זאב ז'בוטינסקי City: רמת גן Platform:  Floor:",
+                "vertexType": "TRANSIT",
+                "pickupType": "NORMAL",
+                "dropoffType": "NORMAL",
+                "cancelled": false,
+                "modes": [
+                  "BUS"
+                ]
+              }
+            ],
+            "legGeometry": {
+              "points": "yovd|@gtqiaAblEumaF}eThoiD",
+              "precision": 6,
+              "length": 3
+            },
+            "bikesAllowed": false,
+            "wheelchairAccessible": "ACCESSIBLE",
+            "reservation": "NONE",
+            "alternatives": []
+          },
+          {
+            "mode": "WALK",
+            "from": {
+              "name": "ת.רק\"ל אבא הלל/דרך ז'בוטינסקי",
+              "stopId": "mot10day_13692",
+              "importance": 0.11061178147792816,
+              "lat": 32.083114,
+              "lon": 34.80505,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T05:31:00Z",
+              "departure": "2026-09-07T05:31:00Z",
+              "scheduledArrival": "2026-09-07T05:31:00Z",
+              "scheduledDeparture": "2026-09-07T05:31:00Z",
+              "stopCode": "21644",
+              "description": "Street: דרך זאב ז'בוטינסקי 12 City: רמת גן Platform:  Floor:",
+              "vertexType": "TRANSIT",
+              "cancelled": false,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "to": {
+              "name": "END",
+              "lat": 32.0838,
+              "lon": 34.8044,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T05:35:00Z",
+              "scheduledArrival": "2026-09-07T05:35:00Z",
+              "vertexType": "NORMAL"
+            },
+            "duration": 240,
+            "startTime": "2026-09-07T05:31:00Z",
+            "endTime": "2026-09-07T05:35:00Z",
+            "scheduledStartTime": "2026-09-07T05:31:00Z",
+            "scheduledEndTime": "2026-09-07T05:35:00Z",
+            "realTime": false,
+            "scheduled": false,
+            "distance": 240.0,
+            "legGeometry": {
+              "points": "_lee|@wqikaA}EwY??k@gDi@aD??uDxD??kF~AcHrB??uHzBgBl@cAf@eAv@??MjAa@`Aq@p@??jDhHbCpI??~FxZ",
+              "precision": 6,
+              "length": 24
+            },
+            "steps": [
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 46.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "toOsmNode": 13948624978,
+                "polyline": {
+                  "points": "_lee|@wqikaA}EwY",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 16.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 966536261,
+                "fromOsmNode": 13948624978,
+                "toOsmNode": 8264758519,
+                "polyline": {
+                  "points": "}ree|@oljkaAk@gDi@aD",
+                  "precision": 6,
+                  "length": 3
+                },
+                "streetName": "זאב ז'בוטינסקי",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 13.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1117672068,
+                "fromOsmNode": 8264758519,
+                "toOsmNode": 9695348699,
+                "polyline": {
+                  "points": "suee|@yvjkaAuDxD",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "הרי הגלעד",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 31.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 370292854,
+                "fromOsmNode": 9695348699,
+                "toOsmNode": 9695348701,
+                "polyline": {
+                  "points": "i{ee|@_qjkaAkF~AcHrB",
+                  "precision": 6,
+                  "length": 3
+                },
+                "streetName": "הרי הגלעד",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 33.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 370292854,
+                "fromOsmNode": 9695348701,
+                "toOsmNode": 3491417624,
+                "polyline": {
+                  "points": "ykfe|@kjjkaAuHzBgBl@cAf@eAv@",
+                  "precision": 6,
+                  "length": 5
+                },
+                "streetName": "הרי הגלעד",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 11.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 342112642,
+                "fromOsmNode": 3491417624,
+                "toOsmNode": 1857101805,
+                "polyline": {
+                  "points": "a}fe|@abjkaAMjAa@`Aq@p@",
+                  "precision": 6,
+                  "length": 4
+                },
+                "streetName": "כיכר הגבורה",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 35.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 175063768,
+                "fromOsmNode": 1857101805,
+                "toOsmNode": 3709931745,
+                "polyline": {
+                  "points": "c`ge|@a|ikaAjDhHbCpI",
+                  "precision": 6,
+                  "length": 3
+                },
+                "streetName": "היוזמה",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 55.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "fromOsmNode": 3709931745,
+                "polyline": {
+                  "points": "svfe|@ehikaA~FxZ",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "duration": 1440,
+        "startTime": "2026-09-07T05:18:00Z",
+        "endTime": "2026-09-07T05:42:00Z",
+        "transfers": 0,
+        "id": "CkghUiegibAJQEApbHh6pSxjQUAyDm1vdDEwZGF5XzEzMzUxOQ9/TdaoCUBAQc5THXIzZEFASIiS+dQGUNCY+dQGWgRXQUxLYAEKgAEKAzE0MhIiMjAyNjA5MDdfMDc6NTVfbW90MTBkYXlfMTY4Nzg0MzUwORoObW90MTBkYXlfMTMzNTEhD39N1qgJQEApzlMdcjNkQUAyDm1vdDEwZGF5XzE0NDEwOToCuFm8CkBAQfawFwrYZkFASNCY+dQGULib+dQGWgNCVVNgAQpIGg5tb3QxMGRheV8xNDQxMCE6ArhZvApAQCn2sBcK2GZBQDnQs1n1uQpAQEGCc0aU9mZBQEi4m/nUBlConfnUBloEV0FMS2AB",
+        "legs": [
+          {
+            "mode": "WALK",
+            "from": {
+              "name": "START",
+              "lat": 32.0757,
+              "lon": 34.7748,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-07T05:18:00Z",
+              "scheduledDeparture": "2026-09-07T05:18:00Z",
+              "vertexType": "NORMAL"
+            },
+            "to": {
+              "name": "לונדון מיניסטור/שד' שאול המלך",
+              "stopId": "mot10day_13351",
+              "importance": 0.05415094271302223,
+              "lat": 32.075465,
+              "lon": 34.78282,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T05:32:00Z",
+              "scheduledArrival": "2026-09-07T05:32:00Z",
+              "stopCode": "21100",
+              "description": "Street: שדרות שאול המלך 4 City: תל אביב יפו Platform:  Floor:",
+              "vertexType": "TRANSIT",
+              "modes": [
+                "BUS"
+              ]
+            },
+            "duration": 840,
+            "startTime": "2026-09-07T05:18:00Z",
+            "endTime": "2026-09-07T05:32:00Z",
+            "scheduledStartTime": "2026-09-07T05:18:00Z",
+            "scheduledEndTime": "2026-09-07T05:32:00Z",
+            "realTime": false,
+            "scheduled": false,
+            "distance": 837.0,
+            "legGeometry": {
+              "points": "q{vd|@{rniaA}DrByC|A??Oo@??WcA??_AuD??mEjB??Y{A??_BuIqBiLiA{Gy@cIOkH???kFXsFf@iHdAuHjAqGxAqG`@oBDeAE[??gKwI??`A}B??nCiT??hCe\\??`Nq~A??dDwe@VuD??PaE??XkE??NkDzCye@??nDee@??l@gH??`B}G??JmE??AmH???uA??{@mm@??CuA",
+              "precision": 6,
+              "length": 65
+            },
+            "steps": [
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 26.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "toOsmNode": 6434511040,
+                "polyline": {
+                  "points": "q{vd|@{rniaA}DrByC|A",
+                  "precision": 6,
+                  "length": 3
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 2.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 686487782,
+                "fromOsmNode": 6434511040,
+                "toOsmNode": 9332520456,
+                "polyline": {
+                  "points": "ifwd|@ilniaAOo@",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 3.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 686487782,
+                "fromOsmNode": 9332520456,
+                "toOsmNode": 6434511042,
+                "polyline": {
+                  "points": "yfwd|@ymniaAWcA",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 9.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 686487782,
+                "fromOsmNode": 6434511042,
+                "toOsmNode": 6434511041,
+                "polyline": {
+                  "points": "qgwd|@}oniaA_AuD",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 13.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 289596332,
+                "fromOsmNode": 6434511041,
+                "toOsmNode": 2144024860,
+                "polyline": {
+                  "points": "qiwd|@suniaAmEjB",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "דיזנגוף",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 5.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 32266276,
+                "fromOsmNode": 2144024860,
+                "toOsmNode": 9332520465,
+                "polyline": {
+                  "points": "_pwd|@grniaAY{A",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "בר גיורא",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 82.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 32266276,
+                "fromOsmNode": 9332520465,
+                "toOsmNode": 362654303,
+                "polyline": {
+                  "points": "ypwd|@cuniaA_BuIqBiLiA{Gy@cIOkH",
+                  "precision": 6,
+                  "length": 6
+                },
+                "streetName": "בר גיורא",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 90.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 32266276,
+                "fromOsmNode": 362654303,
+                "toOsmNode": 2469848040,
+                "polyline": {
+                  "points": "_|wd|@oipiaA?kFXsFf@iHdAuHjAqGxAqG`@oBDeAE[",
+                  "precision": 6,
+                  "length": 10
+                },
+                "streetName": "בר גיורא",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 27.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 686436794,
+                "fromOsmNode": 2469848040,
+                "toOsmNode": 2469848036,
+                "polyline": {
+                  "points": "oqwd|@ecriaAgKwI",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "המלך ג'ורג'",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 7.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 741598216,
+                "fromOsmNode": 2469848036,
+                "toOsmNode": 1627580,
+                "polyline": {
+                  "points": "w}wd|@}mriaA`A}B",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "שדרות הנביאים",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 33.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 239620116,
+                "fromOsmNode": 1627580,
+                "toOsmNode": 352935359,
+                "polyline": {
+                  "points": "u{wd|@{qriaAnCiT",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "שדרות הנביאים",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 45.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 239620116,
+                "fromOsmNode": 352935359,
+                "toOsmNode": 412518857,
+                "polyline": {
+                  "points": "ewwd|@egsiaAhCe\\",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "שדרות הנביאים",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 147.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 239620116,
+                "fromOsmNode": 412518857,
+                "toOsmNode": 352934365,
+                "polyline": {
+                  "points": "{rwd|@kdtiaA`Nq~A",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "שדרות הנביאים",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 68.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 239620116,
+                "fromOsmNode": 352934365,
+                "toOsmNode": 530185824,
+                "polyline": {
+                  "points": "ycwd|@}cwiaAdDwe@VuD",
+                  "precision": 6,
+                  "length": 3
+                },
+                "streetName": "שדרות הנביאים",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 9.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 204417218,
+                "fromOsmNode": 530185824,
+                "toOsmNode": 1187718334,
+                "polyline": {
+                  "points": "{}vd|@kpxiaAPaE",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "שדרות הנביאים",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 10.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 204417218,
+                "fromOsmNode": 1187718334,
+                "toOsmNode": 270490795,
+                "polyline": {
+                  "points": "i}vd|@mvxiaAXkE",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "שדרות הנביאים",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 67.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 204417220,
+                "fromOsmNode": 270490795,
+                "toOsmNode": 415442186,
+                "polyline": {
+                  "points": "o|vd|@y|xiaANkDzCye@",
+                  "precision": 6,
+                  "length": 3
+                },
+                "streetName": "שדרות הנביאים",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 58.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 204417220,
+                "fromOsmNode": 415442186,
+                "toOsmNode": 1312216073,
+                "polyline": {
+                  "points": "cwvd|@_iziaAnDee@",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "שדרות הנביאים",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 14.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 204417220,
+                "fromOsmNode": 1312216073,
+                "toOsmNode": 1627585,
+                "polyline": {
+                  "points": "sqvd|@eo{iaAl@gH",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "שדרות הנביאים",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 15.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 95489272,
+                "fromOsmNode": 1627585,
+                "toOsmNode": 1107292327,
+                "polyline": {
+                  "points": "epvd|@mx{iaA`B}G",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "שאול המלך",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 10.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1164506034,
+                "fromOsmNode": 1107292327,
+                "toOsmNode": 4031900536,
+                "polyline": {
+                  "points": "cmvd|@ka|iaAJmE",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "שאול המלך",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 14.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1164506034,
+                "fromOsmNode": 4031900536,
+                "toOsmNode": 10830139279,
+                "polyline": {
+                  "points": "wlvd|@yg|iaAAmH",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "שאול המלך",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 4.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 204416913,
+                "fromOsmNode": 10830139279,
+                "toOsmNode": 1312216071,
+                "polyline": {
+                  "points": "ylvd|@gq|iaA?uA",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "שאול המלך",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 70.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 204416913,
+                "fromOsmNode": 1312216071,
+                "toOsmNode": 9666648903,
+                "polyline": {
+                  "points": "ylvd|@}s|iaA{@mm@",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "שאול המלך",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 9.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "fromOsmNode": 9666648903,
+                "polyline": {
+                  "points": "unvd|@kb~iaACuA",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              }
+            ]
+          },
+          {
+            "mode": "BUS",
+            "from": {
+              "name": "לונדון מיניסטור/שד' שאול המלך",
+              "stopId": "mot10day_13351",
+              "importance": 0.05415094271302223,
+              "lat": 32.075465,
+              "lon": 34.78282,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-07T05:32:00Z",
+              "scheduledDeparture": "2026-09-07T05:32:00Z",
+              "stopCode": "21100",
+              "description": "Street: שדרות שאול המלך 4 City: תל אביב יפו Platform:  Floor:",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "to": {
+              "name": "ת.רק\"ל אבא הלל",
+              "stopId": "mot10day_14410",
+              "importance": 0.015906231477856636,
+              "lat": 32.083873,
+              "lon": 34.803467999999995,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T05:38:00Z",
+              "scheduledArrival": "2026-09-07T05:38:00Z",
+              "stopCode": "26248",
+              "description": "Street: דרך אבא הלל 4 City: רמת גן Platform:  Floor:",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "duration": 360,
+            "startTime": "2026-09-07T05:32:00Z",
+            "endTime": "2026-09-07T05:38:00Z",
+            "scheduledStartTime": "2026-09-07T05:32:00Z",
+            "scheduledEndTime": "2026-09-07T05:38:00Z",
+            "realTime": false,
+            "scheduled": true,
+            "interlineWithPreviousLeg": false,
+            "headsign": "תל אביב יפו_קריית עתידים",
+            "tripFrom": {
+              "name": "מסוף בית העלמין/איסוף",
+              "stopId": "mot10day_47074",
+              "parentId": "mot10day_22221",
+              "importance": 0.02953116036951542,
+              "lat": 32.002528000000005,
+              "lon": 34.752095000000004,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-07T04:55:00Z",
+              "scheduledDeparture": "2026-09-07T04:55:00Z",
+              "scheduledTrack": "3",
+              "track": "3",
+              "stopCode": "37113",
+              "description": "Street:   City: בת ים Platform: 3   Floor:",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NOT_ALLOWED",
+              "cancelled": false,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "tripTo": {
+              "name": "מסוף עתידים",
+              "stopId": "mot10day_46605",
+              "parentId": "mot10day_14700",
+              "importance": 0.07650657743215561,
+              "lat": 32.113359,
+              "lon": 34.842539,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T05:54:00Z",
+              "scheduledArrival": "2026-09-07T05:54:00Z",
+              "scheduledTrack": "0",
+              "track": "0",
+              "stopCode": "26807",
+              "description": "Street: דבורה הנביאה 128 City: תל אביב יפו Platform:  Floor:",
+              "vertexType": "TRANSIT",
+              "pickupType": "NOT_ALLOWED",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "routeId": "mot10day_9803",
+            "routeUrl": "",
+            "directionId": "1",
+            "routeColor": "ffffff",
+            "routeTextColor": "000000",
+            "routeType": 3,
+            "agencyName": "דן",
+            "agencyUrl": "http://www.dan.co.il",
+            "agencyFareUrl": "http://www.dan.co.il",
+            "agencyId": "5",
+            "tripId": "20260907_07:55_mot10day_1687843509",
+            "routeShortName": "142",
+            "routeLongName": "בת ים: בית עלמין - תל אביב יפו: קריית עתידים",
+            "tripShortName": "",
+            "displayName": "142",
+            "cancelled": false,
+            "source": "/input/Gtfs_10_days.zip/stop_times.txt:9664144:9664197",
+            "intermediateStops": [
+              {
+                "name": "האופרה/שד' שאול המלך",
+                "stopId": "mot10day_14129",
+                "importance": 0.03313321992754936,
+                "lat": 32.075623,
+                "lon": 34.784788999999996,
+                "tz": "Asia/Jerusalem",
+                "arrival": "2026-09-07T05:33:00Z",
+                "departure": "2026-09-07T05:33:00Z",
+                "scheduledArrival": "2026-09-07T05:33:00Z",
+                "scheduledDeparture": "2026-09-07T05:33:00Z",
+                "stopCode": "25722",
+                "description": "Street: שדרות שאול המלך City: תל אביב יפו Platform:  Floor:",
+                "vertexType": "TRANSIT",
+                "pickupType": "NORMAL",
+                "dropoffType": "NORMAL",
+                "cancelled": false,
+                "modes": [
+                  "BUS"
+                ]
+              },
+              {
+                "name": "בית המשפט/שד' שאול המלך",
+                "stopId": "mot10day_13823",
+                "importance": 0.05493996664881706,
+                "lat": 32.076734,
+                "lon": 34.788446,
+                "tz": "Asia/Jerusalem",
+                "arrival": "2026-09-07T05:34:00Z",
+                "departure": "2026-09-07T05:34:00Z",
+                "scheduledArrival": "2026-09-07T05:34:00Z",
+                "scheduledDeparture": "2026-09-07T05:34:00Z",
+                "stopCode": "23025",
+                "description": "Street: שדרות שאול המלך City: תל אביב יפו Platform:  Floor:",
+                "vertexType": "TRANSIT",
+                "pickupType": "NORMAL",
+                "dropoffType": "NORMAL",
+                "cancelled": false,
+                "modes": [
+                  "BUS"
+                ]
+              },
+              {
+                "name": "בית הדר דפנה/שד' שאול המלך",
+                "stopId": "mot10day_13483",
+                "importance": 0.05949113890528679,
+                "lat": 32.07742,
+                "lon": 34.790544000000004,
+                "tz": "Asia/Jerusalem",
+                "arrival": "2026-09-07T05:34:00Z",
+                "departure": "2026-09-07T05:34:00Z",
+                "scheduledArrival": "2026-09-07T05:34:00Z",
+                "scheduledDeparture": "2026-09-07T05:34:00Z",
+                "stopCode": "21303",
+                "description": "Street: שדרות שאול המלך City: תל אביב יפו Platform:  Floor:",
+                "vertexType": "TRANSIT",
+                "pickupType": "NORMAL",
+                "dropoffType": "NORMAL",
+                "cancelled": false,
+                "modes": [
+                  "BUS"
+                ]
+              },
+              {
+                "name": "ת. רכבת תל אביב סבידור/על פרשת דרכים",
+                "stopId": "mot10day_13383",
+                "importance": 0.06695826351642609,
+                "lat": 32.082162000000004,
+                "lon": 34.795464,
+                "tz": "Asia/Jerusalem",
+                "arrival": "2026-09-07T05:36:00Z",
+                "departure": "2026-09-07T05:36:00Z",
+                "scheduledArrival": "2026-09-07T05:36:00Z",
+                "scheduledDeparture": "2026-09-07T05:36:00Z",
+                "stopCode": "21140",
+                "description": "Street: על פרשת דרכים City: תל אביב יפו Platform:  Floor:",
+                "vertexType": "TRANSIT",
+                "pickupType": "NORMAL",
+                "dropoffType": "NORMAL",
+                "cancelled": false,
+                "modes": [
+                  "BUS"
+                ]
+              },
+              {
+                "name": "הבורסה/דרך ז'בוטינסקי",
+                "stopId": "mot10day_15112",
+                "importance": 0.05686106160283089,
+                "lat": 32.082534,
+                "lon": 34.800723999999995,
+                "tz": "Asia/Jerusalem",
+                "arrival": "2026-09-07T05:37:00Z",
+                "departure": "2026-09-07T05:37:00Z",
+                "scheduledArrival": "2026-09-07T05:37:00Z",
+                "scheduledDeparture": "2026-09-07T05:37:00Z",
+                "stopCode": "28665",
+                "description": "Street: דרך זאב ז'בוטינסקי City: רמת גן Platform:  Floor:",
+                "vertexType": "TRANSIT",
+                "pickupType": "NORMAL",
+                "dropoffType": "NORMAL",
+                "cancelled": false,
+                "modes": [
+                  "BUS"
+                ]
+              }
+            ],
+            "legGeometry": {
+              "points": "qkvd|@ge~iaAoaiAovsB~sx@~kkA",
+              "precision": 6,
+              "length": 3
+            },
+            "bikesAllowed": false,
+            "wheelchairAccessible": "ACCESSIBLE",
+            "reservation": "NONE",
+            "alternatives": []
+          },
+          {
+            "mode": "WALK",
+            "from": {
+              "name": "ת.רק\"ל אבא הלל",
+              "stopId": "mot10day_14410",
+              "importance": 0.015906231477856636,
+              "lat": 32.083873,
+              "lon": 34.803467999999995,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T05:38:00Z",
+              "departure": "2026-09-07T05:38:00Z",
+              "scheduledArrival": "2026-09-07T05:38:00Z",
+              "scheduledDeparture": "2026-09-07T05:38:00Z",
+              "stopCode": "26248",
+              "description": "Street: דרך אבא הלל 4 City: רמת גן Platform:  Floor:",
+              "vertexType": "TRANSIT",
+              "cancelled": false,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "to": {
+              "name": "END",
+              "lat": 32.0838,
+              "lon": 34.8044,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T05:42:00Z",
+              "scheduledArrival": "2026-09-07T05:42:00Z",
+              "vertexType": "NORMAL"
+            },
+            "duration": 240,
+            "startTime": "2026-09-07T05:38:00Z",
+            "endTime": "2026-09-07T05:42:00Z",
+            "scheduledStartTime": "2026-09-07T05:38:00Z",
+            "scheduledEndTime": "2026-09-07T05:42:00Z",
+            "realTime": false,
+            "scheduled": false,
+            "distance": 250.0,
+            "legGeometry": {
+              "points": "gyfe|@mmfkaAr@BzEFdRH??nRY??@uBZk@??EmEeBqWaCaZ??oOV??_Ln@??Q}@",
+              "precision": 6,
+              "length": 19
+            },
+            "steps": [
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 52.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "toOsmNode": 3711111014,
+                "polyline": {
+                  "points": "gyfe|@mmfkaAr@BzEFdRH",
+                  "precision": 6,
+                  "length": 4
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 35.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 184659637,
+                "fromOsmNode": 3711111014,
+                "toOsmNode": 3711111013,
+                "polyline": {
+                  "points": "q}ee|@wlfkaAnRY",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "אבא הלל סילבר",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 8.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1133268308,
+                "fromOsmNode": 3711111013,
+                "toOsmNode": 10565928938,
+                "polyline": {
+                  "points": "ajee|@qmfkaA@uBZk@",
+                  "precision": 6,
+                  "length": 3
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 89.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1412282387,
+                "fromOsmNode": 10565928938,
+                "toOsmNode": 4697990836,
+                "polyline": {
+                  "points": "ciee|@srfkaAEmEeBqWaCaZ",
+                  "precision": 6,
+                  "length": 4
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 29.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 476151215,
+                "fromOsmNode": 4697990836,
+                "toOsmNode": 4697990837,
+                "polyline": {
+                  "points": "qpee|@ulhkaAoOV",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "STAIRS",
+                "distance": 23.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 476151216,
+                "fromOsmNode": 4697990837,
+                "toOsmNode": 4697990838,
+                "polyline": {
+                  "points": "aafe|@}khkaA_Ln@",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 14.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "fromOsmNode": 4697990838,
+                "polyline": {
+                  "points": "anfe|@mjhkaAQ}@",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "duration": 1380,
+        "startTime": "2026-09-07T05:18:00Z",
+        "endTime": "2026-09-07T05:41:00Z",
+        "transfers": 1,
+        "id": "CkghUiegibAJQEApbHh6pSxjQUAyDm1vdDEwZGF5XzE0MDU1OZj9utOdCUBAQVgm/FI/Y0FASIiS+dQGULyT+dQGWgRXQUxLYAEKfwoCNjMSIjIwMjYwOTA3XzA4OjE0X21vdDEwZGF5XzE2OTEyOTM0NzgaDm1vdDEwZGF5XzE0MDU1IZj9utOdCUBAKVgm/FI/Y0FAMg5tb3QxMGRheV8xMzE0MTnYne488QhAQEF8FK5H4WRBQEi8k/nUBlDglvnUBloDQlVTYAEKWBoObW90MTBkYXlfMTMxNDEh2J3uPPEIQEApfBSuR+FkQUAyDm1vdDEwZGF5XzQ2Njc5OeWc2EP7CEBAQS/84HzqZEFASOCW+dQGUNiX+dQGWgRXQUxLYAEKfwoBMxIiMjAyNjA5MDdfMDg6MjVfbW90MTBkYXlfMTY5NDEzMjEwMBoObW90MTBkYXlfNDY2Nzkh5ZzYQ/sIQEApL/zgfOpkQUAyDm1vdDEwZGF5XzQ2NjgyOUW94NOcCkBAQYBG6dK/ZkFASJSY+dQGUMCa+dQGWgRUUkFNYAEKSBoObW90MTBkYXlfNDY2ODIhRb3g05wKQEApgEbp0r9mQUA50LNZ9bkKQEBBgnNGlPZmQUBIwJr51AZQ7Jz51AZaBFdBTEtgAQ==",
+        "legs": [
+          {
+            "mode": "WALK",
+            "from": {
+              "name": "START",
+              "lat": 32.0757,
+              "lon": 34.7748,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-07T05:18:00Z",
+              "scheduledDeparture": "2026-09-07T05:18:00Z",
+              "vertexType": "NORMAL"
+            },
+            "to": {
+              "name": "דיזנגוף סנטר/דיזנגוף",
+              "stopId": "mot10day_14055",
+              "importance": 0.06339622288942337,
+              "lat": 32.075129000000004,
+              "lon": 34.77537000000001,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T05:21:00Z",
+              "scheduledArrival": "2026-09-07T05:21:00Z",
+              "stopCode": "25565",
+              "description": "Street: דיזנגוף 53 City: תל אביב יפו Platform:  Floor:",
+              "vertexType": "TRANSIT",
+              "modes": [
+                "BUS"
+              ]
+            },
+            "duration": 180,
+            "startTime": "2026-09-07T05:18:00Z",
+            "endTime": "2026-09-07T05:21:00Z",
+            "scheduledStartTime": "2026-09-07T05:18:00Z",
+            "scheduledEndTime": "2026-09-07T05:21:00Z",
+            "realTime": false,
+            "scheduled": false,
+            "distance": 135.0,
+            "legGeometry": {
+              "points": "q{vd|@{rniaA}DrByC|A??Oo@??WcA??fD}AfK{FNKxAaAxAcA`P{K??jFqG",
+              "precision": 6,
+              "length": 16
+            },
+            "steps": [
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 26.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "toOsmNode": 6434511040,
+                "polyline": {
+                  "points": "q{vd|@{rniaA}DrByC|A",
+                  "precision": 6,
+                  "length": 3
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 2.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 686487782,
+                "fromOsmNode": 6434511040,
+                "toOsmNode": 9332520456,
+                "polyline": {
+                  "points": "ifwd|@ilniaAOo@",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 3.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 686487782,
+                "fromOsmNode": 9332520456,
+                "toOsmNode": 6434511042,
+                "polyline": {
+                  "points": "yfwd|@ymniaAWcA",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 84.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1113400111,
+                "fromOsmNode": 6434511042,
+                "toOsmNode": 6434395319,
+                "polyline": {
+                  "points": "qgwd|@}oniaAfD}AfK{FNKxAaAxAcA`P{K",
+                  "precision": 6,
+                  "length": 7
+                },
+                "streetName": "דיזנגוף",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 20.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "fromOsmNode": 6434395319,
+                "polyline": {
+                  "points": "{~ud|@eloiaAjFqG",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              }
+            ]
+          },
+          {
+            "mode": "BUS",
+            "from": {
+              "name": "דיזנגוף סנטר/דיזנגוף",
+              "stopId": "mot10day_14055",
+              "importance": 0.06339622288942337,
+              "lat": 32.075129000000004,
+              "lon": 34.77537000000001,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-07T05:21:00Z",
+              "scheduledDeparture": "2026-09-07T05:21:00Z",
+              "stopCode": "25565",
+              "description": "Street: דיזנגוף 53 City: תל אביב יפו Platform:  Floor:",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "to": {
+              "name": "ת.רק\"ל יהודית/דרך מנחם בגין",
+              "stopId": "mot10day_13141",
+              "importance": 0.11578044295310974,
+              "lat": 32.069862,
+              "lon": 34.78812500000001,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T05:28:00Z",
+              "scheduledArrival": "2026-09-07T05:28:00Z",
+              "stopCode": "20727",
+              "description": "Street: דרך מנחם בגין 106 City: תל אביב יפו Platform:  Floor:",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "duration": 420,
+            "startTime": "2026-09-07T05:21:00Z",
+            "endTime": "2026-09-07T05:28:00Z",
+            "scheduledStartTime": "2026-09-07T05:21:00Z",
+            "scheduledEndTime": "2026-09-07T05:28:00Z",
+            "realTime": false,
+            "scheduled": true,
+            "interlineWithPreviousLeg": false,
+            "headsign": "רמת גן_אלוף שדה",
+            "tripFrom": {
+              "name": "הכובשים/דניאל",
+              "stopId": "mot10day_13981",
+              "importance": 0.030022870749235153,
+              "lat": 32.068527,
+              "lon": 34.76553400000001,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-07T05:14:00Z",
+              "scheduledDeparture": "2026-09-07T05:14:00Z",
+              "stopCode": "25364",
+              "description": "Street: הכובשים 52 City: תל אביב יפו Platform:  Floor:",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NOT_ALLOWED",
+              "cancelled": false,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "tripTo": {
+              "name": "מסוף אלוף שדה",
+              "stopId": "mot10day_46690",
+              "parentId": "mot10day_13360",
+              "importance": 0.07197255641222,
+              "lat": 32.054928,
+              "lon": 34.833997,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T05:55:00Z",
+              "scheduledArrival": "2026-09-07T05:55:00Z",
+              "scheduledTrack": "1",
+              "track": "1",
+              "stopCode": "21109",
+              "description": "Street:   City: רמת גן Platform: 1   Floor:",
+              "vertexType": "TRANSIT",
+              "pickupType": "NOT_ALLOWED",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "routeId": "mot10day_2517",
+            "routeUrl": "",
+            "directionId": "0",
+            "routeColor": "ffffff",
+            "routeTextColor": "000000",
+            "routeType": 3,
+            "agencyName": "דן",
+            "agencyUrl": "http://www.dan.co.il",
+            "agencyFareUrl": "http://www.dan.co.il",
+            "agencyId": "5",
+            "tripId": "20260907_08:14_mot10day_1691293478",
+            "routeShortName": "63",
+            "routeLongName": "תל אביב יפו: מסוף כרמלית - רמת גן: אלוף שדה",
+            "tripShortName": "",
+            "displayName": "63",
+            "cancelled": false,
+            "source": "/input/Gtfs_10_days.zip/stop_times.txt:22976110:22976141",
+            "intermediateStops": [
+              {
+                "name": "דיזנגוף סנטר/שדרות בן ציון",
+                "stopId": "mot10day_14076",
+                "importance": 0.07580903172492981,
+                "lat": 32.073756,
+                "lon": 34.775586000000004,
+                "tz": "Asia/Jerusalem",
+                "arrival": "2026-09-07T05:22:00Z",
+                "departure": "2026-09-07T05:22:00Z",
+                "scheduledArrival": "2026-09-07T05:22:00Z",
+                "scheduledDeparture": "2026-09-07T05:22:00Z",
+                "stopCode": "25608",
+                "description": "Street: שדרות בן ציון 4 City: תל אביב יפו Platform:  Floor:",
+                "vertexType": "TRANSIT",
+                "pickupType": "NORMAL",
+                "dropoffType": "NORMAL",
+                "cancelled": false,
+                "modes": [
+                  "BUS"
+                ]
+              },
+              {
+                "name": "הבימה/שד' רוטשילד",
+                "stopId": "mot10day_14069",
+                "importance": 0.07864493876695633,
+                "lat": 32.071428,
+                "lon": 34.778882,
+                "tz": "Asia/Jerusalem",
+                "arrival": "2026-09-07T05:24:00Z",
+                "departure": "2026-09-07T05:24:00Z",
+                "scheduledArrival": "2026-09-07T05:24:00Z",
+                "scheduledDeparture": "2026-09-07T05:24:00Z",
+                "stopCode": "25592",
+                "description": "Street: שדרות רוטשילד 135 City: תל אביב יפו Platform:  Floor:",
+                "vertexType": "TRANSIT",
+                "pickupType": "NORMAL",
+                "dropoffType": "NORMAL",
+                "cancelled": false,
+                "modes": [
+                  "BUS"
+                ]
+              },
+              {
+                "name": "החשמונאים/יהודה הלוי",
+                "stopId": "mot10day_13491",
+                "importance": 0.015654658898711205,
+                "lat": 32.06998,
+                "lon": 34.780606999999996,
+                "tz": "Asia/Jerusalem",
+                "arrival": "2026-09-07T05:25:00Z",
+                "departure": "2026-09-07T05:25:00Z",
+                "scheduledArrival": "2026-09-07T05:25:00Z",
+                "scheduledDeparture": "2026-09-07T05:25:00Z",
+                "stopCode": "21316",
+                "description": "Street: החשמונאים 70 City: תל אביב יפו Platform:  Floor:",
+                "vertexType": "TRANSIT",
+                "pickupType": "NORMAL",
+                "dropoffType": "NORMAL",
+                "cancelled": false,
+                "modes": [
+                  "BUS"
+                ]
+              },
+              {
+                "name": "החשמונאים/קרליבך",
+                "stopId": "mot10day_13720",
+                "importance": 0.0407661534845829,
+                "lat": 32.069472000000005,
+                "lon": 34.783648,
+                "tz": "Asia/Jerusalem",
+                "arrival": "2026-09-07T05:26:00Z",
+                "departure": "2026-09-07T05:26:00Z",
+                "scheduledArrival": "2026-09-07T05:26:00Z",
+                "scheduledDeparture": "2026-09-07T05:26:00Z",
+                "stopCode": "21729",
+                "description": "Street: החשמונאים 84 City: תל אביב יפו Platform:  Floor:",
+                "vertexType": "TRANSIT",
+                "pickupType": "NORMAL",
+                "dropoffType": "NORMAL",
+                "cancelled": false,
+                "modes": [
+                  "BUS"
+                ]
+              }
+            ],
+            "legGeometry": {
+              "points": "qvud|@ssoiaAbif@ymqB}_\\rpxA",
+              "precision": 6,
+              "length": 3
+            },
+            "bikesAllowed": false,
+            "wheelchairAccessible": "ACCESSIBLE",
+            "reservation": "NONE",
+            "alternatives": []
+          },
+          {
+            "mode": "WALK",
+            "from": {
+              "name": "ת.רק\"ל יהודית/דרך מנחם בגין",
+              "stopId": "mot10day_13141",
+              "importance": 0.11578044295310974,
+              "lat": 32.069862,
+              "lon": 34.78812500000001,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T05:28:00Z",
+              "departure": "2026-09-07T05:28:00Z",
+              "scheduledArrival": "2026-09-07T05:28:00Z",
+              "scheduledDeparture": "2026-09-07T05:28:00Z",
+              "stopCode": "20727",
+              "description": "Street: דרך מנחם בגין 106 City: תל אביב יפו Platform:  Floor:",
+              "vertexType": "TRANSIT",
+              "cancelled": false,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "to": {
+              "name": "יהודית",
+              "stopId": "mot10day_46679",
+              "parentId": "mot10day_13121",
+              "importance": 0.036037735641002655,
+              "lat": 32.070168,
+              "lon": 34.788406,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T05:30:00Z",
+              "scheduledArrival": "2026-09-07T05:30:00Z",
+              "scheduledTrack": "1",
+              "track": "1",
+              "stopCode": "20707",
+              "description": "Street: מסילת ברזל קו אדום גוש דן City: תל אביב יפו Platform: 1   Floor:",
+              "vertexType": "TRANSIT",
+              "modes": [
+                "TRAM"
+              ]
+            },
+            "duration": 120,
+            "startTime": "2026-09-07T05:28:00Z",
+            "endTime": "2026-09-07T05:30:00Z",
+            "scheduledStartTime": "2026-09-07T05:28:00Z",
+            "scheduledEndTime": "2026-09-07T05:30:00Z",
+            "realTime": false,
+            "scheduled": false,
+            "distance": 93.0,
+            "legGeometry": {
+              "points": "epkd|@olhjaAuYiW??nFxE",
+              "precision": 6,
+              "length": 4
+            },
+            "steps": [
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 68.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "toOsmNode": 3912852015,
+                "polyline": {
+                  "points": "epkd|@olhjaAuYiW",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 25.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "fromOsmNode": 3912852015,
+                "polyline": {
+                  "points": "{jld|@ydijaAnFxE",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              }
+            ]
+          },
+          {
+            "mode": "TRAM",
+            "from": {
+              "name": "יהודית",
+              "stopId": "mot10day_46679",
+              "parentId": "mot10day_13121",
+              "importance": 0.036037735641002655,
+              "lat": 32.070168,
+              "lon": 34.788406,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-07T05:31:00Z",
+              "scheduledDeparture": "2026-09-07T05:31:00Z",
+              "scheduledTrack": "1",
+              "track": "1",
+              "stopCode": "20707",
+              "description": "Street: מסילת ברזל קו אדום גוש דן City: תל אביב יפו Platform: 1   Floor:",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "TRAM"
+              ]
+            },
+            "to": {
+              "name": "אבא הלל",
+              "stopId": "mot10day_46682",
+              "parentId": "mot10day_13127",
+              "importance": 0.036037735641002655,
+              "lat": 32.082911,
+              "lon": 34.802729,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T05:36:00Z",
+              "scheduledArrival": "2026-09-07T05:36:00Z",
+              "scheduledTrack": "1",
+              "track": "1",
+              "stopCode": "20713",
+              "description": "Street: מסילת ברזל קו אדום גוש דן City: רמת גן Platform: 1   Floor:",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "TRAM"
+              ]
+            },
+            "duration": 300,
+            "startTime": "2026-09-07T05:31:00Z",
+            "endTime": "2026-09-07T05:36:00Z",
+            "scheduledStartTime": "2026-09-07T05:31:00Z",
+            "scheduledEndTime": "2026-09-07T05:36:00Z",
+            "realTime": false,
+            "scheduled": true,
+            "interlineWithPreviousLeg": false,
+            "headsign": "פתח תקווה_קרית אריה",
+            "tripFrom": {
+              "name": "אליפלט",
+              "stopId": "mot10day_46676",
+              "parentId": "mot10day_13115",
+              "importance": 0.036037735641002655,
+              "lat": 32.058423,
+              "lon": 34.76303300000001,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-07T05:25:00Z",
+              "scheduledDeparture": "2026-09-07T05:25:00Z",
+              "scheduledTrack": "1",
+              "track": "1",
+              "stopCode": "20701",
+              "description": "Street: מסילת ברזל קו אדום גוש דן City: תל אביב יפו Platform: 1   Floor:",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NOT_ALLOWED",
+              "cancelled": false,
+              "modes": [
+                "TRAM"
+              ]
+            },
+            "tripTo": {
+              "name": "קרית אריה",
+              "stopId": "mot10day_46727",
+              "parentId": "mot10day_21417",
+              "importance": 0.24303887784481049,
+              "lat": 32.105931000000005,
+              "lon": 34.861895999999994,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T05:49:00Z",
+              "scheduledArrival": "2026-09-07T05:49:00Z",
+              "scheduledTrack": "1",
+              "track": "1",
+              "stopCode": "36307",
+              "description": "Street: מסילת ברזל קו אדום גוש דן City: פתח תקווה Platform: 1   Floor:",
+              "vertexType": "TRANSIT",
+              "pickupType": "NOT_ALLOWED",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL",
+                "TRAM"
+              ]
+            },
+            "routeId": "mot10day_34450",
+            "routeUrl": "",
+            "directionId": "1",
+            "routeColor": "ffffff",
+            "routeTextColor": "000000",
+            "routeType": 0,
+            "agencyName": "תבל",
+            "agencyUrl": "http://www.callkav.gov.il/",
+            "agencyFareUrl": "http://www.callkav.gov.il/",
+            "agencyId": "22",
+            "tripId": "20260907_08:25_mot10day_1694132100",
+            "routeShortName": "3",
+            "routeLongName": "תל אביב יפו: אליפלט - פתח תקווה: קרית אריה",
+            "tripShortName": "",
+            "displayName": "3",
+            "cancelled": false,
+            "source": "/input/Gtfs_10_days.zip/stop_times.txt:32194812:32194823",
+            "intermediateStops": [
+              {
+                "name": "שאול המלך",
+                "stopId": "mot10day_46680",
+                "parentId": "mot10day_13123",
+                "importance": 0.036037735641002655,
+                "lat": 32.076636,
+                "lon": 34.79200500000001,
+                "tz": "Asia/Jerusalem",
+                "arrival": "2026-09-07T05:33:00Z",
+                "departure": "2026-09-07T05:33:00Z",
+                "scheduledArrival": "2026-09-07T05:33:00Z",
+                "scheduledDeparture": "2026-09-07T05:33:00Z",
+                "scheduledTrack": "1",
+                "track": "1",
+                "stopCode": "20709",
+                "description": "Street: מסילת ברזל קו אדום גוש דן City: תל אביב יפו Platform: 1   Floor:",
+                "vertexType": "TRANSIT",
+                "pickupType": "NORMAL",
+                "dropoffType": "NORMAL",
+                "cancelled": false,
+                "modes": [
+                  "TRAM"
+                ]
+              },
+              {
+                "name": "ארלוזורוב",
+                "stopId": "mot10day_46681",
+                "parentId": "mot10day_13125",
+                "importance": 0.036037735641002655,
+                "lat": 32.081554,
+                "lon": 34.796524000000005,
+                "tz": "Asia/Jerusalem",
+                "arrival": "2026-09-07T05:35:00Z",
+                "departure": "2026-09-07T05:35:00Z",
+                "scheduledArrival": "2026-09-07T05:35:00Z",
+                "scheduledDeparture": "2026-09-07T05:35:00Z",
+                "scheduledTrack": "1",
+                "track": "1",
+                "stopCode": "20711",
+                "description": "Street: מסילת ברזל קו אדום גוש דן City: תל אביב יפו Platform: 1   Floor:",
+                "vertexType": "TRANSIT",
+                "pickupType": "NORMAL",
+                "dropoffType": "NORMAL",
+                "cancelled": false,
+                "modes": [
+                  "TRAM"
+                ]
+              }
+            ],
+            "legGeometry": {
+              "points": "o`ld|@kbijaAezdAcpnCv}k@|prB",
+              "precision": 6,
+              "length": 3
+            },
+            "bikesAllowed": false,
+            "wheelchairAccessible": "ACCESSIBLE",
+            "reservation": "NONE",
+            "alternatives": []
+          },
+          {
+            "mode": "WALK",
+            "from": {
+              "name": "אבא הלל",
+              "stopId": "mot10day_46682",
+              "parentId": "mot10day_13127",
+              "importance": 0.036037735641002655,
+              "lat": 32.082911,
+              "lon": 34.802729,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T05:36:00Z",
+              "departure": "2026-09-07T05:36:00Z",
+              "scheduledArrival": "2026-09-07T05:36:00Z",
+              "scheduledDeparture": "2026-09-07T05:36:00Z",
+              "scheduledTrack": "1",
+              "track": "1",
+              "stopCode": "20713",
+              "description": "Street: מסילת ברזל קו אדום גוש דן City: רמת גן Platform: 1   Floor:",
+              "vertexType": "TRANSIT",
+              "cancelled": false,
+              "modes": [
+                "TRAM"
+              ]
+            },
+            "to": {
+              "name": "END",
+              "lat": 32.0838,
+              "lon": 34.8044,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T05:41:00Z",
+              "scheduledArrival": "2026-09-07T05:41:00Z",
+              "vertexType": "NORMAL"
+            },
+            "duration": 300,
+            "startTime": "2026-09-07T05:36:00Z",
+            "endTime": "2026-09-07T05:41:00Z",
+            "scheduledStartTime": "2026-09-07T05:36:00Z",
+            "scheduledEndTime": "2026-09-07T05:41:00Z",
+            "realTime": false,
+            "scheduled": false,
+            "distance": 267.0,
+            "legGeometry": {
+              "points": "oxde|@oaekaA@}I??L_S??]gN??IoC??yH^??aEP??EmEeBqWaCaZ??oOV??_Ln@??Q}@",
+              "precision": 6,
+              "length": 22
+            },
+            "steps": [
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 24.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "toOsmNode": 13765608539,
+                "polyline": {
+                  "points": "oxde|@oaekaA@}I",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 30.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1055110316,
+                "fromOsmNode": 13765608539,
+                "toOsmNode": 4960007493,
+                "polyline": {
+                  "points": "mxde|@mlekaAL_S",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "זאב ז'בוטינסקי",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 23.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1055110316,
+                "fromOsmNode": 4960007493,
+                "toOsmNode": 3716084617,
+                "polyline": {
+                  "points": "_xde|@m`fkaA]gN",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "זאב ז'בוטינסקי",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 7.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 184659623,
+                "fromOsmNode": 3716084617,
+                "toOsmNode": 4960007498,
+                "polyline": {
+                  "points": "}xde|@uofkaAIoC",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "זאב ז'בוטינסקי",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 17.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 506234199,
+                "fromOsmNode": 4960007498,
+                "toOsmNode": 4960007500,
+                "polyline": {
+                  "points": "gyde|@etfkaAyH^",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 11.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 506234199,
+                "fromOsmNode": 4960007500,
+                "toOsmNode": 10565928938,
+                "polyline": {
+                  "points": "acee|@esfkaAaEP",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 89.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1412282387,
+                "fromOsmNode": 10565928938,
+                "toOsmNode": 4697990836,
+                "polyline": {
+                  "points": "ciee|@srfkaAEmEeBqWaCaZ",
+                  "precision": 6,
+                  "length": 4
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 29.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 476151215,
+                "fromOsmNode": 4697990836,
+                "toOsmNode": 4697990837,
+                "polyline": {
+                  "points": "qpee|@ulhkaAoOV",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "STAIRS",
+                "distance": 23.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 476151216,
+                "fromOsmNode": 4697990837,
+                "toOsmNode": 4697990838,
+                "polyline": {
+                  "points": "aafe|@}khkaA_Ln@",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 14.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "fromOsmNode": 4697990838,
+                "polyline": {
+                  "points": "anfe|@mjhkaAQ}@",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "previousPageCursor": "EARLIER|1788757200",
+    "nextPageCursor": "LATER|1788758340"
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "case": {
+    "id": "J17",
+    "category": "bus-to-rail",
+    "from": {
+      "name": "Modi'in Center",
+      "name_he": "מודיעין מרכז",
+      "lat": 31.9017,
+      "lon": 35.0074
+    },
+    "to": {
+      "name": "Ben Gurion Airport T3",
+      "name_he": "נמל תעופה בן גוריון",
+      "lat": 32.0114,
+      "lon": 34.8867
+    },
+    "depart": "weekday_morning",
+    "expect": {
+      "outcome": "route",
+      "modes_any_of": [
+        "rail",
+        "bus"
+      ],
+      "min_duration_min": 15,
+      "max_duration_min": 90,
+      "max_transfers": 2
+    },
+    "human_review": "Airport access. A wrong answer here is very visible to a real user."
+  },
+  "request": {
+    "url": "http://localhost:58080/api/v6/plan?fromPlace=31.9017%2C35.0074&toPlace=32.0114%2C34.8867&time=2026-09-07T08%3A00%3A00%2B03%3A00&arriveBy=false&numItineraries=5&timetableView=true&maxPreTransitTime=1800&maxPostTransitTime=1800",
+    "requested_time_local": "2026-09-07T08:00:00+03:00",
+    "http_status": 200,
+    "latency_ms": 22.1
+  },
+  "response": {
+    "requestParameters": {},
+    "debugOutput": {
+      "algorithm": 1,
+      "direct": 0,
+      "execute_time": 0,
+      "fares": 0,
+      "fastest_direct": 0,
+      "fp_update_prevented_by_lower_bound": 0,
+      "interval_extensions": 0,
+      "lb_time": 0,
+      "n_dest_offsets": 0,
+      "n_earliest_arrival_updated_by_footpath": 0,
+      "n_earliest_arrival_updated_by_route": 0,
+      "n_earliest_trip_calls": 0,
+      "n_events_skipped_by_early_termination": 0,
+      "n_execute_bwd": 0,
+      "n_execute_fwd": 1,
+      "n_footpaths_visited": 0,
+      "n_routes_visited": 173,
+      "n_routing_time": 0,
+      "n_start_offsets": 183,
+      "n_td_dest_offsets": 0,
+      "n_td_start_offsets": 0,
+      "prepare": 1,
+      "prepare_backward_WALK": 0,
+      "prepare_forward_WALK": 1,
+      "route_update_prevented_by_lower_bound": 0,
+      "search_interval_reduction_by_early_termination": 0
+    },
+    "from": {
+      "name": "START",
+      "lat": 31.9017,
+      "lon": 35.0074,
+      "vertexType": "NORMAL"
+    },
+    "to": {
+      "name": "END",
+      "lat": 32.0114,
+      "lon": 34.8867,
+      "vertexType": "NORMAL"
+    },
+    "direct": [],
+    "itineraries": [],
+    "previousPageCursor": "EARLIER|1788757200",
+    "nextPageCursor": "LATER|1788757200"
+  }
+}

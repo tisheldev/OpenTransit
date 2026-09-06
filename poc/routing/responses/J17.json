@@ -10,9 +10,10 @@
     },
     "to": {
       "name": "Ben Gurion Airport T3",
-      "name_he": "נמל תעופה בן גוריון",
-      "lat": 32.0114,
-      "lon": 34.8867
+      "name_he": "נתב\"ג טרמינל 3",
+      "lat": 32.0004,
+      "lon": 34.8705,
+      "corpus_fix": "was 32.0114,34.8867 which is 1532 m from the nearest stop of any kind. Replaced with GTFS stop 10971 נתב\"ג from feed 08c168da. Fix derived from the feed, not re-guessed."
     },
     "depart": "weekday_morning",
     "expect": {
@@ -28,38 +29,38 @@
     "human_review": "Airport access. A wrong answer here is very visible to a real user."
   },
   "request": {
-    "url": "http://localhost:58080/api/v6/plan?fromPlace=31.9017%2C35.0074&toPlace=32.0114%2C34.8867&time=2026-09-07T08%3A00%3A00%2B03%3A00&arriveBy=false&numItineraries=5&timetableView=true",
+    "url": "http://localhost:58080/api/v6/plan?fromPlace=31.9017%2C35.0074&toPlace=32.0004%2C34.8705&time=2026-09-07T08%3A00%3A00%2B03%3A00&arriveBy=false&numItineraries=5&timetableView=true",
     "requested_time_local": "2026-09-07T08:00:00+03:00",
     "http_status": 200,
-    "latency_ms": 27.1
+    "latency_ms": 69.8
   },
   "response": {
     "requestParameters": {},
     "debugOutput": {
       "algorithm": 1,
       "direct": 0,
-      "execute_time": 0,
+      "execute_time": 45,
       "fares": 0,
       "fastest_direct": 0,
-      "fp_update_prevented_by_lower_bound": 0,
+      "fp_update_prevented_by_lower_bound": 3259,
       "interval_extensions": 0,
-      "lb_time": 0,
-      "n_dest_offsets": 0,
-      "n_earliest_arrival_updated_by_footpath": 0,
-      "n_earliest_arrival_updated_by_route": 0,
-      "n_earliest_trip_calls": 0,
+      "lb_time": 1,
+      "n_dest_offsets": 5,
+      "n_earliest_arrival_updated_by_footpath": 70131,
+      "n_earliest_arrival_updated_by_route": 338180,
+      "n_earliest_trip_calls": 620489,
       "n_events_skipped_by_early_termination": 0,
-      "n_execute_bwd": 0,
-      "n_execute_fwd": 1,
-      "n_footpaths_visited": 0,
-      "n_routes_visited": 161,
+      "n_execute_bwd": 5,
+      "n_execute_fwd": 5,
+      "n_footpaths_visited": 151336,
+      "n_routes_visited": 53204,
       "n_routing_time": 0,
       "n_start_offsets": 47,
       "n_td_dest_offsets": 0,
       "n_td_start_offsets": 0,
       "prepare": 1,
       "prepare_backward_WALK": 0,
-      "prepare_forward_WALK": 1,
+      "prepare_forward_WALK": 0,
       "route_update_prevented_by_lower_bound": 0,
       "search_interval_reduction_by_early_termination": 0
     },
@@ -71,13 +72,2652 @@
     },
     "to": {
       "name": "END",
-      "lat": 32.0114,
-      "lon": 34.8867,
+      "lat": 32.0004,
+      "lon": 34.8705,
       "vertexType": "NORMAL"
     },
     "direct": [],
-    "itineraries": [],
+    "itineraries": [
+      {
+        "duration": 1800,
+        "startTime": "2026-09-07T05:06:00Z",
+        "endTime": "2026-09-07T05:36:00Z",
+        "transfers": 1,
+        "id": "Ckghn82qz9XmP0Apxf6ye/KAQUAyDm1vdDYwZGF5XzIyMTg5OVKBk23g5j9AQS/ej9svgUFASLiM+dQGUNyP+dQGWgRXQUxLYAEKhAEKAjU4EicyMDI2MDkwN18wODowMF9tb3Q2MGRheV8yODM2MTg0M18wNDA5MjYaDm1vdDYwZGF5XzIyMTg5IVKBk23g5j9AKS/ej9svgUFAMg5tb3Q2MGRheV8zODE2Mjmto6oJouY/QEGFuHL2zoBBQEjcj/nUBlCYkPnUBloDQlVTYAEKYRoObW90NjBkYXlfMzgxNjIhraOqCaLmP0Aphbhy9s6AQUAyDm1vdDYwZGF5XzM3Mzk0OZbpl4i35j9AQe+Yuiu7gEFASJiQ+dQGUJCR+dQGWgRXQUxLYAFxAAAAAAAAAMAK4AEKUtee15XXk9eZ16LXmdefINee16jXm9eWLdee15XXk9eZ16LXmdefINee15vXkdeZ150g16jXoteV16o8LT7XoNeU16jXmdeULdeg15TXqNeZ15QSIDIwMjYwOTA3XzA4OjE4X21vdDYwZGF5XzFfNTAzMDgzGg5tb3Q2MGRheV8zNzM5NCGW6ZeIt+Y/QCnvmLoru4BBQDIObW90NjBkYXlfMzczMDY5AB3mywsAQEBBCWXh62tvQUBIiJL51AZQhJr51AZaDVJFR0lPTkFMX1JBSUxgAWkAAAAAAAAAwApIGg5tb3Q2MGRheV8zNzMwNiEAHebLCwBAQCkJZeHra29BQDmOdXEbDQBAQEGBlUOLbG9BQEiEmvnUBlDAmvnUBloEV0FMS2AB",
+        "legs": [
+          {
+            "mode": "WALK",
+            "from": {
+              "name": "START",
+              "lat": 31.9017,
+              "lon": 35.0074,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-07T05:06:00Z",
+              "scheduledDeparture": "2026-09-07T05:06:00Z",
+              "vertexType": "NORMAL"
+            },
+            "to": {
+              "name": "עמק איילון/תלתן",
+              "stopId": "mot60day_22189",
+              "importance": 0.006458527408540249,
+              "lat": 31.901862,
+              "lon": 35.009273,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T05:13:00Z",
+              "scheduledArrival": "2026-09-07T05:13:00Z",
+              "stopCode": "34155",
+              "description": "רחוב: פיקוס 2 עיר: מודיעין מכבים רעות רציף:  קומה: ",
+              "vertexType": "TRANSIT",
+              "modes": [
+                "BUS"
+              ]
+            },
+            "duration": 420,
+            "startTime": "2026-09-07T05:06:00Z",
+            "endTime": "2026-09-07T05:13:00Z",
+            "scheduledStartTime": "2026-09-07T05:06:00Z",
+            "scheduledEndTime": "2026-09-07T05:13:00Z",
+            "realTime": false,
+            "scheduled": false,
+            "distance": 402.0,
+            "legGeometry": {
+              "points": "ojcz{@o|swaAwa@wQ??qViJ??wCyEq@yCIwBRmD??`@k@dBoDvD{Hl@aBvFiOb@sA??hAsD??fAmD??V_A??x@wC??DIHc@??r@cDlA_GpAkG??v@qD??`BqCvA{A|ByA~B}@vCSxD?bCF??h@V",
+              "precision": 6,
+              "length": 43
+            },
+            "steps": [
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 116.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "toOsmNode": 6986717747,
+                "polyline": {
+                  "points": "ojcz{@o|swaAwa@wQ",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 45.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1098112667,
+                "fromOsmNode": 6986717747,
+                "toOsmNode": 6986717652,
+                "polyline": {
+                  "points": "gmdz{@gotwaAqViJ",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "הרכבת",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 35.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 746583639,
+                "fromOsmNode": 6986717652,
+                "toOsmNode": 6986717658,
+                "polyline": {
+                  "points": "ydez{@qztwaAwCyEq@yCIwBRmD",
+                  "precision": 6,
+                  "length": 5
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 69.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1174883808,
+                "fromOsmNode": 6986717658,
+                "toOsmNode": 7526210642,
+                "polyline": {
+                  "points": "yjez{@kouwaA`@k@dBoDvD{Hl@aBvFiOb@sA",
+                  "precision": 6,
+                  "length": 7
+                },
+                "streetName": "דם המכבים",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 9.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1174883808,
+                "fromOsmNode": 7526210642,
+                "toOsmNode": 10692839255,
+                "polyline": {
+                  "points": "ovdz{@cvvwaAhAsD",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "דם המכבים",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 9.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1174883808,
+                "fromOsmNode": 10692839255,
+                "toOsmNode": 8958082878,
+                "polyline": {
+                  "points": "etdz{@w{vwaAfAmD",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "דם המכבים",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 3.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1174883808,
+                "fromOsmNode": 8958082878,
+                "toOsmNode": 7431140346,
+                "polyline": {
+                  "points": "}qdz{@eawwaAV_A",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "דם המכבים",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 8.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1174883808,
+                "fromOsmNode": 7431140346,
+                "toOsmNode": 7526210617,
+                "polyline": {
+                  "points": "eqdz{@ecwwaAx@wC",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "דם המכבים",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 2.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1174883808,
+                "fromOsmNode": 7526210617,
+                "toOsmNode": 7431140347,
+                "polyline": {
+                  "points": "kodz{@}gwwaADIHc@",
+                  "precision": 6,
+                  "length": 3
+                },
+                "streetName": "דם המכבים",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 35.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1174883808,
+                "fromOsmNode": 7431140347,
+                "toOsmNode": 6986717595,
+                "polyline": {
+                  "points": "{ndz{@kiwwaAr@cDlA_GpAkG",
+                  "precision": 6,
+                  "length": 4
+                },
+                "streetName": "דם המכבים",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 9.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1098112671,
+                "fromOsmNode": 6986717595,
+                "toOsmNode": 10916938488,
+                "polyline": {
+                  "points": "ghdz{@{~wwaAv@qD",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "דם המכבים",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 57.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1174883806,
+                "fromOsmNode": 10916938488,
+                "toOsmNode": 10916938494,
+                "polyline": {
+                  "points": "ofdz{@mdxwaA`BqCvA{A|ByA~B}@vCSxD?bCF",
+                  "precision": 6,
+                  "length": 8
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 5.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "fromOsmNode": 10916938494,
+                "polyline": {
+                  "points": "ajcz{@_qxwaAh@V",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              }
+            ]
+          },
+          {
+            "mode": "BUS",
+            "from": {
+              "name": "עמק איילון/תלתן",
+              "stopId": "mot60day_22189",
+              "importance": 0.006458527408540249,
+              "lat": 31.901862,
+              "lon": 35.009273,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-07T05:13:00Z",
+              "scheduledDeparture": "2026-09-07T05:13:00Z",
+              "stopCode": "34155",
+              "description": "רחוב: פיקוס 2 עיר: מודיעין מכבים רעות רציף:  קומה: ",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "to": {
+              "name": "ת. רכבת מודיעין מרכז",
+              "stopId": "mot60day_38162",
+              "importance": 0.0285237655043602,
+              "lat": 31.90091,
+              "lon": 35.006316000000005,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T05:14:00Z",
+              "scheduledArrival": "2026-09-07T05:14:00Z",
+              "stopCode": "33093",
+              "description": "רחוב: הרכבת עיר: מודיעין מכבים רעות רציף:  קומה: ",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "duration": 60,
+            "startTime": "2026-09-07T05:13:00Z",
+            "endTime": "2026-09-07T05:14:00Z",
+            "scheduledStartTime": "2026-09-07T05:13:00Z",
+            "scheduledEndTime": "2026-09-07T05:14:00Z",
+            "realTime": false,
+            "scheduled": true,
+            "interlineWithPreviousLeg": false,
+            "headsign": "בייק פארק",
+            "tripFrom": {
+              "name": "בי''ס כרמים/עמק חרוד",
+              "stopId": "mot60day_35973",
+              "importance": 0.025964586064219475,
+              "lat": 31.920513999999997,
+              "lon": 35.003706,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-07T05:00:00Z",
+              "scheduledDeparture": "2026-09-07T05:00:00Z",
+              "stopCode": "38096",
+              "description": "רחוב: עמק חרוד עיר: מודיעין מכבים רעות רציף:  קומה: ",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NOT_ALLOWED",
+              "cancelled": false,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "tripTo": {
+              "name": "דרך מנחם בגין/מסוף",
+              "stopId": "mot60day_41767",
+              "importance": 0.015198509208858013,
+              "lat": 31.881654,
+              "lon": 35.01476399999999,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T05:46:00Z",
+              "scheduledArrival": "2026-09-07T05:46:00Z",
+              "stopCode": "31716",
+              "description": "רחוב: דרך מנחם בגין 18 עיר: מודיעין מכבים רעות רציף:  קומה: ",
+              "vertexType": "TRANSIT",
+              "pickupType": "NOT_ALLOWED",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "routeId": "mot60day_20662",
+            "routeUrl": "",
+            "directionId": "0",
+            "routeType": 3,
+            "agencyName": "קווים",
+            "agencyUrl": "http://www.kavim-t.co.il",
+            "agencyFareUrl": "",
+            "agencyId": "18",
+            "tripId": "20260907_08:00_mot60day_28361843_040926",
+            "routeShortName": "58",
+            "routeLongName": "בי''ס כרמים/עמק חרוד-מודיעין מכבים רעות<->דרך מנחם בגין/מסוף-מודיעין מכבים רעות-10",
+            "tripShortName": "",
+            "displayName": "58",
+            "cancelled": false,
+            "source": "/input/israel-public-transportation.zip/stop_times.txt:4516066:4516102",
+            "intermediateStops": [],
+            "legGeometry": {
+              "points": "kicz{@qnxwaA{AgDtfA`g@hEzHBHN|@NjBAxFqMvd@}ArFiUv{@{@bDzD|A~ZbL{GS",
+              "precision": 6,
+              "length": 15
+            },
+            "bikesAllowed": false,
+            "wheelchairAccessible": "ACCESSIBLE",
+            "reservation": "NONE",
+            "alternatives": []
+          },
+          {
+            "mode": "WALK",
+            "from": {
+              "name": "ת. רכבת מודיעין מרכז",
+              "stopId": "mot60day_38162",
+              "importance": 0.0285237655043602,
+              "lat": 31.90091,
+              "lon": 35.006316000000005,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T05:14:00Z",
+              "departure": "2026-09-07T05:14:00Z",
+              "scheduledArrival": "2026-09-07T05:14:00Z",
+              "scheduledDeparture": "2026-09-07T05:14:00Z",
+              "stopCode": "33093",
+              "description": "רחוב: הרכבת עיר: מודיעין מכבים רעות רציף:  קומה: ",
+              "vertexType": "TRANSIT",
+              "cancelled": true,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "to": {
+              "name": "מודיעין מרכז",
+              "stopId": "mot60day_37394",
+              "importance": 0.250232994556427,
+              "lat": 31.901238,
+              "lon": 35.00571200000001,
+              "level": -2.0,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T05:16:00Z",
+              "scheduledArrival": "2026-09-07T05:16:00Z",
+              "stopCode": "17002",
+              "vertexType": "TRANSIT",
+              "cancelled": true,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "duration": 120,
+            "startTime": "2026-09-07T05:14:00Z",
+            "endTime": "2026-09-07T05:16:00Z",
+            "scheduledStartTime": "2026-09-07T05:14:00Z",
+            "scheduledEndTime": "2026-09-07T05:16:00Z",
+            "realTime": false,
+            "scheduled": false,
+            "cancelled": true,
+            "legGeometry": {
+              "points": "",
+              "precision": 6,
+              "length": 0
+            }
+          },
+          {
+            "mode": "REGIONAL_RAIL",
+            "from": {
+              "name": "מודיעין מרכז",
+              "stopId": "mot60day_37394",
+              "importance": 0.250232994556427,
+              "lat": 31.901238,
+              "lon": 35.00571200000001,
+              "level": -2.0,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-07T05:18:00Z",
+              "scheduledDeparture": "2026-09-07T05:18:00Z",
+              "stopCode": "17002",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NOT_ALLOWED",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "to": {
+              "name": "נתב''ג",
+              "stopId": "mot60day_37306",
+              "importance": 0.3637464940547943,
+              "lat": 32.00036,
+              "lon": 34.87048099999999,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T05:35:00Z",
+              "scheduledArrival": "2026-09-07T05:35:00Z",
+              "stopCode": "17090",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "duration": 1020,
+            "startTime": "2026-09-07T05:18:00Z",
+            "endTime": "2026-09-07T05:35:00Z",
+            "scheduledStartTime": "2026-09-07T05:18:00Z",
+            "scheduledEndTime": "2026-09-07T05:35:00Z",
+            "realTime": false,
+            "scheduled": true,
+            "interlineWithPreviousLeg": false,
+            "headsign": "106",
+            "tripFrom": {
+              "name": "מודיעין מרכז",
+              "stopId": "mot60day_37394",
+              "importance": 0.250232994556427,
+              "lat": 31.901238,
+              "lon": 35.00571200000001,
+              "level": -2.0,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-07T05:18:00Z",
+              "scheduledDeparture": "2026-09-07T05:18:00Z",
+              "stopCode": "17002",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NOT_ALLOWED",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "tripTo": {
+              "name": "נהריה",
+              "stopId": "mot60day_37382",
+              "importance": 0.21062441170215607,
+              "lat": 33.005075000000005,
+              "lon": 35.09871000000001,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T07:39:00Z",
+              "scheduledArrival": "2026-09-07T07:39:00Z",
+              "stopCode": "17014",
+              "vertexType": "TRANSIT",
+              "pickupType": "NOT_ALLOWED",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "routeId": "mot60day_29956",
+            "routeUrl": "",
+            "directionId": "0",
+            "routeType": 2,
+            "agencyName": "רכבת ישראל",
+            "agencyUrl": "http://www.rail.co.il",
+            "agencyFareUrl": "",
+            "agencyId": "2",
+            "tripId": "20260907_08:18_mot60day_1_503083",
+            "routeShortName": "",
+            "routeLongName": "מודיעין מרכז-מודיעין מכבים רעות<->נהריה-נהריה",
+            "tripShortName": "",
+            "displayName": "מודיעין מרכז-מודיעין מכבים רעות<->נהריה-נהריה",
+            "cancelled": false,
+            "source": "/input/israel-public-transportation.zip/stop_times.txt:2986:3002",
+            "intermediateStops": [
+              {
+                "name": "פאתי מודיעין",
+                "stopId": "mot60day_37396",
+                "importance": 0.22553588449954987,
+                "lat": 31.893133,
+                "lon": 34.960682,
+                "tz": "Asia/Jerusalem",
+                "arrival": "2026-09-07T05:24:00Z",
+                "departure": "2026-09-07T05:24:00Z",
+                "scheduledArrival": "2026-09-07T05:24:00Z",
+                "scheduledDeparture": "2026-09-07T05:24:00Z",
+                "stopCode": "17000",
+                "vertexType": "TRANSIT",
+                "pickupType": "NORMAL",
+                "dropoffType": "NORMAL",
+                "cancelled": false,
+                "modes": [
+                  "REGIONAL_RAIL"
+                ]
+              }
+            ],
+            "legGeometry": {
+              "points": "kbbz{@_pqwaApyNj}vAulpEpdoD",
+              "precision": 6,
+              "length": 3
+            },
+            "bikesAllowed": false,
+            "wheelchairAccessible": "NOT_ACCESSIBLE",
+            "reservation": "NONE",
+            "alternatives": []
+          },
+          {
+            "mode": "WALK",
+            "from": {
+              "name": "נתב''ג",
+              "stopId": "mot60day_37306",
+              "importance": 0.3637464940547943,
+              "lat": 32.00036,
+              "lon": 34.87048099999999,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T05:35:00Z",
+              "departure": "2026-09-07T05:35:00Z",
+              "scheduledArrival": "2026-09-07T05:35:00Z",
+              "scheduledDeparture": "2026-09-07T05:35:00Z",
+              "stopCode": "17090",
+              "vertexType": "TRANSIT",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "to": {
+              "name": "END",
+              "lat": 32.0004,
+              "lon": 34.8705,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T05:36:00Z",
+              "scheduledArrival": "2026-09-07T05:36:00Z",
+              "vertexType": "NORMAL"
+            },
+            "duration": 60,
+            "startTime": "2026-09-07T05:35:00Z",
+            "endTime": "2026-09-07T05:36:00Z",
+            "scheduledStartTime": "2026-09-07T05:35:00Z",
+            "scheduledEndTime": "2026-09-07T05:36:00Z",
+            "realTime": false,
+            "scheduled": false,
+            "distance": 4.0,
+            "legGeometry": {
+              "points": "ouc`|@alioaAoAe@",
+              "precision": 6,
+              "length": 2
+            },
+            "steps": [
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 4.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "polyline": {
+                  "points": "ouc`|@alioaAoAe@",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "duration": 1740,
+        "startTime": "2026-09-07T05:37:00Z",
+        "endTime": "2026-09-07T06:06:00Z",
+        "transfers": 1,
+        "id": "Ckghn82qz9XmP0Apxf6ye/KAQUAyDm1vdDYwZGF5XzIzMTg1OSridJKt5j9AQRQEj2/vgEFASPya+dQGUOyc+dQGWgRXQUxLYAEKhAEKAjU0EicyMDI2MDkwN18wODoyNV9tb3Q2MGRheV8zNjIwNzE2OF8wNDA5MjYaDm1vdDYwZGF5XzIzMTg1ISridJKt5j9AKRQEj2/vgEFAMg5tb3Q2MGRheV8zODE2Mjmto6oJouY/QEGFuHL2zoBBQEjsnPnUBlDsnPnUBloDQlVTYAEKYRoObW90NjBkYXlfMzgxNjIhraOqCaLmP0Aphbhy9s6AQUAyDm1vdDYwZGF5XzM3Mzk0OZbpl4i35j9AQe+Yuiu7gEFASOyc+dQGUOSd+dQGWgRXQUxLYAFxAAAAAAAAAMAK4AEKUtee15XXk9eZ16LXmdefINee16jXm9eWLdee15XXk9eZ16LXmdefINee15vXkdeZ150g16jXoteV16o8LT7XoNeU16jXmdeULdeg15TXqNeZ15QSIDIwMjYwOTA3XzA4OjQ4X21vdDYwZGF5XzFfNTAzNDY4Gg5tb3Q2MGRheV8zNzM5NCGW6ZeIt+Y/QCnvmLoru4BBQDIObW90NjBkYXlfMzczMDY5AB3mywsAQEBBCWXh62tvQUBIkKD51AZQjKj51AZaDVJFR0lPTkFMX1JBSUxgAWkAAAAAAAAAwApIGg5tb3Q2MGRheV8zNzMwNiEAHebLCwBAQCkJZeHra29BQDmOdXEbDQBAQEGBlUOLbG9BQEiMqPnUBlDIqPnUBloEV0FMS2AB",
+        "legs": [
+          {
+            "mode": "WALK",
+            "from": {
+              "name": "START",
+              "lat": 31.9017,
+              "lon": 35.0074,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-07T05:37:00Z",
+              "scheduledDeparture": "2026-09-07T05:37:00Z",
+              "vertexType": "NORMAL"
+            },
+            "to": {
+              "name": "קניון עזריאלי מודיעין",
+              "stopId": "mot60day_23185",
+              "importance": 0.0023373719304800034,
+              "lat": 31.901086,
+              "lon": 35.007307,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T05:41:00Z",
+              "scheduledArrival": "2026-09-07T05:41:00Z",
+              "stopCode": "35177",
+              "description": "רחוב: ערער 9 עיר: מודיעין מכבים רעות רציף:  קומה: ",
+              "vertexType": "TRANSIT",
+              "modes": [
+                "BUS"
+              ]
+            },
+            "duration": 240,
+            "startTime": "2026-09-07T05:37:00Z",
+            "endTime": "2026-09-07T05:41:00Z",
+            "scheduledStartTime": "2026-09-07T05:37:00Z",
+            "scheduledEndTime": "2026-09-07T05:41:00Z",
+            "realTime": false,
+            "scheduled": false,
+            "distance": 189.0,
+            "legGeometry": {
+              "points": "ojcz{@o|swaA~]vOnClA??Ng@f@eBpMwc@",
+              "precision": 6,
+              "length": 7
+            },
+            "steps": [
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 117.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "toOsmNode": 3048273506,
+                "polyline": {
+                  "points": "ojcz{@o|swaA~]vOnClA",
+                  "precision": 6,
+                  "length": 3
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 72.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "fromOsmNode": 3048273506,
+                "polyline": {
+                  "points": "_gbz{@iiswaANg@f@eBpMwc@",
+                  "precision": 6,
+                  "length": 4
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              }
+            ]
+          },
+          {
+            "mode": "BUS",
+            "from": {
+              "name": "קניון עזריאלי מודיעין",
+              "stopId": "mot60day_23185",
+              "importance": 0.0023373719304800034,
+              "lat": 31.901086,
+              "lon": 35.007307,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-07T05:41:00Z",
+              "scheduledDeparture": "2026-09-07T05:41:00Z",
+              "stopCode": "35177",
+              "description": "רחוב: ערער 9 עיר: מודיעין מכבים רעות רציף:  קומה: ",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "to": {
+              "name": "ת. רכבת מודיעין מרכז",
+              "stopId": "mot60day_38162",
+              "importance": 0.0285237655043602,
+              "lat": 31.90091,
+              "lon": 35.006316000000005,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T05:41:00Z",
+              "scheduledArrival": "2026-09-07T05:41:00Z",
+              "stopCode": "33093",
+              "description": "רחוב: הרכבת עיר: מודיעין מכבים רעות רציף:  קומה: ",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "duration": 0,
+            "startTime": "2026-09-07T05:41:00Z",
+            "endTime": "2026-09-07T05:41:00Z",
+            "scheduledStartTime": "2026-09-07T05:41:00Z",
+            "scheduledEndTime": "2026-09-07T05:41:00Z",
+            "realTime": false,
+            "scheduled": true,
+            "interlineWithPreviousLeg": false,
+            "headsign": "מ.מסחרי לב רעות",
+            "tripFrom": {
+              "name": "בי''ס כרמים/עמק חרוד",
+              "stopId": "mot60day_35973",
+              "importance": 0.025964586064219475,
+              "lat": 31.920513999999997,
+              "lon": 35.003706,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-07T05:25:00Z",
+              "scheduledDeparture": "2026-09-07T05:25:00Z",
+              "stopCode": "38096",
+              "description": "רחוב: עמק חרוד עיר: מודיעין מכבים רעות רציף:  קומה: ",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NOT_ALLOWED",
+              "cancelled": false,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "tripTo": {
+              "name": "מרכז מסחרי/שדרות עומרים",
+              "stopId": "mot60day_22217",
+              "importance": 0.0026821994688361883,
+              "lat": 31.885986,
+              "lon": 35.017593999999995,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T05:59:00Z",
+              "scheduledArrival": "2026-09-07T05:59:00Z",
+              "stopCode": "34184",
+              "description": "רחוב: שדרות עומרים עיר: מודיעין מכבים רעות רציף:  קומה: ",
+              "vertexType": "TRANSIT",
+              "pickupType": "NOT_ALLOWED",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "routeId": "mot60day_22640",
+            "routeUrl": "",
+            "directionId": "0",
+            "routeType": 3,
+            "agencyName": "קווים",
+            "agencyUrl": "http://www.kavim-t.co.il",
+            "agencyFareUrl": "",
+            "agencyId": "18",
+            "tripId": "20260907_08:25_mot60day_36207168_040926",
+            "routeShortName": "54",
+            "routeLongName": "בי''ס כרמים/עמק חרוד-מודיעין מכבים רעות<->מרכז מסחרי/שדרות עומרים-מודיעין מכבים רעות-12",
+            "tripShortName": "",
+            "displayName": "54",
+            "cancelled": false,
+            "source": "/input/israel-public-transportation.zip/stop_times.txt:6043821:6043851",
+            "intermediateStops": [],
+            "legGeometry": {
+              "points": "{xaz{@ustwaAdIkRiUv{@{@bDzD|A~ZbL{GS",
+              "precision": 6,
+              "length": 7
+            },
+            "bikesAllowed": false,
+            "wheelchairAccessible": "ACCESSIBLE",
+            "reservation": "NONE",
+            "alternatives": []
+          },
+          {
+            "mode": "WALK",
+            "from": {
+              "name": "ת. רכבת מודיעין מרכז",
+              "stopId": "mot60day_38162",
+              "importance": 0.0285237655043602,
+              "lat": 31.90091,
+              "lon": 35.006316000000005,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T05:41:00Z",
+              "departure": "2026-09-07T05:41:00Z",
+              "scheduledArrival": "2026-09-07T05:41:00Z",
+              "scheduledDeparture": "2026-09-07T05:41:00Z",
+              "stopCode": "33093",
+              "description": "רחוב: הרכבת עיר: מודיעין מכבים רעות רציף:  קומה: ",
+              "vertexType": "TRANSIT",
+              "cancelled": true,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "to": {
+              "name": "מודיעין מרכז",
+              "stopId": "mot60day_37394",
+              "importance": 0.250232994556427,
+              "lat": 31.901238,
+              "lon": 35.00571200000001,
+              "level": -2.0,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T05:43:00Z",
+              "scheduledArrival": "2026-09-07T05:43:00Z",
+              "stopCode": "17002",
+              "vertexType": "TRANSIT",
+              "cancelled": true,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "duration": 120,
+            "startTime": "2026-09-07T05:41:00Z",
+            "endTime": "2026-09-07T05:43:00Z",
+            "scheduledStartTime": "2026-09-07T05:41:00Z",
+            "scheduledEndTime": "2026-09-07T05:43:00Z",
+            "realTime": false,
+            "scheduled": false,
+            "cancelled": true,
+            "legGeometry": {
+              "points": "",
+              "precision": 6,
+              "length": 0
+            }
+          },
+          {
+            "mode": "REGIONAL_RAIL",
+            "from": {
+              "name": "מודיעין מרכז",
+              "stopId": "mot60day_37394",
+              "importance": 0.250232994556427,
+              "lat": 31.901238,
+              "lon": 35.00571200000001,
+              "level": -2.0,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-07T05:48:00Z",
+              "scheduledDeparture": "2026-09-07T05:48:00Z",
+              "stopCode": "17002",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NOT_ALLOWED",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "to": {
+              "name": "נתב''ג",
+              "stopId": "mot60day_37306",
+              "importance": 0.3637464940547943,
+              "lat": 32.00036,
+              "lon": 34.87048099999999,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T06:05:00Z",
+              "scheduledArrival": "2026-09-07T06:05:00Z",
+              "stopCode": "17090",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "duration": 1020,
+            "startTime": "2026-09-07T05:48:00Z",
+            "endTime": "2026-09-07T06:05:00Z",
+            "scheduledStartTime": "2026-09-07T05:48:00Z",
+            "scheduledEndTime": "2026-09-07T06:05:00Z",
+            "realTime": false,
+            "scheduled": true,
+            "interlineWithPreviousLeg": false,
+            "headsign": "158",
+            "tripFrom": {
+              "name": "מודיעין מרכז",
+              "stopId": "mot60day_37394",
+              "importance": 0.250232994556427,
+              "lat": 31.901238,
+              "lon": 35.00571200000001,
+              "level": -2.0,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-07T05:48:00Z",
+              "scheduledDeparture": "2026-09-07T05:48:00Z",
+              "stopCode": "17002",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NOT_ALLOWED",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "tripTo": {
+              "name": "נהריה",
+              "stopId": "mot60day_37382",
+              "importance": 0.21062441170215607,
+              "lat": 33.005075000000005,
+              "lon": 35.09871000000001,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T08:13:00Z",
+              "scheduledArrival": "2026-09-07T08:13:00Z",
+              "stopCode": "17014",
+              "vertexType": "TRANSIT",
+              "pickupType": "NOT_ALLOWED",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "routeId": "mot60day_29992",
+            "routeUrl": "",
+            "directionId": "0",
+            "routeType": 2,
+            "agencyName": "רכבת ישראל",
+            "agencyUrl": "http://www.rail.co.il",
+            "agencyFareUrl": "",
+            "agencyId": "2",
+            "tripId": "20260907_08:48_mot60day_1_503468",
+            "routeShortName": "",
+            "routeLongName": "מודיעין מרכז-מודיעין מכבים רעות<->נהריה-נהריה",
+            "tripShortName": "",
+            "displayName": "מודיעין מרכז-מודיעין מכבים רעות<->נהריה-נהריה",
+            "cancelled": false,
+            "source": "/input/israel-public-transportation.zip/stop_times.txt:5067:5084",
+            "intermediateStops": [
+              {
+                "name": "פאתי מודיעין",
+                "stopId": "mot60day_37396",
+                "importance": 0.22553588449954987,
+                "lat": 31.893133,
+                "lon": 34.960682,
+                "tz": "Asia/Jerusalem",
+                "arrival": "2026-09-07T05:54:00Z",
+                "departure": "2026-09-07T05:54:00Z",
+                "scheduledArrival": "2026-09-07T05:54:00Z",
+                "scheduledDeparture": "2026-09-07T05:54:00Z",
+                "stopCode": "17000",
+                "vertexType": "TRANSIT",
+                "pickupType": "NORMAL",
+                "dropoffType": "NORMAL",
+                "cancelled": false,
+                "modes": [
+                  "REGIONAL_RAIL"
+                ]
+              }
+            ],
+            "legGeometry": {
+              "points": "kbbz{@_pqwaApyNj}vAulpEpdoD",
+              "precision": 6,
+              "length": 3
+            },
+            "bikesAllowed": false,
+            "wheelchairAccessible": "NOT_ACCESSIBLE",
+            "reservation": "NONE",
+            "alternatives": []
+          },
+          {
+            "mode": "WALK",
+            "from": {
+              "name": "נתב''ג",
+              "stopId": "mot60day_37306",
+              "importance": 0.3637464940547943,
+              "lat": 32.00036,
+              "lon": 34.87048099999999,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T06:05:00Z",
+              "departure": "2026-09-07T06:05:00Z",
+              "scheduledArrival": "2026-09-07T06:05:00Z",
+              "scheduledDeparture": "2026-09-07T06:05:00Z",
+              "stopCode": "17090",
+              "vertexType": "TRANSIT",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "to": {
+              "name": "END",
+              "lat": 32.0004,
+              "lon": 34.8705,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T06:06:00Z",
+              "scheduledArrival": "2026-09-07T06:06:00Z",
+              "vertexType": "NORMAL"
+            },
+            "duration": 60,
+            "startTime": "2026-09-07T06:05:00Z",
+            "endTime": "2026-09-07T06:06:00Z",
+            "scheduledStartTime": "2026-09-07T06:05:00Z",
+            "scheduledEndTime": "2026-09-07T06:06:00Z",
+            "realTime": false,
+            "scheduled": false,
+            "distance": 4.0,
+            "legGeometry": {
+              "points": "ouc`|@alioaAoAe@",
+              "precision": 6,
+              "length": 2
+            },
+            "steps": [
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 4.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "polyline": {
+                  "points": "ouc`|@alioaAoAe@",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "duration": 1740,
+        "startTime": "2026-09-07T06:07:00Z",
+        "endTime": "2026-09-07T06:36:00Z",
+        "transfers": 1,
+        "id": "Ckghn82qz9XmP0Apxf6ye/KAQUAyDm1vdDYwZGF5XzIzMTg1OSridJKt5j9AQRQEj2/vgEFASISp+dQGUPSq+dQGWgRXQUxLYAEKhAEKAjU0EicyMDI2MDkwN18wODo1NV9tb3Q2MGRheV8zNjIwNjk5MF8wNDA5MjYaDm1vdDYwZGF5XzIzMTg1ISridJKt5j9AKRQEj2/vgEFAMg5tb3Q2MGRheV8zODE2Mjmto6oJouY/QEGFuHL2zoBBQEj0qvnUBlD0qvnUBloDQlVTYAEKYRoObW90NjBkYXlfMzgxNjIhraOqCaLmP0Aphbhy9s6AQUAyDm1vdDYwZGF5XzM3Mzk0OZbpl4i35j9AQe+Yuiu7gEFASPSq+dQGUOyr+dQGWgRXQUxLYAFxAAAAAAAAAMAK4AEKUtee15XXk9eZ16LXmdefINee16jXm9eWLdee15XXk9eZ16LXmdefINee15vXkdeZ150g16jXoteV16o8LT7XoNeU16jXmdeULdeg15TXqNeZ15QSIDIwMjYwOTA3XzA5OjE4X21vdDYwZGF5XzFfNTAzMDg5Gg5tb3Q2MGRheV8zNzM5NCGW6ZeIt+Y/QCnvmLoru4BBQDIObW90NjBkYXlfMzczMDY5AB3mywsAQEBBCWXh62tvQUBImK751AZQlLb51AZaDVJFR0lPTkFMX1JBSUxgAWkAAAAAAAAAwApIGg5tb3Q2MGRheV8zNzMwNiEAHebLCwBAQCkJZeHra29BQDmOdXEbDQBAQEGBlUOLbG9BQEiUtvnUBlDQtvnUBloEV0FMS2AB",
+        "legs": [
+          {
+            "mode": "WALK",
+            "from": {
+              "name": "START",
+              "lat": 31.9017,
+              "lon": 35.0074,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-07T06:07:00Z",
+              "scheduledDeparture": "2026-09-07T06:07:00Z",
+              "vertexType": "NORMAL"
+            },
+            "to": {
+              "name": "קניון עזריאלי מודיעין",
+              "stopId": "mot60day_23185",
+              "importance": 0.0023373719304800034,
+              "lat": 31.901086,
+              "lon": 35.007307,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T06:11:00Z",
+              "scheduledArrival": "2026-09-07T06:11:00Z",
+              "stopCode": "35177",
+              "description": "רחוב: ערער 9 עיר: מודיעין מכבים רעות רציף:  קומה: ",
+              "vertexType": "TRANSIT",
+              "modes": [
+                "BUS"
+              ]
+            },
+            "duration": 240,
+            "startTime": "2026-09-07T06:07:00Z",
+            "endTime": "2026-09-07T06:11:00Z",
+            "scheduledStartTime": "2026-09-07T06:07:00Z",
+            "scheduledEndTime": "2026-09-07T06:11:00Z",
+            "realTime": false,
+            "scheduled": false,
+            "distance": 189.0,
+            "legGeometry": {
+              "points": "ojcz{@o|swaA~]vOnClA??Ng@f@eBpMwc@",
+              "precision": 6,
+              "length": 7
+            },
+            "steps": [
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 117.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "toOsmNode": 3048273506,
+                "polyline": {
+                  "points": "ojcz{@o|swaA~]vOnClA",
+                  "precision": 6,
+                  "length": 3
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 72.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "fromOsmNode": 3048273506,
+                "polyline": {
+                  "points": "_gbz{@iiswaANg@f@eBpMwc@",
+                  "precision": 6,
+                  "length": 4
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              }
+            ]
+          },
+          {
+            "mode": "BUS",
+            "from": {
+              "name": "קניון עזריאלי מודיעין",
+              "stopId": "mot60day_23185",
+              "importance": 0.0023373719304800034,
+              "lat": 31.901086,
+              "lon": 35.007307,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-07T06:11:00Z",
+              "scheduledDeparture": "2026-09-07T06:11:00Z",
+              "stopCode": "35177",
+              "description": "רחוב: ערער 9 עיר: מודיעין מכבים רעות רציף:  קומה: ",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "to": {
+              "name": "ת. רכבת מודיעין מרכז",
+              "stopId": "mot60day_38162",
+              "importance": 0.0285237655043602,
+              "lat": 31.90091,
+              "lon": 35.006316000000005,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T06:11:00Z",
+              "scheduledArrival": "2026-09-07T06:11:00Z",
+              "stopCode": "33093",
+              "description": "רחוב: הרכבת עיר: מודיעין מכבים רעות רציף:  קומה: ",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "duration": 0,
+            "startTime": "2026-09-07T06:11:00Z",
+            "endTime": "2026-09-07T06:11:00Z",
+            "scheduledStartTime": "2026-09-07T06:11:00Z",
+            "scheduledEndTime": "2026-09-07T06:11:00Z",
+            "realTime": false,
+            "scheduled": true,
+            "interlineWithPreviousLeg": false,
+            "headsign": "רעות",
+            "tripFrom": {
+              "name": "בי''ס כרמים/עמק חרוד",
+              "stopId": "mot60day_35973",
+              "importance": 0.025964586064219475,
+              "lat": 31.920513999999997,
+              "lon": 35.003706,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-07T05:55:00Z",
+              "scheduledDeparture": "2026-09-07T05:55:00Z",
+              "stopCode": "38096",
+              "description": "רחוב: עמק חרוד עיר: מודיעין מכבים רעות רציף:  קומה: ",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NOT_ALLOWED",
+              "cancelled": false,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "tripTo": {
+              "name": "הדרים/ תיכון רעות מכבים",
+              "stopId": "mot60day_22216",
+              "importance": 0.004363466985523701,
+              "lat": 31.888023999999998,
+              "lon": 35.016215,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T06:28:00Z",
+              "scheduledArrival": "2026-09-07T06:28:00Z",
+              "stopCode": "34183",
+              "description": "רחוב: הדרים עיר: מודיעין מכבים רעות רציף:  קומה: ",
+              "vertexType": "TRANSIT",
+              "pickupType": "NOT_ALLOWED",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "routeId": "mot60day_20653",
+            "routeUrl": "",
+            "directionId": "0",
+            "routeType": 3,
+            "agencyName": "קווים",
+            "agencyUrl": "http://www.kavim-t.co.il",
+            "agencyFareUrl": "",
+            "agencyId": "18",
+            "tripId": "20260907_08:55_mot60day_36206990_040926",
+            "routeShortName": "54",
+            "routeLongName": "בי''ס כרמים/עמק חרוד-מודיעין מכבים רעות<->הדרים/ תיכון רעות מכבים-מודיעין מכבים רעות-10",
+            "tripShortName": "",
+            "displayName": "54",
+            "cancelled": false,
+            "source": "/input/israel-public-transportation.zip/stop_times.txt:6043401:6043430",
+            "intermediateStops": [],
+            "legGeometry": {
+              "points": "{xaz{@ustwaAdIkRiUv{@{@bDzD|A~ZbL{GS",
+              "precision": 6,
+              "length": 7
+            },
+            "bikesAllowed": false,
+            "wheelchairAccessible": "ACCESSIBLE",
+            "reservation": "NONE",
+            "alternatives": []
+          },
+          {
+            "mode": "WALK",
+            "from": {
+              "name": "ת. רכבת מודיעין מרכז",
+              "stopId": "mot60day_38162",
+              "importance": 0.0285237655043602,
+              "lat": 31.90091,
+              "lon": 35.006316000000005,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T06:11:00Z",
+              "departure": "2026-09-07T06:11:00Z",
+              "scheduledArrival": "2026-09-07T06:11:00Z",
+              "scheduledDeparture": "2026-09-07T06:11:00Z",
+              "stopCode": "33093",
+              "description": "רחוב: הרכבת עיר: מודיעין מכבים רעות רציף:  קומה: ",
+              "vertexType": "TRANSIT",
+              "cancelled": true,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "to": {
+              "name": "מודיעין מרכז",
+              "stopId": "mot60day_37394",
+              "importance": 0.250232994556427,
+              "lat": 31.901238,
+              "lon": 35.00571200000001,
+              "level": -2.0,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T06:13:00Z",
+              "scheduledArrival": "2026-09-07T06:13:00Z",
+              "stopCode": "17002",
+              "vertexType": "TRANSIT",
+              "cancelled": true,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "duration": 120,
+            "startTime": "2026-09-07T06:11:00Z",
+            "endTime": "2026-09-07T06:13:00Z",
+            "scheduledStartTime": "2026-09-07T06:11:00Z",
+            "scheduledEndTime": "2026-09-07T06:13:00Z",
+            "realTime": false,
+            "scheduled": false,
+            "cancelled": true,
+            "legGeometry": {
+              "points": "",
+              "precision": 6,
+              "length": 0
+            }
+          },
+          {
+            "mode": "REGIONAL_RAIL",
+            "from": {
+              "name": "מודיעין מרכז",
+              "stopId": "mot60day_37394",
+              "importance": 0.250232994556427,
+              "lat": 31.901238,
+              "lon": 35.00571200000001,
+              "level": -2.0,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-07T06:18:00Z",
+              "scheduledDeparture": "2026-09-07T06:18:00Z",
+              "stopCode": "17002",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NOT_ALLOWED",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "to": {
+              "name": "נתב''ג",
+              "stopId": "mot60day_37306",
+              "importance": 0.3637464940547943,
+              "lat": 32.00036,
+              "lon": 34.87048099999999,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T06:35:00Z",
+              "scheduledArrival": "2026-09-07T06:35:00Z",
+              "stopCode": "17090",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "duration": 1020,
+            "startTime": "2026-09-07T06:18:00Z",
+            "endTime": "2026-09-07T06:35:00Z",
+            "scheduledStartTime": "2026-09-07T06:18:00Z",
+            "scheduledEndTime": "2026-09-07T06:35:00Z",
+            "realTime": false,
+            "scheduled": true,
+            "interlineWithPreviousLeg": false,
+            "headsign": "108",
+            "tripFrom": {
+              "name": "מודיעין מרכז",
+              "stopId": "mot60day_37394",
+              "importance": 0.250232994556427,
+              "lat": 31.901238,
+              "lon": 35.00571200000001,
+              "level": -2.0,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-07T06:18:00Z",
+              "scheduledDeparture": "2026-09-07T06:18:00Z",
+              "stopCode": "17002",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NOT_ALLOWED",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "tripTo": {
+              "name": "נהריה",
+              "stopId": "mot60day_37382",
+              "importance": 0.21062441170215607,
+              "lat": 33.005075000000005,
+              "lon": 35.09871000000001,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T08:39:00Z",
+              "scheduledArrival": "2026-09-07T08:39:00Z",
+              "stopCode": "17014",
+              "vertexType": "TRANSIT",
+              "pickupType": "NOT_ALLOWED",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "routeId": "mot60day_29958",
+            "routeUrl": "",
+            "directionId": "0",
+            "routeType": 2,
+            "agencyName": "רכבת ישראל",
+            "agencyUrl": "http://www.rail.co.il",
+            "agencyFareUrl": "",
+            "agencyId": "2",
+            "tripId": "20260907_09:18_mot60day_1_503089",
+            "routeShortName": "",
+            "routeLongName": "מודיעין מרכז-מודיעין מכבים רעות<->נהריה-נהריה",
+            "tripShortName": "",
+            "displayName": "מודיעין מרכז-מודיעין מכבים רעות<->נהריה-נהריה",
+            "cancelled": false,
+            "source": "/input/israel-public-transportation.zip/stop_times.txt:3088:3104",
+            "intermediateStops": [
+              {
+                "name": "פאתי מודיעין",
+                "stopId": "mot60day_37396",
+                "importance": 0.22553588449954987,
+                "lat": 31.893133,
+                "lon": 34.960682,
+                "tz": "Asia/Jerusalem",
+                "arrival": "2026-09-07T06:24:00Z",
+                "departure": "2026-09-07T06:24:00Z",
+                "scheduledArrival": "2026-09-07T06:24:00Z",
+                "scheduledDeparture": "2026-09-07T06:24:00Z",
+                "stopCode": "17000",
+                "vertexType": "TRANSIT",
+                "pickupType": "NORMAL",
+                "dropoffType": "NORMAL",
+                "cancelled": false,
+                "modes": [
+                  "REGIONAL_RAIL"
+                ]
+              }
+            ],
+            "legGeometry": {
+              "points": "kbbz{@_pqwaApyNj}vAulpEpdoD",
+              "precision": 6,
+              "length": 3
+            },
+            "bikesAllowed": false,
+            "wheelchairAccessible": "NOT_ACCESSIBLE",
+            "reservation": "NONE",
+            "alternatives": []
+          },
+          {
+            "mode": "WALK",
+            "from": {
+              "name": "נתב''ג",
+              "stopId": "mot60day_37306",
+              "importance": 0.3637464940547943,
+              "lat": 32.00036,
+              "lon": 34.87048099999999,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T06:35:00Z",
+              "departure": "2026-09-07T06:35:00Z",
+              "scheduledArrival": "2026-09-07T06:35:00Z",
+              "scheduledDeparture": "2026-09-07T06:35:00Z",
+              "stopCode": "17090",
+              "vertexType": "TRANSIT",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "to": {
+              "name": "END",
+              "lat": 32.0004,
+              "lon": 34.8705,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T06:36:00Z",
+              "scheduledArrival": "2026-09-07T06:36:00Z",
+              "vertexType": "NORMAL"
+            },
+            "duration": 60,
+            "startTime": "2026-09-07T06:35:00Z",
+            "endTime": "2026-09-07T06:36:00Z",
+            "scheduledStartTime": "2026-09-07T06:35:00Z",
+            "scheduledEndTime": "2026-09-07T06:36:00Z",
+            "realTime": false,
+            "scheduled": false,
+            "distance": 4.0,
+            "legGeometry": {
+              "points": "ouc`|@alioaAoAe@",
+              "precision": 6,
+              "length": 2
+            },
+            "steps": [
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 4.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "polyline": {
+                  "points": "ouc`|@alioaAoAe@",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "duration": 1680,
+        "startTime": "2026-09-07T06:38:00Z",
+        "endTime": "2026-09-07T07:06:00Z",
+        "transfers": 1,
+        "id": "Ckghn82qz9XmP0Apxf6ye/KAQUAyDm1vdDYwZGF5XzIyMTg5OVKBk23g5j9AQS/ej9svgUFASMi3+dQGUOy6+dQGWgRXQUxLYAEKhAEKAjUzEicyMDI2MDkwN18wOToyMF9tb3Q2MGRheV8yODYzNTY1Nl8wNDA5MjYaDm1vdDYwZGF5XzIyMTg5IVKBk23g5j9AKS/ej9svgUFAMg5tb3Q2MGRheV8zODE2Mjmto6oJouY/QEGFuHL2zoBBQEjsuvnUBlCou/nUBloDQlVTYAEKYRoObW90NjBkYXlfMzgxNjIhraOqCaLmP0Aphbhy9s6AQUAyDm1vdDYwZGF5XzM3Mzk0OZbpl4i35j9AQe+Yuiu7gEFASKi7+dQGUKC8+dQGWgRXQUxLYAFxAAAAAAAAAMAK4AEKUtee15XXk9eZ16LXmdefINee16jXm9eWLdee15XXk9eZ16LXmdefINee15vXkdeZ150g16jXoteV16o8LT7XoNeU16jXmdeULdeg15TXqNeZ15QSIDIwMjYwOTA3XzA5OjQ4X21vdDYwZGF5XzFfNTAzNDY2Gg5tb3Q2MGRheV8zNzM5NCGW6ZeIt+Y/QCnvmLoru4BBQDIObW90NjBkYXlfMzczMDY5AB3mywsAQEBBCWXh62tvQUBIoLz51AZQnMT51AZaDVJFR0lPTkFMX1JBSUxgAWkAAAAAAAAAwApIGg5tb3Q2MGRheV8zNzMwNiEAHebLCwBAQCkJZeHra29BQDmOdXEbDQBAQEGBlUOLbG9BQEicxPnUBlDYxPnUBloEV0FMS2AB",
+        "legs": [
+          {
+            "mode": "WALK",
+            "from": {
+              "name": "START",
+              "lat": 31.9017,
+              "lon": 35.0074,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-07T06:38:00Z",
+              "scheduledDeparture": "2026-09-07T06:38:00Z",
+              "vertexType": "NORMAL"
+            },
+            "to": {
+              "name": "עמק איילון/תלתן",
+              "stopId": "mot60day_22189",
+              "importance": 0.006458527408540249,
+              "lat": 31.901862,
+              "lon": 35.009273,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T06:45:00Z",
+              "scheduledArrival": "2026-09-07T06:45:00Z",
+              "stopCode": "34155",
+              "description": "רחוב: פיקוס 2 עיר: מודיעין מכבים רעות רציף:  קומה: ",
+              "vertexType": "TRANSIT",
+              "modes": [
+                "BUS"
+              ]
+            },
+            "duration": 420,
+            "startTime": "2026-09-07T06:38:00Z",
+            "endTime": "2026-09-07T06:45:00Z",
+            "scheduledStartTime": "2026-09-07T06:38:00Z",
+            "scheduledEndTime": "2026-09-07T06:45:00Z",
+            "realTime": false,
+            "scheduled": false,
+            "distance": 402.0,
+            "legGeometry": {
+              "points": "ojcz{@o|swaAwa@wQ??qViJ??wCyEq@yCIwBRmD??`@k@dBoDvD{Hl@aBvFiOb@sA??hAsD??fAmD??V_A??x@wC??DIHc@??r@cDlA_GpAkG??v@qD??`BqCvA{A|ByA~B}@vCSxD?bCF??h@V",
+              "precision": 6,
+              "length": 43
+            },
+            "steps": [
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 116.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "toOsmNode": 6986717747,
+                "polyline": {
+                  "points": "ojcz{@o|swaAwa@wQ",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 45.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1098112667,
+                "fromOsmNode": 6986717747,
+                "toOsmNode": 6986717652,
+                "polyline": {
+                  "points": "gmdz{@gotwaAqViJ",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "הרכבת",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 35.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 746583639,
+                "fromOsmNode": 6986717652,
+                "toOsmNode": 6986717658,
+                "polyline": {
+                  "points": "ydez{@qztwaAwCyEq@yCIwBRmD",
+                  "precision": 6,
+                  "length": 5
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 69.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1174883808,
+                "fromOsmNode": 6986717658,
+                "toOsmNode": 7526210642,
+                "polyline": {
+                  "points": "yjez{@kouwaA`@k@dBoDvD{Hl@aBvFiOb@sA",
+                  "precision": 6,
+                  "length": 7
+                },
+                "streetName": "דם המכבים",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 9.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1174883808,
+                "fromOsmNode": 7526210642,
+                "toOsmNode": 10692839255,
+                "polyline": {
+                  "points": "ovdz{@cvvwaAhAsD",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "דם המכבים",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 9.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1174883808,
+                "fromOsmNode": 10692839255,
+                "toOsmNode": 8958082878,
+                "polyline": {
+                  "points": "etdz{@w{vwaAfAmD",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "דם המכבים",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 3.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1174883808,
+                "fromOsmNode": 8958082878,
+                "toOsmNode": 7431140346,
+                "polyline": {
+                  "points": "}qdz{@eawwaAV_A",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "דם המכבים",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 8.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1174883808,
+                "fromOsmNode": 7431140346,
+                "toOsmNode": 7526210617,
+                "polyline": {
+                  "points": "eqdz{@ecwwaAx@wC",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "דם המכבים",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 2.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1174883808,
+                "fromOsmNode": 7526210617,
+                "toOsmNode": 7431140347,
+                "polyline": {
+                  "points": "kodz{@}gwwaADIHc@",
+                  "precision": 6,
+                  "length": 3
+                },
+                "streetName": "דם המכבים",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 35.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1174883808,
+                "fromOsmNode": 7431140347,
+                "toOsmNode": 6986717595,
+                "polyline": {
+                  "points": "{ndz{@kiwwaAr@cDlA_GpAkG",
+                  "precision": 6,
+                  "length": 4
+                },
+                "streetName": "דם המכבים",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 9.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1098112671,
+                "fromOsmNode": 6986717595,
+                "toOsmNode": 10916938488,
+                "polyline": {
+                  "points": "ghdz{@{~wwaAv@qD",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "דם המכבים",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 57.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "osmWay": 1174883806,
+                "fromOsmNode": 10916938488,
+                "toOsmNode": 10916938494,
+                "polyline": {
+                  "points": "ofdz{@mdxwaA`BqCvA{A|ByA~B}@vCSxD?bCF",
+                  "precision": 6,
+                  "length": 8
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 5.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "fromOsmNode": 10916938494,
+                "polyline": {
+                  "points": "ajcz{@_qxwaAh@V",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              }
+            ]
+          },
+          {
+            "mode": "BUS",
+            "from": {
+              "name": "עמק איילון/תלתן",
+              "stopId": "mot60day_22189",
+              "importance": 0.006458527408540249,
+              "lat": 31.901862,
+              "lon": 35.009273,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-07T06:45:00Z",
+              "scheduledDeparture": "2026-09-07T06:45:00Z",
+              "stopCode": "34155",
+              "description": "רחוב: פיקוס 2 עיר: מודיעין מכבים רעות רציף:  קומה: ",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "to": {
+              "name": "ת. רכבת מודיעין מרכז",
+              "stopId": "mot60day_38162",
+              "importance": 0.0285237655043602,
+              "lat": 31.90091,
+              "lon": 35.006316000000005,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T06:46:00Z",
+              "scheduledArrival": "2026-09-07T06:46:00Z",
+              "stopCode": "33093",
+              "description": "רחוב: הרכבת עיר: מודיעין מכבים רעות רציף:  קומה: ",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "duration": 60,
+            "startTime": "2026-09-07T06:45:00Z",
+            "endTime": "2026-09-07T06:46:00Z",
+            "scheduledStartTime": "2026-09-07T06:45:00Z",
+            "scheduledEndTime": "2026-09-07T06:46:00Z",
+            "realTime": false,
+            "scheduled": true,
+            "interlineWithPreviousLeg": false,
+            "headsign": "אולפנה",
+            "tripFrom": {
+              "name": "בי''ס כרמים/עמק חרוד",
+              "stopId": "mot60day_35973",
+              "importance": 0.025964586064219475,
+              "lat": 31.920513999999997,
+              "lon": 35.003706,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-07T06:20:00Z",
+              "scheduledDeparture": "2026-09-07T06:20:00Z",
+              "stopCode": "38096",
+              "description": "רחוב: עמק חרוד עיר: מודיעין מכבים רעות רציף:  קומה: ",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NOT_ALLOWED",
+              "cancelled": false,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "tripTo": {
+              "name": "אולפנה/לוי",
+              "stopId": "mot60day_22204",
+              "importance": 0.013053121976554394,
+              "lat": 31.890191,
+              "lon": 35.008160000000004,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T07:04:00Z",
+              "scheduledArrival": "2026-09-07T07:04:00Z",
+              "stopCode": "34170",
+              "description": "רחוב: לוי עיר: מודיעין מכבים רעות רציף:  קומה: ",
+              "vertexType": "TRANSIT",
+              "pickupType": "NOT_ALLOWED",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "routeId": "mot60day_20651",
+            "routeUrl": "",
+            "directionId": "0",
+            "routeType": 3,
+            "agencyName": "קווים",
+            "agencyUrl": "http://www.kavim-t.co.il",
+            "agencyFareUrl": "",
+            "agencyId": "18",
+            "tripId": "20260907_09:20_mot60day_28635656_040926",
+            "routeShortName": "53",
+            "routeLongName": "בי''ס כרמים/עמק חרוד-מודיעין מכבים רעות<->אולפנה/לוי-מודיעין מכבים רעות-10",
+            "tripShortName": "",
+            "displayName": "53",
+            "cancelled": false,
+            "source": "/input/israel-public-transportation.zip/stop_times.txt:4622549:4622588",
+            "intermediateStops": [],
+            "legGeometry": {
+              "points": "kicz{@qnxwaA{AgDtfA`g@tOlHiHzLoPjl@iUv{@{@bDzD|A~ZbL{GS",
+              "precision": 6,
+              "length": 11
+            },
+            "bikesAllowed": false,
+            "wheelchairAccessible": "ACCESSIBLE",
+            "reservation": "NONE",
+            "alternatives": []
+          },
+          {
+            "mode": "WALK",
+            "from": {
+              "name": "ת. רכבת מודיעין מרכז",
+              "stopId": "mot60day_38162",
+              "importance": 0.0285237655043602,
+              "lat": 31.90091,
+              "lon": 35.006316000000005,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T06:46:00Z",
+              "departure": "2026-09-07T06:46:00Z",
+              "scheduledArrival": "2026-09-07T06:46:00Z",
+              "scheduledDeparture": "2026-09-07T06:46:00Z",
+              "stopCode": "33093",
+              "description": "רחוב: הרכבת עיר: מודיעין מכבים רעות רציף:  קומה: ",
+              "vertexType": "TRANSIT",
+              "cancelled": true,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "to": {
+              "name": "מודיעין מרכז",
+              "stopId": "mot60day_37394",
+              "importance": 0.250232994556427,
+              "lat": 31.901238,
+              "lon": 35.00571200000001,
+              "level": -2.0,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T06:48:00Z",
+              "scheduledArrival": "2026-09-07T06:48:00Z",
+              "stopCode": "17002",
+              "vertexType": "TRANSIT",
+              "cancelled": true,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "duration": 120,
+            "startTime": "2026-09-07T06:46:00Z",
+            "endTime": "2026-09-07T06:48:00Z",
+            "scheduledStartTime": "2026-09-07T06:46:00Z",
+            "scheduledEndTime": "2026-09-07T06:48:00Z",
+            "realTime": false,
+            "scheduled": false,
+            "cancelled": true,
+            "legGeometry": {
+              "points": "",
+              "precision": 6,
+              "length": 0
+            }
+          },
+          {
+            "mode": "REGIONAL_RAIL",
+            "from": {
+              "name": "מודיעין מרכז",
+              "stopId": "mot60day_37394",
+              "importance": 0.250232994556427,
+              "lat": 31.901238,
+              "lon": 35.00571200000001,
+              "level": -2.0,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-07T06:48:00Z",
+              "scheduledDeparture": "2026-09-07T06:48:00Z",
+              "stopCode": "17002",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NOT_ALLOWED",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "to": {
+              "name": "נתב''ג",
+              "stopId": "mot60day_37306",
+              "importance": 0.3637464940547943,
+              "lat": 32.00036,
+              "lon": 34.87048099999999,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T07:05:00Z",
+              "scheduledArrival": "2026-09-07T07:05:00Z",
+              "stopCode": "17090",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "duration": 1020,
+            "startTime": "2026-09-07T06:48:00Z",
+            "endTime": "2026-09-07T07:05:00Z",
+            "scheduledStartTime": "2026-09-07T06:48:00Z",
+            "scheduledEndTime": "2026-09-07T07:05:00Z",
+            "realTime": false,
+            "scheduled": true,
+            "interlineWithPreviousLeg": false,
+            "headsign": "160",
+            "tripFrom": {
+              "name": "מודיעין מרכז",
+              "stopId": "mot60day_37394",
+              "importance": 0.250232994556427,
+              "lat": 31.901238,
+              "lon": 35.00571200000001,
+              "level": -2.0,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-07T06:48:00Z",
+              "scheduledDeparture": "2026-09-07T06:48:00Z",
+              "stopCode": "17002",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NOT_ALLOWED",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "tripTo": {
+              "name": "נהריה",
+              "stopId": "mot60day_37382",
+              "importance": 0.21062441170215607,
+              "lat": 33.005075000000005,
+              "lon": 35.09871000000001,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T09:13:00Z",
+              "scheduledArrival": "2026-09-07T09:13:00Z",
+              "stopCode": "17014",
+              "vertexType": "TRANSIT",
+              "pickupType": "NOT_ALLOWED",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "routeId": "mot60day_29994",
+            "routeUrl": "",
+            "directionId": "0",
+            "routeType": 2,
+            "agencyName": "רכבת ישראל",
+            "agencyUrl": "http://www.rail.co.il",
+            "agencyFareUrl": "",
+            "agencyId": "2",
+            "tripId": "20260907_09:48_mot60day_1_503466",
+            "routeShortName": "",
+            "routeLongName": "מודיעין מרכז-מודיעין מכבים רעות<->נהריה-נהריה",
+            "tripShortName": "",
+            "displayName": "מודיעין מרכז-מודיעין מכבים רעות<->נהריה-נהריה",
+            "cancelled": false,
+            "source": "/input/israel-public-transportation.zip/stop_times.txt:5031:5048",
+            "intermediateStops": [
+              {
+                "name": "פאתי מודיעין",
+                "stopId": "mot60day_37396",
+                "importance": 0.22553588449954987,
+                "lat": 31.893133,
+                "lon": 34.960682,
+                "tz": "Asia/Jerusalem",
+                "arrival": "2026-09-07T06:54:00Z",
+                "departure": "2026-09-07T06:54:00Z",
+                "scheduledArrival": "2026-09-07T06:54:00Z",
+                "scheduledDeparture": "2026-09-07T06:54:00Z",
+                "stopCode": "17000",
+                "vertexType": "TRANSIT",
+                "pickupType": "NORMAL",
+                "dropoffType": "NORMAL",
+                "cancelled": false,
+                "modes": [
+                  "REGIONAL_RAIL"
+                ]
+              }
+            ],
+            "legGeometry": {
+              "points": "kbbz{@_pqwaApyNj}vAulpEpdoD",
+              "precision": 6,
+              "length": 3
+            },
+            "bikesAllowed": false,
+            "wheelchairAccessible": "NOT_ACCESSIBLE",
+            "reservation": "NONE",
+            "alternatives": []
+          },
+          {
+            "mode": "WALK",
+            "from": {
+              "name": "נתב''ג",
+              "stopId": "mot60day_37306",
+              "importance": 0.3637464940547943,
+              "lat": 32.00036,
+              "lon": 34.87048099999999,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T07:05:00Z",
+              "departure": "2026-09-07T07:05:00Z",
+              "scheduledArrival": "2026-09-07T07:05:00Z",
+              "scheduledDeparture": "2026-09-07T07:05:00Z",
+              "stopCode": "17090",
+              "vertexType": "TRANSIT",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "to": {
+              "name": "END",
+              "lat": 32.0004,
+              "lon": 34.8705,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T07:06:00Z",
+              "scheduledArrival": "2026-09-07T07:06:00Z",
+              "vertexType": "NORMAL"
+            },
+            "duration": 60,
+            "startTime": "2026-09-07T07:05:00Z",
+            "endTime": "2026-09-07T07:06:00Z",
+            "scheduledStartTime": "2026-09-07T07:05:00Z",
+            "scheduledEndTime": "2026-09-07T07:06:00Z",
+            "realTime": false,
+            "scheduled": false,
+            "distance": 4.0,
+            "legGeometry": {
+              "points": "ouc`|@alioaAoAe@",
+              "precision": 6,
+              "length": 2
+            },
+            "steps": [
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 4.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "polyline": {
+                  "points": "ouc`|@alioaAoAe@",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "duration": 1740,
+        "startTime": "2026-09-07T07:07:00Z",
+        "endTime": "2026-09-07T07:36:00Z",
+        "transfers": 1,
+        "id": "Ckghn82qz9XmP0Apxf6ye/KAQUAyDm1vdDYwZGF5XzIzMTg1OSridJKt5j9AQRQEj2/vgEFASJTF+dQGUITH+dQGWgRXQUxLYAEKhAEKAjU0EicyMDI2MDkwN18wOTo1NV9tb3Q2MGRheV8zNjIwNjk5Ml8wNDA5MjYaDm1vdDYwZGF5XzIzMTg1ISridJKt5j9AKRQEj2/vgEFAMg5tb3Q2MGRheV8zODE2Mjmto6oJouY/QEGFuHL2zoBBQEiEx/nUBlCEx/nUBloDQlVTYAEKYRoObW90NjBkYXlfMzgxNjIhraOqCaLmP0Aphbhy9s6AQUAyDm1vdDYwZGF5XzM3Mzk0OZbpl4i35j9AQe+Yuiu7gEFASITH+dQGUPzH+dQGWgRXQUxLYAFxAAAAAAAAAMAK4AEKUtee15XXk9eZ16LXmdefINee16jXm9eWLdee15XXk9eZ16LXmdefINee15vXkdeZ150g16jXoteV16o8LT7XoNeU16jXmdeULdeg15TXqNeZ15QSIDIwMjYwOTA3XzEwOjE4X21vdDYwZGF5XzFfNTAzMTA3Gg5tb3Q2MGRheV8zNzM5NCGW6ZeIt+Y/QCnvmLoru4BBQDIObW90NjBkYXlfMzczMDY5AB3mywsAQEBBCWXh62tvQUBIqMr51AZQpNL51AZaDVJFR0lPTkFMX1JBSUxgAWkAAAAAAAAAwApIGg5tb3Q2MGRheV8zNzMwNiEAHebLCwBAQCkJZeHra29BQDmOdXEbDQBAQEGBlUOLbG9BQEik0vnUBlDg0vnUBloEV0FMS2AB",
+        "legs": [
+          {
+            "mode": "WALK",
+            "from": {
+              "name": "START",
+              "lat": 31.9017,
+              "lon": 35.0074,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-07T07:07:00Z",
+              "scheduledDeparture": "2026-09-07T07:07:00Z",
+              "vertexType": "NORMAL"
+            },
+            "to": {
+              "name": "קניון עזריאלי מודיעין",
+              "stopId": "mot60day_23185",
+              "importance": 0.0023373719304800034,
+              "lat": 31.901086,
+              "lon": 35.007307,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T07:11:00Z",
+              "scheduledArrival": "2026-09-07T07:11:00Z",
+              "stopCode": "35177",
+              "description": "רחוב: ערער 9 עיר: מודיעין מכבים רעות רציף:  קומה: ",
+              "vertexType": "TRANSIT",
+              "modes": [
+                "BUS"
+              ]
+            },
+            "duration": 240,
+            "startTime": "2026-09-07T07:07:00Z",
+            "endTime": "2026-09-07T07:11:00Z",
+            "scheduledStartTime": "2026-09-07T07:07:00Z",
+            "scheduledEndTime": "2026-09-07T07:11:00Z",
+            "realTime": false,
+            "scheduled": false,
+            "distance": 189.0,
+            "legGeometry": {
+              "points": "ojcz{@o|swaA~]vOnClA??Ng@f@eBpMwc@",
+              "precision": 6,
+              "length": 7
+            },
+            "steps": [
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 117.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "toOsmNode": 3048273506,
+                "polyline": {
+                  "points": "ojcz{@o|swaA~]vOnClA",
+                  "precision": 6,
+                  "length": 3
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              },
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 72.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "fromOsmNode": 3048273506,
+                "polyline": {
+                  "points": "_gbz{@iiswaANg@f@eBpMwc@",
+                  "precision": 6,
+                  "length": 4
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              }
+            ]
+          },
+          {
+            "mode": "BUS",
+            "from": {
+              "name": "קניון עזריאלי מודיעין",
+              "stopId": "mot60day_23185",
+              "importance": 0.0023373719304800034,
+              "lat": 31.901086,
+              "lon": 35.007307,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-07T07:11:00Z",
+              "scheduledDeparture": "2026-09-07T07:11:00Z",
+              "stopCode": "35177",
+              "description": "רחוב: ערער 9 עיר: מודיעין מכבים רעות רציף:  קומה: ",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "to": {
+              "name": "ת. רכבת מודיעין מרכז",
+              "stopId": "mot60day_38162",
+              "importance": 0.0285237655043602,
+              "lat": 31.90091,
+              "lon": 35.006316000000005,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T07:11:00Z",
+              "scheduledArrival": "2026-09-07T07:11:00Z",
+              "stopCode": "33093",
+              "description": "רחוב: הרכבת עיר: מודיעין מכבים רעות רציף:  קומה: ",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "duration": 0,
+            "startTime": "2026-09-07T07:11:00Z",
+            "endTime": "2026-09-07T07:11:00Z",
+            "scheduledStartTime": "2026-09-07T07:11:00Z",
+            "scheduledEndTime": "2026-09-07T07:11:00Z",
+            "realTime": false,
+            "scheduled": true,
+            "interlineWithPreviousLeg": false,
+            "headsign": "רעות",
+            "tripFrom": {
+              "name": "בי''ס כרמים/עמק חרוד",
+              "stopId": "mot60day_35973",
+              "importance": 0.025964586064219475,
+              "lat": 31.920513999999997,
+              "lon": 35.003706,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-07T06:55:00Z",
+              "scheduledDeparture": "2026-09-07T06:55:00Z",
+              "stopCode": "38096",
+              "description": "רחוב: עמק חרוד עיר: מודיעין מכבים רעות רציף:  קומה: ",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NOT_ALLOWED",
+              "cancelled": false,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "tripTo": {
+              "name": "הדרים/ תיכון רעות מכבים",
+              "stopId": "mot60day_22216",
+              "importance": 0.004363466985523701,
+              "lat": 31.888023999999998,
+              "lon": 35.016215,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T07:28:00Z",
+              "scheduledArrival": "2026-09-07T07:28:00Z",
+              "stopCode": "34183",
+              "description": "רחוב: הדרים עיר: מודיעין מכבים רעות רציף:  קומה: ",
+              "vertexType": "TRANSIT",
+              "pickupType": "NOT_ALLOWED",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "routeId": "mot60day_20653",
+            "routeUrl": "",
+            "directionId": "0",
+            "routeType": 3,
+            "agencyName": "קווים",
+            "agencyUrl": "http://www.kavim-t.co.il",
+            "agencyFareUrl": "",
+            "agencyId": "18",
+            "tripId": "20260907_09:55_mot60day_36206992_040926",
+            "routeShortName": "54",
+            "routeLongName": "בי''ס כרמים/עמק חרוד-מודיעין מכבים רעות<->הדרים/ תיכון רעות מכבים-מודיעין מכבים רעות-10",
+            "tripShortName": "",
+            "displayName": "54",
+            "cancelled": false,
+            "source": "/input/israel-public-transportation.zip/stop_times.txt:6043431:6043460",
+            "intermediateStops": [],
+            "legGeometry": {
+              "points": "{xaz{@ustwaAdIkRiUv{@{@bDzD|A~ZbL{GS",
+              "precision": 6,
+              "length": 7
+            },
+            "bikesAllowed": false,
+            "wheelchairAccessible": "ACCESSIBLE",
+            "reservation": "NONE",
+            "alternatives": []
+          },
+          {
+            "mode": "WALK",
+            "from": {
+              "name": "ת. רכבת מודיעין מרכז",
+              "stopId": "mot60day_38162",
+              "importance": 0.0285237655043602,
+              "lat": 31.90091,
+              "lon": 35.006316000000005,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T07:11:00Z",
+              "departure": "2026-09-07T07:11:00Z",
+              "scheduledArrival": "2026-09-07T07:11:00Z",
+              "scheduledDeparture": "2026-09-07T07:11:00Z",
+              "stopCode": "33093",
+              "description": "רחוב: הרכבת עיר: מודיעין מכבים רעות רציף:  קומה: ",
+              "vertexType": "TRANSIT",
+              "cancelled": true,
+              "modes": [
+                "BUS"
+              ]
+            },
+            "to": {
+              "name": "מודיעין מרכז",
+              "stopId": "mot60day_37394",
+              "importance": 0.250232994556427,
+              "lat": 31.901238,
+              "lon": 35.00571200000001,
+              "level": -2.0,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T07:13:00Z",
+              "scheduledArrival": "2026-09-07T07:13:00Z",
+              "stopCode": "17002",
+              "vertexType": "TRANSIT",
+              "cancelled": true,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "duration": 120,
+            "startTime": "2026-09-07T07:11:00Z",
+            "endTime": "2026-09-07T07:13:00Z",
+            "scheduledStartTime": "2026-09-07T07:11:00Z",
+            "scheduledEndTime": "2026-09-07T07:13:00Z",
+            "realTime": false,
+            "scheduled": false,
+            "cancelled": true,
+            "legGeometry": {
+              "points": "",
+              "precision": 6,
+              "length": 0
+            }
+          },
+          {
+            "mode": "REGIONAL_RAIL",
+            "from": {
+              "name": "מודיעין מרכז",
+              "stopId": "mot60day_37394",
+              "importance": 0.250232994556427,
+              "lat": 31.901238,
+              "lon": 35.00571200000001,
+              "level": -2.0,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-07T07:18:00Z",
+              "scheduledDeparture": "2026-09-07T07:18:00Z",
+              "stopCode": "17002",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NOT_ALLOWED",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "to": {
+              "name": "נתב''ג",
+              "stopId": "mot60day_37306",
+              "importance": 0.3637464940547943,
+              "lat": 32.00036,
+              "lon": 34.87048099999999,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T07:35:00Z",
+              "scheduledArrival": "2026-09-07T07:35:00Z",
+              "stopCode": "17090",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "duration": 1020,
+            "startTime": "2026-09-07T07:18:00Z",
+            "endTime": "2026-09-07T07:35:00Z",
+            "scheduledStartTime": "2026-09-07T07:18:00Z",
+            "scheduledEndTime": "2026-09-07T07:35:00Z",
+            "realTime": false,
+            "scheduled": true,
+            "interlineWithPreviousLeg": false,
+            "headsign": "110",
+            "tripFrom": {
+              "name": "מודיעין מרכז",
+              "stopId": "mot60day_37394",
+              "importance": 0.250232994556427,
+              "lat": 31.901238,
+              "lon": 35.00571200000001,
+              "level": -2.0,
+              "tz": "Asia/Jerusalem",
+              "departure": "2026-09-07T07:18:00Z",
+              "scheduledDeparture": "2026-09-07T07:18:00Z",
+              "stopCode": "17002",
+              "vertexType": "TRANSIT",
+              "pickupType": "NORMAL",
+              "dropoffType": "NOT_ALLOWED",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "tripTo": {
+              "name": "נהריה",
+              "stopId": "mot60day_37382",
+              "importance": 0.21062441170215607,
+              "lat": 33.005075000000005,
+              "lon": 35.09871000000001,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T09:39:00Z",
+              "scheduledArrival": "2026-09-07T09:39:00Z",
+              "stopCode": "17014",
+              "vertexType": "TRANSIT",
+              "pickupType": "NOT_ALLOWED",
+              "dropoffType": "NORMAL",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "routeId": "mot60day_29960",
+            "routeUrl": "",
+            "directionId": "0",
+            "routeType": 2,
+            "agencyName": "רכבת ישראל",
+            "agencyUrl": "http://www.rail.co.il",
+            "agencyFareUrl": "",
+            "agencyId": "2",
+            "tripId": "20260907_10:18_mot60day_1_503107",
+            "routeShortName": "",
+            "routeLongName": "מודיעין מרכז-מודיעין מכבים רעות<->נהריה-נהריה",
+            "tripShortName": "",
+            "displayName": "מודיעין מרכז-מודיעין מכבים רעות<->נהריה-נהריה",
+            "cancelled": false,
+            "source": "/input/israel-public-transportation.zip/stop_times.txt:3413:3429",
+            "intermediateStops": [
+              {
+                "name": "פאתי מודיעין",
+                "stopId": "mot60day_37396",
+                "importance": 0.22553588449954987,
+                "lat": 31.893133,
+                "lon": 34.960682,
+                "tz": "Asia/Jerusalem",
+                "arrival": "2026-09-07T07:24:00Z",
+                "departure": "2026-09-07T07:24:00Z",
+                "scheduledArrival": "2026-09-07T07:24:00Z",
+                "scheduledDeparture": "2026-09-07T07:24:00Z",
+                "stopCode": "17000",
+                "vertexType": "TRANSIT",
+                "pickupType": "NORMAL",
+                "dropoffType": "NORMAL",
+                "cancelled": false,
+                "modes": [
+                  "REGIONAL_RAIL"
+                ]
+              }
+            ],
+            "legGeometry": {
+              "points": "kbbz{@_pqwaApyNj}vAulpEpdoD",
+              "precision": 6,
+              "length": 3
+            },
+            "bikesAllowed": false,
+            "wheelchairAccessible": "NOT_ACCESSIBLE",
+            "reservation": "NONE",
+            "alternatives": []
+          },
+          {
+            "mode": "WALK",
+            "from": {
+              "name": "נתב''ג",
+              "stopId": "mot60day_37306",
+              "importance": 0.3637464940547943,
+              "lat": 32.00036,
+              "lon": 34.87048099999999,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T07:35:00Z",
+              "departure": "2026-09-07T07:35:00Z",
+              "scheduledArrival": "2026-09-07T07:35:00Z",
+              "scheduledDeparture": "2026-09-07T07:35:00Z",
+              "stopCode": "17090",
+              "vertexType": "TRANSIT",
+              "cancelled": false,
+              "modes": [
+                "REGIONAL_RAIL"
+              ]
+            },
+            "to": {
+              "name": "END",
+              "lat": 32.0004,
+              "lon": 34.8705,
+              "tz": "Asia/Jerusalem",
+              "arrival": "2026-09-07T07:36:00Z",
+              "scheduledArrival": "2026-09-07T07:36:00Z",
+              "vertexType": "NORMAL"
+            },
+            "duration": 60,
+            "startTime": "2026-09-07T07:35:00Z",
+            "endTime": "2026-09-07T07:36:00Z",
+            "scheduledStartTime": "2026-09-07T07:35:00Z",
+            "scheduledEndTime": "2026-09-07T07:36:00Z",
+            "realTime": false,
+            "scheduled": false,
+            "distance": 4.0,
+            "legGeometry": {
+              "points": "ouc`|@alioaAoAe@",
+              "precision": 6,
+              "length": 2
+            },
+            "steps": [
+              {
+                "relativeDirection": "CONTINUE",
+                "distance": 4.0,
+                "fromLevel": 0.0,
+                "toLevel": 0.0,
+                "polyline": {
+                  "points": "ouc`|@alioaAoAe@",
+                  "precision": 6,
+                  "length": 2
+                },
+                "streetName": "",
+                "exit": "",
+                "stayOn": false,
+                "area": false,
+                "toll": false
+              }
+            ]
+          }
+        ]
+      }
+    ],
     "previousPageCursor": "EARLIER|1788757200",
-    "nextPageCursor": "LATER|1788757200"
+    "nextPageCursor": "LATER|1788764880"
   }
 }

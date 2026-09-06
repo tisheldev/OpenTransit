@@ -48,7 +48,7 @@ or DuckDB — see ADR 0003 for why that would invalidate the result.
    apostrophes and mixed Hebrew/Latin/digits.
 4. **`TripIdToDate` is a separate download** and must be versioned in lockstep with the
    feed. A mismatched pair must be rejected, not silently used.
-5. **The two feeds are different products.** Load the 10-day feed. Row-count the 60-day
+5. **The two feeds are different products.** Load the 60-day feed with enforced TripIdToDate compatibility. Row-count the 10-day
    feed for comparison so ADR 0005 is evidenced.
 
 ## Deliverables

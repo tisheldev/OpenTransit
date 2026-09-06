@@ -1,0 +1,632 @@
+[
+  {
+    "probe": "J09 as-corpus",
+    "variant": "defaults (as the corpus run)",
+    "n_itineraries": 0,
+    "from": [
+      32.7614,
+      35.0207
+    ],
+    "to": [
+      32.8283,
+      34.9539
+    ],
+    "depart_local": "2026-09-09T18:30:00+03:00",
+    "params": {}
+  },
+  {
+    "probe": "J09 as-corpus",
+    "variant": "searchWindow 2 h",
+    "n_itineraries": 0,
+    "from": [
+      32.7614,
+      35.0207
+    ],
+    "to": [
+      32.8283,
+      34.9539
+    ],
+    "depart_local": "2026-09-09T18:30:00+03:00",
+    "params": {
+      "searchWindow": "7200"
+    }
+  },
+  {
+    "probe": "J09 as-corpus",
+    "variant": "searchWindow 6 h",
+    "n_itineraries": 0,
+    "from": [
+      32.7614,
+      35.0207
+    ],
+    "to": [
+      32.8283,
+      34.9539
+    ],
+    "depart_local": "2026-09-09T18:30:00+03:00",
+    "params": {
+      "searchWindow": "21600"
+    }
+  },
+  {
+    "probe": "J09 as-corpus",
+    "variant": "walk up to 30 min each end",
+    "n_itineraries": 5,
+    "from": [
+      32.7614,
+      35.0207
+    ],
+    "to": [
+      32.8283,
+      34.9539
+    ],
+    "depart_local": "2026-09-09T18:30:00+03:00",
+    "params": {
+      "maxPreTransitTime": "1800",
+      "maxPostTransitTime": "1800"
+    },
+    "first_departure": "2026-09-09T15:30:00Z",
+    "first_arrival": "2026-09-09T16:31:00Z",
+    "duration_min": 61,
+    "transfers": 0,
+    "modes": [
+      "BUS",
+      "WALK"
+    ]
+  },
+  {
+    "probe": "J09 as-corpus",
+    "variant": "searchWindow 6 h + 30 min walk",
+    "n_itineraries": 46,
+    "from": [
+      32.7614,
+      35.0207
+    ],
+    "to": [
+      32.8283,
+      34.9539
+    ],
+    "depart_local": "2026-09-09T18:30:00+03:00",
+    "params": {
+      "searchWindow": "21600",
+      "maxPreTransitTime": "1800",
+      "maxPostTransitTime": "1800"
+    },
+    "first_departure": "2026-09-09T15:30:00Z",
+    "first_arrival": "2026-09-09T16:31:00Z",
+    "duration_min": 61,
+    "transfers": 0,
+    "modes": [
+      "BUS",
+      "WALK"
+    ]
+  },
+  {
+    "probe": "J09 to the real Bat Galim rail station",
+    "variant": "defaults (as the corpus run)",
+    "n_itineraries": 0,
+    "from": [
+      32.7614,
+      35.0207
+    ],
+    "to": [
+      32.833,
+      34.953
+    ],
+    "depart_local": "2026-09-09T18:30:00+03:00",
+    "params": {}
+  },
+  {
+    "probe": "J09 to the real Bat Galim rail station",
+    "variant": "searchWindow 2 h",
+    "n_itineraries": 0,
+    "from": [
+      32.7614,
+      35.0207
+    ],
+    "to": [
+      32.833,
+      34.953
+    ],
+    "depart_local": "2026-09-09T18:30:00+03:00",
+    "params": {
+      "searchWindow": "7200"
+    }
+  },
+  {
+    "probe": "J09 to the real Bat Galim rail station",
+    "variant": "searchWindow 6 h",
+    "n_itineraries": 0,
+    "from": [
+      32.7614,
+      35.0207
+    ],
+    "to": [
+      32.833,
+      34.953
+    ],
+    "depart_local": "2026-09-09T18:30:00+03:00",
+    "params": {
+      "searchWindow": "21600"
+    }
+  },
+  {
+    "probe": "J09 to the real Bat Galim rail station",
+    "variant": "walk up to 30 min each end",
+    "n_itineraries": 5,
+    "from": [
+      32.7614,
+      35.0207
+    ],
+    "to": [
+      32.833,
+      34.953
+    ],
+    "depart_local": "2026-09-09T18:30:00+03:00",
+    "params": {
+      "maxPreTransitTime": "1800",
+      "maxPostTransitTime": "1800"
+    },
+    "first_departure": "2026-09-09T15:30:00Z",
+    "first_arrival": "2026-09-09T16:37:00Z",
+    "duration_min": 67,
+    "transfers": 0,
+    "modes": [
+      "BUS",
+      "WALK"
+    ]
+  },
+  {
+    "probe": "J09 to the real Bat Galim rail station",
+    "variant": "searchWindow 6 h + 30 min walk",
+    "n_itineraries": 45,
+    "from": [
+      32.7614,
+      35.0207
+    ],
+    "to": [
+      32.833,
+      34.953
+    ],
+    "depart_local": "2026-09-09T18:30:00+03:00",
+    "params": {
+      "searchWindow": "21600",
+      "maxPreTransitTime": "1800",
+      "maxPostTransitTime": "1800"
+    },
+    "first_departure": "2026-09-09T15:30:00Z",
+    "first_arrival": "2026-09-09T16:37:00Z",
+    "duration_min": 67,
+    "transfers": 0,
+    "modes": [
+      "BUS",
+      "WALK"
+    ]
+  },
+  {
+    "probe": "J17 as-corpus",
+    "variant": "defaults (as the corpus run)",
+    "n_itineraries": 0,
+    "from": [
+      31.9017,
+      35.0074
+    ],
+    "to": [
+      32.0114,
+      34.8867
+    ],
+    "depart_local": "2026-09-07T08:00:00+03:00",
+    "params": {}
+  },
+  {
+    "probe": "J17 as-corpus",
+    "variant": "searchWindow 2 h",
+    "n_itineraries": 0,
+    "from": [
+      31.9017,
+      35.0074
+    ],
+    "to": [
+      32.0114,
+      34.8867
+    ],
+    "depart_local": "2026-09-07T08:00:00+03:00",
+    "params": {
+      "searchWindow": "7200"
+    }
+  },
+  {
+    "probe": "J17 as-corpus",
+    "variant": "searchWindow 6 h",
+    "n_itineraries": 0,
+    "from": [
+      31.9017,
+      35.0074
+    ],
+    "to": [
+      32.0114,
+      34.8867
+    ],
+    "depart_local": "2026-09-07T08:00:00+03:00",
+    "params": {
+      "searchWindow": "21600"
+    }
+  },
+  {
+    "probe": "J17 as-corpus",
+    "variant": "walk up to 30 min each end",
+    "n_itineraries": 0,
+    "from": [
+      31.9017,
+      35.0074
+    ],
+    "to": [
+      32.0114,
+      34.8867
+    ],
+    "depart_local": "2026-09-07T08:00:00+03:00",
+    "params": {
+      "maxPreTransitTime": "1800",
+      "maxPostTransitTime": "1800"
+    }
+  },
+  {
+    "probe": "J17 as-corpus",
+    "variant": "searchWindow 6 h + 30 min walk",
+    "n_itineraries": 0,
+    "from": [
+      31.9017,
+      35.0074
+    ],
+    "to": [
+      32.0114,
+      34.8867
+    ],
+    "depart_local": "2026-09-07T08:00:00+03:00",
+    "params": {
+      "searchWindow": "21600",
+      "maxPreTransitTime": "1800",
+      "maxPostTransitTime": "1800"
+    }
+  },
+  {
+    "probe": "J17 to the real T3 interchange",
+    "variant": "defaults (as the corpus run)",
+    "n_itineraries": 7,
+    "from": [
+      31.9017,
+      35.0074
+    ],
+    "to": [
+      32.0,
+      34.8706
+    ],
+    "depart_local": "2026-09-07T08:00:00+03:00",
+    "params": {},
+    "first_departure": "2026-09-07T05:00:00Z",
+    "first_arrival": "2026-09-07T06:36:00Z",
+    "duration_min": 96,
+    "transfers": 1,
+    "modes": [
+      "BUS",
+      "WALK"
+    ]
+  },
+  {
+    "probe": "J17 to the real T3 interchange",
+    "variant": "searchWindow 2 h",
+    "n_itineraries": 24,
+    "from": [
+      31.9017,
+      35.0074
+    ],
+    "to": [
+      32.0,
+      34.8706
+    ],
+    "depart_local": "2026-09-07T08:00:00+03:00",
+    "params": {
+      "searchWindow": "7200"
+    },
+    "first_departure": "2026-09-07T05:00:00Z",
+    "first_arrival": "2026-09-07T06:36:00Z",
+    "duration_min": 96,
+    "transfers": 1,
+    "modes": [
+      "BUS",
+      "WALK"
+    ]
+  },
+  {
+    "probe": "J17 to the real T3 interchange",
+    "variant": "searchWindow 6 h",
+    "n_itineraries": 56,
+    "from": [
+      31.9017,
+      35.0074
+    ],
+    "to": [
+      32.0,
+      34.8706
+    ],
+    "depart_local": "2026-09-07T08:00:00+03:00",
+    "params": {
+      "searchWindow": "21600"
+    },
+    "first_departure": "2026-09-07T05:00:00Z",
+    "first_arrival": "2026-09-07T06:36:00Z",
+    "duration_min": 96,
+    "transfers": 1,
+    "modes": [
+      "BUS",
+      "WALK"
+    ]
+  },
+  {
+    "probe": "J17 to the real T3 interchange",
+    "variant": "walk up to 30 min each end",
+    "n_itineraries": 8,
+    "from": [
+      31.9017,
+      35.0074
+    ],
+    "to": [
+      32.0,
+      34.8706
+    ],
+    "depart_local": "2026-09-07T08:00:00+03:00",
+    "params": {
+      "maxPreTransitTime": "1800",
+      "maxPostTransitTime": "1800"
+    },
+    "first_departure": "2026-09-07T05:00:00Z",
+    "first_arrival": "2026-09-07T06:36:00Z",
+    "duration_min": 96,
+    "transfers": 1,
+    "modes": [
+      "BUS",
+      "WALK"
+    ]
+  },
+  {
+    "probe": "J17 to the real T3 interchange",
+    "variant": "searchWindow 6 h + 30 min walk",
+    "n_itineraries": 52,
+    "from": [
+      31.9017,
+      35.0074
+    ],
+    "to": [
+      32.0,
+      34.8706
+    ],
+    "depart_local": "2026-09-07T08:00:00+03:00",
+    "params": {
+      "searchWindow": "21600",
+      "maxPreTransitTime": "1800",
+      "maxPostTransitTime": "1800"
+    },
+    "first_departure": "2026-09-07T05:00:00Z",
+    "first_arrival": "2026-09-07T06:36:00Z",
+    "duration_min": 96,
+    "transfers": 1,
+    "modes": [
+      "BUS",
+      "WALK"
+    ]
+  },
+  {
+    "probe": "J21 as-corpus",
+    "variant": "defaults (as the corpus run)",
+    "n_itineraries": 0,
+    "from": [
+      32.0836,
+      34.7981
+    ],
+    "to": [
+      32.0114,
+      34.8867
+    ],
+    "depart_local": "2026-09-08T23:40:00+03:00",
+    "params": {}
+  },
+  {
+    "probe": "J21 as-corpus",
+    "variant": "searchWindow 2 h",
+    "n_itineraries": 0,
+    "from": [
+      32.0836,
+      34.7981
+    ],
+    "to": [
+      32.0114,
+      34.8867
+    ],
+    "depart_local": "2026-09-08T23:40:00+03:00",
+    "params": {
+      "searchWindow": "7200"
+    }
+  },
+  {
+    "probe": "J21 as-corpus",
+    "variant": "searchWindow 6 h",
+    "n_itineraries": 0,
+    "from": [
+      32.0836,
+      34.7981
+    ],
+    "to": [
+      32.0114,
+      34.8867
+    ],
+    "depart_local": "2026-09-08T23:40:00+03:00",
+    "params": {
+      "searchWindow": "21600"
+    }
+  },
+  {
+    "probe": "J21 as-corpus",
+    "variant": "walk up to 30 min each end",
+    "n_itineraries": 0,
+    "from": [
+      32.0836,
+      34.7981
+    ],
+    "to": [
+      32.0114,
+      34.8867
+    ],
+    "depart_local": "2026-09-08T23:40:00+03:00",
+    "params": {
+      "maxPreTransitTime": "1800",
+      "maxPostTransitTime": "1800"
+    }
+  },
+  {
+    "probe": "J21 as-corpus",
+    "variant": "searchWindow 6 h + 30 min walk",
+    "n_itineraries": 0,
+    "from": [
+      32.0836,
+      34.7981
+    ],
+    "to": [
+      32.0114,
+      34.8867
+    ],
+    "depart_local": "2026-09-08T23:40:00+03:00",
+    "params": {
+      "searchWindow": "21600",
+      "maxPreTransitTime": "1800",
+      "maxPostTransitTime": "1800"
+    }
+  },
+  {
+    "probe": "J21 to the real T3 interchange",
+    "variant": "defaults (as the corpus run)",
+    "n_itineraries": 5,
+    "from": [
+      32.0836,
+      34.7981
+    ],
+    "to": [
+      32.0,
+      34.8706
+    ],
+    "depart_local": "2026-09-08T23:40:00+03:00",
+    "params": {},
+    "first_departure": "2026-09-08T21:15:00Z",
+    "first_arrival": "2026-09-08T22:00:00Z",
+    "duration_min": 45,
+    "transfers": 0,
+    "modes": [
+      "BUS",
+      "WALK"
+    ]
+  },
+  {
+    "probe": "J21 to the real T3 interchange",
+    "variant": "searchWindow 2 h",
+    "n_itineraries": 5,
+    "from": [
+      32.0836,
+      34.7981
+    ],
+    "to": [
+      32.0,
+      34.8706
+    ],
+    "depart_local": "2026-09-08T23:40:00+03:00",
+    "params": {
+      "searchWindow": "7200"
+    },
+    "first_departure": "2026-09-08T21:15:00Z",
+    "first_arrival": "2026-09-08T22:00:00Z",
+    "duration_min": 45,
+    "transfers": 0,
+    "modes": [
+      "BUS",
+      "WALK"
+    ]
+  },
+  {
+    "probe": "J21 to the real T3 interchange",
+    "variant": "searchWindow 6 h",
+    "n_itineraries": 17,
+    "from": [
+      32.0836,
+      34.7981
+    ],
+    "to": [
+      32.0,
+      34.8706
+    ],
+    "depart_local": "2026-09-08T23:40:00+03:00",
+    "params": {
+      "searchWindow": "21600"
+    },
+    "first_departure": "2026-09-08T21:15:00Z",
+    "first_arrival": "2026-09-08T22:00:00Z",
+    "duration_min": 45,
+    "transfers": 0,
+    "modes": [
+      "BUS",
+      "WALK"
+    ]
+  },
+  {
+    "probe": "J21 to the real T3 interchange",
+    "variant": "walk up to 30 min each end",
+    "n_itineraries": 5,
+    "from": [
+      32.0836,
+      34.7981
+    ],
+    "to": [
+      32.0,
+      34.8706
+    ],
+    "depart_local": "2026-09-08T23:40:00+03:00",
+    "params": {
+      "maxPreTransitTime": "1800",
+      "maxPostTransitTime": "1800"
+    },
+    "first_departure": "2026-09-08T20:42:00Z",
+    "first_arrival": "2026-09-08T21:47:00Z",
+    "duration_min": 65,
+    "transfers": 1,
+    "modes": [
+      "BUS",
+      "REGIONAL_RAIL",
+      "WALK"
+    ]
+  },
+  {
+    "probe": "J21 to the real T3 interchange",
+    "variant": "searchWindow 6 h + 30 min walk",
+    "n_itineraries": 18,
+    "from": [
+      32.0836,
+      34.7981
+    ],
+    "to": [
+      32.0,
+      34.8706
+    ],
+    "depart_local": "2026-09-08T23:40:00+03:00",
+    "params": {
+      "searchWindow": "21600",
+      "maxPreTransitTime": "1800",
+      "maxPostTransitTime": "1800"
+    },
+    "first_departure": "2026-09-08T20:42:00Z",
+    "first_arrival": "2026-09-08T21:47:00Z",
+    "duration_min": 65,
+    "transfers": 1,
+    "modes": [
+      "BUS",
+      "REGIONAL_RAIL",
+      "WALK"
+    ]
+  }
+]

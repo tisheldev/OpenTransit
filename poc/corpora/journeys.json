@@ -11,7 +11,7 @@
     "corpus_fixes_4_sep": "J17/J21 airport coordinate and J23 origin were both wrong in the Wave 0 hand-entered set and were corrected from real feed data after Agent B's run. Journey results recorded before this fix are not comparable for those three cases."
   },
   "depart_rules": {
-    "note": "Resolved against the FEED'S OWN service window from feed_info.txt, not against wall-clock 'next Monday'. The 10-day feed is regenerated nightly and its window slides, so calendar-relative rules go stale within days. Each rule means: the first matching weekday inside feed_start_date..feed_end_date, at the given local time.",
+    "note": "Resolved from calendar.txt plus calendar_dates.txt exceptions; feed_info.txt is optional. First matching weekday in the actual service window, Asia/Jerusalem timezone.",
     "resolution": "first_<weekday>_in_feed_window at HH:MM local",
     "weekday_morning": {
       "weekday": "Monday",
@@ -41,15 +41,15 @@
       "weekday": "Friday",
       "time": "15:30"
     },
-    "resolved_for_feed_08c168da3e6c201c": {
-      "feed_window": "2026-09-05 (Sat) .. 2026-09-14 (Mon)",
+    "resolved_for_feed_f26b63c21ac86704": {
+      "feed_window": "2026-09-04 .. 2026-10-04",
       "weekday_morning": "2026-09-07 08:00",
       "weekday_midday": "2026-09-08 13:00",
       "weekday_evening": "2026-09-09 18:30",
       "late_night": "2026-09-08 23:40",
       "after_midnight": "2026-09-09 02:30",
       "shabbat": "2026-09-05 12:00",
-      "friday_afternoon": "2026-09-11 15:30"
+      "friday_afternoon": "2026-09-04 15:30"
     }
   },
   "cases": [

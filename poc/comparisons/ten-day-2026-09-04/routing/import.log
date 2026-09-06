@@ -1,0 +1,1592 @@
+# motis import started 2026-09-04T13:04:55.786959+00:00
+# vm_mem_bytes=25203912704 vm_cpus=16 docker=27.4.0
+ Network poc_default  Creating
+ Network poc_default  Created
+ Volume "poc_motisgraph"  Creating
+ Volume "poc_motisgraph"  Created
+osr
+  existing: {}
+  current: {"elevation_dir":14695981039346656037,"osm":18082151005999835212,"osr_bin_ver":37}
+adr
+  existing: {}
+  current: {"adr_bin_ver":15,"geocoding":1,"osm":18082151005999835212,"reverse_geocoding":1}
+tt
+  existing: {}
+  current: {"nigiri_bin_ver":37,"timetable":11757665504647395845}
+adr_extend
+  existing: {}
+  current: {"adr_bin_ver":15,"adr_ext_bin_ver":6,"geocoding":1,"nigiri_bin_ver":37,"osm":18082151005999835212,"reverse_geocoding":1,"timetable":11757665504647395845}
+matches
+  existing: {}
+  current: {"matches_bin_ver":6,"nigiri_bin_ver":37,"osm":18082151005999835212,"osr_bin_ver":37,"timetable":11757665504647395845,"way_matches":12638357624858014701}
+running tasks: [osr ready, adr ready, tt ready, adr_extend waiting for {adr, tt}, matches waiting for {tt, osr}]
+[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■                                                       ]   0% | Load OSM / Pass 1
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■                                                      ]   1% | Load OSM / Pass 1
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■                                                      ]   2% | Load OSM / Pass 1
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■                                                     ]   3% | Load OSM / Pass 1
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■                                                     ]   4% | Load OSM / Pass 1
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■                                                    ]   5% | Load OSM / Pass 1
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■                                                    ]   6% | Load OSM / Pass 1
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■                                                   ]   7% | Load OSM / Pass 1
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■                                                   ]   8% | Load OSM / Pass 1
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■                                                  ]   9% | Load OSM / Pass 1
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■                                                 ]  10% | Load OSM / Pass 1
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■                                                 ]  11% | Load OSM / Pass 1
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■                                                ]  12% | Load OSM / Pass 1
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■                                                ]  13% | Load OSM / Pass 1
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■                                               ]  14% | Load OSM / Pass 1
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■                                               ]  15% | Load OSM / Pass 1
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■                                               ]  15% | Load OSM / Ways
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■                                              ]  16% | Load OSM / Ways
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■                                              ]  17% | Load OSM / Ways
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■                                             ]  18% | Load OSM / Ways
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■                                             ]  19% | Load OSM / Ways
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■                                            ]  20% | Load OSM / Ways
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■                                           ]  21% | Load OSM / Ways
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■                                           ]  22% | Load OSM / Ways
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■                                          ]  23% | Load OSM / Ways
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■                                          ]  24% | Load OSM / Ways
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■                                         ]  25% | Load OSM / Ways
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■                                         ]  26% | Load OSM / Ways
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■                                        ]  27% | Load OSM / Ways
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■                                        ]  28% | Load OSM / Ways
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■                                       ]  29% | Load OSM / Ways
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■                                      ]  30% | Load OSM / Ways
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■                                      ]  31% | Load OSM / Ways
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■                                     ]  32% | Load OSM / Ways
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■                                     ]  33% | Load OSM / Ways
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■                                    ]  34% | Load OSM / Ways
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■                                    ]  35% | Load OSM / Ways
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■                                   ]  36% | Load OSM / Ways
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■                                   ]  37% | Load OSM / Ways
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■                                  ]  38% | Load OSM / Ways
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■                                  ]  38% | Load OSM / Areas
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■                                  ]  39% | Load OSM / Areas
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■                                  ]  39% | Annotate Areas
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■                                 ]  40% | Annotate Areas
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■                                 ]  40% | Create graph nodes
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■                                ]  41% | Create graph nodes
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■                                ]  42% | Create graph nodes
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■                               ]  43% | Create graph nodes
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■                               ]  44% | Create graph nodes
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■                              ]  45% | Create graph nodes
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■                              ]  46% | Create graph nodes
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■                             ]  47% | Create graph nodes
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■                             ]  48% | Create graph nodes
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■                            ]  49% | Create graph nodes
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                           ]  50% | Create graph nodes
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                           ]  50% | Connect ways
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                           ]  51% | Connect ways
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                          ]  52% | Connect ways
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                          ]  53% | Connect ways
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                         ]  54% | Connect ways
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                         ]  55% | Connect ways
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        ]  56% | Connect ways
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        ]  57% | Connect ways
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                       ]  58% | Connect ways
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                       ]  59% | Connect ways
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                      ]  60% | Connect ways
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     ]  61% | Connect ways
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     ]  62% | Connect ways
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    ]  63% | Connect ways
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    ]  64% | Connect ways
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   ]  65% | Connect ways
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   ]  66% | Connect ways
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  ]  67% | Connect ways
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  ]  68% | Connect ways
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                 ]  69% | Connect ways
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                ]  70% | Connect ways
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                ]  71% | Connect ways
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                ]  71% | Connect ways / transpose
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               ]  72% | Connect ways / transpose
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               ]  73% | Connect ways / transpose
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              ]  74% | Connect ways / transpose
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              ]  74% | Connect ways / sort
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              ]  75% | Connect ways / sort
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              ]  75% | Build components
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     ]  90% | Load OSM / Node Properties
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     ]  91% | Load OSM / Node Properties
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    ]  92% | Load OSM / Node Properties
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    ]  93% | Load OSM / Node Properties
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   ]  94% | Load OSM / Node Properties
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   ]  95% | Load OSM / Node Properties
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   ]  95% | Big Street Neighbors
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  ]  96% | Big Street Neighbors
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  ]  97% | Big Street Neighbors
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  ]  97% | Big Street Neighbors
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  ]  97% | Big Street Neighbors
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ]  98% | Big Street Neighbors
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ]  98% | Big Street Neighbors
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ]  98% | Big Street Neighbors
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ]  99% | Big Street Neighbors
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ]  99% | Big Street Neighbors
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ]  99% | Big Street Neighbors
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ]  99% | Big Street Neighbors
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ]  99% | Big Street Neighbors
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ]  99% | Build R-Tree
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0% | Load OSM
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0% | Load OSM / Pass 1
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■■■                                                     ]   3% | Load OSM / Pass 1
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■■■■                                                    ]   6% | Load OSM / Pass 1
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■■■■■■                                                  ]   9% | Load OSM / Pass 1
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■■■■■■■■                                                ]  12% | Load OSM / Pass 1
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■■■■■■■■■                                               ]  15% | Load OSM / Pass 1
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■■■■■■■■■■■                                             ]  18% | Load OSM / Pass 1
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■■■■■■■■■■■■■                                           ]  21% | Load OSM / Pass 1
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■■■■■■■■■■■■■■                                          ]  24% | Load OSM / Pass 1
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■■■■■■■■■■■■■■■■                                        ]  27% | Load OSM / Pass 1
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■                                      ]  30% | Load OSM / Pass 1
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■                                     ]  33% | Load OSM / Pass 1
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                           ]  51% | Load OSM / Pass 1
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                           ]  51% | Load OSM / Pass 2
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                         ]  54% | Load OSM / Pass 2
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        ]  57% | Load OSM / Pass 2
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                      ]  60% | Load OSM / Pass 2
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    ]  63% | Load OSM / Pass 2
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   ]  66% | Load OSM / Pass 2
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                 ]  69% | Load OSM / Pass 2
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               ]  72% | Load OSM / Pass 2
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              ]  75% | Load OSM / Pass 2
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            ]  78% | Load OSM / Pass 2
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          ]  81% | Load OSM / Pass 2
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         ]  84% | Load OSM / Pass 2
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       ]  87% | Load OSM / Pass 2
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     ]  90% | Load OSM / Pass 2
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    ]  93% | Load OSM / Pass 2
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  ]  96% | Load OSM / Pass 2
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ]  99% | Load OSM / Pass 2
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■                                                       ]   0% | mot10day: Parse Translations
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■                                                       ]   0% | mot10day: Parse Agencies
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■                                                      ]   1% | mot10day: Parse Stops
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■                                                      ]   2% | mot10day: Parse Stops
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■                                                     ]   3% | mot10day: Parse Stops
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■                                                     ]   4% | mot10day: Parse Stops
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■                                                    ]   5% | mot10day: Parse Stops
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■                                                    ]   5% | mot10day: Stops R-Tree
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■                                                    ]   6% | mot10day: Stops R-Tree
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■                                                   ]   7% | mot10day: Stops R-Tree
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■                                                   ]   8% | mot10day: Stops R-Tree
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■                                                  ]   9% | mot10day: Stops R-Tree
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■                                                 ]  10% | mot10day: Stops R-Tree
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■                                                 ]  11% | mot10day: Stops R-Tree
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■                                                ]  12% | mot10day: Stops R-Tree
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■                                                ]  13% | mot10day: Stops R-Tree
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■                                               ]  14% | mot10day: Stops R-Tree
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■                                               ]  15% | mot10day: Stops R-Tree
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■                                              ]  17% | mot10day: Compute Metas
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■                                             ]  18% | mot10day: Compute Metas
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■                                             ]  19% | mot10day: Compute Metas
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■                                            ]  20% | mot10day: Compute Metas
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■                                        ]  27% | mot10day: Parse Routes
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■                                        ]  28% | mot10day: Parse Routes
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■                                       ]  29% | mot10day: Parse Routes
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■                                       ]  29% | mot10day: Parse Calendar
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■                                      ]  31% | mot10day: Parse Calendar Date
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■                                     ]  32% | mot10day: Parse Calendar Date
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■                                     ]  33% | mot10day: Parse Calendar Date
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■                                     ]  33% | mot10day: Build Base Services
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■                                    ]  35% | mot10day: Add Service Exceptions
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■                                   ]  37% | mot10day: Parse Shapes
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■                                  ]  38% | mot10day: Parse Shapes
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■                                  ]  38% | mot10day: Read Trips
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■                                  ]  39% | mot10day: Read Trips
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■                                 ]  40% | mot10day: Read Trips
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■                                ]  41% | mot10day: Read Trips
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■                                ]  42% | mot10day: Read Trips
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■                               ]  43% | mot10day: Read Stop Times
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■                               ]  44% | mot10day: Read Stop Times
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■                              ]  45% | mot10day: Read Stop Times
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■                              ]  46% | mot10day: Read Stop Times
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■                             ]  47% | mot10day: Read Stop Times
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■                             ]  48% | mot10day: Read Stop Times
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■                            ]  49% | mot10day: Read Stop Times
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                           ]  50% | mot10day: Read Stop Times
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                           ]  51% | mot10day: Read Stop Times
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                          ]  52% | mot10day: Read Stop Times
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                          ]  53% | mot10day: Read Stop Times
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                         ]  54% | mot10day: Read Stop Times
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                         ]  55% | mot10day: Read Stop Times
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        ]  56% | mot10day: Read Stop Times
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        ]  57% | mot10day: Read Stop Times
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                       ]  58% | mot10day: Read Stop Times
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                       ]  59% | mot10day: Read Stop Times
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                      ]  60% | mot10day: Read Stop Times
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     ]  61% | mot10day: Read Stop Times
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     ]  62% | mot10day: Read Stop Times
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    ]  63% | mot10day: Read Stop Times
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    ]  64% | mot10day: Read Stop Times
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   ]  65% | mot10day: Read Stop Times
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   ]  66% | mot10day: Read Stop Times
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  ]  67% | mot10day: Read Stop Times
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  ]  68% | mot10day: Read Stop Times
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  ]  68% | mot10day: Load Ticketing
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  ]  68% | mot10day: Expand Trips
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                 ]  69% | mot10day: Expand Trips
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                ]  70% | mot10day: Expand Trips
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                ]  71% | mot10day: Expand Trips
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               ]  72% | mot10day: Expand Trips
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               ]  73% | mot10day: Expand Trips
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              ]  74% | mot10day: Expand Trips
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              ]  75% | mot10day: Expand Trips
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             ]  76% | mot10day: Expand Trips
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             ]  77% | mot10day: Expand Trips
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            ]  78% | mot10day: Expand Trips
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            ]  79% | mot10day: Expand Trips
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■           ]  80% | mot10day: Expand Trips
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          ]  81% | mot10day: Expand Trips
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          ]  82% | mot10day: Expand Trips
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         ]  83% | mot10day: Expand Trips
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         ]  83% | mot10day: Stay Seated
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        ]  85% | mot10day: Write Trips
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        ]  86% | mot10day: Write Trips
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       ]  87% | mot10day: Write Trips
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       ]  88% | mot10day: Write Trips
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■      ]  89% | mot10day: Write Trips
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     ]  90% | mot10day: Write Trips
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     ]  91% | mot10day: Write Trips
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    ]  92% | mot10day: Write Trips
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    ]  93% | mot10day: Write Trips
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   ]  94% | mot10day: Write Trips
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   ]  95% | mot10day: Write Trips
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  ]  96% | mot10day: Write Trips
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  ]  97% | mot10day: Write Trips
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ]  98% | mot10day: Creating trip offsets
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ]  99% | mot10day: Writing offsets and bounding boxes
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  ]  97% | mot10day: Flex
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  ]  97% | Flex
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ]  98% | Finalizing
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■                                                       ]   0% | Prepare Platform Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■                                      ]  30% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■                                      ]  30% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■                                      ]  31% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■                                     ]  32% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■                                     ]  33% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■                                    ]  34% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■                                    ]  35% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■                                   ]  36% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■                                   ]  37% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■                                  ]  38% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■                                  ]  39% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■                                 ]  40% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■                                ]  41% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■                                ]  42% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■                               ]  43% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■                               ]  44% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■                              ]  45% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■                              ]  46% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■                             ]  47% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■                             ]  48% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■                            ]  49% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                           ]  50% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                           ]  51% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                          ]  52% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                          ]  53% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                         ]  54% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                         ]  55% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        ]  56% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        ]  57% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                       ]  58% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                       ]  59% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                      ]  60% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     ]  61% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     ]  62% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    ]  63% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    ]  64% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   ]  65% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   ]  66% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  ]  67% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  ]  68% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                 ]  69% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                ]  70% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                ]  71% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               ]  72% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               ]  73% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              ]  74% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              ]  75% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             ]  76% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             ]  77% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            ]  78% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            ]  79% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■           ]  80% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          ]  81% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          ]  82% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         ]  83% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         ]  84% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        ]  85% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        ]  86% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       ]  87% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       ]  88% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■      ]  89% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     ]  90% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     ]  91% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    ]  92% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    ]  93% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   ]  94% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   ]  95% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  ]  96% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  ]  97% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ]  98% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ]  99% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | Prepare Platform Way Matches
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K  adr_extend: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K     matches: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED

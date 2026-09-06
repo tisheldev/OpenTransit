@@ -35,8 +35,8 @@ from .parse import parse_feed  # noqa: E402
 
 POC_ROOT = Path(__file__).resolve().parents[1]
 REPO_ROOT = POC_ROOT.parent
-PRIMARY = "Gtfs_10_days.zip"
-COMPARISON = "israel-public-transportation.zip"
+PRIMARY = "israel-public-transportation.zip"
+COMPARISON = "Gtfs_10_days.zip"
 T2D = "TripIdToDate.zip"
 
 
@@ -86,7 +86,7 @@ def run(args) -> dict:
     downloaded_bytes = 0
     if args.offline:
         log("refresh SKIPPED (--offline): using the bytes already in the data dir")
-        for n in (PRIMARY, COMPARISON, T2D):
+        for n in [PRIMARY, T2D] + ([] if args.skip_comparison else [COMPARISON]):
             if not (data_dir / n).exists():
                 raise SystemExit(f"--offline but {n} is not in {data_dir}")
     else:
@@ -104,6 +104,13 @@ def run(args) -> dict:
     report["downloaded_bytes"] = downloaded_bytes
 
     shas = {n: sha_of(data_dir, n) for n in (PRIMARY, COMPARISON, T2D)}
+    manifest_path = data_dir / "manifest.json"
+    if args.offline and manifest_path.exists():
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        for name in [PRIMARY, T2D] + ([] if args.skip_comparison else [COMPARISON]):
+            if shas[name] != manifest["files"][name]["sha256"]:
+                raise ValueError(f"{name} differs from its manifest hash")
+    report["primary_feed"] = PRIMARY
     report["sha256"] = shas
     log(f"primary feed sha256 {shas[PRIMARY]}")
 
@@ -169,12 +176,7 @@ def run(args) -> dict:
         negative = {"raised": True, "error": str(e)}
 
     paired = pair_primary["verdict"] == "ACCEPTED"
-    if not paired:
-        log("  WARNING: TripIdToDate does NOT pair with the primary feed. "
-            "Loading it for row-count evidence only; it must not be used to "
-            "resolve trips for this feed.")
-        if not args.allow_unpaired_trip_id_to_date:
-            pairing.pair_or_raise(primary.trips.keys(), t2d, window)
+    pairing.pair_or_raise(primary.trips.keys(), t2d, window)
 
     # -- 4. load ------------------------------------------------------
     log(f"load: Postgres schema '{args.schema}'")
@@ -233,7 +235,8 @@ def run(args) -> dict:
         per_hour: dict[tuple, int] = {}
         for (st_id, svc, hour), n in primary.detail_departures.items():
             if st_id in ids:
-                per_hour[(svc, hour)] = per_hour.get((svc, hour), 0) + n
+                for day in primary.services.services[svc].active_dates:
+                    per_hour[(day, hour)] = per_hour.get((day, hour), 0) + n
         r["peak_departures_per_hour"] = max(per_hour.values()) if per_hour else 0
         # The corpus states a floor per entry; report whether the feed clears
         # it. This is evidence for checkpoint H4, not a pass/fail of POC-1.
@@ -337,12 +340,9 @@ def main(argv=None) -> int:
     ap.add_argument("--offline", action="store_true",
                     help="do not download; use the bytes already on disk")
     ap.add_argument("--skip-comparison", action="store_true",
-                    help="skip the 60-day feed (E06 becomes not_observed)")
+                    help="skip the 10-day comparison feed (E06 becomes not_observed)")
     ap.add_argument("--head-probe", action="store_true",
                     help="run the E01 HEAD-vs-GET diagnostic even when offline")
-    ap.add_argument("--allow-unpaired-trip-id-to-date", action="store_true",
-                    help="load TripIdToDate even when it does not pair with the feed; "
-                         "without this an unpaired snapshot is a hard stop (E05)")
     ap.add_argument("--write-corpus", action="store_true",
                     help="write resolved_stop_id back into poc/corpora/stops.json")
     ap.add_argument("--report", default=None, help="write the raw run report here")

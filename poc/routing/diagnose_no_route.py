@@ -30,6 +30,7 @@ import sys
 import urllib.parse
 import urllib.request
 from pathlib import Path
+from feed_context import verified_context, departure_iso
 
 ROUTING = Path(__file__).resolve().parent
 BASE = "http://localhost:58080/api/v6/plan"
@@ -78,8 +79,16 @@ def main() -> int:
         sys.stdout.reconfigure(encoding="utf-8")
     except Exception:
         pass
+    feed_sha, resolved = verified_context()
+    corpus = json.loads((ROUTING.parent / 'corpora/journeys.json').read_text(encoding='utf-8'))
+    cases = {c['id']: c for c in corpus['cases']}
     results = []
     for label, frm, to, when in PROBES:
+        case = cases[label[:3]]
+        when = departure_iso(resolved[case['depart']])
+        if 'as-corpus' in label:
+            frm = (case['from']['lat'], case['from']['lon'])
+            to = (case['to']['lat'], case['to']['lon'])
         print(f"\n{label}   depart {when}")
         for vname, extra in VARIANTS:
             body, err = ask(frm, to, when, extra)

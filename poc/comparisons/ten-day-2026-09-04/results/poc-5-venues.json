@@ -1,0 +1,3470 @@
+{
+  "poc": 5,
+  "supplement": "food-and-drink venues",
+  "generated": "2026-09-04",
+  "osm_sha256": "8a34b30f91a63ef9",
+  "headline": "40/48 top-1, 44/48 in top-5, 0 returned no candidate at all",
+  "metrics": {
+    "overall": {
+      "top1": 40,
+      "top5": 44,
+      "total": 48,
+      "zero_hits": 0
+    },
+    "by_amenity": {
+      "bar": {
+        "top1": 8,
+        "top5": 8,
+        "total": 8,
+        "zero_hits": 0
+      },
+      "cafe": {
+        "top1": 7,
+        "top5": 8,
+        "total": 10,
+        "zero_hits": 0
+      },
+      "fast_food": {
+        "top1": 8,
+        "top5": 8,
+        "total": 8,
+        "zero_hits": 0
+      },
+      "ice_cream": {
+        "top1": 2,
+        "top5": 2,
+        "total": 3,
+        "zero_hits": 0
+      },
+      "nightclub": {
+        "top1": 2,
+        "top5": 2,
+        "total": 2,
+        "zero_hits": 0
+      },
+      "pub": {
+        "top1": 5,
+        "top5": 5,
+        "total": 5,
+        "zero_hits": 0
+      },
+      "restaurant": {
+        "top1": 8,
+        "top5": 11,
+        "total": 12,
+        "zero_hits": 0
+      }
+    },
+    "by_script": {
+      "he": {
+        "top1": 20,
+        "top5": 23,
+        "total": 25,
+        "zero_hits": 0
+      },
+      "latin": {
+        "top1": 20,
+        "top5": 21,
+        "total": 23,
+        "zero_hits": 0
+      }
+    },
+    "by_city": {
+      "Rishon LeZion": {
+        "top1": 4,
+        "top5": 4,
+        "total": 6,
+        "zero_hits": 0
+      },
+      "Tel Aviv": {
+        "top1": 18,
+        "top5": 21,
+        "total": 23,
+        "zero_hits": 0
+      },
+      "Beersheba": {
+        "top1": 2,
+        "top5": 2,
+        "total": 2,
+        "zero_hits": 0
+      },
+      "Haifa": {
+        "top1": 4,
+        "top5": 5,
+        "total": 5,
+        "zero_hits": 0
+      },
+      "Jerusalem": {
+        "top1": 7,
+        "top5": 7,
+        "total": 7,
+        "zero_hits": 0
+      },
+      "Netanya": {
+        "top1": 1,
+        "top5": 1,
+        "total": 1,
+        "zero_hits": 0
+      },
+      "Eilat": {
+        "top1": 3,
+        "top5": 3,
+        "total": 3,
+        "zero_hits": 0
+      },
+      "Nazareth": {
+        "top1": 1,
+        "top5": 1,
+        "total": 1,
+        "zero_hits": 0
+      }
+    },
+    "english_name_variant": {
+      "top1": 15,
+      "top5": 18,
+      "total": 20,
+      "zero_hits": 0
+    }
+  },
+  "cases": [
+    {
+      "query": "אוטו חולון",
+      "n_hits": 10,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.0,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "אוטו חולון",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.0
+        },
+        {
+          "rank": 2,
+          "name": "צומת חולון",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 3902.8
+        },
+        {
+          "rank": 3,
+          "name": "אורט חולון/הנביאים",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 1477.3
+        },
+        {
+          "rank": 4,
+          "name": "אורט חולון/פרופ' שור",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 1589.3
+        },
+        {
+          "rank": 5,
+          "name": "תיאטרון חולון/קוגל",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 3231.0
+        }
+      ],
+      "top1_name": "אוטו חולון",
+      "top1_source": "osm",
+      "id": "V001",
+      "amenity": "bar",
+      "script": "he",
+      "city": "Rishon LeZion"
+    },
+    {
+      "query": "יין בכרם",
+      "n_hits": 10,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.1,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "יין בכרם",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.1
+        },
+        {
+          "rank": 2,
+          "name": "בר יין בכרכור",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 49787.8
+        },
+        {
+          "rank": 3,
+          "name": "יין בעיר",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 11228.5
+        },
+        {
+          "rank": 4,
+          "name": "יין בעיר",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 16857.6
+        },
+        {
+          "rank": 5,
+          "name": "יין בעיר",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 145899.3
+        }
+      ],
+      "top1_name": "יין בכרם",
+      "top1_source": "osm",
+      "id": "V002",
+      "amenity": "bar",
+      "script": "he",
+      "city": "Tel Aviv"
+    },
+    {
+      "query": "מוזנר",
+      "n_hits": 10,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.1,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "מוזנר",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.1
+        },
+        {
+          "rank": 2,
+          "name": "מוכתר",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 90398.4
+        },
+        {
+          "rank": 3,
+          "name": "מוזיאון",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 98891.9
+        },
+        {
+          "rank": 4,
+          "name": "רוזנטל",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 48928.5
+        },
+        {
+          "rank": 5,
+          "name": "מנזר",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 77983.7
+        }
+      ],
+      "top1_name": "מוזנר",
+      "top1_source": "osm",
+      "id": "V003",
+      "amenity": "bar",
+      "script": "he",
+      "city": "Tel Aviv"
+    },
+    {
+      "query": "תאטרובר",
+      "n_hits": 10,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.0,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "תאטרובר",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.0
+        },
+        {
+          "rank": 2,
+          "name": "תאטרון ירושלים/דובנוב",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 49396.8
+        },
+        {
+          "rank": 3,
+          "name": "תאטרון גשר",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 6803.7
+        },
+        {
+          "rank": 4,
+          "name": "תירוש/ברוש",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 93859.9
+        },
+        {
+          "rank": 5,
+          "name": "תאטרון",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 58175.5
+        }
+      ],
+      "top1_name": "תאטרובר",
+      "top1_source": "osm",
+      "id": "V004",
+      "amenity": "bar",
+      "script": "he",
+      "city": "Rishon LeZion"
+    },
+    {
+      "query": "HaShdera",
+      "n_hits": 10,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.0,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "HaShdera",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.0
+        },
+        {
+          "rank": 2,
+          "name": "HaShdera HaMerkazit/HaMa'ayan",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 15203.9
+        },
+        {
+          "rank": 3,
+          "name": "HaMa'ayan/HaShdera HaMerkazit",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 15082.1
+        },
+        {
+          "rank": 4,
+          "name": "Ecological Farm/Hashdera Hamerkazit",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 15954.8
+        },
+        {
+          "rank": 5,
+          "name": "HaShdera HaShvi'it",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 73114.4
+        }
+      ],
+      "top1_name": "HaShdera",
+      "top1_source": "osm",
+      "id": "V005",
+      "amenity": "bar",
+      "script": "latin",
+      "city": "Rishon LeZion"
+    },
+    {
+      "query": "Old Jaffa",
+      "n_hits": 10,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.1,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "Old Jaffa",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.1
+        },
+        {
+          "rank": 2,
+          "name": "Old Jaffa",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 147.9
+        },
+        {
+          "rank": 3,
+          "name": "Old Jaffa Hostel",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 419.0
+        },
+        {
+          "rank": 4,
+          "name": "PoliHosts Old Jaffa",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 214.8
+        },
+        {
+          "rank": 5,
+          "name": "Old Jaffa Apartments",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 640.8
+        }
+      ],
+      "top1_name": "Old Jaffa",
+      "top1_source": "osm",
+      "id": "V006",
+      "amenity": "bar",
+      "script": "latin",
+      "city": "Tel Aviv"
+    },
+    {
+      "query": "Satchmo Bar",
+      "n_hits": 10,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.1,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "Satchmo Bar",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.1
+        },
+        {
+          "rank": 2,
+          "name": "Pisat Bar",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 123764.6
+        },
+        {
+          "rank": 3,
+          "name": "Achuzat Bar",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 147792.9
+        },
+        {
+          "rank": 4,
+          "name": "Sandwich Bar",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 85575.6
+        },
+        {
+          "rank": 5,
+          "name": "Satchmo Bar",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.1
+        }
+      ],
+      "top1_name": "Satchmo Bar",
+      "top1_source": "osm",
+      "id": "V007",
+      "amenity": "bar",
+      "script": "latin",
+      "city": "Tel Aviv"
+    },
+    {
+      "query": "Zigi",
+      "n_hits": 5,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.0,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "Zigi",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.0
+        },
+        {
+          "rank": 2,
+          "name": "Zigi Shaul",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 175568.9
+        },
+        {
+          "rank": 3,
+          "name": "Ziglag",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 17782.1
+        },
+        {
+          "rank": 4,
+          "name": "Zigmund",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 71847.9
+        },
+        {
+          "rank": 5,
+          "name": "Zigi",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.0
+        }
+      ],
+      "top1_name": "Zigi",
+      "top1_source": "osm",
+      "id": "V008",
+      "amenity": "bar",
+      "script": "latin",
+      "city": "Beersheba"
+    },
+    {
+      "query": "ארומה",
+      "n_hits": 10,
+      "top1": false,
+      "top5_rank": null,
+      "top1_distance_m": 58177.3,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "ארומה",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 58177.3
+        },
+        {
+          "rank": 2,
+          "name": "ארומה",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 48272.1
+        },
+        {
+          "rank": 3,
+          "name": "ארומה",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 122378.2
+        },
+        {
+          "rank": 4,
+          "name": "ארומה",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 262446.4
+        },
+        {
+          "rank": 5,
+          "name": "ארומה",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 44798.6
+        }
+      ],
+      "top1_name": "ארומה",
+      "top1_source": "osm",
+      "id": "V009",
+      "amenity": "cafe",
+      "script": "he",
+      "city": "Rishon LeZion"
+    },
+    {
+      "query": "בית קפה הפינה",
+      "n_hits": 10,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.0,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "בית קפה הפינה",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.0
+        },
+        {
+          "rank": 2,
+          "name": "אבן הפינה",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 93997.0
+        },
+        {
+          "rank": 3,
+          "name": "בית קפה המכלת",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 79123.8
+        },
+        {
+          "rank": 4,
+          "name": "קפה עלית",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 52958.5
+        },
+        {
+          "rank": 5,
+          "name": "קפה בית העם",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 111961.5
+        }
+      ],
+      "top1_name": "בית קפה הפינה",
+      "top1_source": "osm",
+      "id": "V010",
+      "amenity": "cafe",
+      "script": "he",
+      "city": "Haifa"
+    },
+    {
+      "query": "דדה",
+      "n_hits": 10,
+      "top1": false,
+      "top5_rank": 2,
+      "top1_distance_m": 10747.7,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "דדה",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 10747.7
+        },
+        {
+          "rank": 2,
+          "name": "דדה",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.2
+        },
+        {
+          "rank": 3,
+          "name": "דדה",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.1
+        },
+        {
+          "rank": 4,
+          "name": "דדה",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 4625.3
+        },
+        {
+          "rank": 5,
+          "name": "דדה",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 4722.5
+        }
+      ],
+      "top1_name": "דדה",
+      "top1_source": "osm",
+      "id": "V011",
+      "amenity": "cafe",
+      "script": "he",
+      "city": "Tel Aviv"
+    },
+    {
+      "query": "דה לה פה",
+      "n_hits": 10,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.0,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "דה לה פה",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.0
+        },
+        {
+          "rank": 2,
+          "name": "פלה דה תה",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 21008.7
+        },
+        {
+          "rank": 3,
+          "name": "פַּלֶה דֶּה תֵה",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 19633.0
+        },
+        {
+          "rank": 4,
+          "name": "דקל/תפוז",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 69290.1
+        },
+        {
+          "rank": 5,
+          "name": "רפאל דה לה פרגולה",
+          "type": "ADDRESS",
+          "source": "other",
+          "distance_m": 38789.8
+        }
+      ],
+      "top1_name": "דה לה פה",
+      "top1_source": "osm",
+      "id": "V012",
+      "amenity": "cafe",
+      "script": "he",
+      "city": "Rishon LeZion"
+    },
+    {
+      "query": "רולדין",
+      "n_hits": 10,
+      "top1": false,
+      "top5_rank": null,
+      "top1_distance_m": 26500.8,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "רולדין",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 26500.8
+        },
+        {
+          "rank": 2,
+          "name": "רולדין",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 7541.2
+        },
+        {
+          "rank": 3,
+          "name": "רולדין",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 283249.6
+        },
+        {
+          "rank": 4,
+          "name": "רולדין",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 4427.8
+        },
+        {
+          "rank": 5,
+          "name": "רולדין",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 2203.5
+        }
+      ],
+      "top1_name": "רולדין",
+      "top1_source": "osm",
+      "id": "V013",
+      "amenity": "cafe",
+      "script": "he",
+      "city": "Tel Aviv"
+    },
+    {
+      "query": "Cafeneto",
+      "n_hits": 10,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.0,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "Cafeneto",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.0
+        },
+        {
+          "rank": 2,
+          "name": "Cafeneto",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 9251.5
+        },
+        {
+          "rank": 3,
+          "name": "Cafe Beta",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 5941.0
+        },
+        {
+          "rank": 4,
+          "name": "Cafe Neto Gilman",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 5774.9
+        },
+        {
+          "rank": 5,
+          "name": "Cafe Tov",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 12163.9
+        }
+      ],
+      "top1_name": "Cafeneto",
+      "top1_source": "osm",
+      "id": "V014",
+      "amenity": "cafe",
+      "script": "latin",
+      "city": "Tel Aviv"
+    },
+    {
+      "query": "Grand Cafe Torquise",
+      "n_hits": 10,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.1,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "Grand Cafe Torquise",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.1
+        },
+        {
+          "rank": 2,
+          "name": "Turquoise Café and Restaurant",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 45188.8
+        },
+        {
+          "rank": 3,
+          "name": "Grand Cafe",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 146693.5
+        },
+        {
+          "rank": 4,
+          "name": "Grand Cafe",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 56269.6
+        },
+        {
+          "rank": 5,
+          "name": "Café Branja",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 285137.0
+        }
+      ],
+      "top1_name": "Grand Cafe Torquise",
+      "top1_source": "osm",
+      "id": "V015",
+      "amenity": "cafe",
+      "script": "latin",
+      "city": "Tel Aviv"
+    },
+    {
+      "query": "Jaw Cafe",
+      "n_hits": 10,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.0,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "Jaw Cafe",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.0
+        },
+        {
+          "rank": 2,
+          "name": "Cafe Jack",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 54173.3
+        },
+        {
+          "rank": 3,
+          "name": "Java Cafe",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 23769.3
+        },
+        {
+          "rank": 4,
+          "name": "Mar Café",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 56836.7
+        },
+        {
+          "rank": 5,
+          "name": "Net Cafe",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 55739.0
+        }
+      ],
+      "top1_name": "Jaw Cafe",
+      "top1_source": "osm",
+      "id": "V016",
+      "amenity": "cafe",
+      "script": "latin",
+      "city": "Jerusalem"
+    },
+    {
+      "query": "Tony Ice",
+      "n_hits": 10,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.1,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "Tony Ice",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.1
+        },
+        {
+          "rank": 2,
+          "name": "Tony Vespa",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 19607.0
+        },
+        {
+          "rank": 3,
+          "name": "Tony Vespa",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 27118.4
+        },
+        {
+          "rank": 4,
+          "name": "Tony Vespa",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 29556.4
+        },
+        {
+          "rank": 5,
+          "name": "Tony Vespa",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 28634.5
+        }
+      ],
+      "top1_name": "Tony Ice",
+      "top1_source": "osm",
+      "id": "V017",
+      "amenity": "cafe",
+      "script": "latin",
+      "city": "Netanya"
+    },
+    {
+      "query": "Yabous Cafe",
+      "n_hits": 10,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.1,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "Yabous Cafe",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.1
+        },
+        {
+          "rank": 2,
+          "name": "Yafa Cafe",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 7296.6
+        },
+        {
+          "rank": 3,
+          "name": "XBOX CAFE",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 68340.0
+        },
+        {
+          "rank": 4,
+          "name": "Yoya café",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 22002.6
+        },
+        {
+          "rank": 5,
+          "name": "Cafe Sonya",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 58536.3
+        }
+      ],
+      "top1_name": "Yabous Cafe",
+      "top1_source": "osm",
+      "id": "V018",
+      "amenity": "cafe",
+      "script": "latin",
+      "city": "Jerusalem"
+    },
+    {
+      "query": "יעקב קבב",
+      "n_hits": 10,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.0,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "יעקב קבב",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.0
+        },
+        {
+          "rank": 2,
+          "name": "באר יעקב",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 99758.3
+        },
+        {
+          "rank": 3,
+          "name": "אביר יעקב",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 7673.1
+        },
+        {
+          "rank": 4,
+          "name": "קבר דן בן יעקב",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 114831.2
+        },
+        {
+          "rank": 5,
+          "name": "קבר דן בן יעקב",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 50136.5
+        }
+      ],
+      "top1_name": "יעקב קבב",
+      "top1_source": "osm",
+      "id": "V019",
+      "amenity": "fast_food",
+      "script": "he",
+      "city": "Haifa"
+    },
+    {
+      "query": "מרכז החומוס והפול",
+      "n_hits": 10,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.1,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "מרכז החומוס והפול",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.1
+        },
+        {
+          "rank": 2,
+          "name": "מרכז נשים ושלום המשפחה",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 86331.7
+        },
+        {
+          "rank": 3,
+          "name": "מרכז האופרה/דקר",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 92257.4
+        },
+        {
+          "rank": 4,
+          "name": "מרכז האופרה/החשמונאים",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 92319.2
+        },
+        {
+          "rank": 5,
+          "name": "העצמאות/מרכז פיס",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 1713.1
+        }
+      ],
+      "top1_name": "מרכז החומוס והפול",
+      "top1_source": "osm",
+      "id": "V020",
+      "amenity": "fast_food",
+      "script": "he",
+      "city": "Tel Aviv"
+    },
+    {
+      "query": "סיפורו של שניצל",
+      "n_hits": 10,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.0,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "סיפורו של שניצל",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.0
+        },
+        {
+          "rank": 2,
+          "name": "סיפורו של גרגר",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 88065.3
+        },
+        {
+          "rank": 3,
+          "name": "שניצל הגורמה של אבא",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 91609.8
+        },
+        {
+          "rank": 4,
+          "name": "שניצל פור יו",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 91837.0
+        },
+        {
+          "rank": 5,
+          "name": "שניצל עם חיוך",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 229229.6
+        }
+      ],
+      "top1_name": "סיפורו של שניצל",
+      "top1_source": "osm",
+      "id": "V021",
+      "amenity": "fast_food",
+      "script": "he",
+      "city": "Beersheba"
+    },
+    {
+      "query": "רד meat",
+      "n_hits": 10,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.0,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "רד meat",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.0
+        },
+        {
+          "rank": 2,
+          "name": "Meat Bar",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 2050.1
+        },
+        {
+          "rank": 3,
+          "name": "Meat bar",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 11600.5
+        },
+        {
+          "rank": 4,
+          "name": "Meat art",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 18201.1
+        },
+        {
+          "rank": 5,
+          "name": "Meat Me",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 47452.6
+        }
+      ],
+      "top1_name": "רד meat",
+      "top1_source": "osm",
+      "id": "V022",
+      "amenity": "fast_food",
+      "script": "he",
+      "city": "Tel Aviv"
+    },
+    {
+      "query": "Burgersbar",
+      "n_hits": 10,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.0,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "Burgersbar",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.0
+        },
+        {
+          "rank": 2,
+          "name": "Burgers Bar",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 1366.8
+        },
+        {
+          "rank": 3,
+          "name": "Burgers Bar",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 248821.3
+        },
+        {
+          "rank": 4,
+          "name": "Burgers Bar",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 3475.6
+        },
+        {
+          "rank": 5,
+          "name": "Burgers Bar",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 24227.4
+        }
+      ],
+      "top1_name": "Burgersbar",
+      "top1_source": "osm",
+      "id": "V023",
+      "amenity": "fast_food",
+      "script": "latin",
+      "city": "Jerusalem"
+    },
+    {
+      "query": "Cofizz",
+      "n_hits": 10,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.0,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "Cofizz",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.0
+        },
+        {
+          "rank": 2,
+          "name": "Cofizz",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 414.7
+        },
+        {
+          "rank": 3,
+          "name": "Cofizz",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 98818.0
+        },
+        {
+          "rank": 4,
+          "name": "cofiz",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 69116.2
+        },
+        {
+          "rank": 5,
+          "name": "Cofix",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 15823.4
+        }
+      ],
+      "top1_name": "Cofizz",
+      "top1_source": "osm",
+      "id": "V024",
+      "amenity": "fast_food",
+      "script": "latin",
+      "city": "Tel Aviv"
+    },
+    {
+      "query": "Falafel HaZkenim",
+      "n_hits": 10,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.0,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "Falafel HaZkenim",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.0
+        },
+        {
+          "rank": 2,
+          "name": "Falafel 8",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 85716.6
+        },
+        {
+          "rank": 3,
+          "name": "Falafel Gina",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 85029.1
+        },
+        {
+          "rank": 4,
+          "name": "Falafel Cafe",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 13820.5
+        },
+        {
+          "rank": 5,
+          "name": "Maoz Falafel",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 117032.9
+        }
+      ],
+      "top1_name": "Falafel HaZkenim",
+      "top1_source": "osm",
+      "id": "V025",
+      "amenity": "fast_food",
+      "script": "latin",
+      "city": "Haifa"
+    },
+    {
+      "query": "street food",
+      "n_hits": 10,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.0,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "street food",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.0
+        },
+        {
+          "rank": 2,
+          "name": "Atarot Street",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 48919.7
+        },
+        {
+          "rank": 3,
+          "name": "Bshara Street",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 97238.8
+        },
+        {
+          "rank": 4,
+          "name": "I'blin/Main Street",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 92943.4
+        },
+        {
+          "rank": 5,
+          "name": "Street/Center",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 79626.4
+        }
+      ],
+      "top1_name": "street food",
+      "top1_source": "osm",
+      "id": "V026",
+      "amenity": "fast_food",
+      "script": "latin",
+      "city": "Tel Aviv"
+    },
+    {
+      "query": "דלי קרים",
+      "n_hits": 10,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.1,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "דלי קרים",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.1
+        },
+        {
+          "rank": 2,
+          "name": "דלי קרים",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 3354.5
+        },
+        {
+          "rank": 3,
+          "name": "דלי קרים",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 20932.1
+        },
+        {
+          "rank": 4,
+          "name": "דלי קרים",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 79074.9
+        },
+        {
+          "rank": 5,
+          "name": "דלי קרים",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 20046.2
+        }
+      ],
+      "top1_name": "דלי קרים",
+      "top1_source": "osm",
+      "id": "V027",
+      "amenity": "ice_cream",
+      "script": "he",
+      "city": "Tel Aviv"
+    },
+    {
+      "query": "מוסלין",
+      "n_hits": 10,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.0,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "מוסלין",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.0
+        },
+        {
+          "rank": 2,
+          "name": "מוסלין",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 1694.4
+        },
+        {
+          "rank": 3,
+          "name": "הרצל/מוצקין",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 113339.1
+        },
+        {
+          "rank": 4,
+          "name": "ההסתדרות/מוצקין",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 48158.4
+        },
+        {
+          "rank": 5,
+          "name": "מוצקין/הרצל",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 113302.5
+        }
+      ],
+      "top1_name": "מוסלין",
+      "top1_source": "osm",
+      "id": "V028",
+      "amenity": "ice_cream",
+      "script": "he",
+      "city": "Jerusalem"
+    },
+    {
+      "query": "Golda",
+      "n_hits": 10,
+      "top1": false,
+      "top5_rank": null,
+      "top1_distance_m": 90241.5,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "Golda Meir",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 90241.5
+        },
+        {
+          "rank": 2,
+          "name": "Herzog/Golda",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 14494.5
+        },
+        {
+          "rank": 3,
+          "name": "Golda Meir",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 25041.6
+        },
+        {
+          "rank": 4,
+          "name": "Shivat Zion/Golda",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 45844.7
+        },
+        {
+          "rank": 5,
+          "name": "Ramot Junction/Golda",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 46868.8
+        }
+      ],
+      "top1_name": "Golda Meir",
+      "top1_source": "gtfs",
+      "id": "V029",
+      "amenity": "ice_cream",
+      "script": "latin",
+      "city": "Tel Aviv"
+    },
+    {
+      "query": "מועדון הבארבי",
+      "n_hits": 10,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.0,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "מועדון הבארבי",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.0
+        },
+        {
+          "rank": 2,
+          "name": "מועדון אנוש",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 108778.1
+        },
+        {
+          "rank": 3,
+          "name": "מועדון פיס",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 21202.4
+        },
+        {
+          "rank": 4,
+          "name": "מועדון המרגנית/רוקח",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 6200.1
+        },
+        {
+          "rank": 5,
+          "name": "מועדון פיס/הגיא",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 43292.8
+        }
+      ],
+      "top1_name": "מועדון הבארבי",
+      "top1_source": "osm",
+      "id": "V030",
+      "amenity": "nightclub",
+      "script": "he",
+      "city": "Tel Aviv"
+    },
+    {
+      "query": "studio B",
+      "n_hits": 10,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.1,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "studio B",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.1
+        },
+        {
+          "rank": 2,
+          "name": "JFashion beauty studio",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 9733.4
+        },
+        {
+          "rank": 3,
+          "name": "David HaMelekh/Studio",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 27960.4
+        },
+        {
+          "rank": 4,
+          "name": "Studio 56",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 78187.0
+        },
+        {
+          "rank": 5,
+          "name": "FA studio",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 53723.8
+        }
+      ],
+      "top1_name": "studio B",
+      "top1_source": "osm",
+      "id": "V031",
+      "amenity": "nightclub",
+      "script": "latin",
+      "city": "Tel Aviv"
+    },
+    {
+      "query": "הארבעה",
+      "n_hits": 10,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 37.5,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "קרליבך/הארבעה",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 37.5
+        },
+        {
+          "rank": 2,
+          "name": "הארבעה/ירושלים",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 82175.7
+        },
+        {
+          "rank": 3,
+          "name": "דוד רמז/דרך הארבעה",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 99687.4
+        },
+        {
+          "rank": 4,
+          "name": "הארבעה",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.0
+        },
+        {
+          "rank": 5,
+          "name": "חיל האויר/הארבעה",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 50582.4
+        }
+      ],
+      "top1_name": "קרליבך/הארבעה",
+      "top1_source": "gtfs",
+      "id": "V032",
+      "amenity": "pub",
+      "script": "he",
+      "city": "Tel Aviv"
+    },
+    {
+      "query": "מאש",
+      "n_hits": 10,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.0,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "מאש",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.0
+        },
+        {
+          "rank": 2,
+          "name": "מנשה",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 47006.8
+        },
+        {
+          "rank": 3,
+          "name": "צ.מאור",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 45034.4
+        },
+        {
+          "rank": 4,
+          "name": "מאפיה",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 108131.9
+        },
+        {
+          "rank": 5,
+          "name": "חורב/מאפו",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 79346.4
+        }
+      ],
+      "top1_name": "מאש",
+      "top1_source": "osm",
+      "id": "V033",
+      "amenity": "pub",
+      "script": "he",
+      "city": "Tel Aviv"
+    },
+    {
+      "query": "רודיאו",
+      "n_hits": 10,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.0,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "רודיאו",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.0
+        },
+        {
+          "rank": 2,
+          "name": "רודד/ארנון",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 361002.1
+        },
+        {
+          "rank": 3,
+          "name": "רוטשילד",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 90034.2
+        },
+        {
+          "rank": 4,
+          "name": "רופין/קניאל",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 1144.4
+        },
+        {
+          "rank": 5,
+          "name": "רזיאל",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 119828.3
+        }
+      ],
+      "top1_name": "רודיאו",
+      "top1_source": "osm",
+      "id": "V034",
+      "amenity": "pub",
+      "script": "he",
+      "city": "Haifa"
+    },
+    {
+      "query": "Beer Bazaar Habima",
+      "n_hits": 10,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.0,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "Beer Bazaar Habima",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.0
+        },
+        {
+          "rank": 2,
+          "name": "Cafe Bar HaBima",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 128.3
+        },
+        {
+          "rank": 3,
+          "name": "Beerbazaar Levinsky",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 1470.6
+        },
+        {
+          "rank": 4,
+          "name": "Beer Bazaar",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 1116.0
+        },
+        {
+          "rank": 5,
+          "name": "Beer Bazaar",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 2973.2
+        }
+      ],
+      "top1_name": "Beer Bazaar Habima",
+      "top1_source": "osm",
+      "id": "V035",
+      "amenity": "pub",
+      "script": "latin",
+      "city": "Tel Aviv"
+    },
+    {
+      "query": "كازية يونس",
+      "n_hits": 10,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.0,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "كازية يونس",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.0
+        },
+        {
+          "rank": 2,
+          "name": "كازية جرار",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 77067.6
+        },
+        {
+          "rank": 3,
+          "name": "كازية النمر",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 78704.3
+        },
+        {
+          "rank": 4,
+          "name": "كازية داليا",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 540.4
+        },
+        {
+          "rank": 5,
+          "name": "كازية الخواجا",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 19691.0
+        }
+      ],
+      "top1_name": "كازية يونس",
+      "top1_source": "osm",
+      "id": "V036",
+      "amenity": "pub",
+      "script": "latin",
+      "city": "Jerusalem"
+    },
+    {
+      "query": "בית הפנקייק המקורי",
+      "n_hits": 10,
+      "top1": false,
+      "top5_rank": 3,
+      "top1_distance_m": 9467.9,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "בית הפנקייק המקורי",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 9467.9
+        },
+        {
+          "rank": 2,
+          "name": "בית הפנקייק המקורי",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 10047.3
+        },
+        {
+          "rank": 3,
+          "name": "בית הפנקייק המקורי",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.0
+        },
+        {
+          "rank": 4,
+          "name": "המקורי בית חנינא",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 42585.3
+        },
+        {
+          "rank": 5,
+          "name": "הרקפת ב",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 41118.4
+        }
+      ],
+      "top1_name": "בית הפנקייק המקורי",
+      "top1_source": "osm",
+      "id": "V037",
+      "amenity": "restaurant",
+      "script": "he",
+      "city": "Tel Aviv"
+    },
+    {
+      "query": "הלב הרחב",
+      "n_hits": 10,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.0,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "הלב הרחב",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.0
+        },
+        {
+          "rank": 2,
+          "name": "הלהב/הרוקמים",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 273791.1
+        },
+        {
+          "rank": 3,
+          "name": "הרוקמים/הלהב",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 273755.4
+        },
+        {
+          "rank": 4,
+          "name": "הרחבה ב/הזית",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 246315.6
+        },
+        {
+          "rank": 5,
+          "name": "הרב הרצוג/שח\"ל",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 247148.4
+        }
+      ],
+      "top1_name": "הלב הרחב",
+      "top1_source": "osm",
+      "id": "V038",
+      "amenity": "restaurant",
+      "script": "he",
+      "city": "Eilat"
+    },
+    {
+      "query": "לנדוור",
+      "n_hits": 10,
+      "top1": false,
+      "top5_rank": 3,
+      "top1_distance_m": 88382.1,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "לנדוור",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 88382.1
+        },
+        {
+          "rank": 2,
+          "name": "לנדוור",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 75783.6
+        },
+        {
+          "rank": 3,
+          "name": "לנדוור",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.0
+        },
+        {
+          "rank": 4,
+          "name": "לנדוור",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 81953.8
+        },
+        {
+          "rank": 5,
+          "name": "לנדוור",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 104943.5
+        }
+      ],
+      "top1_name": "לנדוור",
+      "top1_source": "osm",
+      "id": "V039",
+      "amenity": "restaurant",
+      "script": "he",
+      "city": "Haifa"
+    },
+    {
+      "query": "מסעדת אמא",
+      "n_hits": 10,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.0,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "מסעדת אמא",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.0
+        },
+        {
+          "rank": 2,
+          "name": "מסעדה של אמא",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 115927.2
+        },
+        {
+          "rank": 3,
+          "name": "מסעדת אלשריף",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 131813.3
+        },
+        {
+          "rank": 4,
+          "name": "מסעדת מלון אמריקנה",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 249244.6
+        },
+        {
+          "rank": 5,
+          "name": "מסעדת אבו סעיד",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 53510.4
+        }
+      ],
+      "top1_name": "מסעדת אמא",
+      "top1_source": "osm",
+      "id": "V040",
+      "amenity": "restaurant",
+      "script": "he",
+      "city": "Jerusalem"
+    },
+    {
+      "query": "מסעדת מלון אמריקנה",
+      "n_hits": 10,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.0,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "מסעדת מלון אמריקנה",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.0
+        },
+        {
+          "rank": 2,
+          "name": "אמריקנה",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 46.1
+        },
+        {
+          "rank": 3,
+          "name": "מסעדת אלשריף",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 381033.8
+        },
+        {
+          "rank": 4,
+          "name": "מסעדת חומוס אלון",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 385265.1
+        },
+        {
+          "rank": 5,
+          "name": "מסעדת שרה",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 278133.6
+        }
+      ],
+      "top1_name": "מסעדת מלון אמריקנה",
+      "top1_source": "osm",
+      "id": "V041",
+      "amenity": "restaurant",
+      "script": "he",
+      "city": "Eilat"
+    },
+    {
+      "query": "פינת הצלע",
+      "n_hits": 10,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.0,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "פינת הצלע",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.0
+        },
+        {
+          "rank": 2,
+          "name": "פינת השלושה",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 9654.6
+        },
+        {
+          "rank": 3,
+          "name": "פינת הגל החדש",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 10430.3
+        },
+        {
+          "rank": 4,
+          "name": "פינת המזל",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 10174.1
+        },
+        {
+          "rank": 5,
+          "name": "פינת השקד",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 125347.5
+        }
+      ],
+      "top1_name": "פינת הצלע",
+      "top1_source": "osm",
+      "id": "V042",
+      "amenity": "restaurant",
+      "script": "he",
+      "city": "Tel Aviv"
+    },
+    {
+      "query": "Alibi",
+      "n_hits": 2,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.0,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "Alibi",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.0
+        },
+        {
+          "rank": 2,
+          "name": "Alibi Bar",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 29367.6
+        }
+      ],
+      "top1_name": "Alibi",
+      "top1_source": "osm",
+      "id": "V043",
+      "amenity": "restaurant",
+      "script": "latin",
+      "city": "Tel Aviv"
+    },
+    {
+      "query": "Denis Kingdom",
+      "n_hits": 10,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.1,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "Denis Kingdom",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.1
+        },
+        {
+          "rank": 2,
+          "name": "Beauty Kingdom",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 298988.3
+        },
+        {
+          "rank": 3,
+          "name": "Kiosk Denis",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 277215.6
+        },
+        {
+          "rank": 4,
+          "name": "Embassy of the Kingdom of Sweden",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 281812.2
+        },
+        {
+          "rank": 5,
+          "name": "Dentist clinic",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 284216.6
+        }
+      ],
+      "top1_name": "Denis Kingdom",
+      "top1_source": "osm",
+      "id": "V044",
+      "amenity": "restaurant",
+      "script": "latin",
+      "city": "Eilat"
+    },
+    {
+      "query": "Nafoura",
+      "n_hits": 9,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.0,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "Nafoura",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.0
+        },
+        {
+          "rank": 2,
+          "name": "Na`urah",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 94307.4
+        },
+        {
+          "rank": 3,
+          "name": "An-Naqura",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 54343.9
+        },
+        {
+          "rank": 4,
+          "name": "An-Naqura",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 54412.4
+        },
+        {
+          "rank": 5,
+          "name": "Al Naqura",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 54455.8
+        }
+      ],
+      "top1_name": "Nafoura",
+      "top1_source": "osm",
+      "id": "V045",
+      "amenity": "restaurant",
+      "script": "latin",
+      "city": "Jerusalem"
+    },
+    {
+      "query": "Oasis",
+      "n_hits": 10,
+      "top1": false,
+      "top5_rank": 2,
+      "top1_distance_m": 111673.4,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "Oasis Hotel",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 111673.4
+        },
+        {
+          "rank": 2,
+          "name": "Oasis",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.1
+        },
+        {
+          "rank": 3,
+          "name": "Oasis",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 25255.6
+        },
+        {
+          "rank": 4,
+          "name": "Oasis gadish",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 162585.9
+        },
+        {
+          "rank": 5,
+          "name": "Oasis Break",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 22239.1
+        }
+      ],
+      "top1_name": "Oasis Hotel",
+      "top1_source": "gtfs",
+      "id": "V046",
+      "amenity": "restaurant",
+      "script": "latin",
+      "city": "Tel Aviv"
+    },
+    {
+      "query": "Pizza Hut",
+      "n_hits": 10,
+      "top1": false,
+      "top5_rank": null,
+      "top1_distance_m": 10411.0,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "Pizza Hut",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 10411.0
+        },
+        {
+          "rank": 2,
+          "name": "Pizza Hut",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 71768.6
+        },
+        {
+          "rank": 3,
+          "name": "Pizza Hut",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 9581.3
+        },
+        {
+          "rank": 4,
+          "name": "Pizza Hut",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 9795.7
+        },
+        {
+          "rank": 5,
+          "name": "Pizza Hut",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 274561.0
+        }
+      ],
+      "top1_name": "Pizza Hut",
+      "top1_source": "osm",
+      "id": "V047",
+      "amenity": "restaurant",
+      "script": "latin",
+      "city": "Rishon LeZion"
+    },
+    {
+      "query": "الرضا",
+      "n_hits": 10,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.1,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "الرضا",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.1
+        },
+        {
+          "rank": 2,
+          "name": "الرضا",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 131731.4
+        },
+        {
+          "rank": 3,
+          "name": "عمارة الرضا",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 153353.5
+        },
+        {
+          "rank": 4,
+          "name": "مسجد الرضا",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 132788.0
+        },
+        {
+          "rank": 5,
+          "name": "ملحمة الرضا",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 58235.5
+        }
+      ],
+      "top1_name": "الرضا",
+      "top1_source": "osm",
+      "id": "V048",
+      "amenity": "restaurant",
+      "script": "latin",
+      "city": "Nazareth"
+    }
+  ],
+  "english_variant_cases": [
+    {
+      "query": "Otto Holon",
+      "n_hits": 10,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.0,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "Otto Holon",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.0
+        },
+        {
+          "rank": 2,
+          "name": "Holon Wolfson",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 4844.4
+        },
+        {
+          "rank": 3,
+          "name": "Holon Junction",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 3902.8
+        },
+        {
+          "rank": 4,
+          "name": "Holon Graph",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 1953.5
+        },
+        {
+          "rank": 5,
+          "name": "Holon Mall",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 2066.4
+        }
+      ],
+      "top1_name": "Otto Holon",
+      "top1_source": "osm",
+      "id": "V001",
+      "amenity": "bar",
+      "script": "he",
+      "city": "Rishon LeZion"
+    },
+    {
+      "query": "Wine Bakerem",
+      "n_hits": 10,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.1,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "Wine Bakerem",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.1
+        },
+        {
+          "rank": 2,
+          "name": "Or Bakerem",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 125848.0
+        },
+        {
+          "rank": 3,
+          "name": "Agada Bakerem",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 126258.1
+        },
+        {
+          "rank": 4,
+          "name": "Achuza Bakerem",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 126262.2
+        },
+        {
+          "rank": 5,
+          "name": "Better Wine",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 2135.9
+        }
+      ],
+      "top1_name": "Wine Bakerem",
+      "top1_source": "osm",
+      "id": "V002",
+      "amenity": "bar",
+      "script": "he",
+      "city": "Tel Aviv"
+    },
+    {
+      "query": "Armadillo Kitchen Bar",
+      "n_hits": 10,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.1,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "Armadillo Kitchen Bar",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.1
+        },
+        {
+          "rank": 2,
+          "name": "Nivo Grill & Kitchen",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 1323.8
+        },
+        {
+          "rank": 3,
+          "name": "Meat Kitchen",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 921.8
+        },
+        {
+          "rank": 4,
+          "name": "Night Kitchen",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 518.7
+        },
+        {
+          "rank": 5,
+          "name": "Kitchen market",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 3631.0
+        }
+      ],
+      "top1_name": "Armadillo Kitchen Bar",
+      "top1_source": "osm",
+      "id": "V003",
+      "amenity": "bar",
+      "script": "he",
+      "city": "Tel Aviv"
+    },
+    {
+      "query": "Teatrobar",
+      "n_hits": 1,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.0,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "Teatrobar",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.0
+        }
+      ],
+      "top1_name": "Teatrobar",
+      "top1_source": "osm",
+      "id": "V004",
+      "amenity": "bar",
+      "script": "he",
+      "city": "Rishon LeZion"
+    },
+    {
+      "query": "Aroma",
+      "n_hits": 10,
+      "top1": false,
+      "top5_rank": null,
+      "top1_distance_m": 50776.6,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "Aroma",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 50776.6
+        },
+        {
+          "rank": 2,
+          "name": "Aroma",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 38078.3
+        },
+        {
+          "rank": 3,
+          "name": "Aroma",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 16534.5
+        },
+        {
+          "rank": 4,
+          "name": "Aroma",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 42637.7
+        },
+        {
+          "rank": 5,
+          "name": "Aroma",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 16761.6
+        }
+      ],
+      "top1_name": "Aroma",
+      "top1_source": "osm",
+      "id": "V009",
+      "amenity": "cafe",
+      "script": "he",
+      "city": "Rishon LeZion"
+    },
+    {
+      "query": "Dede",
+      "n_hits": 8,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.2,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "Dede",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.2
+        },
+        {
+          "rank": 2,
+          "name": "Dede",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.1
+        },
+        {
+          "rank": 3,
+          "name": "Deda",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 4625.3
+        },
+        {
+          "rank": 4,
+          "name": "Deda",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 4722.5
+        },
+        {
+          "rank": 5,
+          "name": "Deda",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 2069.1
+        }
+      ],
+      "top1_name": "Dede",
+      "top1_source": "osm",
+      "id": "V011",
+      "amenity": "cafe",
+      "script": "he",
+      "city": "Tel Aviv"
+    },
+    {
+      "query": "de la Paix",
+      "n_hits": 10,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.0,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "de la Paix",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.0
+        },
+        {
+          "rank": 2,
+          "name": "Cafe de la Paix",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 36532.7
+        },
+        {
+          "rank": 3,
+          "name": "Forêt de la Paix",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 41923.8
+        },
+        {
+          "rank": 4,
+          "name": "Embaixada de Angola",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 19296.4
+        },
+        {
+          "rank": 5,
+          "name": "Cafe de la Paix",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 36532.7
+        }
+      ],
+      "top1_name": "de la Paix",
+      "top1_source": "osm",
+      "id": "V012",
+      "amenity": "cafe",
+      "script": "he",
+      "city": "Rishon LeZion"
+    },
+    {
+      "query": "Roladin",
+      "n_hits": 10,
+      "top1": false,
+      "top5_rank": null,
+      "top1_distance_m": 21041.4,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "Roladin",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 21041.4
+        },
+        {
+          "rank": 2,
+          "name": "Roladin",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 6014.1
+        },
+        {
+          "rank": 3,
+          "name": "Roladin",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 26500.8
+        },
+        {
+          "rank": 4,
+          "name": "Roladin",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 7541.2
+        },
+        {
+          "rank": 5,
+          "name": "Roladin",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 283249.6
+        }
+      ],
+      "top1_name": "Roladin",
+      "top1_source": "osm",
+      "id": "V013",
+      "amenity": "cafe",
+      "script": "he",
+      "city": "Tel Aviv"
+    },
+    {
+      "query": "Red Meat",
+      "n_hits": 10,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.0,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "Red Meat",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.0
+        },
+        {
+          "rank": 2,
+          "name": "Meat Bar",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 2050.1
+        },
+        {
+          "rank": 3,
+          "name": "Meat bar",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 11600.5
+        },
+        {
+          "rank": 4,
+          "name": "Meat art",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 18201.1
+        },
+        {
+          "rank": 5,
+          "name": "Meat Me",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 47452.6
+        }
+      ],
+      "top1_name": "Red Meat",
+      "top1_source": "osm",
+      "id": "V022",
+      "amenity": "fast_food",
+      "script": "he",
+      "city": "Tel Aviv"
+    },
+    {
+      "query": "Deli Cream",
+      "n_hits": 10,
+      "top1": false,
+      "top5_rank": 5,
+      "top1_distance_m": 5377.9,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "Deli Cream",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 5377.9
+        },
+        {
+          "rank": 2,
+          "name": "Deli Cream",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 4753.0
+        },
+        {
+          "rank": 3,
+          "name": "Deli Cream",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 9401.1
+        },
+        {
+          "rank": 4,
+          "name": "deli cream",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 14054.5
+        },
+        {
+          "rank": 5,
+          "name": "Deli Cream",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.1
+        }
+      ],
+      "top1_name": "Deli Cream",
+      "top1_source": "osm",
+      "id": "V027",
+      "amenity": "ice_cream",
+      "script": "he",
+      "city": "Tel Aviv"
+    },
+    {
+      "query": "Mousseline",
+      "n_hits": 4,
+      "top1": false,
+      "top5_rank": 2,
+      "top1_distance_m": 1694.4,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "Mousseline",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 1694.4
+        },
+        {
+          "rank": 2,
+          "name": "Mousseline",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.0
+        },
+        {
+          "rank": 3,
+          "name": "Mousseline",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 1694.4
+        },
+        {
+          "rank": 4,
+          "name": "Mousseline",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.0
+        }
+      ],
+      "top1_name": "Mousseline",
+      "top1_source": "osm",
+      "id": "V028",
+      "amenity": "ice_cream",
+      "script": "he",
+      "city": "Jerusalem"
+    },
+    {
+      "query": "Barby Club",
+      "n_hits": 10,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.0,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "Barby Club",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.0
+        },
+        {
+          "rank": 2,
+          "name": "Club/Tarshish",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 17555.5
+        },
+        {
+          "rank": 3,
+          "name": "Pais Club/HaRav Zaban",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 72612.3
+        },
+        {
+          "rank": 4,
+          "name": "Club 501",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 11361.7
+        },
+        {
+          "rank": 5,
+          "name": "Art Club",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 216.1
+        }
+      ],
+      "top1_name": "Barby Club",
+      "top1_source": "osm",
+      "id": "V030",
+      "amenity": "nightclub",
+      "script": "he",
+      "city": "Tel Aviv"
+    },
+    {
+      "query": "HaArbaa",
+      "n_hits": 10,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.0,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "HaArbaa",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.0
+        },
+        {
+          "rank": 2,
+          "name": "HaArbaa Towers Parking",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 390.9
+        },
+        {
+          "rank": 3,
+          "name": "Carlebach/HaArba'a",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 37.5
+        },
+        {
+          "rank": 4,
+          "name": "Tzabar/HaArava",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 99611.8
+        },
+        {
+          "rank": 5,
+          "name": "HaArbaa Towers 2",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 343.6
+        }
+      ],
+      "top1_name": "HaArbaa",
+      "top1_source": "osm",
+      "id": "V032",
+      "amenity": "pub",
+      "script": "he",
+      "city": "Tel Aviv"
+    },
+    {
+      "query": "MASH",
+      "n_hits": 10,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.0,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "MASH",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.0
+        },
+        {
+          "rank": 2,
+          "name": "El-Mashuh",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 89291.1
+        },
+        {
+          "rank": 3,
+          "name": "Mash'had Junction",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 87770.7
+        },
+        {
+          "rank": 4,
+          "name": "Masada",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 81922.5
+        },
+        {
+          "rank": 5,
+          "name": "Al-Mashahid A",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 58450.7
+        }
+      ],
+      "top1_name": "MASH",
+      "top1_source": "osm",
+      "id": "V033",
+      "amenity": "pub",
+      "script": "he",
+      "city": "Tel Aviv"
+    },
+    {
+      "query": "Rodeo",
+      "n_hits": 4,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.0,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "Rodeo",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.0
+        },
+        {
+          "rank": 2,
+          "name": "Roded/Arnon",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 361002.1
+        },
+        {
+          "rank": 3,
+          "name": "Roded/Gishron",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 361016.5
+        },
+        {
+          "rank": 4,
+          "name": "Roded/Barne'a",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 361008.2
+        }
+      ],
+      "top1_name": "Rodeo",
+      "top1_source": "osm",
+      "id": "V034",
+      "amenity": "pub",
+      "script": "he",
+      "city": "Haifa"
+    },
+    {
+      "query": "Halev harahav",
+      "n_hits": 10,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.0,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "Halev harahav",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.0
+        },
+        {
+          "rank": 2,
+          "name": "Yehuda Halevi/HaRav Kalaf",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 283280.1
+        },
+        {
+          "rank": 3,
+          "name": "Gan HaLev",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 341502.2
+        },
+        {
+          "rank": 4,
+          "name": "Harav Elazar Ha'Levi",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 264967.3
+        },
+        {
+          "rank": 5,
+          "name": "HaRav Kook",
+          "type": "STOP",
+          "source": "gtfs",
+          "distance_m": 240095.7
+        }
+      ],
+      "top1_name": "Halev harahav",
+      "top1_source": "osm",
+      "id": "V038",
+      "amenity": "restaurant",
+      "script": "he",
+      "city": "Eilat"
+    },
+    {
+      "query": "Landwer",
+      "n_hits": 10,
+      "top1": false,
+      "top5_rank": 4,
+      "top1_distance_m": 20515.9,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "Landwer",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 20515.9
+        },
+        {
+          "rank": 2,
+          "name": "Landwer",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 88382.1
+        },
+        {
+          "rank": 3,
+          "name": "Landwer",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 75783.6
+        },
+        {
+          "rank": 4,
+          "name": "Landwer",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.0
+        },
+        {
+          "rank": 5,
+          "name": "Landwer",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 81953.8
+        }
+      ],
+      "top1_name": "Landwer",
+      "top1_source": "osm",
+      "id": "V039",
+      "amenity": "restaurant",
+      "script": "he",
+      "city": "Haifa"
+    },
+    {
+      "query": "Ima",
+      "n_hits": 10,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.0,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "Ima",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.0
+        },
+        {
+          "rank": 2,
+          "name": "Imad",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 8020.0
+        },
+        {
+          "rank": 3,
+          "name": "Imad",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 57649.8
+        },
+        {
+          "rank": 4,
+          "name": "Al Iman",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 14772.6
+        },
+        {
+          "rank": 5,
+          "name": "Abu imad",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 16424.7
+        }
+      ],
+      "top1_name": "Ima",
+      "top1_source": "osm",
+      "id": "V040",
+      "amenity": "restaurant",
+      "script": "he",
+      "city": "Jerusalem"
+    },
+    {
+      "query": "Americana Hotel Restaurant",
+      "n_hits": 10,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.0,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "Americana Hotel Restaurant",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.0
+        },
+        {
+          "rank": 2,
+          "name": "Everest Hotel & Restaurant",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 241443.4
+        },
+        {
+          "rank": 3,
+          "name": "Beach Hotel, Restaurant and Coffee Shop",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 225035.9
+        },
+        {
+          "rank": 4,
+          "name": "Jerusalem Meridian Hotel Lotus and Wine Garden Restaurant",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 249705.9
+        },
+        {
+          "rank": 5,
+          "name": "American Colony Hotel",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 249875.4
+        }
+      ],
+      "top1_name": "Americana Hotel Restaurant",
+      "top1_source": "osm",
+      "id": "V041",
+      "amenity": "restaurant",
+      "script": "he",
+      "city": "Eilat"
+    },
+    {
+      "query": "Al Reda",
+      "n_hits": 10,
+      "top1": true,
+      "top5_rank": 1,
+      "top1_distance_m": 0.1,
+      "hits": [
+        {
+          "rank": 1,
+          "name": "Al Reda",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 0.1
+        },
+        {
+          "rank": 2,
+          "name": "Al-Reda Mosque",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 132788.0
+        },
+        {
+          "rank": 3,
+          "name": "Al nada Rest",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 181614.7
+        },
+        {
+          "rank": 4,
+          "name": "Alfredo",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 79021.1
+        },
+        {
+          "rank": 5,
+          "name": "Almedan",
+          "type": "PLACE",
+          "source": "osm",
+          "distance_m": 130867.2
+        }
+      ],
+      "top1_name": "Al Reda",
+      "top1_source": "osm",
+      "id": "V048",
+      "amenity": "restaurant",
+      "script": "latin",
+      "city": "Nazareth"
+    }
+  ]
+}

@@ -24,8 +24,8 @@ ROOT = Path(__file__).resolve().parent
 DATA = ROOT / "data"
 
 EXPECTED = {
-    "Gtfs_10_days.zip": "MOT 10-day GTFS — primary input (ADR 0005)",
-    "israel-public-transportation.zip": "MOT 60-day GTFS — comparison only (ADR 0005)",
+    "Gtfs_10_days.zip": "MOT 10-day GTFS — comparison only (ADR 0005)",
+    "israel-public-transportation.zip": "MOT 60-day GTFS — primary input (ADR 0005)",
     "TripIdToDate.zip": "MOT trip-id to date mapping — required for realtime matching",
     "israel-and-palestine-latest.osm.pbf": "Geofabrik OSM extract — walking legs for MOTIS",
 }
@@ -70,6 +70,9 @@ def build() -> dict:
         st = p.stat()
         entry = {
             "present": True,
+            "role": {"israel-public-transportation.zip": "primary",
+                     "Gtfs_10_days.zip": "comparison",
+                     "TripIdToDate.zip": "companion"}.get(name, "walking"),
             "description": desc,
             "source": SOURCES[name],
             "size_bytes": st.st_size,

@@ -1,5 +1,7 @@
 # OpenTransit Israel — System Architecture
 
+> **Post-PoC status — 5 September 2026:** [The current plan](next-steps.md) reconciles this proposal with recorded evidence. MOTIS on the 60-day primary has now been rerun; complete-stack sizing and user-capacity claims below are estimates. Primary feed is accepted in ADR 0005; API runtime and address search remain open. Accepted ADRs and measured results take precedence over speculative component choices and numbers.
+
 **Status:** Proposed architecture, v1
 **Scope:** the whole system — backend, data planes, boundaries and their contracts
 **Written:** 28 August 2026
@@ -12,7 +14,7 @@
 | [docs/system-design.md](system-design.md) | *How much, how fast, how deployed* — latency budget, hosting, cost, build order |
 | **this document** | *What shape the system is, and why that shape* — components, boundaries, invariants, flows |
 
-Where the three disagree, the PRD wins on scope, the system design wins on numbers, and this document wins on structure.
+The PRD governs scope and accepted ADRs record decisions. Measured results take precedence over design estimates; unresolved conflicts are tracked in the current next-step plan.
 
 ---
 

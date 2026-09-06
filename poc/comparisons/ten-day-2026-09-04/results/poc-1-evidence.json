@@ -1,0 +1,2993 @@
+{
+  "poc": 1,
+  "generated": "2026-09-04",
+  "feed_sha256": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468",
+  "note": "Full evidence for poc/results/poc-1.json. Machine-written by poc/gtfs/ingest.py; nothing here is hand-edited.",
+  "report": {
+    "data_dir": "C:\\Projects\\OpenTransit\\poc\\data",
+    "schema": "public",
+    "started_empty": false,
+    "refresh": {},
+    "downloaded_bytes": 0,
+    "sha256": {
+      "Gtfs_10_days.zip": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468",
+      "israel-public-transportation.zip": "f26b63c21ac86704c1ad89ce137eee8f2d12a35aa10e34373dcbd36b0e083a93",
+      "TripIdToDate.zip": "97a4b424e1837ae8e772673253aec91ec42ab1e9c32a5da4fb9cfba187163307"
+    },
+    "rows_loaded": {
+      "routes": 6804,
+      "trips": 892451,
+      "stops": 30858,
+      "calendars": 10,
+      "trip_id_to_date": 1961317
+    },
+    "validation_detail": {
+      "tel_aviv": {
+        "city": "תל אביב יפו",
+        "stops": 1082,
+        "departures_in_feed_window": 2992362,
+        "example_stop_names": [
+          "שדרות שאול המלך/הנרייטה סולד",
+          "דרך מנחם בגין/דרך נמיר",
+          "קאנטרי דקל",
+          "תחנה תפעולית/מסוף גולדה",
+          "חוף גורדון"
+        ],
+        "ok": true
+      },
+      "jerusalem": {
+        "city": "ירושלים",
+        "stops": 2287,
+        "departures_in_feed_window": 4403075,
+        "example_stop_names": [
+          "הרב שך א",
+          "אלחדיביה/ג'סר אנטיף",
+          "ג'יסר א-נסף/בלדי מול",
+          "אלזייתונה/אלאחתראם",
+          "אלמדינה אלמנורה/זעקוקה"
+        ],
+        "ok": true
+      },
+      "haifa": {
+        "city": "חיפה",
+        "stops": 1237,
+        "departures_in_feed_window": 1668992,
+        "example_stop_names": [
+          "רות/ברוך",
+          "נמל הדיג שביט",
+          "קרית חיים",
+          "מרכזית המפרץ/קו החוף",
+          "חוצות מפרץ"
+        ],
+        "ok": true
+      },
+      "israel_railways": {
+        "route_type": 2,
+        "operators": [
+          {
+            "agency_id": "2",
+            "agency_name": "רכבת ישראל",
+            "routes": 126,
+            "trips": 5161
+          }
+        ],
+        "example_routes": [
+          {
+            "route_id": "49658",
+            "short_name": "",
+            "long_name": "מודיעין מכבים רעות - ירושלים"
+          },
+          {
+            "route_id": "49670",
+            "short_name": "",
+            "long_name": "מודיעין מכבים רעות - נהריה"
+          },
+          {
+            "route_id": "49671",
+            "short_name": "",
+            "long_name": "מודיעין מכבים רעות - נהריה"
+          },
+          {
+            "route_id": "49684",
+            "short_name": "",
+            "long_name": "מודיעין מכבים רעות - תל אביב יפו"
+          },
+          {
+            "route_id": "49693",
+            "short_name": "",
+            "long_name": "מודיעין מכבים רעות - נהריה"
+          }
+        ],
+        "ok": true
+      },
+      "multiple_bus_operators": {
+        "route_type": 3,
+        "operator_count": 31,
+        "operators_with_trips": 31,
+        "top_operators": [
+          {
+            "agency_id": "3",
+            "agency_name": "אגד",
+            "routes": 1385,
+            "trips": 160321
+          },
+          {
+            "agency_id": "18",
+            "agency_name": "קווים",
+            "routes": 1040,
+            "trips": 93218
+          },
+          {
+            "agency_id": "5",
+            "agency_name": "דן",
+            "routes": 260,
+            "trips": 89536
+          },
+          {
+            "agency_id": "15",
+            "agency_name": "מטרופולין",
+            "routes": 749,
+            "trips": 86567
+          },
+          {
+            "agency_id": "16",
+            "agency_name": "סופרבוס",
+            "routes": 505,
+            "trips": 81875
+          },
+          {
+            "agency_id": "25",
+            "agency_name": "אלקטרה אפיקים",
+            "routes": 383,
+            "trips": 55312
+          },
+          {
+            "agency_id": "31",
+            "agency_name": "דן בדרום",
+            "routes": 312,
+            "trips": 43634
+          },
+          {
+            "agency_id": "14",
+            "agency_name": "נתיב אקספרס",
+            "routes": 471,
+            "trips": 42456
+          },
+          {
+            "agency_id": "38",
+            "agency_name": "אקסטרה ירושלים",
+            "routes": 173,
+            "trips": 29112
+          },
+          {
+            "agency_id": "32",
+            "agency_name": "דן באר שבע",
+            "routes": 69,
+            "trips": 23199
+          }
+        ],
+        "ok": true
+      }
+    },
+    "modes": {
+      "0": 11,
+      "2": 126,
+      "3": 6663,
+      "6": 2,
+      "7": 2
+    },
+    "corpus_stops": [
+      {
+        "id": "S01",
+        "name": "Tel Aviv Savidor Center",
+        "name_he": "תל אביב סבידור מרכז",
+        "mode": "rail",
+        "resolved_stop_id": "10945",
+        "resolved_stop_name": "תל אביב מרכז",
+        "resolution_rule": "name+mode",
+        "name_token_score": 0.75,
+        "matched_tokens": [
+          "אביב",
+          "מרכז",
+          "תל"
+        ],
+        "distance_m": 18.8,
+        "location_type": "0",
+        "parent_station": null,
+        "platforms": [],
+        "platform_count": 0,
+        "candidates_within_radius": 666,
+        "expected_route_type": "2",
+        "observed_route_types": [
+          "2"
+        ],
+        "mode_matches_feed": true,
+        "geometric_nearest": {
+          "stop_id": "10945",
+          "stop_name": "תל אביב מרכז",
+          "distance_m": 18.8
+        },
+        "low_confidence": false,
+        "observed_departures": 3498,
+        "peak_departures_per_hour": 28,
+        "expect_min_services_per_hour": 6,
+        "meets_expect_min_services_per_hour": true,
+        "observed_route_count": 99,
+        "feed_sha256": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468",
+        "postgis_nearest": {
+          "stop_id": "10945",
+          "stop_name": "תל אביב מרכז",
+          "city": "תל אביב יפו",
+          "location_type": 0,
+          "parent_station": null,
+          "distance_m": 18.8
+        }
+      },
+      {
+        "id": "S02",
+        "name": "Tel Aviv HaShalom",
+        "name_he": "תל אביב השלום",
+        "mode": "rail",
+        "resolved_stop_id": "10949",
+        "resolved_stop_name": "השלום",
+        "resolution_rule": "name+mode",
+        "name_token_score": 0.333,
+        "matched_tokens": [
+          "השלום"
+        ],
+        "distance_m": 76.3,
+        "location_type": "0",
+        "parent_station": null,
+        "platforms": [],
+        "platform_count": 0,
+        "candidates_within_radius": 735,
+        "expected_route_type": "2",
+        "observed_route_types": [
+          "2"
+        ],
+        "mode_matches_feed": true,
+        "geometric_nearest": {
+          "stop_id": "13316",
+          "stop_name": "ת. רכבת השלום",
+          "distance_m": 52.7
+        },
+        "low_confidence": false,
+        "observed_departures": 3320,
+        "peak_departures_per_hour": 28,
+        "expect_min_services_per_hour": 6,
+        "meets_expect_min_services_per_hour": true,
+        "observed_route_count": 86,
+        "feed_sha256": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468",
+        "postgis_nearest": {
+          "stop_id": "13537",
+          "stop_name": "קניון עזריאלי/כביש 20",
+          "city": "תל אביב יפו",
+          "location_type": 0,
+          "parent_station": null,
+          "distance_m": 61.7
+        }
+      },
+      {
+        "id": "S03",
+        "name": "Yitzhak Navon Station, Jerusalem",
+        "name_he": "תחנת יצחק נבון",
+        "mode": "rail",
+        "resolved_stop_id": "10990",
+        "resolved_stop_name": "ירושלים/יצחק נבון",
+        "resolution_rule": "name+mode",
+        "name_token_score": 1.0,
+        "matched_tokens": [
+          "יצחק",
+          "נבון"
+        ],
+        "distance_m": 83.4,
+        "location_type": "0",
+        "parent_station": null,
+        "platforms": [],
+        "platform_count": 0,
+        "candidates_within_radius": 807,
+        "expected_route_type": "2",
+        "observed_route_types": [
+          "2"
+        ],
+        "mode_matches_feed": true,
+        "geometric_nearest": {
+          "stop_id": "3523",
+          "stop_name": "ת. מרכזית ירושלים/יפו",
+          "distance_m": 24.1
+        },
+        "low_confidence": false,
+        "observed_departures": 896,
+        "peak_departures_per_hour": 8,
+        "expect_min_services_per_hour": 2,
+        "meets_expect_min_services_per_hour": true,
+        "observed_route_count": 7,
+        "feed_sha256": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468",
+        "postgis_nearest": {
+          "stop_id": "3523",
+          "stop_name": "ת. מרכזית ירושלים/יפו",
+          "city": "ירושלים",
+          "location_type": 0,
+          "parent_station": null,
+          "distance_m": 24.1
+        }
+      },
+      {
+        "id": "S04",
+        "name": "Haifa Center HaShmona",
+        "name_he": "חיפה מרכז השמונה",
+        "mode": "rail",
+        "resolved_stop_id": "10934",
+        "resolved_stop_name": "חיפה מרכז",
+        "resolution_rule": "name+mode",
+        "name_token_score": 0.667,
+        "matched_tokens": [
+          "חיפה",
+          "מרכז"
+        ],
+        "distance_m": 226.4,
+        "location_type": "0",
+        "parent_station": null,
+        "platforms": [],
+        "platform_count": 0,
+        "candidates_within_radius": 472,
+        "expected_route_type": "2",
+        "observed_route_types": [
+          "2"
+        ],
+        "mode_matches_feed": true,
+        "geometric_nearest": {
+          "stop_id": "30113",
+          "stop_name": "תחנת רכבת חיפה מרכז השמונה",
+          "distance_m": 116.5
+        },
+        "low_confidence": false,
+        "observed_departures": 1479,
+        "peak_departures_per_hour": 13,
+        "expect_min_services_per_hour": 2,
+        "meets_expect_min_services_per_hour": true,
+        "observed_route_count": 47,
+        "feed_sha256": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468",
+        "postgis_nearest": {
+          "stop_id": "30113",
+          "stop_name": "תחנת רכבת חיפה מרכז השמונה",
+          "city": "חיפה",
+          "location_type": 0,
+          "parent_station": null,
+          "distance_m": 116.7
+        }
+      },
+      {
+        "id": "S05",
+        "name": "Beersheba Central",
+        "name_he": "באר שבע מרכז",
+        "mode": "rail",
+        "resolved_stop_id": "10968",
+        "resolved_stop_name": "באר שבע מרכז",
+        "resolution_rule": "name+mode",
+        "name_token_score": 1.0,
+        "matched_tokens": [
+          "באר",
+          "מרכז",
+          "שבע"
+        ],
+        "distance_m": 26.6,
+        "location_type": "0",
+        "parent_station": null,
+        "platforms": [],
+        "platform_count": 0,
+        "candidates_within_radius": 504,
+        "expected_route_type": "2",
+        "observed_route_types": [
+          "2"
+        ],
+        "mode_matches_feed": true,
+        "geometric_nearest": {
+          "stop_id": "10968",
+          "stop_name": "באר שבע מרכז",
+          "distance_m": 26.6
+        },
+        "low_confidence": false,
+        "observed_departures": 879,
+        "peak_departures_per_hour": 8,
+        "expect_min_services_per_hour": 1,
+        "meets_expect_min_services_per_hour": true,
+        "observed_route_count": 28,
+        "feed_sha256": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468",
+        "postgis_nearest": {
+          "stop_id": "10968",
+          "stop_name": "באר שבע מרכז",
+          "city": "באר שבע",
+          "location_type": 0,
+          "parent_station": null,
+          "distance_m": 26.6
+        }
+      },
+      {
+        "id": "S06",
+        "name": "Ben Gurion Airport T3",
+        "name_he": "נמל תעופה בן גוריון",
+        "mode": "rail",
+        "resolved_stop_id": "10971",
+        "resolved_stop_name": "נתב\"ג",
+        "resolution_rule": "mode",
+        "name_token_score": 0.0,
+        "matched_tokens": [],
+        "distance_m": 1961.1,
+        "location_type": "0",
+        "parent_station": null,
+        "platforms": [],
+        "platform_count": 0,
+        "candidates_within_radius": 122,
+        "expected_route_type": "2",
+        "observed_route_types": [
+          "2"
+        ],
+        "mode_matches_feed": true,
+        "geometric_nearest": {
+          "stop_id": "22648",
+          "stop_name": "כנף",
+          "distance_m": 1532.3
+        },
+        "low_confidence": true,
+        "observed_departures": 1266,
+        "peak_departures_per_hour": 9,
+        "expect_min_services_per_hour": 1,
+        "meets_expect_min_services_per_hour": true,
+        "observed_route_count": 34,
+        "feed_sha256": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468",
+        "postgis_nearest": {
+          "stop_id": "22648",
+          "stop_name": "כנף",
+          "city": "נמל תעופה בן גוריון",
+          "location_type": 0,
+          "parent_station": null,
+          "distance_m": 1529.3
+        }
+      },
+      {
+        "id": "S07",
+        "name": "Jerusalem Central Bus Station",
+        "name_he": "תחנה מרכזית ירושלים",
+        "mode": "bus",
+        "resolved_stop_id": "3527",
+        "resolved_stop_name": "ת. מרכזית ירושלים קומה 3/רציפים",
+        "resolution_rule": "name+mode+station",
+        "name_token_score": 1.0,
+        "matched_tokens": [
+          "ירושלים"
+        ],
+        "distance_m": 108.8,
+        "location_type": "1",
+        "parent_station": null,
+        "platforms": [
+          "47347",
+          "47348",
+          "47349",
+          "47350",
+          "47352",
+          "47354",
+          "47355",
+          "47356",
+          "47358",
+          "47359",
+          "47360",
+          "47362",
+          "47363",
+          "47364",
+          "47366",
+          "47367"
+        ],
+        "platform_count": 16,
+        "candidates_within_radius": 805,
+        "expected_route_type": "3",
+        "observed_route_types": [
+          "3"
+        ],
+        "mode_matches_feed": true,
+        "geometric_nearest": {
+          "stop_id": "3523",
+          "stop_name": "ת. מרכזית ירושלים/יפו",
+          "distance_m": 40.0
+        },
+        "low_confidence": false,
+        "observed_departures": 5049,
+        "peak_departures_per_hour": 51,
+        "expect_min_services_per_hour": 20,
+        "meets_expect_min_services_per_hour": true,
+        "observed_route_count": 52,
+        "feed_sha256": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468",
+        "postgis_nearest": {
+          "stop_id": "3523",
+          "stop_name": "ת. מרכזית ירושלים/יפו",
+          "city": "ירושלים",
+          "location_type": 0,
+          "parent_station": null,
+          "distance_m": 40.0
+        }
+      },
+      {
+        "id": "S08",
+        "name": "Tel Aviv Central Bus Station",
+        "name_he": "התחנה המרכזית תל אביב",
+        "mode": "bus",
+        "resolved_stop_id": "15071",
+        "resolved_stop_name": "ת.מרכזית תל אביב קומה 6/רציפים",
+        "resolution_rule": "name+mode+station",
+        "name_token_score": 0.5,
+        "matched_tokens": [
+          "אביב",
+          "תל"
+        ],
+        "distance_m": 66.0,
+        "location_type": "1",
+        "parent_station": null,
+        "platforms": [
+          "47394",
+          "47395",
+          "47396",
+          "47397",
+          "47398",
+          "47399",
+          "47400"
+        ],
+        "platform_count": 7,
+        "candidates_within_radius": 634,
+        "expected_route_type": "3",
+        "observed_route_types": [
+          "3"
+        ],
+        "mode_matches_feed": true,
+        "geometric_nearest": {
+          "stop_id": "15071",
+          "stop_name": "ת.מרכזית תל אביב קומה 6/רציפים",
+          "distance_m": 66.0
+        },
+        "low_confidence": false,
+        "observed_departures": 1765,
+        "peak_departures_per_hour": 19,
+        "expect_min_services_per_hour": 20,
+        "meets_expect_min_services_per_hour": false,
+        "observed_route_count": 14,
+        "feed_sha256": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468",
+        "postgis_nearest": {
+          "stop_id": "47394",
+          "stop_name": "ת.מרכזית תל אביב קומה 6/רציפים",
+          "city": "תל אביב יפו",
+          "location_type": 0,
+          "parent_station": "15071",
+          "distance_m": 65.9
+        }
+      },
+      {
+        "id": "S09",
+        "name": "Mount Herzl (light rail)",
+        "name_he": "הר הרצל",
+        "mode": "light_rail",
+        "resolved_stop_id": "4519",
+        "resolved_stop_name": "הר הרצל",
+        "resolution_rule": "name+mode",
+        "name_token_score": 1.0,
+        "matched_tokens": [
+          "הר",
+          "הרצל"
+        ],
+        "distance_m": 315.3,
+        "location_type": "0",
+        "parent_station": null,
+        "platforms": [],
+        "platform_count": 0,
+        "candidates_within_radius": 675,
+        "expected_route_type": "0",
+        "observed_route_types": [
+          "0"
+        ],
+        "mode_matches_feed": true,
+        "geometric_nearest": {
+          "stop_id": "364",
+          "stop_name": "הזיכרון/שדרות הרצל",
+          "distance_m": 182.7
+        },
+        "low_confidence": false,
+        "observed_departures": 1551,
+        "peak_departures_per_hour": 12,
+        "expect_min_services_per_hour": 4,
+        "meets_expect_min_services_per_hour": true,
+        "observed_route_count": 2,
+        "feed_sha256": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468",
+        "postgis_nearest": {
+          "stop_id": "364",
+          "stop_name": "הזיכרון/שדרות הרצל",
+          "city": "ירושלים",
+          "location_type": 0,
+          "parent_station": null,
+          "distance_m": 182.2
+        }
+      },
+      {
+        "id": "S10",
+        "name": "Mitzpe Ramon",
+        "name_he": "מצפה רמון",
+        "mode": "bus",
+        "resolved_stop_id": "8769",
+        "resolved_stop_name": "מרכז מסחרי/מצפה רמון",
+        "resolution_rule": "name+mode",
+        "name_token_score": 1.0,
+        "matched_tokens": [
+          "מצפה",
+          "רמון"
+        ],
+        "distance_m": 323.4,
+        "location_type": "0",
+        "parent_station": null,
+        "platforms": [],
+        "platform_count": 0,
+        "candidates_within_radius": 31,
+        "expected_route_type": "3",
+        "observed_route_types": [
+          "3"
+        ],
+        "mode_matches_feed": true,
+        "geometric_nearest": {
+          "stop_id": "8754",
+          "stop_name": "הספרייה",
+          "distance_m": 44.6
+        },
+        "low_confidence": false,
+        "observed_departures": 679,
+        "peak_departures_per_hour": 11,
+        "expect_min_services_per_hour": 0,
+        "meets_expect_min_services_per_hour": true,
+        "observed_route_count": 21,
+        "feed_sha256": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468",
+        "postgis_nearest": {
+          "stop_id": "8754",
+          "stop_name": "הספרייה",
+          "city": "מצפה רמון",
+          "location_type": 0,
+          "parent_station": null,
+          "distance_m": 44.5
+        }
+      }
+    ],
+    "change_detection_probe": {
+      "feed": "TripIdToDate.zip",
+      "first": {
+        "name": "TripIdToDate.zip",
+        "url": "https://gtfs.mot.gov.il/gtfsfiles/TripIdToDate.zip",
+        "status": "new",
+        "sha256": "97a4b424e1837ae8e772673253aec91ec42ab1e9c32a5da4fb9cfba187163307",
+        "size_bytes": 9781611,
+        "seconds": 11.095663300002343,
+        "http_status": 200,
+        "last_modified": "Thu, 03 Sep 2026 16:58:42 GMT",
+        "etag": "\"c8384679c53bdd1:0\"",
+        "previous_sha256": null,
+        "zip_valid": true,
+        "error": null
+      },
+      "second": {
+        "name": "TripIdToDate.zip",
+        "url": "https://gtfs.mot.gov.il/gtfsfiles/TripIdToDate.zip",
+        "status": "unchanged",
+        "sha256": "97a4b424e1837ae8e772673253aec91ec42ab1e9c32a5da4fb9cfba187163307",
+        "size_bytes": 9781611,
+        "seconds": 5.3998554999998305,
+        "http_status": 200,
+        "last_modified": "Thu, 03 Sep 2026 16:58:42 GMT",
+        "etag": "\"c8384679c53bdd1:0\"",
+        "previous_sha256": "97a4b424e1837ae8e772673253aec91ec42ab1e9c32a5da4fb9cfba187163307",
+        "zip_valid": true,
+        "error": null
+      },
+      "detected": true,
+      "note": "first run on an empty directory must be 'new'; the second must be 'unchanged' if MOT has not republished between the two GETs, or 'changed' if it has. Either is a working detector; only a crash or a wrong hash would not be."
+    },
+    "edge_case_results": [
+      {
+        "id": "E01",
+        "result": "pass",
+        "detail": "HEAD reported Content-Length 3382 (text/html; charset=utf-8); GET delivered 9,781,611 bytes (application/x-zip-compressed). Change detection uses GET + sha256 + zip validation only. Two consecutive GETs of TripIdToDate.zip into an empty directory reported 'new' then 'unchanged'.",
+        "evidence": {
+          "head_in_refresh_path": false,
+          "probe": {
+            "url": "https://gtfs.mot.gov.il/gtfsfiles/TripIdToDate.zip",
+            "head_status": 200,
+            "head_content_length": "3382",
+            "head_content_type": "text/html; charset=utf-8",
+            "get_status": 200,
+            "get_content_length_header": "9781611",
+            "get_content_type": "application/x-zip-compressed",
+            "get_last_modified": "Thu, 03 Sep 2026 16:58:42 GMT",
+            "get_etag": "\"c8384679c53bdd1:0\"",
+            "get_bytes_received": 9781611
+          },
+          "change_detection": {
+            "feed": "TripIdToDate.zip",
+            "first": {
+              "name": "TripIdToDate.zip",
+              "url": "https://gtfs.mot.gov.il/gtfsfiles/TripIdToDate.zip",
+              "status": "new",
+              "sha256": "97a4b424e1837ae8e772673253aec91ec42ab1e9c32a5da4fb9cfba187163307",
+              "size_bytes": 9781611,
+              "seconds": 11.095663300002343,
+              "http_status": 200,
+              "last_modified": "Thu, 03 Sep 2026 16:58:42 GMT",
+              "etag": "\"c8384679c53bdd1:0\"",
+              "previous_sha256": null,
+              "zip_valid": true,
+              "error": null
+            },
+            "second": {
+              "name": "TripIdToDate.zip",
+              "url": "https://gtfs.mot.gov.il/gtfsfiles/TripIdToDate.zip",
+              "status": "unchanged",
+              "sha256": "97a4b424e1837ae8e772673253aec91ec42ab1e9c32a5da4fb9cfba187163307",
+              "size_bytes": 9781611,
+              "seconds": 5.3998554999998305,
+              "http_status": 200,
+              "last_modified": "Thu, 03 Sep 2026 16:58:42 GMT",
+              "etag": "\"c8384679c53bdd1:0\"",
+              "previous_sha256": "97a4b424e1837ae8e772673253aec91ec42ab1e9c32a5da4fb9cfba187163307",
+              "zip_valid": true,
+              "error": null
+            },
+            "detected": true,
+            "note": "first run on an empty directory must be 'new'; the second must be 'unchanged' if MOT has not republished between the two GETs, or 'changed' if it has. Either is a working detector; only a crash or a wrong hash would not be."
+          },
+          "refresh": {}
+        }
+      },
+      {
+        "id": "E02",
+        "result": "pass",
+        "detail": "816,056 of 32,367,255 stop_times rows are at or past 24:00:00. Largest observed 30:05:00 = 108300s = service day +1d 06:05:00; round trip exact: True.",
+        "evidence": {
+          "largest_observed": {
+            "observed": true,
+            "raw": "30:05:00",
+            "seconds_from_service_day_start": 108300,
+            "formatted_back": "30:05:00",
+            "roundtrip_exact": true,
+            "day_offset": 1,
+            "wall_clock_within_service_day": "+1d 06:05:00",
+            "rows_at_or_after_24h": 816056
+          },
+          "synthetic_roundtrip": {
+            "25:30:00": {
+              "seconds": 91800,
+              "back": "25:30:00",
+              "day_offset": 1,
+              "clock_next_day": "01:30:00"
+            },
+            "24:00:00": {
+              "seconds": 86400,
+              "back": "24:00:00",
+              "day_offset": 1,
+              "clock_next_day": "00:00:00"
+            },
+            "27:45:10": {
+              "seconds": 99910,
+              "back": "27:45:10",
+              "day_offset": 1,
+              "clock_next_day": "03:45:10"
+            }
+          },
+          "parse_errors": []
+        }
+      },
+      {
+        "id": "E03",
+        "result": "pass",
+        "detail": "30 Hebrew names compared byte-for-byte after download -> extract -> parse -> Postgres -> read; 0 mismatches. Coverage: doubled_quote=5, single_quote=7, apostrophe_geresh=5, hebrew_plus_latin=5, hebrew_plus_digits=7, hebrew_latin_digits=0, plain_hebrew=30. Not present anywhere in this feed's stop, route or agency names, so untestable here: hebrew_latin_digits.",
+        "evidence": {
+          "compared": 30,
+          "mismatches": [],
+          "coverage": {
+            "doubled_quote": 5,
+            "single_quote": 7,
+            "apostrophe_geresh": 5,
+            "hebrew_plus_latin": 5,
+            "hebrew_plus_digits": 7,
+            "hebrew_latin_digits": 0,
+            "plain_hebrew": 30
+          },
+          "categories_absent_from_feed": [
+            "hebrew_latin_digits"
+          ],
+          "nfc_normalised_equal": true,
+          "examples": [
+            {
+              "kind": "stop",
+              "id": "109",
+              "value": "גן טכנולוגי/א\"\"ס הפועל"
+            },
+            {
+              "kind": "route",
+              "id": "33184",
+              "value": "א\"\"ת עד הלום - איזור תעשיה כבדה"
+            },
+            {
+              "kind": "route",
+              "id": "16219",
+              "value": "6הימים/יוה\"\"כ - מילצן"
+            },
+            {
+              "kind": "route",
+              "id": "10335",
+              "value": "6הימים/יוה\"\"כ - ת.רכבת רחובות"
+            },
+            {
+              "kind": "route",
+              "id": "7831",
+              "value": "א\"\"ת נווה נאמן - א\"\"ת נווה נאמן"
+            },
+            {
+              "kind": "stop",
+              "id": "75",
+              "value": "שדרות גולדה מאיר/המשורר אצ\"ג"
+            },
+            {
+              "kind": "stop",
+              "id": "120",
+              "value": "תחנת רקל\"ה גן טכנולוגי מלחה/אברהם כחילה"
+            },
+            {
+              "kind": "stop",
+              "id": "131",
+              "value": "המ\"ג/פנים מאירות"
+            },
+            {
+              "kind": "stop",
+              "id": "132",
+              "value": "המ\"ג/פנים מאירות"
+            },
+            {
+              "kind": "stop",
+              "id": "133",
+              "value": "המ\"ג/זכרון יעקב"
+            },
+            {
+              "kind": "stop",
+              "id": "15",
+              "value": "אלחדיביה/ג'סר אנטיף"
+            },
+            {
+              "kind": "stop",
+              "id": "16",
+              "value": "ג'יסר א-נסף/בלדי מול"
+            },
+            {
+              "kind": "stop",
+              "id": "42",
+              "value": "אלמשאהד ד'"
+            },
+            {
+              "kind": "stop",
+              "id": "43",
+              "value": "אלמשאהד ד'"
+            },
+            {
+              "kind": "stop",
+              "id": "44",
+              "value": "אלמשאהד ג'"
+            },
+            {
+              "kind": "stop",
+              "id": "12416",
+              "value": "ת. רכבת תל אביב- סבידור/רציפים A"
+            },
+            {
+              "kind": "stop",
+              "id": "13154",
+              "value": "ת.רכבת תל אביב - סבידור/רציפים B"
+            },
+            {
+              "kind": "stop",
+              "id": "13155",
+              "value": "ת.רכבת תל אביב - סבידור/רציפים C"
+            },
+            {
+              "kind": "stop",
+              "id": "13163",
+              "value": "ת.רק\"ל קרליבך/דרך מנחם בגין B"
+            },
+            {
+              "kind": "stop",
+              "id": "13164",
+              "value": "ת.רק\"ל קרליבך/דרך מנחם בגין A"
+            },
+            {
+              "kind": "stop",
+              "id": "52",
+              "value": "אום טובא 6"
+            },
+            {
+              "kind": "stop",
+              "id": "53",
+              "value": "אום טובא 7"
+            },
+            {
+              "kind": "stop",
+              "id": "54",
+              "value": "אום טובא 9"
+            },
+            {
+              "kind": "stop",
+              "id": "55",
+              "value": "סור באהר 1"
+            },
+            {
+              "kind": "stop",
+              "id": "95",
+              "value": "חוש סלימה 1"
+            },
+            {
+              "kind": "stop",
+              "id": "3",
+              "value": "יוסף קארו/בן איש חי"
+            },
+            {
+              "kind": "stop",
+              "id": "5",
+              "value": "ישיבת הרי יהודה"
+            },
+            {
+              "kind": "stop",
+              "id": "7",
+              "value": "בן איש חי"
+            },
+            {
+              "kind": "stop",
+              "id": "8",
+              "value": "כסלון ו"
+            },
+            {
+              "kind": "stop",
+              "id": "10",
+              "value": "כסלון ט"
+            }
+          ]
+        }
+      },
+      {
+        "id": "E04",
+        "result": "pass",
+        "detail": "translations.txt parsed: 1,979,930 rows, schema 'gtfs-official (table_name/field_name/language/record_id)', languages ['AR', 'EN']. No sanitisation is applied — the rules would have to be written down first, and nothing in the file required cleaning to parse.",
+        "evidence": {
+          "primary_feed": {
+            "rows": 1979930,
+            "schema": "gtfs-official (table_name/field_name/language/record_id)",
+            "languages": {
+              "EN": 989989,
+              "AR": 989941
+            },
+            "malformed_rows": 0,
+            "malformed_samples": [],
+            "uncompressed_bytes": 126836299
+          },
+          "comparison_feed": {
+            "rows": 102514,
+            "schema": "mot-legacy (trans_id/lang/translation)",
+            "languages": {
+              "HE": 36913,
+              "AR": 32806,
+              "EN": 32795
+            },
+            "malformed_rows": 0,
+            "uncompressed_bytes": 6202205
+          }
+        }
+      },
+      {
+        "id": "E05",
+        "result": "pass",
+        "detail": "Pairing is decided by trip-id overlap. Primary feed: 0 of 892,451 join keys matched (0.0000%) -> REJECTED. Comparison feed: 100.0000% -> ACCEPTED. A deliberately mismatched pair raised FeedPairingError: True.",
+        "evidence": {
+          "primary": {
+            "feed_distinct_trip_ids": 892451,
+            "feed_distinct_join_keys": 892451,
+            "trip_id_to_date_distinct_ids": 773670,
+            "matched_join_keys": 0,
+            "match_fraction": 0.0,
+            "min_overlap_required": 0.5,
+            "trip_id_to_date_window": [
+              "2023-10-08",
+              "2200-01-01"
+            ],
+            "feed_service_window": [
+              "2026-09-05",
+              "2026-09-14"
+            ],
+            "date_windows_overlap": true,
+            "verdict": "REJECTED"
+          },
+          "comparison": {
+            "feed_distinct_trip_ids": 544338,
+            "feed_distinct_join_keys": 246042,
+            "trip_id_to_date_distinct_ids": 773670,
+            "matched_join_keys": 246042,
+            "match_fraction": 1.0,
+            "min_overlap_required": 0.5,
+            "trip_id_to_date_window": [
+              "2023-10-08",
+              "2200-01-01"
+            ],
+            "feed_service_window": [
+              "2026-09-04",
+              "2026-10-04"
+            ],
+            "date_windows_overlap": true,
+            "verdict": "ACCEPTED"
+          },
+          "negative_control": {
+            "raised": true,
+            "error": "TripIdToDate does not belong with this GTFS snapshot: only 0 of 1 feed trip ids (0.0000%) are present in TripIdToDate.txt, below the 50% threshold. Refusing to pair."
+          },
+          "hashes": {
+            "gtfs": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468",
+            "trip_id_to_date": "97a4b424e1837ae8e772673253aec91ec42ab1e9c32a5da4fb9cfba187163307"
+          }
+        }
+      },
+      {
+        "id": "E06",
+        "result": "pass",
+        "detail": "Both feeds row-counted side by side. 10-day: 892,451 trips / 32,367,255 stop_times. 60-day: 544,338 trips / 20,100,370 stop_times. Only the 10-day feed is loaded (D5).",
+        "evidence": {
+          "row_counts": {
+            "agency": {
+              "ten_day": 36,
+              "sixty_day": 36
+            },
+            "calendar": {
+              "ten_day": 0,
+              "sixty_day": 63305
+            },
+            "calendar_dates": {
+              "ten_day": 10,
+              "sixty_day": 0
+            },
+            "fare_attributes": {
+              "ten_day": 355,
+              "sixty_day": 15
+            },
+            "fare_rules": {
+              "ten_day": 1726708,
+              "sixty_day": 960910
+            },
+            "levels": {
+              "ten_day": 4,
+              "sixty_day": null
+            },
+            "networks": {
+              "ten_day": 73,
+              "sixty_day": null
+            },
+            "routes": {
+              "ten_day": 6804,
+              "sixty_day": 7786
+            },
+            "services": {
+              "ten_day": 10,
+              "sixty_day": 63305
+            },
+            "shapes": {
+              "ten_day": 7058126,
+              "sixty_day": 7139290
+            },
+            "stop_times": {
+              "ten_day": 32367255,
+              "sixty_day": 20100370
+            },
+            "stops": {
+              "ten_day": 30858,
+              "sixty_day": 35302
+            },
+            "translations": {
+              "ten_day": 1979930,
+              "sixty_day": 102514
+            },
+            "trips": {
+              "ten_day": 892451,
+              "sixty_day": 544338
+            }
+          },
+          "ten_day_sha256": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468",
+          "sixty_day_sha256": "f26b63c21ac86704c1ad89ce137eee8f2d12a35aa10e34373dcbd36b0e083a93",
+          "ten_day_service_shape": "calendar_dates only",
+          "sixty_day_service_shape": "calendar only",
+          "uncompressed_sizes": {
+            "ten_day": {
+              "calendar_dates.txt": 242,
+              "trips.txt": 61019564,
+              "stop_times.txt": 1770642811,
+              "stops.txt": 4698851,
+              "routes.txt": 640499,
+              "agency.txt": 3934,
+              "translations.txt": 126836299,
+              "shapes.txt": 239549602,
+              "fare_attributes.txt": 8404,
+              "fare_rules.txt": 35253060,
+              "feed_info.txt": 302,
+              "networks.txt": 2370,
+              "levels.txt": 42
+            },
+            "sixty_day": {
+              "agency.txt": 2962,
+              "calendar.txt": 2472872,
+              "fare_attributes.txt": 398,
+              "fare_rules.txt": 18039570,
+              "routes.txt": 979998,
+              "shapes.txt": 229422513,
+              "stop_times.txt": 1066581537,
+              "stops.txt": 5019537,
+              "translations.txt": 6202205,
+              "trips.txt": 37578715
+            }
+          }
+        }
+      },
+      {
+        "id": "E07",
+        "result": "pass",
+        "detail": "Service is not a flat weekly pattern: 2026-09-05 (Sat) 18.3%, 2026-09-11 (Fri) 49.8%, 2026-09-12 (Sat) 6.2%, 2026-09-13 (Sun) 42.9% against a peak of 126,047 trips/day.",
+        "evidence": {
+          "calendar_dates_by_exception_type": {
+            "1": 10
+          },
+          "calendar_rows": 0,
+          "calendar_dates_rows": 10,
+          "service_shape": "calendar_dates only",
+          "trips_per_service_date": [
+            {
+              "date": "2026-09-05",
+              "weekday": "Saturday",
+              "trips": 23116,
+              "pct_of_peak": 18.3
+            },
+            {
+              "date": "2026-09-06",
+              "weekday": "Sunday",
+              "trips": 122946,
+              "pct_of_peak": 97.5
+            },
+            {
+              "date": "2026-09-07",
+              "weekday": "Monday",
+              "trips": 123599,
+              "pct_of_peak": 98.1
+            },
+            {
+              "date": "2026-09-08",
+              "weekday": "Tuesday",
+              "trips": 123611,
+              "pct_of_peak": 98.1
+            },
+            {
+              "date": "2026-09-09",
+              "weekday": "Wednesday",
+              "trips": 123605,
+              "pct_of_peak": 98.1
+            },
+            {
+              "date": "2026-09-10",
+              "weekday": "Thursday",
+              "trips": 124851,
+              "pct_of_peak": 99.1
+            },
+            {
+              "date": "2026-09-11",
+              "weekday": "Friday",
+              "trips": 62803,
+              "pct_of_peak": 49.8
+            },
+            {
+              "date": "2026-09-12",
+              "weekday": "Saturday",
+              "trips": 7818,
+              "pct_of_peak": 6.2
+            },
+            {
+              "date": "2026-09-13",
+              "weekday": "Sunday",
+              "trips": 54055,
+              "pct_of_peak": 42.9
+            },
+            {
+              "date": "2026-09-14",
+              "weekday": "Monday",
+              "trips": 126047,
+              "pct_of_peak": 100.0
+            }
+          ],
+          "materially_reduced_days": [
+            {
+              "date": "2026-09-05",
+              "weekday": "Saturday",
+              "trips": 23116,
+              "pct_of_peak": 18.3
+            },
+            {
+              "date": "2026-09-11",
+              "weekday": "Friday",
+              "trips": 62803,
+              "pct_of_peak": 49.8
+            },
+            {
+              "date": "2026-09-12",
+              "weekday": "Saturday",
+              "trips": 7818,
+              "pct_of_peak": 6.2
+            },
+            {
+              "date": "2026-09-13",
+              "weekday": "Sunday",
+              "trips": 54055,
+              "pct_of_peak": 42.9
+            }
+          ]
+        }
+      },
+      {
+        "id": "E08",
+        "result": "pass",
+        "detail": "No dangling references in any counted class.",
+        "evidence": {
+          "counts": {
+            "trips_with_unknown_route": 0,
+            "trips_with_unknown_service": 0,
+            "stops_with_unknown_parent": 0,
+            "stop_times_with_unknown_trip": 0,
+            "stop_times_with_unknown_stop": 0,
+            "trips_with_no_stop_times": 0,
+            "trips_with_unknown_shape": 0
+          },
+          "samples": {
+            "trips_with_unknown_route": [],
+            "trips_with_unknown_service": [],
+            "stops_with_unknown_parent": [],
+            "stop_times_with_unknown_trip": [],
+            "stop_times_with_unknown_stop": []
+          }
+        }
+      },
+      {
+        "id": "E09",
+        "result": "pass",
+        "detail": "location_type distribution {'0': 30634, '1': 224}: 224 stations, 772 stops with a parent (2.5% of all stops). S08 resolves to station 15071 with 7 platforms grouped under it. S01 resolves to 10945 (תל אביב מרכז), which has no platform children; the nearest station to it is 14966 with 3 platforms, 162 m away. Of the 6 rail corpus entries, 0 resolved to a stop with platform children — parent/child grouping in this feed is a bus-terminal construct, not a rail-station model (KDP-011).",
+        "evidence": {
+          "location_type_distribution": {
+            "0": 30634,
+            "1": 224
+          },
+          "grouping_summary": {
+            "stations_location_type_1": 224,
+            "stops_with_parent_station": 772,
+            "stations_with_no_children": 4
+          },
+          "largest_stations": [
+            {
+              "stop_id": "8713",
+              "stop_name": "ת.מרכזית באר שבע/רציפים בינעירוני",
+              "city": "באר שבע",
+              "platforms": 23
+            },
+            {
+              "stop_id": "13454",
+              "stop_name": "ת.מרכזית תל אביב קומה 6/רציפים",
+              "city": "תל אביב יפו",
+              "platforms": 21
+            },
+            {
+              "stop_id": "6107",
+              "stop_name": "ת.מרכזית/עירוניים לדרום",
+              "city": "באר שבע",
+              "platforms": 17
+            },
+            {
+              "stop_id": "3527",
+              "stop_name": "ת. מרכזית ירושלים קומה 3/רציפים",
+              "city": "ירושלים",
+              "platforms": 16
+            },
+            {
+              "stop_id": "18622",
+              "stop_name": "ת. מרכזית ראשל\"צ/רציפים",
+              "city": "ראשון לציון",
+              "platforms": 16
+            },
+            {
+              "stop_id": "13360",
+              "stop_name": "מסוף אלוף שדה",
+              "city": "רמת גן",
+              "platforms": 14
+            },
+            {
+              "stop_id": "15258",
+              "stop_name": "ת. מרכזית נתניה/רציפים",
+              "city": "נתניה",
+              "platforms": 13
+            },
+            {
+              "stop_id": "28023",
+              "stop_name": "ת. מרכזית המפרץ/רציפים בינעירוני",
+              "city": "חיפה",
+              "platforms": 13
+            },
+            {
+              "stop_id": "2007",
+              "stop_name": "מרכז תחבורתי הארזים/בינעירוני",
+              "city": "ירושלים",
+              "platforms": 11
+            },
+            {
+              "stop_id": "16221",
+              "stop_name": "ת. מרכזית רחובות/רציפים",
+              "city": "רחובות",
+              "platforms": 11
+            }
+          ],
+          "S01": {
+            "resolved": {
+              "id": "S01",
+              "name": "Tel Aviv Savidor Center",
+              "name_he": "תל אביב סבידור מרכז",
+              "mode": "rail",
+              "resolved_stop_id": "10945",
+              "resolved_stop_name": "תל אביב מרכז",
+              "resolution_rule": "name+mode",
+              "name_token_score": 0.75,
+              "matched_tokens": [
+                "אביב",
+                "מרכז",
+                "תל"
+              ],
+              "distance_m": 18.8,
+              "location_type": "0",
+              "parent_station": null,
+              "platforms": [],
+              "platform_count": 0,
+              "candidates_within_radius": 666,
+              "expected_route_type": "2",
+              "observed_route_types": [
+                "2"
+              ],
+              "mode_matches_feed": true,
+              "geometric_nearest": {
+                "stop_id": "10945",
+                "stop_name": "תל אביב מרכז",
+                "distance_m": 18.8
+              },
+              "low_confidence": false,
+              "observed_departures": 3498,
+              "peak_departures_per_hour": 28,
+              "expect_min_services_per_hour": 6,
+              "meets_expect_min_services_per_hour": true,
+              "observed_route_count": 99,
+              "feed_sha256": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468",
+              "postgis_nearest": {
+                "stop_id": "10945",
+                "stop_name": "תל אביב מרכז",
+                "city": "תל אביב יפו",
+                "location_type": 0,
+                "parent_station": null,
+                "distance_m": 18.8
+              }
+            },
+            "platforms_of_resolved": [],
+            "stations_within_400m": [
+              {
+                "stop_id": "14966",
+                "stop_name": "ת. רכבת תל אביב - סבידור/הורדה",
+                "platforms": 3,
+                "distance_m": 161.6
+              },
+              {
+                "stop_id": "12416",
+                "stop_name": "ת. רכבת תל אביב- סבידור/רציפים A",
+                "platforms": 9,
+                "distance_m": 196.1
+              },
+              {
+                "stop_id": "13155",
+                "stop_name": "ת.רכבת תל אביב - סבידור/רציפים C",
+                "platforms": 2,
+                "distance_m": 242.7
+              },
+              {
+                "stop_id": "13154",
+                "stop_name": "ת.רכבת תל אביב - סבידור/רציפים B",
+                "platforms": 3,
+                "distance_m": 244.7
+              },
+              {
+                "stop_id": "13125",
+                "stop_name": "ארלוזורוב",
+                "platforms": 2,
+                "distance_m": 271.3
+              },
+              {
+                "stop_id": "13848",
+                "stop_name": "ת. רכבת תל אביב - סבידור/דרך נמיר",
+                "platforms": 7,
+                "distance_m": 292.2
+              }
+            ],
+            "platforms_of_nearest_station": [
+              {
+                "stop_id": "47684",
+                "stop_name": "ת. רכבת תל אביב - סבידור/הורדה",
+                "platform_code": "0",
+                "location_type": 0
+              },
+              {
+                "stop_id": "47766",
+                "stop_name": "ת. רכבת תל אביב - סבידור/הורדה",
+                "platform_code": "2",
+                "location_type": 0
+              },
+              {
+                "stop_id": "47767",
+                "stop_name": "ת. רכבת תל אביב - סבידור/הורדה",
+                "platform_code": "1",
+                "location_type": 0
+              }
+            ]
+          },
+          "S08": {
+            "resolved": {
+              "id": "S08",
+              "name": "Tel Aviv Central Bus Station",
+              "name_he": "התחנה המרכזית תל אביב",
+              "mode": "bus",
+              "resolved_stop_id": "15071",
+              "resolved_stop_name": "ת.מרכזית תל אביב קומה 6/רציפים",
+              "resolution_rule": "name+mode+station",
+              "name_token_score": 0.5,
+              "matched_tokens": [
+                "אביב",
+                "תל"
+              ],
+              "distance_m": 66.0,
+              "location_type": "1",
+              "parent_station": null,
+              "platforms": [
+                "47394",
+                "47395",
+                "47396",
+                "47397",
+                "47398",
+                "47399",
+                "47400"
+              ],
+              "platform_count": 7,
+              "candidates_within_radius": 634,
+              "expected_route_type": "3",
+              "observed_route_types": [
+                "3"
+              ],
+              "mode_matches_feed": true,
+              "geometric_nearest": {
+                "stop_id": "15071",
+                "stop_name": "ת.מרכזית תל אביב קומה 6/רציפים",
+                "distance_m": 66.0
+              },
+              "low_confidence": false,
+              "observed_departures": 1765,
+              "peak_departures_per_hour": 19,
+              "expect_min_services_per_hour": 20,
+              "meets_expect_min_services_per_hour": false,
+              "observed_route_count": 14,
+              "feed_sha256": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468",
+              "postgis_nearest": {
+                "stop_id": "47394",
+                "stop_name": "ת.מרכזית תל אביב קומה 6/רציפים",
+                "city": "תל אביב יפו",
+                "location_type": 0,
+                "parent_station": "15071",
+                "distance_m": 65.9
+              }
+            },
+            "platforms_of_resolved": [
+              "47394",
+              "47395",
+              "47396",
+              "47397",
+              "47398",
+              "47399",
+              "47400"
+            ],
+            "stations_within_400m": [
+              {
+                "stop_id": "15071",
+                "stop_name": "ת.מרכזית תל אביב קומה 6/רציפים",
+                "platforms": 7,
+                "distance_m": 65.9
+              },
+              {
+                "stop_id": "13775",
+                "stop_name": "ת.מרכזית תל אביב קומה 7/רציפים",
+                "platforms": 4,
+                "distance_m": 83.2
+              },
+              {
+                "stop_id": "14021",
+                "stop_name": "ת.מרכזית תל אביב קומה 7/רציפים",
+                "platforms": 4,
+                "distance_m": 118.1
+              },
+              {
+                "stop_id": "13454",
+                "stop_name": "ת.מרכזית תל אביב קומה 6/רציפים",
+                "platforms": 21,
+                "distance_m": 148.8
+              },
+              {
+                "stop_id": "15072",
+                "stop_name": "ת.מרכזית תל אביב קומה 7/רציפים",
+                "platforms": 5,
+                "distance_m": 234.4
+              }
+            ],
+            "platforms_of_nearest_station": [
+              {
+                "stop_id": "47394",
+                "stop_name": "ת.מרכזית תל אביב קומה 6/רציפים",
+                "platform_code": "630",
+                "location_type": 0
+              },
+              {
+                "stop_id": "47395",
+                "stop_name": "ת.מרכזית תל אביב קומה 6/רציפים",
+                "platform_code": "631",
+                "location_type": 0
+              },
+              {
+                "stop_id": "47396",
+                "stop_name": "ת.מרכזית תל אביב קומה 6/רציפים",
+                "platform_code": "632",
+                "location_type": 0
+              },
+              {
+                "stop_id": "47397",
+                "stop_name": "ת.מרכזית תל אביב קומה 6/רציפים",
+                "platform_code": "633",
+                "location_type": 0
+              },
+              {
+                "stop_id": "47398",
+                "stop_name": "ת.מרכזית תל אביב קומה 6/רציפים",
+                "platform_code": "634",
+                "location_type": 0
+              },
+              {
+                "stop_id": "47399",
+                "stop_name": "ת.מרכזית תל אביב קומה 6/רציפים",
+                "platform_code": "635",
+                "location_type": 0
+              },
+              {
+                "stop_id": "47400",
+                "stop_name": "ת.מרכזית תל אביב קומה 6/רציפים",
+                "platform_code": "637",
+                "location_type": 0
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "E10",
+        "result": "pass",
+        "detail": "Cold run from an empty data directory: started_empty=True, downloaded 262.2 MB, wall time 338.0s, exit status 0, resulting database queryable: True, manual steps: 0.",
+        "evidence": {
+          "started_empty": true,
+          "data_dir": "C:\\Users\\nhenr\\AppData\\Local\\Temp\\opentransit-cold-h2ai2zc6",
+          "schema": "coldrun",
+          "manual_steps": 0,
+          "command": "python poc/gtfs/ingest.py --data-dir <empty dir>",
+          "wall_seconds": 338.0,
+          "exit_status": 0,
+          "queryable": true,
+          "query_probe": {
+            "stops": 30858,
+            "trips": 892451,
+            "routes": 6804
+          },
+          "downloaded_bytes": 262232964,
+          "downloaded_sha256": {
+            "Gtfs_10_days.zip": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468",
+            "israel-public-transportation.zip": null,
+            "TripIdToDate.zip": "97a4b424e1837ae8e772673253aec91ec42ab1e9c32a5da4fb9cfba187163307"
+          },
+          "refresh": {
+            "Gtfs_10_days.zip": {
+              "name": "Gtfs_10_days.zip",
+              "url": "https://gtfs.mot.gov.il/gtfsfiles/Gtfs_10_days.zip",
+              "status": "new",
+              "sha256": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468",
+              "size_bytes": 252451353,
+              "seconds": 127.93737580000015,
+              "http_status": 200,
+              "last_modified": "Fri, 04 Sep 2026 00:28:38 GMT",
+              "etag": "\"ddce765443cdd1:0\"",
+              "previous_sha256": null,
+              "zip_valid": true,
+              "error": null
+            },
+            "TripIdToDate.zip": {
+              "name": "TripIdToDate.zip",
+              "url": "https://gtfs.mot.gov.il/gtfsfiles/TripIdToDate.zip",
+              "status": "new",
+              "sha256": "97a4b424e1837ae8e772673253aec91ec42ab1e9c32a5da4fb9cfba187163307",
+              "size_bytes": 9781611,
+              "seconds": 5.769348899993929,
+              "http_status": 200,
+              "last_modified": "Thu, 03 Sep 2026 16:58:42 GMT",
+              "etag": "\"c8384679c53bdd1:0\"",
+              "previous_sha256": null,
+              "zip_valid": true,
+              "error": null
+            }
+          },
+          "peak_rss_mb": 768.9,
+          "note": "The cold run downloads whatever MOT is publishing at that moment, so its hashes may differ from poc/data/manifest.json. The recorded row counts and edge-case results come from the manifest bytes, not from this run.",
+          "data_dir_removed": true
+        }
+      }
+    ],
+    "service_day_trip_counts": [
+      {
+        "date": "2026-09-05",
+        "trips": 23116
+      },
+      {
+        "date": "2026-09-06",
+        "trips": 122946
+      },
+      {
+        "date": "2026-09-07",
+        "trips": 123599
+      },
+      {
+        "date": "2026-09-08",
+        "trips": 123611
+      },
+      {
+        "date": "2026-09-09",
+        "trips": 123605
+      },
+      {
+        "date": "2026-09-10",
+        "trips": 124851
+      },
+      {
+        "date": "2026-09-11",
+        "trips": 62803
+      },
+      {
+        "date": "2026-09-12",
+        "trips": 7818
+      },
+      {
+        "date": "2026-09-13",
+        "trips": 54055
+      },
+      {
+        "date": "2026-09-14",
+        "trips": 126047
+      }
+    ],
+    "queryable_probe": {
+      "sql": "rail trips active on the first service day",
+      "service_date": "2026-09-05",
+      "rows": 77
+    },
+    "rows_parsed": {
+      "agency": 36,
+      "routes": 6804,
+      "stops": 30858,
+      "calendar": 0,
+      "calendar_dates": 10,
+      "services": 10,
+      "trips": 892451,
+      "stop_times": 32367255,
+      "shapes": 7058126,
+      "translations": 1979930,
+      "fare_attributes": 355,
+      "fare_rules": 1726708,
+      "networks": 73,
+      "levels": 4
+    },
+    "comparison_rows_parsed": {
+      "agency": 36,
+      "routes": 7786,
+      "stops": 35302,
+      "calendar": 63305,
+      "calendar_dates": 0,
+      "services": 63305,
+      "trips": 544338,
+      "stop_times": 20100370,
+      "shapes": 7139290,
+      "translations": 102514,
+      "fare_attributes": 15,
+      "fare_rules": 960910
+    },
+    "feed_info": {
+      "feed_publisher_name": "משרד התחבורה",
+      "feed_publisher_url": "https://transportation.org.il/",
+      "feed_lang": "He",
+      "default_lang": "He",
+      "feed_start_date": "20260905",
+      "feed_end_date": "20260914",
+      "feed_version": "2.0",
+      "feed_contact_email": "transport@transportation.org.il",
+      "feed_contact_url": "https://transportation.org.il/he/contact-he"
+    },
+    "service_window": [
+      "2026-09-05",
+      "2026-09-14"
+    ],
+    "trip_id_to_date": {
+      "rows": 1961317,
+      "distinct_trip_ids": 773670,
+      "window": [
+        "2023-10-08",
+        "2200-01-01"
+      ],
+      "paired_with_primary": false,
+      "read_stats": {
+        "member": "TripIdToDate.txt",
+        "rows": 1961317,
+        "malformed_rows": 1961317,
+        "has_utf8_bom": true,
+        "header": [
+          "LineDetailRecordId",
+          "OfficeLineId",
+          "Direction",
+          "LineAlternative",
+          "FromDate",
+          "ToDate",
+          "TripId",
+          "DayInWeek",
+          "DepartureTime"
+        ],
+        "malformed_samples": [
+          {
+            "line": 2,
+            "expected_fields": 9,
+            "actual_fields": 10,
+            "raw": "1,67001,1,#,01/09/2026 00:00:00,10/09/2026 00:00:00,1,1,05:10,"
+          },
+          {
+            "line": 3,
+            "expected_fields": 9,
+            "actual_fields": 10,
+            "raw": "1,67001,1,#,01/09/2026 00:00:00,10/09/2026 00:00:00,13711613,4,08:45,"
+          },
+          {
+            "line": 4,
+            "expected_fields": 9,
+            "actual_fields": 10,
+            "raw": "1,67001,1,#,01/09/2026 00:00:00,10/09/2026 00:00:00,15,2,05:10,"
+          },
+          {
+            "line": 5,
+            "expected_fields": 9,
+            "actual_fields": 10,
+            "raw": "1,67001,1,#,01/09/2026 00:00:00,10/09/2026 00:00:00,16,2,05:40,"
+          },
+          {
+            "line": 6,
+            "expected_fields": 9,
+            "actual_fields": 10,
+            "raw": "1,67001,1,#,01/09/2026 00:00:00,10/09/2026 00:00:00,16660708,1,20:35,"
+          }
+        ]
+      }
+    },
+    "read_stats": {
+      "agency.txt": {
+        "member": "agency.txt",
+        "rows": 36,
+        "malformed_rows": 0,
+        "has_utf8_bom": false,
+        "header": [
+          "agency_id",
+          "agency_name",
+          "agency_url",
+          "agency_timezone",
+          "agency_lang",
+          "agency_phone",
+          "agency_fare_url",
+          "agency_email"
+        ],
+        "malformed_samples": []
+      },
+      "routes.txt": {
+        "member": "routes.txt",
+        "rows": 6804,
+        "malformed_rows": 0,
+        "has_utf8_bom": false,
+        "header": [
+          "route_id",
+          "agency_id",
+          "route_short_name",
+          "route_long_name",
+          "route_desc",
+          "route_type",
+          "route_url",
+          "route_color",
+          "route_text_color",
+          "continuous_pickup",
+          "continuous_drop_off"
+        ],
+        "malformed_samples": []
+      },
+      "stops.txt": {
+        "member": "stops.txt",
+        "rows": 30858,
+        "malformed_rows": 0,
+        "has_utf8_bom": false,
+        "header": [
+          "stop_id",
+          "stop_code",
+          "stop_name",
+          "stop_desc",
+          "stop_lat",
+          "stop_lon",
+          "zone_id",
+          "location_type",
+          "parent_station",
+          "stop_timezone",
+          "wheelchair_boarding",
+          "level_id",
+          "platform_code"
+        ],
+        "malformed_samples": []
+      },
+      "calendar_dates.txt": {
+        "member": "calendar_dates.txt",
+        "rows": 10,
+        "malformed_rows": 0,
+        "has_utf8_bom": false,
+        "header": [
+          "service_id",
+          "date",
+          "exception_type"
+        ],
+        "malformed_samples": []
+      },
+      "trips.txt": {
+        "member": "trips.txt",
+        "rows": 892451,
+        "malformed_rows": 0,
+        "has_utf8_bom": false,
+        "header": [
+          "route_id",
+          "service_id",
+          "trip_id",
+          "trip_headsign",
+          "direction_id",
+          "shape_id",
+          "wheelchair_accessible",
+          "bikes_allowed"
+        ],
+        "malformed_samples": []
+      },
+      "stop_times.txt": {
+        "member": "stop_times.txt",
+        "rows": 32367255,
+        "malformed_rows": 0,
+        "has_utf8_bom": false,
+        "header": [
+          "trip_id",
+          "arrival_time",
+          "departure_time",
+          "stop_id",
+          "stop_sequence",
+          "stop_headsign",
+          "pickup_type",
+          "drop_off_type",
+          "continuous_pickup",
+          "continuous_drop_off",
+          "shape_dist_traveled",
+          "timepoint"
+        ],
+        "malformed_samples": []
+      },
+      "shapes.txt": {
+        "member": "shapes.txt",
+        "rows": 7058126,
+        "malformed_rows": 0,
+        "has_utf8_bom": false,
+        "header": [
+          "shape_id",
+          "shape_pt_lat",
+          "shape_pt_lon",
+          "shape_pt_sequence",
+          "shape_dist_traveled"
+        ],
+        "malformed_samples": []
+      },
+      "translations.txt": {
+        "member": "translations.txt",
+        "rows": 1979930,
+        "malformed_rows": 0,
+        "has_utf8_bom": false,
+        "header": [
+          "table_name",
+          "field_name",
+          "language",
+          "translation",
+          "record_id",
+          "record_sub_id",
+          "field_value"
+        ],
+        "malformed_samples": []
+      },
+      "fare_attributes.txt": {
+        "member": "fare_attributes.txt",
+        "rows": 355,
+        "malformed_rows": 0,
+        "has_utf8_bom": false,
+        "header": [
+          "fare_id",
+          "price",
+          "currency_type",
+          "payment_method",
+          "transfers",
+          "agency_id"
+        ],
+        "malformed_samples": []
+      },
+      "fare_rules.txt": {
+        "member": "fare_rules.txt",
+        "rows": 1726708,
+        "malformed_rows": 0,
+        "has_utf8_bom": false,
+        "header": [
+          "fare_id",
+          "route_id",
+          "origin_id",
+          "destination_id",
+          "contains_id"
+        ],
+        "malformed_samples": []
+      },
+      "networks.txt": {
+        "member": "networks.txt",
+        "rows": 73,
+        "malformed_rows": 0,
+        "has_utf8_bom": false,
+        "header": [
+          "network_id",
+          "network_name"
+        ],
+        "malformed_samples": []
+      },
+      "levels.txt": {
+        "member": "levels.txt",
+        "rows": 4,
+        "malformed_rows": 0,
+        "has_utf8_bom": false,
+        "header": [
+          "level_id",
+          "level_index"
+        ],
+        "malformed_samples": []
+      }
+    },
+    "wall_seconds": 218.4,
+    "peak_rss_mb": 1269.7
+  },
+  "cold_run": {
+    "started_empty": true,
+    "data_dir": "C:\\Users\\nhenr\\AppData\\Local\\Temp\\opentransit-cold-h2ai2zc6",
+    "schema": "coldrun",
+    "manual_steps": 0,
+    "command": "python poc/gtfs/ingest.py --data-dir <empty dir>",
+    "wall_seconds": 338.0,
+    "exit_status": 0,
+    "queryable": true,
+    "query_probe": {
+      "stops": 30858,
+      "trips": 892451,
+      "routes": 6804
+    },
+    "downloaded_bytes": 262232964,
+    "downloaded_sha256": {
+      "Gtfs_10_days.zip": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468",
+      "israel-public-transportation.zip": null,
+      "TripIdToDate.zip": "97a4b424e1837ae8e772673253aec91ec42ab1e9c32a5da4fb9cfba187163307"
+    },
+    "refresh": {
+      "Gtfs_10_days.zip": {
+        "name": "Gtfs_10_days.zip",
+        "url": "https://gtfs.mot.gov.il/gtfsfiles/Gtfs_10_days.zip",
+        "status": "new",
+        "sha256": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468",
+        "size_bytes": 252451353,
+        "seconds": 127.93737580000015,
+        "http_status": 200,
+        "last_modified": "Fri, 04 Sep 2026 00:28:38 GMT",
+        "etag": "\"ddce765443cdd1:0\"",
+        "previous_sha256": null,
+        "zip_valid": true,
+        "error": null
+      },
+      "TripIdToDate.zip": {
+        "name": "TripIdToDate.zip",
+        "url": "https://gtfs.mot.gov.il/gtfsfiles/TripIdToDate.zip",
+        "status": "new",
+        "sha256": "97a4b424e1837ae8e772673253aec91ec42ab1e9c32a5da4fb9cfba187163307",
+        "size_bytes": 9781611,
+        "seconds": 5.769348899993929,
+        "http_status": 200,
+        "last_modified": "Thu, 03 Sep 2026 16:58:42 GMT",
+        "etag": "\"c8384679c53bdd1:0\"",
+        "previous_sha256": null,
+        "zip_valid": true,
+        "error": null
+      }
+    },
+    "peak_rss_mb": 768.9,
+    "note": "The cold run downloads whatever MOT is publishing at that moment, so its hashes may differ from poc/data/manifest.json. The recorded row counts and edge-case results come from the manifest bytes, not from this run.",
+    "data_dir_removed": true
+  },
+  "edge_case_evidence": [
+    {
+      "id": "E01",
+      "result": "pass",
+      "detail": "HEAD reported Content-Length 3382 (text/html; charset=utf-8); GET delivered 9,781,611 bytes (application/x-zip-compressed). Change detection uses GET + sha256 + zip validation only. Two consecutive GETs of TripIdToDate.zip into an empty directory reported 'new' then 'unchanged'.",
+      "evidence": {
+        "head_in_refresh_path": false,
+        "probe": {
+          "url": "https://gtfs.mot.gov.il/gtfsfiles/TripIdToDate.zip",
+          "head_status": 200,
+          "head_content_length": "3382",
+          "head_content_type": "text/html; charset=utf-8",
+          "get_status": 200,
+          "get_content_length_header": "9781611",
+          "get_content_type": "application/x-zip-compressed",
+          "get_last_modified": "Thu, 03 Sep 2026 16:58:42 GMT",
+          "get_etag": "\"c8384679c53bdd1:0\"",
+          "get_bytes_received": 9781611
+        },
+        "change_detection": {
+          "feed": "TripIdToDate.zip",
+          "first": {
+            "name": "TripIdToDate.zip",
+            "url": "https://gtfs.mot.gov.il/gtfsfiles/TripIdToDate.zip",
+            "status": "new",
+            "sha256": "97a4b424e1837ae8e772673253aec91ec42ab1e9c32a5da4fb9cfba187163307",
+            "size_bytes": 9781611,
+            "seconds": 11.095663300002343,
+            "http_status": 200,
+            "last_modified": "Thu, 03 Sep 2026 16:58:42 GMT",
+            "etag": "\"c8384679c53bdd1:0\"",
+            "previous_sha256": null,
+            "zip_valid": true,
+            "error": null
+          },
+          "second": {
+            "name": "TripIdToDate.zip",
+            "url": "https://gtfs.mot.gov.il/gtfsfiles/TripIdToDate.zip",
+            "status": "unchanged",
+            "sha256": "97a4b424e1837ae8e772673253aec91ec42ab1e9c32a5da4fb9cfba187163307",
+            "size_bytes": 9781611,
+            "seconds": 5.3998554999998305,
+            "http_status": 200,
+            "last_modified": "Thu, 03 Sep 2026 16:58:42 GMT",
+            "etag": "\"c8384679c53bdd1:0\"",
+            "previous_sha256": "97a4b424e1837ae8e772673253aec91ec42ab1e9c32a5da4fb9cfba187163307",
+            "zip_valid": true,
+            "error": null
+          },
+          "detected": true,
+          "note": "first run on an empty directory must be 'new'; the second must be 'unchanged' if MOT has not republished between the two GETs, or 'changed' if it has. Either is a working detector; only a crash or a wrong hash would not be."
+        },
+        "refresh": {}
+      }
+    },
+    {
+      "id": "E02",
+      "result": "pass",
+      "detail": "816,056 of 32,367,255 stop_times rows are at or past 24:00:00. Largest observed 30:05:00 = 108300s = service day +1d 06:05:00; round trip exact: True.",
+      "evidence": {
+        "largest_observed": {
+          "observed": true,
+          "raw": "30:05:00",
+          "seconds_from_service_day_start": 108300,
+          "formatted_back": "30:05:00",
+          "roundtrip_exact": true,
+          "day_offset": 1,
+          "wall_clock_within_service_day": "+1d 06:05:00",
+          "rows_at_or_after_24h": 816056
+        },
+        "synthetic_roundtrip": {
+          "25:30:00": {
+            "seconds": 91800,
+            "back": "25:30:00",
+            "day_offset": 1,
+            "clock_next_day": "01:30:00"
+          },
+          "24:00:00": {
+            "seconds": 86400,
+            "back": "24:00:00",
+            "day_offset": 1,
+            "clock_next_day": "00:00:00"
+          },
+          "27:45:10": {
+            "seconds": 99910,
+            "back": "27:45:10",
+            "day_offset": 1,
+            "clock_next_day": "03:45:10"
+          }
+        },
+        "parse_errors": []
+      }
+    },
+    {
+      "id": "E03",
+      "result": "pass",
+      "detail": "30 Hebrew names compared byte-for-byte after download -> extract -> parse -> Postgres -> read; 0 mismatches. Coverage: doubled_quote=5, single_quote=7, apostrophe_geresh=5, hebrew_plus_latin=5, hebrew_plus_digits=7, hebrew_latin_digits=0, plain_hebrew=30. Not present anywhere in this feed's stop, route or agency names, so untestable here: hebrew_latin_digits.",
+      "evidence": {
+        "compared": 30,
+        "mismatches": [],
+        "coverage": {
+          "doubled_quote": 5,
+          "single_quote": 7,
+          "apostrophe_geresh": 5,
+          "hebrew_plus_latin": 5,
+          "hebrew_plus_digits": 7,
+          "hebrew_latin_digits": 0,
+          "plain_hebrew": 30
+        },
+        "categories_absent_from_feed": [
+          "hebrew_latin_digits"
+        ],
+        "nfc_normalised_equal": true,
+        "examples": [
+          {
+            "kind": "stop",
+            "id": "109",
+            "value": "גן טכנולוגי/א\"\"ס הפועל"
+          },
+          {
+            "kind": "route",
+            "id": "33184",
+            "value": "א\"\"ת עד הלום - איזור תעשיה כבדה"
+          },
+          {
+            "kind": "route",
+            "id": "16219",
+            "value": "6הימים/יוה\"\"כ - מילצן"
+          },
+          {
+            "kind": "route",
+            "id": "10335",
+            "value": "6הימים/יוה\"\"כ - ת.רכבת רחובות"
+          },
+          {
+            "kind": "route",
+            "id": "7831",
+            "value": "א\"\"ת נווה נאמן - א\"\"ת נווה נאמן"
+          },
+          {
+            "kind": "stop",
+            "id": "75",
+            "value": "שדרות גולדה מאיר/המשורר אצ\"ג"
+          },
+          {
+            "kind": "stop",
+            "id": "120",
+            "value": "תחנת רקל\"ה גן טכנולוגי מלחה/אברהם כחילה"
+          },
+          {
+            "kind": "stop",
+            "id": "131",
+            "value": "המ\"ג/פנים מאירות"
+          },
+          {
+            "kind": "stop",
+            "id": "132",
+            "value": "המ\"ג/פנים מאירות"
+          },
+          {
+            "kind": "stop",
+            "id": "133",
+            "value": "המ\"ג/זכרון יעקב"
+          },
+          {
+            "kind": "stop",
+            "id": "15",
+            "value": "אלחדיביה/ג'סר אנטיף"
+          },
+          {
+            "kind": "stop",
+            "id": "16",
+            "value": "ג'יסר א-נסף/בלדי מול"
+          },
+          {
+            "kind": "stop",
+            "id": "42",
+            "value": "אלמשאהד ד'"
+          },
+          {
+            "kind": "stop",
+            "id": "43",
+            "value": "אלמשאהד ד'"
+          },
+          {
+            "kind": "stop",
+            "id": "44",
+            "value": "אלמשאהד ג'"
+          },
+          {
+            "kind": "stop",
+            "id": "12416",
+            "value": "ת. רכבת תל אביב- סבידור/רציפים A"
+          },
+          {
+            "kind": "stop",
+            "id": "13154",
+            "value": "ת.רכבת תל אביב - סבידור/רציפים B"
+          },
+          {
+            "kind": "stop",
+            "id": "13155",
+            "value": "ת.רכבת תל אביב - סבידור/רציפים C"
+          },
+          {
+            "kind": "stop",
+            "id": "13163",
+            "value": "ת.רק\"ל קרליבך/דרך מנחם בגין B"
+          },
+          {
+            "kind": "stop",
+            "id": "13164",
+            "value": "ת.רק\"ל קרליבך/דרך מנחם בגין A"
+          },
+          {
+            "kind": "stop",
+            "id": "52",
+            "value": "אום טובא 6"
+          },
+          {
+            "kind": "stop",
+            "id": "53",
+            "value": "אום טובא 7"
+          },
+          {
+            "kind": "stop",
+            "id": "54",
+            "value": "אום טובא 9"
+          },
+          {
+            "kind": "stop",
+            "id": "55",
+            "value": "סור באהר 1"
+          },
+          {
+            "kind": "stop",
+            "id": "95",
+            "value": "חוש סלימה 1"
+          },
+          {
+            "kind": "stop",
+            "id": "3",
+            "value": "יוסף קארו/בן איש חי"
+          },
+          {
+            "kind": "stop",
+            "id": "5",
+            "value": "ישיבת הרי יהודה"
+          },
+          {
+            "kind": "stop",
+            "id": "7",
+            "value": "בן איש חי"
+          },
+          {
+            "kind": "stop",
+            "id": "8",
+            "value": "כסלון ו"
+          },
+          {
+            "kind": "stop",
+            "id": "10",
+            "value": "כסלון ט"
+          }
+        ]
+      }
+    },
+    {
+      "id": "E04",
+      "result": "pass",
+      "detail": "translations.txt parsed: 1,979,930 rows, schema 'gtfs-official (table_name/field_name/language/record_id)', languages ['AR', 'EN']. No sanitisation is applied — the rules would have to be written down first, and nothing in the file required cleaning to parse.",
+      "evidence": {
+        "primary_feed": {
+          "rows": 1979930,
+          "schema": "gtfs-official (table_name/field_name/language/record_id)",
+          "languages": {
+            "EN": 989989,
+            "AR": 989941
+          },
+          "malformed_rows": 0,
+          "malformed_samples": [],
+          "uncompressed_bytes": 126836299
+        },
+        "comparison_feed": {
+          "rows": 102514,
+          "schema": "mot-legacy (trans_id/lang/translation)",
+          "languages": {
+            "HE": 36913,
+            "AR": 32806,
+            "EN": 32795
+          },
+          "malformed_rows": 0,
+          "uncompressed_bytes": 6202205
+        }
+      }
+    },
+    {
+      "id": "E05",
+      "result": "pass",
+      "detail": "Pairing is decided by trip-id overlap. Primary feed: 0 of 892,451 join keys matched (0.0000%) -> REJECTED. Comparison feed: 100.0000% -> ACCEPTED. A deliberately mismatched pair raised FeedPairingError: True.",
+      "evidence": {
+        "primary": {
+          "feed_distinct_trip_ids": 892451,
+          "feed_distinct_join_keys": 892451,
+          "trip_id_to_date_distinct_ids": 773670,
+          "matched_join_keys": 0,
+          "match_fraction": 0.0,
+          "min_overlap_required": 0.5,
+          "trip_id_to_date_window": [
+            "2023-10-08",
+            "2200-01-01"
+          ],
+          "feed_service_window": [
+            "2026-09-05",
+            "2026-09-14"
+          ],
+          "date_windows_overlap": true,
+          "verdict": "REJECTED"
+        },
+        "comparison": {
+          "feed_distinct_trip_ids": 544338,
+          "feed_distinct_join_keys": 246042,
+          "trip_id_to_date_distinct_ids": 773670,
+          "matched_join_keys": 246042,
+          "match_fraction": 1.0,
+          "min_overlap_required": 0.5,
+          "trip_id_to_date_window": [
+            "2023-10-08",
+            "2200-01-01"
+          ],
+          "feed_service_window": [
+            "2026-09-04",
+            "2026-10-04"
+          ],
+          "date_windows_overlap": true,
+          "verdict": "ACCEPTED"
+        },
+        "negative_control": {
+          "raised": true,
+          "error": "TripIdToDate does not belong with this GTFS snapshot: only 0 of 1 feed trip ids (0.0000%) are present in TripIdToDate.txt, below the 50% threshold. Refusing to pair."
+        },
+        "hashes": {
+          "gtfs": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468",
+          "trip_id_to_date": "97a4b424e1837ae8e772673253aec91ec42ab1e9c32a5da4fb9cfba187163307"
+        }
+      }
+    },
+    {
+      "id": "E06",
+      "result": "pass",
+      "detail": "Both feeds row-counted side by side. 10-day: 892,451 trips / 32,367,255 stop_times. 60-day: 544,338 trips / 20,100,370 stop_times. Only the 10-day feed is loaded (D5).",
+      "evidence": {
+        "row_counts": {
+          "agency": {
+            "ten_day": 36,
+            "sixty_day": 36
+          },
+          "calendar": {
+            "ten_day": 0,
+            "sixty_day": 63305
+          },
+          "calendar_dates": {
+            "ten_day": 10,
+            "sixty_day": 0
+          },
+          "fare_attributes": {
+            "ten_day": 355,
+            "sixty_day": 15
+          },
+          "fare_rules": {
+            "ten_day": 1726708,
+            "sixty_day": 960910
+          },
+          "levels": {
+            "ten_day": 4,
+            "sixty_day": null
+          },
+          "networks": {
+            "ten_day": 73,
+            "sixty_day": null
+          },
+          "routes": {
+            "ten_day": 6804,
+            "sixty_day": 7786
+          },
+          "services": {
+            "ten_day": 10,
+            "sixty_day": 63305
+          },
+          "shapes": {
+            "ten_day": 7058126,
+            "sixty_day": 7139290
+          },
+          "stop_times": {
+            "ten_day": 32367255,
+            "sixty_day": 20100370
+          },
+          "stops": {
+            "ten_day": 30858,
+            "sixty_day": 35302
+          },
+          "translations": {
+            "ten_day": 1979930,
+            "sixty_day": 102514
+          },
+          "trips": {
+            "ten_day": 892451,
+            "sixty_day": 544338
+          }
+        },
+        "ten_day_sha256": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468",
+        "sixty_day_sha256": "f26b63c21ac86704c1ad89ce137eee8f2d12a35aa10e34373dcbd36b0e083a93",
+        "ten_day_service_shape": "calendar_dates only",
+        "sixty_day_service_shape": "calendar only",
+        "uncompressed_sizes": {
+          "ten_day": {
+            "calendar_dates.txt": 242,
+            "trips.txt": 61019564,
+            "stop_times.txt": 1770642811,
+            "stops.txt": 4698851,
+            "routes.txt": 640499,
+            "agency.txt": 3934,
+            "translations.txt": 126836299,
+            "shapes.txt": 239549602,
+            "fare_attributes.txt": 8404,
+            "fare_rules.txt": 35253060,
+            "feed_info.txt": 302,
+            "networks.txt": 2370,
+            "levels.txt": 42
+          },
+          "sixty_day": {
+            "agency.txt": 2962,
+            "calendar.txt": 2472872,
+            "fare_attributes.txt": 398,
+            "fare_rules.txt": 18039570,
+            "routes.txt": 979998,
+            "shapes.txt": 229422513,
+            "stop_times.txt": 1066581537,
+            "stops.txt": 5019537,
+            "translations.txt": 6202205,
+            "trips.txt": 37578715
+          }
+        }
+      }
+    },
+    {
+      "id": "E07",
+      "result": "pass",
+      "detail": "Service is not a flat weekly pattern: 2026-09-05 (Sat) 18.3%, 2026-09-11 (Fri) 49.8%, 2026-09-12 (Sat) 6.2%, 2026-09-13 (Sun) 42.9% against a peak of 126,047 trips/day.",
+      "evidence": {
+        "calendar_dates_by_exception_type": {
+          "1": 10
+        },
+        "calendar_rows": 0,
+        "calendar_dates_rows": 10,
+        "service_shape": "calendar_dates only",
+        "trips_per_service_date": [
+          {
+            "date": "2026-09-05",
+            "weekday": "Saturday",
+            "trips": 23116,
+            "pct_of_peak": 18.3
+          },
+          {
+            "date": "2026-09-06",
+            "weekday": "Sunday",
+            "trips": 122946,
+            "pct_of_peak": 97.5
+          },
+          {
+            "date": "2026-09-07",
+            "weekday": "Monday",
+            "trips": 123599,
+            "pct_of_peak": 98.1
+          },
+          {
+            "date": "2026-09-08",
+            "weekday": "Tuesday",
+            "trips": 123611,
+            "pct_of_peak": 98.1
+          },
+          {
+            "date": "2026-09-09",
+            "weekday": "Wednesday",
+            "trips": 123605,
+            "pct_of_peak": 98.1
+          },
+          {
+            "date": "2026-09-10",
+            "weekday": "Thursday",
+            "trips": 124851,
+            "pct_of_peak": 99.1
+          },
+          {
+            "date": "2026-09-11",
+            "weekday": "Friday",
+            "trips": 62803,
+            "pct_of_peak": 49.8
+          },
+          {
+            "date": "2026-09-12",
+            "weekday": "Saturday",
+            "trips": 7818,
+            "pct_of_peak": 6.2
+          },
+          {
+            "date": "2026-09-13",
+            "weekday": "Sunday",
+            "trips": 54055,
+            "pct_of_peak": 42.9
+          },
+          {
+            "date": "2026-09-14",
+            "weekday": "Monday",
+            "trips": 126047,
+            "pct_of_peak": 100.0
+          }
+        ],
+        "materially_reduced_days": [
+          {
+            "date": "2026-09-05",
+            "weekday": "Saturday",
+            "trips": 23116,
+            "pct_of_peak": 18.3
+          },
+          {
+            "date": "2026-09-11",
+            "weekday": "Friday",
+            "trips": 62803,
+            "pct_of_peak": 49.8
+          },
+          {
+            "date": "2026-09-12",
+            "weekday": "Saturday",
+            "trips": 7818,
+            "pct_of_peak": 6.2
+          },
+          {
+            "date": "2026-09-13",
+            "weekday": "Sunday",
+            "trips": 54055,
+            "pct_of_peak": 42.9
+          }
+        ]
+      }
+    },
+    {
+      "id": "E08",
+      "result": "pass",
+      "detail": "No dangling references in any counted class.",
+      "evidence": {
+        "counts": {
+          "trips_with_unknown_route": 0,
+          "trips_with_unknown_service": 0,
+          "stops_with_unknown_parent": 0,
+          "stop_times_with_unknown_trip": 0,
+          "stop_times_with_unknown_stop": 0,
+          "trips_with_no_stop_times": 0,
+          "trips_with_unknown_shape": 0
+        },
+        "samples": {
+          "trips_with_unknown_route": [],
+          "trips_with_unknown_service": [],
+          "stops_with_unknown_parent": [],
+          "stop_times_with_unknown_trip": [],
+          "stop_times_with_unknown_stop": []
+        }
+      }
+    },
+    {
+      "id": "E09",
+      "result": "pass",
+      "detail": "location_type distribution {'0': 30634, '1': 224}: 224 stations, 772 stops with a parent (2.5% of all stops). S08 resolves to station 15071 with 7 platforms grouped under it. S01 resolves to 10945 (תל אביב מרכז), which has no platform children; the nearest station to it is 14966 with 3 platforms, 162 m away. Of the 6 rail corpus entries, 0 resolved to a stop with platform children — parent/child grouping in this feed is a bus-terminal construct, not a rail-station model (KDP-011).",
+      "evidence": {
+        "location_type_distribution": {
+          "0": 30634,
+          "1": 224
+        },
+        "grouping_summary": {
+          "stations_location_type_1": 224,
+          "stops_with_parent_station": 772,
+          "stations_with_no_children": 4
+        },
+        "largest_stations": [
+          {
+            "stop_id": "8713",
+            "stop_name": "ת.מרכזית באר שבע/רציפים בינעירוני",
+            "city": "באר שבע",
+            "platforms": 23
+          },
+          {
+            "stop_id": "13454",
+            "stop_name": "ת.מרכזית תל אביב קומה 6/רציפים",
+            "city": "תל אביב יפו",
+            "platforms": 21
+          },
+          {
+            "stop_id": "6107",
+            "stop_name": "ת.מרכזית/עירוניים לדרום",
+            "city": "באר שבע",
+            "platforms": 17
+          },
+          {
+            "stop_id": "3527",
+            "stop_name": "ת. מרכזית ירושלים קומה 3/רציפים",
+            "city": "ירושלים",
+            "platforms": 16
+          },
+          {
+            "stop_id": "18622",
+            "stop_name": "ת. מרכזית ראשל\"צ/רציפים",
+            "city": "ראשון לציון",
+            "platforms": 16
+          },
+          {
+            "stop_id": "13360",
+            "stop_name": "מסוף אלוף שדה",
+            "city": "רמת גן",
+            "platforms": 14
+          },
+          {
+            "stop_id": "15258",
+            "stop_name": "ת. מרכזית נתניה/רציפים",
+            "city": "נתניה",
+            "platforms": 13
+          },
+          {
+            "stop_id": "28023",
+            "stop_name": "ת. מרכזית המפרץ/רציפים בינעירוני",
+            "city": "חיפה",
+            "platforms": 13
+          },
+          {
+            "stop_id": "2007",
+            "stop_name": "מרכז תחבורתי הארזים/בינעירוני",
+            "city": "ירושלים",
+            "platforms": 11
+          },
+          {
+            "stop_id": "16221",
+            "stop_name": "ת. מרכזית רחובות/רציפים",
+            "city": "רחובות",
+            "platforms": 11
+          }
+        ],
+        "S01": {
+          "resolved": {
+            "id": "S01",
+            "name": "Tel Aviv Savidor Center",
+            "name_he": "תל אביב סבידור מרכז",
+            "mode": "rail",
+            "resolved_stop_id": "10945",
+            "resolved_stop_name": "תל אביב מרכז",
+            "resolution_rule": "name+mode",
+            "name_token_score": 0.75,
+            "matched_tokens": [
+              "אביב",
+              "מרכז",
+              "תל"
+            ],
+            "distance_m": 18.8,
+            "location_type": "0",
+            "parent_station": null,
+            "platforms": [],
+            "platform_count": 0,
+            "candidates_within_radius": 666,
+            "expected_route_type": "2",
+            "observed_route_types": [
+              "2"
+            ],
+            "mode_matches_feed": true,
+            "geometric_nearest": {
+              "stop_id": "10945",
+              "stop_name": "תל אביב מרכז",
+              "distance_m": 18.8
+            },
+            "low_confidence": false,
+            "observed_departures": 3498,
+            "peak_departures_per_hour": 28,
+            "expect_min_services_per_hour": 6,
+            "meets_expect_min_services_per_hour": true,
+            "observed_route_count": 99,
+            "feed_sha256": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468",
+            "postgis_nearest": {
+              "stop_id": "10945",
+              "stop_name": "תל אביב מרכז",
+              "city": "תל אביב יפו",
+              "location_type": 0,
+              "parent_station": null,
+              "distance_m": 18.8
+            }
+          },
+          "platforms_of_resolved": [],
+          "stations_within_400m": [
+            {
+              "stop_id": "14966",
+              "stop_name": "ת. רכבת תל אביב - סבידור/הורדה",
+              "platforms": 3,
+              "distance_m": 161.6
+            },
+            {
+              "stop_id": "12416",
+              "stop_name": "ת. רכבת תל אביב- סבידור/רציפים A",
+              "platforms": 9,
+              "distance_m": 196.1
+            },
+            {
+              "stop_id": "13155",
+              "stop_name": "ת.רכבת תל אביב - סבידור/רציפים C",
+              "platforms": 2,
+              "distance_m": 242.7
+            },
+            {
+              "stop_id": "13154",
+              "stop_name": "ת.רכבת תל אביב - סבידור/רציפים B",
+              "platforms": 3,
+              "distance_m": 244.7
+            },
+            {
+              "stop_id": "13125",
+              "stop_name": "ארלוזורוב",
+              "platforms": 2,
+              "distance_m": 271.3
+            },
+            {
+              "stop_id": "13848",
+              "stop_name": "ת. רכבת תל אביב - סבידור/דרך נמיר",
+              "platforms": 7,
+              "distance_m": 292.2
+            }
+          ],
+          "platforms_of_nearest_station": [
+            {
+              "stop_id": "47684",
+              "stop_name": "ת. רכבת תל אביב - סבידור/הורדה",
+              "platform_code": "0",
+              "location_type": 0
+            },
+            {
+              "stop_id": "47766",
+              "stop_name": "ת. רכבת תל אביב - סבידור/הורדה",
+              "platform_code": "2",
+              "location_type": 0
+            },
+            {
+              "stop_id": "47767",
+              "stop_name": "ת. רכבת תל אביב - סבידור/הורדה",
+              "platform_code": "1",
+              "location_type": 0
+            }
+          ]
+        },
+        "S08": {
+          "resolved": {
+            "id": "S08",
+            "name": "Tel Aviv Central Bus Station",
+            "name_he": "התחנה המרכזית תל אביב",
+            "mode": "bus",
+            "resolved_stop_id": "15071",
+            "resolved_stop_name": "ת.מרכזית תל אביב קומה 6/רציפים",
+            "resolution_rule": "name+mode+station",
+            "name_token_score": 0.5,
+            "matched_tokens": [
+              "אביב",
+              "תל"
+            ],
+            "distance_m": 66.0,
+            "location_type": "1",
+            "parent_station": null,
+            "platforms": [
+              "47394",
+              "47395",
+              "47396",
+              "47397",
+              "47398",
+              "47399",
+              "47400"
+            ],
+            "platform_count": 7,
+            "candidates_within_radius": 634,
+            "expected_route_type": "3",
+            "observed_route_types": [
+              "3"
+            ],
+            "mode_matches_feed": true,
+            "geometric_nearest": {
+              "stop_id": "15071",
+              "stop_name": "ת.מרכזית תל אביב קומה 6/רציפים",
+              "distance_m": 66.0
+            },
+            "low_confidence": false,
+            "observed_departures": 1765,
+            "peak_departures_per_hour": 19,
+            "expect_min_services_per_hour": 20,
+            "meets_expect_min_services_per_hour": false,
+            "observed_route_count": 14,
+            "feed_sha256": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468",
+            "postgis_nearest": {
+              "stop_id": "47394",
+              "stop_name": "ת.מרכזית תל אביב קומה 6/רציפים",
+              "city": "תל אביב יפו",
+              "location_type": 0,
+              "parent_station": "15071",
+              "distance_m": 65.9
+            }
+          },
+          "platforms_of_resolved": [
+            "47394",
+            "47395",
+            "47396",
+            "47397",
+            "47398",
+            "47399",
+            "47400"
+          ],
+          "stations_within_400m": [
+            {
+              "stop_id": "15071",
+              "stop_name": "ת.מרכזית תל אביב קומה 6/רציפים",
+              "platforms": 7,
+              "distance_m": 65.9
+            },
+            {
+              "stop_id": "13775",
+              "stop_name": "ת.מרכזית תל אביב קומה 7/רציפים",
+              "platforms": 4,
+              "distance_m": 83.2
+            },
+            {
+              "stop_id": "14021",
+              "stop_name": "ת.מרכזית תל אביב קומה 7/רציפים",
+              "platforms": 4,
+              "distance_m": 118.1
+            },
+            {
+              "stop_id": "13454",
+              "stop_name": "ת.מרכזית תל אביב קומה 6/רציפים",
+              "platforms": 21,
+              "distance_m": 148.8
+            },
+            {
+              "stop_id": "15072",
+              "stop_name": "ת.מרכזית תל אביב קומה 7/רציפים",
+              "platforms": 5,
+              "distance_m": 234.4
+            }
+          ],
+          "platforms_of_nearest_station": [
+            {
+              "stop_id": "47394",
+              "stop_name": "ת.מרכזית תל אביב קומה 6/רציפים",
+              "platform_code": "630",
+              "location_type": 0
+            },
+            {
+              "stop_id": "47395",
+              "stop_name": "ת.מרכזית תל אביב קומה 6/רציפים",
+              "platform_code": "631",
+              "location_type": 0
+            },
+            {
+              "stop_id": "47396",
+              "stop_name": "ת.מרכזית תל אביב קומה 6/רציפים",
+              "platform_code": "632",
+              "location_type": 0
+            },
+            {
+              "stop_id": "47397",
+              "stop_name": "ת.מרכזית תל אביב קומה 6/רציפים",
+              "platform_code": "633",
+              "location_type": 0
+            },
+            {
+              "stop_id": "47398",
+              "stop_name": "ת.מרכזית תל אביב קומה 6/רציפים",
+              "platform_code": "634",
+              "location_type": 0
+            },
+            {
+              "stop_id": "47399",
+              "stop_name": "ת.מרכזית תל אביב קומה 6/רציפים",
+              "platform_code": "635",
+              "location_type": 0
+            },
+            {
+              "stop_id": "47400",
+              "stop_name": "ת.מרכזית תל אביב קומה 6/רציפים",
+              "platform_code": "637",
+              "location_type": 0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "E10",
+      "result": "pass",
+      "detail": "Cold run from an empty data directory: started_empty=True, downloaded 262.2 MB, wall time 338.0s, exit status 0, resulting database queryable: True, manual steps: 0.",
+      "evidence": {
+        "started_empty": true,
+        "data_dir": "C:\\Users\\nhenr\\AppData\\Local\\Temp\\opentransit-cold-h2ai2zc6",
+        "schema": "coldrun",
+        "manual_steps": 0,
+        "command": "python poc/gtfs/ingest.py --data-dir <empty dir>",
+        "wall_seconds": 338.0,
+        "exit_status": 0,
+        "queryable": true,
+        "query_probe": {
+          "stops": 30858,
+          "trips": 892451,
+          "routes": 6804
+        },
+        "downloaded_bytes": 262232964,
+        "downloaded_sha256": {
+          "Gtfs_10_days.zip": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468",
+          "israel-public-transportation.zip": null,
+          "TripIdToDate.zip": "97a4b424e1837ae8e772673253aec91ec42ab1e9c32a5da4fb9cfba187163307"
+        },
+        "refresh": {
+          "Gtfs_10_days.zip": {
+            "name": "Gtfs_10_days.zip",
+            "url": "https://gtfs.mot.gov.il/gtfsfiles/Gtfs_10_days.zip",
+            "status": "new",
+            "sha256": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468",
+            "size_bytes": 252451353,
+            "seconds": 127.93737580000015,
+            "http_status": 200,
+            "last_modified": "Fri, 04 Sep 2026 00:28:38 GMT",
+            "etag": "\"ddce765443cdd1:0\"",
+            "previous_sha256": null,
+            "zip_valid": true,
+            "error": null
+          },
+          "TripIdToDate.zip": {
+            "name": "TripIdToDate.zip",
+            "url": "https://gtfs.mot.gov.il/gtfsfiles/TripIdToDate.zip",
+            "status": "new",
+            "sha256": "97a4b424e1837ae8e772673253aec91ec42ab1e9c32a5da4fb9cfba187163307",
+            "size_bytes": 9781611,
+            "seconds": 5.769348899993929,
+            "http_status": 200,
+            "last_modified": "Thu, 03 Sep 2026 16:58:42 GMT",
+            "etag": "\"c8384679c53bdd1:0\"",
+            "previous_sha256": null,
+            "zip_valid": true,
+            "error": null
+          }
+        },
+        "peak_rss_mb": 768.9,
+        "note": "The cold run downloads whatever MOT is publishing at that moment, so its hashes may differ from poc/data/manifest.json. The recorded row counts and edge-case results come from the manifest bytes, not from this run.",
+        "data_dir_removed": true
+      }
+    }
+  ]
+}

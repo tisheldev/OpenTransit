@@ -1,0 +1,530 @@
+{
+  "poc": 2,
+  "name": "Public transportation routing",
+  "status": "PARTIAL",
+  "generated": "2026-09-04",
+  "headline": "MOTIS routes the Israeli feed: 25/25 cases answered, 21 structurally consistent; serving fits 8 GB with room to spare (1129.5 MB peak under load). Route quality is unjudged - checkpoint H3 pending.",
+  "feed_sha256": "08c168da3e6c201cf9ac4eb524815ed6e0913633ec6cdd08a632f6cbb950b468",
+  "capabilities": {
+    "route_gtfs": true,
+    "walk_transit_transfer": true
+  },
+  "capability_evidence": {
+    "route_gtfs": "MOTIS v2.11.2 imported Gtfs_10_days.zip plus the Geofabrik Israel/Palestine OSM extract into a routable graph (892,451 trips, 30,858 locations, service days 2026-09-05..2026-09-15) and answered all 25 corpus cases over /api/v6/plan with real Israeli lines and operators - Egged 845, Dan 82, Metropoline 370, Israel Railways. Every transit stop id in every response resolves against stops.txt in the same feed. Raw responses: poc/routing/responses/.",
+    "walk_transit_transfer": "20 of the 25 cases returned an itinerary whose leg sequence is literally walk -> transit -> transfer -> transit -> walk, the shape PRD 7 asks for. J11 (Tel Aviv to Haifa) is the clearest: 27 m walk, Israel Railways Tel Aviv Merkaz to Haifa Merkaz, a 4-minute walk to the bus stop, bus 2, then 564 m on foot. The full list is poc/routing/corpus-result.json -> wttw_shape_cases."
+  },
+  "metrics": {
+    "build": {
+      "wall_seconds": 40.0,
+      "peak_rss_mb": 3738.6,
+      "graph_size_mb": 910.8,
+      "memory_cap": "uncapped (32 GB host; WSL2 VM ceiling raised to 23.5 GiB first - see notes)",
+      "detail": {
+        "motis_version": "2.11.2",
+        "image_digest": "sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330",
+        "per_task_seconds": {
+          "osr_street_graph": 4.88,
+          "adr_geocoder": 4.07,
+          "tt_timetable": 24.6,
+          "adr_extend": 1.14,
+          "matches": 2.81
+        },
+        "timetable": {
+          "trips": 892451,
+          "locations": 30858,
+          "first_day": "2026-09-05",
+          "last_day": "2026-09-15"
+        },
+        "artifact_location": "docker named volume poc_motisgraph, NOT a bind mount - see notes",
+        "samples": "poc/routing/import-samples.jsonl"
+      }
+    },
+    "serving": {
+      "steady_rss_mb": 937.8,
+      "steady_rss_pct_of_cap": 11.4,
+      "steady_measurement": {
+        "condition": "at rest, graph loaded, after serving the corpus and a 16-worker load test",
+        "samples": 25,
+        "seconds": 120,
+        "min_rss_mb": 916.5,
+        "max_rss_mb": 1062.9
+      },
+      "memory_cap_gb": 8,
+      "fits_in_8gb": true,
+      "peak_rss_mb_under_load": 1129.5,
+      "peak_pct_of_cap": 13.8,
+      "oom_killed": false,
+      "cap_verified_bytes": 8589934592.0,
+      "load_test": {
+        "requests": 20632,
+        "workers": 16,
+        "seconds": 122.2,
+        "requests_per_second": 168.8,
+        "http_status_counts": {
+          "200": 20632
+        },
+        "latency_ms": {
+          "p50": 62.2,
+          "p90": 195.5,
+          "p95": 256.6,
+          "p99": 377.9,
+          "max": 670.6
+        }
+      },
+      "samples": "poc/routing/serving-steady-samples.jsonl, poc/routing/serving-stress-samples.jsonl, poc/routing/serving-samples.jsonl"
+    },
+    "journeys": {
+      "answered": 25,
+      "structural_pass": 21,
+      "total": 25,
+      "structural_pass_first_itinerary": 20,
+      "structural_pass_generous_walk_profile": 22,
+      "wttw_shape_cases": 20
+    }
+  },
+  "human_checkpoint": {
+    "id": "H3",
+    "status": "pending",
+    "sheet": "poc/results/journeys-h3-review.md",
+    "bar": "PRD 7: at least 9 of the 10 required journeys produce reasonable usable routes, compared by hand against Moovit, Google Maps and BetterRail.",
+    "decisions_waiting_on_a_person": [
+      "J23: MOTIS found a real 6h49m bus chain from Mitzpe Ramon to Metula. PRD 7 #10 needs a genuinely unroutable pair; this is not one.",
+      "J17/J21: the corpus's Ben Gurion Airport T3 coordinate is ~1.9 km off and unroutable. Agent A owns poc/corpora/journeys.json and is snapping coordinates to real stops.",
+      "J09: MOTIS's default 15-minute access/egress walking budget is too tight for Haifa. Is 30 minutes the right product default?",
+      "J18: an all-bus itinerary is ranked above the rail+bus one the case asks for. Ranking is a later phase (PRD 802) but the preference should be recorded now.",
+      "Serving used 14.3% of the 8 GB cap. Whether that justifies revisiting the cost tiers in system-design 331, and whether a 4 GB box is enough, is a developer decision."
+    ]
+  },
+  "cases": [
+    {
+      "id": "J01",
+      "prd_ref": "PRD §7 #1 Tel Aviv → Ramat Gan",
+      "outcome": "route",
+      "structural": "pass",
+      "structural_first_itinerary": "pass",
+      "duration_min": 18.0,
+      "transfers": 0,
+      "modes": [
+        "bus"
+      ],
+      "n_itineraries": 5,
+      "wttw_shape": false,
+      "notes": [],
+      "response_file": "poc/routing/responses/J01.json"
+    },
+    {
+      "id": "J02",
+      "prd_ref": null,
+      "outcome": "route",
+      "structural": "pass",
+      "structural_first_itinerary": "pass",
+      "duration_min": 26.0,
+      "transfers": 1,
+      "modes": [
+        "bus"
+      ],
+      "n_itineraries": 5,
+      "wttw_shape": true,
+      "notes": [],
+      "response_file": "poc/routing/responses/J02.json"
+    },
+    {
+      "id": "J03",
+      "prd_ref": null,
+      "outcome": "route",
+      "structural": "pass",
+      "structural_first_itinerary": "pass",
+      "duration_min": 31.0,
+      "transfers": 0,
+      "modes": [
+        "bus"
+      ],
+      "n_itineraries": 6,
+      "wttw_shape": false,
+      "notes": [],
+      "response_file": "poc/routing/responses/J03.json"
+    },
+    {
+      "id": "J04",
+      "prd_ref": "PRD §7 #2 Tel Aviv → Petah Tikva",
+      "outcome": "route",
+      "structural": "pass",
+      "structural_first_itinerary": "pass",
+      "duration_min": 35.0,
+      "transfers": 1,
+      "modes": [
+        "bus",
+        "light_rail"
+      ],
+      "n_itineraries": 5,
+      "wttw_shape": true,
+      "notes": [],
+      "response_file": "poc/routing/responses/J04.json"
+    },
+    {
+      "id": "J05",
+      "prd_ref": null,
+      "outcome": "route",
+      "structural": "pass",
+      "structural_first_itinerary": "pass",
+      "duration_min": 25.0,
+      "transfers": 0,
+      "modes": [
+        "light_rail"
+      ],
+      "n_itineraries": 6,
+      "wttw_shape": false,
+      "notes": [],
+      "response_file": "poc/routing/responses/J05.json"
+    },
+    {
+      "id": "J06",
+      "prd_ref": null,
+      "outcome": "route",
+      "structural": "pass",
+      "structural_first_itinerary": "pass",
+      "duration_min": 27.0,
+      "transfers": 1,
+      "modes": [
+        "bus"
+      ],
+      "n_itineraries": 6,
+      "wttw_shape": true,
+      "notes": [],
+      "response_file": "poc/routing/responses/J06.json"
+    },
+    {
+      "id": "J07",
+      "prd_ref": null,
+      "outcome": "route",
+      "structural": "pass",
+      "structural_first_itinerary": "pass",
+      "duration_min": 23.0,
+      "transfers": 0,
+      "modes": [
+        "bus"
+      ],
+      "n_itineraries": 7,
+      "wttw_shape": false,
+      "notes": [],
+      "response_file": "poc/routing/responses/J07.json"
+    },
+    {
+      "id": "J08",
+      "prd_ref": null,
+      "outcome": "route",
+      "structural": "pass",
+      "structural_first_itinerary": "pass",
+      "duration_min": 39.0,
+      "transfers": 2,
+      "modes": [
+        "bus",
+        "funicular"
+      ],
+      "n_itineraries": 5,
+      "wttw_shape": true,
+      "notes": [],
+      "response_file": "poc/routing/responses/J08.json"
+    },
+    {
+      "id": "J09",
+      "prd_ref": null,
+      "outcome": "no-route",
+      "structural": "fail",
+      "structural_first_itinerary": "fail",
+      "duration_min": null,
+      "transfers": null,
+      "modes": [],
+      "n_itineraries": 0,
+      "wttw_shape": false,
+      "notes": [
+        "no itineraries returned but the case expects outcome=route"
+      ],
+      "response_file": "poc/routing/responses/J09.json"
+    },
+    {
+      "id": "J10",
+      "prd_ref": null,
+      "outcome": "route",
+      "structural": "pass",
+      "structural_first_itinerary": "pass",
+      "duration_min": 44.0,
+      "transfers": 0,
+      "modes": [
+        "bus"
+      ],
+      "n_itineraries": 8,
+      "wttw_shape": false,
+      "notes": [],
+      "response_file": "poc/routing/responses/J10.json"
+    },
+    {
+      "id": "J11",
+      "prd_ref": "PRD §7 #3 Tel Aviv → Haifa",
+      "outcome": "route",
+      "structural": "pass",
+      "structural_first_itinerary": "pass",
+      "duration_min": 82.0,
+      "transfers": 1,
+      "modes": [
+        "bus",
+        "rail"
+      ],
+      "n_itineraries": 6,
+      "wttw_shape": true,
+      "notes": [],
+      "response_file": "poc/routing/responses/J11.json"
+    },
+    {
+      "id": "J12",
+      "prd_ref": "PRD §7 #4 Tel Aviv → Jerusalem",
+      "outcome": "route",
+      "structural": "pass",
+      "structural_first_itinerary": "pass",
+      "duration_min": 49.0,
+      "transfers": 0,
+      "modes": [
+        "rail"
+      ],
+      "n_itineraries": 5,
+      "wttw_shape": false,
+      "notes": [],
+      "response_file": "poc/routing/responses/J12.json"
+    },
+    {
+      "id": "J13",
+      "prd_ref": null,
+      "outcome": "route",
+      "structural": "pass",
+      "structural_first_itinerary": "pass",
+      "duration_min": 98.0,
+      "transfers": 0,
+      "modes": [
+        "rail"
+      ],
+      "n_itineraries": 6,
+      "wttw_shape": false,
+      "notes": [],
+      "response_file": "poc/routing/responses/J13.json"
+    },
+    {
+      "id": "J14",
+      "prd_ref": null,
+      "outcome": "route",
+      "structural": "pass",
+      "structural_first_itinerary": "pass",
+      "duration_min": 171.0,
+      "transfers": 1,
+      "modes": [
+        "bus",
+        "rail"
+      ],
+      "n_itineraries": 5,
+      "wttw_shape": true,
+      "notes": [],
+      "response_file": "poc/routing/responses/J14.json"
+    },
+    {
+      "id": "J15",
+      "prd_ref": "PRD §7 #5 bus → train",
+      "outcome": "route",
+      "structural": "pass",
+      "structural_first_itinerary": "pass",
+      "duration_min": 136.0,
+      "transfers": 3,
+      "modes": [
+        "bus",
+        "rail"
+      ],
+      "n_itineraries": 5,
+      "wttw_shape": true,
+      "notes": [],
+      "response_file": "poc/routing/responses/J15.json"
+    },
+    {
+      "id": "J16",
+      "prd_ref": "PRD §7 #6 train → bus",
+      "outcome": "route",
+      "structural": "pass",
+      "structural_first_itinerary": "pass",
+      "duration_min": 85.0,
+      "transfers": 1,
+      "modes": [
+        "bus",
+        "rail"
+      ],
+      "n_itineraries": 5,
+      "wttw_shape": true,
+      "notes": [],
+      "response_file": "poc/routing/responses/J16.json"
+    },
+    {
+      "id": "J17",
+      "prd_ref": null,
+      "outcome": "no-route",
+      "structural": "fail",
+      "structural_first_itinerary": "fail",
+      "duration_min": null,
+      "transfers": null,
+      "modes": [],
+      "n_itineraries": 0,
+      "wttw_shape": false,
+      "notes": [
+        "no itineraries returned but the case expects outcome=route"
+      ],
+      "response_file": "poc/routing/responses/J17.json"
+    },
+    {
+      "id": "J18",
+      "prd_ref": null,
+      "outcome": "route",
+      "structural": "pass",
+      "structural_first_itinerary": "fail",
+      "duration_min": 124.0,
+      "transfers": 3,
+      "modes": [
+        "bus"
+      ],
+      "n_itineraries": 6,
+      "wttw_shape": true,
+      "notes": [
+        "itinerary 0 (the one a user sees) does not satisfy the case; itinerary 4 does. This is a ranking question -- flag for H3."
+      ],
+      "response_file": "poc/routing/responses/J18.json"
+    },
+    {
+      "id": "J19",
+      "prd_ref": "PRD §7 #7 at least one transfer",
+      "outcome": "route",
+      "structural": "pass",
+      "structural_first_itinerary": "pass",
+      "duration_min": 71.0,
+      "transfers": 1,
+      "modes": [
+        "bus"
+      ],
+      "n_itineraries": 5,
+      "wttw_shape": true,
+      "notes": [],
+      "response_file": "poc/routing/responses/J19.json"
+    },
+    {
+      "id": "J20",
+      "prd_ref": null,
+      "outcome": "route",
+      "structural": "pass",
+      "structural_first_itinerary": "pass",
+      "duration_min": 130.0,
+      "transfers": 2,
+      "modes": [
+        "bus"
+      ],
+      "n_itineraries": 7,
+      "wttw_shape": true,
+      "notes": [],
+      "response_file": "poc/routing/responses/J20.json"
+    },
+    {
+      "id": "J21",
+      "prd_ref": "PRD §7 #8 late night",
+      "outcome": "no-route",
+      "structural": "fail",
+      "structural_first_itinerary": "fail",
+      "duration_min": null,
+      "transfers": null,
+      "modes": [],
+      "n_itineraries": 0,
+      "wttw_shape": false,
+      "notes": [
+        "no itineraries returned but the case expects outcome=route"
+      ],
+      "response_file": "poc/routing/responses/J21.json"
+    },
+    {
+      "id": "J22",
+      "prd_ref": "PRD §7 #9 crossing a service-day boundary",
+      "outcome": "route",
+      "structural": "pass",
+      "structural_first_itinerary": "pass",
+      "duration_min": 100.0,
+      "transfers": 1,
+      "modes": [
+        "bus",
+        "rail"
+      ],
+      "n_itineraries": 5,
+      "wttw_shape": true,
+      "notes": [],
+      "response_file": "poc/routing/responses/J22.json"
+    },
+    {
+      "id": "J23",
+      "prd_ref": "PRD §7 #10 no reasonable transit route",
+      "outcome": "route",
+      "structural": "fail",
+      "structural_first_itinerary": "fail",
+      "duration_min": 409.0,
+      "transfers": 4,
+      "modes": [
+        "bus"
+      ],
+      "n_itineraries": 5,
+      "wttw_shape": false,
+      "notes": [
+        "5 itinerary/itineraries returned but the case requires no route -- the engine may be inventing service"
+      ],
+      "response_file": "poc/routing/responses/J23.json"
+    },
+    {
+      "id": "J24",
+      "prd_ref": null,
+      "outcome": "no-route",
+      "structural": "pass",
+      "structural_first_itinerary": "pass",
+      "duration_min": null,
+      "transfers": null,
+      "modes": [],
+      "n_itineraries": 0,
+      "wttw_shape": false,
+      "notes": [
+        "no itineraries returned, which the case allows"
+      ],
+      "response_file": "poc/routing/responses/J24.json"
+    },
+    {
+      "id": "J25",
+      "prd_ref": null,
+      "outcome": "route",
+      "structural": "pass",
+      "structural_first_itinerary": "pass",
+      "duration_min": 80.0,
+      "transfers": 1,
+      "modes": [
+        "bus"
+      ],
+      "n_itineraries": 5,
+      "wttw_shape": true,
+      "notes": [],
+      "response_file": "poc/routing/responses/J25.json"
+    }
+  ],
+  "notes": [
+    "STATUS IS PARTIAL BY DESIGN. The 21/25 figure is a STRUCTURAL check only - legs join up, times run forwards, stop ids resolve against the static feed, durations are not absurd, declared modes and transfer counts are honoured. It is NOT PRD 7's bar, which is '9/10 representative journeys produce reasonable usable routes' judged by a human against Moovit, Google Maps and BetterRail. That is checkpoint H3. The review sheet a human fills in is poc/results/journeys-h3-review.md.",
+    "BUILD AND SERVING ARE SEPARATE MEASUREMENTS AND ARE REPORTED SEPARATELY. Build: uncapped, 40 s wall, 3,738.6 MB peak RSS, 910.8 MB graph on disk. Serving: capped at 8 GB (mem_limit 8g and memswap_limit 8g, verified as 8589934592 bytes on the running container), 937.8 MB steady at rest with the graph loaded, 1,129.5 MB peak under a 16-worker load. The serving cap was never raised.",
+    "SERVING FITS 8 GB, AND BY A LARGE MARGIN. Peak was 13.8% of the cap across 20,632 requests, all HTTP 200, p50 62 ms / p95 257 ms, no OOM kill and no restart. This corroborates system-design 320's revised estimate rather than contradicting it: the measured MOTIS footprint for Israel - timetable, street graph and geocoder in one process - is about 1.1-1.2 GB, against the 2-4 GB that table allots those rows. On this evidence the 8 GB tier in 331 is not tight but generous, and the 4 GB shape may well be viable. That is a question for the developer, not a conclusion an agent should draw. Caveats that keep this from being the whole answer: the graph carries a 10-day feed rather than a full year, and no realtime feed, no Transit.Api, no Redis and no Postgres shared the container.",
+    "THE COMPOSE FILE'S MOTIS COMMANDS WERE WRONG AND ARE NOW FIXED. The Wave 0 scaffold used command: [\"import\"] and command: [\"server\"]. The published image declares no entrypoint - its Cmd is [\"/motis\",\"server\",\"/data\"] - so a compose `command:` replaces argv entirely and Docker tried to exec a binary literally named 'server'. The verbs themselves were right: MOTIS v2 does have config, import and server. What was missing is that both take flags (import -c <config> -d <data>, server -d <data>) and that /motis must be argv[0]. Also added poc/routing/config.yml, generated by 'motis config' against the real inputs and then changed in three places, each documented in the file: the tiles section removed, first_day pinned to a date instead of TODAY, and the dataset renamed for readable stop ids.",
+    "CONFIGURATION TRAP 1, resolved. Docker Desktop was not running and its backend was crash-looping on a stale AF_UNIX socket at %LOCALAPPDATA%\\\\Docker\\\\run\\\\userAnalyticsOtlpHttp.sock which Windows refused to delete ('The file cannot be accessed by the system') - del, fsutil reparsepoint delete and Remove-Item all failed. Renaming the containing run\\\\ directory aside let Docker Desktop recreate it and start cleanly. Nothing to do with MOTIS or with Israeli data.",
+    "CONFIGURATION TRAP 2, resolved. Docker Desktop on Windows caps every container at the WSL2 VM size, by default about half of host RAM (16 GB here). Raised to 24 GB in %USERPROFILE%\\\\.wslconfig BEFORE the first build, because ADR 0004 requires a genuine memory raise to precede any attribution of an import failure to MOTIS. Containers then saw 23.5 GiB. As it turned out the build peaked at 3,738.6 MB and the raise was not load-bearing - but it was done first, so the recorded build figure is a measurement of the build and not of a ceiling.",
+    "CONFIGURATION TRAP 3, resolved, AND THIS ONE IS A REAL DEPLOYMENT CONSTRAINT WORTH CARRYING FORWARD. The first import died after 3.7 s with 'unable to import: resize error' at 0 percent of the street-routing task, leaving every .bin file it had created at zero length. The cause was that the graph directory was bind-mounted from the Windows filesystem: MOTIS stores its graph in cista memory-mapped vectors which grow by ftruncate and re-mmap, and Docker Desktop's filesystem-sharing layer does not support that. docker-compose.yml now puts the data directory in a named volume (poc_motisgraph) on ext4 inside the VM, and the import then completed. The carry-forward is that system-design 320's 'ship the artifact' step must land the graph on a real filesystem - never a shared folder, a network mount, or an object-storage FUSE mount.",
+    "KDP-002 WAS CHECKED EXPLICITLY AND DID NOT BITE. The 10-day feed has calendar_dates.txt only and no calendar.txt, which the brief warns can silently produce zero services. MOTIS handled it: timetable_metrics.json in the built graph reports 892,451 trips over 30,858 locations for service days 2026-09-05..2026-09-15, matching feed_info.txt. Worth knowing for later: MOTIS clamped the loaded window to the feed's real service days rather than honouring the configured num_days: 365, so a 365-day window over a 10-day feed costs nothing.",
+    "KDP-001 WAS RESPECTED AND IS ENFORCED IN CODE. Every departure came from the corpus's resolved_for_feed_08c168da3e6c201c block, so all 25 queries fall inside the feed's 2026-09-05..2026-09-14 window. run_corpus.py refuses to run at all if manifest.json's feed sha256 stops matching that block, so a nightly MOT re-publish cannot silently produce results against a stale departure schedule.",
+    "FOUR CASES MISSED THEIR STATED EXPECTATION UNDER THE DEFAULT PROFILE, AND THREE OF THE FOUR LOOK LIKE CORPUS PROBLEMS RATHER THAN ENGINE PROBLEMS. The probes behind that claim are in poc/routing/no-route-diagnosis.json; the four are set out individually below.",
+    "J17 AND J21 - both target 'Ben Gurion Airport T3' at 32.0114,34.8867. There is no stop within 1.5 km of that coordinate and no route at any walking budget tried, up to 30 minutes. The real T3 interchange sits near 32.0000,34.8706; re-probed against that, both cases route immediately at MOTIS defaults - J17 Modi'in to T3 in 96 minutes with one transfer, and J21 Tel Aviv Savidor to T3 at 23:40 in 45 minutes with no transfers, which is precisely the late-night airport rail the case was written to test. This is the coordinate defect the corpus's own provenance block predicts: 'APPROXIMATE, hand-entered, NOT yet validated against the real GTFS stop set.' poc/corpora/journeys.json belongs to Agent A and was deliberately not edited.",
+    "J09 - Haifa University to Bat Galim. Both endpoints do have stops nearby (177 m and 618 m), but MOTIS's default 900 s pre- and post-transit walking budget is not enough on the Carmel's terrain, where crow-flies distance badly understates the walk. Raised to 1800 s the case routes cleanly: 61 minutes, no transfers, Egged bus 148, departing exactly at the requested time. This was recorded as a separate labelled profile (poc/routing/corpus-result-generous-walk.json), NOT folded into the primary measurement. Whether 15 or 30 minutes is the right default walking budget for an Israeli journey planner is a product decision.",
+    "J23 - Mitzpe Ramon to Metula at 02:30 - IS THE CASE THAT NEEDS A HUMAN, AND IT IS NOT THE FAILURE THE CASE ANTICIPATED. The case expects no route and warns that an itinerary here means the engine is inventing service. MOTIS returned five, and the first is well-formed and appears entirely real: walk, Metropoline 64 to Beersheba Central 05:03-06:22, Metropoline 370 to Tel Aviv Central 06:30-07:50, Egged 845 to Tel Hai 08:00-10:39, then Egged 12 and Egged 20 into Metula, arriving 11:46 - six hours 49 minutes, four transfers, departing 04:57 because that is the first bus out of Mitzpe Ramon. Those are real lines on real corridors. The engine is not inventing service; the premise that Israel has no transit path between these two towns appears simply to be wrong. PRD 7 #10 still needs a genuinely unroutable pair, and choosing one is a human call.",
+    "J22, THE AFTER-MIDNIGHT GTFS TRAP, PASSED CONVINCINGLY. Asked for 02:30, MOTIS returned an itinerary departing 02:39 - nine minutes later, not twenty hours - using Metropoline bus 445 to Ben Gurion Airport and the 03:53 Israel Railways night train back to Tel Aviv Merkaz. No crash and no silent empty result. Trips carrying stop times past 24:00:00 are being resolved onto the correct service day.",
+    "J25, THE SHABBAT CASE, BEHAVED CORRECTLY AND IS WORTH LOOKING AT. Asked for Saturday 2026-09-05 at 12:00, MOTIS returned nothing during Shabbat and placed its first itinerary at 18:50 that evening, after Shabbat ends - and by bus (Dan 18 then Egged 480), not by rail, which is right, because Israel Railways does not run on Shabbat. The Israeli calendar is being read correctly out of calendar_dates.txt.",
+    "J18 IS THE ONE RANKING FLAG. The itinerary a user would be shown is all-bus, while the case asks for rail and bus. A rail-and-bus itinerary was returned, just not first. Ranking is explicitly out of scope for POC-2 (PRD 802 puts a ranking layer later) and it is noted for H3 rather than counted as a routing failure.",
+    "SCORING METHOD, stated plainly so it can be argued with. A case counts as a structural pass if ANY returned itinerary satisfies its constraints, because a constraint like J15's modes_all_of [bus, rail] asks whether such a journey is available, not whether MOTIS ranked it first. The stricter number - itineraries[0] only - is recorded alongside it as structural_pass_first_itinerary (20 against 21), and the single case where the two disagree (J18) is flagged above."
+  ]
+}

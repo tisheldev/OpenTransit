@@ -1,14 +1,14 @@
 # Phase 0 POC — status
 
-Generated 2026-09-04 17:47 UTC from `poc/results/` at commit `e283af9`.
+Generated 2026-09-05 14:30 UTC from `poc/results/` at commit `42e71cb`.
 **Machine-generated. Do not hand-edit — run `python poc/poc_status.py --write`.**
 
 ## Dependency status (PRD §13)
 
 | POC | Component | Status | Detail |
 | --- | --- | --- | --- |
-| POC-1 | Static Israeli transportation data | **PASS** | 892,451 trips / 32,367,255 stop_times parsed, 5 tables in Postgres, 10/10 integrity checks pass; TripIdToDate unjoinable (KDP-008); licence terms unread (H2) |
-| POC-2 | Public transportation routing | **PARTIAL** | MOTIS routes the Israeli feed: 25/25 cases answered, 21 structurally consistent; serving fits 8 GB with room to spare (1129.5 MB peak under load). Route quality is unjudged - checkpoint H3 pending. |
+| POC-1 | Static Israeli transportation data | **PASS** | 544,338 trips / 20,100,370 stop_times parsed, 5 tables in Postgres, 10/10 integrity checks pass; licence terms unread (H2) |
+| POC-2 | Public transportation routing | **PARTIAL** | 25/25 answered; 24 structural passes (22 first itinerary); load peak 941.3 MB; H3 pending |
 | POC-3 | Realtime transit information | **NOT_STARTED** | no result file yet |
 | POC-4 | Service alerts | **BLOCKED_ON_ACCESS** | No public feed URL exists; gated on MOT reply |
 | POC-5 | Address and place search | **PARTIAL** | 68/100 top-1 (89/100 in top-5) — clears PRD §10's bar of 20, but Latin-script street addresses do not resolve (4/15 address cases) and the `near` bias point is inert at MOTIS's default placeBias |
@@ -41,18 +41,18 @@ Phase 0 is PASS only when every row is PASS.
 
 **POC-1**
 
-- `rows_parsed`: {'agency': 36, 'routes': 6804, 'stops': 30858, 'calendar': 0, 'calendar_dates': 10, 'services': 10, 'trips': 892451, 'stop_times': 32367255, 'shapes': 7058126, 'translations': 1979930, 'fare_attributes': 355, 'fare_rules': 1726708, 'networks': 73, 'levels': 4}
-- `rows_loaded`: {'routes': 6804, 'trips': 892451, 'stops': 30858, 'calendars': 10, 'trip_id_to_date': 1961317}
-- `cold_refresh_seconds`: 338.0
-- `peak_rss_mb`: 1269.7
-- `ingest_seconds_offline`: 218.4
-- `seven_prd_groups`: {'agency': 36, 'routes': 6804, 'trips': 892451, 'stops': 30858, 'stop_times': 32367255, 'calendar': 10, 'shapes': 7058126}
+- `rows_parsed`: {'agency': 36, 'routes': 7786, 'stops': 35302, 'calendar': 63305, 'calendar_dates': 0, 'services': 63305, 'trips': 544338, 'stop_times': 20100370, 'shapes': 7139290, 'translations': 102514, 'fare_attributes': 15, 'fare_rules': 960910}
+- `rows_loaded`: {'routes': 7786, 'trips': 544338, 'stops': 35302, 'calendars': 63305, 'trip_id_to_date': 1961317}
+- `cold_refresh_seconds`: 180.0
+- `peak_rss_mb`: 1441.7
+- `ingest_seconds_offline`: 199.6
+- `seven_prd_groups`: {'agency': 36, 'routes': 7786, 'trips': 544338, 'stops': 35302, 'stop_times': 20100370, 'calendar': 63305, 'shapes': 7139290}
 
 **POC-2**
 
-- `build`: {'wall_seconds': 40.0, 'peak_rss_mb': 3738.6, 'graph_size_mb': 910.8, 'memory_cap': 'uncapped (32 GB host; WSL2 VM ceiling raised to 23.5 GiB first - see notes)', 'detail': {'motis_version': '2.11.2', 'image_digest': 'sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330', 'per_task_seconds': {'osr_street_graph': 4.88, 'adr_geocoder': 4.07, 'tt_timetable': 24.6, 'adr_extend': 1.14, 'matches': 2.81}, 'timetable': {'trips': 892451, 'locations': 30858, 'first_day': '2026-09-05', 'last_day': '2026-09-15'}, 'artifact_location': 'docker named volume poc_motisgraph, NOT a bind mount - see notes', 'samples': 'poc/routing/import-samples.jsonl'}}
-- `serving`: {'steady_rss_mb': 937.8, 'steady_rss_pct_of_cap': 11.4, 'steady_measurement': {'condition': 'at rest, graph loaded, after serving the corpus and a 16-worker load test', 'samples': 25, 'seconds': 120, 'min_rss_mb': 916.5, 'max_rss_mb': 1062.9}, 'memory_cap_gb': 8, 'fits_in_8gb': True, 'peak_rss_mb_under_load': 1129.5, 'peak_pct_of_cap': 13.8, 'oom_killed': False, 'cap_verified_bytes': 8589934592.0, 'load_test': {'requests': 20632, 'workers': 16, 'seconds': 122.2, 'requests_per_second': 168.8, 'http_status_counts': {'200': 20632}, 'latency_ms': {'p50': 62.2, 'p90': 195.5, 'p95': 256.6, 'p99': 377.9, 'max': 670.6}}, 'samples': 'poc/routing/serving-steady-samples.jsonl, poc/routing/serving-stress-samples.jsonl, poc/routing/serving-samples.jsonl'}
-- `journeys`: {'answered': 25, 'structural_pass': 21, 'total': 25, 'structural_pass_first_itinerary': 20, 'structural_pass_generous_walk_profile': 22, 'wttw_shape_cases': 20}
+- `build`: {'wall_seconds': 34.0, 'peak_rss_mb': 3272.7, 'graph_size_mb': 681.2, 'memory_cap': 'uncapped (WSL2 VM ceiling 23.5 GiB on a 32 GB host)', 'service_window': ['2026-09-04', '2026-10-04']}
+- `serving`: {'steady_rss_mb': 726.8, 'memory_cap_gb': 8, 'fits_in_8gb': True, 'peak_rss_mb_under_load': 941.3, 'cap_verified_bytes': 8589934592.0, 'load_test': {'feed_sha256': 'f26b63c21ac86704c1ad89ce137eee8f2d12a35aa10e34373dcbd36b0e083a93', 'generated': '2026-09-05T12:33:35.549633+00:00', 'workers': 16, 'seconds': 121.5, 'requests': 26715, 'requests_per_second': 219.9, 'http_status_counts': {'200': 26715}, 'latency_ms': {'p50': 57.2, 'p90': 149.3, 'p95': 162.9, 'p99': 180.4, 'max': 229.2}, 'memory_cap_gb': 8, 'cap_observed_bytes': 8589934592.0, 'peak_rss_bytes': 987024588, 'peak_rss_mb': 941.3, 'peak_rss_pct_of_cap': 11.5, 'samples': 33, 'container_state_after': {'oom_killed': False, 'status': 'running', 'restart_count': 0}}}
+- `journeys`: {'total': 25, 'answered': 25, 'structural_pass_any': 24, 'structural_pass_first': 22, 'structural_pass': 24, 'structural_pass_first_itinerary': 22, 'structural_pass_generous_walk_profile': 25}
 
 **POC-5**
 

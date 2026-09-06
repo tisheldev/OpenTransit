@@ -1,0 +1,78 @@
+# MOTIS v2.11.2 configuration for OpenTransit Israel POC-2.
+#
+# Derived from `motis config israel-and-palestine-latest.osm.pbf Gtfs_10_days.zip`
+# (the generator MOTIS itself ships), then modified in exactly three places.
+# Everything else is left at MOTIS's own defaults on purpose: the POC-2 serving
+# measurement is only meaningful if it measures what an operator would actually
+# get, not a hand-tuned configuration.
+#
+# The three deliberate changes, and why:
+#
+#  1. The `tiles:` section is REMOVED. MOTIS adds it whenever an OSM file is
+#     present, and it builds a vector-tile database sized `db_size:
+#     274877906944` (256 GB sparse). POC-2 is about routing (PRD 7); map tiles
+#     are not in scope for Phase 0 and the build machine has ~66 GB free. Tiles
+#     can be re-enabled later without changing anything else here.
+#
+#  2. `first_day` is pinned to 2026-09-04 instead of the generated `TODAY`.
+#     `TODAY` makes the built artifact depend on the wall-clock date of the
+#     machine that built it, which is exactly the kind of silent drift
+#     known-data-problems KDP-001 is about. 2026-09-04 is the date this graph
+#     was built. num_days stays at MOTIS's default 365, which covers the
+#     Gtfs_10_days.zip service window of 2026-09-05..2026-09-14 (KDP-001) with
+#     room to spare. MOTIS uses traffic-day bitsets, so a 365-day window over a
+#     10-day feed costs almost nothing.
+#
+#  3. The dataset key is named `mot10day` rather than `Gtfs10days`, so that stop
+#     and trip ids in API responses are readably prefixed.
+#
+# NOT changed, and worth knowing they are levers if the 8 GB serving envelope in
+# system-design 320 turns out to be tight:
+#   railviz: true       - vehicle-movement data for map animation
+#   with_shapes: true   - shapes.txt geometry, 239 MB in this feed (KDP-003)
+#   tb: false           - RAPTOR rather than transfer-bound routing
+#
+# NOTE on KDP-002: this feed has calendar_dates.txt only, no calendar.txt.
+# `extend_calendar: false` is correct for it -- extend_calendar repeats a
+# calendar.txt weekly pattern past feed_end_date, and there is no weekly pattern
+# here to repeat. If MOTIS reports zero services after import, KDP-002 is the
+# first thing to check, not the last.
+
+osm: /input/israel-and-palestine-latest.osm.pbf
+timetable:
+  first_day: 2026-09-04
+  num_days: 365
+  tb: false
+  railviz: true
+  with_shapes: true
+  adjust_footpaths: true
+  merge_dupes_intra_src: false
+  merge_dupes_inter_src: false
+  link_stop_distance: 100
+  update_interval: 60
+  http_timeout: 30
+  canned_rt: false
+  incremental_rt_update: false
+  extend_missing_footpaths: false
+  max_footpath_length: 15
+  default_transfer_time: 2
+  max_matching_distance: 25.000000
+  preprocess_max_matching_distance: 250.000000
+  datasets:
+    mot10day:
+      path: /input/Gtfs_10_days.zip
+      extend_calendar: false
+      default_bikes_allowed: false
+      default_cars_allowed: false
+      default_reservation_not_required: true
+      clasz_reservation_not_required:
+        AIR: false
+        COACH: false
+        NIGHT: false
+        ODM: false
+        RIDESHARING: false
+elevators: false
+street_routing: true
+osr_footpath: false
+geocoding: true
+reverse_geocoding: true

@@ -1,0 +1,742 @@
+{
+  "schema_version": 1,
+  "generated": "2026-09-04",
+  "purpose": "POC-2 routing corpus. Structural fields are machine-checked; human_review is checkpoint H3.",
+  "provenance": {
+    "required_ten": "PRD §7 lists ten journeys that must be covered. Their ids are tagged prd_ref.",
+    "category_mix": "docs/phase-0-mvp-plan.md §F0.2 table.",
+    "coordinates": "APPROXIMATE, hand-entered, NOT yet validated against the real GTFS stop set. Agent A snaps each to the nearest real stop and rewrites this file with a resolved_stop_id. Until then treat lat/lon as a hint, not truth.",
+    "durations": "min/max bands are the plan author's estimates, not measurements. They exist to catch absurd results (a 4-hour Tel Aviv bus ride), not to grade quality. Widen freely during review.",
+    "calendar_shape": "The 10-day feed has NO calendar.txt. It uses calendar_dates.txt only, with one service_id per date (service_id == the date). Valid GTFS, but any code assuming calendar.txt exists will break on it. The 60-day feed is the opposite: calendar.txt weekly patterns, no calendar_dates.txt.",
+    "corpus_fixes_4_sep": "J17/J21 airport coordinate and J23 origin were both wrong in the Wave 0 hand-entered set and were corrected from real feed data after Agent B's run. Journey results recorded before this fix are not comparable for those three cases."
+  },
+  "depart_rules": {
+    "note": "Resolved against the FEED'S OWN service window from feed_info.txt, not against wall-clock 'next Monday'. The 10-day feed is regenerated nightly and its window slides, so calendar-relative rules go stale within days. Each rule means: the first matching weekday inside feed_start_date..feed_end_date, at the given local time.",
+    "resolution": "first_<weekday>_in_feed_window at HH:MM local",
+    "weekday_morning": {
+      "weekday": "Monday",
+      "time": "08:00"
+    },
+    "weekday_midday": {
+      "weekday": "Tuesday",
+      "time": "13:00"
+    },
+    "weekday_evening": {
+      "weekday": "Wednesday",
+      "time": "18:30"
+    },
+    "late_night": {
+      "weekday": "Tuesday",
+      "time": "23:40"
+    },
+    "after_midnight": {
+      "weekday": "Wednesday",
+      "time": "02:30"
+    },
+    "shabbat": {
+      "weekday": "Saturday",
+      "time": "12:00"
+    },
+    "friday_afternoon": {
+      "weekday": "Friday",
+      "time": "15:30"
+    },
+    "resolved_for_feed_08c168da3e6c201c": {
+      "feed_window": "2026-09-05 (Sat) .. 2026-09-14 (Mon)",
+      "weekday_morning": "2026-09-07 08:00",
+      "weekday_midday": "2026-09-08 13:00",
+      "weekday_evening": "2026-09-09 18:30",
+      "late_night": "2026-09-08 23:40",
+      "after_midnight": "2026-09-09 02:30",
+      "shabbat": "2026-09-05 12:00",
+      "friday_afternoon": "2026-09-11 15:30"
+    }
+  },
+  "cases": [
+    {
+      "id": "J01",
+      "category": "tel-aviv-urban-bus",
+      "prd_ref": "PRD §7 #1 Tel Aviv → Ramat Gan",
+      "from": {
+        "name": "Dizengoff Center",
+        "name_he": "דיזנגוף סנטר",
+        "lat": 32.0757,
+        "lon": 34.7748
+      },
+      "to": {
+        "name": "Ramat Gan Bursa",
+        "name_he": "רמת גן בורסה",
+        "lat": 32.0838,
+        "lon": 34.8044
+      },
+      "depart": "weekday_morning",
+      "expect": {
+        "outcome": "route",
+        "modes_any_of": [
+          "bus",
+          "light_rail"
+        ],
+        "min_duration_min": 10,
+        "max_duration_min": 55,
+        "max_transfers": 2
+      },
+      "human_review": "Would a Tel Aviv resident actually take this? Compare against Moovit."
+    },
+    {
+      "id": "J02",
+      "category": "tel-aviv-urban-bus",
+      "from": {
+        "name": "Tel Aviv University",
+        "name_he": "אוניברסיטת תל אביב",
+        "lat": 32.1133,
+        "lon": 34.8044
+      },
+      "to": {
+        "name": "Sourasky Medical Center (Ichilov)",
+        "name_he": "בית חולים איכילוב",
+        "lat": 32.08,
+        "lon": 34.79
+      },
+      "depart": "weekday_morning",
+      "expect": {
+        "outcome": "route",
+        "modes_any_of": [
+          "bus",
+          "light_rail",
+          "rail"
+        ],
+        "min_duration_min": 12,
+        "max_duration_min": 60,
+        "max_transfers": 2
+      },
+      "human_review": "Peak-hour campus-to-hospital trip. Is the walk at either end reasonable?"
+    },
+    {
+      "id": "J03",
+      "category": "tel-aviv-urban-bus",
+      "from": {
+        "name": "Jaffa Clock Tower",
+        "name_he": "מגדל השעון יפו",
+        "lat": 32.0542,
+        "lon": 34.7522
+      },
+      "to": {
+        "name": "Tel Aviv Savidor Center",
+        "name_he": "תל אביב סבידור מרכז",
+        "lat": 32.0836,
+        "lon": 34.7981
+      },
+      "depart": "weekday_midday",
+      "expect": {
+        "outcome": "route",
+        "modes_any_of": [
+          "bus",
+          "light_rail"
+        ],
+        "min_duration_min": 15,
+        "max_duration_min": 65,
+        "max_transfers": 2
+      },
+      "human_review": "Jaffa to the main station. Does it use the red line where sensible?"
+    },
+    {
+      "id": "J04",
+      "category": "tel-aviv-urban-bus",
+      "prd_ref": "PRD §7 #2 Tel Aviv → Petah Tikva",
+      "from": {
+        "name": "Dizengoff Center",
+        "name_he": "דיזנגוף סנטר",
+        "lat": 32.0757,
+        "lon": 34.7748
+      },
+      "to": {
+        "name": "Petah Tikva Kiryat Arye",
+        "name_he": "פתח תקווה קרית אריה",
+        "lat": 32.0956,
+        "lon": 34.8556
+      },
+      "depart": "weekday_evening",
+      "expect": {
+        "outcome": "route",
+        "modes_any_of": [
+          "bus",
+          "rail",
+          "light_rail"
+        ],
+        "min_duration_min": 20,
+        "max_duration_min": 90,
+        "max_transfers": 2
+      },
+      "human_review": "Evening peak. Does it prefer rail or bus, and is that the right call?"
+    },
+    {
+      "id": "J05",
+      "category": "jerusalem-urban-light-rail",
+      "from": {
+        "name": "Mahane Yehuda Market",
+        "name_he": "שוק מחנה יהודה",
+        "lat": 31.7853,
+        "lon": 35.2124
+      },
+      "to": {
+        "name": "Mount Herzl",
+        "name_he": "הר הרצל",
+        "lat": 31.7736,
+        "lon": 35.1806
+      },
+      "depart": "weekday_midday",
+      "expect": {
+        "outcome": "route",
+        "modes_any_of": [
+          "light_rail",
+          "bus"
+        ],
+        "min_duration_min": 8,
+        "max_duration_min": 45,
+        "max_transfers": 1
+      },
+      "human_review": "This is the light rail's spine. If it routes by bus instead, something is wrong."
+    },
+    {
+      "id": "J06",
+      "category": "jerusalem-urban-light-rail",
+      "from": {
+        "name": "Jerusalem Central Bus Station",
+        "name_he": "תחנה מרכזית ירושלים",
+        "lat": 31.7887,
+        "lon": 35.203
+      },
+      "to": {
+        "name": "Hebrew University Mount Scopus",
+        "name_he": "האוניברסיטה העברית הר הצופים",
+        "lat": 31.7936,
+        "lon": 35.2444
+      },
+      "depart": "weekday_morning",
+      "expect": {
+        "outcome": "route",
+        "modes_any_of": [
+          "light_rail",
+          "bus"
+        ],
+        "min_duration_min": 15,
+        "max_duration_min": 70,
+        "max_transfers": 2
+      },
+      "human_review": "Cross-city to Mount Scopus. Check the transfer point is a real interchange."
+    },
+    {
+      "id": "J07",
+      "category": "jerusalem-urban-light-rail",
+      "from": {
+        "name": "Yitzhak Navon Station",
+        "name_he": "תחנת יצחק נבון",
+        "lat": 31.7888,
+        "lon": 35.2027
+      },
+      "to": {
+        "name": "Malha Mall",
+        "name_he": "קניון מלחא",
+        "lat": 31.7513,
+        "lon": 35.1875
+      },
+      "depart": "weekday_evening",
+      "expect": {
+        "outcome": "route",
+        "modes_any_of": [
+          "light_rail",
+          "bus",
+          "rail"
+        ],
+        "min_duration_min": 15,
+        "max_duration_min": 70,
+        "max_transfers": 2
+      },
+      "human_review": "Does it consider the Malha rail branch, and is that sensible at this hour?"
+    },
+    {
+      "id": "J08",
+      "category": "haifa-urban",
+      "from": {
+        "name": "Haifa Center HaShmona",
+        "name_he": "חיפה מרכז השמונה",
+        "lat": 32.8206,
+        "lon": 34.9985
+      },
+      "to": {
+        "name": "Technion",
+        "name_he": "הטכניון",
+        "lat": 32.7767,
+        "lon": 35.0217
+      },
+      "depart": "weekday_morning",
+      "expect": {
+        "outcome": "route",
+        "modes_any_of": [
+          "bus",
+          "cable_car",
+          "funicular"
+        ],
+        "min_duration_min": 15,
+        "max_duration_min": 75,
+        "max_transfers": 2
+      },
+      "human_review": "Haifa is vertical. Check the walking legs are not absurd gradients."
+    },
+    {
+      "id": "J09",
+      "category": "haifa-urban",
+      "from": {
+        "name": "Haifa University",
+        "name_he": "אוניברסיטת חיפה",
+        "lat": 32.7614,
+        "lon": 35.0207
+      },
+      "to": {
+        "name": "Bat Galim Central Station",
+        "name_he": "חיפה בת גלים",
+        "lat": 32.8283,
+        "lon": 34.9539
+      },
+      "depart": "weekday_evening",
+      "expect": {
+        "outcome": "route",
+        "modes_any_of": [
+          "bus",
+          "rail"
+        ],
+        "min_duration_min": 20,
+        "max_duration_min": 85,
+        "max_transfers": 2
+      },
+      "human_review": "Long descent across the Carmel. Compare to Moovit for line choice."
+    },
+    {
+      "id": "J10",
+      "category": "haifa-urban",
+      "from": {
+        "name": "Grand Kanyon Haifa",
+        "name_he": "גראנד קניון חיפה",
+        "lat": 32.7943,
+        "lon": 34.9891
+      },
+      "to": {
+        "name": "Rambam Medical Center",
+        "name_he": "בית חולים רמבם",
+        "lat": 32.8347,
+        "lon": 34.9857
+      },
+      "depart": "weekday_midday",
+      "expect": {
+        "outcome": "route",
+        "modes_any_of": [
+          "bus",
+          "rail",
+          "funicular"
+        ],
+        "min_duration_min": 12,
+        "max_duration_min": 70,
+        "max_transfers": 2
+      },
+      "human_review": "Mall to hospital. Does the Metronit BRT get used?"
+    },
+    {
+      "id": "J11",
+      "category": "intercity-rail",
+      "prd_ref": "PRD §7 #3 Tel Aviv → Haifa",
+      "from": {
+        "name": "Tel Aviv Savidor Center",
+        "name_he": "תל אביב סבידור מרכז",
+        "lat": 32.0836,
+        "lon": 34.7981
+      },
+      "to": {
+        "name": "Haifa Center HaShmona",
+        "name_he": "חיפה מרכז השמונה",
+        "lat": 32.8206,
+        "lon": 34.9985
+      },
+      "depart": "weekday_morning",
+      "expect": {
+        "outcome": "route",
+        "modes_any_of": [
+          "rail"
+        ],
+        "min_duration_min": 45,
+        "max_duration_min": 130,
+        "max_transfers": 1
+      },
+      "human_review": "The flagship rail corridor. Cross-check timings against BetterRail."
+    },
+    {
+      "id": "J12",
+      "category": "intercity-rail",
+      "prd_ref": "PRD §7 #4 Tel Aviv → Jerusalem",
+      "from": {
+        "name": "Tel Aviv Savidor Center",
+        "name_he": "תל אביב סבידור מרכז",
+        "lat": 32.0836,
+        "lon": 34.7981
+      },
+      "to": {
+        "name": "Yitzhak Navon Station",
+        "name_he": "תחנת יצחק נבון",
+        "lat": 31.7888,
+        "lon": 35.2027
+      },
+      "depart": "weekday_morning",
+      "expect": {
+        "outcome": "route",
+        "modes_any_of": [
+          "rail"
+        ],
+        "min_duration_min": 30,
+        "max_duration_min": 110,
+        "max_transfers": 1
+      },
+      "human_review": "Fast line. If it routes by bus, the rail calendar is probably misread."
+    },
+    {
+      "id": "J13",
+      "category": "intercity-rail",
+      "from": {
+        "name": "Tel Aviv HaShalom",
+        "name_he": "תל אביב השלום",
+        "lat": 32.0731,
+        "lon": 34.7925
+      },
+      "to": {
+        "name": "Beersheba Central",
+        "name_he": "באר שבע מרכז",
+        "lat": 31.243,
+        "lon": 34.7983
+      },
+      "depart": "weekday_midday",
+      "expect": {
+        "outcome": "route",
+        "modes_any_of": [
+          "rail"
+        ],
+        "min_duration_min": 60,
+        "max_duration_min": 180,
+        "max_transfers": 1
+      },
+      "human_review": "Long-distance south. Is the itinerary the direct train or a silly chain?"
+    },
+    {
+      "id": "J14",
+      "category": "intercity-rail",
+      "from": {
+        "name": "Nahariya",
+        "name_he": "נהריה",
+        "lat": 33.0079,
+        "lon": 35.0938
+      },
+      "to": {
+        "name": "Ashdod Ad Halom",
+        "name_he": "אשדוד עד הלום",
+        "lat": 31.794,
+        "lon": 34.641
+      },
+      "depart": "weekday_morning",
+      "expect": {
+        "outcome": "route",
+        "modes_any_of": [
+          "rail"
+        ],
+        "min_duration_min": 120,
+        "max_duration_min": 260,
+        "max_transfers": 2
+      },
+      "human_review": "End-to-end coastal line. Tests the longest single-mode journey in the country."
+    },
+    {
+      "id": "J15",
+      "category": "bus-to-rail",
+      "prd_ref": "PRD §7 #5 bus → train",
+      "from": {
+        "name": "Weizmann Institute, Rehovot",
+        "name_he": "מכון ויצמן למדע",
+        "lat": 31.907,
+        "lon": 34.8102
+      },
+      "to": {
+        "name": "Haifa Center HaShmona",
+        "name_he": "חיפה מרכז השמונה",
+        "lat": 32.8206,
+        "lon": 34.9985
+      },
+      "depart": "weekday_morning",
+      "expect": {
+        "outcome": "route",
+        "modes_all_of": [
+          "bus",
+          "rail"
+        ],
+        "min_duration_min": 75,
+        "max_duration_min": 220,
+        "max_transfers": 3
+      },
+      "human_review": "Must contain a bus leg then a rail leg. Verify the interchange is real."
+    },
+    {
+      "id": "J16",
+      "category": "rail-to-bus",
+      "prd_ref": "PRD §7 #6 train → bus",
+      "from": {
+        "name": "Tel Aviv Savidor Center",
+        "name_he": "תל אביב סבידור מרכז",
+        "lat": 32.0836,
+        "lon": 34.7981
+      },
+      "to": {
+        "name": "Technion",
+        "name_he": "הטכניון",
+        "lat": 32.7767,
+        "lon": 35.0217
+      },
+      "depart": "weekday_morning",
+      "expect": {
+        "outcome": "route",
+        "modes_all_of": [
+          "rail",
+          "bus"
+        ],
+        "min_duration_min": 70,
+        "max_duration_min": 200,
+        "max_transfers": 3
+      },
+      "human_review": "The PRD §39 demo journey in reverse shape. Rail then bus up the Carmel."
+    },
+    {
+      "id": "J17",
+      "category": "bus-to-rail",
+      "from": {
+        "name": "Modi'in Center",
+        "name_he": "מודיעין מרכז",
+        "lat": 31.9017,
+        "lon": 35.0074
+      },
+      "to": {
+        "name": "Ben Gurion Airport T3",
+        "name_he": "נתב\"ג טרמינל 3",
+        "lat": 32.0004,
+        "lon": 34.8705,
+        "corpus_fix": "was 32.0114,34.8867 which is 1532 m from the nearest stop of any kind. Replaced with GTFS stop 10971 נתב\"ג from feed 08c168da. Fix derived from the feed, not re-guessed."
+      },
+      "depart": "weekday_morning",
+      "expect": {
+        "outcome": "route",
+        "modes_any_of": [
+          "rail",
+          "bus"
+        ],
+        "min_duration_min": 15,
+        "max_duration_min": 90,
+        "max_transfers": 2
+      },
+      "human_review": "Airport access. A wrong answer here is very visible to a real user."
+    },
+    {
+      "id": "J18",
+      "category": "rail-to-bus",
+      "from": {
+        "name": "Beersheba North University",
+        "name_he": "באר שבע צפון אוניברסיטה",
+        "lat": 31.262,
+        "lon": 34.8016
+      },
+      "to": {
+        "name": "Bar-Ilan University",
+        "name_he": "אוניברסיטת בר אילן",
+        "lat": 32.07,
+        "lon": 34.8433
+      },
+      "depart": "weekday_morning",
+      "expect": {
+        "outcome": "route",
+        "modes_all_of": [
+          "rail",
+          "bus"
+        ],
+        "min_duration_min": 75,
+        "max_duration_min": 230,
+        "max_transfers": 3
+      },
+      "human_review": "Campus to campus, two operators, at least one interchange."
+    },
+    {
+      "id": "J19",
+      "category": "with-transfer",
+      "prd_ref": "PRD §7 #7 at least one transfer",
+      "from": {
+        "name": "Herzliya Station",
+        "name_he": "תחנת רכבת הרצליה",
+        "lat": 32.1656,
+        "lon": 34.8095
+      },
+      "to": {
+        "name": "Beilinson Hospital, Petah Tikva",
+        "name_he": "בית חולים בילינסון",
+        "lat": 32.087,
+        "lon": 34.858
+      },
+      "depart": "weekday_morning",
+      "expect": {
+        "outcome": "route",
+        "min_transfers": 1,
+        "max_transfers": 3,
+        "min_duration_min": 20,
+        "max_duration_min": 100
+      },
+      "human_review": "Must transfer. Is the transfer window realistic, not a 2-minute cross-platform miracle?"
+    },
+    {
+      "id": "J20",
+      "category": "with-transfer",
+      "from": {
+        "name": "Netanya Station",
+        "name_he": "תחנת רכבת נתניה",
+        "lat": 32.3097,
+        "lon": 34.8619
+      },
+      "to": {
+        "name": "Mahane Yehuda Market",
+        "name_he": "שוק מחנה יהודה",
+        "lat": 31.7853,
+        "lon": 35.2124
+      },
+      "depart": "weekday_midday",
+      "expect": {
+        "outcome": "route",
+        "min_transfers": 1,
+        "max_transfers": 3,
+        "min_duration_min": 60,
+        "max_duration_min": 200
+      },
+      "human_review": "Coastal rail then Jerusalem light rail. Checks cross-operator chaining."
+    },
+    {
+      "id": "J21",
+      "category": "late-night",
+      "prd_ref": "PRD §7 #8 late night",
+      "from": {
+        "name": "Tel Aviv Savidor Center",
+        "name_he": "תל אביב סבידור מרכז",
+        "lat": 32.0836,
+        "lon": 34.7981
+      },
+      "to": {
+        "name": "Ben Gurion Airport T3",
+        "name_he": "נתב\"ג טרמינל 3",
+        "lat": 32.0004,
+        "lon": 34.8705,
+        "corpus_fix": "was 32.0114,34.8867 which is 1532 m from the nearest stop of any kind. Replaced with GTFS stop 10971 נתב\"ג from feed 08c168da. Fix derived from the feed, not re-guessed."
+      },
+      "depart": "late_night",
+      "expect": {
+        "outcome": "route",
+        "modes_any_of": [
+          "rail",
+          "bus"
+        ],
+        "min_duration_min": 10,
+        "max_duration_min": 120,
+        "max_transfers": 2
+      },
+      "human_review": "Airport rail runs deep into the night. Does the engine know that?"
+    },
+    {
+      "id": "J22",
+      "category": "service-day-boundary",
+      "prd_ref": "PRD §7 #9 crossing a service-day boundary",
+      "from": {
+        "name": "Dizengoff Center",
+        "name_he": "דיזנגוף סנטר",
+        "lat": 32.0757,
+        "lon": 34.7748
+      },
+      "to": {
+        "name": "Ramat Gan Bursa",
+        "name_he": "רמת גן בורסה",
+        "lat": 32.0838,
+        "lon": 34.8044
+      },
+      "depart": "after_midnight",
+      "expect": {
+        "outcome": "either",
+        "min_duration_min": 5,
+        "max_duration_min": 180
+      },
+      "human_review": "THE GTFS trap: trips after midnight belong to the previous service day with times like 25:30:00. Either a valid night route or a clean no-route is acceptable. A crash, an empty result with no explanation, or a route departing 20 hours later is a FAIL."
+    },
+    {
+      "id": "J23",
+      "category": "no-reasonable-route",
+      "prd_ref": "PRD §7 #10 no reasonable transit route",
+      "from": {
+        "name": "Har Karkom, central Negev",
+        "name_he": "הר כרכום",
+        "lat": 30.28,
+        "lon": 34.74
+      },
+      "to": {
+        "name": "Metula",
+        "name_he": "מטולה",
+        "lat": 33.2778,
+        "lon": 35.5786
+      },
+      "depart": "after_midnight",
+      "expect": {
+        "outcome": "no-route"
+      },
+      "human_review": "Origin is 23.5 km from the nearest stop in the feed — measured, not assumed. No walking budget reaches transit, so 'no route' is the only correct answer. An itinerary here means the engine is inventing access.",
+      "corpus_fix": "ORIGINAL CASE WAS INVALID. It asserted Mitzpe Ramon -> Metula was unroutable; MOTIS returned a real 6h49m itinerary on real lines (Metropoline 64/370, Egged 845/12/20). The engine was right and the premise was wrong: Israel is too well connected for two towns to be mutually unreachable. Rebuilt around an origin with no stop in range, measured against feed 08c168da: nearest stop 23,491 m."
+    },
+    {
+      "id": "J24",
+      "category": "long-walk-accessibility",
+      "from": {
+        "name": "Masada Junction",
+        "name_he": "צומת מצדה",
+        "lat": 31.3156,
+        "lon": 35.3539
+      },
+      "to": {
+        "name": "Beersheba Central",
+        "name_he": "באר שבע מרכז",
+        "lat": 31.243,
+        "lon": 34.7983
+      },
+      "depart": "weekday_midday",
+      "expect": {
+        "outcome": "either",
+        "max_walk_m": 3000,
+        "min_duration_min": 40,
+        "max_duration_min": 300
+      },
+      "human_review": "Sparse desert service with long access walks. Check the walking legs are physically plausible — not a 6 km hike along a highway shoulder."
+    },
+    {
+      "id": "J25",
+      "category": "shabbat-holiday",
+      "from": {
+        "name": "Dizengoff Center",
+        "name_he": "דיזנגוף סנטר",
+        "lat": 32.0757,
+        "lon": 34.7748
+      },
+      "to": {
+        "name": "Yitzhak Navon Station",
+        "name_he": "תחנת יצחק נבון",
+        "lat": 31.7888,
+        "lon": 35.2027
+      },
+      "depart": "shabbat",
+      "expect": {
+        "outcome": "either"
+      },
+      "human_review": "THE Israeli calendar case: national rail and most buses do not run on Shabbat, while some operators and city lines do. A confident full itinerary on Saturday noon is almost certainly wrong. Verify whatever it returns against the actual calendar.txt entries."
+    }
+  ]
+}

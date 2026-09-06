@@ -35,7 +35,7 @@ BUILD = ROUTING / "import-result.json"
 STRESS = ROUTING / "serving-stress.json"
 STEADY = ROUTING / "serving-steady.json"
 
-IL = timezone(timedelta(hours=3))  # IDT, in force across the feed window
+from feed_context import IL
 
 
 def L(iso: str | None) -> str:
@@ -104,7 +104,12 @@ def main() -> int:
     build = json.loads(BUILD.read_text(encoding="utf-8")) if BUILD.exists() else {}
     stress = json.loads(STRESS.read_text(encoding="utf-8")) if STRESS.exists() else {}
     steady = json.loads(STEADY.read_text(encoding="utf-8")) if STEADY.exists() else {}
-    diagnosis = json.loads(DIAGNOSIS.read_text(encoding="utf-8")) if DIAGNOSIS.exists() else []
+    from feed_context import verified_context
+    feed_sha, _ = verified_context()
+    for evidence in (primary, variant, build, stress, steady):
+        if evidence and evidence.get('feed_sha256') != feed_sha:
+            raise ValueError('Mixed-feed H3 evidence; rerun routing measurements')
+    diagnosis = []  # Historical probes are preserved in comparisons; do not mix feeds.
 
     var_by_id = {c["id"]: c for c in (variant or {}).get("cases", [])}
 
@@ -128,21 +133,21 @@ def main() -> int:
     A("")
     A("## What you are looking at")
     A("")
-    A(f"- **Feed:** `Gtfs_10_days.zip`, sha256 `{primary['feed_sha256'][:16]}…`")
-    A(f"- **Service window:** {primary['feed_window']} (KDP-001 — the feed does *not* cover 4 Sep,")
-    A("  so every departure time below was resolved onto a date inside the window)")
+    A(f"- **Feed:** `israel-public-transportation.zip`, sha256 `{primary['feed_sha256'][:16]}…`")
+    A(f"- **Service window:** {primary['feed_window']}; departures resolved from service calendars")
     A(f"- **Engine:** MOTIS v2.11.2, endpoint `{primary['plan_endpoint']}`")
     A(f"- **Graph built:** {round((build.get('wall_seconds') or 0))} s, peak {build.get('peak_rss_mb')} MB, "
       f"{build.get('graph_size_mb')} MB on disk")
     A("- **Served from:** a container capped at **8 GB** (system-design §320's production box)")
     if steady:
         A(f"- **At rest:** {steady['steady_rss_mb']} MB, "
-          f"{steady['steady_pct_of_cap']}% of the cap, flat across {steady['samples']} samples")
+          f"{steady['steady_pct_of_cap']}% of the cap; range {steady['min_rss_mb']}–{steady['max_rss_mb']} MB across {steady['samples']} samples")
     if stress:
-        A(f"- **Under load:** {stress['requests']} requests, all HTTP 200, p95 {stress['latency_ms']['p95']} ms, "
-          f"peak {stress['peak_rss_mb']} MB = {stress['peak_rss_pct_of_cap']}% of the cap, no OOM")
+        A(f"- **Under load:** {stress['requests']} requests, HTTP statuses {stress['http_status_counts']}, p95 {stress['latency_ms']['p95']} ms, "
+          f"peak {stress['peak_rss_mb']} MB = {stress['peak_rss_pct_of_cap']}% of the cap; "
+          f"OOM killed: {stress['container_state_after'].get('oom_killed')}, restarts: {stress['container_state_after'].get('restart_count')}")
     A("")
-    A("Times are **Israeli local time (IDT, UTC+3)**. Stop names are exactly as the")
+    A("Times are **Israeli local time (Asia/Jerusalem)**. Stop names are exactly as the")
     A("MOT feed spells them, in Hebrew, because that is what you will be matching")
     A("against in Moovit.")
     A("")

@@ -32,15 +32,15 @@ BASE = "https://gtfs.mot.gov.il/gtfsfiles/"
 FEEDS: dict[str, dict] = {
     "Gtfs_10_days.zip": {
         "url": BASE + "Gtfs_10_days.zip",
-        "role": "primary",
-        "description": "MOT 10-day GTFS — primary input (ADR 0005)",
+        "role": "comparison",
+        "description": "MOT 10-day GTFS — comparison only (ADR 0005)",
         "required_members": ["agency.txt", "routes.txt", "trips.txt", "stops.txt",
                              "stop_times.txt", "shapes.txt", "feed_info.txt"],
     },
     "israel-public-transportation.zip": {
         "url": BASE + "israel-public-transportation.zip",
-        "role": "comparison",
-        "description": "MOT 60-day GTFS — comparison only (ADR 0005)",
+        "role": "primary",
+        "description": "MOT 60-day GTFS — primary input (ADR 0005)",
         "required_members": ["agency.txt", "routes.txt", "trips.txt", "stops.txt",
                              "stop_times.txt", "shapes.txt"],
     },

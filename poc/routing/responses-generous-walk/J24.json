@@ -27,14 +27,14 @@
     "url": "http://localhost:58080/api/v6/plan?fromPlace=31.3156%2C35.3539&toPlace=31.243%2C34.7983&time=2026-09-08T13%3A00%3A00%2B03%3A00&arriveBy=false&numItineraries=5&timetableView=true&maxPreTransitTime=1800&maxPostTransitTime=1800",
     "requested_time_local": "2026-09-08T13:00:00+03:00",
     "http_status": 200,
-    "latency_ms": 9.0
+    "latency_ms": 7.4
   },
   "response": {
     "requestParameters": {},
     "debugOutput": {
       "algorithm": 1,
       "direct": 0,
-      "execute_time": 1,
+      "execute_time": 3,
       "fares": 0,
       "fastest_direct": 0,
       "fp_update_prevented_by_lower_bound": 0,
@@ -53,8 +53,8 @@
       "n_start_offsets": 0,
       "n_td_dest_offsets": 0,
       "n_td_start_offsets": 0,
-      "prepare": 2,
-      "prepare_backward_WALK": 2,
+      "prepare": 1,
+      "prepare_backward_WALK": 1,
       "prepare_forward_WALK": 0,
       "route_update_prevented_by_lower_bound": 0,
       "search_interval_reduction_by_early_termination": 0

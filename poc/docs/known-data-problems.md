@@ -41,11 +41,9 @@ none of which are yet decided:
 
 ### Action
 
-Revisit ADR 0005, which chose the 10-day feed as the primary input on the strength of
-`data-access-findings.md` §1 ("for a journey planner the 10-day feed is the accurate one").
-That reasoning is still sound about accuracy, but incomplete: it did not account for the
-window opening tomorrow. This is a **decision for the developer**, not something an agent
-should resolve unilaterally.
+Resolved by the accepted 5 September ADR 0005 amendment: the 60-day feed plus
+compatible TripIdToDate is now the executable primary. The alternatives above
+are historical options, not active configuration. Ten-day data is comparison only.
 
 ---
 
@@ -289,15 +287,15 @@ writes a bare numeric id such as `1684794342`, drawn from a different id space e
 - KDP-002 suspected the file "may make parts of the 147 MB `TripIdToDate.txt` redundant for
   this feed". The measurement is stronger than that: it is not redundant, it is unjoinable.
 - POC-3 must therefore match realtime against the 60-day feed, or find another key. That
-  choice interacts with the already-reopened primary-feed decision in ADR 0005.
+  choice is now recorded in the accepted primary-feed amendment in ADR 0005.
 
 ### Action
 
-The ingester **refuses the pair by default** (`FeedPairingError`, corpus check E05) and
-loads `trip_id_to_date` only under an explicit `--allow-unpaired-trip-id-to-date` flag,
-which POC-1 uses solely to record the row count ADR 0003 asks for.
-`poc/results/poc-1.json` carries the rejection in its notes. **Developer decision**,
-feeding ADR 0005 and POC-3.
+The ingester and graph preflight require complete normalized key coverage and
+an overlapping known date window (`FeedPairingError`, E05). The old unpaired-load
+flag and wrapper bypass are removed. Current primary pairing is accepted; the
+ten-day comparison is rejected. This does not establish realtime matching or
+per-service-date mapping uniqueness.
 
 ---
 

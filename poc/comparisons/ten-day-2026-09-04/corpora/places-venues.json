@@ -1,0 +1,883 @@
+{
+  "schema_version": 1,
+  "generated": "2026-09-04",
+  "generator": "poc/geocoding/venues.py --build",
+  "purpose": "POC-5 supplement: bars, restaurants, cafes and other food-and-drink venues.",
+  "provenance": {
+    "ground_truth": "Sampled from israel-and-palestine-latest.osm.pbf sha256 8a34b30f91a63ef9 — the same extract MOTIS's graph was built from. Coordinates are the OSM node's own, so they are exact by construction. NOT hand-entered.",
+    "why_this_matters": "Because the venue is provably in the geocoder's source data, a miss cannot be blamed on a wrong corpus coordinate. It is an indexing or ranking failure.",
+    "sampling": "seeded (20260904), stratified by amenity x script, capped at 2 per city per stratum",
+    "tolerance": "300 m — a venue is a point, not an area"
+  },
+  "counts": {
+    "by_amenity": {
+      "bar": 8,
+      "cafe": 10,
+      "fast_food": 8,
+      "ice_cream": 3,
+      "nightclub": 2,
+      "pub": 5,
+      "restaurant": 12
+    },
+    "by_script": {
+      "he": 25,
+      "latin": 23
+    },
+    "by_city": {
+      "Rishon LeZion": 6,
+      "Tel Aviv": 23,
+      "Beersheba": 2,
+      "Haifa": 5,
+      "Jerusalem": 7,
+      "Netanya": 1,
+      "Eilat": 3,
+      "Nazareth": 1
+    },
+    "with_english_name": 20
+  },
+  "total": 48,
+  "cases": [
+    {
+      "id": "V001",
+      "query": "אוטו חולון",
+      "script": "he",
+      "amenity": "bar",
+      "city": "Rishon LeZion",
+      "cuisine": null,
+      "expect": {
+        "lat": 32.007943,
+        "lon": 34.799619,
+        "tol_m": 300.0
+      },
+      "osm": {
+        "type": "node",
+        "id": 3952194259
+      },
+      "alt_query_en": "Otto Holon"
+    },
+    {
+      "id": "V002",
+      "query": "יין בכרם",
+      "script": "he",
+      "amenity": "bar",
+      "city": "Tel Aviv",
+      "cuisine": null,
+      "expect": {
+        "lat": 32.066365,
+        "lon": 34.770533,
+        "tol_m": 300.0
+      },
+      "osm": {
+        "type": "node",
+        "id": 12114440012
+      },
+      "alt_query_en": "Wine Bakerem"
+    },
+    {
+      "id": "V003",
+      "query": "מוזנר",
+      "script": "he",
+      "amenity": "bar",
+      "city": "Tel Aviv",
+      "cuisine": null,
+      "expect": {
+        "lat": 32.066353,
+        "lon": 34.776424,
+        "tol_m": 300.0
+      },
+      "osm": {
+        "type": "node",
+        "id": 2639708153
+      },
+      "alt_query_en": "Armadillo Kitchen Bar"
+    },
+    {
+      "id": "V004",
+      "query": "תאטרובר",
+      "script": "he",
+      "amenity": "bar",
+      "city": "Rishon LeZion",
+      "cuisine": null,
+      "expect": {
+        "lat": 31.995198,
+        "lon": 34.767068,
+        "tol_m": 300.0
+      },
+      "osm": {
+        "type": "node",
+        "id": 1743698941
+      },
+      "alt_query_en": "Teatrobar"
+    },
+    {
+      "id": "V005",
+      "query": "HaShdera",
+      "script": "latin",
+      "amenity": "bar",
+      "city": "Rishon LeZion",
+      "cuisine": null,
+      "expect": {
+        "lat": 31.901338,
+        "lon": 34.809017,
+        "tol_m": 300.0
+      },
+      "osm": {
+        "type": "node",
+        "id": 13275242881
+      }
+    },
+    {
+      "id": "V006",
+      "query": "Old Jaffa",
+      "script": "latin",
+      "amenity": "bar",
+      "city": "Tel Aviv",
+      "cuisine": null,
+      "expect": {
+        "lat": 32.054271,
+        "lon": 34.751853,
+        "tol_m": 300.0
+      },
+      "osm": {
+        "type": "node",
+        "id": 5796680566
+      }
+    },
+    {
+      "id": "V007",
+      "query": "Satchmo Bar",
+      "script": "latin",
+      "amenity": "bar",
+      "city": "Tel Aviv",
+      "cuisine": null,
+      "expect": {
+        "lat": 32.056809,
+        "lon": 34.767788,
+        "tol_m": 300.0
+      },
+      "osm": {
+        "type": "node",
+        "id": 12090743890
+      },
+      "alt_query_he": "סאצ'מו"
+    },
+    {
+      "id": "V008",
+      "query": "Zigi",
+      "script": "latin",
+      "amenity": "bar",
+      "city": "Beersheba",
+      "cuisine": null,
+      "expect": {
+        "lat": 31.232115,
+        "lon": 34.79725,
+        "tol_m": 300.0
+      },
+      "osm": {
+        "type": "node",
+        "id": 1011094136
+      }
+    },
+    {
+      "id": "V009",
+      "query": "ארומה",
+      "script": "he",
+      "amenity": "cafe",
+      "city": "Rishon LeZion",
+      "cuisine": "coffee_shop",
+      "expect": {
+        "lat": 31.922365,
+        "lon": 34.791184,
+        "tol_m": 300.0
+      },
+      "osm": {
+        "type": "node",
+        "id": 700455987
+      },
+      "alt_query_en": "Aroma"
+    },
+    {
+      "id": "V010",
+      "query": "בית קפה הפינה",
+      "script": "he",
+      "amenity": "cafe",
+      "city": "Haifa",
+      "cuisine": null,
+      "expect": {
+        "lat": 32.773132,
+        "lon": 35.013176,
+        "tol_m": 300.0
+      },
+      "osm": {
+        "type": "node",
+        "id": 1452648413
+      }
+    },
+    {
+      "id": "V011",
+      "query": "דדה",
+      "script": "he",
+      "amenity": "cafe",
+      "city": "Tel Aviv",
+      "cuisine": null,
+      "expect": {
+        "lat": 32.057545,
+        "lon": 34.769593,
+        "tol_m": 300.0
+      },
+      "osm": {
+        "type": "node",
+        "id": 12568199183
+      },
+      "alt_query_en": "Dede"
+    },
+    {
+      "id": "V012",
+      "query": "דה לה פה",
+      "script": "he",
+      "amenity": "cafe",
+      "city": "Rishon LeZion",
+      "cuisine": "cake;coffee_shop",
+      "expect": {
+        "lat": 31.896034,
+        "lon": 34.813063,
+        "tol_m": 300.0
+      },
+      "osm": {
+        "type": "node",
+        "id": 6195004555
+      },
+      "alt_query_en": "de la Paix"
+    },
+    {
+      "id": "V013",
+      "query": "רולדין",
+      "script": "he",
+      "amenity": "cafe",
+      "city": "Tel Aviv",
+      "cuisine": "coffee_shop",
+      "expect": {
+        "lat": 32.094906,
+        "lon": 34.822149,
+        "tol_m": 300.0
+      },
+      "osm": {
+        "type": "node",
+        "id": 10103704022
+      },
+      "alt_query_en": "Roladin"
+    },
+    {
+      "id": "V014",
+      "query": "Cafeneto",
+      "script": "latin",
+      "amenity": "cafe",
+      "city": "Tel Aviv",
+      "cuisine": null,
+      "expect": {
+        "lat": 32.163687,
+        "lon": 34.795981,
+        "tol_m": 300.0
+      },
+      "osm": {
+        "type": "node",
+        "id": 1753285815
+      }
+    },
+    {
+      "id": "V015",
+      "query": "Grand Cafe Torquise",
+      "script": "latin",
+      "amenity": "cafe",
+      "city": "Tel Aviv",
+      "cuisine": "french",
+      "expect": {
+        "lat": 32.112226,
+        "lon": 34.794958,
+        "tol_m": 300.0
+      },
+      "osm": {
+        "type": "node",
+        "id": 3346575491
+      }
+    },
+    {
+      "id": "V016",
+      "query": "Jaw Cafe",
+      "script": "latin",
+      "amenity": "cafe",
+      "city": "Jerusalem",
+      "cuisine": "sandwich",
+      "expect": {
+        "lat": 31.713816,
+        "lon": 35.194366,
+        "tol_m": 300.0
+      },
+      "osm": {
+        "type": "node",
+        "id": 5330346996
+      }
+    },
+    {
+      "id": "V017",
+      "query": "Tony Ice",
+      "script": "latin",
+      "amenity": "cafe",
+      "city": "Netanya",
+      "cuisine": "ice_cream",
+      "expect": {
+        "lat": 32.330007,
+        "lon": 34.853323,
+        "tol_m": 300.0
+      },
+      "osm": {
+        "type": "node",
+        "id": 559204087
+      }
+    },
+    {
+      "id": "V018",
+      "query": "Yabous Cafe",
+      "script": "latin",
+      "amenity": "cafe",
+      "city": "Jerusalem",
+      "cuisine": null,
+      "expect": {
+        "lat": 31.705701,
+        "lon": 35.219035,
+        "tol_m": 300.0
+      },
+      "osm": {
+        "type": "node",
+        "id": 6868270629
+      }
+    },
+    {
+      "id": "V019",
+      "query": "יעקב קבב",
+      "script": "he",
+      "amenity": "fast_food",
+      "city": "Haifa",
+      "cuisine": "kebab;grill",
+      "expect": {
+        "lat": 32.818268,
+        "lon": 34.999312,
+        "tol_m": 300.0
+      },
+      "osm": {
+        "type": "node",
+        "id": 5525743125
+      }
+    },
+    {
+      "id": "V020",
+      "query": "מרכז החומוס והפול",
+      "script": "he",
+      "amenity": "fast_food",
+      "city": "Tel Aviv",
+      "cuisine": null,
+      "expect": {
+        "lat": 32.08988,
+        "lon": 34.883092,
+        "tol_m": 300.0
+      },
+      "osm": {
+        "type": "node",
+        "id": 5600806068
+      }
+    },
+    {
+      "id": "V021",
+      "query": "סיפורו של שניצל",
+      "script": "he",
+      "amenity": "fast_food",
+      "city": "Beersheba",
+      "cuisine": "regional;middle_eastern",
+      "expect": {
+        "lat": 31.266238,
+        "lon": 34.800631,
+        "tol_m": 300.0
+      },
+      "osm": {
+        "type": "node",
+        "id": 11009821837
+      }
+    },
+    {
+      "id": "V022",
+      "query": "רד meat",
+      "script": "he",
+      "amenity": "fast_food",
+      "city": "Tel Aviv",
+      "cuisine": null,
+      "expect": {
+        "lat": 32.062007,
+        "lon": 34.772312,
+        "tol_m": 300.0
+      },
+      "osm": {
+        "type": "node",
+        "id": 12668725563
+      },
+      "alt_query_en": "Red Meat",
+      "alt_query_he": "רד מיט"
+    },
+    {
+      "id": "V023",
+      "query": "Burgersbar",
+      "script": "latin",
+      "amenity": "fast_food",
+      "city": "Jerusalem",
+      "cuisine": "burger",
+      "expect": {
+        "lat": 31.775562,
+        "lon": 35.232399,
+        "tol_m": 300.0
+      },
+      "osm": {
+        "type": "node",
+        "id": 13535393397
+      }
+    },
+    {
+      "id": "V024",
+      "query": "Cofizz",
+      "script": "latin",
+      "amenity": "fast_food",
+      "city": "Tel Aviv",
+      "cuisine": null,
+      "expect": {
+        "lat": 32.088955,
+        "lon": 34.886813,
+        "tol_m": 300.0
+      },
+      "osm": {
+        "type": "node",
+        "id": 3469206389
+      }
+    },
+    {
+      "id": "V025",
+      "query": "Falafel HaZkenim",
+      "script": "latin",
+      "amenity": "fast_food",
+      "city": "Haifa",
+      "cuisine": "regional;falafel",
+      "expect": {
+        "lat": 32.817066,
+        "lon": 34.993687,
+        "tol_m": 300.0
+      },
+      "osm": {
+        "type": "node",
+        "id": 4513280290
+      },
+      "alt_query_he": "פלאפל הזקנים"
+    },
+    {
+      "id": "V026",
+      "query": "street food",
+      "script": "latin",
+      "amenity": "fast_food",
+      "city": "Tel Aviv",
+      "cuisine": null,
+      "expect": {
+        "lat": 32.067338,
+        "lon": 34.76694,
+        "tol_m": 300.0
+      },
+      "osm": {
+        "type": "node",
+        "id": 6448056986
+      }
+    },
+    {
+      "id": "V027",
+      "query": "דלי קרים",
+      "script": "he",
+      "amenity": "ice_cream",
+      "city": "Tel Aviv",
+      "cuisine": "ice_cream",
+      "expect": {
+        "lat": 32.022723,
+        "lon": 34.773147,
+        "tol_m": 300.0
+      },
+      "osm": {
+        "type": "node",
+        "id": 1305211076
+      },
+      "alt_query_en": "Deli Cream"
+    },
+    {
+      "id": "V028",
+      "query": "מוסלין",
+      "script": "he",
+      "amenity": "ice_cream",
+      "city": "Jerusalem",
+      "cuisine": null,
+      "expect": {
+        "lat": 31.769642,
+        "lon": 35.21323,
+        "tol_m": 300.0
+      },
+      "osm": {
+        "type": "node",
+        "id": 4580755057
+      },
+      "alt_query_en": "Mousseline"
+    },
+    {
+      "id": "V029",
+      "query": "Golda",
+      "script": "latin",
+      "amenity": "ice_cream",
+      "city": "Tel Aviv",
+      "cuisine": null,
+      "expect": {
+        "lat": 32.074896,
+        "lon": 34.819311,
+        "tol_m": 300.0
+      },
+      "osm": {
+        "type": "node",
+        "id": 12164215612
+      }
+    },
+    {
+      "id": "V030",
+      "query": "מועדון הבארבי",
+      "script": "he",
+      "amenity": "nightclub",
+      "city": "Tel Aviv",
+      "cuisine": null,
+      "expect": {
+        "lat": 32.051302,
+        "lon": 34.769717,
+        "tol_m": 300.0
+      },
+      "osm": {
+        "type": "node",
+        "id": 6185651655
+      },
+      "alt_query_en": "Barby Club"
+    },
+    {
+      "id": "V031",
+      "query": "studio B",
+      "script": "latin",
+      "amenity": "nightclub",
+      "city": "Tel Aviv",
+      "cuisine": null,
+      "expect": {
+        "lat": 32.086736,
+        "lon": 34.782297,
+        "tol_m": 300.0
+      },
+      "osm": {
+        "type": "node",
+        "id": 4177983402
+      }
+    },
+    {
+      "id": "V032",
+      "query": "הארבעה",
+      "script": "he",
+      "amenity": "pub",
+      "city": "Tel Aviv",
+      "cuisine": null,
+      "expect": {
+        "lat": 32.070317,
+        "lon": 34.782934,
+        "tol_m": 300.0
+      },
+      "osm": {
+        "type": "node",
+        "id": 608522161
+      },
+      "alt_query_en": "HaArbaa"
+    },
+    {
+      "id": "V033",
+      "query": "מאש",
+      "script": "he",
+      "amenity": "pub",
+      "city": "Tel Aviv",
+      "cuisine": null,
+      "expect": {
+        "lat": 32.09567,
+        "lon": 34.776065,
+        "tol_m": 300.0
+      },
+      "osm": {
+        "type": "node",
+        "id": 746735307
+      },
+      "alt_query_en": "MASH"
+    },
+    {
+      "id": "V034",
+      "query": "רודיאו",
+      "script": "he",
+      "amenity": "pub",
+      "city": "Haifa",
+      "cuisine": null,
+      "expect": {
+        "lat": 32.808165,
+        "lon": 34.995534,
+        "tol_m": 300.0
+      },
+      "osm": {
+        "type": "node",
+        "id": 14107936588
+      },
+      "alt_query_en": "Rodeo"
+    },
+    {
+      "id": "V035",
+      "query": "Beer Bazaar Habima",
+      "script": "latin",
+      "amenity": "pub",
+      "city": "Tel Aviv",
+      "cuisine": null,
+      "expect": {
+        "lat": 32.071726,
+        "lon": 34.779446,
+        "tol_m": 300.0
+      },
+      "osm": {
+        "type": "node",
+        "id": 10693747873
+      }
+    },
+    {
+      "id": "V036",
+      "query": "كازية يونس",
+      "script": "latin",
+      "amenity": "pub",
+      "city": "Jerusalem",
+      "cuisine": null,
+      "expect": {
+        "lat": 31.759584,
+        "lon": 35.282632,
+        "tol_m": 300.0
+      },
+      "osm": {
+        "type": "node",
+        "id": 8554934717
+      }
+    },
+    {
+      "id": "V037",
+      "query": "בית הפנקייק המקורי",
+      "script": "he",
+      "amenity": "restaurant",
+      "city": "Tel Aviv",
+      "cuisine": null,
+      "expect": {
+        "lat": 32.097718,
+        "lon": 34.881698,
+        "tol_m": 300.0
+      },
+      "osm": {
+        "type": "node",
+        "id": 9900779465
+      }
+    },
+    {
+      "id": "V038",
+      "query": "הלב הרחב",
+      "script": "he",
+      "amenity": "restaurant",
+      "city": "Eilat",
+      "cuisine": null,
+      "expect": {
+        "lat": 29.548368,
+        "lon": 34.95175,
+        "tol_m": 300.0
+      },
+      "osm": {
+        "type": "node",
+        "id": 7280478085
+      },
+      "alt_query_en": "Halev harahav"
+    },
+    {
+      "id": "V039",
+      "query": "לנדוור",
+      "script": "he",
+      "amenity": "restaurant",
+      "city": "Haifa",
+      "cuisine": "coffee_shop",
+      "expect": {
+        "lat": 32.82422,
+        "lon": 35.079193,
+        "tol_m": 300.0
+      },
+      "osm": {
+        "type": "node",
+        "id": 1113117585
+      },
+      "alt_query_en": "Landwer",
+      "alt_query_he": "סמיראמיס"
+    },
+    {
+      "id": "V040",
+      "query": "מסעדת אמא",
+      "script": "he",
+      "amenity": "restaurant",
+      "city": "Jerusalem",
+      "cuisine": null,
+      "expect": {
+        "lat": 31.78621,
+        "lon": 35.207542,
+        "tol_m": 300.0
+      },
+      "osm": {
+        "type": "node",
+        "id": 560354901
+      },
+      "alt_query_en": "Ima",
+      "alt_query_he": "אמא"
+    },
+    {
+      "id": "V041",
+      "query": "מסעדת מלון אמריקנה",
+      "script": "he",
+      "amenity": "restaurant",
+      "city": "Eilat",
+      "cuisine": null,
+      "expect": {
+        "lat": 29.554625,
+        "lon": 34.962538,
+        "tol_m": 300.0
+      },
+      "osm": {
+        "type": "node",
+        "id": 4588912395
+      },
+      "alt_query_en": "Americana Hotel Restaurant"
+    },
+    {
+      "id": "V042",
+      "query": "פינת הצלע",
+      "script": "he",
+      "amenity": "restaurant",
+      "city": "Tel Aviv",
+      "cuisine": "meat",
+      "expect": {
+        "lat": 32.029518,
+        "lon": 34.798558,
+        "tol_m": 300.0
+      },
+      "osm": {
+        "type": "node",
+        "id": 12270410090
+      }
+    },
+    {
+      "id": "V043",
+      "query": "Alibi",
+      "script": "latin",
+      "amenity": "restaurant",
+      "city": "Tel Aviv",
+      "cuisine": null,
+      "expect": {
+        "lat": 32.07985,
+        "lon": 34.774105,
+        "tol_m": 300.0
+      },
+      "osm": {
+        "type": "node",
+        "id": 13527207357
+      }
+    },
+    {
+      "id": "V044",
+      "query": "Denis Kingdom",
+      "script": "latin",
+      "amenity": "restaurant",
+      "city": "Eilat",
+      "cuisine": "fish;meat",
+      "expect": {
+        "lat": 29.548533,
+        "lon": 34.967153,
+        "tol_m": 300.0
+      },
+      "osm": {
+        "type": "node",
+        "id": 1088081695
+      }
+    },
+    {
+      "id": "V045",
+      "query": "Nafoura",
+      "script": "latin",
+      "amenity": "restaurant",
+      "city": "Jerusalem",
+      "cuisine": null,
+      "expect": {
+        "lat": 31.77718,
+        "lon": 35.227349,
+        "tol_m": 300.0
+      },
+      "osm": {
+        "type": "node",
+        "id": 6767547288
+      }
+    },
+    {
+      "id": "V046",
+      "query": "Oasis",
+      "script": "latin",
+      "amenity": "restaurant",
+      "city": "Tel Aviv",
+      "cuisine": null,
+      "expect": {
+        "lat": 32.065122,
+        "lon": 34.771241,
+        "tol_m": 300.0
+      },
+      "osm": {
+        "type": "node",
+        "id": 5961333787
+      },
+      "alt_query_he": "אואזיס"
+    },
+    {
+      "id": "V047",
+      "query": "Pizza Hut",
+      "script": "latin",
+      "amenity": "restaurant",
+      "city": "Rishon LeZion",
+      "cuisine": "pizza",
+      "expect": {
+        "lat": 32.013408,
+        "lon": 34.769773,
+        "tol_m": 300.0
+      },
+      "osm": {
+        "type": "node",
+        "id": 1740901019
+      }
+    },
+    {
+      "id": "V048",
+      "query": "الرضا",
+      "script": "latin",
+      "amenity": "restaurant",
+      "city": "Nazareth",
+      "cuisine": "regional;oriental;mediterranean;arab",
+      "expect": {
+        "lat": 32.703156,
+        "lon": 35.298098,
+        "tol_m": 300.0
+      },
+      "osm": {
+        "type": "node",
+        "id": 5247597963
+      },
+      "alt_query_en": "Al Reda"
+    }
+  ]
+}

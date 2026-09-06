@@ -42,7 +42,7 @@ class Hit:
     @property
     def source(self) -> str:
         """Where the candidate came from: the GTFS feed, or OSM."""
-        if self.id.startswith("mot10day_"):
+        if self.id.startswith("mot60day_"):
             return "gtfs"
         if self.id.startswith(("way/", "node/", "relation/")):
             return "osm"

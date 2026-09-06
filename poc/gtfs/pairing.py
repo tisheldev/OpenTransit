@@ -113,7 +113,7 @@ def _int(s: str | None) -> int | None:
 
 def check_pairing(feed_trip_ids, t2d: TripIdToDate,
                   feed_window: tuple[dt.date | None, dt.date | None] = (None, None),
-                  min_overlap: float = 0.50) -> dict:
+                  min_overlap: float = 1.0) -> dict:
     """Evidence for E05. Returns a verdict dict; does not raise."""
     keys = {join_key(t) for t in feed_trip_ids}
     matched = keys & t2d.trip_ids
@@ -138,20 +138,20 @@ def check_pairing(feed_trip_ids, t2d: TripIdToDate,
         "feed_service_window": [fs.isoformat() if fs else None,
                                 fe.isoformat() if fe else None],
         "date_windows_overlap": window_overlap,
-        "verdict": "ACCEPTED" if frac >= min_overlap else "REJECTED",
+        "verdict": "ACCEPTED" if keys and frac >= min_overlap and window_overlap is True else "REJECTED",
     }
 
 
 def pair_or_raise(feed_trip_ids, t2d: TripIdToDate,
-                  feed_window=(None, None), min_overlap: float = 0.50,
-                  allow_unpaired: bool = False) -> dict:
+                  feed_window=(None, None), min_overlap: float = 1.0) -> dict:
     """Default behaviour on a mismatch is to stop, per E05."""
     result = check_pairing(feed_trip_ids, t2d, feed_window, min_overlap)
-    if result["verdict"] == "REJECTED" and not allow_unpaired:
+    if result["verdict"] == "REJECTED":
         raise FeedPairingError(
             "TripIdToDate does not belong with this GTFS snapshot: only "
             f"{result['matched_join_keys']} of {result['feed_distinct_join_keys']} "
             f"feed trip ids ({result['match_fraction']:.4%}) are present in "
-            f"{MEMBER}, below the {min_overlap:.0%} threshold. Refusing to pair."
+            f"{MEMBER}; required overlap {min_overlap:.0%}, date overlap "
+            f"{result['date_windows_overlap']}. Refusing to pair."
         )
     return result

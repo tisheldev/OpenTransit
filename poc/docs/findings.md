@@ -1,7 +1,11 @@
 # Phase 0 POC — consolidated findings
 
+> **Historical September 4 findings:** Ingest/routing have since been rerun on the accepted 60-day primary. See [current results and comparison](primary-feed-rerun.md). Search evidence below remains historical.
+
+> **Review correction — 5 September 2026:** Feed decision and completion claims have been reconciled with the ADRs and recorded results. See [next steps](../../docs/next-steps.md). This narrative is not a new experiment.
+
 **Period:** 4–5 September 2026
-**Scope:** POC-1, POC-2 and POC-5 complete. POC-3 not started, POC-4 blocked, POC-6 not started.
+**Scope:** POC-1 PASS; POC-2 and POC-5 PARTIAL with H3/H4 pending. POC-3 not started, POC-4 blocked, POC-6 not started.
 **Go/No-Go:** 5 of 10 capabilities green (PRD §12)
 **Feed under test:** `Gtfs_10_days.zip` sha256 `08c168da…`, `israel-public-transportation.zip`
 sha256 `f26b63c2…`, `TripIdToDate.zip` sha256 `97a4b424…`,
@@ -25,8 +29,7 @@ depends on an email to the Ministry that has not been sent**, and the file that 
 realtime matching possible turns out not to work with the feed we had chosen.
 
 The single most consequential finding is KDP-008: `TripIdToDate.zip` cannot be joined to
-the 10-day feed at all. Combined with KDP-001, that forced a reversal of the primary-feed
-decision on the first day of building.
+the 10-day feed at all. Combined with KDP-001, that supports changing the primary feed. ADR 0005 now accepts the 60-day primary; see [current rerun findings](primary-feed-rerun.md).
 
 ---
 
@@ -121,9 +124,10 @@ So the 10-day feed cannot support realtime matching — and **KDP-001** had alre
 does not cover the current day (`feed_start_date=20260905`, downloaded 4 Sep), so it cannot
 answer PRD §39's `--depart-now` either.
 
-Two independent failures against core product requirements. ADR 0005 was reversed on 4 Sep:
-**the 60-day feed is now the primary input.** The ingester refuses the mismatched pair by
-default rather than loading it silently.
+Two independent failures against core product requirements in the sampled publication.
+**The 60-day feed is now the accepted executable primary (ADR 0005).**
+The original measurements below are historical; current ingest/routing evidence is in the rerun report. The pairing
+helper rejects low key overlap by default; this does not prove date-aware realtime matching.
 
 ---
 
@@ -187,7 +191,8 @@ so the recorded build figure measures the build and not a ceiling).
 
 **68/100 exact, 89/100 in the top five.** PRD §10's bar of 20 is cleared 3.4×, and both
 queries the PRD names in its own prose resolve: `Dizengoff Center` to 83 m and
-`HaShalom Station` to 53 m. Latency is a non-issue at p50 3.5 ms, p95 62 ms.
+`HaShalom Station` to 53 m. Recorded latency is p50 3.5 ms, p95 67.6 ms;
+this does not yet meet the proposed 40 ms API search target.
 
 | Category | Top-1 | Category | Top-1 |
 | --- | --- | --- | --- |
@@ -209,8 +214,9 @@ coordinate monotonically along the street. A bounded Nominatim comparison (15 re
 ≤1/s) scores 7/15 against MOTIS's 4/15, and 4/11 against 2/11 on the Latin half, returning
 house-level results where MOTIS returns none.
 
-**This is the concrete answer to whether Phase 1 needs Photon.** It is MOTIS's index, not
-the OSM data.
+**This justifies testing an address-search alternative.** The bounded Nominatim comparison
+shows that some failed addresses can be resolved from OSM-derived data; it does not prove
+Photon will fix the failures or isolate every cause to MOTIS indexing.
 
 **The `near` bias point is inert at MOTIS's default `placeBias`.** Both near-pairs score
 "one", and the half that passes is the half that would pass with no bias at all. Sweeping
@@ -302,10 +308,12 @@ sampling the source data rather than by typing coordinates.
 | ADR 0004 | MOTIS | Built and served without incident |
 | ADR 0006 | MOTIS built-in geocoding first | Adequate for stations and landmarks; inadequate for Latin addresses |
 
-### Reversed
+### Reopened
 
-**ADR 0005 — the 10-day feed is no longer the primary input.** Reversed 4 Sep on KDP-001
-and KDP-008. The 60-day feed covers the current day and joins `TripIdToDate` at 100%.
+**ADR 0005 — primary feed selection remains open.** KDP-001 and KDP-008 support choosing
+the 60-day feed: the sampled publication covers the download day and has 100% mapping-key
+overlap. That is not an accepted decision, an implementation switch, or a measured live
+match rate. The next baseline must rerun routing/search/capacity on the chosen feed.
 
 ### Open, and needing the developer
 
@@ -335,8 +343,9 @@ and KDP-008. The 60-day feed covers the current day and joins `TripIdToDate` at 
   measured against Open Bus Stride without MOT. Not yet attempted.
 - **Whether service alerts exist for us.** No public URL. Fully gated.
 - **Whether the routes are any good.** Structural consistency is not quality.
-- **How the graph behaves on a full-year feed.** All capacity figures come from a 10-day
-  window and will grow.
+- **How the graph behaves on the selected production feed.** All recorded capacity figures
+  come from the 10-day input. Memory need not grow with the feed name: the sampled 60-day
+  feed has fewer trips and stop-time rows. Measure it with the full stack before sizing.
 - **Whether the licence permits the intended use.** Unread.
 
 ---

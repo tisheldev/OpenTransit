@@ -1,7 +1,5 @@
-# motis import started 2026-09-04T13:04:55.786959+00:00
+# motis import started 2026-09-05T12:28:38.645056+00:00
 # vm_mem_bytes=25203912704 vm_cpus=16 docker=27.4.0
- Network poc_default  Creating
- Network poc_default  Created
  Volume "poc_motisgraph"  Creating
  Volume "poc_motisgraph"  Created
 osr
@@ -12,13 +10,13 @@ adr
   current: {"adr_bin_ver":15,"geocoding":1,"osm":18082151005999835212,"reverse_geocoding":1}
 tt
   existing: {}
-  current: {"nigiri_bin_ver":37,"timetable":11757665504647395845}
+  current: {"nigiri_bin_ver":37,"timetable":12412193966310487999}
 adr_extend
   existing: {}
-  current: {"adr_bin_ver":15,"adr_ext_bin_ver":6,"geocoding":1,"nigiri_bin_ver":37,"osm":18082151005999835212,"reverse_geocoding":1,"timetable":11757665504647395845}
+  current: {"adr_bin_ver":15,"adr_ext_bin_ver":6,"geocoding":1,"nigiri_bin_ver":37,"osm":18082151005999835212,"reverse_geocoding":1,"timetable":12412193966310487999}
 matches
   existing: {}
-  current: {"matches_bin_ver":6,"nigiri_bin_ver":37,"osm":18082151005999835212,"osr_bin_ver":37,"timetable":11757665504647395845,"way_matches":12638357624858014701}
+  current: {"matches_bin_ver":6,"nigiri_bin_ver":37,"osm":18082151005999835212,"osr_bin_ver":37,"timetable":12412193966310487999,"way_matches":12638357624858014701}
 running tasks: [osr ready, adr ready, tt ready, adr_extend waiting for {adr, tt}, matches waiting for {tt, osr}]
 [K         adr: [■                                                       ]   0%
 [K  adr_extend: [■                                                       ]   0%
@@ -438,6 +436,16 @@ running tasks: [osr ready, adr ready, tt ready, adr_extend waiting for {adr, tt}
 [5A[K         adr: [■                                                       ]   0%
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              ]  75% | Connect ways / sort
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              ]  75% | Connect ways / sort
+[K          tt: [■                                                       ]   0%
+[5A[K         adr: [■                                                       ]   0%
+[K  adr_extend: [■                                                       ]   0%
+[K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              ]  75% | Build components
 [K          tt: [■                                                       ]   0%
 [5A[K         adr: [■                                                       ]   0%
@@ -513,12 +521,12 @@ running tasks: [osr ready, adr ready, tt ready, adr_extend waiting for {adr, tt}
 [5A[K         adr: [■                                                       ]   0%
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
-[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ]  99% | Big Street Neighbors
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ]  98% | Big Street Neighbors
 [K          tt: [■                                                       ]   0%
 [5A[K         adr: [■                                                       ]   0%
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
-[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ]  99% | Big Street Neighbors
+[K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ]  98% | Big Street Neighbors
 [K          tt: [■                                                       ]   0%
 [5A[K         adr: [■                                                       ]   0%
 [K  adr_extend: [■                                                       ]   0%
@@ -714,492 +722,492 @@ running tasks: [osr ready, adr ready, tt ready, adr_extend waiting for {adr, tt}
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■                                                       ]   0% | mot10day: Parse Translations
+[K          tt: [■                                                       ]   0% | mot60day: Parse Translations
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■                                                       ]   0% | mot10day: Parse Agencies
+[K          tt: [■                                                       ]   0% | mot60day: Parse Agencies
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■                                                      ]   1% | mot10day: Parse Stops
+[K          tt: [■■                                                      ]   1% | mot60day: Parse Stops
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■                                                      ]   2% | mot10day: Parse Stops
+[K          tt: [■■                                                      ]   2% | mot60day: Parse Stops
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■                                                     ]   3% | mot10day: Parse Stops
+[K          tt: [■■■                                                     ]   3% | mot60day: Parse Stops
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■                                                     ]   4% | mot10day: Parse Stops
+[K          tt: [■■■                                                     ]   4% | mot60day: Parse Stops
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■                                                    ]   5% | mot10day: Parse Stops
+[K          tt: [■■■■                                                    ]   5% | mot60day: Parse Stops
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■                                                    ]   5% | mot10day: Stops R-Tree
+[K          tt: [■■■■                                                    ]   5% | mot60day: Stops R-Tree
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■                                                    ]   6% | mot10day: Stops R-Tree
+[K          tt: [■■■■                                                    ]   6% | mot60day: Stops R-Tree
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■                                                   ]   7% | mot10day: Stops R-Tree
+[K          tt: [■■■■■                                                   ]   7% | mot60day: Stops R-Tree
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■                                                   ]   8% | mot10day: Stops R-Tree
+[K          tt: [■■■■■                                                   ]   8% | mot60day: Stops R-Tree
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■                                                  ]   9% | mot10day: Stops R-Tree
+[K          tt: [■■■■■■                                                  ]   9% | mot60day: Stops R-Tree
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■                                                 ]  10% | mot10day: Stops R-Tree
+[K          tt: [■■■■■■■                                                 ]  10% | mot60day: Stops R-Tree
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■                                                 ]  11% | mot10day: Stops R-Tree
+[K          tt: [■■■■■■■                                                 ]  11% | mot60day: Stops R-Tree
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■                                                ]  12% | mot10day: Stops R-Tree
+[K          tt: [■■■■■■■■                                                ]  12% | mot60day: Stops R-Tree
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■                                                ]  13% | mot10day: Stops R-Tree
+[K          tt: [■■■■■■■■                                                ]  13% | mot60day: Stops R-Tree
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■                                               ]  14% | mot10day: Stops R-Tree
+[K          tt: [■■■■■■■■■                                               ]  14% | mot60day: Stops R-Tree
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■                                               ]  15% | mot10day: Stops R-Tree
+[K          tt: [■■■■■■■■■                                               ]  15% | mot60day: Stops R-Tree
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■                                              ]  17% | mot10day: Compute Metas
+[K          tt: [■■■■■■■■■■                                              ]  17% | mot60day: Compute Metas
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■                                             ]  18% | mot10day: Compute Metas
+[K          tt: [■■■■■■■■■■■                                             ]  18% | mot60day: Compute Metas
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■                                             ]  19% | mot10day: Compute Metas
+[K          tt: [■■■■■■■■■■■                                             ]  19% | mot60day: Compute Metas
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■                                            ]  20% | mot10day: Compute Metas
+[K          tt: [■■■■■■■■■■■■                                            ]  20% | mot60day: Compute Metas
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■                                        ]  27% | mot10day: Parse Routes
+[K          tt: [■■■■■■■■■■■■■■■■                                        ]  27% | mot60day: Parse Routes
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■                                        ]  28% | mot10day: Parse Routes
+[K          tt: [■■■■■■■■■■■■■■■■                                        ]  28% | mot60day: Parse Routes
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■                                       ]  29% | mot10day: Parse Routes
+[K          tt: [■■■■■■■■■■■■■■■■■                                       ]  29% | mot60day: Parse Routes
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■                                       ]  29% | mot10day: Parse Calendar
+[K          tt: [■■■■■■■■■■■■■■■■■                                       ]  29% | mot60day: Parse Calendar
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■                                      ]  31% | mot10day: Parse Calendar Date
+[K          tt: [■■■■■■■■■■■■■■■■■■                                      ]  30% | mot60day: Parse Calendar
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■                                     ]  32% | mot10day: Parse Calendar Date
+[K          tt: [■■■■■■■■■■■■■■■■■■                                      ]  31% | mot60day: Parse Calendar
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■                                     ]  33% | mot10day: Parse Calendar Date
+[K          tt: [■■■■■■■■■■■■■■■■■■                                      ]  31% | mot60day: Parse Calendar Date
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■                                     ]  33% | mot10day: Build Base Services
+[K          tt: [■■■■■■■■■■■■■■■■■■■                                     ]  33% | mot60day: Build Base Services
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■                                    ]  35% | mot10day: Add Service Exceptions
+[K          tt: [■■■■■■■■■■■■■■■■■■■■                                    ]  35% | mot60day: Add Service Exceptions
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■                                   ]  37% | mot10day: Parse Shapes
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■                                   ]  37% | mot60day: Parse Shapes
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■                                  ]  38% | mot10day: Parse Shapes
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■                                  ]  38% | mot60day: Parse Shapes
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■                                  ]  38% | mot10day: Read Trips
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■                                  ]  38% | mot60day: Read Trips
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■                                  ]  39% | mot10day: Read Trips
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■                                  ]  39% | mot60day: Read Trips
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■                                 ]  40% | mot10day: Read Trips
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■                                 ]  40% | mot60day: Read Trips
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■                                ]  41% | mot10day: Read Trips
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■                                ]  41% | mot60day: Read Trips
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■                                ]  42% | mot10day: Read Trips
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■                                ]  42% | mot60day: Read Trips
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■                               ]  43% | mot10day: Read Stop Times
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■                               ]  43% | mot60day: Read Stop Times
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■                               ]  44% | mot10day: Read Stop Times
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■                               ]  44% | mot60day: Read Stop Times
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■                              ]  45% | mot10day: Read Stop Times
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■                              ]  45% | mot60day: Read Stop Times
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■                              ]  46% | mot10day: Read Stop Times
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■                              ]  46% | mot60day: Read Stop Times
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■                             ]  47% | mot10day: Read Stop Times
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■                             ]  47% | mot60day: Read Stop Times
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■                             ]  48% | mot10day: Read Stop Times
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■                             ]  48% | mot60day: Read Stop Times
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■                            ]  49% | mot10day: Read Stop Times
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■                            ]  49% | mot60day: Read Stop Times
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                           ]  50% | mot10day: Read Stop Times
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                           ]  50% | mot60day: Read Stop Times
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                           ]  51% | mot10day: Read Stop Times
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                           ]  51% | mot60day: Read Stop Times
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                          ]  52% | mot10day: Read Stop Times
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                          ]  52% | mot60day: Read Stop Times
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                          ]  53% | mot10day: Read Stop Times
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                          ]  53% | mot60day: Read Stop Times
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                         ]  54% | mot10day: Read Stop Times
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                         ]  54% | mot60day: Read Stop Times
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                         ]  55% | mot10day: Read Stop Times
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                         ]  55% | mot60day: Read Stop Times
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        ]  56% | mot10day: Read Stop Times
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        ]  56% | mot60day: Read Stop Times
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        ]  57% | mot10day: Read Stop Times
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        ]  57% | mot60day: Read Stop Times
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                       ]  58% | mot10day: Read Stop Times
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                       ]  58% | mot60day: Read Stop Times
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                       ]  59% | mot10day: Read Stop Times
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                       ]  59% | mot60day: Read Stop Times
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                      ]  60% | mot10day: Read Stop Times
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                      ]  60% | mot60day: Read Stop Times
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     ]  61% | mot10day: Read Stop Times
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     ]  61% | mot60day: Read Stop Times
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     ]  62% | mot10day: Read Stop Times
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                     ]  62% | mot60day: Read Stop Times
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    ]  63% | mot10day: Read Stop Times
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    ]  63% | mot60day: Read Stop Times
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    ]  64% | mot10day: Read Stop Times
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                    ]  64% | mot60day: Read Stop Times
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   ]  65% | mot10day: Read Stop Times
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   ]  65% | mot60day: Read Stop Times
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   ]  66% | mot10day: Read Stop Times
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                   ]  66% | mot60day: Read Stop Times
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  ]  67% | mot10day: Read Stop Times
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  ]  67% | mot60day: Read Stop Times
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  ]  68% | mot10day: Read Stop Times
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  ]  68% | mot60day: Read Stop Times
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  ]  68% | mot10day: Load Ticketing
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  ]  68% | mot60day: Load Ticketing
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  ]  68% | mot10day: Expand Trips
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                  ]  68% | mot60day: Expand Trips
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                 ]  69% | mot10day: Expand Trips
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                 ]  69% | mot60day: Expand Trips
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                ]  70% | mot10day: Expand Trips
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                ]  70% | mot60day: Expand Trips
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                ]  71% | mot10day: Expand Trips
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                ]  71% | mot60day: Expand Trips
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               ]  72% | mot10day: Expand Trips
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               ]  72% | mot60day: Expand Trips
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               ]  73% | mot10day: Expand Trips
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■               ]  73% | mot60day: Expand Trips
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              ]  74% | mot10day: Expand Trips
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              ]  74% | mot60day: Expand Trips
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              ]  75% | mot10day: Expand Trips
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■              ]  75% | mot60day: Expand Trips
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             ]  76% | mot10day: Expand Trips
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             ]  76% | mot60day: Expand Trips
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             ]  77% | mot10day: Expand Trips
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■             ]  77% | mot60day: Expand Trips
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            ]  78% | mot10day: Expand Trips
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            ]  78% | mot60day: Expand Trips
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            ]  79% | mot10day: Expand Trips
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■            ]  79% | mot60day: Expand Trips
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■           ]  80% | mot10day: Expand Trips
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■           ]  80% | mot60day: Expand Trips
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          ]  81% | mot10day: Expand Trips
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          ]  81% | mot60day: Expand Trips
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          ]  82% | mot10day: Expand Trips
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■          ]  82% | mot60day: Expand Trips
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         ]  83% | mot10day: Expand Trips
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         ]  83% | mot60day: Expand Trips
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         ]  83% | mot10day: Stay Seated
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■         ]  83% | mot60day: Stay Seated
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        ]  85% | mot10day: Write Trips
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        ]  85% | mot60day: Write Trips
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        ]  86% | mot10day: Write Trips
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        ]  86% | mot60day: Write Trips
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       ]  87% | mot10day: Write Trips
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       ]  87% | mot60day: Write Trips
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       ]  88% | mot10day: Write Trips
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■       ]  88% | mot60day: Write Trips
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■      ]  89% | mot10day: Write Trips
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■      ]  89% | mot60day: Write Trips
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     ]  90% | mot10day: Write Trips
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     ]  90% | mot60day: Write Trips
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     ]  91% | mot10day: Write Trips
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     ]  91% | mot60day: Write Trips
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    ]  92% | mot10day: Write Trips
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    ]  92% | mot60day: Write Trips
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    ]  93% | mot10day: Write Trips
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    ]  93% | mot60day: Write Trips
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   ]  94% | mot10day: Write Trips
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   ]  94% | mot60day: Write Trips
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   ]  95% | mot10day: Write Trips
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   ]  95% | mot60day: Write Trips
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  ]  96% | mot10day: Write Trips
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  ]  96% | mot60day: Write Trips
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  ]  97% | mot10day: Write Trips
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  ]  97% | mot60day: Write Trips
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ]  98% | mot10day: Creating trip offsets
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ]  98% | mot60day: Creating trip offsets
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ]  99% | mot10day: Writing offsets and bounding boxes
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ]  99% | mot60day: Writing offsets and bounding boxes
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%
 [K         osr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
-[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  ]  97% | mot10day: Flex
+[K          tt: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  ]  97% | mot60day: Flex
 [5A[K         adr: [■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ] 100% | FINISHED
 [K  adr_extend: [■                                                       ]   0%
 [K     matches: [■                                                       ]   0%

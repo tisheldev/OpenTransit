@@ -15,16 +15,15 @@ Fill in the `Verdict:` line under each case. `reasonable` / `not reasonable` /
 
 ## What you are looking at
 
-- **Feed:** `Gtfs_10_days.zip`, sha256 `08c168da3e6c201c…`
-- **Service window:** 2026-09-05 (Sat) .. 2026-09-14 (Mon) (KDP-001 — the feed does *not* cover 4 Sep,
-  so every departure time below was resolved onto a date inside the window)
+- **Feed:** `israel-public-transportation.zip`, sha256 `f26b63c21ac86704…`
+- **Service window:** 2026-09-04 .. 2026-10-04; departures resolved from service calendars
 - **Engine:** MOTIS v2.11.2, endpoint `/api/v6/plan`
-- **Graph built:** 40 s, peak 3738.6 MB, 910.8 MB on disk
+- **Graph built:** 34 s, peak 3272.7 MB, 681.2 MB on disk
 - **Served from:** a container capped at **8 GB** (system-design §320's production box)
-- **At rest:** 937.8 MB, 11.4% of the cap, flat across 25 samples
-- **Under load:** 20632 requests, all HTTP 200, p95 256.6 ms, peak 1129.5 MB = 13.8% of the cap, no OOM
+- **At rest:** 726.8 MB, 8.9% of the cap; range 709.3–752.3 MB across 31 samples
+- **Under load:** 26715 requests, HTTP statuses {'200': 26715}, p95 162.9 ms, peak 941.3 MB = 11.5% of the cap; OOM killed: False, restarts: 0
 
-Times are **Israeli local time (IDT, UTC+3)**. Stop names are exactly as the
+Times are **Israeli local time (Asia/Jerusalem)**. Stop names are exactly as the
 MOT feed spells them, in Hebrew, because that is what you will be matching
 against in Moovit.
 
@@ -37,8 +36,8 @@ against in Moovit.
   caused by a walking budget is a very different finding from "no route"
   caused by the data.
 
-**Machine totals (default profile): 25/25 answered, 21 structurally consistent with the case's expectations.**
-**Same under generous-walk: 22/25.**
+**Machine totals (default profile): 25/25 answered, 24 structurally consistent with the case's expectations.**
+**Same under generous-walk: 25/25.**
 
 ---
 
@@ -60,9 +59,9 @@ user would be shown — is:
     Arrives Mon 07 Sep 08:24 -- 18 min, 0 transfer(s)
 
     08:06-08:11  walk 294 m                    START -> דיזנגוף סנטר/המלך ג'ורג'
-    08:11-08:20  bus 82                        דיזנגוף סנטר/המלך ג'ורג' -> ת.רק"ל אבא הלל/דרך ז'בוטינסקי
+    08:11-08:20  bus 82                        דיזנגוף סנטר/המלך ג'ורג' -> ת.רק''ל אבא הלל/דרך ז'בוטינסקי
                operator דן, towards פתח תקווה_בית רבקה
-    08:20-08:24  walk 240 m                    ת.רק"ל אבא הלל/דרך ז'בוטינסקי -> END
+    08:20-08:24  walk 240 m                    ת.רק''ל אבא הלל/דרך ז'בוטינסקי -> END
 ```
 
 <details><summary>Alternatives MOTIS also returned (4 more)</summary>
@@ -74,9 +73,9 @@ user would be shown — is:
     Arrives Mon 07 Sep 08:33 -- 19 min, 0 transfer(s)
 
     08:14-08:17  walk 135 m                    START -> דיזנגוף סנטר/דיזנגוף
-    08:17-08:29  bus 238                       דיזנגוף סנטר/דיזנגוף -> ת.רק"ל אבא הלל
+    08:17-08:29  bus 238                       דיזנגוף סנטר/דיזנגוף -> ת.רק''ל אבא הלל
                operator דן, towards פתח תקווה_הדר גנים
-    08:29-08:33  walk 250 m                    ת.רק"ל אבא הלל -> END
+    08:29-08:33  walk 250 m                    ת.רק''ל אבא הלל -> END
 ```
 
 **Alternative 2**
@@ -86,9 +85,9 @@ user would be shown — is:
     Arrives Mon 07 Sep 08:35 -- 18 min, 0 transfer(s)
 
     08:17-08:22  walk 294 m                    START -> דיזנגוף סנטר/המלך ג'ורג'
-    08:22-08:31  bus 82                        דיזנגוף סנטר/המלך ג'ורג' -> ת.רק"ל אבא הלל/דרך ז'בוטינסקי
+    08:22-08:31  bus 82                        דיזנגוף סנטר/המלך ג'ורג' -> ת.רק''ל אבא הלל/דרך ז'בוטינסקי
                operator דן, towards פתח תקווה_בית רבקה
-    08:31-08:35  walk 240 m                    ת.רק"ל אבא הלל/דרך ז'בוטינסקי -> END
+    08:31-08:35  walk 240 m                    ת.רק''ל אבא הלל/דרך ז'בוטינסקי -> END
 ```
 
 **Alternative 3**
@@ -98,9 +97,9 @@ user would be shown — is:
     Arrives Mon 07 Sep 08:42 -- 24 min, 0 transfer(s)
 
     08:18-08:32  walk 837 m                    START -> לונדון מיניסטור/שד' שאול המלך
-    08:32-08:38  bus 142                       לונדון מיניסטור/שד' שאול המלך -> ת.רק"ל אבא הלל
+    08:32-08:38  bus 142                       לונדון מיניסטור/שד' שאול המלך -> ת.רק''ל אבא הלל
                operator דן, towards תל אביב יפו_קריית עתידים
-    08:38-08:42  walk 250 m                    ת.רק"ל אבא הלל -> END
+    08:38-08:42  walk 250 m                    ת.רק''ל אבא הלל -> END
 ```
 
 </details>
@@ -132,9 +131,9 @@ user would be shown — is:
     08:06-08:13  bus 24                        האוניברסיטה/חיים לבנון -> דרך נמיר/יהודה המכבי
                operator מטרופולין, towards תל אביב יפו_מסוף כרמלית
     08:13-08:15  walk 0 m                      דרך נמיר/יהודה המכבי -> דרך נמיר/יהודה המכבי
-    08:15-08:21  bus 89                        דרך נמיר/יהודה המכבי -> ביה"ח איכילוב/ויצמן
+    08:15-08:21  bus 89                        דרך נמיר/יהודה המכבי -> ביה''ח איכילוב/ויצמן
                operator דן, towards חולון_פארק פרס
-    08:21-08:26  walk 275 m                    ביה"ח איכילוב/ויצמן -> END
+    08:21-08:26  walk 275 m                    ביה''ח איכילוב/ויצמן -> END
 ```
 
 <details><summary>Alternatives MOTIS also returned (4 more)</summary>
@@ -160,9 +159,9 @@ user would be shown — is:
     Departs Mon 07 Sep 08:08 (8 min after the requested time)
     Arrives Mon 07 Sep 08:35 -- 27 min, 2 transfer(s)
 
-    08:08-08:14  walk 389 m                    START -> האוניברסיטה/חיים לבנון
-    08:14-08:19  bus 126                       האוניברסיטה/חיים לבנון -> סמינר הקיבוצים/דרך נמיר
-               operator מטרופולין, towards בת ים_מרכז הספורט
+    08:08-08:14  walk 379 m                    START -> האוניברסיטה/חיים לבנון
+    08:14-08:19  bus 10                        האוניברסיטה/חיים לבנון -> סמינר הקיבוצים/דרך נמיר
+               operator דן, towards חולון_מוזיאון אגד
     08:20-08:22  walk 0 m                      סמינר הקיבוצים/דרך נמיר -> סמינר הקיבוצים/דרך נמיר
     08:22-08:28  bus 249                       סמינר הקיבוצים/דרך נמיר -> בית הדר דפנה/שד' שאול המלך
                operator מטרופולין, towards תל אביב יפו_מסוף כרמלית
@@ -179,9 +178,9 @@ user would be shown — is:
     Arrives Mon 07 Sep 08:36 -- 26 min, 0 transfer(s)
 
     08:10-08:18  walk 495 m                    START -> אינשטיין/אהרון בארט
-    08:18-08:31  bus 7                         אינשטיין/אהרון בארט -> ביה"ח איכילוב/ויצמן
+    08:18-08:31  bus 7                         אינשטיין/אהרון בארט -> ביה''ח איכילוב/ויצמן
                operator דן, towards חולון_מ.רפואי וולפסון
-    08:31-08:36  walk 275 m                    ביה"ח איכילוב/ויצמן -> END
+    08:31-08:36  walk 275 m                    ביה''ח איכילוב/ויצמן -> END
 ```
 
 </details>
@@ -202,7 +201,7 @@ category `tel-aviv-urban-bus`
 
 **The corpus expected:** outcome `route`, `modes_any_of` = ['bus', 'light_rail'], `max_transfers` = 2, `min_duration_min` = 15, `max_duration_min` = 65
 
-**RESULT: 6 itinerary/itineraries returned.** The first one — the one a
+**RESULT: 5 itinerary/itineraries returned.** The first one — the one a
 user would be shown — is:
 
 ```
@@ -215,42 +214,24 @@ user would be shown — is:
     13:29-13:35  walk 431 m                    ת. רכבת תל אביב - סבידור/דרך נמיר -> END
 ```
 
-<details><summary>Alternatives MOTIS also returned (5 more)</summary>
+<details><summary>Alternatives MOTIS also returned (4 more)</summary>
 
 **Alternative 1**
 
 ```
-    Departs Tue 08 Sep 13:05 (5 min after the requested time)
-    Arrives Tue 08 Sep 13:39 -- 34 min, 2 transfer(s)
+    Departs Tue 08 Sep 13:06 (6 min after the requested time)
+    Arrives Tue 08 Sep 13:39 -- 33 min, 1 transfer(s)
 
-    13:05-13:11  walk 397 m                    START -> יפת/לואי פסטר
-    13:11-13:18  bus 18                        יפת/לואי פסטר -> ת.רק"ל מחרוזת/סהרון
-               operator דן, towards בת ים_בית עלמין
-    13:18-13:20  walk 137 m                    ת.רק"ל מחרוזת/סהרון -> שד' ירושלים/מחרוזת
-    13:20-13:22  bus 6                         שד' ירושלים/מחרוזת -> ת. רכבת וולפסון
-               operator דן, towards תל אביב יפו_מסוף הלוחמים
-    13:22-13:24  walk 249 m                    ת. רכבת וולפסון -> חולון וולפסון
-    13:24-13:38  regional rail (no line number in feed) חולון וולפסון -> תל אביב מרכז
+    13:06-13:15  walk 639 m                    START -> כיכר השעון/מרזוק ועזר
+    13:15-13:24  bus 54                        כיכר השעון/מרזוק ועזר -> ת.רכבת ההגנה
+               operator דן, towards קריית עתידים
+    13:24-13:28  walk 156 m                    ת.רכבת ההגנה -> תל אביב ההגנה
+    13:30-13:38  regional rail (no line number in feed) תל אביב ההגנה -> תל אביב מרכז
                operator רכבת ישראל, towards 318
     13:38-13:39  walk 27 m                     תל אביב מרכז -> END
 ```
 
 **Alternative 2**
-
-```
-    Departs Tue 08 Sep 13:06 (6 min after the requested time)
-    Arrives Tue 08 Sep 13:41 -- 35 min, 1 transfer(s)
-
-    13:06-13:15  walk 639 m                    START -> כיכר השעון/מרזוק ועזר
-    13:15-13:24  bus 54                        כיכר השעון/מרזוק ועזר -> ת.רכבת ההגנה
-               operator דן, towards קריית עתידים
-    13:24-13:26  walk 98 m                     ת.רכבת ההגנה -> ת. רכבת ההגנה/החרש
-    13:26-13:35  bus 71                        ת. רכבת ההגנה/החרש -> ת. רכבת תל אביב - סבידור/דרך נמיר
-               operator סופרבוס, towards תל אביב יפו_מכללת לוינסקי
-    13:35-13:41  walk 431 m                    ת. רכבת תל אביב - סבידור/דרך נמיר -> END
-```
-
-**Alternative 3**
 
 ```
     Departs Tue 08 Sep 13:07 (7 min after the requested time)
@@ -260,6 +241,18 @@ user would be shown — is:
     13:20-13:34  tram 1                        שלמה -> ארלוזורוב
                operator תבל, towards פתח תקווה_ת. מרכזית פתח תקווה
     13:34-13:42  walk 498 m                    ארלוזורוב -> END
+```
+
+**Alternative 3**
+
+```
+    Departs Tue 08 Sep 13:10 (10 min after the requested time)
+    Arrives Tue 08 Sep 13:43 -- 33 min, 0 transfer(s)
+
+    13:10-13:15  walk 356 m                    START -> יפת/לואי פסטר
+    13:15-13:38  bus 18                        יפת/לואי פסטר -> ת. רכבת תל אביב - סבידור/הורדה
+               operator דן, towards תל אביב יפו_רכבת מרכז
+    13:38-13:43  walk 295 m                    ת. רכבת תל אביב - סבידור/הורדה -> END
 ```
 
 </details>
@@ -288,9 +281,9 @@ user would be shown — is:
     Arrives Wed 09 Sep 19:06 -- 35 min, 1 transfer(s)
 
     18:31-18:34  walk 135 m                    START -> דיזנגוף סנטר/דיזנגוף
-    18:34-18:41  bus 63                        דיזנגוף סנטר/דיזנגוף -> ת.רק"ל יהודית/דרך מנחם בגין
+    18:34-18:41  bus 63                        דיזנגוף סנטר/דיזנגוף -> ת.רק''ל יהודית/דרך מנחם בגין
                operator דן, towards רמת גן_אלוף שדה
-    18:41-18:43  walk 93 m                     ת.רק"ל יהודית/דרך מנחם בגין -> יהודית
+    18:41-18:43  walk 93 m                     ת.רק''ל יהודית/דרך מנחם בגין -> יהודית
     18:43-18:58  tram 1                        יהודית -> שנקר
                operator תבל, towards פתח תקווה_ת. מרכזית פתח תקווה
     18:58-19:06  walk 477 m                    שנקר -> END
@@ -305,9 +298,9 @@ user would be shown — is:
     Arrives Wed 09 Sep 19:11 -- 35 min, 0 transfer(s)
 
     18:36-18:41  walk 294 m                    START -> דיזנגוף סנטר/המלך ג'ורג'
-    18:41-19:03  bus 82                        דיזנגוף סנטר/המלך ג'ורג' -> ת.רק"ל שנקר/דרך ז'בוטינסקי
+    18:41-19:03  bus 82                        דיזנגוף סנטר/המלך ג'ורג' -> ת.רק''ל שנקר/דרך ז'בוטינסקי
                operator דן, towards פתח תקווה_בית רבקה
-    19:03-19:11  walk 459 m                    ת.רק"ל שנקר/דרך ז'בוטינסקי -> END
+    19:03-19:11  walk 459 m                    ת.רק''ל שנקר/דרך ז'בוטינסקי -> END
 ```
 
 **Alternative 2**
@@ -317,9 +310,9 @@ user would be shown — is:
     Arrives Wed 09 Sep 19:17 -- 35 min, 1 transfer(s)
 
     18:42-18:45  walk 135 m                    START -> דיזנגוף סנטר/דיזנגוף
-    18:45-18:52  bus 63                        דיזנגוף סנטר/דיזנגוף -> ת.רק"ל יהודית/דרך מנחם בגין
+    18:45-18:52  bus 63                        דיזנגוף סנטר/דיזנגוף -> ת.רק''ל יהודית/דרך מנחם בגין
                operator דן, towards רמת גן_אלוף שדה
-    18:52-18:54  walk 93 m                     ת.רק"ל יהודית/דרך מנחם בגין -> יהודית
+    18:52-18:54  walk 93 m                     ת.רק''ל יהודית/דרך מנחם בגין -> יהודית
     18:54-19:09  tram 1                        יהודית -> שנקר
                operator תבל, towards פתח תקווה_ת. מרכזית פתח תקווה
     19:09-19:17  walk 477 m                    שנקר -> END
@@ -332,9 +325,9 @@ user would be shown — is:
     Arrives Wed 09 Sep 19:21 -- 35 min, 0 transfer(s)
 
     18:46-18:51  walk 294 m                    START -> דיזנגוף סנטר/המלך ג'ורג'
-    18:51-19:13  bus 82                        דיזנגוף סנטר/המלך ג'ורג' -> ת.רק"ל שנקר/דרך ז'בוטינסקי
+    18:51-19:13  bus 82                        דיזנגוף סנטר/המלך ג'ורג' -> ת.רק''ל שנקר/דרך ז'בוטינסקי
                operator דן, towards פתח תקווה_בית רבקה
-    19:13-19:21  walk 459 m                    ת.רק"ל שנקר/דרך ז'בוטינסקי -> END
+    19:13-19:21  walk 459 m                    ת.רק''ל שנקר/דרך ז'בוטינסקי -> END
 ```
 
 </details>
@@ -477,7 +470,7 @@ user would be shown — is:
 
     08:10-08:12  walk 99 m                     START -> התחנה המרכזית
     08:12-08:18  tram 1                        התחנה המרכזית -> הדווידקה
-               operator כפיר, towards נווה יעקב צפ'
+               operator כפיר, towards נווה יעקב - צפון
     08:18-08:20  walk 133 m                    הדווידקה -> ככר הדוידקה/הנביאים
     08:20-08:31  bus 19                        ככר הדוידקה/הנביאים -> האוניברסיטה העברית הר הצופים/מרטין בובר
                operator אגד, towards מסוף הר הצופים
@@ -509,10 +502,10 @@ user would be shown — is:
     Departs Wed 09 Sep 18:33 (3 min after the requested time)
     Arrives Wed 09 Sep 18:56 -- 23 min, 0 transfer(s)
 
-    18:33-18:37  walk 227 m                    START -> שדרות שז"ר/בנייני האומה
-    18:37-18:46  bus 531                       שדרות שז"ר/בנייני האומה -> אצטדיון טדי/א"ס ביתר
+    18:33-18:37  walk 227 m                    START -> שדרות שז''ר/בנייני האומה
+    18:37-18:46  bus 531                       שדרות שז''ר/בנייני האומה -> אצטדיון טדי/א''ס ביתר
                operator סופרבוס, towards גילה
-    18:46-18:56  walk 305 m                    אצטדיון טדי/א"ס ביתר -> END
+    18:46-18:56  walk 305 m                    אצטדיון טדי/א''ס ביתר -> END
 ```
 
 <details><summary>Alternatives MOTIS also returned (6 more)</summary>
@@ -523,13 +516,13 @@ user would be shown — is:
     Departs Wed 09 Sep 18:33 (3 min after the requested time)
     Arrives Wed 09 Sep 18:55 -- 22 min, 1 transfer(s)
 
-    18:33-18:37  walk 227 m                    START -> שדרות שז"ר/בנייני האומה
-    18:37-18:46  bus 531                       שדרות שז"ר/בנייני האומה -> אצטדיון טדי/א"ס ביתר
+    18:33-18:37  walk 227 m                    START -> שדרות שז''ר/בנייני האומה
+    18:37-18:46  bus 531                       שדרות שז''ר/בנייני האומה -> אצטדיון טדי/א''ס ביתר
                operator סופרבוס, towards גילה
-    18:46-18:48  walk 0 m                      אצטדיון טדי/א"ס ביתר -> אצטדיון טדי/א"ס ביתר
-    18:48-18:49  bus 18                        אצטדיון טדי/א"ס ביתר -> קניון מלחה/א"ס מכבי
+    18:46-18:48  walk 0 m                      אצטדיון טדי/א''ס ביתר -> אצטדיון טדי/א''ס ביתר
+    18:48-18:49  bus 18                        אצטדיון טדי/א''ס ביתר -> קניון מלחה/א''ס מכבי
                operator אגד, towards מלחה
-    18:49-18:55  walk 140 m                    קניון מלחה/א"ס מכבי -> END
+    18:49-18:55  walk 140 m                    קניון מלחה/א''ס מכבי -> END
 ```
 
 **Alternative 2**
@@ -538,10 +531,10 @@ user would be shown — is:
     Departs Wed 09 Sep 18:34 (4 min after the requested time)
     Arrives Wed 09 Sep 18:57 -- 23 min, 0 transfer(s)
 
-    18:34-18:38  walk 227 m                    START -> שדרות שז"ר/בנייני האומה
-    18:38-18:47  bus 504                       שדרות שז"ר/בנייני האומה -> אצטדיון טדי/א"ס ביתר
+    18:34-18:38  walk 227 m                    START -> שדרות שז''ר/בנייני האומה
+    18:38-18:47  bus 504                       שדרות שז''ר/בנייני האומה -> אצטדיון טדי/א''ס ביתר
                operator סופרבוס, towards חומת שמואל
-    18:47-18:57  walk 305 m                    אצטדיון טדי/א"ס ביתר -> END
+    18:47-18:57  walk 305 m                    אצטדיון טדי/א''ס ביתר -> END
 ```
 
 **Alternative 3**
@@ -550,10 +543,10 @@ user would be shown — is:
     Departs Wed 09 Sep 18:40 (10 min after the requested time)
     Arrives Wed 09 Sep 18:58 -- 18 min, 0 transfer(s)
 
-    18:40-18:44  walk 227 m                    START -> שדרות שז"ר/בנייני האומה
-    18:44-18:52  bus 31                        שדרות שז"ר/בנייני האומה -> קניון מלחה/א"ס הפועל   האייל
+    18:40-18:44  walk 227 m                    START -> שדרות שז''ר/בנייני האומה
+    18:44-18:52  bus 31                        שדרות שז''ר/בנייני האומה -> קניון מלחה/א''ס הפועל   האייל
                operator סופרבוס, towards גילה
-    18:52-18:58  walk 422 m                    קניון מלחה/א"ס הפועל   האייל -> END
+    18:52-18:58  walk 422 m                    קניון מלחה/א''ס הפועל   האייל -> END
 ```
 
 </details>
@@ -626,9 +619,9 @@ user would be shown — is:
     Arrives Mon 07 Sep 08:50 -- 35 min, 1 transfer(s)
 
     08:15-08:24  walk 553 m                    START -> עיר תחתית
-    08:24-08:25  funicular 1                   עיר תחתית -> ביה"ח בני ציון
+    08:24-08:25  funicular 1                   עיר תחתית -> ביה''ח בני ציון
                operator כרמלית, towards מרכז הכרמל
-    08:25-08:27  walk 105 m                    ביה"ח בני ציון -> תחנת כרמלית/גולומב
+    08:25-08:27  walk 105 m                    ביה''ח בני ציון -> תחנת כרמלית/גולומב
     08:28-08:45  bus 76                        תחנת כרמלית/גולומב -> טכניון/מעונות העמים
                operator אגד, towards יגור_מסוף יגור
     08:45-08:50  walk 275 m                    טכניון/מעונות העמים -> END
@@ -760,11 +753,11 @@ user would be shown — is:
 user would be shown — is:
 
 ```
-    Departs Mon 07 Sep 08:16 (16 min after the requested time)
-    Arrives Mon 07 Sep 09:38 -- 82 min, 1 transfer(s)
+    Departs Mon 07 Sep 08:14 (14 min after the requested time)
+    Arrives Mon 07 Sep 09:38 -- 84 min, 1 transfer(s)
 
-    08:16-08:17  walk 27 m                     START -> תל אביב מרכז
-    08:17-09:23  regional rail (no line number in feed) תל אביב מרכז -> חיפה מרכז
+    08:14-08:15  walk 27 m                     START -> תל אביב מרכז
+    08:15-09:23  regional rail (no line number in feed) תל אביב מרכז -> חיפה מרכז
                operator רכבת ישראל, towards 24
     09:23-09:27  walk distance not reported    חיפה מרכז -> תחנת רכבת חיפה מרכז השמונה
     09:28-09:29  bus 2                         תחנת רכבת חיפה מרכז השמונה -> כרמלית
@@ -777,11 +770,11 @@ user would be shown — is:
 **Alternative 1**
 
 ```
-    Departs Mon 07 Sep 08:27 (27 min after the requested time)
-    Arrives Mon 07 Sep 09:52 -- 85 min, 1 transfer(s)
+    Departs Mon 07 Sep 08:25 (25 min after the requested time)
+    Arrives Mon 07 Sep 09:52 -- 87 min, 1 transfer(s)
 
-    08:27-08:28  walk 27 m                     START -> תל אביב מרכז
-    08:28-09:31  regional rail (no line number in feed) תל אביב מרכז -> בת גלים
+    08:25-08:26  walk 27 m                     START -> תל אביב מרכז
+    08:26-09:31  regional rail (no line number in feed) תל אביב מרכז -> בת גלים
                operator רכבת ישראל, towards 156
     09:31-09:33  walk 152 m                    בת גלים -> ת. רכבת בת גלים
     09:34-09:41  bus 36                        ת. רכבת בת גלים -> תחנת רכבת חיפה מרכז השמונה
@@ -792,11 +785,11 @@ user would be shown — is:
 **Alternative 2**
 
 ```
-    Departs Mon 07 Sep 08:46 (46 min after the requested time)
-    Arrives Mon 07 Sep 10:08 -- 82 min, 1 transfer(s)
+    Departs Mon 07 Sep 08:44 (44 min after the requested time)
+    Arrives Mon 07 Sep 10:08 -- 84 min, 1 transfer(s)
 
-    08:46-08:47  walk 27 m                     START -> תל אביב מרכז
-    08:47-09:48  regional rail (no line number in feed) תל אביב מרכז -> בת גלים
+    08:44-08:45  walk 27 m                     START -> תל אביב מרכז
+    08:45-09:48  regional rail (no line number in feed) תל אביב מרכז -> בת גלים
                operator רכבת ישראל, towards 404
     09:48-09:50  walk 152 m                    בת גלים -> ת. רכבת בת גלים
     09:50-09:57  bus 18                        ת. רכבת בת גלים -> תחנת רכבת חיפה מרכז השמונה
@@ -807,11 +800,11 @@ user would be shown — is:
 **Alternative 3**
 
 ```
-    Departs Mon 07 Sep 08:57 (57 min after the requested time)
-    Arrives Mon 07 Sep 10:16 -- 79 min, 1 transfer(s)
+    Departs Mon 07 Sep 08:55 (55 min after the requested time)
+    Arrives Mon 07 Sep 10:16 -- 81 min, 1 transfer(s)
 
-    08:57-08:58  walk 27 m                     START -> תל אביב מרכז
-    08:58-10:00  regional rail (no line number in feed) תל אביב מרכז -> חיפה מרכז
+    08:55-08:56  walk 27 m                     START -> תל אביב מרכז
+    08:56-10:00  regional rail (no line number in feed) תל אביב מרכז -> חיפה מרכז
                operator רכבת ישראל, towards 106
     10:00-10:04  walk distance not reported    חיפה מרכז -> תחנת רכבת חיפה מרכז השמונה
     10:06-10:07  bus 1                         תחנת רכבת חיפה מרכז השמונה -> כרמלית
@@ -841,11 +834,11 @@ user would be shown — is:
 user would be shown — is:
 
 ```
-    Departs Mon 07 Sep 08:06 (6 min after the requested time)
-    Arrives Mon 07 Sep 08:55 -- 49 min, 0 transfer(s)
+    Departs Mon 07 Sep 08:04 (4 min after the requested time)
+    Arrives Mon 07 Sep 08:55 -- 51 min, 0 transfer(s)
 
-    08:06-08:07  walk 27 m                     START -> תל אביב מרכז
-    08:07-08:52  regional rail (no line number in feed) תל אביב מרכז -> ירושלים/יצחק נבון
+    08:04-08:05  walk 27 m                     START -> תל אביב מרכז
+    08:05-08:52  regional rail (no line number in feed) תל אביב מרכז -> ירושלים/יצחק נבון
                operator רכבת ישראל, towards 723
     08:52-08:55  walk 184 m                    ירושלים/יצחק נבון -> END
 ```
@@ -855,40 +848,37 @@ user would be shown — is:
 **Alternative 1**
 
 ```
-    Departs Mon 07 Sep 08:08 (8 min after the requested time)
-    Arrives Mon 07 Sep 08:55 -- 47 min, 1 transfer(s)
+    Departs Mon 07 Sep 08:14 (14 min after the requested time)
+    Arrives Mon 07 Sep 09:09 -- 55 min, 0 transfer(s)
 
-    08:08-08:09  walk 27 m                     START -> תל אביב מרכז
-    08:09-08:15  regional rail (no line number in feed) תל אביב מרכז -> תל אביב ההגנה
-               operator רכבת ישראל, towards 621
-    08:15-08:17  walk 0 m                      תל אביב ההגנה -> תל אביב ההגנה
-    08:17-08:52  regional rail (no line number in feed) תל אביב ההגנה -> ירושלים/יצחק נבון
-               operator רכבת ישראל, towards 723
-    08:52-08:55  walk 184 m                    ירושלים/יצחק נבון -> END
+    08:14-08:20  walk 403 m                    START -> ת.רכבת תל אביב - סבידור/רציפים B
+    08:20-09:04  bus 480                       ת.רכבת תל אביב - סבידור/רציפים B -> ת. מרכזית ירושלים/הורדה
+               operator אגד, towards ירושלים_תחנה מרכזית
+    09:04-09:09  walk 306 m                    ת. מרכזית ירושלים/הורדה -> END
 ```
 
 **Alternative 2**
 
 ```
-    Departs Mon 07 Sep 08:14 (14 min after the requested time)
-    Arrives Mon 07 Sep 09:15 -- 61 min, 0 transfer(s)
+    Departs Mon 07 Sep 08:34 (34 min after the requested time)
+    Arrives Mon 07 Sep 09:25 -- 51 min, 0 transfer(s)
 
-    08:14-08:20  walk 403 m                    START -> ת.רכבת תל אביב - סבידור/רציפים B
-    08:20-09:10  bus 480                       ת.רכבת תל אביב - סבידור/רציפים B -> ת. מרכזית ירושלים/הורדה
-               operator אגד, towards ירושלים_תחנה מרכזית
-    09:10-09:15  walk 306 m                    ת. מרכזית ירושלים/הורדה -> END
+    08:34-08:35  walk 27 m                     START -> תל אביב מרכז
+    08:35-09:22  regional rail (no line number in feed) תל אביב מרכז -> ירושלים/יצחק נבון
+               operator רכבת ישראל, towards 725
+    09:22-09:25  walk 184 m                    ירושלים/יצחק נבון -> END
 ```
 
 **Alternative 3**
 
 ```
-    Departs Mon 07 Sep 08:36 (36 min after the requested time)
-    Arrives Mon 07 Sep 09:25 -- 49 min, 0 transfer(s)
+    Departs Mon 07 Sep 08:44 (44 min after the requested time)
+    Arrives Mon 07 Sep 09:39 -- 55 min, 0 transfer(s)
 
-    08:36-08:37  walk 27 m                     START -> תל אביב מרכז
-    08:37-09:22  regional rail (no line number in feed) תל אביב מרכז -> ירושלים/יצחק נבון
-               operator רכבת ישראל, towards 725
-    09:22-09:25  walk 184 m                    ירושלים/יצחק נבון -> END
+    08:44-08:50  walk 403 m                    START -> ת.רכבת תל אביב - סבידור/רציפים B
+    08:50-09:34  bus 480                       ת.רכבת תל אביב - סבידור/רציפים B -> ת. מרכזית ירושלים/הורדה
+               operator אגד, towards ירושלים_תחנה מרכזית
+    09:34-09:39  walk 306 m                    ת. מרכזית ירושלים/הורדה -> END
 ```
 
 </details>
@@ -909,29 +899,29 @@ category `intercity-rail`
 
 **The corpus expected:** outcome `route`, `modes_any_of` = ['rail'], `max_transfers` = 1, `min_duration_min` = 60, `max_duration_min` = 180
 
-**RESULT: 6 itinerary/itineraries returned.** The first one — the one a
+**RESULT: 5 itinerary/itineraries returned.** The first one — the one a
 user would be shown — is:
 
 ```
-    Departs Tue 08 Sep 13:13 (13 min after the requested time)
-    Arrives Tue 08 Sep 14:51 -- 98 min, 0 transfer(s)
+    Departs Tue 08 Sep 13:11 (11 min after the requested time)
+    Arrives Tue 08 Sep 14:51 -- 100 min, 0 transfer(s)
 
-    13:13-13:17  walk 270 m                    START -> השלום
-    13:17-14:50  regional rail (no line number in feed) השלום -> באר שבע מרכז
+    13:11-13:15  walk 270 m                    START -> השלום
+    13:15-14:50  regional rail (no line number in feed) השלום -> באר שבע מרכז
                operator רכבת ישראל, towards 33
     14:50-14:51  walk 44 m                     באר שבע מרכז -> END
 ```
 
-<details><summary>Alternatives MOTIS also returned (5 more)</summary>
+<details><summary>Alternatives MOTIS also returned (4 more)</summary>
 
 **Alternative 1**
 
 ```
-    Departs Tue 08 Sep 13:38 (38 min after the requested time)
-    Arrives Tue 08 Sep 15:20 -- 102 min, 0 transfer(s)
+    Departs Tue 08 Sep 13:37 (37 min after the requested time)
+    Arrives Tue 08 Sep 15:20 -- 103 min, 0 transfer(s)
 
-    13:38-13:42  walk 270 m                    START -> השלום
-    13:42-15:19  regional rail (no line number in feed) השלום -> באר שבע מרכז
+    13:37-13:41  walk 270 m                    START -> השלום
+    13:41-15:19  regional rail (no line number in feed) השלום -> באר שבע מרכז
                operator רכבת ישראל, towards 643
     15:19-15:20  walk 44 m                     באר שבע מרכז -> END
 ```
@@ -939,13 +929,13 @@ user would be shown — is:
 **Alternative 2**
 
 ```
-    Departs Tue 08 Sep 13:41 (41 min after the requested time)
-    Arrives Tue 08 Sep 15:35 -- 114 min, 2 transfer(s)
+    Departs Tue 08 Sep 13:46 (46 min after the requested time)
+    Arrives Tue 08 Sep 15:35 -- 109 min, 2 transfer(s)
 
-    13:41-13:47  walk 299 m                    START -> יגאל אלון/דרך השלום
-    13:47-13:57  bus 46                        יגאל אלון/דרך השלום -> ת.רכבת ההגנה
-               operator דן, towards בת ים_בית עלמין
-    13:58-14:00  walk 371 m                    ת.רכבת ההגנה -> מסוף ההגנה/איסוף
+    13:46-13:50  walk 270 m                    START -> השלום
+    13:50-13:55  regional rail (no line number in feed) השלום -> תל אביב ההגנה
+               operator רכבת ישראל, towards 517
+    13:56-14:00  walk 421 m                    תל אביב ההגנה -> מסוף ההגנה/איסוף
     14:00-14:02  bus 114                       מסוף ההגנה/איסוף -> גשר קיבוץ גלויות
                operator דן, towards מסוף רכבת ההגנה
     14:02-14:04  walk 96 m                     גשר קיבוץ גלויות -> דרך קיבוץ גלויות/כביש 1
@@ -957,13 +947,13 @@ user would be shown — is:
 **Alternative 3**
 
 ```
-    Departs Tue 08 Sep 13:41 (41 min after the requested time)
-    Arrives Tue 08 Sep 15:33 -- 112 min, 3 transfer(s)
+    Departs Tue 08 Sep 13:46 (46 min after the requested time)
+    Arrives Tue 08 Sep 15:33 -- 107 min, 3 transfer(s)
 
-    13:41-13:47  walk 299 m                    START -> יגאל אלון/דרך השלום
-    13:47-13:57  bus 46                        יגאל אלון/דרך השלום -> ת.רכבת ההגנה
-               operator דן, towards בת ים_בית עלמין
-    13:58-14:00  walk 371 m                    ת.רכבת ההגנה -> מסוף ההגנה/איסוף
+    13:46-13:50  walk 270 m                    START -> השלום
+    13:50-13:55  regional rail (no line number in feed) השלום -> תל אביב ההגנה
+               operator רכבת ישראל, towards 517
+    13:56-14:00  walk 421 m                    תל אביב ההגנה -> מסוף ההגנה/איסוף
     14:00-14:02  bus 114                       מסוף ההגנה/איסוף -> גשר קיבוץ גלויות
                operator דן, towards מסוף רכבת ההגנה
     14:02-14:04  walk 96 m                     גשר קיבוץ גלויות -> דרך קיבוץ גלויות/כביש 1
@@ -993,7 +983,7 @@ category `intercity-rail`
 
 **The corpus expected:** outcome `route`, `modes_any_of` = ['rail'], `max_transfers` = 2, `min_duration_min` = 120, `max_duration_min` = 260
 
-**RESULT: 5 itinerary/itineraries returned.** The first one — the one a
+**RESULT: 6 itinerary/itineraries returned.** The first one — the one a
 user would be shown — is:
 
 ```
@@ -1009,7 +999,7 @@ user would be shown — is:
     10:50-10:53  walk 154 m                    ירושלים -> END
 ```
 
-<details><summary>Alternatives MOTIS also returned (4 more)</summary>
+<details><summary>Alternatives MOTIS also returned (5 more)</summary>
 
 **Alternative 1**
 
@@ -1033,16 +1023,13 @@ user would be shown — is:
 
 ```
     Departs Mon 07 Sep 08:15 (15 min after the requested time)
-    Arrives Mon 07 Sep 11:23 -- 188 min, 2 transfer(s)
+    Arrives Mon 07 Sep 11:23 -- 188 min, 1 transfer(s)
 
     08:15-08:28  walk 760 m                    START -> נהריה
-    08:28-10:15  regional rail (no line number in feed) נהריה -> השלום
+    08:28-10:20  regional rail (no line number in feed) נהריה -> תל אביב ההגנה
                operator רכבת ישראל, towards 27
-    10:26-10:28  walk 329 m                    השלום -> ת. רכבת השלום
-    10:28-10:29  bus 274                       ת. רכבת השלום -> קניון עזריאלי/דרך מנחם בגין
-               operator אגד, towards תל אביב יפו_אוניברסיטת ת"א
-    10:29-10:31  walk 324 m                    קניון עזריאלי/דרך מנחם בגין -> קניון עזריאלי/דרך מנחם בגין
-    10:33-11:20  bus 281                       קניון עזריאלי/דרך מנחם בגין -> ירושלים
+    10:20-10:28  walk 322 m                    תל אביב ההגנה -> ת. רכבת ההגנה/החרש
+    10:40-11:20  bus 281                       ת. רכבת ההגנה/החרש -> ירושלים
                operator אלקטרה אפיקים, towards אשדוד_רובע ט"ו
     11:20-11:23  walk 154 m                    ירושלים -> END
 ```
@@ -1050,16 +1037,22 @@ user would be shown — is:
 **Alternative 3**
 
 ```
-    Departs Mon 07 Sep 08:35 (35 min after the requested time)
-    Arrives Mon 07 Sep 11:48 -- 193 min, 1 transfer(s)
+    Departs Mon 07 Sep 08:15 (15 min after the requested time)
+    Arrives Mon 07 Sep 11:21 -- 186 min, 3 transfer(s)
 
-    08:35-08:48  walk 760 m                    START -> נהריה
-    08:48-10:34  regional rail (no line number in feed) נהריה -> השלום
-               operator רכבת ישראל, towards 109
-    10:34-10:38  walk 315 m                    השלום -> קניון עזריאלי/כביש 20
-    11:04-11:45  bus 280                       קניון עזריאלי/כביש 20 -> ירושלים
+    08:15-08:28  walk 760 m                    START -> נהריה
+    08:28-10:20  regional rail (no line number in feed) נהריה -> תל אביב ההגנה
+               operator רכבת ישראל, towards 27
+    10:20-10:28  walk 322 m                    תל אביב ההגנה -> ת. רכבת ההגנה/החרש
+    10:28-10:30  bus 89                        ת. רכבת ההגנה/החרש -> בית ספר הולץ/חיל השריון
+               operator דן, towards חולון_פארק פרס
+    10:31-10:33  walk 0 m                      בית ספר הולץ/חיל השריון -> בית ספר הולץ/חיל השריון
+    10:33-11:05  bus 312                       בית ספר הולץ/חיל השריון -> בני ברית/האורגים
                operator אלקטרה אפיקים, towards אשדוד_תחנה מרכזית
-    11:45-11:48  walk 154 m                    ירושלים -> END
+    11:05-11:07  walk 0 m                      בני ברית/האורגים -> בני ברית/האורגים
+    11:08-11:18  bus 10                        בני ברית/האורגים -> ירושלים
+               operator אלקטרה אפיקים, towards רובע ט"ו
+    11:18-11:21  walk 154 m                    ירושלים -> END
 ```
 
 </details>
@@ -1085,21 +1078,21 @@ user would be shown — is:
 
 ```
     Departs Mon 07 Sep 08:00 (at the requested time)
-    Arrives Mon 07 Sep 10:16 -- 136 min, 3 transfer(s)
+    Arrives Mon 07 Sep 10:34 -- 154 min, 3 transfer(s)
 
     08:00-08:11  walk 591 m                    START -> מכון ויצמן
-    08:11-08:45  bus 277                       מכון ויצמן -> ת.רק"ל יהודית/דרך מנחם בגין
+    08:11-08:44  bus 277                       מכון ויצמן -> המסגר/ישראל טל
                operator אגד, towards תל אביב יפו_מסוף רדינג
-    08:45-08:47  walk 0 m                      ת.רק"ל יהודית/דרך מנחם בגין -> ת.רק"ל יהודית/דרך מנחם בגין
-    08:47-08:50  bus 23                        ת.רק"ל יהודית/דרך מנחם בגין -> ת. רכבת השלום
-               operator דן, towards גבעתיים_כורזין
-    08:51-08:53  walk 226 m                    ת. רכבת השלום -> השלום
-    08:53-10:00  regional rail (no line number in feed) השלום -> חיפה מרכז
-               operator רכבת ישראל, towards 106
-    10:00-10:04  walk distance not reported    חיפה מרכז -> תחנת רכבת חיפה מרכז השמונה
-    10:06-10:07  bus 1                         תחנת רכבת חיפה מרכז השמונה -> כרמלית
+    08:44-08:46  walk 0 m                      המסגר/ישראל טל -> המסגר/ישראל טל
+    08:46-09:28  bus 825                       המסגר/ישראל טל -> צומת אולגה
+               operator אגד, towards עפולה_תחנה מרכזית
+    09:29-09:31  walk 0 m                      צומת אולגה -> צומת אולגה
+    09:31-10:04  bus 947                       צומת אולגה -> מת''מ
+               operator אגד, towards חיפה_מרכזית חוף הכרמל
+    10:04-10:06  walk 173 m                    מת''מ -> מת''מ
+    10:09-10:25  bus 1                         מת''מ -> כרמלית
                operator סופרבוס, towards קרית מוצקין_מרכזית הקריות
-    10:07-10:16  walk 564 m                    כרמלית -> END
+    10:25-10:34  walk 564 m                    כרמלית -> END
 ```
 
 <details><summary>Alternatives MOTIS also returned (4 more)</summary>
@@ -1113,8 +1106,8 @@ user would be shown — is:
     08:21-08:34  walk 876 m                    START -> רחובות
     08:34-08:43  regional rail (no line number in feed) רחובות -> לוד
                operator רכבת ישראל, towards 956
-    08:51-08:53  walk 0 m                      לוד -> לוד
-    08:53-10:19  regional rail (no line number in feed) לוד -> בת גלים
+    08:49-08:51  walk 0 m                      לוד -> לוד
+    08:51-10:19  regional rail (no line number in feed) לוד -> בת גלים
                operator רכבת ישראל, towards 26
     10:19-10:21  walk 152 m                    בת גלים -> ת. רכבת בת גלים
     10:22-10:29  bus 18                        ת. רכבת בת גלים -> תחנת רכבת חיפה מרכז השמונה
@@ -1131,8 +1124,8 @@ user would be shown — is:
     08:21-08:34  walk 876 m                    START -> רחובות
     08:34-08:43  regional rail (no line number in feed) רחובות -> לוד
                operator רכבת ישראל, towards 956
-    08:51-08:53  walk 0 m                      לוד -> לוד
-    08:53-10:19  regional rail (no line number in feed) לוד -> בת גלים
+    08:49-08:51  walk 0 m                      לוד -> לוד
+    08:51-10:19  regional rail (no line number in feed) לוד -> בת גלים
                operator רכבת ישראל, towards 26
     10:20-10:22  walk 152 m                    בת גלים -> ת. רכבת בת גלים
     10:22-10:27  bus 28                        ת. רכבת בת גלים -> המגינים/בן גוריון
@@ -1152,8 +1145,8 @@ user would be shown — is:
     08:25-08:36  walk 591 m                    START -> מכון ויצמן
     08:36-09:18  bus 274                       מכון ויצמן -> ת. רכבת השלום
                operator אגד, towards תל אביב יפו_אוניברסיטת ת"א
-    09:21-09:23  walk 329 m                    ת. רכבת השלום -> השלום
-    09:23-10:35  regional rail (no line number in feed) השלום -> חיפה מרכז
+    09:19-09:21  walk 329 m                    ת. רכבת השלום -> השלום
+    09:21-10:35  regional rail (no line number in feed) השלום -> חיפה מרכז
                operator רכבת ישראל, towards 158
     10:35-10:39  walk distance not reported    חיפה מרכז -> תחנת רכבת חיפה מרכז השמונה
     10:40-10:41  bus 2                         תחנת רכבת חיפה מרכז השמונה -> כרמלית
@@ -1163,7 +1156,7 @@ user would be shown — is:
 
 </details>
 
-<sub>Machine checks (structure only — not a quality judgement): structural check (any itinerary): **pass**</sub>
+<sub>Machine checks (structure only — not a quality judgement): structural check (any itinerary): **pass** · structural check (the itinerary shown): **fail** · itinerary 0 (the one a user sees) does not satisfy the case; itinerary 1 does. This is a ranking question -- flag for H3. · first itinerary missed: modes ['bus'] missing modes_all_of entries ['rail']</sub>
 
 **Verdict:** 
 
@@ -1183,11 +1176,11 @@ user would be shown — is:
 user would be shown — is:
 
 ```
-    Departs Mon 07 Sep 08:27 (27 min after the requested time)
-    Arrives Mon 07 Sep 09:52 -- 85 min, 1 transfer(s)
+    Departs Mon 07 Sep 08:25 (25 min after the requested time)
+    Arrives Mon 07 Sep 09:52 -- 87 min, 1 transfer(s)
 
-    08:27-08:28  walk 27 m                     START -> תל אביב מרכז
-    08:28-09:24  regional rail (no line number in feed) תל אביב מרכז -> חוף הכרמל
+    08:25-08:26  walk 27 m                     START -> תל אביב מרכז
+    08:26-09:24  regional rail (no line number in feed) תל אביב מרכז -> חוף הכרמל
                operator רכבת ישראל, towards 156
     09:24-09:26  walk 189 m                    חוף הכרמל -> ת. רכבת חוף הכרמל
     09:33-09:47  bus 1                         ת. רכבת חוף הכרמל -> טכניון/מעונות העמים
@@ -1200,11 +1193,11 @@ user would be shown — is:
 **Alternative 1**
 
 ```
-    Departs Mon 07 Sep 08:46 (46 min after the requested time)
-    Arrives Mon 07 Sep 10:30 -- 104 min, 2 transfer(s)
+    Departs Mon 07 Sep 08:44 (44 min after the requested time)
+    Arrives Mon 07 Sep 10:30 -- 106 min, 2 transfer(s)
 
-    08:46-08:47  walk 27 m                     START -> תל אביב מרכז
-    08:47-09:48  regional rail (no line number in feed) תל אביב מרכז -> בת גלים
+    08:44-08:45  walk 27 m                     START -> תל אביב מרכז
+    08:45-09:48  regional rail (no line number in feed) תל אביב מרכז -> בת גלים
                operator רכבת ישראל, towards 404
     09:50-09:52  walk 152 m                    בת גלים -> ת. רכבת בת גלים
     09:52-10:05  bus 28                        ת. רכבת בת גלים -> ארלוזורוב/בלפור
@@ -1218,11 +1211,11 @@ user would be shown — is:
 **Alternative 2**
 
 ```
-    Departs Mon 07 Sep 08:57 (57 min after the requested time)
-    Arrives Mon 07 Sep 10:35 -- 98 min, 1 transfer(s)
+    Departs Mon 07 Sep 08:55 (55 min after the requested time)
+    Arrives Mon 07 Sep 10:35 -- 100 min, 1 transfer(s)
 
-    08:57-08:58  walk 27 m                     START -> תל אביב מרכז
-    08:58-10:00  regional rail (no line number in feed) תל אביב מרכז -> חיפה מרכז
+    08:55-08:56  walk 27 m                     START -> תל אביב מרכז
+    08:56-10:00  regional rail (no line number in feed) תל אביב מרכז -> חיפה מרכז
                operator רכבת ישראל, towards 106
     10:00-10:04  walk distance not reported    חיפה מרכז -> תחנת רכבת חיפה מרכז השמונה
     10:06-10:30  bus 17                        תחנת רכבת חיפה מרכז השמונה -> טכניון/מעונות העמים
@@ -1233,11 +1226,11 @@ user would be shown — is:
 **Alternative 3**
 
 ```
-    Departs Mon 07 Sep 09:27 (87 min after the requested time)
-    Arrives Mon 07 Sep 10:52 -- 85 min, 1 transfer(s)
+    Departs Mon 07 Sep 09:25 (85 min after the requested time)
+    Arrives Mon 07 Sep 10:52 -- 87 min, 1 transfer(s)
 
-    09:27-09:28  walk 27 m                     START -> תל אביב מרכז
-    09:28-10:24  regional rail (no line number in feed) תל אביב מרכז -> חוף הכרמל
+    09:25-09:26  walk 27 m                     START -> תל אביב מרכז
+    09:26-10:24  regional rail (no line number in feed) תל אביב מרכז -> חוף הכרמל
                operator רכבת ישראל, towards 158
     10:24-10:26  walk 189 m                    חוף הכרמל -> ת. רכבת חוף הכרמל
     10:33-10:47  bus 1                         ת. רכבת חוף הכרמל -> טכניון/מעונות העמים
@@ -1263,24 +1256,72 @@ category `bus-to-rail`
 
 **The corpus expected:** outcome `route`, `modes_any_of` = ['rail', 'bus'], `max_transfers` = 2, `min_duration_min` = 15, `max_duration_min` = 90
 
-**RESULT: no route returned.**
+**RESULT: 5 itinerary/itineraries returned.** The first one — the one a
+user would be shown — is:
 
-Probes run against this case (see `poc/routing/no-route-diagnosis.json`):
+```
+    Departs Mon 07 Sep 08:06 (6 min after the requested time)
+    Arrives Mon 07 Sep 08:36 -- 30 min, 1 transfer(s)
 
-| variation | result |
-| --- | --- |
-| J17 as-corpus — defaults (as the corpus run) | no route |
-| J17 as-corpus — searchWindow 2 h | no route |
-| J17 as-corpus — searchWindow 6 h | no route |
-| J17 as-corpus — walk up to 30 min each end | no route |
-| J17 as-corpus — searchWindow 6 h + 30 min walk | no route |
-| J17 to the real T3 interchange — defaults (as the corpus run) | 7 itineraries, 96 min, 1 transfers |
-| J17 to the real T3 interchange — searchWindow 2 h | 24 itineraries, 96 min, 1 transfers |
-| J17 to the real T3 interchange — searchWindow 6 h | 56 itineraries, 96 min, 1 transfers |
-| J17 to the real T3 interchange — walk up to 30 min each end | 8 itineraries, 96 min, 1 transfers |
-| J17 to the real T3 interchange — searchWindow 6 h + 30 min walk | 52 itineraries, 96 min, 1 transfers |
+    08:06-08:13  walk 402 m                    START -> עמק איילון/תלתן
+    08:13-08:14  bus 58                        עמק איילון/תלתן -> ת. רכבת מודיעין מרכז
+               operator קווים, towards בייק פארק
+    08:14-08:16  walk distance not reported    ת. רכבת מודיעין מרכז -> מודיעין מרכז
+    08:18-08:35  regional rail (no line number in feed) מודיעין מרכז -> נתב''ג
+               operator רכבת ישראל, towards 106
+    08:35-08:36  walk 4 m                      נתב''ג -> END
+```
 
-<sub>Machine checks (structure only — not a quality judgement): structural check (any itinerary): **fail** · no itineraries returned but the case expects outcome=route</sub>
+<details><summary>Alternatives MOTIS also returned (4 more)</summary>
+
+**Alternative 1**
+
+```
+    Departs Mon 07 Sep 08:37 (37 min after the requested time)
+    Arrives Mon 07 Sep 09:06 -- 29 min, 1 transfer(s)
+
+    08:37-08:41  walk 189 m                    START -> קניון עזריאלי מודיעין
+    08:41-08:41  bus 54                        קניון עזריאלי מודיעין -> ת. רכבת מודיעין מרכז
+               operator קווים, towards מ.מסחרי לב רעות
+    08:41-08:43  walk distance not reported    ת. רכבת מודיעין מרכז -> מודיעין מרכז
+    08:48-09:05  regional rail (no line number in feed) מודיעין מרכז -> נתב''ג
+               operator רכבת ישראל, towards 158
+    09:05-09:06  walk 4 m                      נתב''ג -> END
+```
+
+**Alternative 2**
+
+```
+    Departs Mon 07 Sep 09:07 (67 min after the requested time)
+    Arrives Mon 07 Sep 09:36 -- 29 min, 1 transfer(s)
+
+    09:07-09:11  walk 189 m                    START -> קניון עזריאלי מודיעין
+    09:11-09:11  bus 54                        קניון עזריאלי מודיעין -> ת. רכבת מודיעין מרכז
+               operator קווים, towards רעות
+    09:11-09:13  walk distance not reported    ת. רכבת מודיעין מרכז -> מודיעין מרכז
+    09:18-09:35  regional rail (no line number in feed) מודיעין מרכז -> נתב''ג
+               operator רכבת ישראל, towards 108
+    09:35-09:36  walk 4 m                      נתב''ג -> END
+```
+
+**Alternative 3**
+
+```
+    Departs Mon 07 Sep 09:38 (98 min after the requested time)
+    Arrives Mon 07 Sep 10:06 -- 28 min, 1 transfer(s)
+
+    09:38-09:45  walk 402 m                    START -> עמק איילון/תלתן
+    09:45-09:46  bus 53                        עמק איילון/תלתן -> ת. רכבת מודיעין מרכז
+               operator קווים, towards אולפנה
+    09:46-09:48  walk distance not reported    ת. רכבת מודיעין מרכז -> מודיעין מרכז
+    09:48-10:05  regional rail (no line number in feed) מודיעין מרכז -> נתב''ג
+               operator רכבת ישראל, towards 160
+    10:05-10:06  walk 4 m                      נתב''ג -> END
+```
+
+</details>
+
+<sub>Machine checks (structure only — not a quality judgement): structural check (any itinerary): **pass**</sub>
 
 **Verdict:** 
 
@@ -1333,10 +1374,10 @@ user would be shown — is:
     08:07-09:16  bus 370                       מרכז רפואי סורוקה/אוניברסיטת בן גוריון -> מחלף לה גווארדייה
                operator מטרופולין, towards תל אביב יפו_תחנה מרכזית
     09:17-09:19  walk 126 m                    מחלף לה גווארדייה -> מחלף לה גווארדייה
-    09:19-09:25  bus 2                         מחלף לה גווארדייה -> שכונת הארגזים/לח"י
+    09:19-09:25  bus 2                         מחלף לה גווארדייה -> שכונת הארגזים/לח''י
                operator דן, towards הארגזים
-    09:27-09:29  walk 0 m                      שכונת הארגזים/לח"י -> שכונת הארגזים/לח"י
-    09:29-09:39  bus 41                        שכונת הארגזים/לח"י -> עמק האלה/דרך שיבא
+    09:27-09:29  walk 0 m                      שכונת הארגזים/לח''י -> שכונת הארגזים/לח''י
+    09:29-09:39  bus 41                        שכונת הארגזים/לח''י -> עמק האלה/דרך שיבא
                operator דן, towards פתח תקווה_מסוף משה ארנס
     09:39-09:41  walk 0 m                      עמק האלה/דרך שיבא -> עמק האלה/דרך שיבא
     09:41-09:48  bus 48                        עמק האלה/דרך שיבא -> מרכז וואהל/מקס ואנה ווב
@@ -1420,13 +1461,13 @@ user would be shown — is:
     Arrives Mon 07 Sep 08:57 -- 54 min, 2 transfer(s)
 
     08:03-08:07  walk 184 m                    START -> גלגלי הפלדה/יוחנן הסנדלר
-    08:07-08:24  bus 91                        גלגלי הפלדה/יוחנן הסנדלר -> ת.רק"ל שאול המלך/דרך מנחם בגין
+    08:07-08:24  bus 91                        גלגלי הפלדה/יוחנן הסנדלר -> ת.רק''ל שאול המלך/דרך מנחם בגין
                operator מטרופולין, towards תל אביב יפו_מסוף הטייסים
-    08:27-08:29  walk 126 m                    ת.רק"ל שאול המלך/דרך מנחם בגין -> שאול המלך
+    08:27-08:29  walk 126 m                    ת.רק''ל שאול המלך/דרך מנחם בגין -> שאול המלך
     08:29-08:45  tram 1                        שאול המלך -> שחם
                operator תבל, towards פתח תקווה_ת. מרכזית פתח תקווה
-    08:45-08:47  walk 124 m                    שחם -> ת.רק"ל שחם/דרך יצחק רבין
-    08:48-08:50  bus 75                        ת.רק"ל שחם/דרך יצחק רבין -> דרך יצחק רבין/דגניה
+    08:45-08:47  walk 124 m                    שחם -> ת.רק''ל שחם/דרך יצחק רבין
+    08:48-08:50  bus 75                        ת.רק''ל שחם/דרך יצחק רבין -> דרך יצחק רבין/דגניה
                operator מטרופולין, towards גני תקווה_מרכז גני תקווה
     08:50-08:57  walk 444 m                    דרך יצחק רבין/דגניה -> END
 ```
@@ -1441,13 +1482,13 @@ user would be shown — is:
     08:10-08:14  bus 90                        גלגלי הפלדה/יוחנן הסנדלר -> סינמה סיטי/כביש 2
                operator מטרופולין, towards תל אביב יפו_מסוף כרמלית
     08:16-08:18  walk 0 m                      סינמה סיטי/כביש 2 -> סינמה סיטי/כביש 2
-    08:18-08:31  bus 347                       סינמה סיטי/כביש 2 -> ת.רק"ל שאול המלך/דרך מנחם בגין
+    08:18-08:31  bus 347                       סינמה סיטי/כביש 2 -> ת.רק''ל שאול המלך/דרך מנחם בגין
                operator מטרופולין, towards תל אביב יפו_תחנה מרכזית
-    08:32-08:34  walk 126 m                    ת.רק"ל שאול המלך/דרך מנחם בגין -> שאול המלך
+    08:32-08:34  walk 126 m                    ת.רק''ל שאול המלך/דרך מנחם בגין -> שאול המלך
     08:34-08:50  tram 1                        שאול המלך -> שחם
                operator תבל, towards פתח תקווה_ת. מרכזית פתח תקווה
-    08:50-08:52  walk 124 m                    שחם -> ת.רק"ל שחם/דרך יצחק רבין
-    08:53-08:54  bus 143                       ת.רק"ל שחם/דרך יצחק רבין -> דרך יצחק רבין/דגניה
+    08:50-08:52  walk 124 m                    שחם -> ת.רק''ל שחם/דרך יצחק רבין
+    08:53-08:54  bus 143                       ת.רק''ל שחם/דרך יצחק רבין -> דרך יצחק רבין/דגניה
                operator סופרבוס, towards חולון_מוזיאון אגד
     08:54-09:01  walk 444 m                    דרך יצחק רבין/דגניה -> END
 ```
@@ -1459,13 +1500,13 @@ user would be shown — is:
     Arrives Mon 07 Sep 09:08 -- 60 min, 2 transfer(s)
 
     08:08-08:16  walk 521 m                    START -> צומת הרצליה
-    08:16-08:35  bus 606                       צומת הרצליה -> ת.רק"ל יהודית/דרך מנחם בגין
+    08:16-08:35  bus 606                       צומת הרצליה -> ת.רק''ל יהודית/דרך מנחם בגין
                operator מטרופולין, towards תל אביב יפו_תחנה מרכזית
-    08:36-08:38  walk 141 m                    ת.רק"ל יהודית/דרך מנחם בגין -> יהודית
+    08:36-08:38  walk 141 m                    ת.רק''ל יהודית/דרך מנחם בגין -> יהודית
     08:38-08:56  tram 1                        יהודית -> שחם
                operator תבל, towards פתח תקווה_ת. מרכזית פתח תקווה
-    08:56-08:58  walk 124 m                    שחם -> ת.רק"ל שחם/דרך יצחק רבין
-    08:59-09:01  bus 41                        ת.רק"ל שחם/דרך יצחק רבין -> דרך יצחק רבין/דגניה
+    08:56-08:58  walk 124 m                    שחם -> ת.רק''ל שחם/דרך יצחק רבין
+    08:59-09:01  bus 41                        ת.רק''ל שחם/דרך יצחק רבין -> דרך יצחק רבין/דגניה
                operator דן, towards תל אביב יפו_מסוף הלוחמים
     09:01-09:08  walk 444 m                    דרך יצחק רבין/דגניה -> END
 ```
@@ -1499,12 +1540,12 @@ user would be shown — is:
     13:18-13:51  bus 611                       בית ספר טשרניחובסקי/בן צבי -> ת. רכבת תל אביב - סבידור/דרך נמיר
                operator מטרופולין, towards תל אביב יפו_תחנה מרכזית
     14:00-14:05  walk 297 m                    ת. רכבת תל אביב - סבידור/דרך נמיר -> ת.רכבת תל אביב - סבידור/רציפים B
-    14:05-14:56  bus 490                       ת.רכבת תל אביב - סבידור/רציפים B -> הרצוג/ניות
+    14:05-14:48  bus 490                       ת.רכבת תל אביב - סבידור/רציפים B -> צומת גבעת מרדכי/בייט
                operator אגד, towards ירושלים_אזור תעשיה תלפיות
-    14:56-14:58  walk 244 m                    הרצוג/ניות -> הרצוג/רסקו
-    14:58-15:03  bus 509                       הרצוג/רסקו -> שדרות יצחק בן צבי/בצלאל
-               operator סופרבוס, towards הר חוצבים
-    15:03-15:13  walk 633 m                    שדרות יצחק בן צבי/בצלאל -> END
+    14:48-14:50  walk 0 m                      צומת גבעת מרדכי/בייט -> צומת גבעת מרדכי/בייט
+    14:54-15:02  bus 39א                       צומת גבעת מרדכי/בייט -> מלכי ישראל/תחכמוני
+               operator אגד, towards מרכז תחבורתי הארזים
+    15:02-15:13  walk 682 m                    מלכי ישראל/תחכמוני -> END
 ```
 
 <details><summary>Alternatives MOTIS also returned (6 more)</summary>
@@ -1521,8 +1562,8 @@ user would be shown — is:
     13:37-13:39  walk 0 m                      מחלף הסירה לדרום -> מחלף הסירה לדרום
     13:39-13:56  bus 91                        מחלף הסירה לדרום -> ת. רכבת השלום
                operator מטרופולין, towards תל אביב יפו_מסוף הטייסים
-    14:09-14:11  walk 226 m                    ת. רכבת השלום -> השלום
-    14:11-14:52  regional rail (no line number in feed) השלום -> ירושלים/יצחק נבון
+    14:07-14:09  walk 226 m                    ת. רכבת השלום -> השלום
+    14:09-14:52  regional rail (no line number in feed) השלום -> ירושלים/יצחק נבון
                operator רכבת ישראל, towards 747
     14:52-14:54  walk 166 m                    ירושלים/יצחק נבון -> ת. מרכזית ירושלים/יפו
     14:55-14:59  bus 75                        ת. מרכזית ירושלים/יפו -> שוק מחנה יהודה/אגריפס
@@ -1536,19 +1577,19 @@ user would be shown — is:
     Departs Tue 08 Sep 13:04 (4 min after the requested time)
     Arrives Tue 08 Sep 15:13 -- 129 min, 3 transfer(s)
 
-    13:04-13:11  walk 371 m                    START -> האר"י/הרב חרל"פ
-    13:11-13:14  bus 72                        האר"י/הרב חרל"פ -> שד. בן צבי/היהלומן אברהם
+    13:04-13:11  walk 371 m                    START -> האר''י/הרב חרל''פ
+    13:11-13:14  bus 72                        האר''י/הרב חרל''פ -> שד. בן צבי/היהלומן אברהם
                operator אקסטרה, towards תחנת הרכבת
-    13:14-13:16  walk 137 m                    שד. בן צבי/היהלומן אברהם -> בן צבי/הגר"א
-    13:16-13:51  bus 611                       בן צבי/הגר"א -> ת. רכבת תל אביב - סבידור/דרך נמיר
+    13:14-13:16  walk 137 m                    שד. בן צבי/היהלומן אברהם -> בן צבי/הגר''א
+    13:16-13:51  bus 611                       בן צבי/הגר''א -> ת. רכבת תל אביב - סבידור/דרך נמיר
                operator מטרופולין, towards תל אביב יפו_תחנה מרכזית
     14:00-14:05  walk 297 m                    ת. רכבת תל אביב - סבידור/דרך נמיר -> ת.רכבת תל אביב - סבידור/רציפים B
-    14:05-14:56  bus 490                       ת.רכבת תל אביב - סבידור/רציפים B -> הרצוג/ניות
+    14:05-14:48  bus 490                       ת.רכבת תל אביב - סבידור/רציפים B -> צומת גבעת מרדכי/בייט
                operator אגד, towards ירושלים_אזור תעשיה תלפיות
-    14:56-14:58  walk 244 m                    הרצוג/ניות -> הרצוג/רסקו
-    14:58-15:03  bus 509                       הרצוג/רסקו -> שדרות יצחק בן צבי/בצלאל
-               operator סופרבוס, towards הר חוצבים
-    15:03-15:13  walk 633 m                    שדרות יצחק בן צבי/בצלאל -> END
+    14:48-14:50  walk 0 m                      צומת גבעת מרדכי/בייט -> צומת גבעת מרדכי/בייט
+    14:54-15:02  bus 39א                       צומת גבעת מרדכי/בייט -> מלכי ישראל/תחכמוני
+               operator אגד, towards מרכז תחבורתי הארזים
+    15:02-15:13  walk 682 m                    מלכי ישראל/תחכמוני -> END
 ```
 
 **Alternative 3**
@@ -1557,17 +1598,17 @@ user would be shown — is:
     Departs Tue 08 Sep 13:04 (4 min after the requested time)
     Arrives Tue 08 Sep 15:03 -- 119 min, 4 transfer(s)
 
-    13:04-13:11  walk 371 m                    START -> האר"י/הרב חרל"פ
-    13:11-13:14  bus 72                        האר"י/הרב חרל"פ -> שד. בן צבי/היהלומן אברהם
+    13:04-13:11  walk 371 m                    START -> האר''י/הרב חרל''פ
+    13:11-13:14  bus 72                        האר''י/הרב חרל''פ -> שד. בן צבי/היהלומן אברהם
                operator אקסטרה, towards תחנת הרכבת
-    13:14-13:16  walk 137 m                    שד. בן צבי/היהלומן אברהם -> בן צבי/הגר"א
-    13:16-13:37  bus 611                       בן צבי/הגר"א -> מחלף הסירה לדרום
+    13:14-13:16  walk 137 m                    שד. בן צבי/היהלומן אברהם -> בן צבי/הגר''א
+    13:16-13:37  bus 611                       בן צבי/הגר''א -> מחלף הסירה לדרום
                operator מטרופולין, towards תל אביב יפו_תחנה מרכזית
     13:37-13:39  walk 0 m                      מחלף הסירה לדרום -> מחלף הסירה לדרום
     13:39-13:56  bus 91                        מחלף הסירה לדרום -> ת. רכבת השלום
                operator מטרופולין, towards תל אביב יפו_מסוף הטייסים
-    14:09-14:11  walk 226 m                    ת. רכבת השלום -> השלום
-    14:11-14:52  regional rail (no line number in feed) השלום -> ירושלים/יצחק נבון
+    14:07-14:09  walk 226 m                    ת. רכבת השלום -> השלום
+    14:09-14:52  regional rail (no line number in feed) השלום -> ירושלים/יצחק נבון
                operator רכבת ישראל, towards 747
     14:52-14:54  walk 166 m                    ירושלים/יצחק נבון -> ת. מרכזית ירושלים/יפו
     14:55-14:59  bus 75                        ת. מרכזית ירושלים/יפו -> שוק מחנה יהודה/אגריפס
@@ -1593,24 +1634,60 @@ user would be shown — is:
 
 **The corpus expected:** outcome `route`, `modes_any_of` = ['rail', 'bus'], `max_transfers` = 2, `min_duration_min` = 10, `max_duration_min` = 120
 
-**RESULT: no route returned.**
+**RESULT: 5 itinerary/itineraries returned.** The first one — the one a
+user would be shown — is:
 
-Probes run against this case (see `poc/routing/no-route-diagnosis.json`):
+```
+    Departs Tue 08 Sep 23:40 (at the requested time)
+    Arrives Wed 09 Sep 00:04 -- 24 min, 0 transfer(s)
 
-| variation | result |
-| --- | --- |
-| J21 as-corpus — defaults (as the corpus run) | no route |
-| J21 as-corpus — searchWindow 2 h | no route |
-| J21 as-corpus — searchWindow 6 h | no route |
-| J21 as-corpus — walk up to 30 min each end | no route |
-| J21 as-corpus — searchWindow 6 h + 30 min walk | no route |
-| J21 to the real T3 interchange — defaults (as the corpus run) | 5 itineraries, 45 min, 0 transfers |
-| J21 to the real T3 interchange — searchWindow 2 h | 5 itineraries, 45 min, 0 transfers |
-| J21 to the real T3 interchange — searchWindow 6 h | 17 itineraries, 45 min, 0 transfers |
-| J21 to the real T3 interchange — walk up to 30 min each end | 5 itineraries, 65 min, 1 transfers |
-| J21 to the real T3 interchange — searchWindow 6 h + 30 min walk | 18 itineraries, 65 min, 1 transfers |
+    23:40-23:41  walk 27 m                     START -> תל אביב מרכז
+    23:41-00:03  regional rail (no line number in feed) תל אביב מרכז -> נתב''ג
+               operator רכבת ישראל, towards 785
+    00:03-00:04  walk 4 m                      נתב''ג -> END
+```
 
-<sub>Machine checks (structure only — not a quality judgement): structural check (any itinerary): **fail** · no itineraries returned but the case expects outcome=route</sub>
+<details><summary>Alternatives MOTIS also returned (4 more)</summary>
+
+**Alternative 1**
+
+```
+    Departs Wed 09 Sep 00:36 (56 min after the requested time)
+    Arrives Wed 09 Sep 00:56 -- 20 min, 0 transfer(s)
+
+    00:36-00:37  walk 27 m                     START -> תל אביב מרכז
+    00:37-00:55  regional rail (no line number in feed) תל אביב מרכז -> נתב''ג
+               operator רכבת ישראל, towards 137
+    00:55-00:56  walk 4 m                      נתב''ג -> END
+```
+
+**Alternative 2**
+
+```
+    Departs Wed 09 Sep 00:46 (66 min after the requested time)
+    Arrives Wed 09 Sep 01:02 -- 16 min, 0 transfer(s)
+
+    00:46-00:47  walk 27 m                     START -> תל אביב מרכז
+    00:47-01:01  regional rail (no line number in feed) תל אביב מרכז -> נתב''ג
+               operator רכבת ישראל, towards 9701
+    01:01-01:02  walk 4 m                      נתב''ג -> END
+```
+
+**Alternative 3**
+
+```
+    Departs Wed 09 Sep 01:31 (111 min after the requested time)
+    Arrives Wed 09 Sep 01:48 -- 17 min, 0 transfer(s)
+
+    01:31-01:32  walk 27 m                     START -> תל אביב מרכז
+    01:32-01:47  regional rail (no line number in feed) תל אביב מרכז -> נתב''ג
+               operator רכבת ישראל, towards 139
+    01:47-01:48  walk 4 m                      נתב''ג -> END
+```
+
+</details>
+
+<sub>Machine checks (structure only — not a quality judgement): structural check (any itinerary): **pass**</sub>
 
 **Verdict:** 
 
@@ -1634,10 +1711,10 @@ user would be shown — is:
     Arrives Wed 09 Sep 04:19 -- 100 min, 1 transfer(s)
 
     02:39-02:42  walk 135 m                    START -> דיזנגוף סנטר/דיזנגוף
-    02:42-03:23  bus 445                       דיזנגוף סנטר/דיזנגוף -> נתב"ג טרמינל 3/קומת תח"צ
+    02:42-03:23  bus 445                       דיזנגוף סנטר/דיזנגוף -> נתב''ג טרמינל 3/קומת תח''צ
                operator מטרופולין, towards נמל תעופה בן גוריון_טרמינל 3
-    03:23-03:25  walk 616 m                    נתב"ג טרמינל 3/קומת תח"צ -> נתב"ג
-    03:53-04:07  regional rail (no line number in feed) נתב"ג -> תל אביב מרכז
+    03:23-03:25  walk 616 m                    נתב''ג טרמינל 3/קומת תח''צ -> נתב''ג
+    03:53-04:07  regional rail (no line number in feed) נתב''ג -> תל אביב מרכז
                operator רכבת ישראל, towards 9706
     04:07-04:19  walk 767 m                    תל אביב מרכז -> END
 ```
@@ -1654,9 +1731,9 @@ user would be shown — is:
     05:00-05:10  bus 172                       דיזנגוף סנטר/דיזנגוף -> שוקן/דרך שלמה
                operator דן, towards חולון_מסוף אזור תעשייה
     05:10-05:12  walk 118 m                    שוקן/דרך שלמה -> דרך שלמה/שוקן
-    05:18-05:34  bus 42                        דרך שלמה/שוקן -> ת.רק"ל אבא הלל
+    05:18-05:34  bus 42                        דרך שלמה/שוקן -> ת.רק''ל אבא הלל
                operator דן, towards תל אביב יפו_קריית עתידים
-    05:34-05:38  walk 250 m                    ת.רק"ל אבא הלל -> END
+    05:34-05:38  walk 250 m                    ת.רק''ל אבא הלל -> END
 ```
 
 **Alternative 2**
@@ -1669,12 +1746,12 @@ user would be shown — is:
     05:00-05:03  bus 172                       דיזנגוף סנטר/דיזנגוף -> שד' רוטשילד/שיינקין
                operator דן, towards חולון_מסוף אזור תעשייה
     05:05-05:07  walk 112 m                    שד' רוטשילד/שיינקין -> שד' רוטשילד/שיינקין
-    05:07-05:11  bus 23                        שד' רוטשילד/שיינקין -> ת.רק"ל יהודית/דרך מנחם בגין
+    05:07-05:11  bus 23                        שד' רוטשילד/שיינקין -> ת.רק''ל יהודית/דרך מנחם בגין
                operator דן, towards גבעתיים_כורזין
-    05:11-05:13  walk 0 m                      ת.רק"ל יהודית/דרך מנחם בגין -> ת.רק"ל יהודית/דרך מנחם בגין
-    05:13-05:19  bus 50                        ת.רק"ל יהודית/דרך מנחם בגין -> ת.רק"ל אבא הלל/דרך ז'בוטינסקי
+    05:11-05:13  walk 0 m                      ת.רק''ל יהודית/דרך מנחם בגין -> ת.רק''ל יהודית/דרך מנחם בגין
+    05:13-05:19  bus 50                        ת.רק''ל יהודית/דרך מנחם בגין -> ת.רק''ל אבא הלל/דרך ז'בוטינסקי
                operator דן, towards פתח תקווה_רכבת סגולה
-    05:19-05:23  walk 240 m                    ת.רק"ל אבא הלל/דרך ז'בוטינסקי -> END
+    05:19-05:23  walk 240 m                    ת.רק''ל אבא הלל/דרך ז'בוטינסקי -> END
 ```
 
 **Alternative 3**
@@ -1684,9 +1761,9 @@ user would be shown — is:
     Arrives Wed 09 Sep 05:40 -- 26 min, 0 transfer(s)
 
     05:14-05:17  walk 136 m                    START -> דיזנגוף סנטר/טשרניחובסקי
-    05:17-05:36  bus 66                        דיזנגוף סנטר/טשרניחובסקי -> ת.רק"ל אבא הלל/דרך ז'בוטינסקי
+    05:17-05:36  bus 66                        דיזנגוף סנטר/טשרניחובסקי -> ת.רק''ל אבא הלל/דרך ז'בוטינסקי
                operator דן, towards פתח תקווה_מסוף משה ארנס
-    05:36-05:40  walk 240 m                    ת.רק"ל אבא הלל/דרך ז'בוטינסקי -> END
+    05:36-05:40  walk 240 m                    ת.רק''ל אבא הלל/דרך ז'בוטינסקי -> END
 ```
 
 </details>
@@ -1697,118 +1774,19 @@ user would be shown — is:
 
 ---
 
-## J23 — Mitzpe Ramon → Metula
+## J23 — Har Karkom, central Negev → Metula
 
 *PRD §7 #10 no reasonable transit route* · category `no-reasonable-route`
 
 **Departing:** 2026-09-09T02:30:00+03:00 (rule `after_midnight`)
 
-> **What to check:** Desert to the Lebanese border at 02:30. A returned itinerary here means the engine is inventing service. A clear 'no route' is the PASS.
+> **What to check:** Origin is 23.5 km from the nearest stop in the feed — measured, not assumed. No walking budget reaches transit, so 'no route' is the only correct answer. An itinerary here means the engine is inventing access.
 
 **The corpus expected:** outcome `no-route`
 
-**RESULT: 5 itinerary/itineraries returned.** The first one — the one a
-user would be shown — is:
+**RESULT: no route returned.**
 
-```
-    Departs Wed 09 Sep 04:57 (147 min after the requested time)
-    Arrives Wed 09 Sep 11:46 -- 409 min, 4 transfer(s)
-
-    04:57-05:03  walk 336 m                    START -> מרכז מסחרי/מצפה רמון
-    05:03-06:22  bus 64                        מרכז מסחרי/מצפה רמון -> ת.מרכזית באר שבע/הורדה
-               operator מטרופולין, towards באר שבע_תחנה מרכזית
-    06:28-06:30  walk 163 m                    ת.מרכזית באר שבע/הורדה -> ת.מרכזית באר שבע/רציפים בינעירוני
-    06:30-07:50  bus 370                       ת.מרכזית באר שבע/רציפים בינעירוני -> ת.מרכזית תל אביב קומה 6/הורדה
-               operator מטרופולין, towards תל אביב יפו_תחנה מרכזית
-    07:58-08:00  walk distance not reported    ת.מרכזית תל אביב קומה 6/הורדה -> ת.מרכזית תל אביב קומה 7/רציפים
-    08:00-10:39  bus 845                       ת.מרכזית תל אביב קומה 7/רציפים -> תל חי/90
-               operator אגד, towards קרית שמונה_תחנה מרכזית
-    10:39-10:41  walk 0 m                      תל חי/90 -> תל חי/90
-    10:41-10:49  bus 12                        תל חי/90 -> ת. מרכזית ק"ש/רציפים
-               operator אגד, towards קרית שמונה_א"ת צפוני
-    10:49-10:51  walk 0 m                      ת. מרכזית ק"ש/רציפים -> ת. מרכזית ק"ש/רציפים
-    11:30-11:44  bus 20                        ת. מרכזית ק"ש/רציפים -> מרכז ספורט קנדה
-               operator אגד, towards תחנה מרכזית
-    11:44-11:46  walk 69 m                     מרכז ספורט קנדה -> END
-```
-
-<details><summary>Alternatives MOTIS also returned (4 more)</summary>
-
-**Alternative 1**
-
-```
-    Departs Wed 09 Sep 06:05 (215 min after the requested time)
-    Arrives Wed 09 Sep 13:06 -- 421 min, 3 transfer(s)
-
-    06:05-06:12  walk 390 m                    START -> עין זיק/עין עקב
-    06:12-08:43  bus 660                       עין זיק/עין עקב -> ת.מרכזית תל אביב קומה 6/הורדה
-               operator מטרופולין, towards תל אביב יפו_תחנה מרכזית
-    09:08-09:10  walk distance not reported    ת.מרכזית תל אביב קומה 6/הורדה -> ת.מרכזית תל אביב קומה 7/רציפים
-    09:10-11:53  bus 845                       ת.מרכזית תל אביב קומה 7/רציפים -> ת. מרכזית ק"ש/הורדה
-               operator אגד, towards קרית שמונה_תחנה מרכזית
-    11:53-11:55  walk 0 m                      ת. מרכזית ק"ש/הורדה -> ת. מרכזית ק"ש/הורדה
-    11:55-11:55  bus 11                        ת. מרכזית ק"ש/הורדה -> ת. מרכזית ק"ש/רציפים
-               operator אגד, towards מפעלים אזוריים הגליל העליון_מ.מסחרי ביג
-    11:55-11:57  walk 0 m                      ת. מרכזית ק"ש/רציפים -> ת. מרכזית ק"ש/רציפים
-    12:50-13:04  bus 20                        ת. מרכזית ק"ש/רציפים -> מרכז ספורט קנדה
-               operator אגד, towards תחנה מרכזית
-    13:04-13:06  walk 69 m                     מרכז ספורט קנדה -> END
-```
-
-**Alternative 2**
-
-```
-    Departs Wed 09 Sep 06:55 (265 min after the requested time)
-    Arrives Wed 09 Sep 13:06 -- 371 min, 5 transfer(s)
-
-    06:55-07:01  walk 336 m                    START -> מרכז מסחרי/מצפה רמון
-    07:01-08:04  bus 65                        מרכז מסחרי/מצפה רמון -> צומת אוהלים (הנוקדים)
-               operator מטרופולין, towards באר שבע_תחנה מרכזית
-    08:20-08:22  walk 304 m                    צומת אוהלים (הנוקדים) -> צומת אוהלים (הנוקדים)
-    08:22-09:34  bus 458                       צומת אוהלים (הנוקדים) -> מחלף חמד
-               operator מטרופולין, towards ירושלים_מרכז תחבורתי הארזים
-    09:45-09:47  walk 371 m                    מחלף חמד -> מחלף חמד
-    09:47-10:53  bus 960                       מחלף חמד -> מחלף אליקים לצפון
-               operator אגד, towards חיפה_מרכזית המפרץ
-    11:06-11:08  walk 0 m                      מחלף אליקים לצפון -> מחלף אליקים לצפון
-    11:08-12:33  bus 845                       מחלף אליקים לצפון -> ת. מרכזית ק"ש/הורדה
-               operator אגד, towards קרית שמונה_תחנה מרכזית
-    12:43-12:45  walk 0 m                      ת. מרכזית ק"ש/הורדה -> ת. מרכזית ק"ש/הורדה
-    12:45-12:45  bus 11                        ת. מרכזית ק"ש/הורדה -> ת. מרכזית ק"ש/רציפים
-               operator אגד, towards מפעלים אזוריים הגליל העליון_מ.מסחרי ביג
-    12:45-12:47  walk 0 m                      ת. מרכזית ק"ש/רציפים -> ת. מרכזית ק"ש/רציפים
-    12:50-13:04  bus 20                        ת. מרכזית ק"ש/רציפים -> מרכז ספורט קנדה
-               operator אגד, towards תחנה מרכזית
-    13:04-13:06  walk 69 m                     מרכז ספורט קנדה -> END
-```
-
-**Alternative 3**
-
-```
-    Departs Wed 09 Sep 08:00 (330 min after the requested time)
-    Arrives Wed 09 Sep 14:31 -- 391 min, 4 transfer(s)
-
-    08:00-08:06  walk 336 m                    START -> מרכז מסחרי/מצפה רמון
-    08:06-09:18  bus 65                        מרכז מסחרי/מצפה רמון -> ת.מרכזית באר שבע/הורדה
-               operator מטרופולין, towards באר שבע_תחנה מרכזית
-    09:28-09:30  walk 163 m                    ת.מרכזית באר שבע/הורדה -> ת.מרכזית באר שבע/רציפים בינעירוני
-    09:30-10:50  bus 370                       ת.מרכזית באר שבע/רציפים בינעירוני -> ת.מרכזית תל אביב קומה 6/הורדה
-               operator מטרופולין, towards תל אביב יפו_תחנה מרכזית
-    11:08-11:10  walk distance not reported    ת.מרכזית תל אביב קומה 6/הורדה -> ת.מרכזית תל אביב קומה 7/רציפים
-    11:10-13:49  bus 845                       ת.מרכזית תל אביב קומה 7/רציפים -> תל חי/90
-               operator אגד, towards קרית שמונה_תחנה מרכזית
-    13:59-14:01  walk 0 m                      תל חי/90 -> תל חי/90
-    14:01-14:09  bus 12                        תל חי/90 -> ת. מרכזית ק"ש/רציפים
-               operator אגד, towards קרית שמונה_א"ת צפוני
-    14:09-14:11  walk 0 m                      ת. מרכזית ק"ש/רציפים -> ת. מרכזית ק"ש/רציפים
-    14:15-14:29  bus 20                        ת. מרכזית ק"ש/רציפים -> מרכז ספורט קנדה
-               operator אגד, towards תחנה מרכזית
-    14:29-14:31  walk 69 m                     מרכז ספורט קנדה -> END
-```
-
-</details>
-
-<sub>Machine checks (structure only — not a quality judgement): structural check (any itinerary): **fail** · 5 itinerary/itineraries returned but the case requires no route -- the engine may be inventing service</sub>
+<sub>Machine checks (structure only — not a quality judgement): structural check (any itinerary): **pass** · no itineraries returned, which the case allows</sub>
 
 **Verdict:** 
 
@@ -1847,15 +1825,15 @@ user would be shown — is:
 
 ```
     Departs Sat 05 Sep 18:50 (410 min after the requested time)
-    Arrives Sat 05 Sep 20:10 -- 80 min, 1 transfer(s)
+    Arrives Sat 05 Sep 20:04 -- 74 min, 1 transfer(s)
 
     18:50-18:53  walk 136 m                    START -> דיזנגוף סנטר/טשרניחובסקי
     18:53-19:04  bus 18                        דיזנגוף סנטר/טשרניחובסקי -> ת. רכבת תל אביב - סבידור/הורדה
                operator דן, towards תל אביב יפו_רכבת מרכז
     19:04-19:06  walk 184 m                    ת. רכבת תל אביב - סבידור/הורדה -> ת.רכבת תל אביב - סבידור/רציפים B
-    19:15-20:05  bus 480                       ת.רכבת תל אביב - סבידור/רציפים B -> ת. מרכזית ירושלים/הורדה
+    19:15-19:59  bus 480                       ת.רכבת תל אביב - סבידור/רציפים B -> ת. מרכזית ירושלים/הורדה
                operator אגד, towards ירושלים_תחנה מרכזית
-    20:05-20:10  walk 306 m                    ת. מרכזית ירושלים/הורדה -> END
+    19:59-20:04  walk 306 m                    ת. מרכזית ירושלים/הורדה -> END
 ```
 
 <details><summary>Alternatives MOTIS also returned (4 more)</summary>
@@ -1864,45 +1842,45 @@ user would be shown — is:
 
 ```
     Departs Sat 05 Sep 19:10 (430 min after the requested time)
-    Arrives Sat 05 Sep 20:25 -- 75 min, 1 transfer(s)
+    Arrives Sat 05 Sep 20:19 -- 69 min, 1 transfer(s)
 
     19:10-19:13  walk 136 m                    START -> דיזנגוף סנטר/טשרניחובסקי
     19:13-19:24  bus 18                        דיזנגוף סנטר/טשרניחובסקי -> ת. רכבת תל אביב - סבידור/הורדה
                operator דן, towards תל אביב יפו_רכבת מרכז
     19:24-19:26  walk 184 m                    ת. רכבת תל אביב - סבידור/הורדה -> ת.רכבת תל אביב - סבידור/רציפים B
-    19:30-20:20  bus 480                       ת.רכבת תל אביב - סבידור/רציפים B -> ת. מרכזית ירושלים/הורדה
+    19:30-20:14  bus 480                       ת.רכבת תל אביב - סבידור/רציפים B -> ת. מרכזית ירושלים/הורדה
                operator אגד, towards ירושלים_תחנה מרכזית
-    20:20-20:25  walk 306 m                    ת. מרכזית ירושלים/הורדה -> END
+    20:14-20:19  walk 306 m                    ת. מרכזית ירושלים/הורדה -> END
 ```
 
 **Alternative 2**
 
 ```
     Departs Sat 05 Sep 19:27 (447 min after the requested time)
-    Arrives Sat 05 Sep 20:40 -- 73 min, 1 transfer(s)
+    Arrives Sat 05 Sep 20:34 -- 67 min, 1 transfer(s)
 
     19:27-19:30  walk 136 m                    START -> דיזנגוף סנטר/טשרניחובסקי
     19:30-19:43  bus 61                        דיזנגוף סנטר/טשרניחובסקי -> ת. רכבת תל אביב סבידור/על פרשת דרכים
                operator דן, towards רמת גן_מסוף עמידר
     19:43-19:45  walk 206 m                    ת. רכבת תל אביב סבידור/על פרשת דרכים -> ת.רכבת תל אביב - סבידור/רציפים B
-    19:45-20:35  bus 480                       ת.רכבת תל אביב - סבידור/רציפים B -> ת. מרכזית ירושלים/הורדה
+    19:45-20:29  bus 480                       ת.רכבת תל אביב - סבידור/רציפים B -> ת. מרכזית ירושלים/הורדה
                operator אגד, towards ירושלים_תחנה מרכזית
-    20:35-20:40  walk 306 m                    ת. מרכזית ירושלים/הורדה -> END
+    20:29-20:34  walk 306 m                    ת. מרכזית ירושלים/הורדה -> END
 ```
 
 **Alternative 3**
 
 ```
     Departs Sat 05 Sep 19:42 (462 min after the requested time)
-    Arrives Sat 05 Sep 20:55 -- 73 min, 1 transfer(s)
+    Arrives Sat 05 Sep 20:49 -- 67 min, 1 transfer(s)
 
     19:42-19:45  walk 136 m                    START -> דיזנגוף סנטר/טשרניחובסקי
     19:45-19:58  bus 61                        דיזנגוף סנטר/טשרניחובסקי -> ת. רכבת תל אביב סבידור/על פרשת דרכים
                operator דן, towards רמת גן_מסוף עמידר
     19:58-20:00  walk 206 m                    ת. רכבת תל אביב סבידור/על פרשת דרכים -> ת.רכבת תל אביב - סבידור/רציפים B
-    20:00-20:50  bus 480                       ת.רכבת תל אביב - סבידור/רציפים B -> ת. מרכזית ירושלים/הורדה
+    20:00-20:44  bus 480                       ת.רכבת תל אביב - סבידור/רציפים B -> ת. מרכזית ירושלים/הורדה
                operator אגד, towards ירושלים_תחנה מרכזית
-    20:50-20:55  walk 306 m                    ת. מרכזית ירושלים/הורדה -> END
+    20:44-20:49  walk 306 m                    ת. מרכזית ירושלים/הורדה -> END
 ```
 
 </details>

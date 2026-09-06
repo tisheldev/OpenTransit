@@ -32,6 +32,8 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from pathlib import Path
 
+from feed_context import verified_context, departure_iso
+
 ROUTING = Path(__file__).resolve().parent
 POC = ROUTING.parent
 CORPUS = POC / "corpora" / "journeys.json"
@@ -66,7 +68,7 @@ def main() -> int:
 
     corpus = json.loads(CORPUS.read_text(encoding="utf-8"))
     rules = corpus["depart_rules"]
-    resolved = rules[next(k for k in rules if k.startswith("resolved_for_feed_"))]
+    feed_sha, resolved = verified_context()
 
     queries = []
     for c in corpus["cases"]:
@@ -76,7 +78,7 @@ def main() -> int:
         queries.append(BASE + "?" + urllib.parse.urlencode({
             "fromPlace": f"{c['from']['lat']},{c['from']['lon']}",
             "toPlace": f"{c['to']['lat']},{c['to']['lon']}",
-            "time": local.replace(" ", "T") + ":00+03:00",
+            "time": departure_iso(local),
             "arriveBy": "false", "numItineraries": "5", "timetableView": "true",
         }))
 
@@ -160,6 +162,7 @@ def main() -> int:
 
     peak = max(samples) if samples else 0.0
     res = {
+        "feed_sha256": feed_sha,
         "generated": now(),
         "workers": args.workers, "seconds": round(elapsed, 1),
         "requests": len(lat), "requests_per_second": round(len(lat) / elapsed, 1) if elapsed else 0,

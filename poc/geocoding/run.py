@@ -45,11 +45,8 @@ SAME_AREA_M = 15000.0      # beyond this, the answer is a different town entirel
 
 
 def feed_sha256() -> str:
-    try:
-        m = json.loads(MANIFEST.read_text(encoding="utf-8"))
-        return m["files"]["Gtfs_10_days.zip"]["sha256"]
-    except Exception:
-        return "unknown"
+    from poc.routing.feed_context import verified_context
+    return verified_context()[0]
 
 
 def miss_shape(case: dict, hits, dist: float | None, rank: int | None) -> str:
@@ -74,7 +71,7 @@ def miss_shape(case: dict, hits, dist: float | None, rank: int | None) -> str:
 # by reading each failing case's returned candidate list. That evidence is kept in
 # `top5` for every case, so any assignment here can be checked against it.
 #
-# Assigned 4 Sep 2026 against Gtfs_10_days.zip sha256 08c168da…. The runner warns
+# Assigned 4 Sep 2026 against the historical Gtfs_10_days.zip sha256 08c168da…. The runner warns
 # when a failing case has no cause, or when a cause is assigned to a case that now
 # passes, so the table cannot silently rot.
 # ---------------------------------------------------------------------------
@@ -538,7 +535,7 @@ def write_review(res: dict, path: Path) -> None:
       "**Machine-generated — do not hand-edit; rerun the runner.**")
     A("")
     A(f"Engine: {res['engine']}")
-    A(f"Feed: `Gtfs_10_days.zip` sha256 `{res['feed_sha256'][:8]}…`")
+    A(f"Feed: `israel-public-transportation.zip` sha256 `{res['feed_sha256'][:8]}…`")
     A("")
     A("## How to read this")
     A("")

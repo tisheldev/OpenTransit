@@ -1,4 +1,0 @@
-cleared volume poc_motisgraph
-[2026-09-04T13:04:55.786959+00:00] starting MOTIS import (uncapped build profile)
-  container VM memory ceiling: 23.5 GiB, 16 CPUs, docker 27.4.0
-[2026-09-04T13:05:40.197350+00:00] import exit=0 wall=0m 40s peak=3738.6 MB graph=910.8 MB
