@@ -1,5 +1,7 @@
 # OpenTransit Israel — System Design
 
+> Current progress, tasks and session handoff: [PROJECT_STATUS.md](../PROJECT_STATUS.md).
+
 > **Post-PoC status — 5 September 2026:** Read [the current plan](next-steps.md) before implementing this proposal. ADR 0005 now accepts the 60-day feed plus TripIdToDate; see the current rerun evidence. MOTIS routing/search are PARTIAL pending quality review; Latin addresses need work. Full-stack capacity, 4 GB viability, pricing and daily-user estimates below are unverified. The API runtime, GET/POST journey contract and search solution remain open. No cloud purchase is implied.
 
 **Status:** Design proposal, v1

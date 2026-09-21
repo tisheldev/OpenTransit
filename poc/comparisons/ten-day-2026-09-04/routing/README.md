@@ -1,6 +1,6 @@
 # poc/routing — POC-2, public transportation routing
 
-> **Historical baseline:** These commands and results use the September 4 ten-day feed. They do not validate the proposed sixty-day production input. `run_import.py` clears the existing graph volume and runners overwrite fixed output paths: preserve the baseline before rebuilding. See [next steps](../../docs/next-steps.md).
+> **Historical baseline:** These commands and results use the September 4 ten-day feed. They do not validate the proposed sixty-day production input. `run_import.py` clears the existing graph volume and runners overwrite fixed output paths: preserve the baseline before rebuilding. See [next steps](../../../../docs/next-steps.md).
 
 MOTIS, Israeli GTFS, and two memory measurements that must not be confused.
 

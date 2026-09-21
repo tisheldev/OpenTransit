@@ -1,30 +1,16 @@
 # From PoC to API implementation
 
-**Reviewed:** 5 September 2026. **Status:** proposed execution scope; decisions below remain open unless explicitly identified as accepted.
+**Execution reference, reconciled 21 September 2026.** Read [PROJECT_STATUS.md](../PROJECT_STATUS.md) for current state, priorities, ownership and session handoff. This document defines implementation scope and acceptance; proposals remain open unless explicitly accepted.
 
-## What the evidence actually supports
-
-| Area | Recorded result | What remains unproven |
-| --- | --- | --- |
-| Static ingestion | POC-1 PASS; cold refresh 338 s, 10/10 integrity checks | Terms acceptance and a complete rerun on the chosen production feed |
-| Routing | POC-2 PARTIAL; 25 responses, 21/25 structurally consistent | H3: at least 9/10 PRD representative journeys judged usable; 25 HTTP responses are not 25 good routes |
-| Capacity | MOTIS alone: p95 256.6 ms, peak RSS 1,129.5 MB; 20,632 requests, 16 workers, 122.2 s | Production feed, API, realtime, other processes, cold behavior, sustained operation and graph replacement headroom |
-| Search | POC-5 PARTIAL; 68/100 top-1, 89/100 top-5; venues 40/48 top-1 | H4; addresses only 4/15, weak Latin addresses and inconsistent location bias; the 40 ms API search target is not established |
-| Realtime | No POC-3 result | Access, sustainable source, temporal trip matching, arrivals, positions, freshness and coverage |
-| Alerts | POC-4 BLOCKED_ON_ACCESS | A real accessible feed, parser implementation and entity association |
-| End-to-end | No POC-6 result | A real search → route → realtime → alerts demonstration |
-
-Sources: [recorded results](../poc/results/), [status](../poc/README.md), [data problems](../poc/docs/known-data-problems.md). These are September 4 experiments, not a fresh check of external service availability.
-
-The main correction is feed provenance. The 10-day feed has **0%** join-key overlap with the sampled `TripIdToDate`; the 60-day feed has **100%** after suffix normalization. This is static key compatibility, **not** a realtime matching success rate. ADR 0005 now accepts the 60-day primary. Ingest and routing enforce compatibility; current measurements are in [the rerun report](../poc/docs/primary-feed-rerun.md).
+The accepted baseline is the 60-day feed plus TripIdToDate (ADR 0005). Ingest/routing reruns are complete; see [measured results](../poc/docs/primary-feed-rerun.md). Search/H4 and realtime integration still need that baseline. Static mapping-key overlap is not a realtime matching rate.
 
 ## The immediate next step: close Phase 0
 
-PRD §§5–13 and accepted ADR 0001 require feasibility before production development. “Step 1” below means Phase 1 M1; the work immediately available is this completion sequence.
+PRD §§5–13 and accepted ADR 0001 require feasibility before production development. H3 gates the realtime/alerts wave; H4 remains required for final acceptance. “Step 1” below means Phase 1 M1; the work immediately available is this completion sequence.
 
 1. **Primary feed accepted and ingest/routing rerun.** Use the 60-day feed plus `TripIdToDate` (ADR 0005). Historical ten-day evidence is preserved in `poc/comparisons/ten-day-2026-09-04`. Complete search/H4 and realtime integration against this generation; H3 is ready for human review.
-2. **Complete H3 and H4.** Regenerate review sheets against that baseline. Record dated comparisons for the ten required route classes, including after-midnight, Shabbat, transfers and genuine no-route cases. Review ambiguous search results against source evidence. Identify which failures are corpus defects versus engine behavior.
-3. **Implement POC-3.** After H3, as required by the existing execution plan, build source adapters, replay fixtures and a matcher using trip identity, service date, route, stop and sequence. Do not resolve a trip using a stripped ID alone. Measure several thousand observations by operator and mode, including unmatched, ambiguous and stale counts with explicit denominators. Use Stride as an experimental source only until its production suitability is explicitly accepted. Pin fixture time and feed generation.
+2. **Complete H3 and H4.** H3 is already regenerated against that baseline; regenerate H4 after the search rerun. Record dated comparisons for the ten required route classes, including after-midnight, Shabbat, transfers and genuine no-route cases. Review ambiguous search results against source evidence. Identify which failures are corpus defects versus engine behavior.
+3. **Implement POC-3.** After the H3 human routing review, build source adapters, replay fixtures and a matcher using trip identity, service date, route, stop and sequence. Do not resolve a trip using a stripped ID alone. Measure several thousand observations by operator and mode, including unmatched, ambiguous and stale counts with explicit denominators. Use Stride as an experimental source only until its production suitability is explicitly accepted. Pin fixture time and feed generation.
 4. **Implement POC-4.** Build protobuf decoding and route/stop/trip resolution against synthetic fixtures; label them synthetic. A real feed remains necessary for PASS. Record empty-but-successful feeds separately from unavailable feeds.
 5. **Implement POC-6 and decide Go/No-Go.** One command resolves Dizengoff Center → Technion and emits walking, transit, geometry, live timing and alerts with honest source states. Replay supports development but does not establish live feasibility. Regenerate status and record an explicit verdict against all ten PRD capabilities.
 
@@ -81,11 +67,11 @@ The internal journey target remains p95 <350 ms (PRD §4.6); the deployed accept
 
 ## Documents we need
 
-Keep the existing PRD, architecture, system design, KDP register and raw evidence. This plan is the current execution entrypoint; the older vertical-slice plan is archived.
+Keep the existing PRD, architecture, system design, KDP register and raw evidence. The root dashboard is the current entrypoint. Superseded execution plans and agent briefs were removed from the working tree; Git at `3398826` preserves them.
 
 | Artifact | Contents | When |
 | --- | --- | --- |
-| Updated ADR 0005 + rerun report | Explicit feed decision, hashes, date range, engine digest, corpus revision and new measured results | Next PoC work |
+| ADR 0005 + rerun report | Completed for ingest/routing; extend evidence for search and integration with their own provenance | Alongside new experiments |
 | `docs/data-usage-and-access.md` | Terms evidence, attribution/redistribution obligations, H1 state/send date, source sustainability and access requirements; no keys | Before Phase 0 acceptance |
 | Completed H3/H4 sheets + Phase 0 verdict | Human route/search decisions and all ten capability gates with evidence | Before M1 |
 | API runtime ADR | Chosen language/framework, reason, dependency/runtime pins | Before M1 |

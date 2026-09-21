@@ -1,5 +1,7 @@
 # OpenTransit Israel — System Architecture
 
+> Current progress, tasks and session handoff: [PROJECT_STATUS.md](../PROJECT_STATUS.md).
+
 > **Post-PoC status — 5 September 2026:** [The current plan](next-steps.md) reconciles this proposal with recorded evidence. MOTIS on the 60-day primary has now been rerun; complete-stack sizing and user-capacity claims below are estimates. Primary feed is accepted in ADR 0005; API runtime and address search remain open. Accepted ADRs and measured results take precedence over speculative component choices and numbers.
 
 **Status:** Proposed architecture, v1

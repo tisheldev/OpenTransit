@@ -1,5 +1,7 @@
 # D2 — Python for the POC
 
+> Historical references: the superseded vertical-slice and execution plans cited below were removed on 2026-09-21 and remain recoverable at Git commit `3398826`. Read [the dashboard](../../../PROJECT_STATUS.md) and PRD for current sequencing; the client follows the completed Phase 1 API. This note does not change the accepted decision.
+
 **Status:** Accepted
 **Date:** 2026-09-04
 

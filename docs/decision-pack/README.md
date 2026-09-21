@@ -1,14 +1,14 @@
 # Your decision and application pack
 
-Prepared 5 September 2026. Everything here is a draft for your review. No email was sent, no terms were accepted, no architecture proposal was marked accepted and no server was purchased.
+Prepared 5 September 2026; reconciled 21 September. D1 (primary feed) is accepted and ingest/routing reruns are complete. D2–D5 remain proposals. No sent email, accepted terms or server purchase is recorded. See [PROJECT_STATUS.md](../../PROJECT_STATUS.md) for current progress.
 
 ## Do this now
 
-1. **Choose the technical package below.** Reply with `Approve recommended package`, or list changes by decision ID. This approves D1–D5 only; it does not sign the MOT form or accept data terms.
+1. **Choose the technical package below.** Reply with `Approve recommended package`, or list changes by decision ID. This approves the remaining D2–D5 proposals only; it does not sign the MOT form or accept data terms.
 2. **Choose the access route:** if you already have a static public egress IPv4, complete the form and use email A. If you have no static IP or are applying without a corporation, use email B first. It is ready in [the Hebrew email drafts](mot-email-he.txt).
 3. **Fill only your personal details**, review the unchanged Ministry terms, then sign and send the form yourself when ready. See [field-by-field instructions](form-guide.md). The prepared form is at `output/pdf/mot-siri-application-draft.pdf` from the repository root.
 
-You do not need to perform the route/search reviews now. The old baseline must be rerun first; [the review queue](quality-review.md) explains what I will bring back to you.
+The route review is ready on the accepted baseline. Search still needs rerunning before H4; [the review queue](quality-review.md) explains the remaining judgments.
 
 ## Recommended technical package
 
@@ -36,8 +36,8 @@ D1 is justified by 0% versus 100% static mapping-key overlap in the recorded sam
 ## What happens after your choices
 
 - I record accepted technical decisions and align the PRD/design documents.
-- I preserve existing graphs/results, parameterize the feed and generation, enforce date-aware pairing checks, and prepare a separate 60-day run.
-- I rerun ingestion, routing, search and capacity with pinned provenance, then provide the focused human review.
+- Ingest, routing and engine capacity were rerun on the accepted primary; [results](../../poc/docs/primary-feed-rerun.md) and the H3 sheet are ready.
+- I preserve prior evidence, rerun search on that baseline and prepare H4 review. Per-service-date identity still needs validation for realtime matching.
 - I prepare and test the matcher, source adapters, alerts parser and integration CLI in the sequence required by the PoC plan. Replay/synthetic tests remain explicitly labelled.
 - You send the access request. Record the actual send date; the four-week decision point is 28 days later. It has not started merely because this pack exists.
 - When MOT replies, provide its non-secret answers on access, IPs and terms. Credentials belong in local secret configuration, not documentation or chat examples.
