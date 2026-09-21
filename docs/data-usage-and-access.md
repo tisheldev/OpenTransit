@@ -1,6 +1,6 @@
 # Data usage and access record
 
-**Updated:** 5 September 2026. **State:** evidence collected; no acceptance, credentials or sent request recorded.
+**Updated:** 21 September 2026. **State:** user confirms MOT email sent today from the correct address; awaiting response. 28-day checkpoint: 19 October 2026. Terms acceptance and credentials remain unrecorded.
 
 ## Verified application evidence
 
@@ -12,7 +12,7 @@ Read [the form guide](decision-pack/form-guide.md) for its exact fields and a co
 
 | Item | Current evidence | Resolution needed |
 | --- | --- | --- |
-| H1 request | Previously deferred; this pack is unsent | Actual sent date, ticket/reference and response |
+| H1 request | User confirms email sent from correct address on 21 September 2026; an earlier email was sent about two weeks before from the wrong address. Awaiting response | Ticket/reference if available, and response; 28-day checkpoint 19 October 2026 |
 | Applicant type | Form asks for corporation name and number | Whether an individual may apply, and correct entries when no corporation exists |
 | Static IP | Explicitly requested by official form | Accepted location/provider, binding, change procedure and test access |
 | SIRI access | Application route verified; no usable credentials recorded | Endpoint, requester reference/key, current protocol and rate limits |
@@ -24,9 +24,9 @@ Read [the form guide](decision-pack/form-guide.md) for its exact fields and a co
 
 The old `https://data.gov.il/he/terms-of-use` URL returned 404 during this review. Do not treat the old link as evidence of an accepted licence. This record does not replace reading authoritative terms or obtaining the outstanding answers.
 
-## Record after the developer acts
+## Submission record
 
-Request sent: pending. Follow-up decision date: actual sent date + 28 days. Terms accepted: pending. Approved egress: pending. Credential storage: pending local configuration; never paste keys here. Approved data uses and evidence: pending.
+Request sent: 21 September 2026 from the correct email address, per user confirmation that day. An earlier email was sent about two weeks before from the wrong address; its exact date is not recorded. Use the September 21 submission as the request baseline. Response: pending. Email variant, attachments and ticket/reference: not recorded. Follow-up decision date: 19 October 2026 (September 21 + 28 days). Terms accepted: pending evidence. Approved egress: pending. Credential storage: pending local configuration; never paste keys here. Approved data uses and evidence: pending.
 
 The four-week threshold comes from the project's PRD, not an MOT response-time guarantee. It triggers a project decision, not automatic approval of a fallback.
 

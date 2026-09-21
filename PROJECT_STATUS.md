@@ -17,7 +17,7 @@ Static ingestion passes; routing awaits human quality review. Search is partial.
 | Realtime / POC-3 | NOT STARTED | Source access/sustainability, date-aware matching, arrivals, vehicles and freshness unproven. |
 | Alerts / POC-4 | BLOCKED on access | No usable feed recorded; synthetic parser work remains possible. |
 | Integration / POC-6 | NOT STARTED | Search → route → realtime → alerts demonstration required. |
-| Data access / usage | BLOCKED on decisions/access | No sent MOT request or terms acceptance recorded. |
+| Data access / usage | WAITING ON MOT / terms evidence | Email sent from correct address September 21; response pending. 28-day checkpoint October 19; terms acceptance evidence remains open. |
 
 Measurements: [generated PoC report](poc/README.md), [raw results](poc/results/), [accepted-feed rerun](poc/docs/primary-feed-rerun.md). Run `python poc/poc_status.py` to inspect recorded capability status without downloads or Docker. It does not rerun experiments.
 
@@ -40,7 +40,7 @@ Use these stable IDs in session claims. READY means prerequisites permit work, n
 
 | ID | Task / done when | State | Dependency / owner |
 | --- | --- | --- | --- |
-| P0-01 | Submit MOT questions/application; record actual sent date, response and terms evidence | WAITING ON USER | User sends/signs; [prepared pack](docs/decision-pack/README.md). No sent date recorded; four-week clock has not started. |
+| P0-01 | Submit MOT questions/application; record actual sent date, response and terms evidence | WAITING ON MOT | User confirms email sent from correct address September 21; response pending. 28-day checkpoint October 19; [access record](docs/data-usage-and-access.md). |
 | P0-02 | Complete H3 route review; at least 9/10 required journeys judged usable with dated comparisons | READY FOR REVIEW | Agent prepares comparisons; user judges [route sheet](poc/results/journeys-h3-review.md). Older departure dates may limit comparisons. |
 | P0-03 | Rerun search on accepted feed; record category/language failures and complete H4 review | READY | Unassigned; preserve historical results and human verdicts before regeneration. |
 | P0-04 | Build realtime adapters/matcher; measure thousands of observations by operator/mode, including unmatched, ambiguous and stale counts | WAITING | H3 first; live proof requires an accessible source. Replay is development evidence only. |
@@ -60,7 +60,7 @@ Before reruns, preserve input/config/corpus hashes, prior outputs and human verd
 | D3 — journey contract | PENDING: POST proposed; current PRD/design specify GET. Align documents when decided. |
 | D4 — search architecture | PENDING: in-process stop index and evidence-backed address solution proposed. |
 | D5 — execution/hosting package | PENDING proposal: local feasibility first, 8 GB test envelope, defer hosting purchase. Existing PRD phase gates still apply. |
-| H1/H2 — access and terms | User action/written evidence required; [access record](docs/data-usage-and-access.md). Drafting an email is not sending or accepting terms. |
+| H1/H2 — access and terms | MOT email sent September 21 from correct address per user; awaiting response. Access and terms acceptance still need evidence; [access record](docs/data-usage-and-access.md). |
 | H5/H6 — fallback | If direct access fails, explicitly choose sustainable fallback, static-only scope or stop. Four-week decision point is actual request date + 28 days. |
 
 ## Active work and session handoff
@@ -71,11 +71,13 @@ Claims are coordination notes, not locks. Check timestamps, Git status and other
 | --- | --- | --- | --- | --- | --- |
 | — | — | — | No active claims | — | Next: P0-03 search rerun or P0-02 review preparation. |
 
-On completion, remove the claim and add a concise outcome below. Paused work keeps its row with an exact resume step. Next recommended engineering task: P0-03, or prepare P0-02 comparisons. P0-01 requires user action.
+On completion, remove the claim and add a concise outcome below. Paused work keeps its row with an exact resume step. Next recommended engineering task: P0-03, or prepare P0-02 comparisons. P0-01 awaits MOT's response; 28-day checkpoint October 19.
 
 ## Recent outcomes
 
 Keep only the latest five material outcomes; Git preserves older history.
+
+- **2026-09-21 — P0-01 submission recorded:** User confirms email sent today from correct address, following an email about two weeks earlier from the wrong address. Updated dashboard, access record and related guidance; checkpoint October 19. Attachments, access and terms acceptance remain unconfirmed. Next: record MOT's response, or make the fallback decision at the checkpoint if unresolved. Documentation validation: local links, stale submission references, date arithmetic and diff whitespace checked; no experiment or external-access check.
 
 - **2026-09-21 — DOC-01 complete:** Added this dashboard and root agent workflow; simplified README; removed 11 tracked superseded plans, presentations, briefs and cleanup notes. Reconciled continuation/decision-pack text with the completed primary-feed rerun and repaired historical navigation. Validation: recorded-status command, local Markdown link check and diff whitespace check. No experiment rerun or external-access check. Next: P0-03 or P0-02; access/terms remain open.
 

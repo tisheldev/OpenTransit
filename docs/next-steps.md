@@ -14,7 +14,7 @@ PRD §§5–13 and accepted ADR 0001 require feasibility before production devel
 4. **Implement POC-4.** Build protobuf decoding and route/stop/trip resolution against synthetic fixtures; label them synthetic. A real feed remains necessary for PASS. Record empty-but-successful feeds separately from unavailable feeds.
 5. **Implement POC-6 and decide Go/No-Go.** One command resolves Dizengoff Center → Technion and emits walking, transit, geometry, live timing and alerts with honest source states. Replay supports development but does not establish live feasibility. Regenerate status and record an explicit verdict against all ten PRD capabilities.
 
-H1 (MOT request) was deferred on September 4; no later sent-date is recorded. Preparing code does not start its four-week clock. The request needs SIRI access, alerts URL, egress/IP requirements and usage terms. H2 needs the terms and source/date recorded. Neither is assumed complete, and this repository review sends no email.
+The user confirmed that the H1 MOT email was sent September 21 from the correct address, following an email about two weeks earlier from the wrong address. A response is pending; use September 21 as the request baseline, with the 28-day decision point on October 19. See the [access record](data-usage-and-access.md). Outstanding answers cover SIRI access, alerts URL, egress/IP requirements and usage terms; the sent email's exact contents and attachments are not recorded. H2 still needs the terms and source/date recorded. Submission does not establish access or terms acceptance.
 
 ## Phase 1, Step 1: M1 service skeleton
 
@@ -54,7 +54,7 @@ The internal journey target remains p95 <350 ms (PRD §4.6); the deployed accept
 | Decision | Recommendation / evidence | Needed by |
 | --- | --- | --- |
 | Primary feed (ADR 0005) | Accepted 60-day + mapping; ingest/routing rerun; H3 quality pending | See rerun report |
-| MOT request and source fallback | Record whether H1 remains deferred; record actual send date if sent; choose Stride/static-only/stop explicitly if access cannot be secured | POC-3/4 and final gate |
+| MOT request and source fallback | Correct-address email sent September 21; record response, with October 19 checkpoint; choose Stride/static-only/stop explicitly if access cannot be secured | POC-3/4 and final gate |
 | Data usage terms (H2) | Record exact dataset/source terms, attribution, redistribution/fixture constraints and reviewer decision; no legal acceptance inferred from a download | Phase 0 acceptance |
 | Route/search quality (H3/H4) | Complete review sheets; do not promote structural results to quality approval | Before realtime wave / final gate |
 | API language | Python is a reasonable default given the developer's recorded PoC preference; .NET remains an option. ADR 0002 only binds the PoC | Before M1 |

@@ -1,12 +1,12 @@
 # Your decision and application pack
 
-Prepared 5 September 2026; reconciled 21 September. D1 (primary feed) is accepted and ingest/routing reruns are complete. D2–D5 remain proposals. No sent email, accepted terms or server purchase is recorded. See [PROJECT_STATUS.md](../../PROJECT_STATUS.md) for current progress.
+Prepared 5 September 2026; reconciled 21 September. D1 (primary feed) is accepted and ingest/routing reruns are complete. D2–D5 remain proposals. The user confirms the MOT email was sent from the correct address on September 21; response pending, with a 28-day checkpoint on October 19. No accepted terms or server purchase is recorded. See [PROJECT_STATUS.md](../../PROJECT_STATUS.md) for current progress.
 
 ## Do this now
 
 1. **Choose the technical package below.** Reply with `Approve recommended package`, or list changes by decision ID. This approves the remaining D2–D5 proposals only; it does not sign the MOT form or accept data terms.
-2. **Choose the access route:** if you already have a static public egress IPv4, complete the form and use email A. If you have no static IP or are applying without a corporation, use email B first. It is ready in [the Hebrew email drafts](mot-email-he.txt).
-3. **Fill only your personal details**, review the unchanged Ministry terms, then sign and send the form yourself when ready. See [field-by-field instructions](form-guide.md). The prepared form is at `output/pdf/mot-siri-application-draft.pdf` from the repository root.
+2. **Await the MOT response; the 28-day decision point is October 19.** The September 21 email from the correct address is the request baseline. The email variant and attachments are not recorded. Keep any ticket/reference in the [access record](../data-usage-and-access.md).
+3. **If MOT still requires a signed application**, use the [field-by-field instructions](form-guide.md), review the Ministry terms and enter your personal details yourself. The prepared form is at `output/pdf/mot-siri-application-draft.pdf` from the repository root. Existing [Hebrew email drafts](mot-email-he.txt) remain reference material.
 
 The route review is ready on the accepted baseline. Search still needs rerunning before H4; [the review queue](quality-review.md) explains the remaining judgments.
 
@@ -39,7 +39,7 @@ D1 is justified by 0% versus 100% static mapping-key overlap in the recorded sam
 - Ingest, routing and engine capacity were rerun on the accepted primary; [results](../../poc/docs/primary-feed-rerun.md) and the H3 sheet are ready.
 - I preserve prior evidence, rerun search on that baseline and prepare H4 review. Per-service-date identity still needs validation for realtime matching.
 - I prepare and test the matcher, source adapters, alerts parser and integration CLI in the sequence required by the PoC plan. Replay/synthetic tests remain explicitly labelled.
-- You send the access request. Record the actual send date; the four-week decision point is 28 days later. It has not started merely because this pack exists.
+- The access email was sent September 21 from the correct address per user confirmation. Await the response; the four-week decision point is October 19.
 - When MOT replies, provide its non-secret answers on access, IPs and terms. Credentials belong in local secret configuration, not documentation or chat examples.
 
 ## Contents
