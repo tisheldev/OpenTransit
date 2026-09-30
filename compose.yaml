@@ -1,0 +1,35 @@
+name: opentransit
+
+services:
+  motis:
+    image: ghcr.io/motis-project/motis@sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330
+    command: ["/motis", "server", "-d", "/data"]
+    mem_limit: 3g
+    ports: ["127.0.0.1:58081:8080"]
+    volumes:
+      - graph:/data:ro
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- 'http://127.0.0.1:8080/api/v6/plan?fromPlace=32.0836,34.7981&toPlace=32.0838,34.8044' >/dev/null 2>&1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+
+  api:
+    build:
+      context: ./services/api
+    mem_limit: 1g
+    ports: ["127.0.0.1:8000:8000"]
+    environment:
+      OPENTRANSIT_MOTIS_URL: http://motis:8080
+      OPENTRANSIT_MANIFEST: /generation/manifest.json
+    volumes:
+      - ${OPENTRANSIT_GENERATION_DIR:?Set generation directory using generated compose.env}:/generation:ro
+    depends_on:
+      motis:
+        condition: service_healthy
+
+volumes:
+  graph:
+    external: true
+    name: ${OPENTRANSIT_GRAPH_VOLUME:?Set the new graph volume using generated compose.env}

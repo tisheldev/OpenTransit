@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-09-30T09:51:06.243598+00:00",
+  "milestone": "M1",
+  "scope": "Local scheduled coordinate/depart-at journey; not H3/H4 or release approval",
+  "generation": {
+    "generationId": "fac861c2b4fb058b944302a26f7275d48bf17358dac7a62ee40871f1805f62a7",
+    "engineDigest": "sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330",
+    "inputs": {
+      "israel-public-transportation.zip": {
+        "url": "https://gtfs.mot.gov.il/gtfsfiles/israel-public-transportation.zip",
+        "sha256": "8629a73c3f6ff024a78e9b8c83602c09180e13e597b82b98a4377a78f3dd2fd9",
+        "bytes": 171085310,
+        "acquiredAt": "2026-09-30T09:33:07.260277+00:00",
+        "lastModified": "Tue, 29 Sep 2026 16:59:05 GMT"
+      },
+      "TripIdToDate.zip": {
+        "url": "https://gtfs.mot.gov.il/gtfsfiles/TripIdToDate.zip",
+        "sha256": "7775623cae79f80040d5bcfe5058fa489736d58da6919b65579424c417561da5",
+        "bytes": 8179075,
+        "acquiredAt": "2026-09-30T09:33:11.146493+00:00",
+        "lastModified": "Tue, 29 Sep 2026 16:59:18 GMT"
+      },
+      "israel-and-palestine-latest.osm.pbf": {
+        "sha256": "8a34b30f91a63ef9239961ba0e4d660ae22deda2f6da4b85ba4772a6b7c4c74f",
+        "bytes": 119241930,
+        "acquiredAt": null,
+        "note": "Existing OSM snapshot copied explicitly; not a fresh OSM download"
+      }
+    },
+    "coverage": {
+      "from": "2026-09-30T00:00:00+03:00",
+      "until": "2026-10-31T00:00:00+02:00"
+    },
+    "preflight": {
+      "feedServiceDates": [
+        "2026-09-30",
+        "2026-10-30"
+      ],
+      "coverage": {
+        "from": "2026-09-30T00:00:00+03:00",
+        "until": "2026-10-31T00:00:00+02:00"
+      },
+      "importDays": 31,
+      "tripCount": 425160,
+      "distinctJoinKeys": 252581,
+      "unmatchedJoinKeys": 0,
+      "pairingScope": "static join-key and date-window preflight; not realtime proof"
+    },
+    "build": {
+      "memoryCapBytes": 6442450944,
+      "startedAt": "2026-09-30T09:33:26.206174+00:00",
+      "seconds": 28.14,
+      "exitCode": 0,
+      "finishedAt": "2026-09-30T09:33:54.533032+00:00"
+    },
+    "builtAt": "2026-09-30T09:33:54.533060+00:00"
+  },
+  "validation": {
+    "focusedSyntheticBehaviorTests": {
+      "passed": 27
+    },
+    "realHttpIntegrationTests": {
+      "passed": 1
+    },
+    "ruff": "passed",
+    "containerBuildAndStartup": "passed",
+    "docsAndOpenapi": "passed",
+    "knownDevWarning": "Starlette TestClient legacy httpx fallback is deprecated; tests pass"
+  },
+  "sources": {
+    "services/api/src/opentransit/config.py": "26c89451fddc63588dcda2c581317c64ebd87a4081132721b9a721500d0f60b8",
+    "services/api/src/opentransit/motis.py": "8f4e6198c28526d02fb65e84fabed0a32b8bf3170fc37e82cf3b4d5a1754996a",
+    "services/api/src/opentransit/__init__.py": "9047fc7634a513974f03d90b90ab803f47b5d65fda69e6075dd3d6253f5009b5",
+    "services/api/src/opentransit/api/app.py": "acc7816388b507ffe80b9c59c421082058a672c2d8beeae2c5b3e759f653e0a5",
+    "services/api/src/opentransit/api/schemas.py": "4ee52c21f784af80786cffb7e1b3a4cbf581908cf8ded01889d1fa72bb824a61",
+    "services/api/src/opentransit/api/__init__.py": "27f5108219671f248b412680251a7b0368f93b55a7a41f11b6a4de9d09bd25f8",
+    "services/api/src/opentransit/build/prepare.py": "b83132f645cdd1902b0c0560e9e036e44d35f4e193bbd3c96c2cbe99877d5e61",
+    "services/api/src/opentransit/build/__init__.py": "73ede6e9f7686aff3adc19c20ff2c291ace16f832d2bbe9a6fe6cdac196033d3",
+    "services/api/src/opentransit/core/generation.py": "0571c93c3129356972d9d6ce3848afa5d40398edd5340f5a9515040da501edd1",
+    "services/api/src/opentransit/core/__init__.py": "a46766ff24f0c73ab5ae30ba30d4c6d37cf8056ea5bfb93a658c07d1a9de3f1b"
+  },
+  "uvLockSha256": "f4ada587110e6aec5801bf0829e005546961b58a04cfd19f03801e1058c1dc6d",
+  "apiImageId": "sha256:d6a496078bc0d1215f4821fdf05191c2ac453ca18b885c333cd16511eb966fab",
+  "configuredMemoryCapsBytes": {
+    "api": 1073741824,
+    "motis": 3221225472,
+    "builder": 6442450944
+  },
+  "actualExample": {
+    "requestFile": "services/api/examples/journey.json",
+    "requestedDepartAt": "2026-10-01T08:00:00+03:00",
+    "httpStatus": 200,
+    "scheduledDeparture": "2026-10-01T08:05:00+03:00",
+    "scheduledArrival": "2026-10-01T09:52:00+03:00",
+    "durationSeconds": 6420,
+    "transfers": 2,
+    "legModes": [
+      "walk",
+      "bus",
+      "walk",
+      "rail",
+      "walk",
+      "bus",
+      "walk"
+    ],
+    "allLegsHaveGeojson": true,
+    "capabilities": {
+      "realtime": "not_enabled",
+      "alerts": "not_enabled"
+    }
+  },
+  "preservedLocalEvidence": {
+    ".runtime/m1-20260930/manifest.json": "79b2f3f9780827785ec2d7ffbcde30b24262135909c5cee6ca1c8ff5572acada",
+    ".runtime/m1-20260930/config.yml": "0c96fa24bb83b9a5853225fcf6924952098b32ed00b6444135060445c1987943",
+    ".runtime/m1-20260930/import.log": "629d932af7191577c43f63327c9dabc7e6cd86d157a85e73cf79589622e16b38",
+    ".runtime/m1-20260930/engine-sample.json": "bf0ab81dfed58d377f2a4e23ad11b8616ac6f12cfac168dd56d873608a2ac2b6",
+    ".runtime/m1-20260930/api-sample.json": "ec161f74d71a8c33437bb06bad72bb9436ad467a548b492cf5c1d339d6fd9280"
+  },
+  "notValidated": [
+    "H3 human route quality",
+    "H4 search",
+    "full routing/time semantics including DST",
+    "managed refresh/activation/rollback",
+    "static data terms",
+    "full-stack load/capacity or cloud deployment"
+  ],
+  "dockerRecovery": "Preserved stale run directory as run.stale-20260930T0922; Docker restarted successfully"
+}

@@ -102,7 +102,7 @@ Release A needs only coordinate inputs, an explicit depart-at time, one schedule
 
 ### F05 — truthful schedule and capability states (all releases)
 
-- Every data response includes generation, generation time, coverage, fixture/production mode and source attribution references.
+- Every data response includes generation, generation time, coverage, real/fixture data mode and source attribution references.
 - For schedule-based v1, predicted times and delays are null; `timingState` is `scheduled`. Null delay is not zero delay. No live vehicle is synthesized.
 - Capability state explicitly says `not_enabled` for realtime and live alerts. An alert list is null when unavailable; `[]` is reserved for an enabled, successfully fetched source with no applicable alerts.
 - Source-provided accessibility is a tri-state value: yes/no/unknown. Unknown platform or geometry stays unknown. No interpolated vehicle location is presented as observed.
@@ -203,13 +203,13 @@ flowchart LR
 
 - Use ISO 8601 timestamps with an explicit offset for request/response instants; reject naive timestamps. Also expose the GTFS service date and `Asia/Jerusalem` timezone where relevant.
 - A service date is not necessarily the local calendar date of a stop call. GTFS values over 24 hours and daylight-saving boundaries need dedicated validation.
-- Public references are opaque and generation-scoped. A trip occurrence combines full source trip ID, service date and generation; repeated stop calls add stop sequence. Never identify trips using normalized/stripped IDs alone.
+- Public stop/route references use namespaced source IDs conditional on daily-feed stability evidence. A trip occurrence preserves full source trip ID and service date, with generation attribution in metadata; repeated stop calls add sequence. Never identify trips using normalized/stripped IDs alone.
 - R2: stop/route references retain namespaced source IDs if daily-feed stability is proven; absent references return 404. Dated trips preserve full identity. Unsigned cursors bind generation/query/sort position; a mismatch returns `422 INVALID_CURSOR` and requires a fresh listing. Long-lived favorites retain coordinates/display metadata as hints.
 - Coordinates use WGS84 with named latitude/longitude fields; geometry uses GeoJSON longitude/latitude order. National feed coverage does not guarantee routability at every coordinate.
 
 ### Response and error semantics
 
-Common data envelope: `data`, `meta` (request ID, generatedAt, generationId, mode, coverage, freshness, capabilities, attribution), `warnings`, and optional `page`. No internal stack traces, URLs containing keys or raw user input in errors.
+Common data envelope: `data`, `meta` (request ID, generatedAt, generationId, mode, coverage, freshness, capabilities, attribution and warnings), and optional `page`. No internal stack traces, URLs containing keys or raw user input in errors.
 
 | HTTP | Stable application code / meaning |
 | --- | --- |

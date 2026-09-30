@@ -8,6 +8,7 @@ __pycache__/
 htmlcov/
 .DS_Store
 Thumbs.db
+.runtime/
 
 # Local configuration; examples remain reviewable
 .env

@@ -1,0 +1,5 @@
+{
+  "from": {"kind": "coordinate", "latitude": 32.0757, "longitude": 34.7748},
+  "to": {"kind": "coordinate", "latitude": 32.7775, "longitude": 35.0219},
+  "departAt": "2026-10-01T08:00:00+03:00"
+}
