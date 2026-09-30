@@ -23,6 +23,7 @@ services:
     environment:
       OPENTRANSIT_MOTIS_URL: http://motis:8080
       OPENTRANSIT_MANIFEST: /generation/manifest.json
+      OPENTRANSIT_PLAYGROUND: "1"
     volumes:
       - ${OPENTRANSIT_GENERATION_DIR:?Set generation directory using generated compose.env}:/generation:ro
     depends_on:

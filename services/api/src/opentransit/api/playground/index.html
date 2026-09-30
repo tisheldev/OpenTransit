@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>OpenTransit · Journey playground</title>
+  <link rel="stylesheet" href="./vendor/leaflet.css">
+  <link rel="stylesheet" href="./style.css">
+  <script src="./vendor/leaflet.js" defer></script>
+  <script src="./app.mjs" type="module"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="./"><span class="brand-mark" aria-hidden="true">↗</span> OpenTransit</a>
+    <span class="preview">Local test client</span>
+    <a href="/docs" target="_blank" rel="noopener">API docs ↗</a>
+  </header>
+  <main>
+    <section class="planner" aria-labelledby="page-title">
+      <div class="eyebrow">JOURNEY PLAYGROUND</div>
+      <h1 id="page-title">Where are you going?</h1>
+      <p class="intro">Try a journey, then check its route and connections.</p>
+      <div class="notice">Scheduled service only. Live delays and alerts are not available.</div>
+      <form id="planner">
+        <fieldset id="inputs">
+          <legend class="sr-only">Journey inputs</legend>
+          <section class="place-input origin">
+            <label for="from-preset"><span class="place-dot">A</span> From</label>
+            <select id="from-preset" aria-label="Origin example location"></select>
+            <div class="coordinates">
+              <label>Latitude<input id="from-lat" type="number" min="29" max="34" step="any" required></label>
+              <label>Longitude<input id="from-lon" type="number" min="34" max="36" step="any" required></label>
+            </div>
+            <button class="map-picker" id="pick-from" type="button" aria-pressed="false">Choose origin on map</button>
+          </section>
+          <button id="swap" class="swap" type="button" aria-label="Swap origin and destination">⇅ Swap</button>
+          <section class="place-input destination">
+            <label for="to-preset"><span class="place-dot">B</span> To</label>
+            <select id="to-preset" aria-label="Destination example location"></select>
+            <div class="coordinates">
+              <label>Latitude<input id="to-lat" type="number" min="29" max="34" step="any" required></label>
+              <label>Longitude<input id="to-lon" type="number" min="34" max="36" step="any" required></label>
+            </div>
+            <button class="map-picker" id="pick-to" type="button" aria-pressed="false">Choose destination on map</button>
+          </section>
+          <label class="departure-label" for="depart-at">Depart at · Israel time</label>
+          <input id="depart-at" type="datetime-local" required>
+          <div class="time-options">
+            <button id="depart-now" type="button" class="text-button">Use current time</button>
+            <label class="offset-label">UTC offset
+              <select id="offset" aria-label="Departure UTC offset">
+                <option value="auto">Automatic</option>
+                <option value="+03:00">+03:00 (summer)</option>
+                <option value="+02:00">+02:00 (winter)</option>
+              </select>
+            </label>
+          </div>
+          <button class="submit" id="submit" type="submit">Plan journey <span aria-hidden="true">→</span></button>
+        </fieldset>
+      </form>
+      <p class="helper">Example places or coordinates for now; address search comes later. The first suggested itinerary is shown.</p>
+    </section>
+    <section class="workspace" aria-label="Map and journey results">
+      <div class="map-wrap">
+        <div id="map" aria-label="Journey map"></div>
+        <div id="map-hint" class="map-hint">Choose points using the buttons on the left.</div>
+        <div class="map-key"><span class="walk-key">Walking</span><span class="bus-key">Bus</span><span class="rail-key">Rail</span></div>
+        <p id="tile-warning" class="tile-warning" hidden>Street tiles are unavailable. Route lines and location controls still work.</p>
+      </div>
+      <div class="results">
+        <p id="status" class="status" role="status" aria-live="polite">Ready to try Dizengoff Center → Technion. Press Plan journey.</p>
+        <section id="journey" aria-label="Suggested itinerary" hidden>
+          <div class="journey-heading">
+            <div><div class="eyebrow">SUGGESTED ITINERARY</div><h2 id="time-range"></h2><p id="journey-date"></p></div>
+            <span class="scheduled-badge">Scheduled</span>
+          </div>
+          <div id="summary" class="summary"></div>
+          <ol id="legs" class="legs"></ol>
+        </section>
+        <section id="metadata" class="metadata" aria-label="Data information" hidden></section>
+        <details id="debug" class="debug" hidden>
+          <summary>Inspect request and response</summary>
+          <div class="debug-heading"><h3>Request</h3><button type="button" id="copy-request">Copy JSON</button></div>
+          <pre id="request-json"></pre>
+          <div class="debug-heading"><h3>Response</h3><button type="button" id="copy-response">Copy JSON</button></div>
+          <pre id="response-json"></pre>
+          <p id="copy-status" role="status"></p>
+        </details>
+      </div>
+    </section>
+  </main>
+  <footer>A local harness for checking M1 routing. Route quality is awaiting human review. Data: Israel Ministry of Transport · © OpenStreetMap contributors.</footer>
+  <template id="leg-template">
+    <li class="leg">
+      <div class="leg-icon" aria-hidden="true"></div>
+      <div class="leg-content">
+        <div class="leg-title"><h3></h3><span class="leg-duration"></span></div>
+        <p class="leg-direction" dir="auto"></p>
+        <div class="stop-row"><time class="departure"></time><bdi class="from-name"></bdi></div>
+        <div class="stop-row"><time class="arrival"></time><bdi class="to-name"></bdi></div>
+        <p class="leg-note"></p>
+      </div>
+    </li>
+  </template>
+</body>
+</html>

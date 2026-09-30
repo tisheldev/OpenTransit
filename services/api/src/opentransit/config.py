@@ -10,6 +10,7 @@ class Settings:
     motis_url: str = "http://127.0.0.1:58081"
     engine_timeout_seconds: float = 1.2
     journey_deadline_seconds: float = 1.5
+    playground_enabled: bool = False
 
     def __post_init__(self) -> None:
         url = urlsplit(self.motis_url)
@@ -25,4 +26,5 @@ class Settings:
         return cls(
             manifest_path=Path(os.getenv("OPENTRANSIT_MANIFEST", ".runtime/m1/manifest.json")),
             motis_url=os.getenv("OPENTRANSIT_MOTIS_URL", "http://127.0.0.1:58081"),
+            playground_enabled=os.getenv("OPENTRANSIT_PLAYGROUND", "0") == "1",
         )

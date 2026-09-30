@@ -13,6 +13,21 @@ curl.exe --json "@services/api/examples/journey.json" http://127.0.0.1:8000/v1/j
 
 Open [interactive API docs](http://127.0.0.1:8000/docs). The example plans Dizengoff Center → Technion on October 1 at 08:00 Israeli time. Change `departAt` to a desired explicit-offset time inside the manifest's half-open coverage. The September 30 graph covers `[2026-09-30T00:00:00+03:00, 2026-10-31T00:00:00+02:00)`; it includes the October DST offset change, but comprehensive DST correctness is an M3 check. Timings are scheduled; predictions/delays and alerts are null, with both live capabilities `not_enabled`.
 
+## Try the local test client
+
+Open the [journey playground](http://127.0.0.1:8000/playground/) after starting Compose above. This small browser harness was requested September 30 for manual M1 testing; it is not Phase 2 product acceptance.
+
+1. Keep the Dizengoff Center → Technion example or select other example places. For arbitrary locations, enter coordinates or press **Choose origin/destination on map**, then click the map. Example coordinates identify approximate station/campus points, not an entrance guarantee.
+2. Pick a departure in **Israel time**, within the graph's coverage. The default is tomorrow at 08:00. **Automatic** applies the date's Israel UTC offset; during the repeated autumn hour choose +03:00 or +02:00 explicitly. Nonexistent spring times and mismatched offsets are rejected before sending.
+3. Press **Plan journey**. Check walking distances, stop names, lines, scheduled times, waits and transfers against what you expected. Walking is dashed gray, bus blue and rail purple. Click route lines to identify legs.
+4. Expand **Inspect request and response** to copy the exact JSON for a reproducible report. Record the generation/request IDs, chosen date, unexpected leg and expected behavior. A successful response is not H3 human approval.
+
+The page shows data freshness and distinguishes no-route from unavailable/expired data or engine errors. It clears the previous itinerary when inputs change. It stores nothing in the browser and sends journey requests only to the same local API. Map scripts/styles are bundled; street tiles come directly from OpenStreetMap in the browser. If tile access fails, the form, itinerary and route lines still work. Search, live delays, alerts, preferences and multiple alternatives remain later work.
+
+Compose enables this page with `OPENTRANSIT_PLAYGROUND=1`; it is disabled by default when the API is started otherwise. For the host-edit workflow below, also set `$env:OPENTRANSIT_PLAYGROUND = '1'`. No additional frontend server or npm install is needed.
+
+September 30 checks: 29 focused API checks, five client date/time checks and one real HTTP integration check passed. Browser verification covered the real seven-leg journey, map selection, swapping, input changes, copying JSON, an empty result, out-of-coverage errors and ambiguous departure times. The narrow in-app viewport showed no horizontal overflow; a desktop viewport and human route quality remain unverified. Details: [test-client verification](../services/api/results/test-client-20260930.json).
+
 `/healthz` checks only process liveness. A missing/unready manifest returns `503 DATA_UNAVAILABLE`; expired coverage or seven days without source validation returns `503 FEED_EXPIRED`. A requested date outside an otherwise usable graph returns 422. An engine failure is 503, a timeout 504, and a successful empty search is `200 no_route`. A still-covered aging feed has explicit freshness/warnings. M1 does not refresh automatically; build a new generation when necessary.
 
 MOTIS/API ports bind only to loopback. Their configured memory limits are 3 GiB and 1 GiB, respectively; the import process is separately capped at 6 GiB. These limits and one successful request are not full-stack capacity or replacement-load evidence. M7 measures that under the aggregate 8 GiB serving ceiling. Local Compose is not the selected Fargate deployment package.
@@ -51,6 +66,7 @@ Run focused checks from the root:
 uv run --project services/api --locked ruff check services/api/src services/api/tests
 uv run --project services/api --locked ruff format --check services/api/src services/api/tests
 uv run --project services/api --locked pytest services/api/tests -m 'not integration' -q
+node --test services/api/tests/playground.test.mjs
 $env:OPENTRANSIT_TEST_URL = 'http://127.0.0.1:8000'
 $env:OPENTRANSIT_TEST_DEPART_AT = '2026-10-01T08:00:00+03:00'
 uv run --project services/api --locked pytest services/api/tests -m integration -q

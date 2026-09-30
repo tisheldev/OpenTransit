@@ -6,11 +6,12 @@
 ## Where we stand
 
 **M1 local scheduled API implemented and verified September 30.**
-The user deferred realtime; live alerts move with that feature wave. The user authorized applying design simplifications R1–R5 and starting implementation September 30 ([ADR 0007](poc/docs/adr/0007-schedule-api-design.md)). M1–M4 proceed alongside static validation. H3/H4, scheduled integration and static terms remain release requirements. The user prioritizes working functionality: M1 now delivers a basic local journey; CI waits for M7 and contributor/repository polish for Phase 5. The completed schedule-based API still precedes the client. Original full-scope Phase 0 evidence remains 5/10, not a v1 entry gate or a completion percentage. The local API returns a real scheduled coordinate/depart-at journey from a fresh graph; 27 focused checks and one real HTTP integration check passed. No deployed API or frontend exists.
+The user deferred realtime; live alerts move with that feature wave. The user authorized applying design simplifications R1–R5 and starting implementation September 30 ([ADR 0007](poc/docs/adr/0007-schedule-api-design.md)). M1–M4 proceed alongside static validation. H3/H4, scheduled integration and static terms remain release requirements. The user prioritizes working functionality: M1 now delivers a basic local journey; CI waits for M7 and contributor/repository polish for Phase 5. The completed schedule-based API still precedes the product client; the user explicitly requested a small local M1 test harness September 30. Original full-scope Phase 0 evidence remains 5/10, not a v1 entry gate or a completion percentage. The local API and opt-in browser harness return a real scheduled coordinate/depart-at journey from a fresh graph; current validation is 29 focused API checks, five client time checks and one real HTTP integration check. No deployed API or Phase 2 product client exists.
 
 | Workstream | State | Evidence / remaining gap |
 | --- | --- | --- |
 | Local API / M1 | IMPLEMENTED / TESTED | Real Dizengoff Center → Technion HTTP journey; fresh feed graph through October 30. [Run instructions](docs/development.md), [verification](services/api/results/m1-20260930.json). H3 not approved. |
+| Local test client / TEST-UI | IMPLEMENTED / TESTED | Opt-in form, interactive map, leg timeline and JSON inspection; real journey and error/empty states checked in browser. [Try it](http://127.0.0.1:8000/playground/), [verification](services/api/results/test-client-20260930.json). User review pending. |
 | Static data / POC-1 | PASS technically | 544,338 trips; 20,100,370 stop times; 10/10 integrity checks. Terms remain open separately. |
 | Routing / POC-2 | PARTIAL | 24/25 structural passes; 22/25 first-itinerary passes. Human H3 review pending. |
 | Capacity | Engine measured only | MOTIS p95 162.9 ms; load peak 941.3 MB under an 8 GiB serving cap. Full stack and graph replacement unproven. |
@@ -29,7 +30,7 @@ Measurements: [generated PoC report](poc/README.md), [raw results](poc/results/)
 | --- | --- | --- |
 | 0 | Static quality and scheduled integration; realtime/alerts proof deferred | Continue alongside API; required before static release |
 | 1 | Scheduled API: M1 basic local journey → M2 feeds → M3 routing/departures → M4 search → M7 operations/load → M8 deployment | Python/FastAPI and R1–R5 accepted; planning gate satisfied September 30. M5/M6 deferred |
-| 2 | First usable client | NOT STARTED; API must be finished first |
+| 2 | First usable product client | NOT STARTED; API must be finished first. Local M1 test harness is an explicit September 30 exception |
 | 3 | Realtime/alerts integration, then realtime-aware routing | FUTURE; source access, terms and live proof required |
 | 4 | Reliability intelligence | FUTURE |
 | 5 | Public open-source product | FUTURE |
@@ -73,13 +74,15 @@ Claims are coordination notes, not locks. Check timestamps, Git status and other
 
 | Task ID | Agent/session | Updated (UTC) | State | Files/scope | Next step / blocker |
 | --- | --- | --- | --- | --- | --- |
-| — | — | — | No active claims | — | Next: P1-02 M2 feed fetch/validation; user obtains written static GTFS terms. |
+| — | — | — | No active claims | — | User tries the local playground; next implementation: P1-02 M2 feed fetch/validation. |
 
-On completion, remove the claim and add a concise outcome below. Paused work keeps its row with an exact resume step. Next: P1-02 M2.1 fetch/change detection, then M2.2 integrity/pairing validation; prepare fresh H3/H4 sheets alongside development. User obtains written static GTFS terms. MOT response is only a deferred-feature dependency; follow-up October 19.
+On completion, remove the claim and add a concise outcome below. Paused work keeps its row with an exact resume step. User now tries the [local playground](http://127.0.0.1:8000/playground/) and reports unexpected legs with copied request/response JSON; this is not yet H3 approval. Next implementation: P1-02 M2.1 fetch/change detection, then M2.2 integrity/pairing validation; prepare fresh H3/H4 sheets alongside development. User obtains written static GTFS terms. MOT response is only a deferred-feature dependency; follow-up October 19.
 
 ## Recent outcomes
 
 Keep only the latest five material outcomes; Git preserves older history.
+
+- **2026-09-30 — TEST-UI complete:** At the user's request, added an opt-in browser harness with example/coordinate/map inputs, endpoint swapping, Israel-time departure conversion, mapped leg geometry, readable schedule/wait/transfer details, freshness and copyable JSON. Enabled in local Compose only by default; recorded the narrow test-harness exception in PRD without starting Phase 2. Validation: 29 focused API checks + five client date/time checks + one real HTTP integration check; real seven-leg journey, map selection, swapping, JSON copying, no-route, HTTP 422 and ambiguous DST time checked in the browser. Small-screen overflow corrected; no final browser warnings/errors. Ruff/format, JS syntax, 59 local links/anchors and whitespace passed; [verification](services/api/results/test-client-20260930.json), [runbook](docs/development.md#try-the-local-test-client). PoC report regenerated from unchanged PoC results, still 5/10; no feeds or graph volumes replaced. Desktop visual verification, H3/H4, static terms and later API milestones remain open. Next: user tries familiar journeys and reports mismatches; agent continues P1-02 M2.
 
 - **2026-09-30 — P1-01 complete:** Applied accepted R1–R5/POST planning and implemented local FastAPI health/docs/journey endpoints, MOTIS normalization, safe problems/logs, dependency/image pins and isolated graph preparation. Fresh GTFS/mapping hashes and static pairing preflight recorded; September 4 OSM explicitly reused; PoC volume/raw evidence preserved. Real October 1 08:00 Dizengoff → Technion request returns seven legs, two transfers and scheduled arrival 09:52. Validation: 27 synthetic behavior checks + one real HTTP check, ruff/format, container build/startup, local links and whitespace; [verification](services/api/results/m1-20260930.json), [runbook](docs/development.md). Fixed Docker stale OTel socket by preserving/renaming its runtime directory; corrected MOTIS health probe. PoC report regenerated from unchanged raw evidence, still 5/10. Development-only TestClient deprecation warning remains. Publication: user requested committing/pushing everything; M1 `5ffd6e3` and design/hosting `d6ffa46` pushed to `origin/main`. Lint, formatting and whitespace rechecked; remote synchronized and working tree clean after the push. Next: P1-02 M2 fetch/validation/reference data; H3/H4, static terms, managed refresh and full-stack/deployment acceptance remain open.
 
@@ -88,8 +91,6 @@ Keep only the latest five material outcomes; Git preserves older history.
 - **2026-09-25 — API-PLAN drafted:** At the user's request, added a step-level M1–M4 plan, a hosting plan (provider options with September 2026 prices, host layout, supporting services, sequence H-0 to H-3) and a non-code workstream (S1–S9) to the continuation plan. Added design simplifications R1–R5 (blue/green activation, stable source IDs, one package, per-generation SQLite, deferred scale controls) to system design §0 as proposals; underlying sections are unchanged until accepted. Validation: local links/anchors and diff whitespace checked; no code, experiments or purchases. Next: user reviews the proposals and hosting timing.
 
 - **2026-09-25 — API-DESIGN priority revised:** User put working functionality before open-source polish. Release A/M1 now returns a real local coordinate/depart-at journey using a verified prepared graph; M3 completes the broader routing feature set. CI/schema automation moves to M7; contributor onboarding, portable demos and community tooling to Phase 5. Aligned API/root PRDs, continuation plan, design and decision notes. Validation: local links/anchors, JSON examples and diff whitespace checked; no code or experiments. Next: continue PRD/design review before implementation; static release requirements unchanged.
-
-- **2026-09-25 — API-DESIGN drafts complete:** Added API-specific PRD with phased scope, 14 stories, endpoint inventory and release gates; replaced system design with Python structure, UML, data/identity contracts, activation, security, operations and expansion design. Reconciled root PRD, architecture, continuation/decision docs. No application code or evidence changes. Validation: local links/anchors, JSON, offline diagram structure and diff whitespace checked. Visual rendering unverified: automatic approval review rejected loading external CDN code with local docs. Next: review API PRD, then design; D3/D4/defaults remain proposals.
 
 ## Where details belong
 
@@ -100,7 +101,7 @@ Keep only the latest five material outcomes; Git preserves older history.
 | Milestone implementation and acceptance | [Continuation plan](docs/next-steps.md) |
 | User decisions, Ministry application, terms | [Decision pack](docs/decision-pack/README.md), [access record](docs/data-usage-and-access.md) |
 | Accepted choices / known feed problems | [ADRs](poc/docs/adr/), [data problems](poc/docs/known-data-problems.md) |
-| Local API setup and checks | [Development runbook](docs/development.md), [M1 verification](services/api/results/m1-20260930.json), [API package](services/api/) |
+| Local API/client setup and checks | [Development runbook](docs/development.md), [M1 verification](services/api/results/m1-20260930.json), [client verification](services/api/results/test-client-20260930.json), [API package](services/api/) |
 | Results and reproduction | [PoC status](poc/README.md), [routing runbook](poc/routing/README.md), [rerun report](poc/docs/primary-feed-rerun.md) |
 | Code structure, UML, contracts and operations | [System design](docs/system-design.md), [architecture overview](docs/architecture.md); review drafts, not implementation evidence |
 

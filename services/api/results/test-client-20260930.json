@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-09-30T10:49:47Z",
+  "scope": "User-requested local M1 browser test harness; not Phase 2 or H3 approval",
+  "url": "http://127.0.0.1:8000/playground/",
+  "generationEvidence": "m1-20260930.json",
+  "generationId": "fac861c2b4fb058b944302a26f7275d48bf17358dac7a62ee40871f1805f62a7",
+  "automatedChecks": {
+    "apiFocusedTests": { "passed": 29, "note": "27 existing synthetic behavior checks plus two test-client configuration/serving checks" },
+    "browserTimeUnitTests": { "passed": 5, "note": "Israel offsets, repeated autumn hour, missing spring hour, malformed dates and calendar boundaries; run with Node" },
+    "realHttpIntegrationTests": { "passed": 1 },
+    "ruffCheckAndFormat": "passed",
+    "javascriptSyntax": "passed",
+    "localLinksAndAnchors": { "checked": 59, "result": "passed" },
+    "gitDiffCheck": "passed",
+    "knownDevelopmentWarning": "Starlette TestClient legacy httpx fallback deprecation"
+  },
+  "browserChecks": {
+    "method": "Manual UI automation in the Codex in-app browser against real local API/MOTIS",
+    "realScheduledJourney": "passed",
+    "mapSelectionSetsCoordinates": "passed",
+    "swapChangesBothEndpointsAndClearsResult": "passed",
+    "coordinateEditsClearPreviousItinerary": "passed",
+    "copyRequestJson": "passed",
+    "outsideCoverageError": { "httpStatus": 422, "code": "OUTSIDE_SERVICE_WINDOW", "requestId": "83fc1e31e4604140a3676370ae4436d6" },
+    "noRoute": { "origin": [32.0, 34.0], "requestId": "990b9d8c51214b5887f663cd71b54bb6", "note": "Sea location; no itinerary or stale route lines shown" },
+    "ambiguousIsraelTimeRequiresOffset": "passed for 2026-10-25T01:30",
+    "smallViewportHorizontalOverflow": false,
+    "viewportCssPixels": { "width": 319, "height": 670 },
+    "finalBuildConsoleWarningsOrErrors": [],
+    "streetTilesLoaded": true
+  },
+  "finalBrowserJourney": {
+    "generatedAt": "2026-09-30T10:48:56.722340Z",
+    "requestId": "78f48101aed9426a81b290f1f152ac41",
+    "mode": "real",
+    "request": {
+      "from": { "kind": "coordinate", "latitude": 32.0757, "longitude": 34.7748 },
+      "to": { "kind": "coordinate", "latitude": 32.7775, "longitude": 35.0219 },
+      "departAt": "2026-10-01T08:00:00+03:00"
+    },
+    "scheduledDeparture": "2026-10-01T08:05:00+03:00",
+    "scheduledArrival": "2026-10-01T09:52:00+03:00",
+    "transfers": 2,
+    "legModes": ["walk", "bus", "walk", "rail", "walk", "bus", "walk"],
+    "drawnMapLegs": 7
+  },
+  "notValidated": [
+    "Human route usability/H3 approval",
+    "Desktop viewport visual verification",
+    "Routing-engine DST semantics (client timestamp conversion only was checked)",
+    "Browser rendering of fixture, aging, expired and engine-failure responses",
+    "Full-stack capacity, static terms, managed refresh or cloud deployment"
+  ]
+}

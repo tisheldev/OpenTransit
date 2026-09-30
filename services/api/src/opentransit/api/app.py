@@ -3,6 +3,7 @@ import logging
 import time
 from contextlib import asynccontextmanager
 from datetime import UTC, datetime
+from pathlib import Path
 from uuid import uuid4
 
 import httpx
@@ -11,6 +12,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException
 from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.staticfiles import StaticFiles
 
 from opentransit.api.schemas import (
     Coverage,
@@ -100,6 +102,12 @@ def create_app(settings: Settings | None = None, transport=None, clock=None) -> 
 
     app = FastAPI(title="OpenTransit — local schedule preview", version="0.1.0", lifespan=lifespan)
     app.add_middleware(SafeRequests)
+    if settings.playground_enabled:
+        app.mount(
+            "/playground",
+            StaticFiles(directory=Path(__file__).with_name("playground"), html=True),
+            name="playground",
+        )
 
     @app.exception_handler(RequestValidationError)
     async def validation(request: Request, exc: RequestValidationError):
