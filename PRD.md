@@ -12,6 +12,26 @@
 
 ---
 
+## Accepted scope revision — 25 September 2026
+
+The user explicitly chose to begin system development without realtime and add it later. **V1 is a schedule-based planner.** This revision takes precedence over conflicting realtime-first gates and examples below, ADR 0001's original sequencing, and older architecture/decision proposals.
+
+- **Development may start now:** Phase 1 M1–M4 can proceed while static quality validation continues; Python with FastAPI was selected on September 25 ([ADR 0002](poc/docs/adr/0002-python-for-the-poc.md)); pin supported versions during M1. Full Phase 0 acceptance is no longer an entry requirement for this work. Existing results are not newly approved by this decision.
+- **Initial scope:** nationwide scheduled routing, walking and transfers, place/stop search, scheduled departures, journey details and truthful feed health. Times must be labelled scheduled. Delays, live arrivals, vehicle positions and live service alerts are deferred; unavailable alerts must never imply no disruptions.
+- **Before schedule-based release:** complete H3 route review (at least 9/10 representative journeys usable), accepted-feed search rerun and H4 review, a schedule-only search-to-journey demonstration, and documented acceptable terms for the datasets actually used. Keep feed freshness, service-day correctness, no-route/error handling, rollback and full-stack performance checks in their implementation milestones. These are release requirements, not reasons to delay M1.
+- **Build order:** M1 basic local journey → M2 feeds → M3 scheduled routing/departures → M4 search → M7 static operations/load → M8 deployment → Phase 2 client. The completed and deployed schedule-based API still precedes client development; that gate is unchanged.
+- **Deferred feature wave:** POC-3/M5 realtime and POC-4/M6 alerts, including live matching, freshness, source sustainability and source-specific terms, must pass before those features ship. Preserve full trip identity and service dates now to support that work later; do not build the live pipeline for M1.
+- **Acceptance:** a deployed scheduled Dizengoff Center → Technion query meets the existing <400 ms p95 target, with <350 ms server-side journey target and honest scheduled/unavailable states. Live delays and MOT credentials are not v1 acceptance criteria. The original ten-capability PoC report remains historical full-scope evidence, not the schedule-first development gate.
+- **Access follow-up:** retain the September 21 MOT request and October 19 checkpoint for later features. An unanswered realtime application does not stop the schedule-based product. No access or terms approval is inferred.
+
+The realtime requirements, examples and kill criteria elsewhere in this document apply to the deferred feature wave wherever they conflict with this revision. Static data quality and usage requirements continue to apply to v1.
+
+---
+
+## API planning package — 25 September 2026
+
+The user requested a full API PRD and system design before coding. Review [API product requirements](docs/api-prd.md), then [system design and UML](docs/system-design.md). The user authorized applying the suggested design changes and starting implementation on September 30. [ADR 0007](poc/docs/adr/0007-schedule-api-design.md) accepts R1–R5 and POST journey planning; the planning gate is satisfied. Its September 30 hosting amendment selects AWS ECS Fargate and a private ECR image carrying the prepared generation; S3 is optional. Region, resources, networking and total cost require deployment validation. The existing schedule-first and Python/FastAPI decisions remain accepted. The user subsequently prioritized working functionality over open-source polish: M1 must return a basic local scheduled journey using the prepared engine, with minimal setup and checks. CI/contract automation moves to M7; contributor onboarding, portable demos and community/repository polish move to Phase 5. This does not waive static release acceptance or API-before-client sequencing.
+
 ## 1. Product Vision
 
 OpenTransit Israel is a fast, clean, privacy-conscious, open-source public transportation application for Israel.
@@ -529,56 +549,13 @@ This becomes the technical foundation of the project.
 
 ## 14. Phase 1 — OpenTransit API v1
 
-After POC success, the first product is **the backend API**, not an app. It is finished, deployed, documented and fast before any client exists.
+The first product is the **schedule-based backend API**. Its detailed requirements, user stories, endpoint inventory, acceptance criteria and expansion roadmap are in the [API PRD](docs/api-prd.md). The [system design](docs/system-design.md) describes code structure, UML, identities, generation activation and operations. Both are review drafts produced before coding at the user's request.
 
-Full architecture, deployment topology, cost model and build order: [docs/system-design.md](docs/system-design.md). The summary:
+Initial capabilities: stop/route/pattern reference data, scheduled departures and trip details, journey planning with walking/transfers, Hebrew/English destination search and honest data health. Predictions, live vehicles and service alerts are deferred. The draft recommends POST journey planning; D3 is pending review, not silently accepted.
 
-### What gets built
+Build order after planning review: **M1 basic local journey → M2 feeds/reference data → M3 scheduled journeys/departures → M4 search → M7 hardening → M8 deployment**. Deferred M5/M6 add realtime/alerts later. Runtime: Python/FastAPI, with MOTIS doing routing. Production hosting is AWS ECS Fargate, with API and MOTIS in one task and a fixed generation packaged in private ECR; S3 is optional. The API's request dependencies remain on-host/task; immutable generations keep indexes and graphs consistent. The intended 8 GiB serving ceiling includes the full stack and old/new task overlap, and must be measured; it is not a minimum task allocation. No production cost or user-capacity guarantee has been established. See the [hosting plan](docs/next-steps.md#hosting-plan).
 
-A single self-hostable backend that answers transport questions over HTTP:
-
-```
-GET  /v1/places?q=&lang=he|en&near=          address, stop and POI search
-GET  /v1/journeys?from=&to=&departAt=        multi-modal journey planning
-GET  /v1/stops/{stopCode}/departures         live departure board
-GET  /v1/trips/{tripId}                      stop sequence with live progress
-GET  /v1/vehicles?bbox=                      live positions
-GET  /v1/alerts                              service alerts
-GET  /v1/status                              public feed health
-```
-
-Behind it: MOTIS holding the routing graph in RAM on the same host, an in-memory realtime snapshot replaced wholesale every 15–30 seconds, an in-process index of every Israeli transit stop for fast search, and a single privileged ingester that is the only process holding the MOT key.
-
-### Architectural rules for this phase
-
-1. **Nothing on the hot path leaves the machine.** Not Postgres, not S3, not MOT, not another availability zone.
-2. **Realtime is a pointer swap, not a query.** The ingester builds a complete immutable snapshot and atomically replaces the previous one; readers never lock.
-3. **Postgres is off the hot path entirely.** It holds history and analytics. A journey request never opens a database connection.
-4. **One ingester, ever.** MOT permits one poll per 15 seconds on a single key. A second poller risks the key.
-5. **The whole stack runs from fixtures.** Contributors have no MOT key, so `docker compose up` must run everything against recorded data.
-6. **Storage is S3-compatible, never S3-specific.** AWS S3, Cloudflare R2, Backblaze, Hetzner or local MinIO must all work unchanged.
-7. **It runs on one 8 GB box.** MOTIS loads a country's full-year timetable in under 2 GB, so the whole stack fits comfortably on a single small instance. If a design decision requires more than that, it needs a reason. Cost is a design constraint, not an afterthought — see the price-range comparison in [docs/system-design.md](docs/system-design.md#6-deployment-and-cost).
-
-The practical consequence: **Phase 0 costs $0–12/month** (everything on the dev machine, plus at most a tiny Israeli VPS for the SIRI ingester once the key arrives), and **a free-to-the-public v1 costs $40–75/month** — roughly flat whether the service has 100 users or 50,000, because the routing graph is built once and shared.
-
-### Milestones
-
-| # | Milestone | Done when |
-| --- | --- | --- |
-| M1 | Skeleton | `docker compose up` serves `/healthz`; OpenAPI published; CI green |
-| M2 | GTFS ingest | nightly download, validation and versioning to object storage; `/v1/stops` works |
-| M3 | Routing | MOTIS wired; `/v1/journeys` returns schedule-only itineraries |
-| M4 | Search | `/v1/places` in Hebrew and English, p95 under 40 ms |
-| M5 | Realtime | snapshot swap live; delays on journeys and departures; `/v1/vehicles` |
-| M6 | Alerts | `/v1/alerts` and per-journey attachment |
-| M7 | Hardening | atomic graph swap, degradation ladder, `/v1/status`, load test at 50 rps |
-| M8 | Deploy | live in the Israel region on the registered IP, public docs and status page |
-
-### Phase 1 acceptance
-
-> A plain `curl` plans Dizengoff Center → Technion with live delays in under **400 ms p95**, repeatedly, on a weekday evening, against real data — served from a deployed environment, not a laptop.
-
-Only then does a client get written.
+**Phase 1 acceptance:** a deployed scheduled Dizengoff Center → Technion query at p95 <400 ms, with the <350 ms API-process target measured separately; H3/H4, static integration, usage terms and operational requirements satisfied. See the [static release gate](docs/api-prd.md#static-release-gate). Only then does client implementation begin.
 
 ---
 
@@ -778,6 +755,8 @@ new GTFS → validate → build new graph → health check → atomic swap
 ```
 
 If the new feed fails validation, continue using the previous valid version.
+
+For the selected Fargate deployment, the swap is a validated rollout of complete task revisions carrying immutable ECR generation images, followed by old-request draining. Local Compose can use an atomic generation pointer. Neither method may mix a new reference index with an old routing graph; see [activation design](docs/system-design.md#8-feed-builder-and-atomic-activation).
 
 ---
 

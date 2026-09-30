@@ -1,543 +1,596 @@
-# OpenTransit Israel — System Design
+# OpenTransit API — System Design
 
-> Current progress, tasks and session handoff: [PROJECT_STATUS.md](../PROJECT_STATUS.md).
+**Version:** 1.2 · **Date:** 30 September 2026 · **Code status:** M1 implementation authorized; Fargate hosting selected, not deployed; later milestones remain planned.
 
-> **Post-PoC status — 5 September 2026:** Read [the current plan](next-steps.md) before implementing this proposal. ADR 0005 now accepts the 60-day feed plus TripIdToDate; see the current rerun evidence. MOTIS routing/search are PARTIAL pending quality review; Latin addresses need work. Full-stack capacity, 4 GB viability, pricing and daily-user estimates below are unverified. The API runtime, GET/POST journey contract and search solution remain open. No cloud purchase is implied.
+Read the [API PRD](api-prd.md) first. This design implements schedule-first releases A–C and specifies extension points for D–F. [Architecture](architecture.md) is the short component map, [continuation plan](next-steps.md) maps work to milestones, and [dashboard](../PROJECT_STATUS.md) is the only maintained progress record.
 
-**Status:** Design proposal, v1
-**Scope:** the backend. The API *is* the product until it is finished; clients come after.
-**Written:** 28 August 2026
+This replaces the earlier realtime-first design and its unmeasured capacity/cost assertions. Accepted choices remain Python/FastAPI, MOTIS, the 60-day GTFS + TripIdToDate baseline, and existing PoC storage decisions. The user authorized applying R1–R5 and starting implementation on September 30; [ADR 0007](../poc/docs/adr/0007-schedule-api-design.md) records the accepted design. Its hosting amendment selects ECS Fargate with a prepared generation in a private ECR image and optional S3. Resource defaults remain starting values to verify; deployment needs a concrete cost/networking plan.
 
----
+**Accepted priority correction:** first build one working local journey endpoint using the prepared MOTIS graph. The complete structure below is the target design, not M1 scaffolding. Minimal configuration, an adapter, input/output models and focused checks are sufficient initially. CI/contract automation follows in M7; contributor onboarding and repository polish move to Phase 5.
 
-## 0. The one rule
+## 0. Review proposals — simplifications
 
-> **No request on the hot path may make a call that leaves the machine.**
+**Accepted 30 September 2026.** The user authorized applying the suggested simplifications and starting implementation. The sections below now incorporate these choices. The [M1–M4 plan](next-steps.md#m1m4-delivery-plan) follows them. The product guarantees are unchanged: old-or-new generation consistency (N05), honest scheduled-only labels, no off-host calls on requests, and the 8 GiB serving cap.
 
-Every design decision below follows from that sentence. Journey planning, stop departures, place search and realtime enrichment are all answered from memory or from a process on loopback. Nothing on the hot path talks to Postgres, to S3, to MOT, or to another availability zone.
-
-Everything slow — downloading feeds, building graphs, polling SIRI, archiving snapshots — happens on the cold path, on a schedule, and its only output is a data structure the hot path can read with a pointer dereference.
-
-That split is what makes a transit API feel instant, and it is the thing most transit apps get wrong.
-
----
-
-## 1. Latency budget
-
-The targets from the PRD (route request under 2s) are far too loose for a backend. These are the real numbers to build against, measured server-side at the API process, Israel region to Israeli client:
-
-| Endpoint | p50 | p95 | p99 |
-| --- | --- | --- | --- |
-| `GET /v1/places` (autocomplete) | 8 ms | 40 ms | 90 ms |
-| `GET /v1/journeys` | 90 ms | 350 ms | 800 ms |
-| `GET /v1/stops/{id}/departures` | 6 ms | 40 ms | 90 ms |
-| `GET /v1/vehicles?bbox=` | 5 ms | 25 ms | 60 ms |
-| `GET /v1/alerts` | 2 ms | 10 ms | 25 ms |
-
-Where the journey budget goes:
-
-```
-parse + validate            1 ms
-resolve from/to (cached)    2 ms
-MOTIS query over loopback  40–250 ms   ← the only expensive step
-realtime overlay            1 ms       ← hash lookups on an in-memory snapshot
-alert overlay              <1 ms
-rank + serialize            5 ms
-─────────────────────────────────────
-                           50–260 ms server time
-```
-
-Add ~15–25 ms RTT for an Israeli mobile client to an Israeli region, and the user sees results in well under half a second. That is the difference between an app that feels like a tool and one that feels like a website.
-
-**Non-negotiable consequences:**
-
-- The routing engine runs on the same host as the API. Not in another cluster, not behind a load balancer.
-- Realtime is a pointer to an immutable in-memory object, not a database query.
-- The geocoder for transit stops is in-process. Only free-text street addresses may touch a heavier index.
-- Postgres is *not* on the hot path at all.
-
----
-
-## 2. Component map
-
-```
-                          Israeli users
-                                │
-                                ▼
-                    ┌───────────────────────┐
-                    │  Cloudflare (TLS,     │   free tier
-                    │  cache, WAF, IL PoP)  │
-                    └───────────┬───────────┘
-                                │
-╔═══════════════════════════════▼══════════════════════════════════╗
-║  APPLICATION HOST — Israel region, one box to start              ║
-║                                                                  ║
-║   ┌──────────────────────────────────────────────────────────┐   ║
-║   │  Transit.Api   (.NET or Python — see §3)                 │   ║
-║   │  ├─ in-memory realtime snapshot   (immutable, swapped)   │   ║
-║   │  ├─ in-memory alert set           (immutable, swapped)   │   ║
-║   │  ├─ in-memory stop/station index  (~30k stops)           │   ║
-║   │  └─ LRU caches: geocode results, journey shells          │   ║
-║   └───────┬──────────────────────┬────────────────┬──────────┘   ║
-║           │ loopback             │ loopback       │ loopback     ║
-║   ┌───────▼────────┐   ┌─────────▼──────┐  ┌──────▼─────────┐    ║
-║   │ MOTIS          │   │ Photon         │  │ Redis          │    ║
-║   │ routing graph  │   │ ONLY IF NEEDED │  │ pub/sub + cache│    ║
-║   │ + geocoding    │   │ (see §3)       │  │                │    ║
-║   │ + tiles        │   │                │  │                │    ║
-║   │ (~2 GB RAM)    │   │                │  │                │    ║
-║   └────────────────┘   └────────────────┘  └──────▲─────────┘    ║
-║                                                   │              ║
-║   ┌───────────────────────────────────────────────┴──────────┐   ║
-║   │  Transit.Ingest — SINGLE process, the only MOT client    │   ║
-║   │  ├─ SIRI poller      every 15–30 s                       │   ║
-║   │  ├─ Alerts poller    every 5 min                         │   ║
-║   │  └─ GTFS builder     nightly                             │   ║
-║   └───────┬──────────────────────────────────┬───────────────┘   ║
-╚═══════════│══════════════════════════════════│═══════════════════╝
-            │ needs a stable, whitelisted IP   │
-            ▼                                  ▼
-   ┌──────────────────┐              ┌──────────────────────┐
-   │ MOT SIRI + Alerts│              │ Object storage (S3)  │
-   │ moran.mot.gov.il │              │ feeds, snapshots,    │
-   │ gtfs.mot.gov.il  │              │ graphs, parquet      │
-   └──────────────────┘              └──────────┬───────────┘
-                                                │
-                                     ┌──────────▼───────────┐
-                                     │ Postgres + PostGIS   │
-                                     │ history, analytics,  │
-                                     │ NOT the hot path     │
-                                     └──────────────────────┘
-```
-
----
-
-## 3. What each piece is, and why that one
-
-### Transit.Api — the language is an open choice, not a .NET requirement
-
-Nothing in this architecture requires a specific runtime, and the PRD is explicit about it (§25: "Implementation language is not a product requirement"). An earlier draft of this document picked ASP.NET Core partly because the PRD's module naming is already .NET-shaped, which is circular — `Transit.Api` is a rename, not a constraint.
-
-The genuine requirements are narrower than a language choice:
-
-- hold hundreds of megabytes of transit state in one address space and read it per request without a lock
-- keep the API's *own* work inside roughly 10 ms on the journey path and 20 ms on the search path
-- parse and serialize JSON at 50 rps on one box without becoming the bottleneck
-
-Two candidates satisfy those, with different failure modes.
-
-**ASP.NET Core (.NET 9), minimal APIs.** Kestrel, source-generated `System.Text.Json`, `ArrayPool`, spans, and optional native AOT if startup time ever matters. One process, real threads, and an atomic exchange on a snapshot reference is a genuinely free lock-free swap — the pattern in §4 is native to the runtime rather than worked around. The cost lands on the cold path, where the work is Parquet, joins and statistics and the tooling is thinner.
-
-**Python (FastAPI or Litestar, on uvicorn or Granian), with `msgspec` or `orjson`.** It satisfies the architecture too, and the costs are concentrated in exactly two places rather than spread everywhere:
-
-| Concern | What actually happens |
-| --- | --- |
-| `/v1/journeys` | Safe. MOTIS owns 40–250 ms of a 350 ms budget, so the API's own overhead growing from ~10 ms to ~40 ms disappears into it. |
-| `/v1/places` (40 ms) and `/v1/vehicles` (25 ms) | The exposed endpoints, because they are pure in-process work. Needs a real index — `marisa-trie`, or a sorted array plus `bisect` — and numpy for the bbox scan, rather than naive iteration. |
-| One address space holding the snapshot | The GIL pushes CPython toward N worker processes, so N copies of the snapshot and the stop index. The Redis fan-out in §4 already treats workers as instances, so this costs RAM, not a redesign. A free-threaded build (supported since 3.14) removes the duplication, at the cost of a less settled C-extension ecosystem. |
-| The swap itself | Ports cleanly. Rebinding an attribute is atomic under the GIL, so `state.snapshot = new_snap` gives readers the same old-or-new guarantee, with no torn reads. |
-
-**Where Python is the better tool regardless of the API decision.** The cold path is HTTP polling, JSON parsing, reconciliation joins and Parquet writing on a seconds-scale budget — `orjson`, `pyarrow` and `polars` beat the .NET equivalents on both ergonomics and contributor familiarity. The Phase 4 reliability statistics are Python territory outright: DuckDB, notebooks, the lot.
-
-**The decision rule.** This is a solo open-source project whose stated success metric (PRD §37) is whether the developer uses it every day. A backend written in a language the author is slow in does not get finished, and that risk dwarfs 20 ms on autocomplete. Pick the faster language for whoever is writing it, and mitigate that language's two known weaknesses deliberately.
-
-The one split worth considering on its merits: **Python for `Transit.Ingest` and the Phase 4 analytics even when the API is .NET.** The hot/cold boundary in §0 is already hard, and the two sides communicate only through Redis and object storage, both language-neutral — so a seam there costs nothing architecturally. What it does cost is two toolchains in one repository, which for a solo maintainer is not nothing.
-
-Rules for this service, whichever language wins:
-
-- Stateless with respect to *user* data, stateful with respect to *transit* data. It holds hundreds of megabytes of transit state in RAM deliberately.
-- No ORM on the hot path. No ORM at all until Phase 4 analytics.
-- Every response is generated from immutable snapshots, so no locks and no GC pressure from per-request allocation of shared state.
-- Brotli compression, HTTP/2, ETags on everything cacheable.
-
-### MOTIS — routing engine
-
-Runs as a sidecar container, queried over `127.0.0.1`. It holds the timetable and street graph in RAM and answers RAPTOR queries in tens of milliseconds. Alternative kept in the interface: OpenTripPlanner, which is slower and hungrier but more familiar. `Transit.Routing` defines `IJourneyPlanner`; MOTIS is one implementation, so swapping engines is a Phase-0 decision, not a rewrite.
-
-### Geocoding — probably free with MOTIS, and Photon only if it is not
-
-MOTIS ships geocoding and map tiles alongside routing, from the same OSM and GTFS data it has already loaded. If its geocoder handles Hebrew queries and Israeli addressing well enough, an entire Elasticsearch dependency and several gigabytes of RAM disappear from the design.
-
-So search is tiered, cheapest first:
-
-1. **Tier 1, in-process (~90 % of queries):** every GTFS stop, station and major POI — roughly 30–40k entries for Israel — in a prefix/trigram index in memory, Hebrew and English, with `stop_code` and station aliases. Single-digit milliseconds. Rebuilt when the feed rolls over. This is a few hundred lines of code and it covers the overwhelming majority of what people actually type into a transit app.
-2. **Tier 2, MOTIS geocoding on loopback:** free-text street addresses. No new dependency, no new container.
-3. **Tier 3, Photon — only if tier 2 proves inadequate for Hebrew:** ~2–4 GB of RAM and an Elasticsearch process, which is why it is a contingency rather than a default.
-
-Evaluate tier 2 during the Phase 0 routing bake-off, since MOTIS is being stood up anyway. The public Nominatim endpoint is never used in production — its policy forbids exactly the autocomplete pattern this product needs.
-
-### Redis — fan-out, not storage
-
-Two jobs: distribute the realtime snapshot from the single ingester to any number of API instances via pub/sub, and hold short-TTL caches shared across instances. It is deliberately not the source of truth for anything. If Redis dies, the API keeps serving from its last in-memory snapshot and degrades to schedule-only when that snapshot ages out.
-
-### Postgres + PostGIS — cold storage
-
-Static GTFS metadata, historical realtime, and the Phase-4 reliability statistics. Explicitly off the hot path: a journey request never opens a database connection. This keeps the instance small and means a Postgres outage degrades analytics, not the product.
-
-Note on size: do not blindly load `stop_times.txt` for the 60-day feed into Postgres — that is on the order of a hundred million rows and buys nothing, because MOTIS already answers both journeys *and* stop departures from RAM. Load routes, trips, stops, calendars and `TripIdToDate`; leave the giant table to the routing engine.
-
-### Object storage — S3-compatible, provider-agnostic
-
-Everything durable and immutable lands here, addressed by content hash:
-
-```
-s3://opentransit/
-  feeds/gtfs/raw/{sha256}.zip              the exact bytes MOT served
-  feeds/gtfs/normalized/{sha256}/*.parquet  cleaned, typed, queryable
-  feeds/tripidtodate/{sha256}.zip
-  graphs/{feed_sha256}/motis-graph.bin      built once, reused on redeploy
-  siri/raw/{yyyy}/{MM}/{dd}/{HH}/{ts}.json.zst   rolling 7-day retention
-  siri/compacted/{yyyy}/{MM}/{dd}/observations.parquet
-  alerts/{yyyy}/{MM}/{dd}/{ts}.pb
-  fixtures/                                 recorded data for contributors
-```
-
-Accessed through the S3 API only, so it runs on AWS S3, Cloudflare R2, Backblaze B2, Hetzner Object Storage or MinIO locally without a code change. `Transit.Infrastructure` exposes `IObjectStore`; nothing above it knows the provider.
-
-### Transit.Ingest — the single privileged process
-
-This is the only component with the MOT key, and there must be exactly one of it. MOT permits a poll no more often than every 15 s on a single key; running two pollers is a good way to lose access.
-
-It is a plain worker with three schedules, and it is the piece that must run on a whitelisted, stable-IP host.
-
----
-
-## 4. The hot path in detail
-
-### The realtime snapshot swap
-
-The pattern that makes realtime free at request time:
-
-```
-every 15–30 s:
-    fetch AllActiveTripsFilter (calls) from MOT      ~1–3 MB gzipped JSON
-    parse into a NEW immutable snapshot object
-        Dictionary<TripKey, TripRealtime>            keyed by (service_date, DatedVehicleJourneyRef)
-        Dictionary<StopCode, StopVisit[]>            pre-sorted departure boards
-        Dictionary<VehicleRef, Position>             for the map
-        recordedAt, sourceLag, coverageStats
-    validate: entity counts within tolerance of the previous snapshot
-    publish to Redis  →  every API instance rebuilds its local copy
-    atomically swap the snapshot reference            ← the swap
-```
-
-Readers take a local reference to the current snapshot and are done. No locks, no async, no allocation, no contention. The old snapshot is collected once in-flight requests finish. Peak memory for a nationwide snapshot of active trips is tens of megabytes.
-
-**Staleness is a first-class field.** Every response carries the snapshot's `recordedAt` and a per-leg realtime state of `live | stale | scheduled | unknown`. When the snapshot ages past a threshold — 90 s is a sensible default — the API stops claiming live data and says so, rather than serving confident nonsense. That is PRD §4.3 made mechanical.
-
-### Trip reconciliation
-
-Runs inside the ingester, not per request. The join is the documented one:
-
-```
-SIRI FramedVehicleJourneyRef (DataFrameRef + DatedVehicleJourneyRef)
-    → TripIdToDate.txt → GTFS trip_id
-fallbacks, in order:
-    (LineRef → route_id) + (OperatorRef → agency_id)
-        + DirectionRef + OriginAimedDepartureTime ≈ first departure_time
-    then: nearest scheduled trip on the same route within ±N minutes
-```
-
-Every snapshot records `matched / unmatched / ambiguous` counts, and that ratio is a monitored SLI — it is the single best early warning that a feed change has broken something. Unmatched trips are not discarded; they are kept as vehicle positions without journey context, and archived for offline analysis of *why* they failed to match.
-
-### Journey request flow
-
-```
-GET /v1/journeys?from=…&to=…&departAt=…
-
- 1  resolve endpoints            in-process index, then LRU, then Photon
- 2  MOTIS query on loopback      returns candidate itineraries (schedule-based)
- 3  overlay realtime             per leg: snapshot lookup by trip key
- 4  overlay alerts               per route/stop/trip entity match
- 5  rank                         Phase 1: engine order, lightly adjusted
-                                 Phase 3: realtime-aware (see PRD §28)
- 6  shape response               normalized model, never a leaked SIRI or MOTIS structure
-```
-
-Step 2 is the only step that can be slow, which means performance work has exactly one target — and MOTIS is already fast for a single small country.
-
----
-
-## 5. The cold path
-
-### Nightly GTFS build, with an atomic swap
-
-```
-03:30  GET gtfs.mot.gov.il/gtfsfiles/israel-public-transportation.zip        (GET, not HEAD — see findings)
-       GET .../TripIdToDate.zip
-       sha256 → already seen? stop.
-       archive raw bytes to S3
-       validate:   zip integrity, required files present,
-                   row counts within ±20 % of the active feed,
-                   known landmark stops and lines resolve,
-                   service dates actually cover today+10
-       normalize:  encoding, translations.txt sanitation, coordinate sanity
-       build MOTIS graph → S3 under the feed hash
-       start a second MOTIS container on the new graph
-       health check it with a fixed suite of ~20 known journeys
-       flip the API's routing upstream            ← the atomic swap
-       drain and stop the old container
-       rebuild the in-process stop index
-```
-
-If any step fails, nothing is swapped, the previous graph keeps serving, and an alert fires. **A bad feed must never be able to take the service down** — the failure mode of a validation error is "yesterday's data", not "no data".
-
-Building a graph needs headroom, so either the box is sized for two graphs at once, or the build runs on a temporary machine and only the artifact is shipped.
-
-### SIRI archiving and compaction
-
-At the highest useful rate the volume is real:
-
-| | estimate |
-| --- | --- |
-| Poll interval | 30 s (`AllActiveTrips` + `calls`) |
-| Snapshots/day | 2,880 |
-| Compressed size each | ~1–3 MB (zstd) — **measure in Phase 0** |
-| Raw per day | ~3–8 GB |
-| Raw retention | 7 days → ~25–55 GB standing |
-| Daily Parquet rollup | ~100–300 MB/day |
-| Rollup per year | ~40–110 GB |
-
-The rollup keeps one row per (trip, stop): scheduled time, observed time, delay, vehicle, match status. That is the entire input to Phase 4 reliability intelligence, and it is small enough to query with DuckDB against object storage without a data warehouse.
-
-Cost sanity: on R2 or B2 this is a few dollars a month; on S3 Standard, roughly $1–3/month for the rollups plus a little for the rolling raw window. Storage is not the constraint — deciding to keep raw data forever would be.
-
----
-
-## 6. Deployment and cost
-
-### Correcting an oversized first estimate
-
-An earlier draft of this document specified 32 GB of RAM and landed at $230–310/month. That was wrong, for one reason: MOTIS is far more memory-efficient than assumed. Its routing core is built around compact, serialize-once data structures, and the project reports loading a whole country's full-year timetable in **under 2 GB**. Israel alone is a small dataset by that standard.
-
-Real memory budget:
-
-| Component | RAM |
-| --- | --- |
-| MOTIS timetable (Israel, full year) | ~1–2 GB |
-| MOTIS street graph (Israel OSM extract) | ~1–2 GB |
-| Transit.Api + realtime snapshot + stop index | ~0.5 GB |
-| Redis | ~0.2 GB |
-| OS and headroom | ~1 GB |
-| **Total** | **~4–6 GB** |
-
-So the production box is **8 GB, not 32**. Graph builds want transient headroom, and the answer is not a bigger server all year — build the graph on the dev machine or a spot instance and ship the artifact, which the content-addressed storage layout already supports.
-
-Dropping Photon in favour of MOTIS's own geocoder (§3) removes another 2–4 GB. Those two corrections take the bill down by roughly a factor of five.
-
-### What each price range actually buys
-
-| Budget | Shape | What runs | What you cannot do | Right when |
+| # | Superseded design | Concern | Accepted replacement | Updated sections |
 | --- | --- | --- | --- | --- |
-| **$0** | Dev machine, Docker Compose | Entire stack on localhost: GTFS ingest, MOTIS graph, routing, geocoding, API, realtime replayed from fixtures | Nothing is reachable from a phone; no live SIRI unless MOT whitelists your own IP; it dies when the laptop sleeps | All of Phase 0 Track A, and API milestones M1–M4 |
-| **~$5** | + smallest Israeli VPS, 1 vCPU / 1–2 GB | The SIRI ingester alone, 24/7, from a stable Israeli IP — polling, archiving snapshots to object storage, alerts | Cannot hold the routing graph or serve the API; it is a collector, not a service | The day the MOT key arrives. Start the history archive immediately — SIRI cannot be backfilled, and Phase 4 is worth nothing without it |
-| **~$15–25** | 1 box, 2 vCPU / 4–8 GB, Israel | The whole stack, publicly reachable, with live realtime: journeys, places, departures, vehicles, alerts | No headroom — graph builds must happen off-box; a reboot is downtime; no staging; tight if the 60-day feed is used | Private beta and dogfooding — the "I use this instead of Moovit" milestone |
-| **~$40–75** | 1 box, 2–4 vCPU / 8 GB + 100 GB + object storage + Cloudflare | Comfortable public v1. Two MOTIS containers briefly during an atomic graph swap, Postgres container, telemetry, compacted archive | Still one machine: a host failure is an outage; no staging environment; no redundancy | **The recommended free-to-the-public tier.** Handles tens of thousands of daily users |
-| **~$120–160** | 2 boxes — serving + ingest/build — or one larger with managed Postgres | Graph builds never touch the serving host; blue/green deploys; a staging environment; managed backups | Still single-region and not highly available | When downtime starts costing you something other than pride |
-| **~$250–400** | 2 API instances, managed Postgres, dedicated ingest, staging, paid observability | Survives a host failure; real alerting; capacity for growth spikes | — | Only once someone else's commute breaks when it goes down. This is a funded shape |
+| R1 | Lease registry, Unix-socket activation control, fsync recovery journal | A large amount of custom concurrency and crash-recovery code for one API worker and one nightly refresh | **Local blue/green:** probe an idle MOTIS, atomically rename `current`, reload an immutable `Generation`, then stop the old engine after acknowledgement/grace. Each request captures one generation. **Fargate amendment:** each task pins a fixed generation from its image; replace complete tasks after readiness and drain old requests. No cross-task symlink or reload signal. | §2 deployment, §4 request reference, §8 local and Fargate activation |
+| R2 | Generation-scoped opaque IDs; 410 after every activation; signed cursors | With nightly refresh, every stop or route ID a client saved would expire daily. Signing adds key management for cursors that grant no access. | Namespaced **source IDs** for stops/routes, if the M2 check shows GTFS IDs stable across feeds. Trip reference = source trip ID plus service date; 404 when absent. Cursors are unsigned encoded (generation, sort key, query digest), validated as untrusted input; a mismatch asks the client to restart the listing. `generationId` stays in `meta`. | §5 identity/lifetime, related 410 cases |
+| R3 | domain/application/ports/adapters/runtime layers plus a separate ingestion package | Ports and use-case classes with one implementation each add indirection for a solo project | One package (`api/`, `core/`, `motis.py`, `reference.py`, `build/`) with one lock file and two entry points. Keep the rule that `core` does not import FastAPI. Add a protocol when a second implementation arrives (e.g. a realtime source). | §3 tree and dependency diagram, §4 port classes |
+| R4 | Custom in-memory immutable indexes; PoC Postgres/PostGIS kept nearby | Custom structures need their own serialization and loading code; Postgres is not needed on the serving host | One read-only **SQLite** file per generation (standard library) for reference data and stop-name search (FTS5 to be measured in M4). Departures and trips come from MOTIS. No Postgres on the host; the PoC keeps its own. | §1 "do now", §3 `indexes.py`, §8 artifacts |
+| R5 | Circuit breaker, hashed-key quotas, journey/search caches, `/metrics`, multi-worker activation | Useful at scale, but no traffic exists yet | M1–M4: timeouts, one concurrency semaphore, body limit. M7: a simple in-app per-IP limiter, plus `/metrics` only if something scrapes it. Add a breaker, caches or workers after a measurement shows the need. | §9 breaker, §10 quotas/caches, §11 metrics |
 
-Two things worth noticing in that table. The jump from $0 to a working public service is about **$40**, not $300 — and the jump from there to redundancy is proportionally the expensive one, because redundancy means buying a second of everything.
+R1 moves basic local activation from M7 into M2, because a 60-day feed needs routine rebuilds anyway. Fargate task rollout is verified at H-1; M7 keeps concurrent-activation and fault-injection proof. Selected hosting and remaining implementation choices are in the [hosting plan](next-steps.md#hosting-plan).
 
-And the thing that actually gates this project cannot be bought at any price. The MOT key costs nothing and no amount of money makes it arrive faster.
+## 1. Design drivers and choices
 
-### Tier 0 — the POC. Target: $0–12/month
+| Driver | Design response | Requirement |
+| --- | --- | --- |
+| Solo-maintained Python API | Modular application; one initial API worker | F07, N09 |
+| Fast scheduled answers | Loaded immutable indexes and same-host MOTIS | F01–F04, N01/N02/N04 |
+| Correct identities during refresh | Each request pins one complete generation and engine | F06, N05 |
+| No realtime for v1 | Scheduled-only timing and disabled capabilities | F05 |
+| Later live enrichment | Preserve service dates, full trip identity and nullable prediction fields | US13/US14 |
+| Limited capacity evidence | Measure full stack and replacement under intended 8 GiB cap | N03 |
+| No user accounts/history | Stateless passenger API; client-owned plans/favorites | N10 |
 
-Phase 0 needs almost no hosting at all.
+**Do now:** FastAPI, typed DTOs, asynchronous on-host MOTIS adapter, read-only per-generation SQLite reference data, a separate feed-builder process and disk-backed artifacts. Retain established PoC Postgres/PostGIS for staging/evidence where needed; it is never a passenger request dependency. ADR 0003 applies to POC-1 and is not revoked.
 
-- **Everything runs on the dev machine** under Docker Compose. GTFS is a public download, MOTIS builds locally, the API listens on localhost. There is nothing to pay for.
-- **The one exception is the SIRI ingester**, because of the IP restriction. Two cases:
-  - If you are in Israel and MOT will whitelist a home or office address, this is free. A static IP from an Israeli ISP costs a few shekels a month — **ask MOT whether the key is IP-bound in the same email as everything else**, because the answer decides this line item.
-  - Otherwise, the smallest possible Israeli VPS. Kamatera runs data centres in Tel Aviv, Haifa, Petah Tikva and Rosh Ha'ayin with à-la-carte sizing from around $4/month and a 30-day free trial. The ingester is a poller: ~512 MB and almost no CPU.
-- **Object storage:** local disk during the POC, or Cloudflare R2's free tier (10 GB, no egress charges).
+**Defer:** Redis, queues, microservices, cloud storage requirements, analytics databases, live pollers, accounts and frontend code. Select supported Python/FastAPI/Pydantic/Uvicorn/httpx versions and lock them in M1, along with the tested MOTIS image digest. The PoC's mutable `latest` image is not a production pin.
 
-The POC is not where money goes. Anyone quoting you cloud bills for a feasibility test is solving the wrong problem.
+## 2. Context and deployment boundaries
 
-### Tier 1 — public v1, free to use. Target: $35–75/month
+```mermaid
+flowchart TB
+  client[Future client or HTTP tool]
+  maintainer[Operator]
+  sources[GTFS plus mapping and OSM sources]
+  edge[HTTPS ingress - implementation to validate]
+  subgraph host[Fargate task - one fixed generation]
+    api[Python FastAPI - one worker initially]
+    indexes[Read-only SQLite and generation reference]
+    motisA[MOTIS - localhost]
+    api --> indexes
+    api --> motisA
+  end
+  candidate[Candidate task - complete new generation]
+  control[ECS revision rollout and draining]
+  subgraph build[Separate build process - measured separately]
+    builder[Download validate normalize build]
+    artifacts[Retained sources and evidence]
+    registry[Private ECR generation image]
+    builder --> artifacts
+    builder --> registry
+  end
+  client --> edge
+  edge --> api
+  edge -. ready candidate .-> candidate
+  sources --> builder
+  maintainer --> builder
+  maintainer --> control
+  registry --> host
+  registry --> candidate
+  control --> candidate
+  control --> host
+```
 
-One box, in Israel, doing everything.
+Production runs API/MOTIS in separate containers within the same Fargate task, communicating over localhost. Local Compose uses container-local DNS. Only HTTPS API ingress is public; MOTIS is private. No off-task engine, S3 or source call occurs on a passenger request. Builder downloads and image pulls happen outside that path. Source URLs come from trusted configuration, never user parameters.
 
-| Item | Cost |
+Initially one steady task is planned, not HA. Replacement restores one fixed generation from private ECR; S3 and a persistent server disk are optional. The included ephemeral filesystem must pass MOTIS startup/probe checks. Task size starts as a 0.5 vCPU / 2 GiB test candidate, not verified capacity. Old/new task overlap, ingress and serving telemetry count toward the aggregate 8 GiB ceiling; build memory and platform overhead are reported separately. If overlap cannot fit, keep the old generation and revisit topology before claiming uninterrupted refresh. Region, ingress and total cost remain H-0 choices.
+
+## 3. Code organization and dependency direction
+
+Proposed paths below are a design, not files created by this task:
+
+```text
+services/api/
+  pyproject.toml                 one package and dependency set
+  uv.lock                        reproducible resolved dependencies
+  src/opentransit/
+    config.py                    validated environment settings
+    api/                         HTTP schemas, routing and safe errors
+    core/                        generation, time and identity rules
+    motis.py                     engine client and normalization
+    reference.py                 read-only SQLite (M2)
+    build/                       separate feed CLI process
+  tests/                         focused behavior and integration checks
+docs/api/openapi.yaml            compatibility snapshot (M7 onward)
+```
+
+Create modules when behavior arrives. M1 needs configuration, HTTP schemas, one MOTIS adapter and a fixed verified generation; it does not create M2's reference store or activation runtime. Reviewed PoC logic may be extracted with regression checks; scripts with side effects are not imported.
+
+```mermaid
+flowchart TD
+  http[HTTP schemas and routes] --> core[Core generation time and identity]
+  http --> motis[MOTIS client]
+  http --> reference[Read-only SQLite - M2]
+  motis --> core
+  reference --> core
+  build[Feed CLI process] --> artifacts[Immutable graph SQLite and manifest]
+  artifacts --> core
+```
+
+`core` does not import FastAPI. Do not add ports or use-case classes with only one implementation; add a protocol when a second implementation requires it. One package exposes an API process and a separate feed CLI. Use FastAPI [lifespan](https://fastapi.tiangolo.com/advanced/events/) for the shared asynchronous HTTP client; builders never run on passenger requests.
+
+## 4. UML class design
+
+### Request generation and engine client
+
+```mermaid
+classDiagram
+  class JourneyRouter {
+    +plan(request) JourneyResponse
+  }
+  class MotisClient {
+    +plan(query, generation) JourneyResult
+  }
+  class Generation {
+    +id
+    +coverage
+    +engineEndpoint
+    +referenceFile
+    +manifest
+  }
+  class APIState {
+    +generation Generation
+    +reload(candidate)
+  }
+  JourneyRouter --> APIState : captures generation once
+  JourneyRouter --> MotisClient
+  MotisClient --> Generation
+  APIState --> Generation : immutable reference
+```
+
+A request captures one immutable generation object before any await. The engine client uses that object's endpoint throughout. Local reload constructs and verifies a new object, then replaces the process reference; M1 has no reload behavior and M2 adds it locally. In Fargate the reference is fixed for the task lifetime: API, SQLite and localhost MOTIS all use the image's generation. ECS replaces complete tasks. No lease registry or explicit release protocol is required for one worker and deadline-bounded requests.
+
+### Domain and identity
+
+```mermaid
+classDiagram
+  class Generation {
+    +id
+    +feedHash
+    +mappingHash
+    +osmHash
+    +engineDigest
+    +coverage
+  }
+  class Stop {
+    +id
+    +sourceStopId
+    +publicCode
+    +parentId
+    +coordinates
+  }
+  class Route {
+    +id
+    +sourceRouteId
+    +operatorId
+    +shortName
+    +mode
+  }
+  class RoutePattern {
+    +id
+    +headsign
+    +directionId
+  }
+  class PatternCall {
+    +sequence
+    +pickupRule
+    +dropoffRule
+  }
+  class TripOccurrence {
+    +reference
+    +sourceTripId
+    +serviceDate
+    +generationId
+  }
+  class StopCall {
+    +sequence
+    +scheduledArrival
+    +scheduledDeparture
+    +timingState
+  }
+  class Journey {
+    +responseLocalId
+    +durationSeconds
+    +walkingSeconds
+    +transfers
+  }
+  class Leg {
+    +kind
+    +from
+    +to
+    +scheduledDeparture
+    +scheduledArrival
+    +geometry
+  }
+  Generation "1" --> "*" Stop
+  Generation "1" --> "*" Route
+  Route "1" --> "*" RoutePattern
+  RoutePattern "1" *-- "*" PatternCall
+  PatternCall "*" --> "1" Stop
+  RoutePattern "1" --> "*" TripOccurrence
+  TripOccurrence "1" *-- "*" StopCall
+  StopCall "*" --> "1" Stop
+  Journey "1" *-- "1..*" Leg
+  Leg "*" --> "0..1" TripOccurrence
+```
+
+Pattern identity includes ordered stops and pickup/drop-off semantics, not just route/direction. Repeated stops are distinct calls. A journey ID identifies an alternative in one response, not a durable server lookup token.
+
+## 5. Data contract and time model
+
+| Type | Required semantics |
 | --- | --- |
-| 2–4 vCPU / 8 GB in Israel — AWS `t4g.large` in `il-central-1`, or a Kamatera Israel instance | ~$25–50 |
-| 100 GB SSD | ~$5–12 |
-| Elastic/static IP (registered with MOT) | ~$0–4 |
-| Object storage — R2 or S3, feeds plus a compacted archive | ~$0–6 |
-| Postgres — a container on the same box | $0 |
-| Cloudflare — free plan, no bandwidth metering | $0 |
-| Telemetry — Grafana Cloud free tier | $0 |
-| **Total** | **~$35–75/month** |
+| Location | Discriminated coordinate, stop reference or selected place reference; no raw text |
+| GenerationId | Content identity of feed/mapping/OSM/config/schema/engine inputs; hash excludes its own ID and nondeterministic timestamps |
+| Stop/Route IDs | Namespaced full source IDs if M2 proves stability across daily feeds; no daily expiry; 404 when absent |
+| Pattern IDs | Content identity of ordered calls and restrictions; remains generation-attributed |
+| TripRef | Full source trip ID + service date; retain engine occurrence identity and frequency start time when present; generation remains metadata |
+| CallKey | Trip occurrence + sequence; stop ID alone cannot identify loop calls |
+| PlaceCandidate | Kind, label/language, locality, precision, coordinates, reference and attribution |
+| JourneyQuery | Two locations, exactly one time mode, modes, per-leg walk bound, result count |
+| TransitLeg | Scheduled instants, operator/route/headsign, board/alight calls, trip reference, nullable predictions/delay, geometry state |
+| WalkLeg | Duration/distance, endpoints and geometry; no live claim |
+| Metadata | Request ID, generatedAt, mode, generation, coverage, freshness, capabilities, attribution, ranking policy where relevant |
+| Page | Limit and unsigned encoded nextCursor with generation, query digest and exact sort key; null when exhausted |
 
-Graviton/ARM instances price roughly 10–20 % below x86 equivalents at comparable performance, and MOTIS runs fine on ARM, as do both candidate API runtimes — take the discount.
+Keep raw GTFS times and service dates. Conversion must follow [GTFS time semantics](https://gtfs.org/documentation/schedule/reference/#field-types), including the service-day origin and daylight-saving transitions; do not simply attach a timezone to a naive clock. Cross-check engine timestamps with fixtures for >24-hour calls, spring gaps and autumn overlaps. Departures inspect all intersecting service dates, including the preceding date. TripIdToDate remains paired with the feed; normalized key overlap is not dated-trip proof.
 
-### Tier 2 — only once someone's commute depends on it
+If frequency-based services occur, distinguish exact generated departures from frequency estimates. Unsupported feed constructs require candidate rejection or an explicit reviewed coverage limitation, never invented exact times. Transit call nulls stay explicit unless an engine estimate is documented and labelled.
 
-Split the roles: a separate ingest/build host, managed Postgres, a staging environment, real alerting, maybe a second API instance behind the existing Cloudflare layer. Call it $150–400/month. This is a funded-project shape, and nothing above needs redesigning to get there — the ingester is already a separate process and storage is already content-addressed.
+Public references retain complete source keys and are bounded typed inputs. The M2 stability check decides whether namespaced stop/route source IDs are safe; if it fails, record a revised scheme before exposing reference endpoints. Trip references preserve the full source trip ID and service date; never infer the service date from boarding time alone.
 
-### The cost traps that create $300 bills
+Cursors are unsigned encoded (generation, query digest, stable sort key), validated as untrusted input. A generation/query mismatch returns `422 INVALID_CURSOR` and asks the client to restart the listing. IDs grant no authorization and need no signing keys. A source ID absent from the active feed returns 404; do not silently redirect a missing dated trip to a similar trip. Generation attribution stays in metadata.
 
-Every one of these is a default somebody accepts without noticing:
+## 6. HTTP contract and examples
 
-| Trap | Typical cost | Avoid it by |
-| --- | --- | --- |
-| **NAT Gateway** | ~$35/mo plus per-GB | put the instance in a public subnet with a static IP; you need inbound anyway |
-| **Load balancer** | ~$18–25/mo | Cloudflare in front of the box's IP; Caddy terminates TLS |
-| **Managed Kubernetes** | ~$70/mo for the control plane alone | Docker Compose and systemd |
-| **Managed Postgres, early** | ~$25–35/mo | a container on the same box until Phase 4 analytics justify it |
-| **Elasticsearch for geocoding** | forces a bigger instance | MOTIS geocoding plus the in-process stop index |
-| **Keeping raw SIRI forever** | 3–8 GB/day, compounding | 7-day raw window, then daily Parquet rollup |
-| **Serving map tiles from origin** | egress, the one bill that scales | PMTiles on R2 (zero egress) behind Cloudflare |
-| **Multi-AZ by reflex** | doubles compute, adds per-GB transfer | one AZ; this is a journey planner, not a bank |
-
-The decision that actually controls the bill is *one box or many*, not which cloud.
-
-### Why "free to use" is sustainable
-
-The expensive artifact — the routing graph — is built once and shared by every user. Cost is therefore almost flat with respect to users:
-
-- 10,000 daily users × 5 requests ≈ 50k requests/day ≈ **0.6 req/s average**, with commute peaks perhaps 20–30 req/s. One 8 GB box absorbs that without noticing.
-- A journey response is ~10–20 KB of JSON, ~3–5 KB compressed. 50k requests/day is ~7.5 GB/month of egress, most of which never reaches the origin because Cloudflare serves it.
-
-So the running cost is roughly **$40–70/month whether the service has 100 users or 50,000**. The only thing that genuinely scales with popularity is map tiles, and PMTiles on R2 removes that bill by construction.
-
-That is the whole economic argument for the product being free: at this scale, free-to-use costs about as much as a phone plan.
-
-### Getting to actually zero
-
-1. **Sponsorship.** GitHub Sponsors or Ko-fi covering $50/month is a realistic ask for a transit app people use daily, and it keeps the project independent.
-2. **Credit programmes.** AWS Activate and the Open Data programme, Google Cloud credits, Microsoft for Startups, Cloudflare's open-source plans. Oracle's Always Free tier is worth an attempt but not a plan — it was cut from 4 OCPU/24 GB to 2 OCPU/12 GB in 2026, and Ampere A1 capacity is frequently unavailable. Treat it as a lottery ticket.
-3. **Partner with Hasadna, the Public Knowledge Workshop.** They already run Israeli transit infrastructure as a nonprofit, already hold MOT access, and already pay for hosting. This is the highest-leverage option on the list because it answers the hosting question and the SIRI access question at the same time. Worth a conversation regardless of the outcome.
-4. **Never depend on a proprietary managed service**, so that moving to whoever is currently free is always a deployment change and never a rewrite. The design already holds this line.
-
-### If the ingester must live apart
-
-Should MOT's answer make an Israeli IP mandatory while cheaper compute lives elsewhere, the split is already designed for: a €4–15/month Israeli VPS runs only the ingester and publishes to Redis and object storage; the API and MOTIS run wherever is cheapest. The cost is roughly 55–70 ms of extra latency for Israeli users — survivable for journey planning, noticeable in autocomplete. Prefer a single Israeli box when the prices are this close.
-
-### Provider independence
-
-Nothing here requires a specific cloud. GCP `me-west1` and Azure Israel Central substitute directly, object storage is used through the S3 API only, and the whole stack is containers. MOT's own hosts happen to sit in Google's Israel range, so if whitelisting turns out to be easier from that network, moving is a deployment decision, not a redesign.
-
-## 7. API surface, v1
-
-Contract-first. The OpenAPI document lives in the repo and is the source of truth; handlers and clients are generated from it.
-
-```
-GET  /v1/places?q=&lang=he|en&near=lat,lon&limit=
-GET  /v1/journeys?from=&to=&departAt=|arriveBy=&modes=&maxWalkMinutes=&results=
-GET  /v1/journeys/{token}          re-resolve a saved plan against current realtime
-GET  /v1/stops?bbox=|near=&radius=
-GET  /v1/stops/{stopCode}/departures?limit=&horizonMinutes=
-GET  /v1/trips/{tripId}            full stop sequence with live progress
-GET  /v1/vehicles?bbox=            live positions
-GET  /v1/alerts?routeId=&stopId=&active=
-GET  /v1/status                    public feed health — see §8
-GET  /healthz  /readyz  /metrics   operational, not public
-```
-
-Conventions that keep the client simple and the API honest:
-
-- `from` / `to` accept `lat,lon`, `stop:{code}`, or `place:{id}` from `/v1/places`. Never a raw string — geocoding is its own call, so it can be cached and debounced independently.
-- Every time is ISO-8601 with an explicit offset. Israel switches DST; a naive local time in a transit API is a bug waiting for October.
-- Every transit leg carries `scheduled`, `expected`, `delaySeconds` and `realtimeState`. `expected` is never silently equal to `scheduled` — if there is no live data, the state says `scheduled` and the client renders it differently.
-- Errors are typed and actionable: `NO_ROUTE_FOUND`, `PLACE_NOT_FOUND`, `FEED_UNAVAILABLE`, `OUT_OF_SERVICE_AREA` — with enough context to show a real message.
-- Versioned under `/v1`. Additive changes only; a breaking change means `/v2` running alongside.
-
-**Caching**
-
-| Endpoint | Edge | Server |
-| --- | --- | --- |
-| `/v1/places` | 1 h, vary on query + lang | LRU 50k entries |
-| `/v1/stops`, `/v1/trips` | 5 min | rebuilt on feed swap |
-| `/v1/stops/{id}/departures` | 10 s | from the live snapshot |
-| `/v1/journeys` | no edge cache | 30 s LRU keyed to the departure minute |
-| `/v1/alerts` | 60 s | from the live snapshot |
-
----
-
-## 8. Operations
-
-### Health as a product surface
-
-`/v1/status` is public, because a transit service people rely on to physically get somewhere should be honest about its own state:
+See the [complete endpoint inventory](api-prd.md#5-proposed-http-surface). Examples are synthetic illustrations, not verified transit observations. D3 POST planning is accepted; M1 exposes only coordinate/depart-at inputs.
 
 ```json
 {
-  "gtfs":    { "feedHash": "a1b2…", "builtAt": "2026-08-28T03:41Z", "ageHours": 14, "state": "healthy" },
-  "realtime":{ "lastSnapshot": "2026-08-28T18:09:12Z", "lagSeconds": 8,
-               "tripsTotal": 11482, "matched": 0.963, "state": "healthy" },
-  "alerts":  { "lastFetch": "2026-08-28T18:05:00Z", "active": 37, "state": "healthy" },
-  "routing": { "graphFeedHash": "a1b2…", "p95Ms": 180, "state": "healthy" }
+  "from": {"kind": "coordinate", "latitude": 32.0757, "longitude": 34.7748},
+  "to": {"kind": "coordinate", "latitude": 32.7775, "longitude": 35.0219},
+  "departAt": "2026-09-24T08:00:00+03:00",
+  "modes": ["bus", "rail", "light_rail"],
+  "maxWalkMinutesPerLeg": 15,
+  "results": 3,
+  "lang": "he"
 }
 ```
 
-### SLIs worth paging on
+`arriveBy` replaces `departAt`; neither is silently filled. Reject incompatible location fields, invalid/nonfinite coordinates, unsupported constraints and dates outside coverage before planning. Coverage is the actual graph/timetable intersection, not the nominal “60-day” filename.
 
-| Signal | Warn | Page |
+Success is `data: {outcome: routes_found, journeys: [...]}` or `data: {outcome: no_route, journeys: []}`. Each alternative has ordered legs, geometry state, totals and applied constraints. Reject malformed engine alternatives; if none can be trusted, return a dependency/data error. Only a successfully executed empty search becomes no-route.
+
+Shared metadata/timing fragment (not a complete response schema):
+
+```json
+{
+  "timing": {
+    "scheduledDeparture": "2026-09-24T08:12:00+03:00",
+    "scheduledArrival": "2026-09-24T08:32:00+03:00",
+    "expectedDeparture": null,
+    "expectedArrival": null,
+    "delaySeconds": null,
+    "timingState": "scheduled",
+    "observedAt": null
+  },
+  "alerts": null,
+  "meta": {
+    "requestId": "example-request",
+    "generationId": "example-generation",
+    "generatedAt": "2026-09-24T05:00:00Z",
+    "mode": "fixture",
+    "coverage": {"from": "2026-09-24T00:00:00+03:00", "until": "2026-09-26T00:00:00+03:00"},
+    "freshness": "current",
+    "capabilities": {"realtime": "not_enabled", "alerts": "not_enabled"},
+    "attribution": ["synthetic-fixture"]
+  }
+}
+```
+
+Coverage and departure windows are half-open `[from, until)`; every required leg must be covered. Trip calls expose serviceDate separately from calendar date. Response timestamps have explicit offsets. GeoJSON uses longitude/latitude order; query coordinates have named fields.
+
+Search returns `matchedTypes`, `unavailableTypes` and `partial` when only some categories work. If all requested categories are down, return 503; valid zero matches return 200. Default language is Hebrew, English supported; expose actual label language and original name when translation is absent.
+
+Pages sort by relevance/distance then ID; departures sort by instant, occurrence and sequence. Cursors bind generation and the full query. Route detail has a bounded summary; pattern pages return complete ordered patterns. Candidate validation checks excessive call counts/payload size rather than letting malformed trips create unbounded responses.
+
+Status serves cached in-process health and can return 200 while reporting routing unavailable. `/readyz` returns 503 in that condition. Use RFC 9457 problems with stable `urn:opentransit:problem:*` types:
+
+```json
+{
+  "type": "urn:opentransit:problem:invalid-cursor",
+  "title": "Listing cursor changed",
+  "status": 422,
+  "code": "INVALID_CURSOR",
+  "detail": "Restart the listing using the active generation.",
+  "requestId": "example-request",
+  "activeGenerationId": "example-new-generation"
+}
+```
+
+Map framework validation errors to safe field paths/reasons, removing rejected inputs. Stable codes distinguish outside service window/area, unsupported constraints, expired feed, unavailable/timed-out engine, invalid cursor and overload. Follow the PRD status table; failures never become empty business results.
+
+## 7. UML request sequences
+
+### Journey planning — US01/US05
+
+```mermaid
+sequenceDiagram
+  actor Client
+  participant HTTP as Journey router
+  participant State as API state
+  participant Engine as Pinned MOTIS
+  Client->>HTTP: POST coordinates and explicit time
+  HTTP->>HTTP: Validate input
+  HTTP->>State: capture immutable generation G
+  HTTP->>HTTP: Verify coverage and deadline
+  HTTP->>Engine: plan using G endpoint
+  alt Timeout or unavailable engine
+    Engine--xHTTP: dependency failure
+    HTTP-->>Client: typed 504 or 503
+  else Successful engine result
+    Engine-->>HTTP: scheduled candidates
+    HTTP->>HTTP: Normalize and verify invariants
+    HTTP-->>Client: journeys or valid no-route with G metadata
+  end
+```
+
+One request uses one generation throughout awaits. Disconnect cancels downstream work where supported. Reference resolution (M2/M3) uses the captured reference store and never performs off-host geocoding.
+
+### Search → plan — US02/US01
+
+```mermaid
+sequenceDiagram
+  actor Client
+  participant Search as Search API
+  participant Index as Local generation sources
+  participant Plan as Journey API
+  Client->>Search: query and optional bias
+  Search->>Index: search pinned generation
+  Index-->>Search: candidates and availability
+  Search-->>Client: source references or coordinates
+  Client->>Plan: selected location and explicit time
+  alt Source reference remains present
+    Plan-->>Client: scheduled alternatives from current generation
+  else Reference absent
+    Plan-->>Client: 404 reference not found
+    Client->>Search: resolve destination again
+  end
+```
+
+## 8. Feed builder and atomic activation
+
+Each immutable manifest records normalized reference/index artifacts, engine graph, source hashes/acquisition times, normalization/schema versions, engine digest, configuration digest, measured coverage, attribution and validation report references. Identity depends on all interpretation-affecting inputs. Stage into a new directory, verify hashes and sizes, then mark ready.
+
+### Production: Fargate task replacement
+
+Build/validate outside serving, then package a complete generation into a private ECR image. The task definition pins runtime and generation image digests. Start API and MOTIS only after generation files are available on local task storage; require hashes, coverage, reference/graph agreement and routing probes before readiness. Use an image containing the MOTIS runtime and artifacts or a data-initialization container with completion dependencies and a shared task-local volume; verify the chosen layout in H-0. S3 is not required. Never rely on task disk to retain source evidence.
+
+Publish each refreshed generation as a new image and ECS revision. Overlap healthy old/new tasks, send traffic only to ready targets, and drain old requests before stopping old tasks. Configure/test failed-deployment rollback; a bad candidate must not remove the valid old revision. During rollout requests may receive either generation, but every response uses one complete generation. No cross-task `current` symlink or reload signal is used. Keep previous/evidence-pinned images; coverage/freshness checks still precede rollback. Count complete old/new serving tasks and edge components under the 8 GiB ceiling. H-1/M7 validate this behavior; the [hosting plan](next-steps.md#hosting-plan) defines acceptance.
+
+### Local Compose: pointer and reload
+
+The following protocol and diagrams are the local M2 workflow, not production ECS control:
+
+1. Download GTFS/mapping into staging and validate archives. Keep source timestamps separate from acquisition. Upstream files may change independently: verify pairing/service-date coherence and retry or reject incoherent pairs.
+2. Parse required GTFS groups plus mapping/translations. Check references, ranges, ambiguous stop codes, sequences and date-aware pairing. Quarantine only under documented rules; never silently remove an operator.
+3. Build indexes and MOTIS artifacts from pinned config/OSM. Record normalization without changing raw inputs.
+4. Probe routing, departures, coverage and search against the candidate. Require reviewed semantic results, not merely HTTP 200.
+5. Start the idle blue/green MOTIS at a private endpoint. Load its SQLite and manifest into a new immutable generation object; reject inconsistent artifacts or inadequate serving headroom.
+6. Serialize operator activation, atomically rename the `current` symlink to the verified generation, then signal the single API worker to reload. Reload verifies and replaces the complete generation object; existing requests keep their old object.
+7. Stop the old engine only after the API acknowledges reload and a grace period of at least ten request deadlines. Retain previous/evidence-pinned artifacts; pruning is a separate manual operation.
+
+```mermaid
+stateDiagram-v2
+  [*] --> Downloading
+  Downloading --> Validating
+  Validating --> Building
+  Building --> Candidate
+  Candidate --> Ready: probes and capacity pass
+  Ready --> Active: atomic pointer and reload
+  Active --> Draining: replacement acknowledged
+  Draining --> Retained: grace period elapsed
+  Retained --> Candidate: rollback validation
+  Downloading --> Rejected: fetch failure
+  Validating --> Rejected: integrity failure
+  Building --> Rejected: build failure
+  Candidate --> Rejected: probe failure
+  Ready --> Rejected: insufficient headroom
+```
+
+```mermaid
+sequenceDiagram
+  actor Operator
+  participant Builder
+  participant Candidate as Idle MOTIS
+  participant Pointer as Current symlink
+  participant API as Single API worker
+  participant Old as Old MOTIS
+  Operator->>Builder: prepare candidate
+  Builder->>Candidate: start and probe
+  Builder->>Pointer: atomic rename to verified generation
+  Builder->>API: private reload signal
+  API->>API: verify then replace immutable generation
+  API-->>Builder: acknowledge generation
+  Builder->>Old: stop after grace period
+```
+
+No custom recovery journal, Unix activation socket or lease registry. Operator access is through host permissions. Restart reads the atomic pointer and verifies that generation; a crash between rename and signal may leave the live process on the old complete generation until restart/reload. Keep both engines running until acknowledgement; failed reload keeps the old object and restores the pointer before reporting failure. M7 tests these failures under traffic. Fsync durability and signal mechanics must use the deployment filesystem's supported primitives; do not claim crash proof from the diagram.
+
+One worker is required for this design. Multiple workers need an explicit acknowledgement protocol and separate tests before adoption. Failed rollback leaves readiness false if neither generation is valid. Background probes carry generation IDs so late old-engine results cannot change new-generation health.
+
+## 9. Freshness, readiness and degradation
+
+Freshness uses **last successful upstream validation**, not merely age of unchanged bytes. Identical downloaded content can renew source validation without rebuilding. Coverage and freshness are separate. Source modification time is provenance, not proof of refresh success.
+
+Proposed policy: warn after 30 hours without successful source validation; stale after 48 hours; serve still-covered schedules with warnings for at most seven days since validation. At seven days or outside coverage, reject schedule-dependent requests. These defaults need review; no silent production override.
+
+| Condition | Readiness / behavior | Recovery |
 | --- | --- | --- |
-| Realtime snapshot age | > 90 s | > 5 min |
-| SIRI↔GTFS match rate | < 90 % | < 70 % |
-| GTFS feed age | > 30 h | > 48 h |
-| `/v1/journeys` p95 | > 500 ms | > 1.5 s |
-| Routing error rate | > 0.5 % | > 2 % |
-| MOT 401/403 responses | any | sustained — the key may be revoked |
+| No valid generation | Readiness 503; status works; schedule endpoints 503 | Validate/load a complete generation |
+| Fixture mode when introduced | Readiness 200 with fixture mode, no production claim | Explicit production configuration |
+| MOTIS unavailable | Core readiness 503; planning/departures/trips fail; local references may still work | Bounded background probes/restart |
+| Address dependency down | Core readiness can be 200; partial search or 503 for address-only request | Repair source; v1 release criteria still unmet |
+| Failed refresh, active data valid | Keep ready with age/stale warnings as applicable | Backoff/retry; preserve active data |
+| Coverage expired or hard freshness limit reached | Core readiness 503; typed schedule errors | Activate valid generation |
+| Live capabilities disabled | No v1 readiness failure; predictions/alerts null | Deferred feature work |
+| Candidate exceeds capacity | Reject activation; old generation unchanged | Revisit artifact/deployment strategy |
 
-That last row matters more than it looks. The key is a relationship with a government office, not a credential you can reissue yourself.
+Background tasks probe local dependencies with deadlines and maintain an in-process health snapshot. Readiness/status never download data. Liveness checks the process, not timetable usability. Use bounded timeouts initially; add a circuit breaker only after measurements justify it (R5). Status 200 describes health and must not be used as a readiness probe.
 
-### Degradation ladder
+## 10. Performance, concurrency and caching
 
-The service is designed to lose capability in defined steps rather than fail:
+Initial proposal: one Uvicorn worker, asynchronous keepalive HTTP to MOTIS, bounded admission, immutable indexes. CPU-heavy parsing/building stays outside the API. Never block async handlers with synchronous network clients. Measure before claiming Python or worker counts meet budgets.
 
-1. Realtime stale → serve schedule, mark every leg `scheduled`, show it in `/v1/status`.
-2. Alerts feed down → serve journeys without alerts, flag `alerts: degraded`.
-3. Photon down → transit-stop search still works from the in-process index; street addresses return a typed error.
-4. Redis down → each API instance serves its own last snapshot.
-5. Postgres down → no user-visible impact at all.
-6. New GTFS invalid → keep the previous graph, page the operator.
-
-Only "MOTIS down" is a real outage, which is precisely why it lives on the same box with nothing between it and the API.
-
----
-
-## 9. Working without a key
-
-Contributors will not have a MOT SIRI key, and that has to be a designed-for case rather than a wall:
-
-- `Transit.Realtime` defines `IRealtimeSource`, with `MotSiriSource` and `ReplaySource`.
-- The repo ships a fixture bundle: a small GTFS extract, `TripIdToDate` rows, a few hours of recorded SIRI snapshots and a sample alerts package.
-- `docker compose up` runs the whole stack against fixtures, with a clock that can be pinned to the fixture window, so tests are deterministic.
-- Integration tests run entirely on fixtures in CI. Only a nightly job in the deployed environment touches live MOT.
-
-This is also the honest hedge against kill criterion 3: if the key never arrives, the replay-based development environment is still the thing that lets the project keep moving while the decision is made.
-
----
-
-## 10. Build order
-
-Each milestone ends with something callable over HTTP. No milestone ends with "a library that will be useful later".
-
-| # | Milestone | Done when |
+| Control | Proposed starting point | Purpose |
 | --- | --- | --- |
-| M1 | Skeleton | `docker compose up` serves `/healthz`, OpenAPI published, CI green |
-| M2 | GTFS ingest | nightly job downloads, validates, versions to S3; `/v1/stops` works |
-| M3 | Routing | MOTIS wired; `/v1/journeys` returns schedule-only itineraries |
-| M4 | Search | `/v1/places` two-tier, Hebrew and English, p95 < 40 ms |
-| M5 | Realtime | snapshot swap live; journeys and departures carry delays; `/v1/vehicles` |
-| M6 | Alerts | `/v1/alerts` and per-journey attachment |
-| M7 | Hardening | atomic graph swap, degradation ladder, `/v1/status`, load test at 50 rps |
-| M8 | Deploy | running in the Israel region on the registered IP, public docs, status page |
+| Journey deadline | 1.5 seconds end-to-end at server | Bound tails, separate from p95 target |
+| MOTIS planning timeout | <=1.2 seconds and remaining deadline | Reserve normalization/response budget |
+| Search/departure deadlines | 300 ms dependency; 500 ms endpoint | Bounded failure; p95 target stays 40 ms |
+| Concurrent journeys | 16, no unbounded queue | Protect engine; overload returns 503 |
+| Request body | 16 KiB maximum | Small typed query, no uploads |
+| Client rate quota (M7) | Simple in-app per-IP limiter; starting 60/minute, burst 20 | Tune from evidence including carrier NAT |
+| Journey subquota | Deferred until traffic measurements justify it | Avoid premature policy machinery |
+| Metrics labels | Route template, bounded code/mode | Avoid sensitive/high-cardinality labels |
 
-**Phase 1 is complete when** a plain `curl` from a phone tethered in Tel Aviv plans Dizengoff Center → Technion, with live delays, in under 400 ms p95 — repeatedly, on a weekday evening, against real data.
+M7 quotas return 429 + Retry-After; capacity saturation returns 503. A shared bounded engine-client pool also limits combined search/departure load. Pool sizes are measured in M7. No automatic expensive retries near deadline. Operator load probes have a private explicit policy so quotas do not falsify capacity measurements; separately test the public quota path.
 
-Only then does a client get written.
+Start without a journey cache. Rounding departure time can change reachability. If profiling justifies one, key by exact normalized query, generation, ranking and language, with byte/time bounds. Never reuse another generation's answer. Search caching is also deferred until profiling shows a need.
 
----
+Edge policy: no-store for journeys, search, nearby queries and departures. Reference resources without passenger input may later use generation-scoped ETags. Status is no-store or very short-lived with explicit age. Never persist raw query-derived cache keys in logs.
 
-## 11. Open decisions
+### Full-stack load protocol
 
-Things this document deliberately does not settle, because the answer depends on Phase 0:
+Proposed M7 benchmark: 50 requests/second for 15 minutes, 30% journeys / 30% search / 25% departures / 15% references/status; additionally a 30-minute soak and activation under load. Record offered/achieved throughput, concurrency, rejections, errors, latency distributions, input/corpus hashes, CPU and peak memory. Report each endpoint separately, cold/warm behavior, and disable caches for the primary routing baseline.
 
-1. **Primary feed:** 60-day plus TripIdToDate (accepted ADR 0005). The 10-day feed is comparison only; no dual-feed fallback.
-2. **Whether MOTIS or OTP** survives the routing bake-off.
-3. **Whether the ingester can run in-region** or needs a separate whitelisted host — MOT's answer decides the deployment shape.
-4. **Poll rate**: `calls` detail every 30 s is the assumption; if the payload is much larger than estimated, drop to 60 s and use `normal` for positions.
-5. **Whether Photon is needed at all** for v1, if transit stops plus a small POI set cover the real query distribution.
-6. **The API language** — .NET or Python (§3). This one does not depend on Phase 0 at all; it depends on which language the author writes faster. It is listed here so that it is recorded as a deliberate choice rather than inherited from a first draft, and it should be settled before M1, because the skeleton milestone is the cheapest possible place to change the answer.
+Include long routes, ambiguous queries and no-route cases. Proposed unexpected 5xx rate <0.5% at target load; show overload/timeouts separately and include them in total failure counts. An external regional probe measures <400 ms deployed p95 separately from <350 ms API duration; record network/TLS boundaries and repeat weekday evenings. No daily-user capacity estimate follows from an engine benchmark.
+
+Historical MOTIS p95 162.9 ms and roughly 941 MB load peak are engine-only evidence. Graph replacement must fit the aggregate serving cap with all components; off-host building alone does not solve serving overlap. No current cloud price or hosting purchase is assumed.
+
+## 11. Security, privacy and operations
+
+- HTTPS at ingress; private MOTIS, artifacts and activation control; expose private metrics only if a collector needs them. Production operator actions use least-privilege AWS IAM; local reload uses host authorization, not passenger credentials.
+- No user-supplied source URL/path/engine endpoint. Validate source references and bounds; use structured HTTP query encoding.
+- Remove query strings, bodies, raw path references and rejected inputs from proxy/app logs and traces. Log route template, generated request ID, safe code, generation and duration. Validate/replace supplied request IDs.
+- No accounts, durable location history or behavioral analytics. M7 rate-limit counters are ephemeral, bounded and expire; routine logs retain seven days. Review any proxy/host raw-IP logging separately; do not claim anonymity while retaining it.
+- Anonymous quotas are coarse abuse controls; shared carrier NAT may affect many users. Tune from aggregate evidence; introduce API keys only if a later distribution policy requires them.
+- Explicit CORS origins and trusted proxies; CORS does not authenticate callers. Validate configuration at startup. Secrets remain outside Git; static v1 needs no live MOT key.
+- API/engine mount artifacts read-only, run non-root where supported. Builder has separate write access and enforces archive traversal, expansion and file-count limits.
+- Safe logs initially cover failures and durations; add `/metrics` in M7 only when a collector needs it, with bounded labels. Alert on expiry, repeated refresh failures and unexpected memory growth.
+- Cleanup protects active, draining, rollback and evidence-pinned generations. Require explicit dry-run selection before deletion. Existing ignored PoC feeds/artifacts are never deleted as incidental setup.
+
+### Deployment, backup and recovery
+
+Selected Fargate/ECR hosting, optional S3, deferred static SIRI egress and deployment checks: [hosting plan](next-steps.md#hosting-plan). Region, ingress and monthly cost are not yet verified.
+
+M8 packages the API and pinned engine as versioned containers, with a separate builder profile. Promote the same tested artifacts into deployment; startup verifies schema/image compatibility before readiness. API-code rollback and data-generation rollback are separate operations: select a compatible application image and manifest together. Stop accepting new traffic, drain within the configured request deadline, then terminate; abrupt shutdown must not corrupt immutable artifacts.
+
+Back up the committed manifest, provenance, configuration templates and reproducible artifact inputs outside the serving disk using a cold-path mechanism. Keep private credentials in a separate protected store. Proposed recovery objectives for review: restore service within one hour after a recoverable host/disk failure, and lose no committed generation manifest (copy it on activation); large rebuildable artifacts may use a daily backup cadence. Run a restore drill before release and report actual recovery time. If the target cannot be met, revise topology or the target explicitly; a single host still cannot promise uninterrupted operation.
+
+Operator runbooks must cover expired feed, failed build, disk pressure, activation failure, engine outage, application rollback and lost host. No destructive cleanup command is part of this design deliverable.
+
+## 12. OpenAPI and compatibility workflow
+
+M1 uses FastAPI-generated docs/schema for its actual working endpoints. Mark the local preview contract provisional. M7 introduces the checked-in compatibility snapshot and CI comparison against the exported schema before v1 publication. Update both in one contract change. This is a generated-and-reviewed contract, not two independently maintained sources or a circular handler generator.
+
+Planning examples are not production OpenAPI. Add domain schemas before their milestone handlers are released; include success, empty, fixture, scheduled, stale, no-route and problem examples. Contract tests validate real responses and flag incompatible type/required-field/status changes.
+
+Reserve timing states at initial publication: scheduled, predicted, stale, cancelled, unknown. V1 valid timetable calls emit scheduled. Capability states: not_enabled, available, degraded, unavailable. Disabled is intentional absence; unavailable is failure of an enabled feature. Optional additive fields can remain in v1; changes in enum meaning, default ranking, identity lifetime or required fields need explicit compatibility/version review.
+
+## 13. Future live integration
+
+Later introduce a separate single-owner ingester with source adapters, date-aware reconciliation and immutable snapshots. Only it holds MOT credentials. Poll rates follow verified source terms, not assumptions in earlier proposals.
+
+```mermaid
+classDiagram
+  class RealtimeSource {
+    <<interface>>
+    +fetch() ObservationBatch
+  }
+  class MotSiriSource
+  class ReplaySource
+  class TripMatcher {
+    +match(observations, generation) MatchReport
+  }
+  class RealtimeSnapshot {
+    +generationId
+    +observedAt
+    +receivedAt
+    +coverage
+    +matchedCalls
+  }
+  class JourneyEnricher {
+    +enrich(journey, snapshot) Journey
+  }
+  MotSiriSource ..|> RealtimeSource
+  ReplaySource ..|> RealtimeSource
+  RealtimeSource --> TripMatcher
+  TripMatcher --> RealtimeSnapshot
+  JourneyEnricher --> RealtimeSnapshot
+```
+
+Future requests pin a compatible static-generation/realtime/alerts tuple. Never join a mismatched generation by stripped IDs. If no matched snapshot exists after feed activation, serve schedules until a compatible one arrives. Recheck freshness at read time: a stopped ingester must not leave a permanent live claim.
+
+Keep source observedAt, receivedAt and publishedAt distinct. Record unmatched, ambiguous, stale and rejected observations with explicit denominators by operator/mode. Match generation, service date, trip identity and call sequence; line/stop similarity through midnight is insufficient.
+
+Alerts have independent freshness and entity/time resolution. Null means unavailable; [] means a successfully fetched source with no applicable messages. Cancellation needs positive evidence. Redis/fan-out is optional when multiple processes actually need it; passenger state remains local.
+
+Realtime-aware routing is more than annotating schedule routes: version the ranking policy and evaluate transfer outcomes before changing defaults. Historical analytics are cold-path work over permitted archived observations; show sample sizes and uncertainty in future confidence outputs.
+
+## 14. Verification and traceability
+
+These checks are planned, not executed by writing this document. H3/H4 still need recorded human approval.
+
+| Scenario | Requirement/story | Milestone/evidence |
+| --- | --- | --- |
+| Minimal startup, prepared graph and engine unavailable | F07, US09/10 | M1 local journey smoke/failure checks; full readiness in M7 |
+| Bounds, conflicting times, safe problems, schema compatibility | F03/F07, US01/05/09, N07/N10 | Input/error checks M1–M4; schema automation M7 |
+| Service dates, >24h, DST, loop calls, boarding restrictions, full IDs | F02–F04, US04/06/07 | M2/M3 deterministic fixtures |
+| Pinned engine planning/arrive-by/constraints, no-route vs timeout | F03, US01/05, N04 | M3 adapter conformance and H3 |
+| Category/language search, duplicates, bias and unknown precision | F01, US02 | M4 accepted-feed corpus and H4 |
+| Old reference/cursor across activation under traffic | F06, US06/11, N05 | M7 concurrent integration test |
+| Kill builder, incoherent pair, activation crash, restart/rollback | F06, US10/11 | M2 validation; M7 fault injection |
+| Expired coverage, freshness limit, disabled alerts, missing geometry | F05, US08 | M3/M7 pinned-clock degradation |
+| Sentinel coordinates/query/secret absent from proxy/app logs | N10, US12 | M1 policy; M7 full-stack inspection |
+| Traffic mix/soak, replacement memory, external probe | N01–N03/N06/N07 | M7/M8 versioned results |
+| Thousands of dated observations and real alerts feed | US13/14 | Deferred M5/M6; replay labelled separately |
+
+Focused local checks accompany the first journey endpoint. CI is added in M7 and uses synthetic/licensed small fixtures, not nationwide downloads or live credentials. Portable contributor fixture packaging remains Phase 5. Opt-in real-data runs pin provenance and preserve previous outputs. Documentation-only changes do not require expensive experiment reruns.
+
+## 15. Build sequence after planning review
+
+Step-level M1–M4 work, hosting services and non-code tasks: [delivery plan](next-steps.md#m1m4-delivery-plan).
+
+| Milestone | Implementation | Completion/dependency |
+| --- | --- | --- |
+| M1 | Minimal FastAPI plus prepared MOTIS graph: coordinate/depart-at request, one normalized scheduled journey, safe errors, generated docs and focused checks | Review plan first; demonstrate a real local HTTP journey; no contributor/CI prerequisite |
+| M2 | Artifact generation/validation, indexes, stops/routes/pattern APIs | Accepted feed; historical PoC preserved |
+| M3 | MOTIS adapter, dated trips, departures and planning | Verify time/constraints; H3 before release |
+| M4 | Local search merging and evidence-backed addresses | Category/language/latency evidence; H4 before release |
+| M7 | Activation/recovery, freshness, privacy/quotas, CI/schema automation and load | Static release/terms requirements complete |
+| M8 | Deployment, docs/status, monitoring/runbook | Scheduled real-data probe; then client |
+| M5/M6 later | Live adapters/matching/snapshots and alerts | Access/terms and real-source evidence |
+| Phase 5 | Contributor onboarding, portable demos, contribution templates and repository/community polish | Useful product already working; not a gate for M1 or v1 |
+
+## 16. Risks and unresolved choices
+
+| Risk/choice | Consequence | Resolution |
+| --- | --- | --- |
+| Pinned MOTIS differs from upstream docs | Unsupported or misinterpreted API behavior | Inspect pinned schema and conformance-test adapter |
+| Weak address search | Destination input unusable | Evaluate normalization/local alternative; explicit scope review if unresolved |
+| Overlap exceeds 8 GiB | Seamless activation not proven | Measure early; revise architecture, not cap just to pass |
+| One API worker misses target | Latency/queue pressure | Profile first; multi-worker generation coordination needs tests |
+| Immediate reference expiry | Saved IDs need re-resolution | Publish lifecycle and coordinates; stable aliases only with evidence |
+| Static usage terms unresolved | Release cannot be accepted | Record authoritative terms/reviewer decision |
+| Proposed quota/freshness/quality defaults | May harm usability or hide weak quality | Review PRD decisions before contract publication |
+| Single host failure | Outage | Document recovery; redundancy follows measured need/budget |
+
+## 17. Technical sources and provenance
+
+- [FastAPI lifespan](https://fastapi.tiangolo.com/advanced/events/) and [dependencies](https://fastapi.tiangolo.com/tutorial/dependencies/) support the composition approach; pin exact versions in M1.
+- [RFC 9457](https://www.rfc-editor.org/rfc/rfc9457.html) defines the problem-details format used here.
+- [MOTIS upstream OpenAPI](https://github.com/motis-project/motis/blob/master/openapi.yaml) is a reference, not proof about the tested image. PoC Compose probes `/api/v6/plan`; use the pinned image's matching schema rather than copying upstream main paths.
+- [ADRs](../poc/docs/adr/), [accepted-feed evidence](../poc/docs/primary-feed-rerun.md) and [access record](data-usage-and-access.md) establish decisions/evidence. No new performance or external-access experiment was run for this design.

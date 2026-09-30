@@ -1,6 +1,6 @@
 # Technical decisions ready for acceptance
 
-D1 is accepted by explicit user instruction on 5 September 2026; other proposals remain pending. Approving the recommended package in the decision-pack README authorizes these choices; it does not claim their implementation or PoC acceptance is complete.
+D1 was accepted September 5; D2 September 25; D3 and design simplifications R1–R5 September 30 ([ADR 0007](../../poc/docs/adr/0007-schedule-api-design.md)). Other proposals remain pending except that the September 25 PRD revision supersedes D5 feasibility-first sequencing. Approving the recommended package in the decision-pack README authorizes these choices; it does not claim their implementation or PoC acceptance is complete.
 
 ## D1: integrated feed baseline
 
@@ -20,15 +20,15 @@ D1 is accepted by explicit user instruction on 5 September 2026; other proposals
 
 ## D2: API runtime
 
-**Proposed decision:** Python for API and ingestion; FastAPI for the first API skeleton. Python is already the developer's selected PoC language. Runtime/framework/dependencies will be pinned to supported versions during setup and checked against their official documentation before installation.
+**Accepted September 25:** Python for API and ingestion; FastAPI for the first API skeleton. See [ADR 0002 amendment](../../poc/docs/adr/0002-python-for-the-poc.md). Python is already the developer's selected PoC language. Runtime/framework/dependencies will be pinned to supported versions during setup and checked against their official documentation before installation.
 
 **Boundary:** this is an implementation choice, not an assertion that every endpoint meets its budget. MOTIS owns routing computation. Measure API overhead, snapshot memory and worker duplication; do not add worker processes without measuring the copies of state they create.
 
-**Alternative:** .NET API plus Python ingestion; choose now if that is the preferred long-term API stack. Do not rewrite the PoC just to match the API language.
+**Alternative considered:** .NET API plus Python ingestion; Python was selected. Do not rewrite the PoC just to match the API language.
 
 ## D3: journey request and privacy
 
-**Proposed decision:** POST `/v1/journeys`, body containing origin, destination and explicit-offset time. No raw place text is implicitly geocoded on the routing path. GET remains suitable for non-sensitive public metadata; search/location-bearing GET requests must have their own log/cache controls.
+**Accepted September 30:** POST `/v1/journeys`, body containing origin, destination and explicit-offset time. No raw place text is implicitly geocoded on the routing path. GET remains suitable for non-sensitive public metadata; search/location-bearing GET requests must have their own log/cache controls.
 
 Example of the intended contract, not an implemented endpoint:
 
@@ -45,26 +45,26 @@ Example of the intended contract, not an implemented endpoint:
 
 The example is illustrative, not a promised itinerary or verified endpoint coordinate. Precise coordinates, request bodies and credentials are omitted from normal logs. Operational metrics contain aggregate dimensions. `NO_ROUTE_FOUND` must be distinct from an unavailable or expired feed.
 
-**Contract work after acceptance:** align PRD/system-design, specify mutually exclusive `departAt`/`arriveBy`, input bounds, per-leg scheduled/expected fields, typed errors and token lifetime. M1 publishes the implemented health contract; planned journey schemas are explicitly marked planned until M3.
+**Contract work after acceptance:** align PRD/system-design, specify mutually exclusive `departAt`/`arriveBy`, input bounds, per-leg scheduled/expected fields, typed errors and reference/cursor behavior. M1 exposes its implemented basic coordinate/depart-at journey and health schemas through generated docs; the remaining journey features stay planned until M3.
 
 ## D4: search and walking
 
-**Proposed decision:** retain MOTIS as the first engine and add the proposed in-process transit-stop index during M4. Evaluate address normalization and a same-host geocoder against the failed categories before adopting another service. Public Nominatim is not the production autocomplete backend.
+**Proposed decision:** retain MOTIS as the first engine and measure SQLite FTS5 against an in-process stop index during M4 (per-generation SQLite accepted in R4). Evaluate address normalization and a same-host geocoder against the failed categories before adopting another service. Public Nominatim is not the production autocomplete backend.
 
 Keep 15-minute and 30-minute walking results as separate labelled profiles for review. No global walking-policy change is needed before the rerun. Nearby/chain searches return a candidate list; location is optional and should not be silently required for unique names. Test intent and boarding access points rather than only geographic centroids.
 
 ## D5: scope and deployment envelope
 
-**Proposed decision:** finish feasibility before M1, develop locally and preserve the 8 GB serving test cap. Do not purchase hosting until MOT confirms IP requirements and the complete stack is measured.
+**Accepted sequencing:** schedule-first development is authorized, with the planning gate satisfied by September 30 authorization. Static validation continues alongside development. **Hosting accepted September 30:** AWS ECS on Fargate, API and MOTIS in one task, prepared generation in a private ECR image, S3 optional. Keep M1 local. Preserve the intended 8 GiB aggregate serving ceiling including task replacement overlap; test a smaller task allocation rather than treating 8 GiB as a minimum. Region, ingress, refresh automation/source retention and total cost await H-0/H-1 evidence. See [ADR 0007 amendment](../../poc/docs/adr/0007-schedule-api-design.md#hosting-amendment--accepted-30-september-2026) and [hosting plan](../next-steps.md#hosting-plan).
 
-M1 deliverables are the application/configuration boundary, health/readiness, served OpenAPI, synthetic/replay mode, one-command development startup, dependency lock, logging and CI. It does not require Redis, an extra geocoder, a cloud server or a product UI.
+M1 delivers a real basic local journey through FastAPI and the prepared MOTIS graph, with minimal configuration, dependency pins, generated docs, safe errors and focused checks. CI/schema automation follows in M7; contributor onboarding and repository polish are Phase 5. It does not require a fixture platform, Redis, an extra geocoder, hosting or product UI.
 
-Graph activation in production must switch a consistent generation of graph, static identifiers, search index and matching state. A passing engine-only test cannot establish memory headroom for two graphs and the surrounding processes.
+Graph activation in production replaces complete ECS task revisions, each pinned to a consistent graph, static identifiers and search index. Readiness/probes precede traffic; old requests drain before old tasks stop. Matching state is added with the deferred live wave. A passing engine-only test cannot establish memory headroom for overlapping tasks and edge components. Future SIRI static egress applies to its collector (normally NAT Gateway + Elastic IP); MOT must confirm provider/geography and binding. No NAT or VM is required for static development merely to prepare for SIRI.
 
 ## Remaining decisions are deliberately scheduled later
 
 - **Realtime quality:** propose freshness/coverage and per-mode match thresholds before POC-3 scoring, with sample counts, denominators and ambiguous-match handling visible. The old 90% warning/70% paging values do not automatically become acceptance thresholds.
 - **Walking default:** decide from regenerated H3 evidence.
 - **Additional geocoder:** decide from the address comparison and measured resource cost.
-- **Hosting/provider and retention:** decide after access/terms answers and measured capacity.
+- **Hosting implementation and retention:** Fargate/ECR selected; resolve region, task resources, HTTPS ingress, durable automation archive and actual cost from measured deployment evidence. S3 remains optional; source evidence must not live only on ephemeral task disk.
 - **Fallback or static-only product:** decide only if direct access remains unavailable; this is not included in the recommended package.

@@ -18,7 +18,7 @@ requirement.
 Python 3.13 for the POC. Decided by the developer, 4 Sep 2026, on the stated grounds that
 it is the faster language for them.
 
-**Scope:** this binds the POC only. The Phase 1 API language remains open.
+**Original scope (September 4):** PoC only. The September 25 amendment below extends the choice to the production API.
 
 ## Consequences
 
@@ -31,3 +31,11 @@ it is the faster language for them.
   API lands on .NET.
 - If the API does land on .NET, the repository carries two toolchains. system-design §140
   already weighed and accepted that seam.
+
+## Accepted amendment — 25 September 2026
+
+The user selected Python for the backend after comparing Python/FastAPI, C#/ASP.NET Core and TypeScript/Node.js. Use **Python with FastAPI** for the Phase 1 API, retaining Python for ingestion. This supersedes the original PoC-only scope and older documents describing the API runtime as undecided.
+
+The choice builds on the existing Python work and the developer's recorded preference. MOTIS continues to perform routing computation. This decision does not establish API performance or approve other pending architecture choices.
+
+During M1, select supported runtime/framework versions, verify compatibility and lock dependencies. The PoC's Python 3.13 pin is historical evidence, not an automatic production pin. Measure API overhead and worker memory as functionality is introduced; no free-threaded runtime or multi-worker topology is implied. Realtime remains deferred under the schedule-first PRD revision.

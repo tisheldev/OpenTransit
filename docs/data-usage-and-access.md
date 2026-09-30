@@ -2,6 +2,8 @@
 
 **Updated:** 21 September 2026. **State:** user confirms MOT email sent today from the correct address; awaiting response. 28-day checkpoint: 19 October 2026. Terms acceptance and credentials remain unrecorded.
 
+**Scope revision — 25 September 2026:** The user chose a schedule-based first release. SIRI and live alerts access are deferred feature requirements and no longer block system development. October 19 remains a follow-up checkpoint for those features. Static dataset terms still need recorded review before release; this decision grants no data-use permissions.
+
 ## Verified application evidence
 
 The [official SIRI receipt form](https://www.gov.il/BlobFolder/generalpage/real_time_information_siri/he/real_time_information_receipt_form.pdf) was supplied by the developer and inspected in full. Web fetch returned 403; the browser loaded and downloaded the one-page PDF successfully. It directs submission to `ptsupport@mot.gov.il`, requests a static IP and includes a liability disclaimer acknowledged by signature. The original contains no interactive form fields.
@@ -25,6 +27,8 @@ Read [the form guide](decision-pack/form-guide.md) for its exact fields and a co
 The old `https://data.gov.il/he/terms-of-use` URL returned 404 during this review. Do not treat the old link as evidence of an accepted licence. This record does not replace reading authoritative terms or obtaining the outstanding answers.
 
 ## Submission record
+
+**Hosting decision — 30 September 2026:** the API will use ECS Fargate with a private ECR generation image; no S3 bucket is required initially. This is not MOT approval of AWS, its region or any address. For future SIRI, only the collector needs fixed outbound access: a private-subnet collector routed through a public NAT Gateway with an Elastic IP is the default pattern; a small EC2 collector with an Elastic IP is an alternative to assess for cost. Do not substitute the API's domain/load-balancer address for outbound IP evidence. Confirm provider/geography, binding, multiple-IP and change rules before allocation. No IP, NAT Gateway, credentials or source access was acquired; realtime remains deferred. See [hosting plan](next-steps.md#hosting-plan).
 
 Request sent: 21 September 2026 from the correct email address, per user confirmation that day. An earlier email was sent about two weeks before from the wrong address; its exact date is not recorded. Use the September 21 submission as the request baseline. Response: pending. Email variant, attachments and ticket/reference: not recorded. Follow-up decision date: 19 October 2026 (September 21 + 28 days). Terms accepted: pending evidence. Approved egress: pending. Credential storage: pending local configuration; never paste keys here. Approved data uses and evidence: pending.
 
