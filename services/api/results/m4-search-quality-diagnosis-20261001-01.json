@@ -1,0 +1,2391 @@
+{
+ "schemaVersion": 1,
+ "recordedAt": "2026-10-01T09:49:08.906001+00:00",
+ "scope": "Read-only diagnosis of the stop-related failures in m4-photon-bound-api-search-20261001-02 plus an offline in-process replay of a prototype fix. No HTTP, Docker or runtime changes; frozen corpus expectations unchanged. Scores are measured evidence, not H4 verdicts.",
+ "acceptanceStatus": "Open. Offline replay recovers stop-index failures only; a fresh full-corpus API run on a generation built with this code is required before any category or p95 claim.",
+ "provenance": {
+  "sourceResultPath": "services/api/results/m4-photon-bound-api-search-20261001-02.json",
+  "sourceResultSha256": "5498cbd94f01e65c2da4b102d738940e78794b28d41406c556d77d0abd7f3319",
+  "publicGenerationId": "12bfd861a952535fbc8f094b9a13d93fd47d6efd564b272edbb44f378a25d9c0",
+  "referenceArtifactSha256InResult": "8f81298d87dbe84478bfd22652b87bd5b7db1e61979a9d00187558fea64605b6",
+  "referencePath": "C:/Users/nhenr/.codex/worktrees/8007/OpenTransit/.runtime/generations/m4-translations-blue-20260930/reference.sqlite",
+  "referenceSha256": "8f81298d87dbe84478bfd22652b87bd5b7db1e61979a9d00187558fea64605b6",
+  "referenceManifestPath": "C:/Users/nhenr/.codex/worktrees/8007/OpenTransit/.runtime/generations/m4-translations-blue-20260930/manifest.json",
+  "referenceManifestSha256": "671c87a268060289d0af9dd3b57f8bdb7aa732d9dd288d4dff49a1853b53371a",
+  "referenceContentSha256": "ba26bdb8858532f89e5fb0ae8844b4cd045522bae2ff3f97c5a5c804fe175a74",
+  "componentGenerationId": "c7b66eee1ad04dddba13f4c5dade5ef2023963a1ac0384857aaf173b9d164aa1",
+  "referenceOpenMode": "ReferenceStore (sqlite URI mode=ro&immutable=1, integrity and content hash verified); route counts read with mode=ro",
+  "baseCommit": "37b771b",
+  "prototypeCommit": "0ffaf24f7fa4e45fd4860fc586ab18f3fd0ba2eb",
+  "branch": "worktree-agent-ad005e47511f0876f",
+  "pythonVersion": "3.14.6 (services/api/.venv)",
+  "platform": "Windows 11 host, in-process (not the Linux API container)"
+ },
+ "offlineReproduction": {
+  "method": "For each of the 47 records whose apiTypes include stop/station: recompute search_stops in-process against the real reference rows, replay the recorded first-pass poi/address candidates in their recorded order, merge with opentransit.api.routes.places._merge_candidates (limit 10) and score with tools/evaluate_search.score_response.",
+  "baselineReproduction": "Committed 37b771b stop_search reproduced every recorded stop candidate order, merged list and top-1/top-5 outcome for all 47 cases (0 mismatches).",
+  "limitations": [
+   "Geocoder candidates are replayed from the saved response (top-10 merged list only); geocoder items truncated by the original merge cannot reappear.",
+   "Exact-stop cases are scored with the mot:stop: qualified reference (fix F1).",
+   "Timings are Windows in-process search_stops only, not API-process durations."
+  ],
+  "baselineByCell": {
+   "station": [
+    10,
+    11,
+    20
+   ],
+   "translated_stop": [
+    0,
+    0,
+    2
+   ],
+   "misspelling": [
+    3,
+    6,
+    10
+   ],
+   "translit": [
+    4,
+    7,
+    9
+   ],
+   "near_dependent": [
+    4,
+    4,
+    6
+   ]
+  },
+  "baselineByCellNote": "[top1, top5, total] from the recorded run; translated_stop becomes [1, 2, 2] from the evaluator fix alone.",
+  "prototypeByCell": {
+   "misspelling": [
+    6,
+    8,
+    10
+   ],
+   "near_dependent": [
+    4,
+    5,
+    6
+   ],
+   "station": [
+    17,
+    18,
+    20
+   ],
+   "translated_stop": [
+    1,
+    2,
+    2
+   ],
+   "translit": [
+    6,
+    8,
+    9
+   ]
+  },
+  "prototypeByCellNote": "[top1, top5, total] after commit prototypeCommit",
+  "top1Gained": [
+   "P001",
+   "P002",
+   "P004",
+   "P006",
+   "P011",
+   "P012",
+   "P020",
+   "P080",
+   "P081",
+   "P084",
+   "P087",
+   "P088",
+   "GTFS-TRANS-42658-en"
+  ],
+  "top1Lost": [],
+  "top5Gained": [
+   "P001",
+   "P002",
+   "P004",
+   "P006",
+   "P011",
+   "P013",
+   "P020",
+   "P081",
+   "P084",
+   "P087",
+   "P095",
+   "GTFS-TRANS-13583-en",
+   "GTFS-TRANS-42658-en"
+  ],
+  "top5Lost": [],
+  "projectedOverallTop1": "130 -> 143 of 183 if no non-stop case changes (stop-related only; requires a fresh API run)",
+  "projectedOverallTop5": "150 -> 163 of 183 (same caveat)",
+  "indexBuildSeconds": 2.6,
+  "stopSearchInProcessMs": {
+   "samples": 141,
+   "p50": 2.17,
+   "p95": 9.93,
+   "max": 43.02
+  },
+  "stopSearchInProcessMsNote": "3 repeats x 47 cases. Baseline code on the same host: p50 1.4, p95 18.1, max 21.7. Slowest new case is P002 (Hebrew partial fallback over Tel Aviv rows, about 40-50 ms).",
+  "scratchPrototypeAblation": {
+   "note": "Scratch toggle prototype (not committed) used to attribute recovery; its fold had no half-tier penalty, so P013/P086 differ from the committed code.",
+   "configs": {
+    "final": {
+     "misspelling": [
+      5,
+      8,
+      10
+     ],
+     "near_dependent": [
+      4,
+      5,
+      6
+     ],
+     "station": [
+      18,
+      18,
+      20
+     ],
+     "translated_stop": [
+      1,
+      2,
+      2
+     ],
+     "translit": [
+      7,
+      8,
+      9
+     ]
+    },
+    "without_generic": {
+     "misspelling": [
+      5,
+      8,
+      10
+     ],
+     "near_dependent": [
+      4,
+      5,
+      6
+     ],
+     "station": [
+      18,
+      18,
+      20
+     ],
+     "translated_stop": [
+      1,
+      2,
+      2
+     ],
+     "translit": [
+      7,
+      8,
+      9
+     ]
+    },
+    "without_partial": {
+     "misspelling": [
+      4,
+      7,
+      10
+     ],
+     "near_dependent": [
+      4,
+      5,
+      6
+     ],
+     "station": [
+      15,
+      15,
+      20
+     ],
+     "translated_stop": [
+      1,
+      2,
+      2
+     ],
+     "translit": [
+      7,
+      8,
+      9
+     ]
+    },
+    "without_importance": {
+     "misspelling": [
+      4,
+      7,
+      10
+     ],
+     "near_dependent": [
+      4,
+      5,
+      6
+     ],
+     "station": [
+      16,
+      16,
+      20
+     ],
+     "translated_stop": [
+      1,
+      2,
+      2
+     ],
+     "translit": [
+      7,
+      8,
+      9
+     ]
+    },
+    "without_near_band": {
+     "misspelling": [
+      5,
+      8,
+      10
+     ],
+     "near_dependent": [
+      4,
+      4,
+      6
+     ],
+     "station": [
+      18,
+      18,
+      20
+     ],
+     "translated_stop": [
+      1,
+      2,
+      2
+     ],
+     "translit": [
+      7,
+      8,
+      9
+     ]
+    },
+    "without_abbrev": {
+     "misspelling": [
+      4,
+      7,
+      10
+     ],
+     "near_dependent": [
+      4,
+      5,
+      6
+     ],
+     "station": [
+      16,
+      17,
+      20
+     ],
+     "translated_stop": [
+      1,
+      2,
+      2
+     ],
+     "translit": [
+      7,
+      8,
+      9
+     ]
+    },
+    "without_fold": {
+     "misspelling": [
+      4,
+      7,
+      10
+     ],
+     "near_dependent": [
+      4,
+      5,
+      6
+     ],
+     "station": [
+      17,
+      17,
+      20
+     ],
+     "translated_stop": [
+      1,
+      2,
+      2
+     ],
+     "translit": [
+      4,
+      7,
+      9
+     ]
+    }
+   }
+  }
+ },
+ "failureClassification": {
+  "causeDefinitions": {
+   "missing_alias_data": "GTFS label lacks the name passengers use (Savidor, city prefix).",
+   "missing_translation_data": "Stop has no English translation row.",
+   "abbreviation_normalization": "GTFS abbreviations (ת., נתב\"ג) not expanded.",
+   "strict_all_token_matching": "Every query token must match one row; no partial fallback.",
+   "transliteration_variant": "Different Latin spelling of the Hebrew name.",
+   "word_join_spelling_variant": "Words joined/split differently (Beersheba vs Be'er Sheva).",
+   "hebrew_word_in_latin_query": "Hebrew word transliterated inside an English query.",
+   "locality_intent_no_city_entity": "City query; no locality entity in stop or Photon address index, so street-named stops/streets win.",
+   "stop_first_merge_routing": "_merge_candidates always starts with the stop list, so weak stop matches outrank strong geocoder matches.",
+   "geocoder_side_ranking": "Photon/MOTIS ranking or recall is the cause.",
+   "near_bias_ranking": "Text score dominated distance despite near.",
+   "evaluator_scoring_defect": "Evaluator compared raw GTFS IDs with mot:stop: references.",
+   "identical_label_ambiguity": "Several stops share the exact label."
+  },
+  "primaryCauseCountsByCell": {
+   "station": {
+    "missing_alias_data": 2,
+    "abbreviation_normalization": 3,
+    "transliteration_variant": 2,
+    "word_join_spelling_variant": 1,
+    "missing_translation_data": 1,
+    "strict_all_token_matching": 1
+   },
+   "translated_stop": {
+    "evaluator_scoring_defect": 2
+   },
+   "misspelling": {
+    "geocoder_side_ranking": 4,
+    "locality_intent_no_city_entity": 1,
+    "hebrew_word_in_latin_query": 1,
+    "missing_translation_data": 1
+   },
+   "translit": {
+    "locality_intent_no_city_entity": 3,
+    "transliteration_variant": 1,
+    "geocoder_side_ranking": 1
+   },
+   "near_dependent": {
+    "near_bias_ranking": 1,
+    "geocoder_side_ranking": 1
+   }
+  },
+  "otherCategories": "No stop-type misses: poi/venue/neighborhood cases request only poi and address cases request only address. All six address top-1 misses (P059, P061-P065) return the expected street and house number 700-1330 m from the expected coordinate (outside the 700-900 m tolerances); 'Rager Boulevard' returns 'Yitzhack Rager Avenue' 1040 m away. These are geocoder coordinate/tolerance questions, not stop search.",
+  "cases": [
+   {
+    "caseId": "P001",
+    "category": "station",
+    "language": "en",
+    "apiTypes": [
+     "stop",
+     "station"
+    ],
+    "near": null,
+    "expected": {
+     "place": "TA Savidor",
+     "latitude": 32.0836,
+     "longitude": 34.7981,
+     "toleranceMeters": 400.0,
+     "expectedStopId": null
+    },
+    "recordedFirstPass": {
+     "top1Hit": false,
+     "top5HitRank": null,
+     "top3": []
+    },
+    "primaryCause": "missing_alias_data",
+    "secondaryCauses": [
+     "strict_all_token_matching"
+    ],
+    "evidence": "Rail stop 37358 (code 17038) is labelled only 'תל אביב מרכז'/'Tel Aviv Center' (no 'Savidor'); the adjacent bus terminal stops say 'Tel Aviv-Savidor Train Stations' (no 'Center'). All four tokens are required in one row, so the stop index returned nothing.",
+    "proposedFixes": [
+     "F3"
+    ],
+    "expectationFlag": null,
+    "offlineReplayAfterPrototype": {
+     "top1Hit": true,
+     "top5Hit": true,
+     "top5HitRank": 1,
+     "top3": [
+      {
+       "kind": "stop",
+       "displayName": "Tel Aviv Center",
+       "distanceMeters": 19
+      },
+      {
+       "kind": "station",
+       "displayName": "Tel Aviv Train Station Savidor/Namir Road",
+       "distanceMeters": 292
+      },
+      {
+       "kind": "stop",
+       "displayName": "Tel Aviv Train Station Savidor/Namir Road",
+       "distanceMeters": 444
+      }
+     ]
+    }
+   },
+   {
+    "caseId": "P002",
+    "category": "station",
+    "language": "he",
+    "apiTypes": [
+     "stop",
+     "station"
+    ],
+    "near": null,
+    "expected": {
+     "place": "TA Savidor",
+     "latitude": 32.0836,
+     "longitude": 34.7981,
+     "toleranceMeters": 400.0,
+     "expectedStopId": null
+    },
+    "recordedFirstPass": {
+     "top1Hit": false,
+     "top5HitRank": null,
+     "top3": []
+    },
+    "primaryCause": "missing_alias_data",
+    "secondaryCauses": [
+     "station_words_required_as_tokens",
+     "strict_all_token_matching"
+    ],
+    "evidence": "Same rows as P001; the query also requires 'תחנת'/'רכבת', which the rail stop name lacks (GTFS writes 'ת.' or omits it).",
+    "proposedFixes": [
+     "F3"
+    ],
+    "expectationFlag": null,
+    "offlineReplayAfterPrototype": {
+     "top1Hit": true,
+     "top5Hit": true,
+     "top5HitRank": 1,
+     "top3": [
+      {
+       "kind": "stop",
+       "displayName": "תל אביב מרכז",
+       "distanceMeters": 19
+      },
+      {
+       "kind": "station",
+       "displayName": "ת. רכבת תל אביב - סבידור/דרך נמיר",
+       "distanceMeters": 292
+      },
+      {
+       "kind": "stop",
+       "displayName": "ת. רכבת תל אביב - סבידור/דרך נמיר",
+       "distanceMeters": 444
+      }
+     ]
+    }
+   },
+   {
+    "caseId": "P004",
+    "category": "station",
+    "language": "he",
+    "apiTypes": [
+     "stop",
+     "station"
+    ],
+    "near": null,
+    "expected": {
+     "place": "TA HaShalom",
+     "latitude": 32.0731,
+     "longitude": 34.7925,
+     "toleranceMeters": 400.0,
+     "expectedStopId": null
+    },
+    "recordedFirstPass": {
+     "top1Hit": false,
+     "top5HitRank": null,
+     "top3": []
+    },
+    "primaryCause": "abbreviation_normalization",
+    "secondaryCauses": [
+     "station_words_required_as_tokens"
+    ],
+    "evidence": "Rail stop 37350 is 'השלום'; nearby bus stops are 'ת. רכבת השלום' where 'ת.' abbreviates 'תחנת'. Normalization removes the period but never expands 'ת', so 'תחנת השלום' matched nothing.",
+    "proposedFixes": [
+     "F2"
+    ],
+    "expectationFlag": null,
+    "offlineReplayAfterPrototype": {
+     "top1Hit": true,
+     "top5Hit": true,
+     "top5HitRank": 1,
+     "top3": [
+      {
+       "kind": "stop",
+       "displayName": "ת. רכבת השלום",
+       "distanceMeters": 53
+      },
+      {
+       "kind": "stop",
+       "displayName": "ת. רכבת השלום",
+       "distanceMeters": 97
+      }
+     ]
+    }
+   },
+   {
+    "caseId": "P005",
+    "category": "station",
+    "language": "en",
+    "apiTypes": [
+     "stop",
+     "station"
+    ],
+    "near": null,
+    "expected": {
+     "place": "JLM Navon",
+     "latitude": 31.7888,
+     "longitude": 35.2027,
+     "toleranceMeters": 500.0,
+     "expectedStopId": null
+    },
+    "recordedFirstPass": {
+     "top1Hit": false,
+     "top5HitRank": null,
+     "top3": [
+      {
+       "kind": "stop",
+       "displayName": "Yitzhak Navon/HaBanim",
+       "distanceMeters": 100147
+      },
+      {
+       "kind": "stop",
+       "displayName": "Yitzhak Navon/HaBanim",
+       "distanceMeters": 100072
+      },
+      {
+       "kind": "stop",
+       "displayName": "Yitzhak Navon/Herzl",
+       "distanceMeters": 100008
+      }
+     ]
+    },
+    "primaryCause": "transliteration_variant",
+    "secondaryCauses": [
+     "street_vs_station_ranking"
+    ],
+    "evidence": "Rail stop 42286 English label is 'Yerushalayim/Yits'hak Navon'. 'Yitzhak Navon' instead prefix-matches bus stops on Yitzhak Navon streets 45-118 km away. Folding now matches the rail stop, but only as an all-token (tier 3.5) match below the street-named prefix matches (tier 2).",
+    "proposedFixes": [
+     "F8"
+    ],
+    "expectationFlag": null,
+    "offlineReplayAfterPrototype": {
+     "top1Hit": false,
+     "top5Hit": false,
+     "top5HitRank": null,
+     "top3": [
+      {
+       "kind": "stop",
+       "displayName": "Yitzhak Navon/HaBanim",
+       "distanceMeters": 100147
+      },
+      {
+       "kind": "stop",
+       "displayName": "Yitzhak Navon/HaBanim",
+       "distanceMeters": 100072
+      },
+      {
+       "kind": "stop",
+       "displayName": "Yitzhak Navon/Herzl",
+       "distanceMeters": 100008
+      }
+     ]
+    }
+   },
+   {
+    "caseId": "P006",
+    "category": "station",
+    "language": "he",
+    "apiTypes": [
+     "stop",
+     "station"
+    ],
+    "near": null,
+    "expected": {
+     "place": "JLM Navon",
+     "latitude": 31.7888,
+     "longitude": 35.2027,
+     "toleranceMeters": 500.0,
+     "expectedStopId": null
+    },
+    "recordedFirstPass": {
+     "top1Hit": false,
+     "top5HitRank": null,
+     "top3": []
+    },
+    "primaryCause": "abbreviation_normalization",
+    "secondaryCauses": [
+     "street_vs_station_ranking"
+    ],
+    "evidence": "'תחנת יצחק נבון': no label contains תחנת+יצחק+נבון literally; rail stop is 'ירושלים/יצחק נבון'. Partial coverage (station word ignored) returns the rail stop first.",
+    "proposedFixes": [
+     "F3"
+    ],
+    "expectationFlag": null,
+    "offlineReplayAfterPrototype": {
+     "top1Hit": true,
+     "top5Hit": true,
+     "top5HitRank": 1,
+     "top3": [
+      {
+       "kind": "stop",
+       "displayName": "ירושלים/יצחק נבון",
+       "distanceMeters": 83
+      },
+      {
+       "kind": "stop",
+       "displayName": "שדרות הבנים/יצחק נבון",
+       "distanceMeters": 100178
+      },
+      {
+       "kind": "stop",
+       "displayName": "שדרות הבנים/יצחק נבון",
+       "distanceMeters": 100030
+      }
+     ]
+    }
+   },
+   {
+    "caseId": "P009",
+    "category": "station",
+    "language": "en",
+    "apiTypes": [
+     "stop",
+     "station"
+    ],
+    "near": null,
+    "expected": {
+     "place": "BS Central",
+     "latitude": 31.243,
+     "longitude": 34.7983,
+     "toleranceMeters": 500.0,
+     "expectedStopId": null
+    },
+    "recordedFirstPass": {
+     "top1Hit": false,
+     "top5HitRank": null,
+     "top3": []
+    },
+    "primaryCause": "word_join_spelling_variant",
+    "secondaryCauses": [
+     "transliteration_variant"
+    ],
+    "evidence": "'Beersheba' is one word; GTFS has 'Be'er Sheba - Center' (rail 37312) and 'Be'er Sheva Central Station/...' (two words after apostrophe removal). Neither prefix nor fold joins words; partial needs two significant tokens and only 'central' matches.",
+    "proposedFixes": [
+     "F7"
+    ],
+    "expectationFlag": null,
+    "offlineReplayAfterPrototype": {
+     "top1Hit": false,
+     "top5Hit": false,
+     "top5HitRank": null,
+     "top3": []
+    }
+   },
+   {
+    "caseId": "P011",
+    "category": "station",
+    "language": "en",
+    "apiTypes": [
+     "stop",
+     "station"
+    ],
+    "near": null,
+    "expected": {
+     "place": "TLV Airport",
+     "latitude": 32.0004,
+     "longitude": 34.8705,
+     "toleranceMeters": 1500.0,
+     "expectedStopId": null
+    },
+    "recordedFirstPass": {
+     "top1Hit": false,
+     "top5HitRank": null,
+     "top3": []
+    },
+    "primaryCause": "missing_translation_data",
+    "secondaryCauses": [],
+    "evidence": "Airport rail stop 37306 'נתב''ג' has no English translation row; no English label mentions Ben Gurion Airport.",
+    "proposedFixes": [
+     "F2"
+    ],
+    "expectationFlag": null,
+    "offlineReplayAfterPrototype": {
+     "top1Hit": true,
+     "top5Hit": true,
+     "top5HitRank": 1,
+     "top3": [
+      {
+       "kind": "stop",
+       "displayName": "נתב''ג",
+       "distanceMeters": 5
+      },
+      {
+       "kind": "stop",
+       "displayName": "נתב''ג/טרמינל 2",
+       "distanceMeters": 3154
+      },
+      {
+       "kind": "stop",
+       "displayName": "נתב''ג/טרמינל 2",
+       "distanceMeters": 3204
+      }
+     ]
+    }
+   },
+   {
+    "caseId": "P012",
+    "category": "station",
+    "language": "he",
+    "apiTypes": [
+     "stop",
+     "station"
+    ],
+    "near": null,
+    "expected": {
+     "place": "TLV Airport",
+     "latitude": 32.0004,
+     "longitude": 34.8705,
+     "toleranceMeters": 1500.0,
+     "expectedStopId": null
+    },
+    "recordedFirstPass": {
+     "top1Hit": false,
+     "top5HitRank": 2,
+     "top3": [
+      {
+       "kind": "stop",
+       "displayName": "האירוסים/רקפת",
+       "distanceMeters": 3163
+      },
+      {
+       "kind": "stop",
+       "displayName": "כנף",
+       "distanceMeters": 917
+      },
+      {
+       "kind": "stop",
+       "displayName": "כנף/ברוש",
+       "distanceMeters": 889
+      }
+     ]
+    },
+    "primaryCause": "abbreviation_normalization",
+    "secondaryCauses": [],
+    "evidence": "Hebrew stops use the acronym 'נתב''ג' (normalized 'נתבג'); the full form 'נמל תעופה בן גוריון' only appears in nearby stops' locality description (rank 1 was 'האירוסים/רקפת' 3.2 km away).",
+    "proposedFixes": [
+     "F2"
+    ],
+    "expectationFlag": null,
+    "offlineReplayAfterPrototype": {
+     "top1Hit": true,
+     "top5Hit": true,
+     "top5HitRank": 1,
+     "top3": [
+      {
+       "kind": "stop",
+       "displayName": "נתב''ג",
+       "distanceMeters": 5
+      },
+      {
+       "kind": "stop",
+       "displayName": "נתב''ג/טרמינל 2",
+       "distanceMeters": 3154
+      },
+      {
+       "kind": "stop",
+       "displayName": "נתב''ג/טרמינל 2",
+       "distanceMeters": 3204
+      }
+     ]
+    }
+   },
+   {
+    "caseId": "P013",
+    "category": "station",
+    "language": "en",
+    "apiTypes": [
+     "stop",
+     "station"
+    ],
+    "near": null,
+    "expected": {
+     "place": "Herzliya",
+     "latitude": 32.163558,
+     "longitude": 34.817406,
+     "toleranceMeters": 500.0,
+     "expectedStopId": null
+    },
+    "recordedFirstPass": {
+     "top1Hit": false,
+     "top5HitRank": null,
+     "top3": [
+      {
+       "kind": "stop",
+       "displayName": "Herzliya Marina Taxi Station",
+       "distanceMeters": 2010
+      },
+      {
+       "kind": "stop",
+       "displayName": "Marina Herzliya Taxi Station",
+       "distanceMeters": 1918
+      }
+     ]
+    },
+    "primaryCause": "transliteration_variant",
+    "secondaryCauses": [
+     "street_vs_station_ranking"
+    ],
+    "evidence": "Rail stop 37362 English label is 'Hertsliya'; literal 'Herzliya ... Taxi Station' stops 1.9-2 km away match every token. After folding, 'Hertsliya Railway Station' ranks 3 (folded matches rank half a tier lower by design).",
+    "proposedFixes": [
+     "F4",
+     "F8"
+    ],
+    "expectationFlag": null,
+    "offlineReplayAfterPrototype": {
+     "top1Hit": false,
+     "top5Hit": true,
+     "top5HitRank": 3,
+     "top3": [
+      {
+       "kind": "stop",
+       "displayName": "Herzliya Marina Taxi Station",
+       "distanceMeters": 2010
+      },
+      {
+       "kind": "stop",
+       "displayName": "Marina Herzliya Taxi Station",
+       "distanceMeters": 1918
+      },
+      {
+       "kind": "stop",
+       "displayName": "Hertsliya Railway Station",
+       "distanceMeters": 105
+      }
+     ]
+    }
+   },
+   {
+    "caseId": "P020",
+    "category": "station",
+    "language": "en",
+    "apiTypes": [
+     "stop",
+     "station"
+    ],
+    "near": null,
+    "expected": {
+     "place": "PT Kiryat Arye",
+     "latitude": 32.106273,
+     "longitude": 34.863205,
+     "toleranceMeters": 500.0,
+     "expectedStopId": null
+    },
+    "recordedFirstPass": {
+     "top1Hit": false,
+     "top5HitRank": null,
+     "top3": []
+    },
+    "primaryCause": "strict_all_token_matching",
+    "secondaryCauses": [
+     "missing_alias_data"
+    ],
+    "evidence": "English labels near the target omit the city ('Kiryat Arye Railway Station', rail 'Kiriyat Arieh'); the city exists only in the Hebrew description. Partial coverage with route-count tie-break returns rail stop 37354.",
+    "proposedFixes": [
+     "F3"
+    ],
+    "expectationFlag": null,
+    "offlineReplayAfterPrototype": {
+     "top1Hit": true,
+     "top5Hit": true,
+     "top5HitRank": 1,
+     "top3": [
+      {
+       "kind": "stop",
+       "displayName": "Kiriyat Arieh",
+       "distanceMeters": 0
+      },
+      {
+       "kind": "stop",
+       "displayName": "Kiryat Arye Rail Station/Park & Ride",
+       "distanceMeters": 109
+      },
+      {
+       "kind": "stop",
+       "displayName": "Kiryat Arye Railway Station",
+       "distanceMeters": 139
+      }
+     ]
+    }
+   },
+   {
+    "caseId": "GTFS-TRANS-42658-en",
+    "category": "translated_stop",
+    "language": "en",
+    "apiTypes": [
+     "stop"
+    ],
+    "near": null,
+    "expected": {
+     "place": "Naomi Shemer Blvd/Hatane Pras Israel",
+     "latitude": 31.940499,
+     "longitude": 34.841406,
+     "toleranceMeters": null,
+     "expectedStopId": "42658"
+    },
+    "recordedFirstPass": {
+     "top1Hit": false,
+     "top5HitRank": null,
+     "top3": [
+      {
+       "kind": "stop",
+       "displayName": "Naomi Shemer Blvd/Hatane Pras Israel",
+       "distanceMeters": 0
+      }
+     ]
+    },
+    "primaryCause": "evaluator_scoring_defect",
+    "secondaryCauses": [],
+    "evidence": "API returned mot:stop:42658 at rank 1 (0 m); live score_response compared it to the raw frozen ID '42658'. Same defect previously corrected for run 20260930-02 by correct_saved_exact_stop_scores.",
+    "proposedFixes": [
+     "F1"
+    ],
+    "expectationFlag": null,
+    "offlineReplayAfterPrototype": {
+     "top1Hit": true,
+     "top5Hit": true,
+     "top5HitRank": 1,
+     "top3": [
+      {
+       "kind": "stop",
+       "displayName": "Naomi Shemer Blvd/Hatane Pras Israel",
+       "distanceMeters": 0
+      }
+     ]
+    }
+   },
+   {
+    "caseId": "GTFS-TRANS-13583-en",
+    "category": "translated_stop",
+    "language": "en",
+    "apiTypes": [
+     "stop"
+    ],
+    "near": null,
+    "expected": {
+     "place": "Dizengoff Center/Dizengoff",
+     "latitude": 32.075566,
+     "longitude": 34.77512,
+     "toleranceMeters": null,
+     "expectedStopId": "13583"
+    },
+    "recordedFirstPass": {
+     "top1Hit": false,
+     "top5HitRank": null,
+     "top3": [
+      {
+       "kind": "stop",
+       "displayName": "Dizengoff Center/Dizengoff",
+       "distanceMeters": 54
+      },
+      {
+       "kind": "stop",
+       "displayName": "Dizengoff Center/Dizengoff",
+       "distanceMeters": 0
+      },
+      {
+       "kind": "stop",
+       "displayName": "Dizengoff Center/Tchernichovsky",
+       "distanceMeters": 116
+      }
+     ]
+    },
+    "primaryCause": "evaluator_scoring_defect",
+    "secondaryCauses": [
+     "identical_label_ambiguity"
+    ],
+    "evidence": "After namespace correction the expected stop is rank 2: stops 13561 and 13583 both carry 'Dizengoff Center/Dizengoff' (54 m apart, opposite sides); a text query cannot prefer either and the ID tie-break picks 13561.",
+    "proposedFixes": [
+     "F1"
+    ],
+    "expectationFlag": "Exact-stop expectation targets one of two identically labelled stops; top-1 is not achievable from the query text. Human H4 decision: accept either stop, or keep as a known top-5-only case.",
+    "offlineReplayAfterPrototype": {
+     "top1Hit": false,
+     "top5Hit": true,
+     "top5HitRank": 2,
+     "top3": [
+      {
+       "kind": "stop",
+       "displayName": "Dizengoff Center/Dizengoff",
+       "distanceMeters": 54
+      },
+      {
+       "kind": "stop",
+       "displayName": "Dizengoff Center/Dizengoff",
+       "distanceMeters": 0
+      },
+      {
+       "kind": "stop",
+       "displayName": "Dizengoff Center/Tchernichovsky",
+       "distanceMeters": 116
+      }
+     ]
+    }
+   },
+   {
+    "caseId": "P078",
+    "category": "misspelling",
+    "language": "en",
+    "apiTypes": [
+     "stop",
+     "station",
+     "poi",
+     "address"
+    ],
+    "near": null,
+    "expected": {
+     "place": "Jerusalem",
+     "latitude": 31.7857,
+     "longitude": 35.211,
+     "toleranceMeters": 3000.0,
+     "expectedStopId": null
+    },
+    "recordedFirstPass": {
+     "top1Hit": false,
+     "top5HitRank": 5,
+     "top3": [
+      {
+       "kind": "address",
+       "displayName": "Jerusalem",
+       "distanceMeters": 68969
+      },
+      {
+       "kind": "address",
+       "displayName": "Jerusalem",
+       "distanceMeters": 110098
+      },
+      {
+       "kind": "address",
+       "displayName": "Jerusalem",
+       "distanceMeters": 55610
+      }
+     ]
+    },
+    "primaryCause": "geocoder_side_ranking",
+    "secondaryCauses": [
+     "locality_intent_no_city_entity"
+    ],
+    "evidence": "No stop matches. Photon returns streets named 'Jerusalem' 55-110 km away (the address index has no locality documents); MOTIS POI 'Jerusalim' at 1.6 km is rank 5.",
+    "proposedFixes": [
+     "F6",
+     "F9"
+    ],
+    "expectationFlag": null,
+    "offlineReplayAfterPrototype": {
+     "top1Hit": false,
+     "top5Hit": true,
+     "top5HitRank": 5,
+     "top3": [
+      {
+       "kind": "address",
+       "displayName": "Jerusalem",
+       "distanceMeters": 68969
+      },
+      {
+       "kind": "address",
+       "displayName": "Jerusalem",
+       "distanceMeters": 110098
+      },
+      {
+       "kind": "address",
+       "displayName": "Jerusalem",
+       "distanceMeters": 55610
+      }
+     ]
+    }
+   },
+   {
+    "caseId": "P080",
+    "category": "misspelling",
+    "language": "en",
+    "apiTypes": [
+     "stop",
+     "station",
+     "poi",
+     "address"
+    ],
+    "near": null,
+    "expected": {
+     "place": "Herzliya",
+     "latitude": 32.1656,
+     "longitude": 34.8095,
+     "toleranceMeters": 2000.0,
+     "expectedStopId": null
+    },
+    "recordedFirstPass": {
+     "top1Hit": false,
+     "top5HitRank": 4,
+     "top3": [
+      {
+       "kind": "address",
+       "displayName": "Herzliya",
+       "distanceMeters": 74166
+      },
+      {
+       "kind": "poi",
+       "displayName": "Herzliya",
+       "distanceMeters": 2610
+      },
+      {
+       "kind": "poi",
+       "displayName": "Herzliya",
+       "distanceMeters": 3521
+      }
+     ]
+    },
+    "primaryCause": "geocoder_side_ranking",
+    "secondaryCauses": [
+     "transliteration_variant"
+    ],
+    "evidence": "Baseline: Photon street 'Herzliya' 74 km at rank 1; no stop matched 'herzliyya'. Folding matches rail stop 'Hertsliya' 778 m from the city point.",
+    "proposedFixes": [
+     "F4"
+    ],
+    "expectationFlag": "Scored hit is a stop inside the city tolerance, not a city entity; H4 should judge whether a stop is an acceptable answer to a city query.",
+    "offlineReplayAfterPrototype": {
+     "top1Hit": true,
+     "top5Hit": true,
+     "top5HitRank": 1,
+     "top3": [
+      {
+       "kind": "stop",
+       "displayName": "Hertsliya",
+       "distanceMeters": 778
+      },
+      {
+       "kind": "address",
+       "displayName": "Herzliya",
+       "distanceMeters": 74166
+      },
+      {
+       "kind": "stop",
+       "displayName": "Hertsliya/HaNevi'im",
+       "distanceMeters": 73921
+      }
+     ]
+    }
+   },
+   {
+    "caseId": "P081",
+    "category": "misspelling",
+    "language": "en",
+    "apiTypes": [
+     "stop",
+     "station",
+     "poi",
+     "address"
+    ],
+    "near": null,
+    "expected": {
+     "place": "Netanya",
+     "latitude": 32.3097,
+     "longitude": 34.8619,
+     "toleranceMeters": 2000.0,
+     "expectedStopId": null
+    },
+    "recordedFirstPass": {
+     "top1Hit": false,
+     "top5HitRank": null,
+     "top3": [
+      {
+       "kind": "address",
+       "displayName": "Netafim",
+       "distanceMeters": 16438
+      },
+      {
+       "kind": "address",
+       "displayName": "Netafim",
+       "distanceMeters": 122258
+      },
+      {
+       "kind": "address",
+       "displayName": "Netaim",
+       "distanceMeters": 17109
+      }
+     ]
+    },
+    "primaryCause": "geocoder_side_ranking",
+    "secondaryCauses": [
+     "transliteration_variant"
+    ],
+    "evidence": "Photon fuzzy-matches 'Netafim'/'Netaim' streets first; MOTIS POI 'Netania' (2161 m) and 'Netanya' (2065 m) sit just outside the 2000 m tolerance. Folding matches stop 'Netanya' 1330 m away.",
+    "proposedFixes": [
+     "F4"
+    ],
+    "expectationFlag": "Tolerance 2000 m vs OSM city nodes 2065-2161 m away: borderline expected coordinate/tolerance for a city.",
+    "offlineReplayAfterPrototype": {
+     "top1Hit": true,
+     "top5Hit": true,
+     "top5HitRank": 1,
+     "top3": [
+      {
+       "kind": "stop",
+       "displayName": "Netanya",
+       "distanceMeters": 1330
+      },
+      {
+       "kind": "address",
+       "displayName": "Netafim",
+       "distanceMeters": 16438
+      },
+      {
+       "kind": "stop",
+       "displayName": "Netanya Central Station",
+       "distanceMeters": 1995
+      }
+     ]
+    }
+   },
+   {
+    "caseId": "P082",
+    "category": "misspelling",
+    "language": "en",
+    "apiTypes": [
+     "stop",
+     "station",
+     "poi",
+     "address"
+    ],
+    "near": null,
+    "expected": {
+     "place": "Rishon",
+     "latitude": 31.964,
+     "longitude": 34.804,
+     "toleranceMeters": 3000.0,
+     "expectedStopId": null
+    },
+    "recordedFirstPass": {
+     "top1Hit": false,
+     "top5HitRank": null,
+     "top3": [
+      {
+       "kind": "stop",
+       "displayName": "HaMishna/Rishon LeZion",
+       "distanceMeters": 24450
+      },
+      {
+       "kind": "address",
+       "displayName": "Rishon LeZion",
+       "distanceMeters": 22799
+      },
+      {
+       "kind": "stop",
+       "displayName": "Park and Go Rishon LeZion/HaHatzlaha Road",
+       "distanceMeters": 5043
+      }
+     ]
+    },
+    "primaryCause": "locality_intent_no_city_entity",
+    "secondaryCauses": [
+     "stop_first_merge_routing",
+     "geocoder_side_ranking"
+    ],
+    "evidence": "City query. Stops whose names contain a street called 'Rishon LeZion' in other cities (e.g. 'HaMishna/Rishon LeZion' 24 km) occupy merged rank 1 because the merge always starts with the stop list; Photon returns streets named Rishon LeZion.",
+    "proposedFixes": [
+     "F6"
+    ],
+    "expectationFlag": null,
+    "offlineReplayAfterPrototype": {
+     "top1Hit": false,
+     "top5Hit": false,
+     "top5HitRank": null,
+     "top3": [
+      {
+       "kind": "stop",
+       "displayName": "Rishon LeTsiyon Beach",
+       "distanceMeters": 7532
+      },
+      {
+       "kind": "address",
+       "displayName": "Rishon LeZion",
+       "distanceMeters": 22799
+      },
+      {
+       "kind": "stop",
+       "displayName": "Rishon LeTsiyon Blvd/Shfeyah",
+       "distanceMeters": 24392
+      }
+     ]
+    }
+   },
+   {
+    "caseId": "P083",
+    "category": "misspelling",
+    "language": "en",
+    "apiTypes": [
+     "stop",
+     "station",
+     "poi",
+     "address"
+    ],
+    "near": null,
+    "expected": {
+     "place": "TA Savidor",
+     "latitude": 32.0836,
+     "longitude": 34.7981,
+     "toleranceMeters": 400.0,
+     "expectedStopId": null
+    },
+    "recordedFirstPass": {
+     "top1Hit": false,
+     "top5HitRank": null,
+     "top3": [
+      {
+       "kind": "poi",
+       "displayName": "Merkaz Omen",
+       "distanceMeters": 67797
+      },
+      {
+       "kind": "poi",
+       "displayName": "Merkaz HaIr",
+       "distanceMeters": 98629
+      },
+      {
+       "kind": "poi",
+       "displayName": "Merkaz HaIr",
+       "distanceMeters": 39607
+      }
+     ]
+    },
+    "primaryCause": "hebrew_word_in_latin_query",
+    "secondaryCauses": [
+     "single_significant_token_match"
+    ],
+    "evidence": "'Merkaz' is Hebrew for 'Center'; only 'Savidor' matches stop labels. Partial coverage requires two tokens (one-token partial recovered P083 in the scratch prototype but cost P085 its top-5), so no stop is returned and MOTIS 'Merkaz ...' POIs win.",
+    "proposedFixes": [
+     "F10"
+    ],
+    "expectationFlag": null,
+    "offlineReplayAfterPrototype": {
+     "top1Hit": false,
+     "top5Hit": false,
+     "top5HitRank": null,
+     "top3": [
+      {
+       "kind": "poi",
+       "displayName": "Merkaz Omen",
+       "distanceMeters": 67797
+      },
+      {
+       "kind": "poi",
+       "displayName": "Merkaz HaIr",
+       "distanceMeters": 98629
+      },
+      {
+       "kind": "poi",
+       "displayName": "Merkaz HaIr",
+       "distanceMeters": 39607
+      }
+     ]
+    }
+   },
+   {
+    "caseId": "P084",
+    "category": "misspelling",
+    "language": "en",
+    "apiTypes": [
+     "stop",
+     "station",
+     "poi",
+     "address"
+    ],
+    "near": null,
+    "expected": {
+     "place": "TLV Airport",
+     "latitude": 32.0004,
+     "longitude": 34.8705,
+     "toleranceMeters": 1500.0,
+     "expectedStopId": null
+    },
+    "recordedFirstPass": {
+     "top1Hit": false,
+     "top5HitRank": null,
+     "top3": [
+      {
+       "kind": "address",
+       "displayName": "Ben Gurion",
+       "distanceMeters": 80888
+      },
+      {
+       "kind": "address",
+       "displayName": "Polla Ben-Gurion",
+       "distanceMeters": 82068
+      },
+      {
+       "kind": "address",
+       "displayName": "David Ben-Gurion",
+       "distanceMeters": 37290
+      }
+     ]
+    },
+    "primaryCause": "missing_translation_data",
+    "secondaryCauses": [
+     "misspelling"
+    ],
+    "evidence": "Airport stop lacks English; 'Airoport' is misspelled. Alias + partial coverage (2 of 3 tokens, busiest stop first) returns 'נתב''ג' rail stop 5 m away.",
+    "proposedFixes": [
+     "F2",
+     "F3"
+    ],
+    "expectationFlag": null,
+    "offlineReplayAfterPrototype": {
+     "top1Hit": true,
+     "top5Hit": true,
+     "top5HitRank": 1,
+     "top3": [
+      {
+       "kind": "stop",
+       "displayName": "נתב''ג",
+       "distanceMeters": 5
+      },
+      {
+       "kind": "address",
+       "displayName": "Ben Gurion",
+       "distanceMeters": 80888
+      },
+      {
+       "kind": "stop",
+       "displayName": "Migdal Vita/Ben Gurion Road",
+       "distanceMeters": 11375
+      }
+     ]
+    }
+   },
+   {
+    "caseId": "P085",
+    "category": "misspelling",
+    "language": "en",
+    "apiTypes": [
+     "stop",
+     "station",
+     "poi",
+     "address"
+    ],
+    "near": null,
+    "expected": {
+     "place": "Mahane Yehuda",
+     "latitude": 31.7853,
+     "longitude": 35.2124,
+     "toleranceMeters": 500.0,
+     "expectedStopId": null
+    },
+    "recordedFirstPass": {
+     "top1Hit": false,
+     "top5HitRank": 5,
+     "top3": [
+      {
+       "kind": "address",
+       "displayName": "Malchee Yehuda",
+       "distanceMeters": 55184
+      },
+      {
+       "kind": "address",
+       "displayName": "Malchee Yehuda",
+       "distanceMeters": 55181
+      },
+      {
+       "kind": "address",
+       "displayName": "Malchei Yehuda",
+       "distanceMeters": 44730
+      }
+     ]
+    },
+    "primaryCause": "geocoder_side_ranking",
+    "secondaryCauses": [
+     "transliteration_variant"
+    ],
+    "evidence": "Photon fuzzy ranks 'Malchee Yehuda' streets first; 'Mahane Yehuda' address is rank 5. 'machne' vs 'mahane' is not covered by folding (vowel insertion).",
+    "proposedFixes": [
+     "F9"
+    ],
+    "expectationFlag": null,
+    "offlineReplayAfterPrototype": {
+     "top1Hit": false,
+     "top5Hit": true,
+     "top5HitRank": 5,
+     "top3": [
+      {
+       "kind": "address",
+       "displayName": "Malchee Yehuda",
+       "distanceMeters": 55184
+      },
+      {
+       "kind": "address",
+       "displayName": "Malchee Yehuda",
+       "distanceMeters": 55181
+      },
+      {
+       "kind": "address",
+       "displayName": "Malchei Yehuda",
+       "distanceMeters": 44730
+      }
+     ]
+    }
+   },
+   {
+    "caseId": "P086",
+    "category": "translit",
+    "language": "en",
+    "apiTypes": [
+     "stop",
+     "station",
+     "poi",
+     "address"
+    ],
+    "near": null,
+    "expected": {
+     "place": "Petah Tikva",
+     "latitude": 32.087,
+     "longitude": 34.887,
+     "toleranceMeters": 3000.0,
+     "expectedStopId": null
+    },
+    "recordedFirstPass": {
+     "top1Hit": false,
+     "top5HitRank": 5,
+     "top3": [
+      {
+       "kind": "stop",
+       "displayName": "Petah Tikva A",
+       "distanceMeters": 44218
+      },
+      {
+       "kind": "address",
+       "displayName": "Petah Tikva",
+       "distanceMeters": 39832
+      },
+      {
+       "kind": "stop",
+       "displayName": "Petah Tikva/Ben Avi",
+       "distanceMeters": 25831
+      }
+     ]
+    },
+    "primaryCause": "locality_intent_no_city_entity",
+    "secondaryCauses": [
+     "stop_first_merge_routing"
+    ],
+    "evidence": "City query. Stop 'Petah Tikva A' (44 km, a street-named stop elsewhere) is the alphabetical first prefix match and leads the merge; Photon returns Petah Tikva streets 8-44 km away.",
+    "proposedFixes": [
+     "F6"
+    ],
+    "expectationFlag": null,
+    "offlineReplayAfterPrototype": {
+     "top1Hit": false,
+     "top5Hit": true,
+     "top5HitRank": 5,
+     "top3": [
+      {
+       "kind": "stop",
+       "displayName": "Petah Tikva A",
+       "distanceMeters": 44218
+      },
+      {
+       "kind": "address",
+       "displayName": "Petah Tikva",
+       "distanceMeters": 39832
+      },
+      {
+       "kind": "stop",
+       "displayName": "Petah Tikva/Ben Avi",
+       "distanceMeters": 25831
+      }
+     ]
+    }
+   },
+   {
+    "caseId": "P087",
+    "category": "translit",
+    "language": "en",
+    "apiTypes": [
+     "stop",
+     "station",
+     "poi",
+     "address"
+    ],
+    "near": null,
+    "expected": {
+     "place": "Petah Tikva",
+     "latitude": 32.087,
+     "longitude": 34.887,
+     "toleranceMeters": 3000.0,
+     "expectedStopId": null
+    },
+    "recordedFirstPass": {
+     "top1Hit": false,
+     "top5HitRank": null,
+     "top3": [
+      {
+       "kind": "address",
+       "displayName": "Petach Tikvah",
+       "distanceMeters": 26280
+      },
+      {
+       "kind": "address",
+       "displayName": "Petah Tikva",
+       "distanceMeters": 8722
+      },
+      {
+       "kind": "address",
+       "displayName": "Petah Tikva",
+       "distanceMeters": 39832
+      }
+     ]
+    },
+    "primaryCause": "transliteration_variant",
+    "secondaryCauses": [
+     "locality_intent_no_city_entity"
+    ],
+    "evidence": "'Petach Tikwa' matched no stop; Photon street 'Petach Tikvah' 26 km first. Folded stop match 'Petach Tikva HaNevi'im HaHamisha Taxi Station' (1962 m) is now rank 1.",
+    "proposedFixes": [
+     "F4",
+     "F6"
+    ],
+    "expectationFlag": "Scored hit is a taxi-rank stop inside the 3000 m city tolerance, not the city entity.",
+    "offlineReplayAfterPrototype": {
+     "top1Hit": true,
+     "top5Hit": true,
+     "top5HitRank": 1,
+     "top3": [
+      {
+       "kind": "stop",
+       "displayName": "Petach Tikva HaNevi'im HaHamisha Taxi Station",
+       "distanceMeters": 1962
+      },
+      {
+       "kind": "address",
+       "displayName": "Petach Tikvah",
+       "distanceMeters": 26280
+      },
+      {
+       "kind": "stop",
+       "displayName": "Petach Tikva Moshe Dayan Taxi Station",
+       "distanceMeters": 2504
+      }
+     ]
+    }
+   },
+   {
+    "caseId": "P088",
+    "category": "translit",
+    "language": "en",
+    "apiTypes": [
+     "stop",
+     "station",
+     "poi",
+     "address"
+    ],
+    "near": null,
+    "expected": {
+     "place": "Petah Tikva",
+     "latitude": 32.087,
+     "longitude": 34.887,
+     "toleranceMeters": 3000.0,
+     "expectedStopId": null
+    },
+    "recordedFirstPass": {
+     "top1Hit": false,
+     "top5HitRank": 2,
+     "top3": [
+      {
+       "kind": "poi",
+       "displayName": "Petah Tiqwa",
+       "distanceMeters": 3193
+      },
+      {
+       "kind": "poi",
+       "displayName": "Petah Tikwa",
+       "distanceMeters": 127
+      },
+      {
+       "kind": "poi",
+       "displayName": "Ganne Tiqwa",
+       "distanceMeters": 3128
+      }
+     ]
+    },
+    "primaryCause": "geocoder_side_ranking",
+    "secondaryCauses": [
+     "transliteration_variant"
+    ],
+    "evidence": "MOTIS POI 'Petah Tiqwa' at 3193 m (tolerance 3000 m) ranks 1; 'Petah Tikwa' POI at 127 m ranks 2. Folded stop match now leads the merge (1962 m).",
+    "proposedFixes": [
+     "F4",
+     "F6"
+    ],
+    "expectationFlag": "Borderline tolerance: the geocoder's city node is 3193 m from the expected point (tolerance 3000 m).",
+    "offlineReplayAfterPrototype": {
+     "top1Hit": true,
+     "top5Hit": true,
+     "top5HitRank": 1,
+     "top3": [
+      {
+       "kind": "stop",
+       "displayName": "Petach Tikva HaNevi'im HaHamisha Taxi Station",
+       "distanceMeters": 1962
+      },
+      {
+       "kind": "poi",
+       "displayName": "Petah Tiqwa",
+       "distanceMeters": 3193
+      },
+      {
+       "kind": "stop",
+       "displayName": "Petach Tikva Moshe Dayan Taxi Station",
+       "distanceMeters": 2504
+      }
+     ]
+    }
+   },
+   {
+    "caseId": "P089",
+    "category": "translit",
+    "language": "en",
+    "apiTypes": [
+     "stop",
+     "station",
+     "poi",
+     "address"
+    ],
+    "near": null,
+    "expected": {
+     "place": "Rishon",
+     "latitude": 31.964,
+     "longitude": 34.804,
+     "toleranceMeters": 3000.0,
+     "expectedStopId": null
+    },
+    "recordedFirstPass": {
+     "top1Hit": false,
+     "top5HitRank": 4,
+     "top3": [
+      {
+       "kind": "stop",
+       "displayName": "Rishon LeTsiyon Beach",
+       "distanceMeters": 7532
+      },
+      {
+       "kind": "address",
+       "displayName": "Rishon LeTsiyon",
+       "distanceMeters": 6611
+      },
+      {
+       "kind": "stop",
+       "displayName": "Rishon LeTsiyon Blvd/Shfeyah",
+       "distanceMeters": 24392
+      }
+     ]
+    },
+    "primaryCause": "locality_intent_no_city_entity",
+    "secondaryCauses": [
+     "stop_first_merge_routing"
+    ],
+    "evidence": "Stop 'Rishon LeTsiyon Beach' (7.5 km) leads the merge; Photon 'Rishon LeTsiyon' street 6.6 km; MOTIS city POI 579 m is rank 4.",
+    "proposedFixes": [
+     "F6"
+    ],
+    "expectationFlag": null,
+    "offlineReplayAfterPrototype": {
+     "top1Hit": false,
+     "top5Hit": true,
+     "top5HitRank": 4,
+     "top3": [
+      {
+       "kind": "stop",
+       "displayName": "Rishon LeTsiyon Beach",
+       "distanceMeters": 7532
+      },
+      {
+       "kind": "address",
+       "displayName": "Rishon LeTsiyon",
+       "distanceMeters": 6611
+      },
+      {
+       "kind": "stop",
+       "displayName": "Rishon LeTsiyon Blvd/Shfeyah",
+       "distanceMeters": 24392
+      }
+     ]
+    }
+   },
+   {
+    "caseId": "P090",
+    "category": "translit",
+    "language": "en",
+    "apiTypes": [
+     "stop",
+     "station",
+     "poi",
+     "address"
+    ],
+    "near": null,
+    "expected": {
+     "place": "Rishon",
+     "latitude": 31.964,
+     "longitude": 34.804,
+     "toleranceMeters": 3000.0,
+     "expectedStopId": null
+    },
+    "recordedFirstPass": {
+     "top1Hit": false,
+     "top5HitRank": null,
+     "top3": [
+      {
+       "kind": "stop",
+       "displayName": "HaMishna/Rishon LeZion",
+       "distanceMeters": 24450
+      },
+      {
+       "kind": "address",
+       "displayName": "Rishon LeZion",
+       "distanceMeters": 22799
+      },
+      {
+       "kind": "stop",
+       "displayName": "Park and Go Rishon LeZion/HaHatzlaha Road",
+       "distanceMeters": 5043
+      }
+     ]
+    },
+    "primaryCause": "locality_intent_no_city_entity",
+    "secondaryCauses": [
+     "stop_first_merge_routing"
+    ],
+    "evidence": "Same query family as P082 ('Rishon LeZion').",
+    "proposedFixes": [
+     "F6"
+    ],
+    "expectationFlag": null,
+    "offlineReplayAfterPrototype": {
+     "top1Hit": false,
+     "top5Hit": false,
+     "top5HitRank": null,
+     "top3": [
+      {
+       "kind": "stop",
+       "displayName": "Rishon LeTsiyon Beach",
+       "distanceMeters": 7532
+      },
+      {
+       "kind": "address",
+       "displayName": "Rishon LeZion",
+       "distanceMeters": 22799
+      },
+      {
+       "kind": "stop",
+       "displayName": "Rishon LeTsiyon Blvd/Shfeyah",
+       "distanceMeters": 24392
+      }
+     ]
+    }
+   },
+   {
+    "caseId": "P095",
+    "category": "near_dependent",
+    "language": "en",
+    "apiTypes": [
+     "stop",
+     "station",
+     "poi",
+     "address"
+    ],
+    "near": {
+     "latitude": 32.08,
+     "longitude": 34.78
+    },
+    "expected": {
+     "place": "TA CBS",
+     "latitude": 32.057,
+     "longitude": 34.78,
+     "toleranceMeters": 1500.0,
+     "expectedStopId": null
+    },
+    "recordedFirstPass": {
+     "top1Hit": false,
+     "top5HitRank": null,
+     "top3": [
+      {
+       "kind": "stop",
+       "displayName": "Central Station",
+       "distanceMeters": 32394
+      },
+      {
+       "kind": "poi",
+       "displayName": "Central bus station",
+       "distanceMeters": 148039
+      },
+      {
+       "kind": "stop",
+       "displayName": "Central Station",
+       "distanceMeters": 32404
+      }
+     ]
+    },
+    "primaryCause": "near_bias_ranking",
+    "secondaryCauses": [
+     "genuine_ambiguity"
+    ],
+    "evidence": "Exact-name 'Central Station' stops 32 km away outranked token matches near the bias point because score dominated distance. With the >10 km demotion the TA CBS stop (89 m from target) is rank 3; rank 1 is 'Diamond exchange market/Central Train Station' 3.4 km from target but nearer the bias point.",
+    "proposedFixes": [
+     "F5"
+    ],
+    "expectationFlag": "Bias point (32.08, 34.78) is roughly equidistant from Savidor 'Central Train Station' and the Central Bus Station; 'Central Station' is ambiguous there.",
+    "offlineReplayAfterPrototype": {
+     "top1Hit": false,
+     "top5Hit": true,
+     "top5HitRank": 3,
+     "top3": [
+      {
+       "kind": "stop",
+       "displayName": "Diamond excahnge market/Central Train Station",
+       "distanceMeters": 3436
+      },
+      {
+       "kind": "poi",
+       "displayName": "Central bus station",
+       "distanceMeters": 148039
+      },
+      {
+       "kind": "stop",
+       "displayName": "Tel Aviv Central Station/Levinsky",
+       "distanceMeters": 89
+      }
+     ]
+    }
+   },
+   {
+    "caseId": "P099",
+    "category": "near_dependent",
+    "language": "en",
+    "apiTypes": [
+     "stop",
+     "station",
+     "poi",
+     "address"
+    ],
+    "near": {
+     "latitude": 32.08,
+     "longitude": 34.78
+    },
+    "expected": {
+     "place": "HaTachana TA",
+     "latitude": 32.061,
+     "longitude": 34.762,
+     "toleranceMeters": 2000.0,
+     "expectedStopId": null
+    },
+    "recordedFirstPass": {
+     "top1Hit": false,
+     "top5HitRank": null,
+     "top3": [
+      {
+       "kind": "address",
+       "displayName": "HaTahana",
+       "distanceMeters": 17479
+      },
+      {
+       "kind": "address",
+       "displayName": "HaTahana",
+       "distanceMeters": 17545
+      },
+      {
+       "kind": "address",
+       "displayName": "HaTochna",
+       "distanceMeters": 20171
+      }
+     ]
+    },
+    "primaryCause": "geocoder_side_ranking",
+    "secondaryCauses": [
+     "missing_poi"
+    ],
+    "evidence": "No stop named HaTachana in Tel Aviv; Photon returns 'HaTahana' streets 17-54 km away despite near; MOTIS POI for the HaTachana compound absent from the candidates.",
+    "proposedFixes": [
+     "F9"
+    ],
+    "expectationFlag": null,
+    "offlineReplayAfterPrototype": {
+     "top1Hit": false,
+     "top5Hit": false,
+     "top5HitRank": null,
+     "top3": [
+      {
+       "kind": "stop",
+       "displayName": "HaTahana Road/HaEla",
+       "distanceMeters": 123700
+      },
+      {
+       "kind": "address",
+       "displayName": "HaTahana",
+       "distanceMeters": 17479
+      },
+      {
+       "kind": "stop",
+       "displayName": "HaTahana Road/Ha'Alon",
+       "distanceMeters": 123904
+      }
+     ]
+    }
+   }
+  ]
+ },
+ "fixPlan": [
+  {
+   "rank": 1,
+   "id": "F1",
+   "title": "Evaluator: canonicalize frozen exact-stop IDs to mot:stop: references in score_response",
+   "status": "prototyped in prototypeCommit",
+   "expectedRecovery": {
+    "translated_stop": "+1 top1, +2 top5"
+   },
+   "regressionRisk": "None for the API. Frozen expectedStopId values unchanged.",
+   "files": [
+    "services/api/tools/evaluate_search.py",
+    "services/api/tests/test_evaluate_search.py"
+   ],
+   "verify": "pytest tests/test_evaluate_search.py; offline replay."
+  },
+  {
+   "rank": 2,
+   "id": "F2",
+   "title": "Abbreviation expansion (ת. / ת\"א / נתב\"ג / רק\"ל) and a curated EN alias for the airport rail stop",
+   "status": "prototyped",
+   "expectedRecovery": {
+    "station": "+3 top1 (P004, P011, P012)",
+    "misspelling": "P084 with F3"
+   },
+   "regressionRisk": "Low; expansions are additional labels. The curated alias needs a recorded source.",
+   "files": [
+    "services/api/src/opentransit/stop_search.py"
+   ],
+   "verify": "Offline replay; tests/test_stop_search_prefilter.py."
+  },
+  {
+   "rank": 3,
+   "id": "F3",
+   "title": "Partial-coverage fallback (>=2 significant tokens, station words ignored) when no row matches every token; route-count tie-break",
+   "status": "prototyped (stop_search_candidates now exposes route_count)",
+   "expectedRecovery": {
+    "station": "+4 top1 (P001, P002, P006, P020)",
+    "misspelling": "+1 top1 (P084, with F2)"
+   },
+   "regressionRisk": "Medium. Weak stop results enter mixed merges because the merge is stop-first. A one-token minimum cost P085 its top-5 in the scratch prototype; two tokens shows no loss. Worst observed in-process cost is about 40-50 ms (P002).",
+   "files": [
+    "services/api/src/opentransit/stop_search.py",
+    "services/api/src/opentransit/reference.py"
+   ],
+   "verify": "Offline replay plus a fresh full-corpus API run for p95."
+  },
+  {
+   "rank": 4,
+   "id": "F4",
+   "title": "Latin transliteration folding (tz/ts->z, ch/kh->h, q->k, w->v, y->i, doubled letters, final vowel+h) as a half-tier-lower match",
+   "status": "prototyped",
+   "expectedRecovery": {
+    "misspelling": "+2 top1 (P080, P081)",
+    "translit": "+2 top1 (P087, P088)",
+    "station": "P013 top5 (rank 3)"
+   },
+   "regressionRisk": "Medium. City queries can be satisfied by a stop inside a generous city tolerance (an H4 judgment). Folded prefix collisions (Herzl vs Hertsliya) are kept below literal matches by the half-tier penalty.",
+   "files": [
+    "services/api/src/opentransit/stop_search.py"
+   ],
+   "verify": "Offline replay; inspect P096-P098 candidates."
+  },
+  {
+   "rank": 5,
+   "id": "F5",
+   "title": "near: demote matches farther than 10 km by two tiers, then order by distance",
+   "status": "prototyped",
+   "expectedRecovery": {
+    "near_dependent": "+1 top5 (P095); top1 stays ambiguous"
+   },
+   "regressionRisk": "Low; P096-P100 unchanged in replay.",
+   "files": [
+    "services/api/src/opentransit/stop_search.py"
+   ],
+   "verify": "Offline replay."
+  },
+  {
+   "rank": 6,
+   "id": "F6",
+   "title": "Locality intent: add locality (city) entities (Photon place documents or GTFS-derived localities) and stop treating a weak or substring stop match as merged rank 1",
+   "status": "proposed",
+   "expectedRecovery": {
+    "misspelling": "up to +2 (P078, P082)",
+    "translit": "up to +3 (P086, P089, P090)"
+   },
+   "regressionRisk": "Medium-high. Changes merge policy for every mixed query and needs a localities source with provenance.",
+   "files": [
+    "services/api/src/opentransit/api/routes/places.py",
+    "services/api/src/opentransit/geocoding.py",
+    "Photon index build (tools/enrich_photon_addresses.py)"
+   ],
+   "verify": "Extend the offline replay harness to synthesize locality candidates; then a full API run."
+  },
+  {
+   "rank": 7,
+   "id": "F8",
+   "title": "Rail-station English names or a rail/hub prior for street-vs-station ties",
+   "status": "proposed",
+   "expectedRecovery": {
+    "station": "+2 top1 (P005, P013)"
+   },
+   "regressionRisk": "Medium. A global hub prior regressed P079/P093 in the scratch prototype; an alias table needs a sourced name list.",
+   "files": [
+    "services/api/src/opentransit/stop_search.py"
+   ],
+   "verify": "Offline replay."
+  },
+  {
+   "rank": 8,
+   "id": "F7",
+   "title": "Compact (space-insensitive) token matching for joined words",
+   "status": "proposed",
+   "expectedRecovery": {
+    "station": "+1 (P009), uncertain"
+   },
+   "regressionRisk": "Low-medium.",
+   "files": [
+    "services/api/src/opentransit/stop_search.py"
+   ],
+   "verify": "Offline replay."
+  },
+  {
+   "rank": 9,
+   "id": "F9",
+   "title": "Geocoder side: Photon near bias, fuzzy ranking and POI recall (HaTachana)",
+   "status": "proposed",
+   "expectedRecovery": {
+    "misspelling": "P078, P085 possible",
+    "near_dependent": "P099 possible"
+   },
+   "regressionRisk": "Unknown; needs a Photon trial.",
+   "files": [
+    "services/api/src/opentransit/photon_geocoder.py"
+   ],
+   "verify": "Photon trial (Docker), outside this offline scope."
+  },
+  {
+   "rank": 10,
+   "id": "F10",
+   "title": "Hebrew-in-Latin vocabulary (merkaz=center, tahana=station) as query synonyms",
+   "status": "proposed",
+   "expectedRecovery": {
+    "misspelling": "+1 (P083)"
+   },
+   "regressionRisk": "Low if limited to a short list.",
+   "files": [
+    "services/api/src/opentransit/stop_search.py"
+   ],
+   "verify": "Offline replay."
+  }
+ ],
+ "latencyAttribution": {
+  "source": "Per-record processDurationMs in the source result (API-process time, log-correlated). No backend phase timings exist, so attribution is by requested type set.",
+  "firstPass": {
+   "requestCount": 183,
+   "apiProcessP95Ms": 44.4,
+   "tailDefinition": "requests with processDurationMs >= p95",
+   "tailCount": 10,
+   "tailByRequestedTypes": {
+    "poi": 8,
+    "address+poi+station+stop": 2
+   },
+   "tailCaseIds": [
+    "P024",
+    "P043",
+    "P075",
+    "P095",
+    "P096",
+    "V010",
+    "V020",
+    "V021",
+    "V037",
+    "V041"
+   ],
+   "byRequestedTypes": {
+    "station+stop": {
+     "n": 20,
+     "p50Ms": 3.2,
+     "p95Ms": 7.8,
+     "maxMs": 14.6
+    },
+    "poi": {
+     "n": 114,
+     "p50Ms": 11.9,
+     "p95Ms": 60.1,
+     "maxMs": 75.4
+    },
+    "address": {
+     "n": 22,
+     "p50Ms": 15.9,
+     "p95Ms": 35.2,
+     "maxMs": 35.7
+    },
+    "address+poi+station+stop": {
+     "n": 25,
+     "p50Ms": 29.5,
+     "p95Ms": 59.5,
+     "maxMs": 61.3
+    },
+    "stop": {
+     "n": 2,
+     "p50Ms": 2.9,
+     "p95Ms": 3.2,
+     "maxMs": 3.2
+    }
+   },
+   "p95IfRequestTypeExcludedMs": {
+    "station+stop": 53.1,
+    "poi": 40.9,
+    "address": 53.1,
+    "address+poi+station+stop": 44.4,
+    "stop": 44.4
+   }
+  },
+  "allRequests": {
+   "requestCount": 732,
+   "apiProcessP95Ms": 51.8,
+   "tailDefinition": "requests with processDurationMs >= p95",
+   "tailCount": 37,
+   "tailByRequestedTypes": {
+    "poi": 27,
+    "address+poi+station+stop": 10
+   },
+   "tailCaseIds": [
+    "P024",
+    "P043",
+    "P075",
+    "P088",
+    "P095",
+    "P096",
+    "P097",
+    "V010",
+    "V021",
+    "V037",
+    "V041"
+   ],
+   "byRequestedTypes": {
+    "station+stop": {
+     "n": 80,
+     "p50Ms": 3.3,
+     "p95Ms": 11.6,
+     "maxMs": 18.1
+    },
+    "poi": {
+     "n": 456,
+     "p50Ms": 13.2,
+     "p95Ms": 55.7,
+     "maxMs": 85.0
+    },
+    "address": {
+     "n": 88,
+     "p50Ms": 15.2,
+     "p95Ms": 35.2,
+     "maxMs": 47.0
+    },
+    "address+poi+station+stop": {
+     "n": 100,
+     "p50Ms": 31.1,
+     "p95Ms": 60.1,
+     "maxMs": 84.4
+    },
+    "stop": {
+     "n": 8,
+     "p50Ms": 3.4,
+     "p95Ms": 4.8,
+     "maxMs": 4.8
+    }
+   },
+   "p95IfRequestTypeExcludedMs": {
+    "station+stop": 54.0,
+    "poi": 45.7,
+    "address": 54.0,
+    "address+poi+station+stop": 45.7,
+    "stop": 51.8
+   }
+  },
+  "interpretation": [
+   "Stop-only requests (station+stop, stop) are never in the p95 tail; their API-process p95 is 7.8 ms (first pass) and 11.6 ms (all requests).",
+   "Tail requests are POI-only (MOTIS) or all-type mixed requests. Excluding POI-only requests drops p95 from 44.4 to 40.9 ms (first pass) and from 51.8 to 45.7 ms (all requests).",
+   "Mixed-request p50 (about 30 ms) is close to stop (about 3) + Photon address (about 15) + MOTIS POI (about 13). That matches geocode_places awaiting Photon and then MOTIS sequentially after the synchronous stop search.",
+   "Stop search is at most about 3-4 ms of a 50-85 ms tail request (under 10%); the geocoder backends are over 90%. Hebrew POI queries (V037, P075, V010, V041, P043, P024) dominate the tail."
+  ],
+  "recommendationsForLatencySlice": [
+   "Run the Photon and MOTIS calls concurrently with asyncio.gather and move stop search off the event loop (or run it concurrently).",
+   "Profile MOTIS geocode for Hebrew POI queries; that is the POI-only tail.",
+   "Keep stop partial fallback cost bounded (worst about 40-50 ms in-process for P002); if needed, exclude locality descriptions from the coverage pool."
+  ]
+ },
+ "corpusAndExpectationFlagsForH4": [
+  {
+   "caseId": "GTFS-TRANS-13583-en",
+   "flag": "Exact-stop expectation targets one of two identically labelled stops; top-1 is not achievable from the query text. Human H4 decision: accept either stop, or keep as a known top-5-only case."
+  },
+  {
+   "caseId": "P080",
+   "flag": "Scored hit is a stop inside the city tolerance, not a city entity; H4 should judge whether a stop is an acceptable answer to a city query."
+  },
+  {
+   "caseId": "P081",
+   "flag": "Tolerance 2000 m vs OSM city nodes 2065-2161 m away: borderline expected coordinate/tolerance for a city."
+  },
+  {
+   "caseId": "P087",
+   "flag": "Scored hit is a taxi-rank stop inside the 3000 m city tolerance, not the city entity."
+  },
+  {
+   "caseId": "P088",
+   "flag": "Borderline tolerance: the geocoder's city node is 3193 m from the expected point (tolerance 3000 m)."
+  },
+  {
+   "caseId": "P095",
+   "flag": "Bias point (32.08, 34.78) is roughly equidistant from Savidor 'Central Train Station' and the Central Bus Station; 'Central Station' is ambiguous there."
+  },
+  {
+   "caseIds": [
+    "P059",
+    "P061",
+    "P062",
+    "P063",
+    "P064",
+    "P065"
+   ],
+   "flag": "Correct street and house returned 700-1330 m from the expected coordinate; check whether the expected points or tolerances (700-900 m) represent the addressed building."
+  },
+  {
+   "caseIds": [
+    "P078",
+    "P080",
+    "P081",
+    "P082",
+    "P086",
+    "P087",
+    "P088",
+    "P089",
+    "P090",
+    "P091",
+    "P092",
+    "P093",
+    "P094"
+   ],
+   "flag": "City-level expectations with 2-3 km tolerances can be satisfied by any stop or POI in the city; the scored outcome does not show whether a city entity was returned."
+  }
+ ],
+ "dataModelFindings": [
+  "Israel Railways stops are location_type 0 with no parent station and an empty description (no city). The 'station' kind covers only 236 bus-terminal parents, so type=station does not select rail stations.",
+  "Rail stop English translations use non-standard transliterations (Hertsliya, Kiriyat Arieh, Yerushalayim/Yits'hak Navon, Be'er Sheba - Center, Hashalom); the airport stop 'נתב''ג' has none.",
+  "Bus stop English labels omit the city; the city appears only in the Hebrew description ('עיר: ...')."
+ ]
+}

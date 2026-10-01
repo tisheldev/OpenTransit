@@ -1,0 +1,15 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "EcsTasksAssumeExecutionRole",
+      "Effect": "Allow",
+      "Principal": {"Service": "ecs-tasks.amazonaws.com"},
+      "Action": "sts:AssumeRole",
+      "Condition": {
+        "StringEquals": {"aws:SourceAccount": "{{ACCOUNT_ID}}"},
+        "ArnLike": {"aws:SourceArn": "arn:aws:ecs:il-central-1:{{ACCOUNT_ID}}:*"}
+      }
+    }
+  ]
+}

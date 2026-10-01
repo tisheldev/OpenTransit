@@ -1059,6 +1059,12 @@ class ReferenceStore:
         """
         with self._connect() as connection:
             rows = connection.execute("SELECT * FROM stops ORDER BY stop_id").fetchall()
+            # Route counts are a search tie-break signal for partial matches only.
+            route_counts = dict(
+                connection.execute(
+                    "SELECT stop_id, COUNT(*) FROM route_stops GROUP BY stop_id"
+                ).fetchall()
+            )
             stops_by_source_id = {row["source_id"]: row for row in rows}
             source_ids_by_name: dict[str, list[str]] = {}
             for row in rows:
@@ -1086,6 +1092,7 @@ class ReferenceStore:
             {
                 **self._stop_item(row),
                 "translations": translations.get(row["source_id"], {}),
+                "route_count": route_counts.get(row["stop_id"], 0),
             }
             for row in rows
         ]

@@ -1,0 +1,5 @@
+{
+  "clusterName": "opentransit-h0",
+  "settings": [{"name": "containerInsights", "value": "disabled"}],
+  "tags": [{"key": "project", "value": "opentransit"}, {"key": "purpose", "value": "h0-draft"}]
+}

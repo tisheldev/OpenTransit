@@ -189,6 +189,11 @@ async def probe_generation(
     checked_at = checked_at.astimezone(UTC)
     manifest = json.loads((generation_dir / "manifest.json").read_text(encoding="utf-8"))
     identity = {"generationId": manifest.get("generationId")}
+    composite = "scheduleComponentGenerationId" in manifest
+    if composite:
+        # A composite (schedule + address) generation reuses its schedule component's
+        # reference database, which embeds the component ID. Record both identities.
+        identity["scheduleComponentGenerationId"] = manifest["scheduleComponentGenerationId"]
     report = {
         **identity,
         "engineOrigin": engine_url.rstrip("/"),
@@ -206,11 +211,30 @@ async def probe_generation(
         origin = _loopback_origin(engine_url)
         verified = verify_artifacts(generation_dir)
         generation = Generation.load(generation_dir / "manifest.json")
-        if generation.freshness(checked_at) != "current":
-            raise ValueError("Candidate source freshness is not current")
+        freshness = generation.freshness(checked_at)
+        evidence_time = generation.freshness_checked_at()
+        report["sourceFreshness"] = {
+            "state": freshness,
+            "basis": generation.freshness_basis,
+            "checkedAt": evidence_time.isoformat() if evidence_time else None,
+            "policy": "accepts the states /readyz serves (current, aging, stale); rejects expired",
+        }
+        # Accept exactly the states /readyz treats as serviceable, so a task replaced from
+        # a pinned image can start while the API would legitimately serve (with warnings).
+        if not generation.freshness_serviceable(checked_at):
+            raise ValueError(f"Candidate source freshness is {freshness}, not serviceable")
+        if freshness != "current":
+            report["warnings"].append(
+                f"Source freshness is {freshness}; the API serves it with age warnings"
+            )
         if not generation.contains(checked_at):
             raise ValueError("Candidate schedule does not cover the current time")
-        reference = ReferenceStore(generation_dir / "reference.sqlite", generation.id)
+        component_id = manifest["scheduleComponentGenerationId"] if composite else generation.id
+        if not isinstance(component_id, str) or not component_id:
+            raise ValueError("A composed generation must identify its schedule component")
+        reference = ReferenceStore(
+            generation_dir / "reference.sqlite", component_id, cursor_generation_id=generation.id
+        )
         if reference.metadata.counts != manifest["artifacts"]["reference"]["counts"]:
             raise ValueError("Reference counts differ from the manifest")
         report.update(verified)

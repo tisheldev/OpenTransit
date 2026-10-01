@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-10-01T10:20:00Z",
+  "supplements": "m2-id-stability-20261001-01.json",
+  "inputs": {
+    "previous": {"path": ".runtime/m1-20260930/inputs/israel-public-transportation.zip", "sha256": "8629a73c3f6ff024a78e9b8c83602c09180e13e597b82b98a4377a78f3dd2fd9", "acquiredAt": "2026-09-30T09:33:07.260277+00:00", "acquisitionRecord": ".runtime/m1-20260930/manifest.json (M1 prepare-m1 download; not a managed fetch event)"},
+    "candidate": {"path": ".runtime/sources/snapshots/20261001T093052Z-31057f27/israel-public-transportation.zip", "sha256": "7d628a2fd0fd11518eb5a0c922b4ac55f4ed1cf52c8251853484deab06247b2e", "acquisitionRecord": ".runtime/sources/checks/20261001T093052Z-31057f27.json (managed fetch, paired validation passed)"}
+  },
+  "method": "trips.txt keyed by full trip_id; for retained IDs, count which of route_id, service_id, trip_headsign, direction_id, shape_id differ; count trailing _ddmmyy suffixes of removed/added IDs.",
+  "retainedTripFieldChanges": {"service_id only": 284513, "none": 5793, "service_id and trip_headsign": 2},
+  "removedTripIdSuffixTop": {"300926": 133884, "021026": 248, "091026": 205, "041026": 190, "031026": 179},
+  "addedTripIdSuffixTop": {"011026": 133167, "041026": 327, "161026": 290, "021026": 248, "111026": 211},
+  "interpretation": "Stop and route IDs were unchanged apart from 11 removed routes. About a third of trip IDs roll daily (the dominant suffix changes from 300926 to 011026), and 98% of retained trip IDs change service_id between publications. Trip identity is therefore publication-scoped; one consecutive pair, to be rechecked with later daily snapshots."
+}

@@ -337,14 +337,25 @@ def test_translated_stop_uses_exact_source_identity_without_invented_tolerance()
             [
                 {
                     "kind": "stop",
-                    "locationRef": {"kind": "stop", "stopId": "13583"},
+                    "locationRef": {"kind": "stop", "stopId": "mot:stop:13583"},
                 }
             ],
             matched=("stop",),
         ),
     )
+    assert selected.expected_stop_id == "13583"  # frozen corpus value is unchanged
     assert result["scoreRule"] == "exact_stop_reference"
     assert result["top1Hit"] and result["top5Hit"]
+    # A different stop with the same label is not the expected identity.
+    other = score_response(
+        selected,
+        200,
+        _payload(
+            [{"kind": "stop", "locationRef": {"kind": "stop", "stopId": "mot:stop:13561"}}],
+            matched=("stop",),
+        ),
+    )
+    assert not other["top1Hit"] and not other["top5Hit"]
 
 
 def test_valid_empty_partial_unavailable_and_malformed_are_distinct():

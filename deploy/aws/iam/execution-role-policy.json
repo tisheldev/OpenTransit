@@ -1,0 +1,32 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "EcrAuthorizationToken",
+      "Effect": "Allow",
+      "Action": "ecr:GetAuthorizationToken",
+      "Resource": "*"
+    },
+    {
+      "Sid": "PullApprovedRepositoriesOnly",
+      "Effect": "Allow",
+      "Action": [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:BatchGetImage",
+        "ecr:GetDownloadUrlForLayer"
+      ],
+      "Resource": [
+        "arn:aws:ecr:il-central-1:{{ACCOUNT_ID}}:repository/opentransit-api",
+        "arn:aws:ecr:il-central-1:{{ACCOUNT_ID}}:repository/opentransit-data",
+        "arn:aws:ecr:il-central-1:{{ACCOUNT_ID}}:repository/opentransit-photon",
+        "arn:aws:ecr:il-central-1:{{ACCOUNT_ID}}:repository/opentransit-motis"
+      ]
+    },
+    {
+      "Sid": "WriteTaskLogsToPrecreatedGroup",
+      "Effect": "Allow",
+      "Action": ["logs:CreateLogStream", "logs:PutLogEvents"],
+      "Resource": "arn:aws:logs:il-central-1:{{ACCOUNT_ID}}:log-group:/opentransit/h0:log-stream:*"
+    }
+  ]
+}

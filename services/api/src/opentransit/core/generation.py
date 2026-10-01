@@ -8,6 +8,11 @@ from pathlib import Path
 
 from opentransit.core.time import as_utc_instant
 
+# Source-freshness states that /readyz and request handling treat as serviceable.
+# Only "expired" (seven days or more, or a future-dated check) is rejected; the
+# earlier states are served with warnings (docs/system-design.md section 9).
+SERVICEABLE_FRESHNESS = frozenset({"current", "aging", "stale"})
+
 
 def instant(value: str) -> datetime:
     result = datetime.fromisoformat(value.replace("Z", "+00:00"))
@@ -61,8 +66,18 @@ class Generation:
             as_utc_instant(self.coverage_from) <= instant_utc < as_utc_instant(self.coverage_until)
         )
 
+    @property
+    def freshness_basis(self) -> str:
+        return "sourceCheckedAt" if self.source_check_recorded else "validatedAt"
+
+    def freshness_checked_at(self) -> datetime | None:
+        return self.source_checked_at if self.source_check_recorded else self.validated_at
+
+    def freshness_serviceable(self, now: datetime) -> bool:
+        return self.freshness(now) in SERVICEABLE_FRESHNESS
+
     def freshness(self, now: datetime) -> str:
-        checked_at = self.source_checked_at if self.source_check_recorded else self.validated_at
+        checked_at = self.freshness_checked_at()
         if checked_at is None:
             return "expired"
         age = as_utc_instant(now) - as_utc_instant(checked_at)

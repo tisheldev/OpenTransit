@@ -31,7 +31,7 @@ def health_router(settings, clock, problem) -> APIRouter:
         reasons = []
         if not generation.contains(now):
             reasons.append(_reason("coverage", "OUTSIDE_COVERAGE"))
-        if generation.freshness(now) == "expired":
+        if not generation.freshness_serviceable(now):
             reasons.append(_reason("freshness", "SOURCE_CHECK_EXPIRED"))
         if reasons:
             return False, "expired", "unchecked", reasons

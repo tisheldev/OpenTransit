@@ -1,0 +1,24 @@
+{
+  "albSecurityGroup": {
+    "GroupName": "opentransit-h0-alb",
+    "Description": "H-0 draft: reviewer HTTPS in, API port to the task group only",
+    "VpcId": "{{VPC_ID}}",
+    "ingress": [
+      {"protocol": "tcp", "fromPort": 443, "toPort": 443, "cidr": "{{REVIEWER_CIDR}}"}
+    ],
+    "egress": [
+      {"protocol": "tcp", "fromPort": 8000, "toPort": 8000, "securityGroup": "taskSecurityGroup"}
+    ]
+  },
+  "taskSecurityGroup": {
+    "GroupName": "opentransit-h0-task",
+    "Description": "H-0 draft: API port from the ALB group only; HTTPS egress for image pull and logs",
+    "VpcId": "{{VPC_ID}}",
+    "ingress": [
+      {"protocol": "tcp", "fromPort": 8000, "toPort": 8000, "securityGroup": "albSecurityGroup"}
+    ],
+    "egress": [
+      {"protocol": "tcp", "fromPort": 443, "toPort": 443, "cidr": "0.0.0.0/0"}
+    ]
+  }
+}

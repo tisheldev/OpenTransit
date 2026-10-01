@@ -1,0 +1,5 @@
+{
+  "logGroupName": "/opentransit/h0",
+  "retentionInDays": 7,
+  "tags": {"project": "opentransit", "purpose": "h0-draft"}
+}

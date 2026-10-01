@@ -447,7 +447,8 @@ def score_response(
             case.expected_stop_id is not None
             and isinstance(location_ref, dict)
             and location_ref.get("kind") == "stop"
-            and location_ref.get("stopId") == case.expected_stop_id
+            # Frozen corpus IDs are raw GTFS source IDs; API refs are mot:stop: qualified.
+            and location_ref.get("stopId") == _canonical_expected_stop_ref(case.expected_stop_id)
         )
         if case.expected_stop_id is not None and exact_stop_match:
             if rank == 1:
