@@ -16,7 +16,7 @@ from opentransit.config import Settings
 
 def include_routes(app: FastAPI, settings: Settings, clock) -> None:
     app.include_router(reference_router(clock, problem))
-    app.include_router(timetable_router(clock, problem))
+    app.include_router(timetable_router(settings, clock, problem))
     app.include_router(places_router(clock, problem))
     app.include_router(health_router(settings, clock, problem))
     app.include_router(journeys_router(settings, clock, problem))
