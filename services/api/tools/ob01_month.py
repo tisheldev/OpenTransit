@@ -60,6 +60,7 @@ from opentransit.history.arrivals import (
     ORIGIN_EPSILON_M,
 )
 from opentransit.history.distributions import day_type, local_hour, percentile
+from opentransit.history.distributions import summary as distribution_summary
 from opentransit.history.month import (
     BUCKETS,
     MIN_COVERAGE,
@@ -73,8 +74,17 @@ from opentransit.history.month import (
     read_bucket,
     trips_of,
 )
-from opentransit.history.schedule import load_day
-from opentransit.history.siri_archive import load_rides
+from opentransit.history.review import (
+    ARTEFACT_GPS_M,
+    FROZEN_M,
+    STATIONARY_SHARE,
+    TracePing,
+    classify,
+    haversine_m,
+    segment_trace,
+)
+from opentransit.history.schedule import load_day, match_ride
+from opentransit.history.siri_archive import load_rides, parse_snapshot
 
 PARAMETERS = {
     "backwardToleranceM": BACKWARD_TOLERANCE_M,
@@ -719,6 +729,183 @@ def validate(args) -> int:
     return 0
 
 
+def review_targets(report: dict, top: int) -> list[dict]:
+    targets: dict[tuple, dict] = {}
+    rows = report["pilotOutlierStopPairs"] + report["slowestPublishableSegmentsVsSchedule"][:top]
+    for row in rows:
+        key = (row["routeId"], row["fromStopId"], row["toStopId"])
+        target = targets.setdefault(
+            key,
+            {
+                "routeId": row["routeId"],
+                "fromStopId": row["fromStopId"],
+                "toStopId": row["toStopId"],
+                "route": row.get("route"),
+                "fromStop": row.get("fromStop"),
+                "toStop": row.get("toStop"),
+                "monthRows": [],
+            },
+        )
+        target["monthRows"].append(
+            {
+                field: row[field]
+                for field in (
+                    "hour",
+                    "dayType",
+                    "samples",
+                    "coverage",
+                    "serviceDays",
+                    "scheduledSecondsMedian",
+                    "runP10Seconds",
+                    "runP50Seconds",
+                    "runP90Seconds",
+                    "publishable",
+                    "ratioP50",
+                )
+            }
+        )
+    return list(targets.values())
+
+
+def nearest_stop(stops: dict, point: tuple[float, float] | None) -> dict | None:
+    if point is None or not stops:
+        return None
+    stop_id, stop = min(
+        stops.items(),
+        key=lambda item: haversine_m(point[0], point[1], item[1]["lat"], item[1]["lon"]),
+    )
+    distance = haversine_m(point[0], point[1], stop["lat"], stop["lon"])
+    return {"stopId": stop_id, "name": stop["name"], "metres": round(distance)}
+
+
+def review(args) -> int:
+    """Trace the slowest and the pilot's Jerusalem segments on raw pings for a few days."""
+    if args.output.exists():
+        raise SystemExit(f"refusing to overwrite {args.output}")
+    report = json.loads(args.report.read_text(encoding="utf-8"))
+    targets = review_targets(report, args.top)
+    routes_wanted = {target["routeId"] for target in targets}
+    began = time.monotonic()
+    traces: dict[tuple, list[dict]] = {}
+    stops: dict = {}
+    for day in args.day:
+        schedule = load_day(schedule_path(args.raw_cache, day), day)
+        _, stops = context(args.raw_cache, day)
+        pings: dict[tuple, list[TracePing]] = {}
+        for key in expected_minutes(day):
+            path = siri_path(args.raw_cache, key)
+            if not path.exists():
+                continue
+            for ping in parse_snapshot(path.read_bytes())[0]:
+                if ping.line_ref in routes_wanted and ping.service_date == day:
+                    identity = (ping.line_ref, ping.origin_departure, ping.trip_ref)
+                    pings.setdefault(identity, []).append(
+                        TracePing(
+                            ping.recorded_at, ping.distance_m, ping.lat, ping.lon, ping.velocity
+                        )
+                    )
+        for (line_ref, origin, _trip_ref), ride_pings in pings.items():
+            trip, _reason = match_ride(schedule, line_ref, origin)
+            if trip is None:
+                continue
+            calls = trip.calls
+            for target in targets:
+                if target["routeId"] != line_ref:
+                    continue
+                for first, second in zip(calls, calls[1:], strict=False):
+                    if (first.stop_id, second.stop_id) != (
+                        target["fromStopId"],
+                        target["toStopId"],
+                    ):
+                        continue
+                    if first.distance_m is None or second.distance_m is None:
+                        continue
+                    trace = segment_trace(ride_pings, first.distance_m, second.distance_m)
+                    if trace is None:
+                        continue
+                    trace |= {
+                        "serviceDate": day.isoformat(),
+                        "hour": local_hour(first.departure),
+                        "scheduledSeconds": second.arrival - first.departure,
+                        "segmentMetres": round(second.distance_m - first.distance_m),
+                        "class": classify(trace),
+                    }
+                    key = (target["routeId"], target["fromStopId"], target["toStopId"])
+                    traces.setdefault(key, []).append(trace)
+        print(f"{day}: traced, {time.monotonic() - began:.0f} s", flush=True)
+    findings = []
+    for target in targets:
+        key = (target["routeId"], target["fromStopId"], target["toStopId"])
+        found = traces.get(key, [])
+        slow = [t for t in found if t["runSeconds"] >= 3 * max(t["scheduledSeconds"], 60)]
+        places = Counter(
+            (round(t["longestFrozenAt"][0], 3), round(t["longestFrozenAt"][1], 3))
+            for t in slow
+            if t["longestFrozenAt"]
+        )
+        common = places.most_common(1)[0] if places else None
+        findings.append(
+            target
+            | {
+                "tracedTrips": len(found),
+                "segmentMetres": found[0]["segmentMetres"] if found else None,
+                "runSecondsAll": distribution_summary([t["runSeconds"] for t in found])
+                if found
+                else None,
+                "slowTrips": len(slow),
+                "slowTripClasses": dict(Counter(t["class"] for t in slow)),
+                "slowTripFrozenShareMedian": percentile(
+                    [t["frozenSeconds"] / t["runSeconds"] for t in slow if t["runSeconds"]], 0.5
+                )
+                if slow
+                else None,
+                "slowTripGpsNetMetresWhileFrozenMedian": percentile(
+                    [t["gpsNetMetresWhileFrozen"] for t in slow], 0.5
+                )
+                if slow
+                else None,
+                "commonStandstillPlace": {
+                    "latLon": list(common[0]),
+                    "slowTrips": common[1],
+                    "nearestStop": nearest_stop(stops, common[0]),
+                }
+                if common
+                else None,
+                "slowHours": dict(sorted(Counter(t["hour"] for t in slow).items())),
+            }
+        )
+    result = {
+        "task": "OB-01 outlier-segment review (historical replay; not live, not for display)",
+        "generatedAt": datetime.now(UTC).isoformat(timespec="seconds"),
+        "monthReport": args.report.as_posix(),
+        "monthReportSha256": file_sha256(args.report),
+        "days": [day.isoformat() for day in args.day],
+        "method": (
+            "For each target route x stop pair, every matched trip on the review days is traced "
+            "on raw pings. A slow trip takes at least 3x its scheduled time (minimum 60 s). "
+            "'Frozen' stretches are consecutive pings whose SIRI distance advances by at most "
+            f"{FROZEN_M} m; net GPS movement over them separates a standstill ('stationary', "
+            f"frozen for at least {STATIONARY_SHARE:.0%} of the run) from a frozen-distance "
+            f"artefact (at least {ARTEFACT_GPS_M} m of GPS movement). Heuristic, unreviewed by "
+            "a human."
+        ),
+        "targets": findings,
+        "runtimeSeconds": round(time.monotonic() - began),
+    }
+    write_new(args.output, result)
+    for finding in findings:
+        print(
+            finding["routeId"],
+            finding["fromStopId"],
+            finding["toStopId"],
+            finding["tracedTrips"],
+            finding["slowTrips"],
+            finding["slowTripClasses"],
+            (finding["commonStandstillPlace"] or {}).get("nearestStop"),
+        )
+    return 0
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     sub = parser.add_subparsers(dest="command", required=True)
@@ -744,8 +931,20 @@ def main() -> int:
         else:
             command.add_argument("--calibration", required=True)
             command.add_argument("--calibration-report", type=Path, required=True)
+    command = sub.add_parser("review")
+    command.add_argument("--report", type=Path, required=True)
+    command.add_argument("--day", type=date.fromisoformat, action="append", required=True)
+    command.add_argument("--raw-cache", type=Path, required=True)
+    command.add_argument("--top", type=int, default=10)
+    command.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
-    commands = {"fetch": fetch, "observe": observe, "aggregate": aggregate, "validate": validate}
+    commands = {
+        "fetch": fetch,
+        "observe": observe,
+        "aggregate": aggregate,
+        "validate": validate,
+        "review": review,
+    }
     return commands[args.command](args)
 
 
