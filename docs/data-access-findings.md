@@ -3,7 +3,7 @@
 **Checked:** 28 August 2026
 **Question:** are the two Moovit-specific dependencies — nationwide GTFS and MOT realtime (SIRI) — actually usable by an independent open-source app?
 
-**Short answer:** GTFS is a solved problem, verified live and open. SIRI is the real gate, and it has *two* locks, not one: an access key issued by MOT on application, and an endpoint that is network-restricted. Service alerts sit behind the same application. The volunteer fallback (Open Bus Stride) is alive but currently gives raw SIRI with no GTFS linkage.
+**Short answer:** GTFS is a solved problem, verified live and open. SIRI is the real gate, and it has *two* locks, not one: an access key issued by MOT on application, and an endpoint that is network-restricted. Service alerts sit behind the same application. The volunteer fallback (Open Bus Stride) is alive; on 28 August it gave raw SIRI with no GTFS linkage. *Update, 1 October 2026:* about 96% of sampled recent rides now carry a ride-level GTFS link, but stop-level linkage is unconfirmed and the matcher remains ours to write (§3, [Open Bus research note](research/open-bus.md)).
 
 ---
 
@@ -112,6 +112,8 @@ So today the public Stride API is a source of *unmatched* SIRI, not of reconcile
 
 > **Prototyping on Open Bus does not save you the reconciliation work.** The GTFS↔realtime matcher is ours to write regardless of which source we use, exactly as the PRD assumed. That is good news for portability and bad news for anyone hoping Stride was a shortcut.
 
+**Update, 1 October 2026 (measured; the 28 August measurement above is kept as history).** Ride-level linkage now exists for recent rides: `siri_rides` scheduled 06:00–06:30 +03:00 had `gtfs_ride_id` for 4,187/4,366 (95.9%) on 2026-09-30 and 4,430/4,629 (95.7%) on 2026-09-23, all through Stride's route/time strategy, but 0/4,276 on 2026-08-30. Stop-level linkage is **unconfirmed**: a sampled matched ride still had `gtfs_stop_id` null on its first stops, and a wider sample failed when the API reset the connection. The conclusion narrows rather than reverses: Stride is no longer "unmatched SIRI" for recent rides, yet the matcher remains ours to write — Stride is a volunteer service, lags about 11 minutes, rejects large queries and resets connections, and does not confirm stop-level linkage. Hasadna's public S3 archive (raw SIRI since 2021, daily GTFS since 2022) is the more useful asset for offline work. Details and sources: [Open Bus research note](research/open-bus.md).
+
 ---
 
 ## 4. Service alerts — same door as SIRI
@@ -158,7 +160,7 @@ Nothing else in the project can resolve these, and the calendar cost of asking l
 
 If MOT declines or does not answer within a set window — suggest four weeks — the project chooses explicitly between:
 
-1. **Stride-backed realtime.** Works today, but it is a volunteer service, currently without GTFS linkage, and it is a permanent third-party dependency for the product's core promise.
+1. **Stride-backed realtime.** Works today, but it is a volunteer service, without GTFS linkage when checked on 28 August (1 October 2026: ride-level linkage for about 96% of sampled recent rides, stop level unconfirmed, about 11 minutes lag; see §3), and it is a permanent third-party dependency for the product's core promise.
 2. **Static-only planner.** Honest, shippable, but not the product described in the PRD.
 3. **Stop.** Per the PRD's own kill criterion #3.
 
@@ -176,5 +178,6 @@ That decision, not the code, is the real output of Phase 0.
 - [MOT GTFS page](https://www.gov.il/he/pages/gtfs_general_transit_feed_specifications)
 - [hasadna/open-bus-siri-requester](https://github.com/hasadna/open-bus-siri-requester) — reference implementation, MOT key + SSH tunnel
 - [hasadna/open-bus-stride-api](https://github.com/hasadna/open-bus-stride-api) and [the live API](https://open-bus-stride-api.hasadna.org.il/docs)
+- [Open Bus research note, 1 October 2026](research/open-bus.md) — archive, linkage and operations measurements
 - [Open Bus SIRI data documentation wiki](https://github.com/hasadna/open-bus/wiki/Bus-Real-Time-(SIRI)-Data-Documentation)
 - [data.gov.il terms of use](https://data.gov.il/he/terms-of-use)

@@ -1,0 +1,576 @@
+{
+  "task": "OB-01 pilot (historical replay; not live, not approved for public display)",
+  "generatedAt": "2026-10-01T17:26:23+00:00",
+  "serviceDate": "2026-09-15",
+  "dayType": "weekday",
+  "inputs": {
+    "siriArchive": "openbus-stride-public/stride-siri-requester (Hasadna Open Bus)",
+    "siriMinutesRequested": 1800,
+    "siriMinutesRead": 1784,
+    "siriMinutesMissing": [
+      "stride-siri-requester/2026/09/14/21/20.br",
+      "stride-siri-requester/2026/09/15/00/41.br",
+      "stride-siri-requester/2026/09/15/03/16.br",
+      "stride-siri-requester/2026/09/15/05/12.br",
+      "stride-siri-requester/2026/09/15/07/03.br",
+      "stride-siri-requester/2026/09/15/09/13.br",
+      "stride-siri-requester/2026/09/15/11/06.br",
+      "stride-siri-requester/2026/09/15/11/51.br",
+      "stride-siri-requester/2026/09/15/12/39.br",
+      "stride-siri-requester/2026/09/15/14/45.br",
+      "stride-siri-requester/2026/09/15/15/31.br",
+      "stride-siri-requester/2026/09/15/16/23.br",
+      "stride-siri-requester/2026/09/15/18/27.br",
+      "stride-siri-requester/2026/09/15/20/11.br",
+      "stride-siri-requester/2026/09/15/22/16.br",
+      "stride-siri-requester/2026/09/16/02/04.br"
+    ],
+    "feed": "D:/ot/open-bus-archive/gtfs-full/2026-09-15/israel-public-transportation.zip",
+    "feedSha256": "28c1e72c0f062c1d4d16f65cfef4cb09c9c618b3e1574ff9af658a4f22ffb1de",
+    "feedArchiveKey": "gtfs_archive/2026/09/15/israel-public-transportation.zip"
+  },
+  "parameters": {
+    "backwardToleranceM": 30,
+    "maxSpeedMps": 35,
+    "maxBracketS": 240,
+    "originEpsilonM": 50,
+    "cruiseMpsFromRest": 6.0,
+    "earlyLateThresholdsS": [
+      -60,
+      300
+    ]
+  },
+  "pings": {
+    "serviceDatePings": 8348747,
+    "skippedVisits": 7330,
+    "otherServiceDatePings": 286975,
+    "pings": 705283,
+    "duplicates": 285948,
+    "backwards": 8536,
+    "speedOutliers": 2935,
+    "ridesWithSeveralVehicles": 99
+  },
+  "matching": {
+    "rides": 135454,
+    "outcomes": {
+      "noTripOnServiceDate": 122464,
+      "matched": 12956,
+      "ambiguousTripRef": 1,
+      "routeMismatch": 17,
+      "originDepartureMismatch": 16
+    },
+    "scheduledTrips": 122254,
+    "scheduledTripsObserved": 12956,
+    "scheduledTripCoverage": 0.106,
+    "note": "Unobserved trips may have run untracked; never label them cancelled."
+  },
+  "calls": {
+    "afterLastPing": 37722,
+    "observed": 486393,
+    "gapTooLong": 13970,
+    "beforeFirstPing": 5922
+  },
+  "distanceConsistency": {
+    "orderChangesAgreeing": 238875,
+    "orderChangesDisagreeing": 141338,
+    "toleranceM": 100,
+    "disagreeingOffsetM": {
+      "n": 141338,
+      "p10": -1185.5,
+      "p50": -414.5,
+      "p90": -245.0
+    }
+  },
+  "interpolationCheck": {
+    "method": "re-infer sampled rides from every second ping; compare with full track",
+    "absErrorSeconds": {
+      "n": 6648,
+      "p10": 0.0,
+      "p50": 4.0,
+      "p90": 22.0
+    }
+  },
+  "originDepartureDelaySeconds": {
+    "n": 9084,
+    "p10": 8.0,
+    "p50": 57.0,
+    "p90": 199.0
+  },
+  "originEarlyShare": 0.004,
+  "originLateShare": 0.056,
+  "finalStopDelaySeconds": {
+    "n": 4236,
+    "p10": -236.0,
+    "p50": 384.0,
+    "p90": 1333.5
+  },
+  "durationRatio": {
+    "n": 3384,
+    "p10": 0.872,
+    "p50": 1.121,
+    "p90": 1.433
+  },
+  "stopDelayByScheduledHour": {
+    "0": {
+      "n": 8097,
+      "p10": -454.0,
+      "p50": 27.0,
+      "p90": 859.0
+    },
+    "1": {
+      "n": 1870,
+      "p10": -499.1,
+      "p50": -25.0,
+      "p90": 767.0
+    },
+    "2": {
+      "n": 114,
+      "p10": -154.0,
+      "p50": 206.5,
+      "p90": 1128.3
+    },
+    "3": {
+      "n": 17,
+      "p10": -174.6,
+      "p50": 1809.0,
+      "p90": 3077.6
+    },
+    "4": {
+      "n": 342,
+      "p10": -259.2,
+      "p50": -41.5,
+      "p90": 207.8
+    },
+    "5": {
+      "n": 10785,
+      "p10": -374.0,
+      "p50": -77.0,
+      "p90": 160.0
+    },
+    "6": {
+      "n": 26387,
+      "p10": -320.0,
+      "p50": -9.0,
+      "p90": 375.0
+    },
+    "7": {
+      "n": 33592,
+      "p10": -93.0,
+      "p50": 231.0,
+      "p90": 1355.0
+    },
+    "8": {
+      "n": 30560,
+      "p10": 5.0,
+      "p50": 531.0,
+      "p90": 1901.0
+    },
+    "9": {
+      "n": 28848,
+      "p10": -70.0,
+      "p50": 298.0,
+      "p90": 1482.0
+    },
+    "10": {
+      "n": 27570,
+      "p10": -89.0,
+      "p50": 225.0,
+      "p90": 1047.0
+    },
+    "11": {
+      "n": 22379,
+      "p10": -119.0,
+      "p50": 194.0,
+      "p90": 978.0
+    },
+    "12": {
+      "n": 28880,
+      "p10": -91.0,
+      "p50": 249.0,
+      "p90": 1179.0
+    },
+    "13": {
+      "n": 30408,
+      "p10": -67.0,
+      "p50": 330.0,
+      "p90": 1508.0
+    },
+    "14": {
+      "n": 28966,
+      "p10": -68.0,
+      "p50": 382.0,
+      "p90": 1744.0
+    },
+    "15": {
+      "n": 27854,
+      "p10": -31.0,
+      "p50": 404.0,
+      "p90": 2235.7
+    },
+    "16": {
+      "n": 26329,
+      "p10": -13.0,
+      "p50": 499.0,
+      "p90": 2101.2
+    },
+    "17": {
+      "n": 25404,
+      "p10": -36.0,
+      "p50": 416.0,
+      "p90": 1687.0
+    },
+    "18": {
+      "n": 24320,
+      "p10": -58.0,
+      "p50": 338.5,
+      "p90": 1478.0
+    },
+    "19": {
+      "n": 23447,
+      "p10": -73.0,
+      "p50": 316.0,
+      "p90": 1446.0
+    },
+    "20": {
+      "n": 20817,
+      "p10": -138.0,
+      "p50": 196.0,
+      "p90": 1340.0
+    },
+    "21": {
+      "n": 18909,
+      "p10": -206.0,
+      "p50": 115.0,
+      "p90": 1179.2
+    },
+    "22": {
+      "n": 16976,
+      "p10": -248.0,
+      "p50": 76.0,
+      "p90": 978.0
+    },
+    "23": {
+      "n": 14438,
+      "p10": -326.0,
+      "p50": 39.0,
+      "p90": 1048.0
+    }
+  },
+  "byAgency": {
+    "3": {
+      "scheduledTrips": 22407,
+      "matchedRides": 6337,
+      "finalStopDelaySeconds": {
+        "n": 4093,
+        "p10": -242.6,
+        "p50": 368.0,
+        "p90": 1241.0
+      }
+    },
+    "16": {
+      "scheduledTrips": 11616,
+      "matchedRides": 3410,
+      "finalStopDelaySeconds": {
+        "n": 68,
+        "p10": 727.5,
+        "p50": 1763.0,
+        "p90": 3185.0
+      }
+    },
+    "38": {
+      "scheduledTrips": 3218,
+      "matchedRides": 2703,
+      "finalStopDelaySeconds": {
+        "n": 73,
+        "p10": -230.6,
+        "p50": 1081.0,
+        "p90": 3745.6
+      }
+    },
+    "5": {
+      "scheduledTrips": 11870,
+      "matchedRides": 142,
+      "finalStopDelaySeconds": null
+    },
+    "4": {
+      "scheduledTrips": 2237,
+      "matchedRides": 130,
+      "finalStopDelaySeconds": null
+    },
+    "14": {
+      "scheduledTrips": 5737,
+      "matchedRides": 121,
+      "finalStopDelaySeconds": {
+        "n": 2,
+        "p10": -122.9,
+        "p50": 105.5,
+        "p90": 333.9
+      }
+    },
+    "135": {
+      "scheduledTrips": 1662,
+      "matchedRides": 23,
+      "finalStopDelaySeconds": null
+    },
+    "37": {
+      "scheduledTrips": 1899,
+      "matchedRides": 21,
+      "finalStopDelaySeconds": null
+    },
+    "18": {
+      "scheduledTrips": 13210,
+      "matchedRides": 20,
+      "finalStopDelaySeconds": null
+    },
+    "7": {
+      "scheduledTrips": 1541,
+      "matchedRides": 16,
+      "finalStopDelaySeconds": null
+    },
+    "15": {
+      "scheduledTrips": 12701,
+      "matchedRides": 12,
+      "finalStopDelaySeconds": null
+    },
+    "34": {
+      "scheduledTrips": 2634,
+      "matchedRides": 12,
+      "finalStopDelaySeconds": null
+    },
+    "6": {
+      "scheduledTrips": 2205,
+      "matchedRides": 8,
+      "finalStopDelaySeconds": null
+    },
+    "24": {
+      "scheduledTrips": 425,
+      "matchedRides": 1,
+      "finalStopDelaySeconds": null
+    }
+  },
+  "slowestSegmentsVsSchedule": [
+    {
+      "routeId": "10393",
+      "fromStopId": "8877",
+      "toStopId": "11755",
+      "hour": 18,
+      "dayType": "weekday",
+      "scheduledSecondsMedian": 120.0,
+      "samples": 3,
+      "runP10Seconds": 1393.2,
+      "runP50Seconds": 3834.0,
+      "runP90Seconds": 3922.8,
+      "routeShortName": "3",
+      "ratioP50": 31.95
+    },
+    {
+      "routeId": "30796",
+      "fromStopId": "9402",
+      "toStopId": "51369",
+      "hour": 21,
+      "dayType": "weekday",
+      "scheduledSecondsMedian": 133.0,
+      "samples": 4,
+      "runP10Seconds": 1760.6,
+      "runP50Seconds": 2712.5,
+      "runP90Seconds": 3221.3,
+      "routeShortName": "77",
+      "ratioP50": 20.39
+    },
+    {
+      "routeId": "10393",
+      "fromStopId": "8877",
+      "toStopId": "11755",
+      "hour": 19,
+      "dayType": "weekday",
+      "scheduledSecondsMedian": 120.0,
+      "samples": 5,
+      "runP10Seconds": 1541.8,
+      "runP50Seconds": 1788.0,
+      "runP90Seconds": 2312.6,
+      "routeShortName": "3",
+      "ratioP50": 14.9
+    },
+    {
+      "routeId": "36947",
+      "fromStopId": "48500",
+      "toStopId": "8750",
+      "hour": 16,
+      "dayType": "weekday",
+      "scheduledSecondsMedian": 161.0,
+      "samples": 3,
+      "runP10Seconds": 600.8,
+      "runP50Seconds": 1988.0,
+      "runP90Seconds": 1992.8,
+      "routeShortName": "505",
+      "ratioP50": 12.35
+    },
+    {
+      "routeId": "36017",
+      "fromStopId": "8877",
+      "toStopId": "9687",
+      "hour": 20,
+      "dayType": "weekday",
+      "scheduledSecondsMedian": 156.0,
+      "samples": 3,
+      "runP10Seconds": 708.6,
+      "runP50Seconds": 1855.0,
+      "runP90Seconds": 2184.6,
+      "routeShortName": "333",
+      "ratioP50": 11.89
+    },
+    {
+      "routeId": "44921",
+      "fromStopId": "8877",
+      "toStopId": "9687",
+      "hour": 20,
+      "dayType": "weekday",
+      "scheduledSecondsMedian": 147.0,
+      "samples": 5,
+      "runP10Seconds": 962.0,
+      "runP50Seconds": 1475.0,
+      "runP90Seconds": 1985.4,
+      "routeShortName": "222",
+      "ratioP50": 10.03
+    },
+    {
+      "routeId": "13435",
+      "fromStopId": "9690",
+      "toStopId": "10097",
+      "hour": 14,
+      "dayType": "weekday",
+      "scheduledSecondsMedian": 168.0,
+      "samples": 4,
+      "runP10Seconds": 1567.4,
+      "runP50Seconds": 1636.0,
+      "runP90Seconds": 1892.2,
+      "routeShortName": "1",
+      "ratioP50": 9.74
+    },
+    {
+      "routeId": "37172",
+      "fromStopId": "10097",
+      "toStopId": "10165",
+      "hour": 23,
+      "dayType": "weekday",
+      "scheduledSecondsMedian": 180.0,
+      "samples": 3,
+      "runP10Seconds": 881.6,
+      "runP50Seconds": 1592.0,
+      "runP90Seconds": 1605.6,
+      "routeShortName": "111",
+      "ratioP50": 8.84
+    },
+    {
+      "routeId": "20272",
+      "fromStopId": "9552",
+      "toStopId": "8750",
+      "hour": 16,
+      "dayType": "weekday",
+      "scheduledSecondsMedian": 220.0,
+      "samples": 3,
+      "runP10Seconds": 1778.4,
+      "runP50Seconds": 1876.0,
+      "runP90Seconds": 1892.8,
+      "routeShortName": "509",
+      "ratioP50": 8.53
+    },
+    {
+      "routeId": "13435",
+      "fromStopId": "9690",
+      "toStopId": "10097",
+      "hour": 13,
+      "dayType": "weekday",
+      "scheduledSecondsMedian": 168.0,
+      "samples": 5,
+      "runP10Seconds": 994.6,
+      "runP50Seconds": 1368.0,
+      "runP90Seconds": 1516.4,
+      "routeShortName": "1",
+      "ratioP50": 8.14
+    },
+    {
+      "routeId": "30794",
+      "fromStopId": "9552",
+      "toStopId": "8750",
+      "hour": 16,
+      "dayType": "weekday",
+      "scheduledSecondsMedian": 229.0,
+      "samples": 3,
+      "runP10Seconds": 1455.8,
+      "runP50Seconds": 1847.0,
+      "runP90Seconds": 2087.8,
+      "routeShortName": "77",
+      "ratioP50": 8.07
+    },
+    {
+      "routeId": "13435",
+      "fromStopId": "9690",
+      "toStopId": "10097",
+      "hour": 23,
+      "dayType": "weekday",
+      "scheduledSecondsMedian": 168.0,
+      "samples": 6,
+      "runP10Seconds": 309.5,
+      "runP50Seconds": 1335.0,
+      "runP90Seconds": 1735.0,
+      "routeShortName": "1",
+      "ratioP50": 7.95
+    },
+    {
+      "routeId": "23504",
+      "fromStopId": "46373",
+      "toStopId": "46838",
+      "hour": 19,
+      "dayType": "weekday",
+      "scheduledSecondsMedian": 125.0,
+      "samples": 3,
+      "runP10Seconds": 285.0,
+      "runP50Seconds": 969.0,
+      "runP90Seconds": 973.8,
+      "routeShortName": "91",
+      "ratioP50": 7.75
+    },
+    {
+      "routeId": "44921",
+      "fromStopId": "9690",
+      "toStopId": "11623",
+      "hour": 22,
+      "dayType": "weekday",
+      "scheduledSecondsMedian": 152.0,
+      "samples": 3,
+      "runP10Seconds": 668.8,
+      "runP50Seconds": 1128.0,
+      "runP90Seconds": 1254.4,
+      "routeShortName": "222",
+      "ratioP50": 7.42
+    },
+    {
+      "routeId": "33665",
+      "fromStopId": "10226",
+      "toStopId": "10790",
+      "hour": 15,
+      "dayType": "weekday",
+      "scheduledSecondsMedian": 131.0,
+      "samples": 3,
+      "runP10Seconds": 917.2,
+      "runP50Seconds": 934.0,
+      "runP90Seconds": 1399.6,
+      "routeShortName": "61",
+      "ratioP50": 7.13
+    }
+  ],
+  "tables": {
+    "delays": {
+      "path": "D:/ot/open-bus-archive/ob01/2026-09-15/delays.csv.gz",
+      "rows": 207197,
+      "sha256": "624708c7d4886139d6e56de34fda03dba3430e090a3719c6468f0c3971e7a8e7"
+    },
+    "segments": {
+      "path": "D:/ot/open-bus-archive/ob01/2026-09-15/segments.csv.gz",
+      "rows": 201987,
+      "sha256": "56b5226551042768ac3e7cb8452be970e80e077724df9d0af16f1e3161b14cd1"
+    }
+  },
+  "scope": "One service day; historical replay from a third-party archive of MOT SIRI. Inferred times are about ±30 s at one-minute pings. Small per-key samples; distributions need a month and a held-out validation month (OB-01 done-when). Public display needs Phase 4 and data terms."
+}
