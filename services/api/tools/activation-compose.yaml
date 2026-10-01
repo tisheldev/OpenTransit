@@ -28,6 +28,8 @@ services:
       OPENTRANSIT_CURRENT_BINDING: /managed/current
       OPENTRANSIT_MANAGED_ROOT: /managed
       OPENTRANSIT_ACK_DIR: /managed/acks
+      # Operator load harness from one client: the M7 per-client limiter would reject it.
+      OPENTRANSIT_RATE_LIMIT_ENABLED: "0"
     volumes:
       - root:/managed
       - ${OT_SRC}:/src:ro
