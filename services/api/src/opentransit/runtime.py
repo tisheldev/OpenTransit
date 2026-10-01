@@ -144,9 +144,13 @@ class RuntimeSnapshot:
             artifacts = manifest["artifacts"]
             routing_verified = (
                 probe.get("status") == "passed"
-                # Composite generations reuse the original graph and probe.
-                # Preserve the component identity instead of relabeling evidence.
-                and probe.get("generationId") == component_generation_id
+                # A composite probe records both identities: the public generation ID
+                # and the schedule component whose graph/reference it verified.
+                and probe.get("generationId") == generation.id
+                and (
+                    "scheduleComponentGenerationId" not in manifest
+                    or probe.get("scheduleComponentGenerationId") == component_generation_id
+                )
                 and probe.get("engineDigest") == generation.engine_digest
                 and probe.get("engineOrigin", "").rstrip("/")
                 == str(motis.client.base_url).rstrip("/")

@@ -116,17 +116,16 @@ init (SUCCESS) -> photon (HEALTHY) ---------------------------^
 
 ## Known gaps found while drafting (need code or decisions outside deploy/aws)
 
-* **G1 (blocks the Photon variant).** `opentransit probe` cannot verify a composite address
-  generation: it opens the reference DB with the composite `generationId` (`probe.py`, `ReferenceStore(...,
-  generation.id)`), but the DB embeds the schedule *component* ID, and it records the composite
-  ID while `RuntimeSnapshot.load` requires `probe.generationId == scheduleComponentGenerationId`.
-  Suggested fix (root): probe with the component ID and record both IDs. The no-addresses
-  variant is unaffected.
-* **G2 (freshness).** The verifier requires source freshness `current` (under 30 h since the
-  recorded source check); `/readyz` stays ready until 7 days. A task replaced from an image more
-  than 30 h after its source check cannot pass the verifier, so "replacement recovers from the
-  pinned image" holds only inside that window unless images are rebuilt with a fresh check or the
-  probe policy changes. Decide before H-1; harmless for a same-day H-0.
+* **G1 (resolved in code).** `opentransit probe` now verifies a composite address generation: it opens the
+  reference DB with the schedule *component* ID (the ID the DB embeds) and records both the public
+  `generationId` and `scheduleComponentGenerationId`. `RuntimeSnapshot.load` requires the probe's
+  `generationId` to equal the public ID and, for composites, the component ID to match, plus the
+  unchanged engine-origin and graph/config/reference hash bindings. Plain generations are unchanged.
+* **G2 (resolved in code).** The verifier accepts exactly the source-freshness states `/readyz` serves
+  (`current`, `aging`, `stale`; docs/system-design.md section 9) and rejects `expired` (7 days or more,
+  or a check dated more than 5 minutes ahead). The state is recorded as `sourceFreshness` in the probe
+  report, with a warning when not `current`. A task replaced from a pinned image therefore starts for
+  up to 7 days after its source check; after that `/readyz` would reject it too.
 * **G3 (slot ports).** Generations built with `--local-engine-slot` bake `server.port` 59081 into
   `motis/config.yml` inside the hashed graph tree. The preserved M3/M4 generations are slot builds;
   the H-0 generation needs a slot-free build (the October rebuild). `init` and `stage_bundle` reject
@@ -279,5 +278,4 @@ before creating anything.
    H-0 start with option (c) (addresses off) while D4 is open?
 2. If 3 GiB fails, may the aggregate ceiling be read on measured usage (so two 4 GiB tasks are
    allowed), or must it hold by allocation?
-3. G1/G2 need a code/policy decision by root before the Photon variant or unattended refresh can
-   work: composite probe identity, and freshness policy for replaced tasks.
+3. G1/G2 are resolved in code (see above); the Photon variant still needs a slot-free build (G3).
