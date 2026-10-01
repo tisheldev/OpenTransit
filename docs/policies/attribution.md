@@ -23,5 +23,5 @@ This credit is provisional and does not imply MOT endorsement or accepted terms.
 MOTIS routes journeys (MIT); Photon provides optional address geocoding (Apache-2.0).
 Their software licences do not license the datasets they process. See the
 [licence audit](../licence-audit.md) for dependency and container notice obligations.
-The OpenTransit code licence remains a user decision. No live SIRI or alerts attribution
+Original OpenTransit code/docs use [MIT](../../LICENSE); upstream data keeps its own terms. No live SIRI or alerts attribution
 is claimed because those capabilities are deferred.

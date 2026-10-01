@@ -99,8 +99,12 @@ ECR digests, with empty task storage. Never reset production volumes to simulate
    remove only this drill's disposable resources using the AWS runbook.
 
 Record **measured restore seconds: pending (not run)**, recovery point/source-check age,
-failed attempts and acceptance verdict. The user must choose RTO/RPO and observation
-window; do not declare a drill passed against an invented target. The startup verifier
+failed attempts and acceptance verdict. With technical choices delegated on 1 October,
+use initial drill objectives of useful service restored within **15 minutes**, the
+latest successfully validated retained generation with upstream paired-check age
+**at most 24 hours**, and **15 minutes** of stable external observation after recovery.
+These are test objectives, not an SLA or a change to serving freshness rules; preserve
+all source/evidence artifacts. Measure before claiming a pass. The startup verifier
 accepts the same freshness states as `/readyz` (current, aging or stale, up to seven days
 since validation); an image whose source check has expired needs a new paired upstream
 check and build, not a relaxed verifier.

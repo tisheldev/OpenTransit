@@ -30,4 +30,4 @@ Governing law, dispute process and enforceable liability wording need profession
 [Privacy](privacy.md) explains request processing. [Attribution](attribution.md) identifies
 upstream sources. API access does not grant ownership of their data or permission to
 redistribute raw feeds, graphs or databases; source licences apply separately from the
-future OpenTransit code licence. Review material changes before their stated effective date.
+[MIT OpenTransit code licence](../../LICENSE). Review material changes before their stated effective date.
