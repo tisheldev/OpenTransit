@@ -16,7 +16,7 @@ from opentransit.localities import (
     representative_point,
 )
 from opentransit.reference import STOP_PREFIX, ReferenceStore, build_reference
-from opentransit.stop_search import search_stops
+from opentransit.stop_search import _search_index, search_stops
 
 PBF_SHA = "a" * 64
 
@@ -413,6 +413,23 @@ def test_part_of_a_compound_name_names_the_locality():
         rows, [_locality(4, [("", "Binyamina - Givat Ada", "name")], (32.5, 34.9))]
     )
     assert _ids(search_stops(reference, "Givat Ada", language="en"))[:1] == [STOP_PREFIX + "kadima"]
+
+
+def test_plain_hyphen_splits_only_merged_names_of_long_parts():
+    rows = [
+        _stop("m", "מודיעין", "Modiin Central", localities=["osm:relation:5"], lat=31.9, lon=35.0)
+    ]
+    reference = _Reference(
+        rows,
+        [
+            _locality(5, [("en", "Modiin-Maccabim-Reut", "name:en")], (31.9, 35.0)),
+            _locality(6, [("en", "Tel-Aviv", "name:en")], (32.08, 34.78)),
+        ],
+    )
+    assert _ids(search_stops(reference, "Maccabim", language="en"))[:1] == [STOP_PREFIX + "m"]
+    index = _search_index(reference)
+    assert "tel" not in index.osm_by_name and "aviv" not in index.osm_by_name
+    assert "tel aviv" in index.osm_by_name
 
 
 def test_locality_without_stops_is_ignored_and_ordinary_search_runs():

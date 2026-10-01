@@ -282,9 +282,17 @@ def _locality_aliases(rows: list[dict[str, Any]], cities: set[str]) -> dict[str,
 
 
 def _locality_name_forms(name: str) -> list[str]:
-    """Normalized forms of an OSM locality name: whole name, then each dash-part."""
+    """Normalized forms of an OSM locality name: whole name, then each dash-part.
+
+    A plain hyphen only splits a merged name of three or more long parts
+    ("Modiin-Maccabim-Reut"); "Tel-Aviv" or "Be'er-Sheva" are single names.
+    """
+    parts = [*_NAME_PART_SPLIT.split(name)]
+    hyphenated = name.split("-")
+    if len(hyphenated) >= 3 and all(len(normalize_label(part)) >= 4 for part in hyphenated):
+        parts.extend(hyphenated)
     forms = []
-    for candidate in (name, *_NAME_PART_SPLIT.split(name)):
+    for candidate in (name, *parts):
         form = normalize_label(candidate)
         if len(form) >= _LOCALITY_MIN_ALIAS_CHARS and any(char.isalpha() for char in form):
             forms.append(form)
