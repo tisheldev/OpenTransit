@@ -111,6 +111,7 @@ Keep only the latest five material outcomes; Git preserves older history.
 | Results and reproduction | [PoC status](poc/README.md), [routing runbook](poc/routing/README.md), [rerun report](poc/docs/primary-feed-rerun.md) |
 | M2 identity/provenance and new feed audit | [Data contracts](docs/data-contracts.md), [domain glossary](CONTEXT.md), [timing policy](poc/docs/adr/0008-bounded-minute-schedule-interpretation.md), [raw audit](services/api/results/m2-validation-attempt3-20260930.json), [full policy audit](services/api/results/m2-validation-attempt5-20260930.json); attempt 4 records runner access failure, attempt 2 peak-memory value is invalid |
 | Phase 2 client design (proposal) | [Client design](docs/client-design.md); local AWS drafts in [deploy/aws](deploy/aws/README.md) |
+| Operations, policies, load tests, licences (drafts) | [Operations runbook](docs/operations.md), [policies](docs/policies/privacy.md), [load scenarios](tools/load/README.md), [licence audit](docs/licence-audit.md) |
 | Code structure, UML, contracts and operations | [System design](docs/system-design.md), [architecture overview](docs/architecture.md); review drafts, not implementation evidence |
 
 Removed historical planning material is recoverable from Git at `3398826`; do not recreate an archive folder or a separate session-report document. Historical experimental comparisons remain under `poc/comparisons/` because they support measured claims.

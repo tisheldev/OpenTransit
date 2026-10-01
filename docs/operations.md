@@ -66,9 +66,10 @@ not contain that index. Fargate staging rejects local slot-port builds: do not p
 | Bad release / rollback | Preserve failed candidate events/probe. Keep the old healthy task until replacement is verified and requests drain; do not swap graph/reference files independently. | Recheck the retained previous generation's coverage, source freshness and hashes. Select its complete task revision/image digest set, roll the ECS service back, wait for readiness and synthetic checks, then drain the failed task. If previous data is expired, build fresh; rollback is not a freshness bypass. |
 | Lost Fargate task | Treat task volumes as lost; inspect stopped reason and ECS replacement events. One steady task is not high availability. Avoid launching duplicate manual replacements while ECS reconciles. | ECS restores the approved desired count from pinned ECR images and task definition. If replacement fails, verify digest availability, roles, subnet egress, disk, init/probe and health grace. Recover missing deployment configuration from retained definitions. No host directory or production `current` symlink is a backup. |
 
-For local pointer/reload activation, use the implemented and verified Linux workflow
-for the release being operated; this runbook does not invent an `opentransit activate`
-or `rollback` subcommand. Cloud recovery uses complete task revisions. Keep API/MOTIS
+For local pointer/reload activation, use `opentransit activate`, `rollback` and
+`await-retirement` inside the Linux API container ([development](development.md)); their
+live Compose acceptance is still open. A complete schedule-plus-address generation is
+built in one step with `opentransit build-generation` ([development](development.md)). Cloud recovery uses complete task revisions. Keep API/MOTIS
 (and optional Photon) in one task, engine ports private, source credentials out of
 serving, and aggregate serving/replacement memory under 8 GiB. ALB memory remains an
 explicit measurement boundary; task allocations alone do not prove full-stack capacity.
@@ -94,8 +95,10 @@ ECR digests, with empty task storage. Never reset production volumes to simulate
 
 Record **measured restore seconds: pending (not run)**, recovery point/source-check age,
 failed attempts and acceptance verdict. The user must choose RTO/RPO and observation
-window; do not declare a drill passed against an invented target. An image-only restore
-that now fails freshness needs a new paired upstream check/build, not a relaxed verifier.
+window; do not declare a drill passed against an invented target. The startup verifier
+accepts the same freshness states as `/readyz` (current, aging or stale, up to seven days
+since validation); an image whose source check has expired needs a new paired upstream
+check and build, not a relaxed verifier.
 These procedures support [M7/M8 acceptance](next-steps.md#later-milestones); load evidence
 comes from [tools/load](../tools/load/README.md). Release still requires H3/H4, static
 terms, integration and actual operational/deployed evidence.
