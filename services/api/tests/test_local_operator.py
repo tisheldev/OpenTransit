@@ -242,6 +242,7 @@ def test_rejected_candidate_restores_pointer_and_old_snapshot_keeps_serving(serv
     detail = failed.value.detail
     assert detail["status"] == "rejected"
     assert detail["failureAck"]["failureCode"] == "factory_rejected"
+    assert detail["failureAck"]["failureKind"] == "ValueError"
     assert detail["pointerRestored"] is True
     assert detail["pointerGenerationId"] == held.generation.id
     assert detail["pointerToken"] == detail["restoreToken"] != "op-old-1"

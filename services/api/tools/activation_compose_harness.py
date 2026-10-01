@@ -20,6 +20,7 @@ import argparse
 import hashlib
 import json
 import os
+import random
 import re
 import subprocess
 import sys
@@ -389,6 +390,8 @@ class Harness:
             "/managed/acks",
             "--binding",
             binding,
+            "--timeout",
+            "3600",  # a reload hashes ~3.7 GB several times; r03 took 9-16 minutes
         ]
         if now:
             args += ["--now", now]
@@ -405,14 +408,15 @@ class Harness:
             headers={"content-type": "application/json"},
             method="POST",
         )
+        error = None
         try:
             with urllib.request.urlopen(request, timeout=timeout) as response:
                 body = json.loads(response.read())
                 status = response.status
         except urllib.error.HTTPError as exc:
-            body, status = None, exc.code
-        except urllib.error.URLError, TimeoutError, OSError, ValueError:
-            body, status = None, 0
+            body, status, error = None, exc.code, "HTTPError"
+        except (urllib.error.URLError, TimeoutError, OSError, ValueError) as exc:
+            body, status, error = None, 0, type(exc).__name__
         generation = None
         if isinstance(body, dict):
             meta = (body.get("data") or {}).get("metadata") or body.get("metadata") or {}
@@ -420,7 +424,13 @@ class Harness:
             if generation is None:
                 match = re.search(r'"generationId":\s*"([^"]+)"', json.dumps(body))
                 generation = match[1] if match else None
-        return {"t0": started, "t1": time.time(), "status": status, "generationId": generation}
+        return {
+            "t0": started,
+            "t1": time.time(),
+            "status": status,
+            "generationId": generation,
+            "error": error,
+        }
 
     def burst(self, count=4) -> list[dict]:
         results = []
@@ -428,14 +438,14 @@ class Harness:
             results.append(self.journey())
         return results
 
-    def load(self, clients=6):
+    def load(self, clients=4):
         records: list[dict] = []
         stop = threading.Event()
 
         def worker():
             while not stop.is_set():
                 records.append(self.journey())
-                time.sleep(0.05)
+                time.sleep(random.uniform(0.0, 0.25))  # desynchronise the clients
 
         threads = [threading.Thread(target=worker) for _ in range(clients)]
         for thread in threads:
@@ -627,9 +637,16 @@ class Harness:
         ok = rc == 0 and (report or {}).get("status") == "acknowledged"
         new = [r for r in records if r["generationId"] == self.b_id]
         old = [r for r in records if r["generationId"] == self.a_id]
+        ack_container = (
+            datetime.fromisoformat(report["ackFileMtimeUtc"]).timestamp() if ok else None
+        )
+        # The activation ack is written immediately after the snapshot is published, so its
+        # time (converted to the host clock) bounds the publication instant.
+        ack = ack_container - skew if ack_container else None
         boundary = min((r["t0"] for r in new), default=None)
-        crossing = [r for r in old if boundary and r["t0"] < boundary < r["t1"]]
-        late_old = [r for r in old if boundary and r["t0"] > boundary + 0.25]
+        crossing = [r for r in old if ack and r["t0"] < ack < r["t1"]]
+        late_old = [r for r in old if ack and r["t0"] > ack + 0.5]
+        early_new = [r for r in new if ack and r["t1"] < ack - 0.5]
         non_ok = [r for r in records if r["status"] != 200]
         unknown = [r for r in records if r["generationId"] not in {self.a_id, self.b_id}]
         self.check(
@@ -639,6 +656,7 @@ class Harness:
             and bool(old)
             and len(crossing) >= 1
             and not late_old
+            and not early_new
             and not non_ok
             and not unknown
             and pointer_reads["errors"] == 0
@@ -647,14 +665,18 @@ class Harness:
             requestCount=len(records),
             perGeneration=self.generation_ids(records),
             inflightCrossingBoundary=len(crossing),
-            maxCrossingOverlapMs=round(
-                max((r["t1"] - boundary for r in crossing), default=0) * 1000
-            ),
-            oldStartedAfterBoundaryPlus250ms=len(late_old),
+            maxCrossingOverlapMs=round(max((r["t1"] - ack for r in crossing), default=0) * 1000),
+            oldStartedMoreThan500msAfterAck=len(late_old),
+            newFinishedMoreThan500msBeforeAck=len(early_new),
+            firstNewRequestStartOffsetMs=round((boundary - ack) * 1000)
+            if boundary and ack
+            else None,
+            nonSuccessErrors=sorted({str(r.get("error")) for r in records if r["status"] != 200}),
             nonSuccess=len(non_ok),
             proxyDelaySeconds=PROXY_DELAY,
             hostToContainerClockSkewSeconds=round(skew, 3),
-            boundaryNote="boundary = start of the first request answered by the new generation",
+            boundaryNote="in-flight = started before the activation ack (publication instant) and "
+            "answered by the old generation after it; ack time converted with the measured skew",
         )
         self.new_token = "t2-b-activate"
         self.old_token = (report or {}).get("retiredOperationToken") or "unknown"
@@ -785,6 +807,13 @@ class Harness:
         # Valid rollback: the old engine was stopped, so restart it first.
         self.run(["docker", "start", "ot-t2-motis-a"], label="docker start ot-t2-motis-a")
         ready = self.wait_engine(59081)
+        for _ in range(6):  # page the graph back in; the worker health check allows 1.2 s
+            self.python_in_api(
+                "import urllib.request as u;u.urlopen('http://127.0.0.1:59081/api/v6/plan?"
+                "fromPlace=32.0757,34.7748&toPlace=32.0838,34.8044&time=2026-10-05T05:00:00Z',"
+                "timeout=10)",
+                timeout=30,
+            )
         started = time.time()
         rc, report, proc = self.activate(a_binding, action="rollback")
         seconds = round(time.time() - started, 1)

@@ -175,8 +175,8 @@ class SnapshotManager:
 
             try:
                 candidate = await self._create_lease(binding)
-            except BaseException:
-                self._write_failure_ack(binding, "factory_rejected")
+            except BaseException as exc:
+                self._write_failure_ack(binding, "factory_rejected", exc)
                 raise
             try:
                 with activation_lock(self.managed_root):
@@ -265,7 +265,9 @@ class SnapshotManager:
             # to stop an engine. The old client is already closed after the grace.
             return
 
-    def _write_failure_ack(self, attempted: GenerationBinding, failure_code: str) -> None:
+    def _write_failure_ack(
+        self, attempted: GenerationBinding, failure_code: str, error: BaseException | None = None
+    ) -> None:
         active_binding = self._active[1] if self._active else None
         try:
             self._write_ack(
@@ -281,6 +283,8 @@ class SnapshotManager:
                     "workerIncarnationId": self.worker_incarnation_id,
                     "status": "rejected",
                     "failureCode": failure_code,
+                    # Exception class only: messages can carry paths or request data.
+                    "failureKind": type(error).__name__ if error is not None else None,
                     "activeOperationToken": (
                         active_binding.activation_token if active_binding else None
                     ),
