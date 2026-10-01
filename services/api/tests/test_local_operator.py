@@ -167,6 +167,12 @@ def test_currency_check_names_each_expiry_reason(served):
     with pytest.raises(operator.ActivationRefused) as stale:
         operator.check_currency(binding, now + timedelta(days=3))
     assert stale.value.reasons == ["source_stale"]
+    rollback_binding = read_binding(
+        operator.reissue_binding(served.root, served.old, "rollback"), served.root, verify=False
+    )
+    assert (
+        operator.check_currency(rollback_binding, now + timedelta(days=3))["freshness"] == "stale"
+    )
     with pytest.raises(operator.ActivationRefused) as expired:
         operator.check_currency(binding, now + timedelta(days=90))
     assert "coverage_expired" in expired.value.reasons
@@ -263,10 +269,10 @@ def test_unacknowledged_candidate_times_out_and_pointer_is_restored(served):
 
 
 @posix_only
-def test_rollback_refuses_stale_previous_before_touching_pointer(served):
+def test_rollback_refuses_expired_previous_before_touching_pointer(served):
     before = current_target(served.current)
     files_before = sorted(path.name for path in served.root.iterdir())
-    future = datetime.now(UTC) + timedelta(days=3)
+    future = datetime.now(UTC) + timedelta(days=10)
     with pytest.raises(operator.ActivationRefused) as refused:
         operator.rollback(
             served.root,
@@ -275,9 +281,29 @@ def test_rollback_refuses_stale_previous_before_touching_pointer(served):
             now=future,
             signaller=served.worker.signaller,
         )
-    assert refused.value.reasons == ["source_stale"]
+    assert refused.value.reasons == ["source_expired"]
     assert current_target(served.current) == before
     assert sorted(path.name for path in served.root.iterdir()) == files_before
+    assert served.worker.signalled == []
+
+
+@posix_only
+def test_stale_generation_may_roll_back_but_a_new_candidate_may_not(served):
+    stale = datetime.now(UTC) + timedelta(days=3)
+    eligible = operator.rollback(
+        served.root, served.old, served.root / "acks", now=stale, check_only=True
+    )
+    assert eligible["status"] == "eligible"
+    assert eligible["currency"]["freshness"] == "stale"
+    with pytest.raises(operator.ActivationRefused) as refused:
+        operator.activate(
+            served.root,
+            served.new,
+            served.root / "acks",
+            now=stale,
+            signaller=served.worker.signaller,
+        )
+    assert refused.value.reasons == ["source_stale"]
     assert served.worker.signalled == []
 
 

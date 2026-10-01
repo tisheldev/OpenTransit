@@ -137,6 +137,9 @@ def main(argv: list[str] | None = None) -> int:
         op.add_argument("--binding", type=Path, required=True)
         op.add_argument("--now", type=datetime.fromisoformat, help="Override the check clock")
         op.add_argument("--timeout", type=float, default=900.0)
+        op.add_argument(
+            "--check-only", action="store_true", help="Report coverage/freshness eligibility only"
+        )
     retire = commands.add_parser(
         "await-retirement", help="Wait for the worker to retire the old snapshot"
     )
@@ -252,13 +255,27 @@ def main(argv: list[str] | None = None) -> int:
                     )
                 else:
                     action = operator.activate if args.command == "activate" else operator.rollback
-                    result = action(
-                        args.managed_root,
-                        args.binding,
-                        args.ack_dir,
-                        now=args.now,
-                        timeout=args.timeout,
-                    )
+                    extra = {"check_only": True} if args.check_only else {}
+                    if args.check_only and args.command == "activate":
+                        binding = operator.read_binding(
+                            args.binding, args.managed_root.resolve(strict=True), verify=False
+                        )
+                        result = {
+                            "status": "eligible",
+                            "action": "activate",
+                            "currency": operator.check_currency(
+                                binding, args.now or datetime.now(UTC)
+                            ),
+                        }
+                    else:
+                        result = action(
+                            args.managed_root,
+                            args.binding,
+                            args.ack_dir,
+                            now=args.now,
+                            timeout=args.timeout,
+                            **extra,
+                        )
             except operator.ActivationRefused as exc:
                 result = {"status": "refused", "reasons": exc.reasons, "detail": exc.detail}
             except operator.ActivationFailed as exc:
@@ -266,7 +283,7 @@ def main(argv: list[str] | None = None) -> int:
             except TimeoutError as exc:
                 result = {"status": "timeout", "message": str(exc)}
             print(json.dumps(result, sort_keys=True, ensure_ascii=False))
-            return 0 if result.get("status") in {"acknowledged", "retired"} else 2
+            return 0 if result.get("status") in {"acknowledged", "retired", "eligible"} else 2
     except (OSError, ValueError, RuntimeError) as exc:
         print(f"{type(exc).__name__}: {exc}", file=sys.stderr)
         return 1

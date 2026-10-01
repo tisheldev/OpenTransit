@@ -18,6 +18,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from opentransit.build.activation import (
+    GenerationBinding,
     activate_current,
     activation_ack_filename,
     activation_failure_ack_filename,
@@ -55,7 +56,12 @@ class ActivationFailed(RuntimeError):
 
 
 def check_currency(binding, now: datetime) -> dict:
-    """Re-check coverage and source freshness for a binding at ``now`` without the engine."""
+    """Re-check coverage and source freshness for a binding at ``now`` without the engine.
+
+    A new candidate needs ``current`` freshness. A rollback binding re-serves a generation that
+    was already serving, so ``aging`` and ``stale`` stay serviceable (and are labelled); only
+    ``expired`` freshness or lapsed coverage is refused.
+    """
     if now.utcoffset() is None:
         raise ValueError("Operator clock must have an explicit timezone")
     manifest_path = binding.generation_dir / "manifest.json"
@@ -74,7 +80,8 @@ def check_currency(binding, now: datetime) -> dict:
     elif instant >= as_utc_instant(generation.coverage_until):
         reasons.append("coverage_expired")
     freshness = generation.freshness(now)
-    if freshness != "current":
+    rollback = binding.purpose == "rollback"
+    if not (generation.freshness_serviceable(now) if rollback else freshness == "current"):
         reasons.append(f"source_{freshness}")
     detail = {
         "generationId": generation.id,
@@ -87,6 +94,7 @@ def check_currency(binding, now: datetime) -> dict:
         if generation.source_checked_at
         else None,
         "freshness": freshness,
+        "purpose": binding.purpose,
     }
     if reasons:
         raise ActivationRefused(reasons, detail)
@@ -153,12 +161,19 @@ def _wait_for_ack(
         sleep(poll)
 
 
-def reissue_binding(root: Path, binding_path: Path) -> Path:
-    """Write a new binding for the same generation with a fresh operation token."""
+def reissue_binding(root: Path, binding_path: Path, purpose: str = "activate") -> Path:
+    """Write a new binding for the same generation with a fresh operation token.
+
+    ``write_binding`` verifies every artifact, so the source binding is only parsed here.
+    """
     root = Path(root).resolve(strict=True)
-    existing = read_binding(Path(binding_path), root)
+    existing = read_binding(Path(binding_path), root, verify=False)
     data = existing.as_dict()
     data["activationToken"] = new_operation_token()
+    if purpose == "rollback":
+        data["purpose"] = "rollback"
+    else:
+        data.pop("purpose", None)
     path = root / f"binding-{data['activationToken']}.json"
     write_binding(path, data, root)
     return path
@@ -181,7 +196,8 @@ def activate(
     root = Path(managed_root).resolve(strict=True)
     current = root / "current"
     now = now or datetime.now(UTC)
-    candidate = read_binding(Path(binding_path), root)
+    # Cheap refusal first; activate_current verifies every artifact before the pointer moves.
+    candidate = read_binding(Path(binding_path), root, verify=False)
     currency = check_currency(candidate, now)
     worker = read_worker_record(ack_dir)
     previous = read_binding_metadata(current, root)
@@ -230,7 +246,7 @@ def activate(
     if previous_target is None:
         report["pointerRestored"] = False
         raise ActivationFailed("Prior pointer was not a symlink; cannot restore it", report)
-    restore_path = reissue_binding(root, root / previous_target)
+    restore_path = reissue_binding(root, root / previous_target, "rollback")
     restored = restore_current_if_current(root, current, candidate.activation_token, restore_path)
     pointer = read_binding_metadata(current, root)
     report.update(
@@ -246,13 +262,22 @@ def rollback(
     managed_root: Path,
     to_binding_path: Path,
     ack_dir: Path,
+    *,
+    check_only: bool = False,
     **options,
 ) -> dict:
-    """Re-check coverage/freshness, then activate a fresh-token binding of an older generation."""
+    """Re-check coverage/freshness, then activate a fresh-token rollback binding.
+
+    Serviceable (current, aging or stale) generations roll back; expired ones are refused
+    before the pointer is touched. ``check_only`` reports eligibility without changing anything.
+    """
     root = Path(managed_root).resolve(strict=True)
-    existing = read_binding(Path(to_binding_path), root)
-    check_currency(existing, options.get("now") or datetime.now(UTC))
-    fresh = reissue_binding(root, to_binding_path)
+    existing = read_binding(Path(to_binding_path), root, verify=False)
+    probe = GenerationBinding(**{**existing.__dict__, "purpose": "rollback"})
+    currency = check_currency(probe, options.get("now") or datetime.now(UTC))
+    if check_only:
+        return {"status": "eligible", "action": "rollback", "currency": currency}
+    fresh = reissue_binding(root, to_binding_path, "rollback")
     return activate(root, fresh, ack_dir, action="rollback", **options)
 
 

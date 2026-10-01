@@ -382,7 +382,11 @@ def make_lifespan(settings: Settings, transport, clock, signal_installer):
                     if (
                         not generation.contains(now)
                         or now >= generation.coverage_until
-                        or generation.freshness(now) != "current"
+                        or not (
+                            generation.freshness_serviceable(now)
+                            if binding.purpose == "rollback"
+                            else generation.freshness(now) == "current"
+                        )
                     ):
                         raise ValueError("Candidate coverage or source freshness is not current")
                     async with asyncio.timeout(settings.engine_timeout_seconds):
