@@ -8,6 +8,12 @@ Scope: [Python lock](../services/api/uv.lock), [Compose](../compose.yaml),
 scheduled datasets. No packages, image layers or feeds were downloaded; no Docker ran.
 This is a source/metadata inventory, not clearance of binary redistribution.
 
+**1 October decision:** the user directed maximum openness/public visibility and
+delegated remaining choices. MIT is selected for original OpenTransit code/docs;
+see the [root licence](../LICENSE). Public GitHub visibility is authorized. Dataset
+and third-party obligations remain separate; the baseline inventory below stays
+attributable to its recorded commit.
+
 Lock SHA-256: `f4ada587110e6aec5801bf0829e005546961b58a04cfd19f03801e1058c1dc6d`.
 
 ## Python packages
@@ -105,11 +111,10 @@ unreviewed upstream excerpts into a public repository.
 
 ## Decisions and conflicts to resolve
 
-1. **Choose OpenTransit code licence and repository visibility before M7 CI.** MIT or
-   Apache-2.0 are candidates, not accepted decisions. Apache dependencies constrain a
-   future GPL-2.0-only combined distribution; review actual linkage/distribution rather
-   than treating every separate process as one work. Preserve third-party notices under
-   either permissive choice. No root `LICENSE` is added by this audit.
+1. **Resolved: MIT code/docs licence; public repository direction.** The user delegated
+   these choices on 1 October; [LICENSE](../LICENSE) implements the code decision.
+   Preserve third-party notices; MIT does not replace Apache/MPL/OS component terms.
+   No feature branch is merged merely to change repository visibility.
 2. **Separate code from data permissions.** ODbL database share-alike cannot be replaced
    by a permissive code licence; MOT's unknown terms may conflict with required ODbL
    sharing for combined derived artifacts. Obtain a classification/terms decision before

@@ -23,3 +23,13 @@ python poc/poc_status.py
 ```
 
 `poc/` contains executable experiments, corpora and evidence. `docs/` contains supporting plans, access records and design references. Current progress belongs in the root dashboard; superseded prose lives in Git history.
+
+## Licence and public development
+
+OpenTransit original code and documentation are licensed under [MIT](LICENSE).
+Public development and unrestricted reuse are the project direction selected on
+1 October 2026. Third-party code retains its own notices/licences; upstream datasets
+and derived graphs/databases are not relicensed by MIT. See the
+[licence audit](docs/licence-audit.md) and [source attribution](docs/policies/attribution.md).
+Public source availability does not imply that the passenger API is deployed or
+that dataset redistribution and release acceptance have been cleared.
