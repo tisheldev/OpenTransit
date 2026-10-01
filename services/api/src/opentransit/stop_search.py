@@ -5,6 +5,7 @@ from __future__ import annotations
 import math
 import re
 import sqlite3
+import statistics
 import threading
 import unicodedata
 from functools import lru_cache
@@ -44,16 +45,34 @@ _ABBREVIATIONS = {
 # name for the נתב"ג station. Each entry needs a cited public source.
 # Keyed by a normalized name token; values are added as searchable labels.
 _ALIASES = {"נתבג": ("ben gurion airport",)}
+# Station vocabulary added to rail stops (GTFS rail-route linkage), per script.
+_RAIL_SUFFIXES = ("station", "railway station", "train station", "rail station")
+_RAIL_PREFIXES_HE = ("תחנת", "תחנת רכבת")
 # Latin transliteration folding for Hebrew place names (Yits'hak/Yitzhak,
 # Hertsliya/Herzliya, Petach Tikwa/Petah Tiqwa/Petah Tikva).
 _FOLDS = (("tz", "z"), ("ts", "z"), ("ch", "h"), ("kh", "h"), ("ck", "k"), ("q", "k"))
 _FOLDS += (("w", "v"), ("ph", "f"), ("y", "i"))
 _REPEATED = re.compile(r"(.)\1+")
 _PARTIAL_MIN_TOKENS = 2
+# Shorter compact keys are too ambiguous to match across word boundaries.
+_COMPACT_MIN_CHARS = 4
 # Transliteration-only matches rank half a tier below the same literal match.
 _FOLDED_PENALTY = 0.5
 # With a location, a match farther than this ranks two tiers lower.
 _NEAR_FAR_M = 10_000.0
+
+
+# GTFS stop_desc is "רחוב: <street> עיר: <city> רציף: <platform> קומה: <floor>".
+_DESC_CITY = re.compile(r"עיר:\s*(.*?)\s*(?:רציף:|קומה:|$)")
+# A query that is exactly a locality name ranks that locality's stops (central first,
+# then busiest) and any lexical match inside it ahead of lexical matches elsewhere,
+# which are usually street-named stops in other cities. Localities and their English
+# names are derived from the feed (stop descriptions and translations), not curated.
+_LOCALITY_TIER = 1.75
+_LOCALITY_OUTSIDE_PENALTY = 2
+_LOCALITY_MAX_ROWS = 400
+_LOCALITY_BAND_M = 750.0
+_LOCALITY_MIN_ALIAS_CHARS = 3
 
 
 def normalize_label(value: str) -> str:
@@ -85,6 +104,18 @@ def fold_transliteration(normalized: str) -> str:
     return " ".join(words)
 
 
+def compact_key(normalized: str) -> str:
+    """Space-insensitive key for Latin labels: Beersheba, Be'er Sheva and Beer-Sheba meet.
+
+    Joined and split spellings differ in word boundaries and often in b/v (the Hebrew
+    bet/vet), so the key drops spaces, applies the transliteration fold and maps b to v.
+    It is used only for a half-tier-lower fallback match, never for literal matches.
+    Each word is folded on its own, so a doubled letter across a word boundary
+    ("Tikva A") is not collapsed into a different spelling.
+    """
+    return fold_transliteration(normalized).replace(" ", "").replace("b", "v")
+
+
 def _expand_abbreviations(normalized: str) -> str | None:
     words = normalized.split()
     if not any(word in _ABBREVIATIONS for word in words):
@@ -92,8 +123,30 @@ def _expand_abbreviations(normalized: str) -> str | None:
     return " ".join(_ABBREVIATIONS.get(word, word) for word in words)
 
 
-def _label_variants(normalized: list[str]) -> list[str]:
+def _rail_variants(raw_names: list[str]) -> list[str]:
+    """Extra labels for a stop served by GTFS rail routes (a rail station).
+
+    The feed names rail stops by place only (no "station" word, no parent) and
+    often as "City/Place". Both are derived from the rail-route linkage, not curated:
+    the part after the slash is a name passengers use, and "<name> station" forms
+    let "Herzliya Station" meet the rail stop named just "Hertsliya".
+    """
+    tails = [
+        t for name in raw_names if "/" in name and (t := normalize_label(name.split("/", 1)[1]))
+    ]
+    extra = list(tails)
+    for label in [n for name in raw_names if (n := normalize_label(name))] + tails:
+        if label.isascii():
+            extra.extend(f"{label} {word}" for word in _RAIL_SUFFIXES)
+        else:
+            extra.extend(f"{word} {label}" for word in _RAIL_PREFIXES_HE)
+    return extra
+
+
+def _label_variants(normalized: list[str], rail_names: list[str] | None = None) -> list[str]:
     labels = list(normalized)
+    if rail_names:
+        labels.extend(_rail_variants(rail_names))
     labels.extend(e for label in normalized if (e := _expand_abbreviations(label)))
     for label in list(labels):
         for token, aliases in _ALIASES.items():
@@ -165,6 +218,49 @@ def _coverage(tokens: list[str], labels: list[str]) -> int:
     return best
 
 
+def _stop_city(row: dict[str, Any]) -> str | None:
+    """Normalized Hebrew city from the GTFS stop description, when present."""
+    match = _DESC_CITY.search(row.get("description") or "")
+    city = normalize_label(match.group(1)) if match else ""
+    return city if any(char.isalpha() for char in city) else None
+
+
+def _locality_aliases(rows: list[dict[str, Any]], cities: set[str]) -> dict[str, str]:
+    """Locality name -> normalized Hebrew city, derived only from the feed itself.
+
+    Hebrew city names come from stop descriptions. English names come from stop-name
+    translations: when a stop's Hebrew name has a "/"-separated segment that is a
+    known city and its English name has the same number of segments, the English
+    segment at that position is an English name of that city. Folded Latin keys.
+    """
+    aliases = {city: city for city in cities}
+    votes: dict[str, dict[str, int]] = {}
+    for row in rows:
+        name, english = row.get("name"), row["translations"].get("en")
+        if not name or not english:
+            continue
+        hebrew_parts, english_parts = name.split("/"), english.split("/")
+        if len(hebrew_parts) != len(english_parts):
+            continue
+        for hebrew, latin in zip(hebrew_parts, english_parts, strict=True):
+            city = normalize_label(hebrew)
+            key = fold_transliteration(normalize_label(latin))
+            if (
+                city in cities
+                and key.isascii()
+                and len(key) >= _LOCALITY_MIN_ALIAS_CHARS
+                and not key.replace(" ", "").isdigit()
+            ):
+                by_city = votes.setdefault(key, {})
+                by_city[city] = by_city.get(city, 0) + 1
+    for key, by_city in votes.items():
+        ranked = sorted(by_city.items(), key=lambda item: (-item[1], item[0]))
+        # An English name that points at several cities is ambiguous; skip it.
+        if len(ranked) == 1 or ranked[0][1] >= 2 * ranked[1][1]:
+            aliases.setdefault(key, ranked[0][0])
+    return aliases
+
+
 class _SearchIndex:
     def __init__(self, rows: list[dict[str, Any]]) -> None:
         self.rows = tuple(rows)
@@ -182,14 +278,32 @@ class _SearchIndex:
         self.labels: list[list[str]] = []
         self.folded: list[list[str]] = []
         self.coverage_labels: list[list[str]] = []
+        self.compact: list[list[str]] = []
         self.codes: list[str] = []
         self.importance: list[int] = []
         for row in rows:
             raw = [row.get("name"), *row["translations"].values(), row.get("description")]
             normalized = [n for value in raw if value and (n := normalize_label(value))]
-            self.labels.append(_label_variants(normalized))
+            rail_names = (
+                [v for v in (row.get("name"), *row["translations"].values()) if v]
+                if row.get("rail") and row.get("location_type") != 1
+                else None
+            )
+            self.labels.append(_label_variants(normalized, rail_names))
             self.folded.append(_folded_labels(self.labels[-1]))
             self.coverage_labels.append(list(dict.fromkeys([*self.labels[-1], *self.folded[-1]])))
+            # Only multi-word Latin labels differ from their folded form once joined.
+            self.compact.append(
+                list(
+                    dict.fromkeys(
+                        key
+                        for label in self.labels[-1]
+                        if label.isascii()
+                        and " " in label
+                        and len(key := compact_key(label)) >= _COMPACT_MIN_CHARS
+                    )
+                )
+            )
             self.codes.append(normalize_label(row.get("code") or ""))
             routes = int(row.get("route_count") or 0)
             routes += sum(
@@ -197,6 +311,31 @@ class _SearchIndex:
                 for child in self.children_by_parent.get(row["stop_id"], [])
             )
             self.importance.append(routes)
+        self.city_of = [_stop_city(row) for row in rows]
+        by_city: dict[str, list[int]] = {}
+        for row_index, city in enumerate(self.city_of):
+            if city:
+                by_city.setdefault(city, []).append(row_index)
+        self.city_rows = {
+            city: sorted(members, key=lambda i: (-self.importance[i], i))[:_LOCALITY_MAX_ROWS]
+            for city, members in by_city.items()
+        }
+        # Median stop position approximates the city centre without any boundary data.
+        self.city_center = {
+            city: (
+                statistics.median(rows[i]["latitude"] for i in located),
+                statistics.median(rows[i]["longitude"] for i in located),
+            )
+            for city, members in by_city.items()
+            if (
+                located := [
+                    i
+                    for i in members
+                    if rows[i].get("latitude") is not None and rows[i].get("longitude") is not None
+                ]
+            )
+        }
+        self.locality_aliases = _locality_aliases(rows, set(by_city))
         self.connection = sqlite3.connect(":memory:", check_same_thread=False)
         self.lock = threading.Lock()
         self.connection.execute(
@@ -212,6 +351,24 @@ class _SearchIndex:
         self.connection.executemany(
             "INSERT INTO labels(candidate_index, label) VALUES (?, ?)", values
         )
+        # Compact keys live in their own table so ordinary probes stay as cheap as before.
+        self.connection.execute(
+            "CREATE VIRTUAL TABLE compact_labels USING fts5(candidate_index UNINDEXED, "
+            "label, tokenize='trigram')"
+        )
+        self.connection.executemany(
+            "INSERT INTO compact_labels(candidate_index, label) VALUES (?, ?)",
+            [(index, key) for index, keys in enumerate(self.compact) for key in keys],
+        )
+
+    def _compact_rows(self, key: str) -> list[int]:
+        escaped = key.replace('"', '""')
+        with self.lock:
+            rows = self.connection.execute(
+                "SELECT DISTINCT candidate_index FROM compact_labels WHERE label MATCH ?",
+                (f'"{escaped}"',),
+            ).fetchall()
+        return sorted(int(row[0]) for row in rows)
 
     def _token_rows(self, token: str) -> set[int]:
         escaped = token.replace('"', '""')
@@ -229,6 +386,13 @@ class _SearchIndex:
             matches = [self._token_rows(token) for token in tokens]
         return sorted(set.intersection(*matches)) if matches else []
 
+    def locality_for(self, query: str) -> str | None:
+        """The city whose name is exactly the query, in Hebrew or folded Latin."""
+        city = self.locality_aliases.get(query)
+        if city is None and query.isascii():
+            city = self.locality_aliases.get(fold_transliteration(query))
+        return city
+
     def strict_matches(self, query: str) -> dict[int, float]:
         """Best strict score per row; transliteration-folded matches rank lower."""
         best: dict[int, float] = {}
@@ -244,7 +408,27 @@ class _SearchIndex:
                 score = _score_normalized(folded, self.folded[row_index], "")
                 if score is not None and score + _FOLDED_PENALTY < best.get(row_index, 5):
                     best[row_index] = score + _FOLDED_PENALTY
+        if not best:
+            # Joined/split spelling is a rescue for queries nothing else matched; it
+            # costs one more index probe, so it never runs next to a literal match.
+            for variant in _query_variants(query):
+                self._add_compact_matches(variant, best)
         return best
+
+    def _add_compact_matches(self, variant: str, best: dict[int, float]) -> None:
+        """Join-insensitive Latin match: exact or prefix of a label's compact key."""
+        if not variant.isascii() or len(key := compact_key(variant)) < _COMPACT_MIN_CHARS:
+            return
+        for row_index in self._compact_rows(key):
+            labels = self.compact[row_index]
+            if key in labels:
+                score = 1
+            elif any(label.startswith(key) for label in labels):
+                score = 2
+            else:
+                continue
+            if score + _FOLDED_PENALTY < best.get(row_index, 5):
+                best[row_index] = score + _FOLDED_PENALTY
 
     def partial_matches(self, query: str) -> dict[int, int]:
         """Rows covering most significant tokens when no row matches all of them."""
@@ -327,13 +511,40 @@ def search_stops(
         }
         partial = True
 
+    locality = index.locality_for(normalized_query)
+    center: tuple[float, float] | None = None
+    locality_hits: set[int] = set()
+    if locality is not None:
+        # The query names a city: its stops lead (an exact label inside it still ranks
+        # first); lexical matches in other cities (street-named stops) rank after them.
+        ranked_scores: dict[int, float] = {}
+        for row_index, score in (scored if not partial else {}).items():
+            city = index.city_of[row_index]
+            if city == locality:
+                ranked_scores[row_index] = min(score, _LOCALITY_TIER)
+            elif city is None:
+                # No city in the feed (for example rail stops): not evidence of another city.
+                ranked_scores[row_index] = score
+            else:
+                ranked_scores[row_index] = score + _LOCALITY_OUTSIDE_PENALTY
+        for row_index in index.city_rows[locality]:
+            if row_index not in ranked_scores or ranked_scores[row_index] > _LOCALITY_TIER:
+                ranked_scores[row_index] = _LOCALITY_TIER
+                locality_hits.add(row_index)
+        scored, partial = ranked_scores, False
+        center = index.city_center.get(locality)
+
     grouped: dict[str, dict[str, Any]] = {}
     for row_index, score in scored.items():
         row = rows[row_index]
         location_type = row.get("location_type") or 0
         is_station = location_type == 1
+        # A stop served by a GTFS rail route is a rail station in both vocabularies:
+        # selectable as a stop and, because the feed gives it no parent or
+        # location_type 1, also as a station.
+        rail = bool(row.get("rail")) and not is_station
         candidate_type = "station" if is_station else "stop"
-        if candidate_type not in requested:
+        if candidate_type not in requested and not rail:
             continue
 
         parent_source = row.get("parent_station")
@@ -347,15 +558,21 @@ def search_stops(
             grouped_candidate["score"],
             grouped_candidate["matched_source_id"],
         ):
+            as_station = "station" in requested and (parent is not None or rail)
             base = parent if parent and "station" in requested else row
+            kind = "station" if as_station else candidate_type
             display_name, actual_language = _display(base, language)
             # If the station itself did not match, use the matching child label so
             # the passenger can recognize why this station was returned.
-            if base is not row and _score(normalized_query, [display_name], None) is None:
+            if (
+                base is not row
+                and row_index not in locality_hits
+                and _score(normalized_query, [display_name], None) is None
+            ):
                 display_name, actual_language = _display(row, language)
             base_index = index.position[base["source_id"]]
             grouped[group_key] = {
-                "kind": "station" if parent and "station" in requested else candidate_type,
+                "kind": kind,
                 "id": STOP_PREFIX + base["source_id"],
                 "displayName": display_name,
                 "languageUsed": actual_language,
@@ -375,9 +592,7 @@ def search_stops(
                 ]
                 if station
                 else [],
-                "matchedTypes": [
-                    "station" if parent and "station" in requested else candidate_type
-                ],
+                "matchedTypes": [kind],
                 "score": score,
                 "matched_source_id": row["source_id"],
                 "importance": max(index.importance[row_index], index.importance[base_index]),
@@ -386,6 +601,15 @@ def search_stops(
 
     candidates = list(grouped.values())
     for candidate in candidates:
+        if center is not None and candidate["coordinates"] is not None:
+            # Distance to the city centre in coarse bands: central stops first, then busiest.
+            offset = _distance_m(
+                center[0],
+                center[1],
+                candidate["coordinates"]["latitude"],
+                candidate["coordinates"]["longitude"],
+            )
+            candidate["center_band"] = int(offset // _LOCALITY_BAND_M)
         if near is not None and candidate["coordinates"] is not None:
             lat, lon = near
             stop_lat = candidate["coordinates"]["latitude"]
@@ -399,6 +623,10 @@ def search_stops(
         if partial:
             # Partial matches: most tokens covered, then the busiest stop.
             return (score, distance, -item["importance"], name, item["id"])
+        if locality is not None:
+            effective = score + (2 if near is not None and distance > _NEAR_FAR_M else 0)
+            band = item.get("center_band", math.inf)
+            return (effective, distance, band, -item["importance"], name, item["id"])
         if near is not None:
             # With a location, a distant match drops two tiers so a nearby all-token
             # match can outrank a far exact/prefix one; ties order by distance.
@@ -411,6 +639,7 @@ def search_stops(
         candidate.pop("score", None)
         candidate.pop("matched_source_id", None)
         candidate.pop("importance", None)
+        candidate.pop("center_band", None)
         if candidate["distance"] is None:
             candidate.pop("distance")
     return {

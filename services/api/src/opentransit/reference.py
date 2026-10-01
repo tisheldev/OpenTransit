@@ -39,6 +39,7 @@ MAX_RADIUS_M = 5000
 MAX_BBOX_KM2 = 100
 EARTH_RADIUS_M = 6_371_008.8
 STOP_PREFIX = "mot:stop:"
+GTFS_RAIL_ROUTE_TYPE = 2
 ROUTE_PREFIX = "mot:route:"
 
 
@@ -1065,6 +1066,17 @@ class ReferenceStore:
                     "SELECT stop_id, COUNT(*) FROM route_stops GROUP BY stop_id"
                 ).fetchall()
             )
+            # GTFS route_type 2 (rail) linkage: a stop served by a rail route is a rail
+            # station even though the feed gives it location_type 0 and no parent.
+            rail_stop_ids = {
+                stop_id
+                for (stop_id,) in connection.execute(
+                    "SELECT DISTINCT route_stops.stop_id FROM route_stops "
+                    "JOIN routes ON routes.route_id = route_stops.route_id "
+                    "WHERE routes.route_type = ?",
+                    (GTFS_RAIL_ROUTE_TYPE,),
+                )
+            }
             stops_by_source_id = {row["source_id"]: row for row in rows}
             source_ids_by_name: dict[str, list[str]] = {}
             for row in rows:
@@ -1093,6 +1105,7 @@ class ReferenceStore:
                 **self._stop_item(row),
                 "translations": translations.get(row["source_id"], {}),
                 "route_count": route_counts.get(row["stop_id"], 0),
+                "rail": row["stop_id"] in rail_stop_ids,
             }
             for row in rows
         ]

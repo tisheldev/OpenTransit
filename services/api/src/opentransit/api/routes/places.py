@@ -1,5 +1,6 @@
 """Place search over one captured immutable generation."""
 
+import asyncio
 import math
 import sqlite3
 from datetime import datetime
@@ -81,33 +82,9 @@ def places_router(clock, problem) -> APIRouter:
         stop_items: list[dict] = []
         geocoder_items: list[dict] = []
 
-        if requested_stops:
-            if snapshot.reference is None:
-                unavailable_types.extend(requested_stops)
-            else:
-                try:
-                    result = search_stops(
-                        snapshot.reference,
-                        q,
-                        language=lang,
-                        near=near_point,
-                        types=requested_stops,
-                        limit=limit,
-                    )
-                    stop_items = result["items"]
-                    matched_types.extend(requested_stops)
-                    for item in stop_items:
-                        item["locationRef"] = {"kind": "stop", "stopId": item["id"]}
-                except ValueError, TypeError:
-                    return problem(
-                        request,
-                        422,
-                        "INVALID_REQUEST",
-                        "Check q, lang, near, type, and limit bounds.",
-                    )
-                except OSError, sqlite3.Error:
-                    unavailable_types.extend(requested_stops)
-
+        # Geocoder backends are started first and awaited last: their network waits
+        # overlap with the in-process stop search instead of following it.
+        geocode_task: asyncio.Future | None = None
         if requested_geocoders:
             enabled = getattr(request.app.state, "generation_geocoding", {})
             motis_geocoding_enabled = enabled.get(generation.id, False)
@@ -132,8 +109,8 @@ def places_router(clock, problem) -> APIRouter:
                 kind for kind in requested_geocoders if kind not in available_geocoders
             )
             if available_geocoders:
-                try:
-                    result = await geocode_places(
+                geocode_task = asyncio.ensure_future(
+                    geocode_places(
                         snapshot,
                         q,
                         language=lang,
@@ -142,6 +119,42 @@ def places_router(clock, problem) -> APIRouter:
                         limit=limit,
                         request_id=getattr(request.state, "request_id", None),
                     )
+                )
+                # Let the backend requests dispatch before the synchronous stop search
+                # occupies this event loop.
+                await asyncio.sleep(0)
+
+        try:
+            if requested_stops:
+                if snapshot.reference is None:
+                    unavailable_types.extend(requested_stops)
+                else:
+                    try:
+                        result = search_stops(
+                            snapshot.reference,
+                            q,
+                            language=lang,
+                            near=near_point,
+                            types=requested_stops,
+                            limit=limit,
+                        )
+                        stop_items = result["items"]
+                        matched_types.extend(requested_stops)
+                        for item in stop_items:
+                            item["locationRef"] = {"kind": "stop", "stopId": item["id"]}
+                    except ValueError, TypeError:
+                        return problem(
+                            request,
+                            422,
+                            "INVALID_REQUEST",
+                            "Check q, lang, near, type, and limit bounds.",
+                        )
+                    except OSError, sqlite3.Error:
+                        unavailable_types.extend(requested_stops)
+
+            if geocode_task is not None:
+                try:
+                    result = await geocode_task
                     geocoder_items = result.items
                     # A valid 2xx empty response still means these categories were searched.
                     matched_types.extend(result.searched_types)
@@ -155,6 +168,12 @@ def places_router(clock, problem) -> APIRouter:
                     )
                 except GeocoderUnavailable:
                     unavailable_types.extend(available_geocoders)
+        finally:
+            if geocode_task is not None:
+                if not geocode_task.done():
+                    geocode_task.cancel()
+                elif not geocode_task.cancelled():
+                    geocode_task.exception()  # mark retrieved on early returns
 
         if not matched_types:
             if snapshot.reference is None:
