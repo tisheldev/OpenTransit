@@ -127,6 +127,25 @@ def main(argv: list[str] | None = None) -> int:
     ids.add_argument("--previous-date", type=date.fromisoformat, required=True)
     ids.add_argument("--candidate-date", type=date.fromisoformat, required=True)
     ids.add_argument("--output", type=Path, required=True)
+    for name, helptext in (
+        ("activate", "Select a binding, signal the local worker and wait for its acknowledgement"),
+        ("rollback", "Re-check coverage/freshness, then reactivate an older generation binding"),
+    ):
+        op = commands.add_parser(name, help=helptext)
+        op.add_argument("--managed-root", type=Path, required=True)
+        op.add_argument("--ack-dir", type=Path, required=True)
+        op.add_argument("--binding", type=Path, required=True)
+        op.add_argument("--now", type=datetime.fromisoformat, help="Override the check clock")
+        op.add_argument("--timeout", type=float, default=900.0)
+    retire = commands.add_parser(
+        "await-retirement", help="Wait for the worker to retire the old snapshot"
+    )
+    retire.add_argument("--ack-dir", type=Path, required=True)
+    retire.add_argument("--old-token", required=True)
+    retire.add_argument("--new-token", required=True)
+    retire.add_argument("--incarnation", required=True)
+    retire.add_argument("--deadline-seconds", type=float, default=1.5)
+    retire.add_argument("--timeout", type=float, default=120.0)
     args = parser.parse_args(argv)
     try:
         if args.command == "prepare-m1":
@@ -204,6 +223,36 @@ def main(argv: list[str] | None = None) -> int:
             )
             write_evidence(args.output, plan.as_dict())
             print(args.output)
+        elif args.command in {"activate", "rollback", "await-retirement"}:
+            from opentransit.build import local_operator as operator
+
+            try:
+                if args.command == "await-retirement":
+                    result = operator.await_retirement(
+                        args.ack_dir,
+                        old_token=args.old_token,
+                        new_token=args.new_token,
+                        incarnation=args.incarnation,
+                        deadline_seconds=args.deadline_seconds,
+                        timeout=args.timeout,
+                    )
+                else:
+                    action = operator.activate if args.command == "activate" else operator.rollback
+                    result = action(
+                        args.managed_root,
+                        args.binding,
+                        args.ack_dir,
+                        now=args.now,
+                        timeout=args.timeout,
+                    )
+            except operator.ActivationRefused as exc:
+                result = {"status": "refused", "reasons": exc.reasons, "detail": exc.detail}
+            except operator.ActivationFailed as exc:
+                result = {"status": "failed", "message": str(exc), "detail": exc.detail}
+            except TimeoutError as exc:
+                result = {"status": "timeout", "message": str(exc)}
+            print(json.dumps(result, sort_keys=True, ensure_ascii=False))
+            return 0 if result.get("status") in {"acknowledged", "retired"} else 2
     except (OSError, ValueError, RuntimeError) as exc:
         print(f"{type(exc).__name__}: {exc}", file=sys.stderr)
         return 1
