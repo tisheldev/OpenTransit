@@ -11,9 +11,14 @@ merged top-10 only, so candidates that the original merge truncated cannot
 reappear; timings are in-process ``search_stops`` durations on the host, not API
 durations; a replay is a projection, never a fresh API run and never an H4 verdict.
 
+With ``--locality-probe`` the result also carries a before/after probe of city-name
+queries: each query is run once with the reference's OSM localities and once with only
+the feed-derived locality fallback, and every top-5 stop is judged by polygon
+containment in the expected OSM locality (a structural check, not an H4 verdict).
+
 Usage:
     python tools/replay_search.py --reference REF.sqlite --saved-run RUN.json \
-        --output OUT.json [--compare NAME=PREVIOUS_REPLAY.json ...]
+        --output OUT.json [--compare NAME=PREVIOUS_REPLAY.json ...] [--locality-probe]
 """
 
 from __future__ import annotations
@@ -39,12 +44,162 @@ except ImportError:  # pragma: no cover - script execution
 
 from opentransit.api.routes.places import _merge_candidates
 from opentransit.reference import ReferenceStore
-from opentransit.stop_search import _search_index, search_stops
+from opentransit.stop_search import _distance_m, _search_index, search_stops
 
 SCHEMA_VERSION = 1
 STOP_TYPES = ("stop", "station")
 GEOCODER_KINDS = ("poi", "address")
 API_LIMIT = 10
+
+
+# (query, language, OSM locality id it names). Relation ids are the pinned OSM extract's;
+# the list mixes Hebrew names, English names and common Latin spellings.
+LOCALITY_PROBE = (
+    ("Tel Aviv", "en", "osm:relation:1382494"),
+    ("תל אביב", "he", "osm:relation:1382494"),
+    ("Tel-Aviv", "en", "osm:relation:1382494"),
+    ("Jerusalem", "en", "osm:relation:1381350"),
+    ("ירושלים", "he", "osm:relation:1381350"),
+    ("Haifa", "en", "osm:relation:1387888"),
+    ("חיפה", "he", "osm:relation:1387888"),
+    ("Be'er Sheva", "en", "osm:relation:1377264"),
+    ("Beer Sheva", "en", "osm:relation:1377264"),
+    ("Beersheba", "en", "osm:relation:1377264"),
+    ("באר שבע", "he", "osm:relation:1377264"),
+    ("Ashdod", "en", "osm:relation:1380013"),
+    ("אשדוד", "he", "osm:relation:1380013"),
+    ("Holon", "en", "osm:relation:1382460"),
+    ("חולון", "he", "osm:relation:1382460"),
+    ("Ramat Gan", "en", "osm:relation:1382493"),
+    ("רמת גן", "he", "osm:relation:1382493"),
+    ("Petah Tikva", "en", "osm:relation:1382816"),
+    ("Petach Tikvah", "en", "osm:relation:1382816"),
+    ("פתח תקווה", "he", "osm:relation:1382816"),
+    ("Rishon LeZion", "en", "osm:relation:1382177"),
+    ("ראשון לציון", "he", "osm:relation:1382177"),
+    ("Netanya", "en", "osm:relation:1383391"),
+    ("נתניה", "he", "osm:relation:1383391"),
+    ("Herzliya", "en", "osm:relation:1382820"),
+    ("הרצליה", "he", "osm:relation:1382820"),
+    ("Ashkelon", "en", "osm:relation:1376782"),
+    ("אשקלון", "he", "osm:relation:1376782"),
+    ("Eilat", "en", "osm:relation:1377284"),
+    ("אילת", "he", "osm:relation:1377284"),
+    ("Kfar Saba", "en", "osm:relation:1383631"),
+    ("Hadera", "en", "osm:relation:1392860"),
+    ("Bat Yam", "en", "osm:relation:1382458"),
+    ("Bnei Brak", "en", "osm:relation:1382817"),
+    ("בני ברק", "he", "osm:relation:1382817"),
+    ("Rehovot", "en", "osm:relation:1246791"),
+    ("Nazareth", "en", "osm:relation:1386836"),
+    ("Tiberias", "en", "osm:relation:1387273"),
+    ("Acre", "en", "osm:relation:1387962"),
+    ("עכו", "he", "osm:relation:1387962"),
+    ("Modiin", "en", "osm:relation:1381425"),
+    ("Lod", "en", "osm:relation:1381532"),
+    ("Ramla", "en", "osm:relation:1381458"),
+    ("Raanana", "en", "osm:relation:1383630"),
+    ("Nahariya", "en", "osm:relation:1932164"),
+    ("Afula", "en", "osm:relation:1380226"),
+    ("Kiryat Shmona", "en", "osm:relation:1378947"),
+    ("Beit Shemesh", "en", "osm:relation:1379449"),
+    ("Givatayim", "en", "osm:relation:1382923"),
+    ("Dimona", "en", "osm:relation:1376826"),
+)
+
+
+class _FeedOnly:
+    """The same stop corpus without OSM localities: the feed-derived fallback alone."""
+
+    def __init__(self, reference: ReferenceStore) -> None:
+        self._reference = reference
+
+    def stop_search_candidates(self) -> list[dict[str, Any]]:
+        return self._reference.stop_search_candidates()
+
+
+def locality_probe(
+    reference: ReferenceStore, queries: tuple[tuple[str, str, str], ...] = LOCALITY_PROBE
+) -> dict[str, Any]:
+    """Before/after city-name queries judged by containment in the expected OSM locality."""
+    localities = {item["locality_id"]: item for item in reference.search_localities()}
+    if not localities:
+        return {"available": False, "reason": "reference has no OSM localities"}
+    rows = {row["stop_id"]: row for row in _search_index(reference).rows}
+    feed_only = _FeedOnly(reference)
+
+    def run(source: Any, query: str, language: str, expected: str) -> dict[str, Any]:
+        items = search_stops(source, query, language=language, types=STOP_TYPES, limit=API_LIMIT)[
+            "items"
+        ]
+        center = localities[expected]["center"]
+        top = []
+        for item in items[:5]:
+            row = rows[item["id"]]
+            coordinates = item["coordinates"]
+            top.append(
+                {
+                    "displayName": item["displayName"],
+                    "kind": item["kind"],
+                    "inside": expected in row["locality_ids"],
+                    "centerDistanceMeters": (
+                        round(
+                            _distance_m(
+                                center[0],
+                                center[1],
+                                coordinates["latitude"],
+                                coordinates["longitude"],
+                            )
+                        )
+                        if coordinates
+                        else None
+                    ),
+                    "routeCount": row["route_count"],
+                }
+            )
+        return {
+            "top1Inside": bool(top and top[0]["inside"]),
+            "top5Inside": sum(entry["inside"] for entry in top),
+            "top": top,
+        }
+
+    cases = []
+    for query, language, expected in queries:
+        if expected not in localities:
+            raise ValueError(f"Probe names a locality the reference lacks: {expected}")
+        cases.append(
+            {
+                "query": query,
+                "language": language,
+                "expectedLocality": expected,
+                "expectedName": localities[expected]["name_en"] or localities[expected]["name"],
+                "before": run(feed_only, query, language, expected),
+                "after": run(reference, query, language, expected),
+            }
+        )
+
+    def totals(side: str) -> dict[str, int]:
+        return {
+            "queries": len(cases),
+            "top1Inside": sum(case[side]["top1Inside"] for case in cases),
+            "top5AllInside": sum(
+                case[side]["top5Inside"] == len(case[side]["top"]) > 0 for case in cases
+            ),
+        }
+
+    return {
+        "available": True,
+        "note": (
+            "before = same reference and code with only the feed-derived locality fallback; "
+            "after = OSM localities. Judged by polygon containment of the stop in the expected "
+            "OSM locality. A structural check, not an H4 verdict."
+        ),
+        "totals": {"before": totals("before"), "after": totals("after")},
+        "top1Lost": [
+            c["query"] for c in cases if c["before"]["top1Inside"] and not c["after"]["top1Inside"]
+        ],
+        "cases": cases,
+    }
 
 
 def stop_related(case: SearchCase) -> bool:
@@ -302,6 +457,11 @@ def main(argv: list[str] | None = None) -> int:
         help="earlier replay result to diff against (repeatable)",
     )
     parser.add_argument("--label", default="replay")
+    parser.add_argument(
+        "--locality-probe",
+        action="store_true",
+        help="add the before/after city-name probe (needs a reference with OSM localities)",
+    )
     parser.add_argument("--places-corpus", type=Path, default=root / "poc/corpora/places.json")
     parser.add_argument(
         "--venues-corpus", type=Path, default=root / "poc/corpora/places-venues.json"
@@ -335,6 +495,8 @@ def main(argv: list[str] | None = None) -> int:
         label=args.label,
         root=root,
     )
+    if args.locality_probe:
+        result["localityProbe"] = locality_probe(reference)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     with args.output.open("x", encoding="utf-8", newline="\n") as handle:
         handle.write(json.dumps(result, ensure_ascii=False, indent=2) + "\n")
@@ -342,6 +504,9 @@ def main(argv: list[str] | None = None) -> int:
     for name, (top1, top5, total) in result["replayedByCell"].items():
         before = result["recordedByCell"][name]
         print(f"  {name}: top1 {before[0]}->{top1}, top5 {before[1]}->{top5}, of {total}")
+    if "localityProbe" in result and result["localityProbe"]["available"]:
+        totals = result["localityProbe"]["totals"]
+        print(f"  locality probe: {totals['before']} -> {totals['after']}")
     return 0
 
 
