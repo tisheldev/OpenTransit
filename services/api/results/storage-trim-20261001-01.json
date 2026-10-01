@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-10-01T11:30:00Z",
+  "authorizedBy": "user, 1 October 2026 (chat: trim failed attempts to free disk; C: had 5.2 GB free)",
+  "root": "C:/Users/nhenr/.codex/worktrees/8007/OpenTransit/.runtime/generations",
+  "deleted": [
+    {"path": "m3-functional-blue-20260930/reference.sqlite", "sizeBytes": 3020242944, "sha256": "fb7c677e43157a5431e4c1f51534c0008a93ac42341f9338a0ac1d8e4fbb43f2"},
+    {"path": "m3-functional-blue-20260930-attempt2/reference.sqlite", "sizeBytes": 3020242944, "sha256": "fb7c677e43157a5431e4c1f51534c0008a93ac42341f9338a0ac1d8e4fbb43f2"}
+  ],
+  "retainedIdenticalCopy": {"path": "m3-functional-blue-20260930-attempt3/reference.sqlite", "sha256": "fb7c677e43157a5431e4c1f51534c0008a93ac42341f9338a0ac1d8e4fbb43f2"},
+  "retainedInFailedAttempts": ["config.yml", "import.log", "manifest.json", "motis/ (import output, kB)", "validation.json"],
+  "note": "Both failed graph-import attempts produced reference files byte-identical to the retained attempt-3 file, so no information was lost. Failure evidence (import logs, manifests, validation) is retained."
+}
