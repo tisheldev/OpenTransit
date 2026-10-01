@@ -90,7 +90,7 @@ M7 (hardening, CI, load) and M8 (public deployment) follow as already defined; t
 | M3.7 | Regenerate the H3 review sheet **through the API** so review covers the product path; the user reviews it (P0-02). | Sheet ready; verdicts recorded by the user only |
 | M3.8 | One-command scheduled demo, Dizengoff Center → Technion by coordinates (part of P0-06). | Output shows scheduled labels and disabled realtime |
 
-**Status, 1 October 2026.** M3.1–M3.6 are implemented and tested; walking-cap conformance ran against the real engine (8 cases, 0 violations) and the 1.5 s deadline, 16 KiB body limit and overload bounds have tests. M3.7: the API-path H3 sheet (34 cases, 0 errors, 0 mixed-generation) and a dated [Moovit comparison](../services/api/results/acceptance-oct1b-20261001-02/h3-moovit-comparison.md) exist; **the user's verdicts are pending and no H3 approval is recorded.** M3.8: `opentransit demo` is implemented and recorded (three scheduled-labelled journeys). The J09/J24 "no route" outcomes are corpus-coordinate issues ([diagnosis](../services/api/results/h3-no-route-diagnosis-20261001-01.json)).
+**Status, 1 October 2026.** M3.1–M3.6 are implemented and tested; walking-cap conformance ran against the real engine (8 cases, 0 violations) and the 1.5 s deadline, 16 KiB body limit and overload bounds have tests. M3.7: the API-path H3 sheet (34 cases, 0 errors, 0 mixed-generation) and a dated [Moovit comparison](../services/api/results/acceptance-oct1b-20261001-02/h3-moovit-comparison.md) exist; **H3 passed 1 October: the user judged 9 of 10 required journeys usable (J11 unsure; [verdicts](../services/api/results/h3-verdicts-20261001-01.json)).** Follow-up: street access from Haifa Center HaShmona station (J11 last mile). M3.8: `opentransit demo` is implemented and recorded (three scheduled-labelled journeys). The J09/J24 "no route" outcomes are corpus-coordinate issues ([diagnosis](../services/api/results/h3-no-route-diagnosis-20261001-01.json)).
 
 ### M4 — place search
 
@@ -157,7 +157,7 @@ After functional coverage, perform consolidated milestone acceptance, finish ref
 
 **Faster sequence, adopted by the user 1 October:** M7 and the client run during the H-1 week rather than after M8 (PRD gate revision). Public release gates are unchanged.
 
-**Progress, end of 1 October.** Step 0 is done. Step 1: T1 done (walking caps, bounds, demo); T2 implemented, with M2.5 acceptance pending the harness rerun and the readiness root cause fixed; T3 done (H4 approved with known limits); T4 H3 sheet ready, user verdicts pending; T5 drafts (images, task definition, IAM/network, Photon sizing proposal 1 vCPU / 3 GiB) validated structurally only. Step 2: the consolidated live acceptance ran on the October 1 generation and passed mechanically (runs `-01`, `-02`); still open are M2.5, the H3 verdict and M2.8 over further daily pairs. Next: M2.5 rerun, H-0 image build/measure, then ask the user for H-0 approval (Step 3).
+**Progress, end of 1 October.** Step 0 is done. Step 1: T1 done (walking caps, bounds, demo); T2 implemented, with M2.5 acceptance pending the harness rerun and the readiness root cause fixed; T3 done (H4 approved with known limits); T4 done (H3 passed 9/10, user, 1 October); T5 drafts (images, task definition, IAM/network, Photon sizing proposal 1 vCPU / 3 GiB) validated structurally only. Step 2: the consolidated live acceptance ran on the October 1 generation and passed mechanically (runs `-01`, `-02`); still open are M2.5 and M2.8 over further daily pairs. Next: M2.5 rerun, H-0 image build/measure, then ask the user for H-0 approval (Step 3).
 
 **User inputs:** H3/H4 verdicts after T4; constrained-address decision if T3 exhausts its attempts; code licence and repository visibility before CI; AWS access and bounded H-0 spending approval; static GTFS terms before release; MOT follow-up October 19.
 
@@ -280,10 +280,10 @@ Run these alongside coding. Several are release requirements that no amount of c
 
 | Decision | Recommendation / evidence | Needed by |
 | --- | --- | --- |
-| Primary feed (ADR 0005) | Accepted 60-day + mapping; ingest/routing rerun; H3 quality pending | See rerun report |
+| Primary feed (ADR 0005) | Accepted 60-day + mapping; ingest/routing rerun; H3 passed 1 October | See rerun report |
 | MOT request and source fallback | Correct-address email sent September 21; record response, with October 19 checkpoint; choose a sustainable source before adding live features | Deferred POC-3/4 |
 | Data usage terms (H2) | Record exact dataset/source terms, attribution, redistribution/fixture constraints and reviewer decision; no legal acceptance inferred from a download | Static release; live terms before deferred features |
-| Route/search quality (H3/H4) | H4 approved by the user 1 October with documented limits. H3 sheet ready, verdicts pending; do not promote structural results to quality approval | Static release; H3 before deferred realtime wave |
+| Route/search quality (H3/H4) | H4 approved by the user 1 October with documented limits. H3 passed 1 October (9/10, user); do not promote structural results to quality approval | Static release; H3 before deferred realtime wave |
 | API language | ACCEPTED September 25: Python with FastAPI; ADR 0002 amended for production API scope | Pin supported versions and dependencies in M1 |
 | Journey HTTP contract and privacy | ACCEPTED September 30: POST JSON for journey planning (D3), superseding the earlier GET proposal; body/location logging remains prohibited | Implemented M1; complete contract in M3/M4 |
 | Time and identity | Explicit-offset API times, Asia/Jerusalem service dates, feed-scoped trip IDs, date-aware mapping and generation-consistent snapshots | POC matcher; M2/M3 |

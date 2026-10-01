@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "checkpoint": "H3",
+  "recordedAt": "2026-10-01T16:20:00Z",
+  "reviewer": "user (project owner)",
+  "source": "user verdicts entered on the H3 review page (https://claude.ai/artifact/9ncab6vFDiFm81F5enNupY, db collection 'verdicts') and pasted in chat on 2026-10-01; identical",
+  "reviewedRun": "services/api/results/acceptance-oct1b-20261001-02/",
+  "comparison": "services/api/results/acceptance-oct1b-20261001-02/h3-moovit-comparison.md",
+  "generationId": "5eb4e43d9456b96a68ee44ffb7a58fe9137ed16bf40a670cf513c34564e44249",
+  "apiSourceCommit": "6ed3f5b",
+  "criterion": "PRD §7: at least 9 of the 10 required journeys judged usable",
+  "verdicts": [
+    {"case": "J01", "verdict": "Y", "note": "why doesn't it show 66 if it arrives earlier?"},
+    {"case": "J04", "verdict": "Y", "note": "why no walking to the red line option?"},
+    {"case": "J11", "verdict": "Unsure", "note": "does moovit use the actual train data? how are the times so different"},
+    {"case": "J12", "verdict": "Y", "note": "are walking times included or ignored?"},
+    {"case": "J15", "verdict": "Y", "note": ""},
+    {"case": "J16", "verdict": "Y", "note": ""},
+    {"case": "J19", "verdict": "Y", "note": ""},
+    {"case": "J21", "verdict": "Y", "note": ""},
+    {"case": "J22", "verdict": "Y", "note": ""},
+    {"case": "J23", "verdict": "Y", "note": ""}
+  ],
+  "usable": 9,
+  "result": "PASS (9 of 10 required journeys usable; J11 unsure)",
+  "followUps": [
+    "J11: train times match the shared MOT feed; the 9-minute gap is the last mile at Haifa Center HaShmona, where the router has no street walk from the station to the destination point 226 m away (h3-no-route-diagnosis-20261001-01.json) and substitutes a bus plus a 9-minute walk. Investigate station street access.",
+    "Optional journeys (24) not reviewed; Friday/Shabbat and clock-change variants still need the Moovit comparison when Moovit's planning window reaches them (2-3 Oct and 18 Oct)."
+  ]
+}
