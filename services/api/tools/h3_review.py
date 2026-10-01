@@ -480,6 +480,8 @@ def render_leg(leg: dict[str, Any], show_offset: bool) -> str:
     if leg.get("kind") == "walk" or not leg.get("transit"):
         dist = leg.get("distanceMeters")
         distance = f", {round(dist)} m" if dist is not None else ""
+        if leg.get("geometryUnavailableReason") == "street_path_unavailable":
+            distance += " (timetable transfer; street path unavailable)"
         return (
             f"Walk {minutes(leg.get('durationSeconds'))}{distance}: "
             f"{origin['name']} {start} -> {destination['name']} {end}"
@@ -502,7 +504,11 @@ def render_journey(index: int, journey: dict[str, Any], show_offset: bool) -> li
         f"arrives {fmt_day_clock(timing['scheduledArrival'], show_offset)}; "
         f"total {minutes(journey['durationSeconds'])}, {journey['transfers']} transfer(s), "
         f"walking {minutes(journey['walkingSeconds'])} / "
-        f"{round(journey['walkingDistanceMeters'])} m",
+        + (
+            "unknown distance"
+            if journey.get("walkingDistanceMeters") is None
+            else f"{round(journey['walkingDistanceMeters'])} m"
+        ),
         "",
     ]
     for number, leg in enumerate(journey["legs"], 1):

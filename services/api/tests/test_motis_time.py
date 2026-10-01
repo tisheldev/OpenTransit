@@ -71,8 +71,15 @@ def test_real_engine_first_two_samples_keep_recorded_contract_and_provenance():
     assert first.timing.scheduledArrival.isoformat() == results["actualExample"]["scheduledArrival"]
     assert second.durationSeconds == 7620
     assert len(first.legs) == 7 and len(second.legs) == 11
+    # The third sample's cancelled leg is an unrouted timetable transfer (37380 -> 2410),
+    # not live data: it normalizes with its street path and distance marked unknown.
+    third = normalize(source_response[2], gen, departure)
+    assert third.legs[4].geometryUnavailableReason == "street_path_unavailable"
+    assert third.legs[4].distanceMeters is None and third.walkingDistanceMeters is None
+    egress_unrouted = json.loads(json.dumps(source_response[2]))
+    egress_unrouted["legs"][-1]["cancelled"] = True
     with pytest.raises(ValueError, match="Unexpected live data"):
-        normalize(source_response[2], gen, departure)
+        normalize(egress_unrouted, gen, departure)
 
 
 def test_fall_back_elapsed_times_waits_walk_and_gtfs_service_identity():

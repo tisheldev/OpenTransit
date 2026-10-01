@@ -194,7 +194,12 @@ class Journey(Model):
     timing: Timing
     durationSeconds: int
     walkingSeconds: int
-    walkingDistanceMeters: float
+    walkingDistanceMeters: float | None = Field(
+        description=(
+            "Sum of walk-leg distances; null when any walk leg's distance is unknown, such "
+            "as a transfer whose street path is unavailable (TRANSFER_STREET_PATH_UNAVAILABLE)."
+        )
+    )
     transfers: int
     legs: list[Leg]
 

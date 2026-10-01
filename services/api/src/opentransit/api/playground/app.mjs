@@ -201,7 +201,7 @@ function renderJourney(journey) {
   $("summary").replaceChildren(...[
     duration(journey.durationSeconds),
     `${journey.transfers} transfer${journey.transfers === 1 ? "" : "s"}`,
-    `${duration(journey.walkingSeconds)} walking · ${(journey.walkingDistanceMeters / 1000).toFixed(1)} km`,
+    `${duration(journey.walkingSeconds)} walking · ${journey.walkingDistanceMeters == null ? "distance unknown" : `${(journey.walkingDistanceMeters / 1000).toFixed(1)} km`}`,
   ].map(text => textElement("span", text)));
   $("legs").replaceChildren();
   let previousArrival = null;

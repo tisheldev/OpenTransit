@@ -169,6 +169,32 @@ def transit(value: dict) -> Transit:
     )
 
 
+STREET_PATH_UNAVAILABLE = "street_path_unavailable"
+
+
+def _is_unrouted_transfer(legs: list, index: int) -> bool:
+    """A timetable transfer between two transit legs whose street path MOTIS could not build.
+
+    MOTIS v2.11.2 with osr_footpath=false routes transfers on timetable footpaths (stop
+    proximity) and only street-routes them for the response (detailedTransfers). When that
+    street routing fails it returns the same footpath leg marked `cancelled`, without distance
+    or geometry; the identical query with detailedTransfers=false returns it uncancelled. The
+    transfer is therefore part of the engine's scheduled answer, only its path is unknown.
+    Access, egress and direct walks are not footpaths and stay infeasible when cancelled.
+    """
+    leg = legs[index]
+    if not 0 < index < len(legs) - 1 or not isinstance(leg, dict):
+        return False
+    neighbours = (legs[index - 1], legs[index + 1])
+    ends = (leg.get("from"), leg.get("to"))
+    return (
+        leg.get("mode") == "WALK"
+        and leg.get("cancelled") is True
+        and all(isinstance(x, dict) and x.get("mode") not in (None, "WALK") for x in neighbours)
+        and all(isinstance(x, dict) and bool(x.get("stopId")) for x in ends)
+    )
+
+
 def normalize(
     raw: dict,
     generation: Generation,
@@ -180,12 +206,13 @@ def normalize(
     if not isinstance(raw, dict) or not isinstance(raw.get("legs"), list):
         raise ValueError("Invalid itinerary object")
     legs = []
-    for item in raw["legs"]:
+    for index, item in enumerate(raw["legs"]):
         if not isinstance(item, dict):
             raise ValueError("Invalid leg object")
         if item.get("realTime"):
             raise UnexpectedLiveDataError("Unexpected live data in scheduled engine")
-        if item.get("cancelled"):
+        unrouted = _is_unrouted_transfer(raw["legs"], index)
+        if item.get("cancelled") and not unrouted:
             raise ValueError("Unexpected live data in scheduled engine")
         mode = MODE_MAP[item["mode"]]
         if mode != "walk" and allowed_modes is not None and mode not in allowed_modes:
@@ -209,12 +236,17 @@ def normalize(
                 or abs(previous.destination.longitude - start.longitude) > 0.0001
             ):
                 raise ValueError("Disconnected legs")
-        distance = item.get("distance")
+        # An unrouted transfer has no street path: never present a distance or shape for it.
+        distance = None if unrouted else item.get("distance")
         if distance is not None and (not math.isfinite(distance) or distance < 0):
             raise ValueError("Invalid leg distance")
-        if mode == "walk" and distance is None:
+        if mode == "walk" and distance is None and not unrouted:
             raise ValueError("Missing walking distance")
-        shape = geometry(item.get("legGeometry"))
+        shape = None if unrouted else geometry(item.get("legGeometry"))
+        if unrouted:
+            unavailable = STREET_PATH_UNAVAILABLE
+        else:
+            unavailable = None if shape else "not_provided_by_engine"
         legs.append(
             Leg(
                 kind="walk" if mode == "walk" else "transit",
@@ -227,7 +259,7 @@ def normalize(
                 ),
                 distanceMeters=distance,
                 geometry=shape,
-                geometryUnavailableReason=None if shape else "not_provided_by_engine",
+                geometryUnavailableReason=unavailable,
                 transit=None if mode == "walk" else transit(item),
             )
         )
@@ -240,14 +272,21 @@ def normalize(
         scheduledDeparture=legs[0].timing.scheduledDeparture,
         scheduledArrival=legs[-1].timing.scheduledArrival,
     )
+    walks = [x for x in legs if x.kind == "walk"]
+    # A partial sum would understate the walk; an unknown leg distance makes the total unknown.
+    walking_distance = (
+        None
+        if any(x.distanceMeters is None for x in walks)
+        else sum(x.distanceMeters for x in walks)
+    )
     return Journey(
         id="journey-pending",
         timing=times,
         durationSeconds=int(
             checked_duration_seconds(times.scheduledDeparture, times.scheduledArrival)
         ),
-        walkingSeconds=sum(x.durationSeconds for x in legs if x.kind == "walk"),
-        walkingDistanceMeters=sum(x.distanceMeters for x in legs if x.kind == "walk"),
+        walkingSeconds=sum(x.durationSeconds for x in walks),
+        walkingDistanceMeters=walking_distance,
         transfers=transfers,
         legs=legs,
     )
@@ -285,11 +324,16 @@ def _engine_place(value: Coordinate | StopLocation, reference) -> str:
 
 
 def _has_cancelled_walk(raw: object) -> bool:
+    """An access, egress or direct walk without a street path makes the alternative infeasible."""
     if not isinstance(raw, dict) or not isinstance(raw.get("legs"), list):
         return False
+    legs = raw["legs"]
     return any(
-        isinstance(leg, dict) and leg.get("mode") == "WALK" and leg.get("cancelled")
-        for leg in raw["legs"]
+        isinstance(leg, dict)
+        and leg.get("mode") == "WALK"
+        and leg.get("cancelled")
+        and not _is_unrouted_transfer(legs, index)
+        for index, leg in enumerate(legs)
     )
 
 
@@ -409,6 +453,10 @@ class MotisClient:
                         warnings.append("DUPLICATE_ALTERNATIVES_OMITTED")
                     continue
                 seen.add(fingerprint)
+                if any(
+                    leg.geometryUnavailableReason == STREET_PATH_UNAVAILABLE for leg in journey.legs
+                ) and ("TRANSFER_STREET_PATH_UNAVAILABLE" not in warnings):
+                    warnings.append("TRANSFER_STREET_PATH_UNAVAILABLE")
                 journeys.append(journey.model_copy(update={"id": fingerprint}))
                 if len(journeys) >= query.results:
                     break

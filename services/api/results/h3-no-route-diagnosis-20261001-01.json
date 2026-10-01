@@ -1,0 +1,611 @@
+{
+ "schemaVersion": 1,
+ "id": "h3-no-route-diagnosis-20261001-01",
+ "kind": "diagnosis (engine probes + adapter replay); not an H3 verdict",
+ "recordedAt": "2026-10-01",
+ "agent": "NR (Claude Code subagent, Docker lane)",
+ "baseSource": "4d63692 (feat/scheduled-api-m2-m4)",
+ "subject": "services/api/results/acceptance-oct1b-20261001-01 (h3-moovit-comparison.md)",
+ "generation": {
+  "path": "D:/ot/generations/oct1b",
+  "generationId": "5eb4e43d9456b96a68ee44ffb7a58fe9137ed16bf40a670cf513c34564e44249",
+  "coverage": "2026-10-01..2026-10-31",
+  "gtfsSha256": "7d628a2fd0fd11518eb5a0c922b4ac55f4ed1cf52c8251853484deab06247b2e",
+  "gtfsHasTransfersTxt": false,
+  "motisConfigRelevant": {
+   "osr_footpath": false,
+   "link_stop_distance": 100,
+   "adjust_footpaths": true,
+   "max_footpath_length": 15,
+   "max_matching_distance": 25,
+   "street_routing_max_prepost_transit_seconds": 1800,
+   "street_routing_max_direct_seconds": 1800
+  }
+ },
+ "engine": {
+  "image": "ghcr.io/motis-project/motis@sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330",
+  "container": "ot-nr-motis (2g, 127.0.0.1:8601, generation motis dir mounted read-only)",
+  "endpoint": "/api/v6/plan",
+  "adapterParameters": {
+   "arriveBy": "false",
+   "numItineraries": "3",
+   "maxItineraries": "5",
+   "timetableView": "true",
+   "realtimeMode": "OFF",
+   "transitModes": "BUS,COACH,HIGHSPEED_RAIL,LONG_DISTANCE,NIGHT_RAIL,REGIONAL_RAIL,SUBURBAN,TRAM,SUBWAY",
+   "directModes": "WALK",
+   "maxPreTransitTime": "900",
+   "maxPostTransitTime": "900",
+   "maxDirectTime": "1800",
+   "detailedLegs": "true",
+   "joinInterlinedLegs": "false",
+   "withScheduledSkippedStops": "true",
+   "detailedTransfers": "true",
+   "preTransitModes": "WALK",
+   "postTransitModes": "WALK",
+   "language": "he"
+  }
+ },
+ "savedResponseMeta": {
+  "J15": {
+   "outcome": "no_route",
+   "warnings": [
+    "INFEASIBLE_STREET_ALTERNATIVES_OMITTED"
+   ]
+  },
+  "J17": {
+   "outcome": "no_route",
+   "warnings": [
+    "INFEASIBLE_STREET_ALTERNATIVES_OMITTED"
+   ]
+  },
+  "J09": {
+   "outcome": "no_route",
+   "warnings": []
+  },
+  "J24": {
+   "outcome": "no_route",
+   "warnings": []
+  },
+  "J11": {
+   "outcome": "routes_found",
+   "journeys": 2,
+   "warnings": [
+    "INFEASIBLE_STREET_ALTERNATIVES_OMITTED"
+   ]
+  }
+ },
+ "rootCauses": {
+  "A_adapter_dropped_unrouted_transfers": {
+   "cases": [
+    "J15",
+    "J17",
+    "J11",
+    "J14 (extra option)",
+    "J16 (extra option)"
+   ],
+   "type": "code (services/api/src/opentransit/motis.py)",
+   "finding": "MOTIS returned transit itineraries for J15/J17/J11 with the exact adapter parameters. Each dropped one has exactly one cancelled WALK leg BETWEEN two transit legs (stop->stop), with no distance and no geometry. The adapter treated any cancelled walk as an infeasible alternative and omitted the whole itinerary; when all were omitted the API returned no_route.",
+   "whyTransferIsNotInfeasible": [
+    "osr_footpath=false and the feed has no transfers.txt: RAPTOR transfers are MOTIS's own proximity footpaths (link_stop_distance=100, transitive, adjust_footpaths), not street routes; the engine's answer is feasible on its timetable.",
+    "Same query with detailedTransfers=false returns the identical itineraries with that walk NOT cancelled (still no geometry): 'cancelled' only means the response-time street routing of that footpath failed.",
+    "All affected pairs are same-complex rail<->bus interchanges 68-157 m apart."
+   ],
+   "h3SweepAllCases": {
+    "alternativesReturnedByEngine": 118,
+    "clean": 109,
+    "droppedOnlyForInteriorTransfer": 9,
+    "accessEgressCancelledOrDistanceMissing": 0,
+    "cancelledTransferPairs": [
+     {
+      "from": "37380 Haifa Center HaShmona rail",
+      "to": "35831 HaShmona bus stop",
+      "straightLineM": 132,
+      "footpathS": 240,
+      "count": 4
+     },
+     {
+      "from": "38162 Modi'in Center rail bus stop",
+      "to": "37394 Modi'in Center rail (OSM level -2)",
+      "straightLineM": 68,
+      "footpathS": 120,
+      "count": 3
+     },
+     {
+      "from": "44243 Nahariya central bus station",
+      "to": "37382 Nahariya rail",
+      "straightLineM": 128,
+      "footpathS": 240,
+      "count": 1
+     },
+     {
+      "from": "37380 Haifa Center HaShmona rail",
+      "to": "2410 HaShmona bus stop",
+      "straightLineM": 157,
+      "footpathS": 240,
+      "count": 1
+     }
+    ]
+   },
+   "streetGraphObservations": {
+    "directWalkStopToStop": {
+     "37380->35831": "440 m / 6 min (exists, longer than 240 s footpath)",
+     "44243->37382": "234 m / 3 min (exists, shorter than footpath; detailed transfer still cancelled)",
+     "38162->37394": "none",
+     "37380->2410": "none"
+    },
+    "railStationsWithNoDirectWalkTo150mPointsNandS": [
+     {
+      "stop": "37394",
+      "name": "מודיעין מרכז",
+      "lat": 31.901238,
+      "lon": 35.005712,
+      "directWalkMeters": {
+       "n150": null,
+       "s150": null
+      }
+     }
+    ],
+    "railStationsChecked": 70,
+    "interpretation": "Why MOTIS's detailed-transfer street routing fails is not fully explained by street distance (Nahariya has a 3-min street path). Modi'in Center (37394, matched at level -2) is unreachable by street routing at all; that also prevents the Moovit-style walk-to-station direct train for J17."
+   },
+   "fix": "Keep a cancelled WALK only when it is an interior transfer (previous and next legs are transit, both ends carry stopId): distanceMeters=null, geometry=null, geometryUnavailableReason='street_path_unavailable', engine transfer time kept, journey walkingDistanceMeters=null (schema now nullable), meta warning TRANSFER_STREET_PATH_UNAVAILABLE. Cancelled access/egress/direct walks are still omitted (INFEASIBLE_STREET_ALTERNATIVES_OMITTED). No leg, distance or path is fabricated."
+  },
+  "B_J09_corpus_coordinate_and_egress_cap": {
+   "type": "data (frozen corpus coordinate) + honest 15-min egress default",
+   "finding": "Corpus 'Bat Galim Central Station' (32.8283,34.9539) is ~2.63 km west of Haifa Bat Galim rail station 37378 (32.830498,34.981888). Nearest served stops are Ein HaYam 2626/2627 at 618-619 m straight line; engine walks 1039-1146 m (16-17 min) > 15-min maxPostTransitTime. Engine returns 0 itineraries; adapter dropped nothing.",
+   "probes": [
+    {
+     "variant": "adapter params",
+     "overrides": {},
+     "result": "0 itineraries"
+    },
+    {
+     "variant": "maxPostTransitTime=1200",
+     "overrides": {
+      "maxPostTransitTime": "1200"
+     },
+     "result": "4 itineraries, first 18:30->19:31 (148, then 16-min walk)"
+    },
+    {
+     "variant": "maxMatchingDistance=250 / timetableView=false / searchWindow=14400 / detailedTransfers=false",
+     "overrides": {},
+     "result": "0 itineraries each"
+    },
+    {
+     "variant": "toPlace = real Bat Galim station 32.830498,34.981888",
+     "overrides": {
+      "toPlace": "32.830498,34.981888"
+     },
+     "result": "5 itineraries, 37א 18:32->19:23 (Moovit 19:24)"
+    }
+   ],
+   "regression": false,
+   "poc": "poc/comparisons/ten-day-2026-09-04/routing/no-route-diagnosis.json: same 0 at defaults, routes only with 30-min walks"
+  },
+  "C_J24_corpus_coordinate_on_Masada_summit": {
+   "type": "data (frozen corpus coordinate); corpus expect.outcome='either'",
+   "finding": "Corpus 'Masada Junction' (31.3156,35.3539) is on the Masada summit. Nearest served stop 12069 'Masada' (421/384/444/486) is 1066 m straight line; Masada Junction stops 12321/12287 are 2746-2836 m. The engine finds no street walk from the point to stop 12069 even with 30-min caps.",
+   "probes": [
+    {
+     "variant": "adapter params",
+     "overrides": {},
+     "result": "0 itineraries"
+    },
+    {
+     "variant": "maxPreTransitTime=1800 / maxPostTransitTime=1800 / maxMatchingDistance=250 / searchWindow=14400",
+     "overrides": {},
+     "result": "0 itineraries each"
+    },
+    {
+     "variant": "direct walk to stop 12069 coordinate, 30-min caps",
+     "overrides": {
+      "toPlace": "31.3127,35.364591"
+     },
+     "result": "0 direct"
+    },
+    {
+     "variant": "fromPlace=stop 12069",
+     "overrides": {
+      "fromPlace": "mot60day_12069"
+     },
+     "result": "3 itineraries: 421 13:30 -> 388 arr 15:17 (Moovit 15:16) but egress walk 43994->destination cancelled (would still be omitted: egress, not a transfer)"
+    }
+   ],
+   "regression": false
+  },
+  "J11_gap": {
+   "finding": "Best was dropped by cause A (rail -> HaShmona transfer -> bus 2, 08:14->09:38). With the fix our best arrival is 09:38 vs Moovit 09:29 (+9 instead of +23). The remaining gap: HaShmona rail 37380 has no street walk to the destination (32.8206,34.9985, 226 m away) so the engine adds bus 1/2 + 9-min walk instead of walking from the station."
+  }
+ },
+ "parameterVariation": {
+  "J17": {
+   "maxMatchingDistance=100|250": "unchanged (bus->cancelled transfer->rail)",
+   "pedestrianProfile=WHEELCHAIR": "unchanged",
+   "useRoutedTransfers=true": "unchanged",
+   "maxPreTransitTime=1800": "unchanged; no walk-to-station itinerary",
+   "timetableView=false": "1 itinerary, same pattern",
+   "searchWindow=7200": "5 itineraries, same pattern",
+   "detailedTransfers=false": "same itineraries, transfer NOT cancelled, no geometry",
+   "fromPlace=station coordinate level -2": "0 itineraries",
+   "fromPlace=mot60day_37394": "direct rail 08:18->08:36 (matches Moovit)"
+  }
+ },
+ "regressionAssessment": {
+  "streetRoutingLimits": "Not causal: caps are 900/900/1800 s, below the 1800 s engine limits; raising caps only changed J09.",
+  "walkCapMapping": "Correct; J09 is the cap working as specified on a mispositioned corpus point.",
+  "omissionLogic": "Causal for J15/J17/J11/J14/J16 (cause A). The design note (docs/system-design.md) is a proposal; this changes it for interior transfers only.",
+  "pocEra": "PoC J17-to-T3 also used buses only (Modi'in Center rail unreachable on foot then too); J09 identical. Not an engine regression."
+ },
+ "configChange": {
+  "recommended": null,
+  "considered": "osr_footpath=true would replace proximity footpaths with street-routed ones; per probes it would remove the Modi'in 38162->37394 transfer (no street path) and lengthen HaShmona's. Not recommended; any config change alters generationId and needs a rebuild. Not done."
+ },
+ "adapterReplayAfterFix": {
+  "method": "patched MotisClient.plan over every H3 coordinate request against ot-nr-motis",
+  "changedCases": [
+   {
+    "id": "J09",
+    "before": {
+     "outcome": "no_route",
+     "journeys": 0,
+     "warnings": []
+    },
+    "after": {
+     "outcome": "no_route",
+     "journeys": [],
+     "warnings": []
+    }
+   },
+   {
+    "id": "J11",
+    "before": {
+     "outcome": "routes_found",
+     "journeys": 2,
+     "warnings": [
+      "INFEASIBLE_STREET_ALTERNATIVES_OMITTED"
+     ]
+    },
+    "after": {
+     "outcome": "routes_found",
+     "journeys": [
+      {
+       "departure": "2026-10-05T08:14:00+03:00",
+       "arrival": "2026-10-05T09:38:00+03:00",
+       "transfers": 1,
+       "lines": [
+        "rail",
+        "2"
+       ],
+       "unroutedTransfers": [
+        [
+         "mot:stop:37380",
+         "mot:stop:35831"
+        ]
+       ],
+       "walkingDistanceMeters": null
+      },
+      {
+       "departure": "2026-10-05T08:25:00+03:00",
+       "arrival": "2026-10-05T09:52:00+03:00",
+       "transfers": 1,
+       "lines": [
+        "rail",
+        "36"
+       ],
+       "unroutedTransfers": [],
+       "walkingDistanceMeters": 898.0
+      },
+      {
+       "departure": "2026-10-05T08:44:00+03:00",
+       "arrival": "2026-10-05T10:08:00+03:00",
+       "transfers": 1,
+       "lines": [
+        "rail",
+        "18"
+       ],
+       "unroutedTransfers": [],
+       "walkingDistanceMeters": 898.0
+      }
+     ],
+     "warnings": [
+      "TRANSFER_STREET_PATH_UNAVAILABLE"
+     ]
+    }
+   },
+   {
+    "id": "J14",
+    "before": {
+     "outcome": "routes_found",
+     "journeys": 3,
+     "warnings": [
+      "INFEASIBLE_STREET_ALTERNATIVES_OMITTED"
+     ]
+    },
+    "after": {
+     "outcome": "routes_found",
+     "journeys": [
+      {
+       "departure": "2026-10-05T08:02:00+03:00",
+       "arrival": "2026-10-05T10:53:00+03:00",
+       "transfers": 1,
+       "lines": [
+        "rail",
+        "280"
+       ],
+       "unroutedTransfers": [],
+       "walkingDistanceMeters": 1229.0
+      },
+      {
+       "departure": "2026-10-05T08:03:00+03:00",
+       "arrival": "2026-10-05T10:53:00+03:00",
+       "transfers": 2,
+       "lines": [
+        "16",
+        "rail",
+        "280"
+       ],
+       "unroutedTransfers": [
+        [
+         "mot:stop:44243",
+         "mot:stop:37382"
+        ]
+       ],
+       "walkingDistanceMeters": null
+      },
+      {
+       "departure": "2026-10-05T08:15:00+03:00",
+       "arrival": "2026-10-05T11:23:00+03:00",
+       "transfers": 1,
+       "lines": [
+        "rail",
+        "281"
+       ],
+       "unroutedTransfers": [],
+       "walkingDistanceMeters": 1324.0
+      }
+     ],
+     "warnings": [
+      "TRANSFER_STREET_PATH_UNAVAILABLE"
+     ]
+    }
+   },
+   {
+    "id": "J15",
+    "before": {
+     "outcome": "no_route",
+     "journeys": 0,
+     "warnings": [
+      "INFEASIBLE_STREET_ALTERNATIVES_OMITTED"
+     ]
+    },
+    "after": {
+     "outcome": "routes_found",
+     "journeys": [
+      {
+       "departure": "2026-10-05T08:00:00+03:00",
+       "arrival": "2026-10-05T10:16:00+03:00",
+       "transfers": 2,
+       "lines": [
+        "277",
+        "rail",
+        "1"
+       ],
+       "unroutedTransfers": [
+        [
+         "mot:stop:37380",
+         "mot:stop:35831"
+        ]
+       ],
+       "walkingDistanceMeters": null
+      },
+      {
+       "departure": "2026-10-05T08:21:00+03:00",
+       "arrival": "2026-10-05T10:40:00+03:00",
+       "transfers": 2,
+       "lines": [
+        "rail",
+        "rail",
+        "1"
+       ],
+       "unroutedTransfers": [
+        [
+         "mot:stop:37380",
+         "mot:stop:35831"
+        ]
+       ],
+       "walkingDistanceMeters": null
+      },
+      {
+       "departure": "2026-10-05T08:25:00+03:00",
+       "arrival": "2026-10-05T10:50:00+03:00",
+       "transfers": 2,
+       "lines": [
+        "274",
+        "rail",
+        "2"
+       ],
+       "unroutedTransfers": [
+        [
+         "mot:stop:37380",
+         "mot:stop:35831"
+        ]
+       ],
+       "walkingDistanceMeters": null
+      }
+     ],
+     "warnings": [
+      "TRANSFER_STREET_PATH_UNAVAILABLE"
+     ]
+    }
+   },
+   {
+    "id": "J16",
+    "before": {
+     "outcome": "routes_found",
+     "journeys": 2,
+     "warnings": [
+      "INFEASIBLE_STREET_ALTERNATIVES_OMITTED"
+     ]
+    },
+    "after": {
+     "outcome": "routes_found",
+     "journeys": [
+      {
+       "departure": "2026-10-05T08:25:00+03:00",
+       "arrival": "2026-10-05T09:52:00+03:00",
+       "transfers": 1,
+       "lines": [
+        "rail",
+        "1"
+       ],
+       "unroutedTransfers": [],
+       "walkingDistanceMeters": 491.0
+      },
+      {
+       "departure": "2026-10-05T08:44:00+03:00",
+       "arrival": "2026-10-05T10:25:00+03:00",
+       "transfers": 1,
+       "lines": [
+        "rail",
+        "17"
+       ],
+       "unroutedTransfers": [
+        [
+         "mot:stop:37380",
+         "mot:stop:2410"
+        ]
+       ],
+       "walkingDistanceMeters": null
+      },
+      {
+       "departure": "2026-10-05T08:45:00+03:00",
+       "arrival": "2026-10-05T10:37:00+03:00",
+       "transfers": 3,
+       "lines": [
+        "825",
+        "947",
+        "4",
+        "144"
+       ],
+       "unroutedTransfers": [],
+       "walkingDistanceMeters": 1033.0
+      }
+     ],
+     "warnings": [
+      "TRANSFER_STREET_PATH_UNAVAILABLE"
+     ]
+    }
+   },
+   {
+    "id": "J17",
+    "before": {
+     "outcome": "no_route",
+     "journeys": 0,
+     "warnings": [
+      "INFEASIBLE_STREET_ALTERNATIVES_OMITTED"
+     ]
+    },
+    "after": {
+     "outcome": "routes_found",
+     "journeys": [
+      {
+       "departure": "2026-10-05T08:06:00+03:00",
+       "arrival": "2026-10-05T08:36:00+03:00",
+       "transfers": 1,
+       "lines": [
+        "58",
+        "rail"
+       ],
+       "unroutedTransfers": [
+        [
+         "mot:stop:38162",
+         "mot:stop:37394"
+        ]
+       ],
+       "walkingDistanceMeters": null
+      },
+      {
+       "departure": "2026-10-05T08:37:00+03:00",
+       "arrival": "2026-10-05T09:06:00+03:00",
+       "transfers": 1,
+       "lines": [
+        "54",
+        "rail"
+       ],
+       "unroutedTransfers": [
+        [
+         "mot:stop:38162",
+         "mot:stop:37394"
+        ]
+       ],
+       "walkingDistanceMeters": null
+      },
+      {
+       "departure": "2026-10-05T09:07:00+03:00",
+       "arrival": "2026-10-05T09:36:00+03:00",
+       "transfers": 1,
+       "lines": [
+        "54",
+        "rail"
+       ],
+       "unroutedTransfers": [
+        [
+         "mot:stop:38162",
+         "mot:stop:37394"
+        ]
+       ],
+       "walkingDistanceMeters": null
+      }
+     ],
+     "warnings": [
+      "TRANSFER_STREET_PATH_UNAVAILABLE"
+     ]
+    }
+   },
+   {
+    "id": "J24",
+    "before": {
+     "outcome": "no_route",
+     "journeys": 0,
+     "warnings": []
+    },
+    "after": {
+     "outcome": "no_route",
+     "journeys": [],
+     "warnings": []
+    }
+   }
+  ],
+  "unchangedOutcomeCases": [
+   "J01",
+   "J01-DST",
+   "J01-HOL",
+   "J02",
+   "J03",
+   "J04",
+   "J05",
+   "J05-SAT",
+   "J06",
+   "J07",
+   "J08",
+   "J10",
+   "J11-FRI",
+   "J11-SAT",
+   "J12",
+   "J12-FRI",
+   "J12-HOL",
+   "J13",
+   "J18",
+   "J19",
+   "J20",
+   "J21",
+   "J22",
+   "J22-DST1",
+   "J22-DST2",
+   "J23",
+   "J25"
+  ]
+ },
+ "notAnH3Verdict": "Usable? remains a human decision; regenerate the H3 sheet with the fixed API."
+}

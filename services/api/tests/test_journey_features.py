@@ -124,14 +124,29 @@ def test_stop_reference_requires_namespace_and_resolves_full_engine_identity():
         request(**{"from": {"kind": "stop", "stopId": "13583"}})
 
 
-def test_actual_first_two_are_kept_cancelled_third_omitted_and_query_is_pinned():
+def test_actual_three_are_kept_with_unrouted_transfer_disclosed_and_query_is_pinned():
     seen = []
     result = call_plan(REAL_PLAN, seen=seen)
-    assert len(result.journeys) == 2
+    assert len(result.journeys) == 3
     assert result.ranking_policy == RANKING_POLICY
-    assert "INFEASIBLE_STREET_ALTERNATIVES_OMITTED" in result.warnings
+    # The real third alternative's rail->bus transfer at Haifa Center HaShmona (37380 -> 2410)
+    # is a timetable footpath MOTIS could not street-route: kept, path and distance unknown.
+    assert result.warnings == ["TRANSFER_STREET_PATH_UNAVAILABLE"]
     assert result.journeys[0].durationSeconds == 6420
     assert result.journeys[1].durationSeconds == 7620
+    third = result.journeys[2]
+    transfer = third.legs[4]
+    assert (transfer.kind, transfer.origin.stopId, transfer.destination.stopId) == (
+        "walk",
+        "mot:stop:37380",
+        "mot:stop:2410",
+    )
+    assert transfer.geometry is None and transfer.distanceMeters is None
+    assert transfer.geometryUnavailableReason == "street_path_unavailable"
+    assert transfer.durationSeconds > 0
+    assert third.walkingDistanceMeters is None
+    assert third.walkingSeconds == sum(x.durationSeconds for x in third.legs if x.kind == "walk")
+    assert result.journeys[0].walkingDistanceMeters == 88.0 + 455.0 + 189.0 + 333.0
     assert result.journeys[0].legs[1].transit.engineTripId.startswith("20261001_")
     assert result.journeys[0].legs[1].origin.stopId.startswith("mot:stop:")
     assert result.journeys[0].legs[1].transit.routeId.startswith("mot:route:")

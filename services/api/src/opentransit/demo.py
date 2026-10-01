@@ -46,6 +46,10 @@ def _span(seconds: int) -> str:
     return f"{hours}h{minutes:02d}m" if hours else f"{minutes}m"
 
 
+def _distance(meters: float | None) -> str:
+    return "unknown distance" if meters is None else f"{meters:.0f} m"
+
+
 def _leg_line(leg: dict) -> str:
     timing = leg["timing"]
     label = timing.get("timingState", "unknown")
@@ -88,7 +92,8 @@ def format_summary(request_body: dict, response: dict, api_url: str) -> str:
             f"arrive {_clock(timing['scheduledArrival'])} "
             f"({_span(journey['durationSeconds'])}, {journey['transfers']} transfer(s), "
             f"walking {_span(journey['walkingSeconds'])} / "
-            f"{journey['walkingDistanceMeters']:.0f} m)  [{timing.get('timingState', 'unknown')}]"
+            f"{_distance(journey.get('walkingDistanceMeters'))})  "
+            f"[{timing.get('timingState', 'unknown')}]"
         )
         lines.extend(_leg_line(leg) for leg in journey["legs"])
     constraints = meta.get("appliedConstraints") or {}

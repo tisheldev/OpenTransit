@@ -326,18 +326,98 @@ def test_deduplication_distinguishes_service_dates_and_counts_after_dedupe():
     assert result.warnings == ["DUPLICATE_ALTERNATIVES_OMITTED"]
 
 
-def test_missing_street_path_omits_that_alternative_once_and_keeps_the_others_in_order():
+def unrouted(itinerary, index):
+    """Shape MOTIS v2.11.2 returns when it cannot street-route a leg: cancelled, no path."""
+    leg = itinerary["legs"][index]
+    leg["cancelled"] = True
+    leg.pop("distance")
+    leg["legGeometry"] = {"points": "", "precision": 6, "length": 0}
+    return itinerary
+
+
+@pytest.mark.parametrize("index", [0, 4])
+def test_missing_access_or_egress_street_path_omits_that_alternative_and_keeps_others(index):
     first = synthetic_itinerary(BASE + timedelta(hours=2), "a")
-    broken_one = synthetic_itinerary(BASE, "b")
-    broken_one["legs"][2]["cancelled"] = True
-    broken_two = synthetic_itinerary(BASE + timedelta(hours=1), "c")
-    broken_two["legs"][0]["cancelled"] = True
+    broken = unrouted(synthetic_itinerary(BASE + timedelta(hours=1), "c"), index)
     last = synthetic_itinerary(BASE + timedelta(hours=3), "d")
-    result = call_plan(
-        {"itineraries": [first, broken_one, broken_two, last], "direct": []}, request(results=5)
-    )
+    result = call_plan({"itineraries": [first, broken, last], "direct": []}, request(results=5))
     assert departures(result) == [BASE + timedelta(hours=2), BASE + timedelta(hours=3)]
     assert result.warnings == ["INFEASIBLE_STREET_ALTERNATIVES_OMITTED"]
+
+
+def test_missing_direct_walk_street_path_omits_the_direct_alternative():
+    direct = synthetic_itinerary(BASE, "direct")
+    direct["legs"], direct["transfers"] = direct["legs"][:1], 0
+    unrouted(direct, 0)
+    kept = synthetic_itinerary(BASE + timedelta(hours=1), "kept")
+    result = call_plan({"itineraries": [kept], "direct": [direct]}, request(results=5))
+    assert departures(result) == [BASE + timedelta(hours=1)]
+    assert result.warnings == ["INFEASIBLE_STREET_ALTERNATIVES_OMITTED"]
+
+
+def test_unrouted_transfer_between_transit_legs_is_kept_in_order_and_disclosed():
+    first = synthetic_itinerary(BASE + timedelta(hours=2), "a")
+    transfer = unrouted(synthetic_itinerary(BASE, "b", transfer_walk_minutes=4), 2)
+    transfer["legs"][2]["legGeometry"] = {"points": "_ibE_seK_seK_seK", "precision": 5}
+    result = call_plan({"itineraries": [first, transfer], "direct": []}, request(results=5))
+    assert departures(result) == [BASE + timedelta(hours=2), BASE]
+    assert result.warnings == ["TRANSFER_STREET_PATH_UNAVAILABLE"]
+    clean, kept = result.journeys
+    leg = kept.legs[2]
+    assert (leg.kind, leg.origin.stopId, leg.destination.stopId) == (
+        "walk",
+        "mot:stop:2",
+        "mot:stop:3",
+    )
+    # Never present a dummy straight line or distance as a street path.
+    assert leg.geometry is None and leg.distanceMeters is None
+    assert leg.geometryUnavailableReason == "street_path_unavailable"
+    assert leg.durationSeconds == 240  # the engine's timetable transfer time
+    assert kept.walkingSeconds == 120 + 240 + 180
+    assert kept.walkingDistanceMeters is None
+    assert clean.walkingDistanceMeters == 200.0 + 400.0 + 300.0
+    assert all(x.geometryUnavailableReason != "street_path_unavailable" for x in clean.legs)
+
+
+def test_unrouted_transfer_is_kept_but_unrouted_egress_in_same_alternative_still_omits():
+    both = unrouted(unrouted(synthetic_itinerary(BASE, "b"), 2), 4)
+    kept = synthetic_itinerary(BASE + timedelta(hours=1), "k")
+    result = call_plan({"itineraries": [both, kept], "direct": []}, request(results=5))
+    assert departures(result) == [BASE + timedelta(hours=1)]
+    assert result.warnings == ["INFEASIBLE_STREET_ALTERNATIVES_OMITTED"]
+
+
+@pytest.mark.parametrize("missing", ["from", "to"])
+def test_cancelled_walk_without_stop_identity_on_both_ends_is_not_a_transfer(missing):
+    broken = unrouted(synthetic_itinerary(BASE, "b"), 2)
+    broken["legs"][2][missing].pop("stopId")
+    kept = synthetic_itinerary(BASE + timedelta(hours=1), "k")
+    result = call_plan({"itineraries": [broken, kept], "direct": []}, request(results=5))
+    assert departures(result) == [BASE + timedelta(hours=1)]
+    assert result.warnings == ["INFEASIBLE_STREET_ALTERNATIVES_OMITTED"]
+
+
+def test_http_unrouted_transfer_reaches_client_with_null_distance_and_warning(
+    client_factory, query
+):
+    only = unrouted(synthetic_itinerary(datetime(2026, 9, 30, 5, 10, tzinfo=UTC), "x"), 2)
+    with client_factory(
+        lambda r: httpx.Response(200, json={"itineraries": [only], "direct": []})
+    ) as c:
+        response = c.post("/v1/journeys", json=query)
+        schema = c.get("/openapi.json").json()
+    assert response.status_code == 200
+    body = response.json()
+    assert body["data"]["outcome"] == "routes_found"
+    assert body["meta"]["warnings"] == ["TRANSFER_STREET_PATH_UNAVAILABLE"]
+    journey = body["data"]["journeys"][0]
+    assert journey["walkingDistanceMeters"] is None
+    leg = journey["legs"][2]
+    assert leg["geometry"] is None and leg["distanceMeters"] is None
+    assert leg["geometryUnavailableReason"] == "street_path_unavailable"
+    walking = schema["components"]["schemas"]["Journey"]["properties"]["walkingDistanceMeters"]
+    assert {"type": "null"} in walking["anyOf"]
+    assert "TRANSFER_STREET_PATH_UNAVAILABLE" in walking["description"]
 
 
 def test_cancelled_non_walk_leg_is_not_a_street_omission_but_an_invalid_alternative():
