@@ -132,9 +132,10 @@ init (SUCCESS) -> photon (HEALTHY) ---------------------------^
   construction (the October 1 acceptance generation `oct1b` is one); staging it with `stage_bundle` has not been run yet.
   `init` and `stage_bundle` reject slot builds.
 * **G4 (startup cost).** The reference database (about 3.0 GB in the preserved generations) is
-  hashed by init twice, by the verifier once and by the API twice, and `ReferenceStore` runs
+  hashed by init twice, by the verifier once and by the API once (twice before October 2), and `ReferenceStore` runs
   `PRAGMA integrity_check` plus a content hash in both verifier and API. The October 1 acceptance runner measured about 9 minutes (530 s) for the API to become ready on a Windows
-  bind mount with one reference hash in the verifier and one in the API (full probe step 576 s). Startup time on
+  bind mount (full probe step 576 s). One reference hash over that mount takes about 34 s; `ReferenceStore`'s
+  checks took 169-239 s even on native disk and dominate ([measurement](../../services/api/results/api-startup-hash-20261002-01.json)). Startup time on
   0.5-1 vCPU Fargate remains unknown; measure before setting
   `healthCheckGracePeriodSeconds` (draft 600) and `startTimeout` (draft 900).
 * **G5 (disk).** Uncompressed layers total about 4.1 GB (reference 3.0, graph 0.7, address

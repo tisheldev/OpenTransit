@@ -17,7 +17,34 @@ def file_sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
-def verify_artifacts(directory: Path, manifest: dict | None = None) -> dict:
+class ArtifactDigests:
+    """File digests computed once during one startup or activation load.
+
+    Address verification, artifact verification and the reference check each needed a
+    file's digest; rereading the ~3 GB reference cost minutes on a slow bind mount. A digest
+    is reused only while the file keeps the resolved path, size and modification time it
+    had when it was hashed; any change rehashes it. Callers still compare every digest with
+    the manifest, so a mismatched artifact fails exactly as before.
+    """
+
+    def __init__(self) -> None:
+        self._digests: dict[Path, tuple[int, int, str]] = {}
+
+    def sha256(self, path: Path) -> str:
+        path = Path(path).resolve()
+        status = path.stat()
+        cached = self._digests.get(path)
+        if cached is not None and cached[:2] == (status.st_size, status.st_mtime_ns):
+            return cached[2]
+        digest = file_sha256(path)
+        self._digests[path] = (status.st_size, status.st_mtime_ns, digest)
+        return digest
+
+
+def verify_artifacts(
+    directory: Path, manifest: dict | None = None, digests: ArtifactDigests | None = None
+) -> dict:
+    digests = ArtifactDigests() if digests is None else digests
     directory = directory.resolve()
     manifest = manifest or json.loads((directory / "manifest.json").read_text(encoding="utf-8"))
     artifacts = manifest["artifacts"]
@@ -25,7 +52,7 @@ def verify_artifacts(directory: Path, manifest: dict | None = None) -> dict:
         if artifacts[key].get("path", name) != name:
             raise ValueError("Unsupported artifact path")
         path = directory / name
-        if path.is_symlink() or file_sha256(path) != artifacts[key]["sha256"]:
+        if path.is_symlink() or digests.sha256(path) != artifacts[key]["sha256"]:
             raise ValueError("Artifact checksum differs from the manifest")
     graph = artifacts["motis"]
     if graph.get("path") != "motis":
@@ -42,7 +69,7 @@ def verify_artifacts(directory: Path, manifest: dict | None = None) -> dict:
                 {
                     "path": path.relative_to(graph_dir).as_posix(),
                     "bytes": path.stat().st_size,
-                    "sha256": file_sha256(path),
+                    "sha256": digests.sha256(path),
                 }
             )
     if not entries or entries != graph["files"]:
@@ -60,7 +87,7 @@ def verify_artifacts(directory: Path, manifest: dict | None = None) -> dict:
         "referenceSha256": artifacts["reference"]["sha256"],
     }
     if manifest.get("addressSearch") is not None:
-        verified.update(verify_address_composite(directory, manifest))
+        verified.update(verify_address_composite(directory, manifest, digests))
     return verified
 
 
@@ -71,8 +98,11 @@ def _canonical_sha256(value: dict) -> str:
     return hashlib.sha256(encoded).hexdigest()
 
 
-def verify_address_composite(directory: Path, manifest: dict) -> dict:
+def verify_address_composite(
+    directory: Path, manifest: dict, digests: ArtifactDigests | None = None
+) -> dict:
     """Verify a composite generation's preserved schedule and sealed address inputs."""
+    digests = ArtifactDigests() if digests is None else digests
     directory = Path(directory).resolve()
     component_id = manifest.get("scheduleComponentGenerationId")
     if not isinstance(component_id, str) or not re.fullmatch(r"[a-f0-9]{64}", component_id):
@@ -88,7 +118,7 @@ def verify_address_composite(directory: Path, manifest: dict) -> dict:
     ):
         raise ValueError("Composite generation must preserve its schedule component manifest")
     component_path = directory / "schedule-component-manifest.json"
-    if component_path.is_symlink() or file_sha256(component_path) != component.get("sha256"):
+    if component_path.is_symlink() or digests.sha256(component_path) != component.get("sha256"):
         raise ValueError("Schedule component manifest checksum differs")
     original = json.loads(component_path.read_text(encoding="utf-8"))
     if original.get("generationId") != component_id:
@@ -123,7 +153,7 @@ def verify_address_composite(directory: Path, manifest: dict) -> dict:
         if not isinstance(artifact, dict) or artifact.get("path") != expected_path:
             raise ValueError("Composite address artifact path is invalid")
         path = directory / expected_path
-        if path.is_symlink() or file_sha256(path) != artifact.get("sha256"):
+        if path.is_symlink() or digests.sha256(path) != artifact.get("sha256"):
             raise ValueError(f"Composite address artifact checksum differs: {artifact_key}")
         verified[artifact_key] = (path, artifact["sha256"])
 
