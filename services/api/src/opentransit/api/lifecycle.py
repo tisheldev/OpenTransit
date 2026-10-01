@@ -54,10 +54,17 @@ async def _load_address_provider(
         photon_url, photon_admin_url = settings.photon_url, settings.photon_admin_url
     if photon_url is None or photon_admin_url is None:
         raise ValueError("Composite address generation requires fixed Photon query/admin origins")
-    metadata = verify_address_composite(manifest_path.parent, manifest)
-    catalog = AddressCatalog(
-        manifest_path.parent / "address-catalog.sqlite", metadata["sourceDumpSha256"]
-    )
+
+    def open_verified_catalog():
+        metadata = verify_address_composite(manifest_path.parent, manifest)
+        catalog = AddressCatalog(
+            manifest_path.parent / "address-catalog.sqlite", metadata["sourceDumpSha256"]
+        )
+        return metadata, catalog
+
+    # Hashing and counting the ~134 MB catalog takes seconds on a slow mount; a managed
+    # reload does this while the old snapshot serves, so keep it off the event loop.
+    metadata, catalog = await asyncio.to_thread(open_verified_catalog)
     client = httpx.AsyncClient(
         base_url=photon_url,
         timeout=settings.engine_timeout_seconds,

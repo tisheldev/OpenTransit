@@ -405,3 +405,47 @@ def test_address_binding_prefers_explicit_binding_origins_over_settings(tmp_path
     assert str(provider.client.base_url).startswith("http://127.0.0.1:2422")
     assert ports == {9211}
     asyncio.run(provider.client.aclose())
+
+
+def test_address_binding_verification_does_not_block_the_event_loop(tmp_path, monkeypatch):
+    """A managed reload hashes the catalog while the old snapshot serves; keep the loop free."""
+    import time
+
+    import opentransit.api.lifecycle as lifecycle_module
+
+    manifest_path = tmp_path / "manifest.json"
+    manifest_path.write_text(json.dumps({"addressSearch": {"provider": "photon"}}))
+
+    def slow_verify(*_):
+        time.sleep(0.4)  # stands in for hashing ~134 MB over a slow bind mount
+        raise ValueError("stop after verification")
+
+    monkeypatch.setattr(lifecycle_module, "verify_address_composite", slow_verify)
+    settings = Settings(
+        manifest_path,
+        photon_url="http://127.0.0.1:2322",
+        photon_admin_url="http://127.0.0.1:9201",
+    )
+
+    async def run():
+        gaps = []
+
+        async def ticker():
+            last = time.perf_counter()
+            while True:
+                await asyncio.sleep(0.01)
+                now = time.perf_counter()
+                gaps.append(now - last)
+                last = now
+
+        task = asyncio.create_task(ticker())
+        await asyncio.sleep(0.02)
+        with pytest.raises(ValueError, match="stop after verification"):
+            await _load_address_provider(
+                manifest_path, settings, httpx.MockTransport(lambda r: httpx.Response(404))
+            )
+        await asyncio.sleep(0.05)  # let the ticker record any stall before stopping it
+        task.cancel()
+        return max(gaps)
+
+    assert asyncio.run(run()) < 0.2
