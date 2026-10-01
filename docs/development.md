@@ -80,6 +80,8 @@ uv run --project services/api --locked opentransit demo --api-url http://127.0.0
 
 The opt-in [journey playground](http://127.0.0.1:8000/playground/) is a manual test harness requested September 30; it is not Phase 2. Enable it with `OPENTRANSIT_PLAYGROUND=1` (Compose does). Keep the Dizengoff → Technion example or enter coordinates/click the map; pick an Israel-time departure inside coverage (during the repeated autumn hour choose +03:00 or +02:00 explicitly); expand **Inspect request and response** to copy exact JSON for a report. A successful response is not H3 approval. The page stores nothing in the browser and talks only to the same API; street tiles load directly from OpenStreetMap, and routes still render if tiles fail. [Verification](../services/api/results/test-client-20260930.json).
 
+The same switch also serves the [API explorer](http://127.0.0.1:8000/playground/explorer.html) (requested October 2), a manual client for every public endpoint: health, readiness and status; place search with type, language and `near`; stops by `near`/`bbox` with pagination and stop detail; departures; routes by stop, operator or line, route detail and patterns; dated trips; journeys with coordinate, stop or place endpoints, depart-at or arrive-by, modes, result count, language and the three walk caps; and a raw request form with invalid-input examples for checking problem responses. Returned IDs are links: a stop opens its detail, departures or routes; a departure or transit leg opens its trip; place results can become a journey's origin or destination. Blank optional fields are omitted, so server defaults apply. It shows the exact request and response and keeps a per-tab history in memory only. Like the playground, it is a test harness: not Phase 2, not H3/H4 evidence.
+
 ## Fetch and build a generation
 
 ```powershell
@@ -155,7 +157,7 @@ All write new files only and refuse to overwrite.
 uv run --project services/api --locked ruff check services/api/src services/api/tests
 uv run --project services/api --locked ruff format --check services/api/src services/api/tests
 uv run --project services/api --locked pytest services/api/tests -m 'not integration' -q
-node --test services/api/tests/playground.test.mjs
+node --test services/api/tests/playground.test.mjs services/api/tests/explorer.test.mjs
 $env:OPENTRANSIT_TEST_URL = 'http://127.0.0.1:8000'
 $env:OPENTRANSIT_TEST_DEPART_AT = '2026-10-05T08:00:00+03:00'
 uv run --project services/api --locked pytest services/api/tests -m integration -q

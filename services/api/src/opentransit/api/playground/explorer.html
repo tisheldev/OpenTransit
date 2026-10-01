@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>OpenTransit · API explorer</title>
+  <link rel="stylesheet" href="./vendor/leaflet.css">
+  <link rel="stylesheet" href="./explorer.css">
+  <script src="./vendor/leaflet.js" defer></script>
+  <script src="./explorer.mjs" type="module"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="./explorer.html"><span class="brand-mark" aria-hidden="true">↗</span> OpenTransit</a>
+    <span class="pill">API explorer · local test client</span>
+    <button id="status-pill" class="status-pill" type="button" title="Refresh /v1/status">Checking API…</button>
+    <nav class="links"><a href="./">Journey playground</a><a href="/docs" target="_blank" rel="noopener">API docs ↗</a></nav>
+  </header>
+
+  <main>
+    <aside class="side">
+      <nav class="tabs" aria-label="Endpoints">
+        <button type="button" data-tab="status">Status</button>
+        <button type="button" data-tab="places">Places</button>
+        <button type="button" data-tab="stops">Stops</button>
+        <button type="button" data-tab="departures">Departures</button>
+        <button type="button" data-tab="routes">Routes</button>
+        <button type="button" data-tab="trip">Trip</button>
+        <button type="button" data-tab="journeys">Journeys</button>
+        <button type="button" data-tab="raw">Raw</button>
+      </nav>
+
+      <!-- Status -->
+      <form class="panel" data-panel="status">
+        <h2>Health and status</h2>
+        <p class="hint"><code>GET /healthz</code>, <code>/readyz</code> and <code>/v1/status</code>.</p>
+        <div class="row">
+          <button type="button" data-run="/healthz">/healthz</button>
+          <button type="button" data-run="/readyz">/readyz</button>
+          <button type="submit" class="primary">/v1/status</button>
+        </div>
+      </form>
+
+      <!-- Places -->
+      <form class="panel" data-panel="places">
+        <h2>Place search</h2>
+        <p class="hint"><code>GET /v1/places</code> — stops, stations, POIs and addresses.</p>
+        <label>Query (q)<input name="q" required minlength="2" maxlength="200" value="דיזנגוף סנטר" dir="auto"></label>
+        <div class="grid2">
+          <label>Language<select name="lang"><option>he</option><option>en</option></select></label>
+          <label>Limit<input name="limit" type="number" min="1" max="20" placeholder="10"></label>
+        </div>
+        <label>Near (lat,lon) <span class="opt">optional · map click fills it</span><input name="near" placeholder="32.0757,34.7748"></label>
+        <fieldset class="checks"><legend>Types <span class="opt">none = all</span></legend>
+          <label><input type="checkbox" name="type" value="stop">stop</label>
+          <label><input type="checkbox" name="type" value="station">station</label>
+          <label><input type="checkbox" name="type" value="poi">poi</label>
+          <label><input type="checkbox" name="type" value="address">address</label>
+        </fieldset>
+        <button type="submit" class="primary">Search</button>
+      </form>
+
+      <!-- Stops -->
+      <form class="panel" data-panel="stops">
+        <h2>Stops nearby or in a box</h2>
+        <p class="hint"><code>GET /v1/stops</code>. Click the map to set the centre.</p>
+        <fieldset class="checks"><legend>Selector</legend>
+          <label><input type="radio" name="selector" value="near" checked>near + radius</label>
+          <label><input type="radio" name="selector" value="bbox">bbox</label>
+        </fieldset>
+        <div data-show="selector=near">
+          <label>Near (lat,lon)<input name="near" value="32.0757,34.7748"></label>
+          <label>Radius (m) <span class="opt">max 5000</span><input name="radius" type="number" min="1" max="5000" placeholder="500"></label>
+        </div>
+        <div data-show="selector=bbox">
+          <label>Bbox (west,south,east,north) <button type="button" class="link" id="bbox-from-map">use map view</button>
+            <input name="bbox" value="34.770,32.070,34.785,32.082"></label>
+        </div>
+        <label>Limit<input name="limit" type="number" min="1" max="100" placeholder="20"></label>
+        <button type="submit" class="primary">List stops</button>
+        <hr>
+        <h3>Stop detail</h3>
+        <p class="hint"><code>GET /v1/stops/{stopId}</code></p>
+        <label>Stop ID<input name="stopId" placeholder="mot:stop:…"></label>
+        <button type="button" id="stop-detail">Get stop</button>
+      </form>
+
+      <!-- Departures -->
+      <form class="panel" data-panel="departures">
+        <h2>Departures from a stop</h2>
+        <p class="hint"><code>GET /v1/stops/{stopId}/departures</code></p>
+        <label>Stop ID<input name="stopId" required placeholder="mot:stop:…"></label>
+        <label>From · Israel time<input name="from" type="datetime-local" required></label>
+        <div class="grid2">
+          <label>UTC offset<select name="offset"><option value="auto">Automatic</option><option>+03:00</option><option>+02:00</option></select></label>
+          <button type="button" class="link" data-now="from">now</button>
+        </div>
+        <div class="grid2">
+          <label>Horizon (min)<input name="horizonMinutes" type="number" min="1" max="1440" placeholder="120"></label>
+          <label>Limit<input name="limit" type="number" min="1" max="100" placeholder="20"></label>
+        </div>
+        <button type="submit" class="primary">Get departures</button>
+      </form>
+
+      <!-- Routes -->
+      <form class="panel" data-panel="routes">
+        <h2>Routes</h2>
+        <p class="hint"><code>GET /v1/routes</code> — all filters optional.</p>
+        <label>Route short name<input name="routeShortName" placeholder="e.g. 5"></label>
+        <label>Operator ID<input name="operatorId" placeholder="operatorId from a route result"></label>
+        <label>Stop ID<input name="stopId" placeholder="mot:stop:…"></label>
+        <label>Limit<input name="limit" type="number" min="1" max="100" placeholder="20"></label>
+        <button type="submit" class="primary">List routes</button>
+        <hr>
+        <h3>Route detail and patterns</h3>
+        <p class="hint"><code>GET /v1/routes/{routeId}</code> and <code>…/patterns</code></p>
+        <label>Route ID<input name="routeId" placeholder="mot:route:…"></label>
+        <div class="row">
+          <button type="button" id="route-detail">Get route</button>
+          <button type="button" id="route-patterns">Get patterns</button>
+        </div>
+      </form>
+
+      <!-- Trip -->
+      <form class="panel" data-panel="trip">
+        <h2>Dated trip</h2>
+        <p class="hint"><code>GET /v1/trips/{tripRef}</code>. Trip references come from departures or journey legs and are generation-scoped.</p>
+        <label>Trip reference<input name="tripRef" required placeholder="20261002_08:00_…"></label>
+        <button type="submit" class="primary">Get trip</button>
+      </form>
+
+      <!-- Journeys -->
+      <form class="panel" data-panel="journeys">
+        <h2>Plan a journey</h2>
+        <p class="hint"><code>POST /v1/journeys</code>. Blank optional fields are omitted so server defaults apply.</p>
+        <fieldset class="endpoint" data-end="from"><legend><span class="dot a">A</span> From</legend>
+          <select name="fromKind"><option value="coordinate">coordinate</option><option value="stop">stop</option><option value="place">place</option></select>
+          <div data-show="fromKind=coordinate" class="grid2">
+            <label>Lat<input name="fromLat" type="number" step="any" value="32.0757"></label>
+            <label>Lon<input name="fromLon" type="number" step="any" value="34.7748"></label>
+          </div>
+          <label data-show="fromKind=stop">Stop ID<input name="fromStop" placeholder="mot:stop:…"></label>
+          <label data-show="fromKind=place">Place ref<input name="fromPlace" placeholder="from a place search result"></label>
+          <input name="fromLabel" type="hidden">
+          <button type="button" class="link" data-pick="from">pick on map</button>
+        </fieldset>
+        <button type="button" class="link swap" id="swap">⇅ swap</button>
+        <fieldset class="endpoint" data-end="to"><legend><span class="dot b">B</span> To</legend>
+          <select name="toKind"><option value="coordinate">coordinate</option><option value="stop">stop</option><option value="place">place</option></select>
+          <div data-show="toKind=coordinate" class="grid2">
+            <label>Lat<input name="toLat" type="number" step="any" value="32.7775"></label>
+            <label>Lon<input name="toLon" type="number" step="any" value="35.0219"></label>
+          </div>
+          <label data-show="toKind=stop">Stop ID<input name="toStop" placeholder="mot:stop:…"></label>
+          <label data-show="toKind=place">Place ref<input name="toPlace" placeholder="from a place search result"></label>
+          <input name="toLabel" type="hidden">
+          <button type="button" class="link" data-pick="to">pick on map</button>
+        </fieldset>
+        <div class="grid2">
+          <label>Anchor<select name="anchor"><option value="departAt">Depart at</option><option value="arriveBy">Arrive by</option></select></label>
+          <label>UTC offset<select name="offset"><option value="auto">Automatic</option><option>+03:00</option><option>+02:00</option></select></label>
+        </div>
+        <label>Time · Israel <button type="button" class="link" data-now="time">now</button><input name="time" type="datetime-local" required></label>
+        <fieldset class="checks"><legend>Modes</legend>
+          <label><input type="checkbox" name="modes" value="bus" checked>bus</label>
+          <label><input type="checkbox" name="modes" value="rail" checked>rail</label>
+          <label><input type="checkbox" name="modes" value="light_rail" checked>light_rail</label>
+        </fieldset>
+        <div class="grid2">
+          <label>Results (1–5)<input name="results" type="number" min="1" max="5" placeholder="3"></label>
+          <label>Language<select name="lang"><option value="">(default he)</option><option>he</option><option>en</option></select></label>
+        </div>
+        <fieldset class="caps"><legend>Walk caps (min, 1–30)</legend>
+          <label>Access<input name="maxAccessWalkMinutes" type="number" min="1" max="30" placeholder="15"></label>
+          <label>Egress<input name="maxEgressWalkMinutes" type="number" min="1" max="30" placeholder="15"></label>
+          <label>Direct<input name="maxDirectWalkMinutes" type="number" min="1" max="30" placeholder="30"></label>
+        </fieldset>
+        <button type="submit" class="primary">Plan journey</button>
+      </form>
+
+      <!-- Raw -->
+      <form class="panel" data-panel="raw">
+        <h2>Raw request</h2>
+        <p class="hint">Send anything to this API, including invalid input, to check problem responses.</p>
+        <div class="grid-method">
+          <select name="method"><option>GET</option><option>POST</option></select>
+          <input name="path" value="/v1/status" required>
+        </div>
+        <label>JSON body <span class="opt">POST only</span><textarea name="body" rows="8" spellcheck="false"></textarea></label>
+        <label>Examples<select id="raw-examples"></select></label>
+        <button type="submit" class="primary">Send</button>
+      </form>
+    </aside>
+
+    <section class="work">
+      <div class="map-wrap">
+        <div id="map" aria-label="Map of results"></div>
+        <p id="map-hint" class="map-hint"></p>
+      </div>
+      <p id="banner" class="banner" role="status" aria-live="polite">Pick an endpoint on the left.</p>
+      <section id="result" class="result" aria-label="Rendered response"></section>
+      <details id="exchange" class="exchange" open>
+        <summary>Request and response <span id="exchange-line"></span></summary>
+        <div class="ex-head"><h3>Request</h3><button type="button" data-copy="request">Copy</button></div>
+        <pre id="ex-request"></pre>
+        <div class="ex-head"><h3>Response</h3><button type="button" data-copy="response">Copy</button></div>
+        <pre id="ex-response"></pre>
+      </details>
+      <details class="history">
+        <summary>History (this tab only, not stored)</summary>
+        <ol id="history"></ol>
+      </details>
+    </section>
+  </main>
+  <footer>Local test harness. Scheduled data only; a successful response is not route-quality approval. Data: Israel Ministry of Transport · © OpenStreetMap contributors.</footer>
+</body>
+</html>
