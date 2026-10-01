@@ -60,6 +60,17 @@ PHOTON_ORIGINS = {
 # Small composite files copied into the managed root; large artifacts are read-only mounts.
 COMPOSITE_COPIES = ("schedule-component-manifest.json", "photon-import-attestation.json")
 DEADLINE_SECONDS = 1.5
+# Standby engines are queried directly (bypassing the delay proxy, so proxy-based checks are
+# unaffected) to keep their graph pages resident: reloads rehash ~3 GB per generation over the
+# Windows share for 10-16 minutes, which evicts an idle engine and makes its first request
+# exceed the 1.2 s engine timeout (r03 rollback, r04 probe J01).
+ENGINE_DIRECT_PORTS = (59091, 59092)
+KEEP_WARM_SECONDS = 15
+WARM_QUERY = (
+    "import urllib.request as u;u.urlopen('http://127.0.0.1:{port}/api/v6/plan?"
+    "fromPlace=32.0757,34.7748&toPlace=32.0838,34.8044&time=2026-10-05T05:00:00Z',"
+    "timeout=10)"
+)
 PROXY_DELAY = 0.35
 JOURNEY = {
     "from": {"kind": "coordinate", "latitude": 32.0757, "longitude": 34.7748},
@@ -117,6 +128,8 @@ class Harness:
         self.data: dict = {}
         self.memory: dict[str, int] = {}
         self._sampling = False
+        self._warming = False
+        self.warm_counts: dict[str, dict[str, int]] = {}
         self.started = False
 
     # -- process helpers -------------------------------------------------------------
@@ -342,6 +355,35 @@ class Harness:
         (self.run_dir / "delay-a").write_text("0", encoding="utf-8")
         (self.run_dir / "delay-b").write_text("0", encoding="utf-8")
 
+    def warm_engine(self, port: int, count: int = 6) -> None:
+        for _ in range(count):
+            self.python_in_api(WARM_QUERY.format(port=port), timeout=30)
+
+    def keep_engines_warm(self) -> None:
+        """Operator-style standby keep-alive: one direct plan query per engine every 15 s."""
+
+        def loop():
+            while self._warming:
+                for port in ENGINE_DIRECT_PORTS:
+                    try:
+                        ok = (
+                            subprocess.run(
+                                ["docker", "exec", self.api_container, "/app/.venv/bin/python"]
+                                + ["-c", WARM_QUERY.format(port=port)],
+                                capture_output=True,
+                                timeout=60,
+                            ).returncode
+                            == 0
+                        )
+                    except subprocess.TimeoutExpired:
+                        ok = False
+                    counts = self.warm_counts.setdefault(str(port), {"ok": 0, "failed": 0})
+                    counts["ok" if ok else "failed"] += 1
+                time.sleep(KEEP_WARM_SECONDS)
+
+        self._warming = True
+        threading.Thread(target=loop, daemon=True).start()
+
     def sample_memory(self) -> None:
         def loop():
             while self._sampling:
@@ -456,6 +498,7 @@ class Harness:
             for slot in "ab":
                 self.timings[f"photon{slot.upper()}ReadySeconds"] = self.wait_photon(slot)
         self.sample_memory()
+        self.keep_engines_warm()
         self.timings["stackStartSeconds"] = round(time.time() - started, 1)
 
     def wait_photon(self, slot: str, timeout=600) -> float:
@@ -492,6 +535,7 @@ class Harness:
             if not self.args.source_check:
                 self.tool("source-check", "--generation", gen, "--out", f"{gen}/source-check.json")
             extra = ["--active", "/managed/gen-a"] if slot == "b" else []
+            self.warm_engine(port - 59081 + ENGINE_DIRECT_PORTS[0])
             rc, _, proc = self.cli(
                 "probe",
                 "--generation",
@@ -959,13 +1003,7 @@ class Harness:
         motis_a = f"{self.prefix}-motis-a"
         self.run(["docker", "start", motis_a], label=f"docker start {motis_a}")
         ready = self.wait_engine(59081)
-        for _ in range(6):  # page the graph back in; the worker health check allows 1.2 s
-            self.python_in_api(
-                "import urllib.request as u;u.urlopen('http://127.0.0.1:59081/api/v6/plan?"
-                "fromPlace=32.0757,34.7748&toPlace=32.0838,34.8044&time=2026-10-05T05:00:00Z',"
-                "timeout=10)",
-                timeout=30,
-            )
+        self.warm_engine(ENGINE_DIRECT_PORTS[0])  # page the graph back in; health allows 1.2 s
         started = time.time()
         rc, report, proc = self.activate(a_binding, action="rollback")
         seconds = round(time.time() - started, 1)
@@ -1051,6 +1089,7 @@ class Harness:
     # -- teardown ----------------------------------------------------------------------------
     def export_and_teardown(self) -> None:
         self._sampling = False
+        self._warming = False
         logs = {}
         for name in self.containers:
             proc = self.run(["docker", "logs", name], check=False, label=f"docker logs {name}")
@@ -1129,6 +1168,14 @@ class Harness:
                 if self.args.source_check
                 else "per-generation records reconstructed from each manifest's "
                 "recorded acquisition/validation times; no new upstream check or download",
+                "engineKeepWarm": {
+                    "intervalSeconds": KEEP_WARM_SECONDS,
+                    "directPorts": list(ENGINE_DIRECT_PORTS),
+                    "queries": self.warm_counts,
+                    "note": "standby engines queried directly (not through the delay proxy) "
+                    "so reload hashing does not evict their graphs; failures while an engine "
+                    "is deliberately stopped are expected",
+                },
                 "journeyDeadlineSeconds": DEADLINE_SECONDS,
                 "proxyDelaySeconds": PROXY_DELAY,
                 "limits": {
