@@ -233,3 +233,21 @@ def test_api_request_keeps_the_snapshot_captured_before_await(client_factory):
             response = pending.result(timeout=3)
         assert response.status_code == 200
         assert response.json()["meta"]["generationId"] == "generation-before"
+
+
+def test_configured_deadline_applies_to_trips_and_departures(client_factory):
+    async def slow(request):
+        await asyncio.sleep(0.2)
+        return engine_response(request)
+
+    with client_factory(slow, deadline=0.1) as client:
+        attach_snapshot(client)
+        trip_response = client.get(f"/v1/trips/{TRIP_IDS['loop_trip']}")
+        assert trip_response.status_code == 504
+        assert trip_response.json()["code"] == "ENGINE_TIMEOUT"
+
+        departures_response = client.get(
+            "/v1/stops/mot:stop:board/departures", params={"from": FROM}
+        )
+        assert departures_response.status_code == 504
+        assert departures_response.json()["code"] == "ENGINE_TIMEOUT"

@@ -1,6 +1,7 @@
 import asyncio
 
 import httpx
+from conftest import NOW
 
 from opentransit.api.app import create_app
 from opentransit.config import Settings
@@ -20,7 +21,11 @@ def test_capacity_rejects_seventeenth_request_and_recovers(manifest, query):
             await release.wait()
             return httpx.Response(200, json={"itineraries": [], "direct": []})
 
-        app = create_app(Settings(manifest), transport=httpx.MockTransport(engine))
+        app = create_app(
+            Settings(manifest),
+            transport=httpx.MockTransport(engine),
+            clock=lambda: NOW,
+        )
         async with app.router.lifespan_context(app):
             async with httpx.AsyncClient(
                 base_url="http://api.test", transport=httpx.ASGITransport(app=app)
@@ -60,7 +65,11 @@ def test_cancelled_request_releases_capacity(manifest, query):
                 raise
             return httpx.Response(200, json={"itineraries": [], "direct": []})
 
-        app = create_app(Settings(manifest), transport=httpx.MockTransport(engine))
+        app = create_app(
+            Settings(manifest),
+            transport=httpx.MockTransport(engine),
+            clock=lambda: NOW,
+        )
         async with app.router.lifespan_context(app):
             async with httpx.AsyncClient(
                 base_url="http://api.test", transport=httpx.ASGITransport(app=app)

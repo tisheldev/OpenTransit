@@ -4,7 +4,7 @@ Service dates are separate GTFS identities. These functions parse and compare
 instants only; local time conversion is an explicit display operation.
 """
 
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from zoneinfo import ZoneInfo
 
 JERUSALEM = ZoneInfo("Asia/Jerusalem")
@@ -29,6 +29,21 @@ def as_utc_instant(value: datetime) -> datetime:
     if value.utcoffset() is None:
         raise ValueError("Datetime must include an explicit UTC offset")
     return value.astimezone(UTC)
+
+
+def engine_time(value: datetime) -> str:
+    """Serialize an aware instant for a MOTIS query parameter, truncated to whole seconds.
+
+    MOTIS v2.11.2 parses `%FT%T%Ez` into milliseconds (openapi-cpp/HowardHinnant date):
+    fractional digits after the third are read as the UTC-offset hours and the real offset
+    is ignored, so `datetime.isoformat()` with microseconds shifts the query by 0-99 hours.
+    """
+    offset = value.utcoffset() if isinstance(value, datetime) else None
+    if offset is None:
+        raise ValueError("Datetime must include an explicit UTC offset")
+    if offset % timedelta(minutes=1):
+        value = value.astimezone(UTC)
+    return value.isoformat(timespec="seconds")
 
 
 def is_before(left: datetime, right: datetime) -> bool:

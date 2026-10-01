@@ -9,6 +9,8 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from opentransit.api.log import LOG
 from opentransit.api.responses import problem
 
+MAX_BODY_BYTES = 16_384  # 16 KiB; larger POST bodies get 413 before parsing.
+
 
 class SafeRequests(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
@@ -18,7 +20,7 @@ class SafeRequests(BaseHTTPMiddleware):
             body = bytearray()
             async for chunk in request.stream():
                 body.extend(chunk)
-                if len(body) > 16_384:
+                if len(body) > MAX_BODY_BYTES:
                     response = problem(request, 413, "BODY_TOO_LARGE", "Body limit is 16 KiB.")
                     break
             else:

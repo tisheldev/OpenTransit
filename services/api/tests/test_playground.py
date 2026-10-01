@@ -1,3 +1,4 @@
+from conftest import NOW
 from fastapi.testclient import TestClient
 
 from opentransit.api.app import create_app
@@ -6,7 +7,8 @@ from opentransit.config import Settings
 
 def test_playground_is_opt_in_and_not_part_of_api_contract(manifest):
     for enabled in (False, True):
-        with TestClient(create_app(Settings(manifest, playground_enabled=enabled))) as client:
+        app = create_app(Settings(manifest, playground_enabled=enabled), clock=lambda: NOW)
+        with TestClient(app) as client:
             page = client.get("/playground/")
             assert page.status_code == (200 if enabled else 404)
             paths = client.get("/openapi.json").json()["paths"]

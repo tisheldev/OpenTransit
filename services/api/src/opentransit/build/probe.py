@@ -15,6 +15,7 @@ import httpx
 
 from opentransit.build.generations import verify_artifacts
 from opentransit.core.generation import Generation
+from opentransit.core.time import engine_time
 from opentransit.reference import ReferenceStore
 
 COUNT_DROP_LIMIT = 0.20
@@ -74,7 +75,10 @@ def _journeys(source: Path | list[dict]) -> tuple[list[dict], str]:
             when = datetime.fromisoformat(str(probe_time).replace("Z", "+00:00"))
             if when.utcoffset() is None:
                 raise ValueError("Probe departure override requires an explicit offset")
-            params["time"] = when.isoformat()
+            params["time"] = engine_time(when)
+        elif when.microsecond:
+            # MOTIS misreads fractional isoformat() times as offsets; send whole seconds.
+            params["time"] = engine_time(when)
         expected = item.get("expect", {}).get("outcome", "route")
         if expected not in {"route", "no_route", "either"}:
             raise ValueError("Journey expected outcome must be route, no_route, or either")

@@ -146,8 +146,22 @@ def main(argv: list[str] | None = None) -> int:
     retire.add_argument("--incarnation", required=True)
     retire.add_argument("--deadline-seconds", type=float, default=1.5)
     retire.add_argument("--timeout", type=float, default=120.0)
+    demo = commands.add_parser(
+        "demo", help="Plan Dizengoff Center -> Technion against a running API (scheduled)"
+    )
+    demo.add_argument("--api-url", default="http://127.0.0.1:8000")
+    demo.add_argument("--depart-at", help="ISO time with offset; default tomorrow 08:00 Israel")
+    demo.add_argument("--results", type=int, choices=range(1, 6), default=3)
+    demo.add_argument("--lang", choices=("he", "en"), default="en")
     args = parser.parse_args(argv)
     try:
+        if args.command == "demo":
+            from opentransit.demo import run_demo
+
+            for stream in (sys.stdout, sys.stderr):
+                if hasattr(stream, "reconfigure"):
+                    stream.reconfigure(errors="replace")
+            return run_demo(args.api_url, args.depart_at, results=args.results, lang=args.lang)
         if args.command == "prepare-m1":
             prepare(args.output, args.osm_path)
         elif args.command == "fetch":

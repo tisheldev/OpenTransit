@@ -23,6 +23,7 @@ from opentransit.api.schemas import (
 from opentransit.core.generation import Generation, instant
 from opentransit.core.time import (
     checked_duration_seconds,
+    engine_time,
     is_before,
     to_local_display,
 )
@@ -298,21 +299,33 @@ class MotisClient:
 
     async def ready(self, now: datetime) -> bool:
         """Engine health only; candidate/generation correctness needs separate probes."""
+        return (await self.health(now)) is None
+
+    async def health(self, now: datetime) -> dict[str, str] | None:
+        """Return None when healthy, else a safe machine-readable failure reason."""
         try:
             response = await self.client.get(
                 "/api/v6/plan",
                 params={
                     "fromPlace": "32.0836,34.7981",
                     "toPlace": "32.0838,34.8044",
-                    "time": now.isoformat(),
+                    "time": engine_time(now),
                     "numItineraries": "1",
                 },
             )
-            response.raise_for_status()
+        except httpx.TimeoutException:
+            return {"reason": "ENGINE_TIMEOUT"}
+        except httpx.HTTPError:
+            return {"reason": "ENGINE_UNREACHABLE"}
+        if not response.is_success:
+            return {"reason": "ENGINE_HTTP_STATUS", "httpStatus": str(response.status_code)}
+        try:
             data = response.json()
-            return isinstance(data["itineraries"], list) and isinstance(data["direct"], list)
-        except httpx.HTTPError, ValueError, KeyError, TypeError:
-            return False
+            if isinstance(data["itineraries"], list) and isinstance(data["direct"], list):
+                return None
+        except ValueError, KeyError, TypeError:
+            pass
+        return {"reason": "ENGINE_INVALID_RESPONSE"}
 
     async def plan(self, query, generation: Generation, reference=None) -> PlanResult:
         try:
@@ -328,7 +341,7 @@ class MotisClient:
         params = {
             "fromPlace": origin,
             "toPlace": destination,
-            "time": query.time_anchor.isoformat(),
+            "time": engine_time(query.time_anchor),
             "arriveBy": str(query.is_arrive_by).lower(),
             "numItineraries": str(query.results),
             "maxItineraries": "5",
@@ -400,6 +413,10 @@ class MotisClient:
                 if len(journeys) >= query.results:
                     break
             if raw_alternatives and not journeys:
+                if warnings == ["INFEASIBLE_STREET_ALTERNATIVES_OMITTED"]:
+                    # Every alternative lacked a street path: an empty search with the
+                    # disclosure, not a malformed engine response.
+                    return PlanResult([], warnings, RANKING_POLICY, constraints)
                 raise EngineFailure("ENGINE_INVALID_RESPONSE")
             return PlanResult(journeys, warnings, RANKING_POLICY, constraints)
         except EngineFailure:

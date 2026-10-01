@@ -14,7 +14,7 @@ from zoneinfo import ZoneInfo
 
 import httpx
 
-from opentransit.core.time import as_utc_instant, parse_utc_instant
+from opentransit.core.time import as_utc_instant, engine_time, parse_utc_instant
 from opentransit.core.trip_calls import (
     EngineCall,
     EngineProfile,
@@ -438,7 +438,7 @@ async def departures(
             "/api/v6/stoptimes",
             {
                 "stopId": f"mot60day_{source_stop_id}",
-                "time": start_utc.isoformat(),
+                "time": engine_time(start_utc),
                 "arriveBy": "false",
                 "direction": "LATER",
                 "window": str(horizon * 60),

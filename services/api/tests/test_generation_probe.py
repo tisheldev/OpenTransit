@@ -271,7 +271,9 @@ def test_probe_records_corpus_hash_and_explicit_override_times(
     assert result["corpusSha256"] == hashlib.sha256(corpus.read_bytes()).hexdigest()
     entry = result["journeys"][0]
     assert entry["sourceDepartureTime"] == original
-    assert entry["departureTime"] == requested
+    # The engine receives whole seconds; MOTIS misparses fractional isoformat() times.
+    sent = (current + timedelta(minutes=2)).replace(microsecond=0)
+    assert entry["departureTime"] == sent.isoformat()
 
 
 def test_probe_rejects_more_than_ten_instead_of_truncating(current_generation, tmp_path):

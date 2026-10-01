@@ -24,7 +24,7 @@ from opentransit.runtime import capture_snapshot
 _EXPLICIT_TIME = re.compile(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})\Z")
 
 
-def timetable_router(clock, problem) -> APIRouter:
+def timetable_router(settings, clock, problem) -> APIRouter:
     router = APIRouter()
 
     @router.get("/v1/trips/{trip_ref}")
@@ -44,7 +44,7 @@ def timetable_router(clock, problem) -> APIRouter:
             semaphore = request.app.state.planning_semaphore
             if semaphore.locked():
                 return problem(request, 503, "SERVER_OVERLOADED", "Schedule capacity is busy.")
-            async with asyncio.timeout(1.5):
+            async with asyncio.timeout(settings.journey_deadline_seconds):
                 async with semaphore:
                     data = await trip_detail(snapshot, trip_ref)
         except TimetableFailure as exc:
@@ -103,7 +103,7 @@ def timetable_router(clock, problem) -> APIRouter:
             semaphore = request.app.state.planning_semaphore
             if semaphore.locked():
                 return problem(request, 503, "SERVER_OVERLOADED", "Schedule capacity is busy.")
-            async with asyncio.timeout(1.5):
+            async with asyncio.timeout(settings.journey_deadline_seconds):
                 async with semaphore:
                     data = await departures(snapshot, stop_id, start, horizon, limit, cursor)
         except TimetableFailure as exc:

@@ -12,7 +12,9 @@ from opentransit.config import Settings
 from opentransit.reference import build_reference
 
 
-def reference_client(manifest, engine_route, *, now=None, corrupt=False, engine_down=False):
+def reference_client(
+    manifest, engine_route, *, now=None, corrupt=False, engine_down=False, engine=None
+):
     feed = synthetic_feed(manifest.parent / "feed.zip")
     info = json.loads(manifest.read_text(encoding="utf-8"))
     database = manifest.parent / "reference.sqlite"
@@ -45,6 +47,8 @@ def reference_client(manifest, engine_route, *, now=None, corrupt=False, engine_
         encoding="utf-8",
     )
 
+    handler = engine
+
     def engine(request):
         if engine_down:
             raise httpx.ConnectError("sentinel-private-host", request=request)
@@ -55,7 +59,7 @@ def reference_client(manifest, engine_route, *, now=None, corrupt=False, engine_
     return TestClient(
         create_app(
             Settings(manifest, probe_path=probe),
-            transport=httpx.MockTransport(engine),
+            transport=httpx.MockTransport(handler or engine),
             clock=lambda: now or datetime(2026, 9, 30, 9, tzinfo=UTC),
         )
     )
