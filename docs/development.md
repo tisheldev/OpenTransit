@@ -78,6 +78,12 @@ Managed startup verifies all artifact hashes and reference identity. Set `OPENTR
 
 `opentransit prune --generations-root .runtime/generations --active <generation-id> --previous <previous-id> --dry-run --output .runtime/retention-new.json` only reports candidates; it never deletes files. Active, previous, evidence-pinned and draining generations must be retained. Candidate probing and Linux activation/rollback are still being verified; no refresh schedule or cloud deployment is configured.
 
+### Local activation, rollback and the Compose harness
+
+`opentransit activate|rollback --managed-root R --ack-dir R/acks --binding R/binding-<token>.json` runs inside the Linux API container (Windows lacks the pointer lock and `SIGUSR1`). It verifies the binding, re-checks coverage/freshness (`--now` simulates a clock), swaps the `current` symlink atomically, signals the single worker and waits for its acknowledgement; a rejected or unacknowledged candidate restores the pointer with a fresh-token binding while the worker keeps serving its old snapshot. `rollback` re-checks the older generation first and refuses stale or expired coverage before touching the pointer. `opentransit await-retirement` waits for the worker's retirement acknowledgement (at least ten request deadlines after activation); stop the old engine only after it succeeds.
+
+`python services/api/tools/activation_compose_harness.py --run-id <id> --codex-runtime <.runtime dir> [--results-out services/api/results/<new file>.json]` (run with `uv run --project services/api` for Python 3.14) starts `ot-t2-*` containers from `services/api/tools/activation-compose.yaml` (API 1g, two MOTIS 3g, host port 8300), mounts two existing generations read-only, exercises activation under load, failed reload, rollback refusal/success, retirement gating and `prune --dry-run`, exports logs and removes its containers. The compose file expects the older `opentransit-api` image and bind-mounts the current source, so no image build or download is needed.
+
 ## Edit and check the API
 
 For rapid edits, run only MOTIS in Compose and the API on the host:

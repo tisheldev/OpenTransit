@@ -122,7 +122,9 @@ class Harness:
     def cli(self, *argv, timeout=1500, label=None):
         """Run the product `opentransit` command inside the API container."""
         proc = self.exec_api(
-            "/app/.venv/bin/opentransit",
+            "/app/.venv/bin/python",
+            "-m",
+            "opentransit.build.cli",
             *argv,
             timeout=timeout,
             check=False,
