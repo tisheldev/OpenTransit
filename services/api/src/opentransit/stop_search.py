@@ -40,6 +40,8 @@ _ABBREVIATIONS = {
     "רקל": "רכבת קלה",
 }
 # Curated aliases for hubs whose GTFS stop has no usable English translation.
+# Not source data: "Ben Gurion Airport" is Israel Railways' published English
+# name for the נתב"ג station. Each entry needs a cited public source.
 # Keyed by a normalized name token; values are added as searchable labels.
 _ALIASES = {"נתבג": ("ben gurion airport",)}
 # Latin transliteration folding for Hebrew place names (Yits'hak/Yitzhak,
