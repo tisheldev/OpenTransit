@@ -260,13 +260,33 @@ After the local preparation is reviewable, the essential decisions are: approve 
 | H-2 | M7 | Load/soak on Fargate, failed-candidate and draining tests, restore drill from task definitions/ECR/evidence, rate limiting | N01–N03/N05/N06 evidence; aggregate overlap measured under 8 GiB serving ceiling |
 | H-3 | M8 | Domain live, policies published, status page, runbook complete | Static release gate |
 
+## Proposed: Open Bus–derived reliability features
+
+**PROPOSAL, 1 October 2026 — not accepted, not scheduled.** Source facts and measurements: [Open Bus research note](research/open-bus.md). Each item keeps its PRD gate: realtime is Phase 3 ([PRD §29](../PRD.md#29-phase-3--realtime-aware-routing)), reliability intelligence Phase 4 ([§30](../PRD.md#30-phase-4--reliability-intelligence)), and any public display also needs data-terms evidence for MOT data obtained through Hasadna's archive (the archive has no stated data licence). OB-01–OB-03 need no live MOT SIRI key, so the user **may** choose to pull them ahead of their phase; that is a user decision and this section changes no gate.
+
+Rules for every item: copy the S3 archive and compute offline — never put product traffic on the Stride API; label all output historical/replay with source dates and coverage; an untracked ride is "not tracked", never "cancelled"; preserve full trip identity and service dates (`DataFrameRef` + `DatedVehicleJourneyRef` against the same day's `TripIdToDate`).
+
+| ID | Work | Gate | Done when |
+| --- | --- | --- | --- |
+| OB-01 | Monthly offline batch over the S3 SIRI archive (about 10 GB compressed per month): infer stop arrivals per ride, then travel-time and delay distributions per route segment × hour × day type; serve "usually X–Y min late" on legs | Phase 4; terms before public display | Batch reproducible from pinned archive paths and hashes; handles parked pre-departure pings (first moving ping), about 10% duplicate pings, ±30 s precision and coverage gaps, each with tests; per-segment sample size and coverage published beside every figure; a held-out month validates the distributions; output labelled historical |
+| OB-02 | Transfer-risk estimate ("this N-min transfer is missed about X% of the time") from OB-01 distributions | Phase 4 (PRD §28 ranking); after OB-01 | Method documented with its independence assumptions; checked against observed connections in a held-out month; low-sample transfers show no figure rather than a guess |
+| OB-03 | Reliability badges per line and hour: on-time %, early-departure %, bunching; "often not tracked" where coverage is low | Phase 4; terms before public display | Definitions and thresholds written down (not presented as MOT penalty rules); minimum coverage and sample per badge; badges hidden below threshold; no "cancelled" label anywhere |
+| OB-04 | Coarse crowding hint by daypart from data.gov.il `ridership` (quarterly) | Phase 4; dataset licence recorded | `RouteID`/OfficeLineId join to `TripIdToDate` verified with a match count; licence text recorded in the [access record](data-usage-and-access.md); hint labelled with quarter and daypart |
+| OB-05 | Longitudinal ID-stability evidence from the archived daily GTFS/TripIdToDate (M2.8 supplementary) | M2 (supplementary only) | Tracked by the `M2.8-ARCHIVE` claim on the dashboard; cannot replace the genuine consecutive-daily M2.8 requirement |
+| OB-06 | Develop and measure the SIRI↔GTFS matcher offline against archived SIRI (POC-3 groundwork) | Phase 3 groundwork; H3 passed | Date-aware match rate by operator/mode over thousands of archived observations, with unmatched reasons; labelled replay; POC-3 live proof still requires MOT access |
+| OB-07 | "Report this bus" deep link to the government complaint form, as open-bus-backend does | Client feature; privacy review (S4) | Privacy review recorded; link passes no personal data in URL parameters; user confirms before anything is sent |
+
+Also: contact Hasadna (`#open-bus` Slack) about data terms for the archive and stop-level linkage (non-code, S9). Not yet done.
+
+**OB-01 status, 1 October 2026 (user revision: start now; display gates unchanged).** The offline pipeline is implemented in `opentransit.history` (archive parsing, route + origin-time matching, distance-along-route arrival inference with from-rest departures, distributions) and in `services/api/tools/ob01_pilot.py`, with offline tests. The optional `history` dependency group adds `brotli`. The one-day pilot is [`ob01-pilot-20260915-03`](../services/api/results/ob01-pilot-20260915-03.json): 95.2% of scheduled trips observed, 3.87 M stop times inferred, interpolation check median 4 s; findings are in the [research note](research/open-bus.md) (measurement E). Runs `-01` (TripId-prefix matching, 10.6% coverage, wrong) and `-02` (double-counted 1,208 trips) are kept as superseded. Not yet done against the criteria above: a month batch with pinned archive paths and hashes, a held-out validation month, per-figure coverage rules, holiday/season handling and a review of the outlier segments. Distribution tables stay outside Git under `D:/ot/open-bus-archive/ob01/`.
+
 ## Non-code workstream
 
 Run these alongside coding. Several are release requirements that no amount of code satisfies.
 
 | ID | Task | When | Done when |
 | --- | --- | --- | --- |
-| S1 | MOT follow-up (P0-01); also ask about GTFS terms and any IP restrictions | October 19 checkpoint | Response or fallback decision recorded |
+| S1 | MOT follow-up (P0-01); also ask about GTFS terms, any IP restrictions and public use of statistics derived from Hasadna's archive of MOT data | October 19 checkpoint | Response or fallback decision recorded |
 | S2 | Static data terms (H2): MOT GTFS terms; OSM ODbL attribution ("© OpenStreetMap contributors" in API metadata/docs); no public distribution of derived graph/database files without an ODbL review; Geofabrik download etiquette | Before M8 | Terms evidence in the [access record](data-usage-and-access.md) |
 | S3 | Human reviews: H3 after M3.7, H4 after M4.5. Budget a few focused hours each. | M3, M4 | User verdicts recorded |
 | S4 | Public policies: privacy notice (what is logged, 7-day retention, IP handling under Israel's Privacy Protection Law), terms of use and schedule disclaimer, API fair-use policy, attribution page. A short professional review is worthwhile; this plan is not legal advice. | Before M8 | Published with the API |
@@ -274,7 +294,7 @@ Run these alongside coding. Several are release requirements that no amount of c
 | S6 | Account hygiene: project email; MFA/recovery on AWS, GitHub and selected registrar/DNS; least-privilege deployment access and billing alerts | Before H-0 | Checklist done |
 | S7 | `docs/operations.md`: expired feed, failed build, disk full, engine down, rollback, lost host; timed restore drill | M7 | Drill time recorded |
 | S8 | Calendar-aware review: holiday timetables, Shabbat no-service cases and the 2026-10-25 DST change in H3 dates and fixtures | M3 | Cases present in the corpus |
-| S9 | Optional outreach: Hasadna's open-bus project already collects MOT realtime data and may help the deferred realtime wave or H4 corpus feedback | Any time | Not a gate |
+| S9 | Optional outreach: Hasadna's open-bus project already collects MOT realtime data and may help the deferred realtime wave or H4 corpus feedback; ask about archive data terms and stop-level linkage ([proposals](#proposed-open-busderived-reliability-features)) | Any time | Not a gate |
 
 ## Decisions to make
 
