@@ -33,6 +33,16 @@ CANONICAL_INPUTS = {
     "osm": "israel-and-palestine-latest.osm.pbf",
 }
 LOCAL_ENGINE_SLOTS = {"blue": 59081, "green": 59082}
+# The API accepts access/egress/direct walking caps of at most 30 minutes
+# (JourneyRequest maxAccessWalkMinutes/maxEgressWalkMinutes/maxDirectWalkMinutes, le=30).
+# MOTIS clamps maxPreTransitTime/maxPostTransitTime and maxDirectTime to these server
+# `limits` values, so a generated config pins them to exactly the advertised maxima instead
+# of relying on engine defaults (3600/21600 in v2.11.2). They are part of the config hash.
+API_MAX_WALK_SECONDS = 30 * 60
+STREET_ROUTING_LIMITS = {
+    "street_routing_max_prepost_transit_seconds": API_MAX_WALK_SECONDS,
+    "street_routing_max_direct_seconds": API_MAX_WALK_SECONDS,
+}
 REQUIRED_VALIDATION_CHECKS = {f"E{i:02d}" for i in range(1, 11)} | {
     f"V{i:02d}" for i in range(1, 11)
 }
@@ -303,7 +313,9 @@ def _config(
         f"      path: /input/{CANONICAL_INPUTS['gtfs']}\n"
         "      extend_calendar: false\n"
         "street_routing: true\n"
-        f"geocoding: {'true' if geocoding else 'false'}\n"
+        "limits:\n"
+        + "".join(f"  {key}: {value}\n" for key, value in STREET_ROUTING_LIMITS.items())
+        + f"geocoding: {'true' if geocoding else 'false'}\n"
         "reverse_geocoding: false\n"
     )
 
@@ -415,13 +427,25 @@ def build_generation(
     local_engine_slot: str | None = None,
     validation_evidence_path: Path | None = None,
     reference_reuse_generation_path: Path | None = None,
+    on_stage: Callable[[str, str, dict], None] | None = None,
+    reserved_entries: frozenset[str] = frozenset(),
 ) -> Path:
     """Validate inputs, build reference SQLite and import MOTIS into a new directory.
 
     ``runner`` is injectable so tests can exercise success/failure handling without
     launching Docker. The candidate directory is created with exclusive semantics;
     failures leave their manifest and logs behind and are never overwritten.
+
+    ``on_stage(name, "started"|"finished", details)`` reports the validate, reference,
+    motis_import and motis_export boundaries to an orchestrator. A failure raises without a
+    "finished" event for the open stage. ``reserved_entries`` names entries an orchestrator
+    created before the call; the directory may then pre-exist but must hold nothing else.
     """
+
+    def stage(name: str, event: str, details: dict | None = None) -> None:
+        if on_stage is not None:
+            on_stage(name, event, details or {})
+
     inputs_dir = Path(inputs_dir).resolve()
     output_dir = Path(output_dir).resolve()
     if not isinstance(first_day, date) or isinstance(first_day, datetime):
@@ -454,7 +478,14 @@ def build_generation(
         reference_reuse_generation_path, (str, os.PathLike)
     ):
         raise ValueError("reference_reuse_generation_path must be a path or None")
-    output_dir.mkdir(parents=True, exist_ok=False)
+    if reserved_entries and output_dir.is_dir():
+        unexpected = sorted(
+            entry.name for entry in output_dir.iterdir() if entry.name not in reserved_entries
+        )
+        if unexpected:
+            raise FileExistsError(f"Generation directory already contains {unexpected}")
+    else:
+        output_dir.mkdir(parents=True, exist_ok=False)
     manifest_path = output_dir / "manifest.json"
     manifest = {
         "schemaVersion": 1,
@@ -464,6 +495,7 @@ def build_generation(
         "parserVersion": PARSER_VERSION,
         "referenceSchemaVersion": REFERENCE_SCHEMA_VERSION,
         "timingPolicy": asdict(PINNED_PROJECTION_POLICY),
+        "engineLimits": dict(STREET_ROUTING_LIMITS),
         "localEngineSlot": local_engine_slot,
         "engineOrigin": (
             f"http://127.0.0.1:{LOCAL_ENGINE_SLOTS[local_engine_slot]}"
@@ -508,6 +540,7 @@ def build_generation(
             manifest["mode"] = "fixture"
 
         evidence_provenance = None
+        stage("validate", "started")
         if validation_evidence_path is None:
             validation = validate_feed(
                 artifacts["gtfs"].path,
@@ -523,6 +556,7 @@ def build_generation(
             validation_artifact["evidenceProvenance"] = evidence_provenance
             manifest["validationEvidence"] = evidence_provenance
         _write_json(output_dir / "validation.json", validation_artifact)
+        stage("validate", "finished", {"serviceDates": len(validation.service_dates)})
         available_dates = [date.fromisoformat(day) for day in validation.service_dates]
         if first_day not in available_dates:
             raise ValueError("first_day must be an active validated GTFS service date")
@@ -576,6 +610,7 @@ def build_generation(
             "mode": manifest["mode"],
             "window": {"firstDay": first_day.isoformat(), "days": effective_days},
             "importMemoryCapBytes": build["importMemoryCapBytes"],
+            "engineLimits": dict(STREET_ROUTING_LIMITS),
         }
         if local_engine_slot is not None:
             identity["localEngineSlot"] = local_engine_slot
@@ -595,6 +630,7 @@ def build_generation(
         _write_json(manifest_path, manifest)
 
         reference_path = output_dir / "reference.sqlite"
+        stage("reference", "started")
         if reference_reuse_generation_path is None:
             reference_metadata = build_reference(
                 artifacts["gtfs"].path, reference_path, generation_id
@@ -621,6 +657,7 @@ def build_generation(
                 "sha256": reference_artifact["sha256"],
                 "contentSha256": reference_artifact["contentSha256"],
             }
+        stage("reference", "finished", {"sha256": manifest["artifacts"]["reference"]["sha256"]})
         motis_dir = output_dir / "motis"
         motis_dir.mkdir()
         builder_name = f"opentransit-builder-{uuid.uuid4().hex}"
@@ -666,6 +703,7 @@ def build_generation(
             "rm /data/.opentransit-write-check",
         ]
         preflight_path = output_dir / "volume-preflight.log"
+        stage("motis_import", "started", {"memoryCapBytes": build["importMemoryCapBytes"]})
         with preflight_path.open("w", encoding="utf-8") as preflight_log:
             preflight = runner(
                 preflight_command,
@@ -738,6 +776,8 @@ def build_generation(
                 f"MOTIS import failed with exit code {result.returncode}; inspect {log_path}"
             )
 
+        stage("motis_import", "finished", {"elapsedSeconds": build["elapsedSeconds"]})
+        stage("motis_export", "started")
         export_path = output_dir / "export.log"
         export_started_clock = time.perf_counter()
         with export_path.open("w", encoding="utf-8") as export_log:
@@ -763,6 +803,15 @@ def build_generation(
         manifest["state"] = "ready"
         manifest["builtAt"] = datetime.now(UTC).isoformat()
         _write_json(manifest_path, manifest)
+        stage(
+            "motis_export",
+            "finished",
+            {
+                "exportElapsedSeconds": build["exportElapsedSeconds"],
+                "graphTreeSha256": manifest["artifacts"]["motis"]["sha256"],
+                "graphBytes": manifest["artifacts"]["motis"]["bytes"],
+            },
+        )
         return output_dir
     except FeedValidationError as exc:
         if hasattr(exc, "report"):

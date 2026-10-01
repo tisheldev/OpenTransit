@@ -192,3 +192,6 @@ def verify_address_composite(directory: Path, manifest: dict) -> dict:
         "documentCount": attestation["documentCount"],
         "probes": attestation["probes"],
     }
+
+
+canonical_sha256 = _canonical_sha256

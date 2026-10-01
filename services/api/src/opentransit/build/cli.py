@@ -4,6 +4,7 @@ import argparse
 import asyncio
 import json
 import shutil
+import subprocess
 import sys
 import uuid
 import zipfile
@@ -98,6 +99,29 @@ def main(argv: list[str] | None = None) -> int:
     build.add_argument("--local-engine-slot", choices=("blue", "green"))
     build.add_argument("--validation-evidence", type=Path)
     build.add_argument("--reference-reuse-generation", type=Path)
+    complete = commands.add_parser(
+        "build-generation",
+        help="One command: validate, reference, MOTIS import (+ Photon addresses), verify",
+    )
+    complete.add_argument("--snapshot", type=Path, required=True, help="fetch snapshot directory")
+    complete.add_argument("--output", type=Path, required=True, help="new generation directory")
+    complete.add_argument("--first-day", type=date.fromisoformat, required=True)
+    complete.add_argument("--days", type=int, default=31)
+    complete.add_argument("--memory-gib", type=int, default=6, help="MOTIS import cap (max 6)")
+    complete.add_argument("--addresses", action="store_true", help="also build Photon addresses")
+    complete.add_argument("--photon-jar", type=Path, help="pinned photon-1.3.0.jar (--addresses)")
+    complete.add_argument("--photon-memory-gib", type=int, default=2, help="Photon import cap")
+    complete.add_argument("--osm-reader-path", type=Path, help="directory providing pyosmium")
+    complete.add_argument("--import-timeout-seconds", type=int, default=1800)
+    complete.add_argument("--photon-timeout-seconds", type=int, default=1800)
+    activate = commands.add_parser(
+        "activate", help="Select a verified, probed generation as current (Linux)"
+    )
+    activate.add_argument("--generation", type=Path, required=True)
+    activate.add_argument("--generations-root", type=Path, required=True)
+    activate.add_argument("--engine-origin", required=True, help="loopback origin of its engine")
+    activate.add_argument("--probe", type=Path, help="default: <generation>/probe.json")
+    activate.add_argument("--source-check", type=Path)
     repair = commands.add_parser(
         "repair-reference",
         help="Clone a sealed generation and repair exact legacy translation keys",
@@ -182,6 +206,39 @@ def main(argv: list[str] | None = None) -> int:
                     reference_reuse_generation_path=args.reference_reuse_generation,
                 )
             )
+        elif args.command == "build-generation":
+            from opentransit.build.pipeline import build_complete_generation
+
+            print(
+                build_complete_generation(
+                    args.snapshot,
+                    args.output,
+                    args.first_day,
+                    args.days,
+                    addresses=args.addresses,
+                    memory_gib=args.memory_gib,
+                    photon_memory_gib=args.photon_memory_gib,
+                    photon_jar=args.photon_jar,
+                    osm_reader_path=args.osm_reader_path,
+                    import_timeout_seconds=args.import_timeout_seconds,
+                    photon_timeout_seconds=args.photon_timeout_seconds,
+                )
+            )
+        elif args.command == "activate":
+            from opentransit.build.select_generation import select_generation
+
+            print(
+                json.dumps(
+                    select_generation(
+                        args.generation,
+                        args.generations_root,
+                        args.engine_origin,
+                        probe_path=args.probe,
+                        source_check_path=args.source_check,
+                    ),
+                    indent=2,
+                )
+            )
         elif args.command == "repair-reference":
             from opentransit.build.reference_repair import repair_reference_generation
 
@@ -218,7 +275,7 @@ def main(argv: list[str] | None = None) -> int:
             )
             write_evidence(args.output, plan.as_dict())
             print(args.output)
-    except (OSError, ValueError, RuntimeError) as exc:
+    except (OSError, ValueError, RuntimeError, subprocess.SubprocessError) as exc:
         print(f"{type(exc).__name__}: {exc}", file=sys.stderr)
         return 1
     return 0

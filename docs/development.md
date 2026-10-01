@@ -72,6 +72,34 @@ Replace `<snapshot>` with the successful snapshot path printed by `fetch`, and s
 
 `build` refuses an existing output directory. It writes the reference SQLite file and imports into a new `motis/` directory using the pinned engine; it never replaces the active M1 volume. The Docker import limit is separate from whole-build and serving memory evidence. Failed build directories and logs remain available. The September 30 preserved inputs now pass the full-feed bounded minute-policy validation, while all raw timing anomalies remain recorded. These examples describe the command interface; the [real graph build](../services/api/results/m3-functional-build-attempt3-20260930.json) and [ten-case structural probe](../services/api/results/m3-functional-probe-attempt2-20260930.json) now pass, while complete pipeline/activation acceptance remains required. [Latest audit](../services/api/results/m2-validation-attempt5-20260930.json), [timing policy](../poc/docs/adr/0008-bounded-minute-schedule-interpretation.md) and [data contracts](data-contracts.md) record the distinction.
 
+### One-command complete generation (written 1 October; not yet run against Docker)
+
+`opentransit build-generation --snapshot <fetch snapshot> --output <new dir> --first-day D --days N [--addresses --photon-jar <photon-1.3.0.jar> --osm-reader-path <dir containing osmium>]` runs, in order: paired validation, reference SQLite, geocoding-enabled MOTIS import (default 6 GiB cap) and graph export, hashing; with `--addresses` also the Photon house export and source-context scan (pyosmium), the unchanged enrichment, address catalog, Photon import (2 GiB cap, no network) and seal (one 1 GiB serving container, loopback only, write block + flush, then a host copy of the data tree as the checkpoint), the attestation and an in-place composite manifest (public `generationId` plus `scheduleComponentGenerationId`); then a full artifact, config and Photon-tree verification. The output directory must not exist. `pipeline/pipeline.json` records each stage's status, timing and details (logs: `pipeline/logs/`, MOTIS logs in the output root); a failure keeps everything written, names the failing stage, exits non-zero and touches no input or earlier generation. An address build holds `manifest.json` back until the composite verifies, so an incomplete build is never loadable. Containers and Docker volumes are never removed.
+
+The generated `config.yml` has no `server:` block (slot-free; the runtime publishes the port, e.g. `-p 127.0.0.1:59081:8080`) and pins `limits: street_routing_max_prepost_transit_seconds: 1800` and `street_routing_max_direct_seconds: 1800`, the API's 30-minute access/egress/direct maxima (MOTIS defaults are 3600/21600). They are in the config hash and manifest `engineLimits`. The build checks the config and any effective-config echo in `import.log`; actual clamping still needs `tools/check_walk_caps.py` against a running API on this generation.
+
+Docker lane for root (Windows host; keep paths short; the output needs roughly 5 GB plus Docker volume space, so check free space first):
+
+```powershell
+$RT = 'C:/Users/nhenr/.codex/worktrees/8007/OpenTransit/.runtime'   # preserved Codex runtime, read-only use
+$SNAP = 'C:/Projects/OpenTransit/.runtime/sources/snapshots/20261001T093052Z-31057f27'
+$GEN = 'C:/Projects/OpenTransit/.runtime/generations/oct1a'          # must not exist
+uv sync --project services/api --locked
+uv run --project services/api --locked opentransit build-generation --snapshot $SNAP --output $GEN --first-day 2026-10-01 --days 31 --memory-gib 6 --addresses --photon-jar "$RT/m4-photon-spike-20260930/photon-1.3.0.jar" --photon-memory-gib 2 --osm-reader-path "$RT/osm-reader-20260930"
+Get-Content "$GEN/pipeline/pipeline.json" | ConvertFrom-Json | Select-Object state, failure   # state must be complete
+```
+
+Then, as separate steps (candidate probe, M2.4): serve the graph slot-free on a loopback port, probe it, stop it, and optionally stage the H-0 build context:
+
+```powershell
+docker run -d --name ot-oct1a-motis --memory 3g -p 127.0.0.1:59081:8080 --mount "type=bind,src=$GEN/motis,dst=/generation/motis,readonly" ghcr.io/motis-project/motis@sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330 /motis server -d /generation/motis
+uv run --project services/api --locked opentransit probe --generation $GEN --engine-url http://127.0.0.1:59081 --queries "$RT/m3-functional-evidence-20260930/probe-corpus-02.json"
+docker stop ot-oct1a-motis
+uv run --project services/api --locked python deploy/aws/tools/stage_bundle.py --generation $GEN --probe-queries "$RT/m3-functional-evidence-20260930/probe-corpus-02.json" --photon-data "$GEN/photon" --output C:/Projects/OpenTransit/.runtime/t5-h0/stage
+```
+
+Omit `--addresses` and its options for a schedule-only generation (`manifest.json` is then the plain schedule manifest). `opentransit activate --generation <dir> --generations-root <root> --engine-origin http://127.0.0.1:<port> [--probe <file>]` selects a probed generation as `current` through the existing binding and atomic-pointer code (Linux only; it adds no activation behavior and requires the passed probe). Prior measurements for planning: validation about 5 minutes (303 s, Sept 30); MOTIS import 28-30 s plus 5 s export under the 6 GiB cap; context scan 103 s at 436 MB peak; enrichment about 34 minutes under 2 GiB (561 MB high-water); Photon import 12 s of processing under 2 GiB; serving peak 429 MB under 1 GiB; reference build, house export, hashing and stage totals are unmeasured. The pipeline is tested only with mocked Docker, osmium and enrichment boundaries; the Photon admin queries run `curl` (else `wget`) inside the pinned Java image, which is unverified.
+
 Reference routes are `/v1/stops`, `/v1/stops/{id}`, `/v1/routes`, `/v1/routes/{id}` and `/v1/routes/{id}/patterns`. Nearby stops require `near=latitude,longitude` or `bbox=west,south,east,north`; route lists require a stop, operator or line-label filter. Cursors bind the query and generation. IDs are provisional pending consecutive daily-feed evidence.
 
 Managed startup verifies all artifact hashes and reference identity. Set `OPENTRANSIT_MANIFEST` to the candidate's manifest and `OPENTRANSIT_MOTIS_URL` to its engine. `OPENTRANSIT_PROBE` must identify a passed structural probe bound to that generation's artifacts and engine origin before journeys/readiness are enabled. `OPENTRANSIT_SOURCE_CHECK` optionally supplies a successful same-hash paired upstream check. A legacy M1 manifest can still serve journeys, but lacks the complete managed reference/probe proof needed for `/readyz`. `/healthz` remains process liveness.
