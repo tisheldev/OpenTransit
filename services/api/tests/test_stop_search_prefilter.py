@@ -134,3 +134,64 @@ def test_indexed_search_matches_exhaustive_scoring_for_fixture_queries(monkeypat
         monkeypatch.setattr(stop_search_module, "_search_index", lambda _ref: exhaustive)
         expected = search_stops(reference, query, language=language)
         assert actual == expected, query
+
+
+def _hub_rows():
+    def stop(source_id, name, en=None, routes=0, lat=32.0, lon=34.8):
+        return {
+            "source_id": source_id,
+            "stop_id": STOP_PREFIX + source_id,
+            "parent_station": None,
+            "location_type": 0,
+            "name": name,
+            "description": None,
+            "translations": {"en": en} if en else {},
+            "code": None,
+            "latitude": lat,
+            "longitude": lon,
+            "route_count": routes,
+        }
+
+    return [
+        stop("rail_herzliya", "הרצליה", "Hertsliya", routes=500),
+        stop("bus_marina", "מרינה", "Herzliya Marina Taxi Station", routes=2),
+        stop("airport", "נתב''ג", None, routes=300),
+        stop("street_bg", "בן גוריון/הרצל", "Ben Gurion/Herzl", routes=3),
+        stop("terminal", "ת. רכבת תל אביב- סבידור/רציפים", "Tel Aviv-Savidor Train Stations"),
+        stop("near_far", "Central Station", "Central Station", lat=32.8, lon=35.0),
+        stop("near_close", "Central Bus Station North", "Central Bus Station North"),
+    ]
+
+
+def test_transliteration_folding_matches_gtfs_english_spelling():
+    reference = _ReferenceFixture(_hub_rows())
+    result = search_stops(reference, "Herzliya", language="en")
+    assert STOP_PREFIX + "rail_herzliya" in [item["id"] for item in result["items"]]
+
+
+def test_abbreviation_and_curated_alias_reach_airport_stop():
+    reference = _ReferenceFixture(_hub_rows())
+    hebrew = search_stops(reference, "נמל תעופה בן גוריון", language="he")
+    assert hebrew["items"][0]["id"] == STOP_PREFIX + "airport"
+    english = search_stops(reference, "Ben Gurion Airport", language="en")
+    assert english["items"][0]["id"] == STOP_PREFIX + "airport"
+
+
+def test_partial_coverage_is_only_a_fallback_and_needs_two_tokens():
+    reference = _ReferenceFixture(_hub_rows())
+    # No stop carries every token; the terminal covers tel/aviv/savidor.
+    result = search_stops(reference, "Tel Aviv Savidor Center", language="en")
+    assert result["items"][0]["id"] == STOP_PREFIX + "terminal"
+    # A single significant token never triggers partial matching.
+    assert search_stops(reference, "Savidor Unknownword", language="en")["items"] == []
+    # Partial ties prefer the busier stop.
+    tie = search_stops(reference, "Ben Gurion Airoport", language="en")
+    assert tie["items"][0]["id"] == STOP_PREFIX + "airport"
+
+
+def test_near_bias_orders_full_token_matches_by_distance():
+    reference = _ReferenceFixture(_hub_rows())
+    result = search_stops(reference, "Central Station", language="en", near=(32.0, 34.8))
+    assert result["items"][0]["id"] == STOP_PREFIX + "near_close"
+    without_near = search_stops(reference, "Central Station", language="en")
+    assert without_near["items"][0]["id"] == STOP_PREFIX + "near_far"
