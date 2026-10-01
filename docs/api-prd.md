@@ -1,6 +1,6 @@
 # OpenTransit API — Product Requirements
 
-**Version:** 1.1 · **Date:** 30 September 2026 · **Implementation:** M1 authorized; dashboard records validation.
+**Version:** 1.2 · **Date:** 1 October 2026 · **Implementation:** M1–M4 implemented locally; the dashboard records validation and which acceptance items remain open.
 
 This document specifies the API product, its users, scope, stories and acceptance criteria. [System design](system-design.md) describes the implementation; [the dashboard](../PROJECT_STATUS.md) tracks progress. The [root PRD](../PRD.md) governs the overall product. Its September 25 schedule-first revision and accepted ADRs are binding. September 30 authorization accepts the planning package with R1–R5 and POST journey planning ([ADR 0007](../poc/docs/adr/0007-schedule-api-design.md)). Defaults remain values to verify; acceptance criteria are requirements, not evidence that they have passed.
 
@@ -85,7 +85,7 @@ Release A needs only coordinate inputs, an explicit depart-at time, one schedule
 - Accept origin/destination as coordinates or returned stop/place references; reject raw text. Search is a separate step.
 - Support depart-at and arrive-by planning, exactly one of which must be specified. A client selecting “now” sends an explicit timestamp.
 - Return up to three alternatives by default, with a maximum of five; fewer results are legitimate. Deduplicate equivalent transit sequences and clearly identify walk-only alternatives.
-- Return departure/arrival, elapsed duration, walking duration/distance, transfers and ordered walk/transit legs. Transit legs include operator, route, mode, headsign, boarding/alighting stops, full trip reference and service date. Supply usable geometry for each leg or an explicit geometry-unavailable reason.
+- Return departure/arrival, elapsed duration, walking duration/distance, transfers and ordered walk/transit legs. Transit legs include operator, route, mode, headsign, boarding/alighting stops, full trip reference and service date. Supply usable geometry for each leg or an explicit geometry-unavailable reason. `walkingDistanceMeters` is null when any walk leg's distance is unknown: an interior transfer the engine cannot street-route keeps its timetable time with null distance/geometry and the warning `TRANSFER_STREET_PATH_UNAVAILABLE` (implemented 1 October).
 - M3 constraint contract: selectable bus/rail/light-rail modes; walking remains necessary access/transfer movement. The pinned engine exposes separate access, egress and direct-walk time limits, not a transfer-walk limit. Implement `maxAccessWalkMinutes`, `maxEgressWalkMinutes` and `maxDirectWalkMinutes` (integers 1–30; defaults 15, 15 and 30). Explicitly disclose `transferWalkLimit: not_enforced` and total walking separately. Reject the earlier proposed `maxWalkMinutesPerLeg`; do not approximate it by filtering a limited candidate set. Actual limit conformance and the existing 15/30-minute H3 comparisons remain required before acceptance.
 - Never quietly relax a constraint. Unsupported modes/preferences produce a typed validation error. Only advertise arrive-by and limits once the pinned engine adapter proves their semantics.
 - Preserve the engine's feasible ordering initially, with a documented deterministic tie-break. Do not claim realtime-optimal, cheapest or objectively “best.” Record ranking policy/version in metadata.
@@ -125,12 +125,12 @@ Release A needs only coordinate inputs, an explicit depart-at time, one schedule
 
 ## 5. Proposed HTTP surface
 
-D3 POST journey planning was accepted September 30. POST reduces coordinates in URLs; it does not make request-body logging safe. Reference routes use namespaced full source IDs once M2 verifies stability. Exact schemas will be captured in OpenAPI during M1 and extended with each implemented milestone.
+D3 POST journey planning was accepted September 30. POST reduces coordinates in URLs; it does not make request-body logging safe. Reference routes use namespaced full source IDs (`mot:stop:…`, `mot:route:…`; M2.8 decision, 1 October). Exact schemas will be captured in OpenAPI during M1 and extended with each implemented milestone.
 
 | Method and path | Principal input | Result | Release / story |
 | --- | --- | --- | --- |
 | `GET /healthz` | None | Process alive | A / US10 |
-| `GET /readyz` | None | Readiness and mode; 503 if unusable | B/C / US10 |
+| `GET /readyz` | None | 200 when usable; otherwise `503 NOT_READY` with safe reason codes (coverage, freshness, probe, engine, reference, search index, geocoder warm-up) | B/C / US10 |
 | `GET /openapi.json`, `GET /docs` | None | Implemented API reference | A / US09 |
 | `GET /v1/status` | None | Capabilities, coverage, safe health | B/C / US08 |
 | `GET /v1/stops` | `near` + radius OR `bbox`, limit/cursor | Stop page | B / US03 |
@@ -252,7 +252,7 @@ These are targets, not measured claims. If a target cannot be achieved, record t
 1. F01–F06, the release A–C portions of F07 and US01–US11 pass at their assigned milestones; US12 contributor packaging is deferred to Phase 5; API-only demo works against current real data.
 2. H3: at least 9/10 required representative routes usable, including transfers, overnight/service-day boundaries, Shabbat/no-service and genuine no-route cases, with dated comparisons.
 3. H4: rerun the accepted-feed corpus and obtain explicit human verdicts. Proposed stronger v1 thresholds: top-5 acceptable destination >=90% overall, >=90% stops/stations and >=80% in each supported address/POI category; Hebrew and English each >=85%. Report sample sizes and failures. Expand underrepresented language/category cells before claiming coverage. These thresholds need review and do not retroactively pass the historical 89/100 result.
-4. Address support remains a v1 requirement. If H4 cannot meet it, fix it or explicitly approve a constrained stop/POI-only release; do not silently drop addresses.
+4. Address support remains a v1 requirement. If H4 cannot meet it, fix it or explicitly approve a constrained stop/POI-only release; do not silently drop addresses. **Decision, 1 October 2026:** the user approved H4 on the acceptance run (148/183 top-1, 165/183 top-5) and accepted addresses at 16/22 and API p95 of 42.7 ms (all requests) / 52.1 ms (first pass) as documented known limits to revisit after launch; the proposed thresholds above are not retroactively met, and addresses stay supported at that measured quality.
 5. Current feed validity, static dataset/OSM terms and attribution have recorded evidence. Technical downloads do not establish accepted usage terms.
 6. N01–N10 validated; activation/rollback demonstrated; operational runbook and API documentation ready. No realtime credentials required.
 

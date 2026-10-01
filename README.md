@@ -12,6 +12,8 @@ Agents must follow [AGENTS.md](AGENTS.md): read the dashboard before work, claim
 | --- | --- |
 | Product scope and phase gates | [PRD](PRD.md) |
 | Detailed implementation milestones | [Continuation plan](docs/next-steps.md) |
+| Run, build and check the API locally | [Development runbook](docs/development.md) |
+| Operations, policies and AWS drafts | [Operations](docs/operations.md), [deploy/aws](deploy/aws/README.md) |
 | Decisions and Ministry application | [Decision pack](docs/decision-pack/README.md) |
 | Experiment results | [Recorded PoC status](poc/README.md) |
 | Run routing experiments | [Routing runbook](poc/routing/README.md) |

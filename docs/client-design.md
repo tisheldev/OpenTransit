@@ -8,6 +8,7 @@
 - Only `POST /v1/journeys` has typed OpenAPI response models. Places, stops, routes, departures, trips and status are untyped, so validate them with schemas checked against recorded fixtures.
 - `placeRef` is bound to one generation and returns `422 INVALID_PLACE_REF` after a refresh. Favourites store coordinates and labels; the ref is only a hint.
 - Unavailable live data is represented inconsistently: journey `alerts: null`, trip `alerts: "not_enabled"`. Decide capability from `meta.capabilities` and `/v1/status` only.
+- `walkingDistanceMeters` and a walk leg's `distanceMeters`/`geometry` can be null: an interior transfer MOTIS cannot street-route keeps its time (`geometryUnavailableReason: street_path_unavailable`, journey warning `TRANSFER_STREET_PATH_UNAVAILABLE`). Render a time-only walk instead of inventing a distance or line.
 - The trip link is `leg.transit.engineTripId`, used as `GET /v1/trips/{tripRef}`. Verify encoding against real IDs; an ID containing `/` would not route.
 - The PRD requires perceived startup under 2 s, local-only favourites, no account, and MapLibre with OSM data. It has no offline requirement. Target WCAG 2.2 AA, Hebrew-first RTL with English.
 

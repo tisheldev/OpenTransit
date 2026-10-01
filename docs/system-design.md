@@ -1,6 +1,6 @@
 # OpenTransit API — System Design
 
-**Version:** 1.2 · **Date:** 30 September 2026 · **Code status:** M1 implementation authorized; Fargate hosting selected, not deployed; later milestones remain planned.
+**Version:** 1.3 · **Date:** 1 October 2026 · **Code status:** M1–M4 implemented locally and mechanically accepted on one generation (human H3 pending; M2.5 activation rerun pending); M5–M8 not implemented; Fargate hosting selected, drafts only, not deployed.
 
 Read the [API PRD](api-prd.md) first. This design implements schedule-first releases A–C and specifies extension points for D–F. [Architecture](architecture.md) is the short component map, [continuation plan](next-steps.md) maps work to milestones, and [dashboard](../PROJECT_STATUS.md) is the only maintained progress record.
 
@@ -225,14 +225,14 @@ Pattern identity includes ordered stops and pickup/drop-off semantics, not just 
 | --- | --- |
 | Location | Discriminated coordinate, stop reference or selected place reference; no raw text |
 | GenerationId | Content identity of feed/mapping/OSM/config/schema/engine inputs; hash excludes its own ID and nondeterministic timestamps |
-| Stop/Route IDs | Namespaced full source IDs if M2 proves stability across daily feeds; no daily expiry; 404 when absent |
+| Stop/Route IDs | `mot:stop:<stop_id>` and `mot:route:<route_id>` (M2.8 decision, 1 October, from one consecutive pair); no daily expiry; 404 when absent |
 | Pattern IDs | Content identity of ordered calls and restrictions; remains generation-attributed |
 | TripRef | Full source trip ID + service date; retain engine occurrence identity and frequency start time when present; generation remains metadata |
 | CallKey | Trip occurrence + sequence; stop ID alone cannot identify loop calls |
 | PlaceCandidate | Kind, label/language, locality, precision, coordinates, reference and attribution |
-| JourneyQuery | Two locations, exactly one time mode, modes, per-leg walk bound, result count |
+| JourneyQuery | Two locations, exactly one time mode, modes, access/egress/direct walk limits (no per-leg bound), result count |
 | TransitLeg | Scheduled instants, operator/route/headsign, board/alight calls, trip reference, nullable predictions/delay, geometry state |
-| WalkLeg | Duration/distance, endpoints and geometry; no live claim |
+| WalkLeg | Duration, nullable distance, endpoints and nullable geometry (unavailable street path is explicit); no live claim |
 | Metadata | Request ID, generatedAt, mode, generation, coverage, freshness, capabilities, attribution, ranking policy where relevant |
 | Page | Limit and unsigned encoded nextCursor with generation, query digest and exact sort key; null when exhausted |
 
@@ -240,7 +240,7 @@ Keep raw GTFS times and service dates. Conversion must follow [GTFS time semanti
 
 If frequency-based services occur, distinguish exact generated departures from frequency estimates. Unsupported feed constructs require candidate rejection or an explicit reviewed coverage limitation, never invented exact times. Transit call nulls stay explicit unless an engine estimate is documented and labelled.
 
-Public references retain complete source keys and are bounded typed inputs. The M2 stability check decides whether namespaced stop/route source IDs are safe; if it fails, record a revised scheme before exposing reference endpoints. Trip references preserve the full source trip ID and service date; never infer the service date from boarding time alone.
+Public references retain complete source keys and are bounded typed inputs. The M2.8 stability check (1 October) accepted namespaced stop/route source IDs; trip references remain generation-scoped ([data contracts](data-contracts.md#identity)); a later consecutive pair that contradicts this reopens the decision. Trip references preserve the full source trip ID and service date; never infer the service date from boarding time alone.
 
 Cursors are unsigned encoded (generation, query digest, stable sort key), validated as untrusted input. A generation/query mismatch returns `422 INVALID_CURSOR` and asks the client to restart the listing. IDs grant no authorization and need no signing keys. A source ID absent from the active feed returns 404; do not silently redirect a missing dated trip to a similar trip. Generation attribution stays in metadata.
 
@@ -430,14 +430,15 @@ One worker is required for this design. Multiple workers need an explicit acknow
 
 Freshness uses **last successful upstream validation**, not merely age of unchanged bytes. Identical downloaded content can renew source validation without rebuilding. Coverage and freshness are separate. Source modification time is provenance, not proof of refresh success.
 
-Proposed policy: warn after 30 hours without successful source validation; stale after 48 hours; serve still-covered schedules with warnings for at most seven days since validation. At seven days or outside coverage, reject schedule-dependent requests. These defaults need review; no silent production override.
+Implemented policy (defaults still open to review; no silent production override): `current` under 30 hours without successful source validation, `aging` to 48 hours, `stale` to seven days; current, aging and stale are **serviceable** and served with warnings. At seven days (`expired`) or outside coverage, schedule-dependent requests are rejected. `/readyz`, the candidate probe and rollback share this rule; activating a new candidate requires `current`. `/readyz` returns 503 with safe reason codes (for example `SOURCE_CHECK_EXPIRED`, `PROBE_UNVERIFIED`, `ENGINE_UNAVAILABLE`, `SEARCH_INDEX_BUILDING`, `ADDRESS_PROVIDER_WARMING`, `PLACE_PROVIDER_UNAVAILABLE`; full list in [data contracts](data-contracts.md#readiness)).
 
 | Condition | Readiness / behavior | Recovery |
 | --- | --- | --- |
 | No valid generation | Readiness 503; status works; schedule endpoints 503 | Validate/load a complete generation |
 | Fixture mode when introduced | Readiness 200 with fixture mode, no production claim | Explicit production configuration |
 | MOTIS unavailable | Core readiness 503; planning/departures/trips fail; local references may still work | Bounded background probes/restart |
-| Address dependency down | Core readiness can be 200; partial search or 503 for address-only request | Repair source; v1 release criteria still unmet |
+| Search index not built, or a geocoder not yet warmed/failed its warm-up | Readiness 503 with a `SEARCH_INDEX_*`, `ADDRESS_PROVIDER_*` or `PLACE_PROVIDER_*` reason; background retry | Wait for warm-up or repair the provider |
+| Address dependency down after warm-up | Core readiness unchanged; partial search (`unavailableTypes`) or 503 for an address-only request | Repair source; address quality 16/22 is an accepted known limit |
 | Failed refresh, active data valid | Keep ready with age/stale warnings as applicable | Backoff/retry; preserve active data |
 | Coverage expired or hard freshness limit reached | Core readiness 503; typed schedule errors | Activate valid generation |
 | Live capabilities disabled | No v1 readiness failure; predictions/alerts null | Deferred feature work |

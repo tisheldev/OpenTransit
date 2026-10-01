@@ -1,6 +1,6 @@
 # OpenTransit — Architecture overview
 
-**30 September 2026 · Accepted design direction (ADR 0007).** Schedule-based v1; Python/FastAPI and MOTIS accepted. M1 is authorized; see the dashboard for implemented and tested behavior. This overview replaces the earlier realtime-first proposal. It is a component map, not a second system design or status log.
+**Updated 1 October 2026 · Accepted design direction (ADR 0007).** Schedule-based v1; Python/FastAPI and MOTIS accepted. M1–M4 are implemented locally; see the dashboard for tested behavior and open acceptance. This overview replaces the earlier realtime-first proposal. It is a component map, not a second system design or status log.
 
 ## Read in this order
 
@@ -29,7 +29,8 @@ flowchart LR
 | Component | Responsibility | Boundary |
 | --- | --- | --- |
 | API | Validate, orchestrate and normalize search/routes/departures/reference data | No external per-request calls, user history or feed building |
-| MOTIS | Routing, scheduled trip/stop-time access and initial geocoding | Private on-host dependency; normalized behind an adapter |
+| MOTIS | Routing, scheduled trip/stop-time access and place (POI) geocoding | Private on-host dependency; normalized behind an adapter |
+| Photon (address provider) | Generation-bound street and house-number search (sealed per generation; D4) | Loopback only, one per task; readiness waits for its warm-up |
 | Immutable indexes | Stops/routes/pattern identities and local search | Read from one pinned generation per request |
 | Builder | Download, validate, normalize and build candidate artifacts | No writes into active generation; preserve source provenance |
 | Generation reference | Capture one immutable object per request; local pointer/reload or complete ECS task replacement | No mixing new SQLite and old graph; each Fargate task pins one generation |
@@ -50,7 +51,7 @@ flowchart LR
 
 Use **AWS ECS on Fargate**, with FastAPI and MOTIS in the same task and the prepared graph, manifest and later SQLite packaged in a **private ECR image**. Pin image digests; verify the local generation before readiness. Feed refresh deploys a new complete task revision and drains old requests. During rollout requests may use either complete generation. Local Docker Compose remains for M1/M2; its pointer/reload controls are not production ECS controls.
 
-S3 is optional; retained raw sources, hashes and reviewed evidence must survive outside disposable task storage. Test 0.5 vCPU / 2 GiB before choosing resources; the 8 GiB aggregate serving ceiling includes task replacement overlap and is not a minimum allocation. No production deployment or capacity claim exists. Region, HTTPS ingress, automated refresh retention and total cost remain to validate. Future SIRI needs fixed outbound access only for its collector (NAT Gateway + Elastic IP, subject to MOT approval); realtime stays deferred. See [ADR 0007 amendment](../poc/docs/adr/0007-schedule-api-design.md#hosting-amendment--accepted-30-september-2026) and [hosting plan](next-steps.md#hosting-plan).
+S3 is optional; retained raw sources, hashes and reviewed evidence must survive outside disposable task storage. Local drafts propose 1 vCPU / 3 GiB with Photon in the task (fallback 0.5 vCPU / 2 GiB without addresses); verify before choosing resources; the 8 GiB aggregate serving ceiling includes task replacement overlap and is not a minimum allocation. No production deployment or capacity claim exists. Region, HTTPS ingress, automated refresh retention and total cost remain to validate. Future SIRI needs fixed outbound access only for its collector (NAT Gateway + Elastic IP, subject to MOT approval); realtime stays deferred. See [ADR 0007 amendment](../poc/docs/adr/0007-schedule-api-design.md#hosting-amendment--accepted-30-september-2026) and [hosting plan](next-steps.md#hosting-plan).
 
 The component diagram above describes the logical request/build boundary. In production, private ECR supplies generation files at task startup and ECS controls revision rollout; passenger requests stay inside their API/MOTIS task.
 

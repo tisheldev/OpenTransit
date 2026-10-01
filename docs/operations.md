@@ -15,7 +15,8 @@ Keep inputs, manifests, hashes, failed attempts and human reviews. Never log pas
 bodies, coordinates, search text, query strings or sensitive path values; routine
 sanitized logs retain seven days. Publish an outage/update on the chosen status channel.
 
-Check `/healthz` (process only), `/readyz` (must be exactly 200) and a known synthetic
+Check `/healthz` (process only), `/readyz` (must be exactly 200; a 503 body lists safe
+reason codes, see [data contracts](data-contracts.md#readiness)) and a known synthetic
 scheduled journey. Preserve status/error codes and generation metadata. An empty
 `200 no_route` is distinct from unavailable data. ALB can send traffic when all targets
 are unhealthy: request-side rejection must remain effective. Inspect ECS service events,
@@ -46,6 +47,10 @@ uv run --project services/api --locked opentransit prune \
   --pin "$EVIDENCE_ID" --draining "$DRAINING_ID" \
   --dry-run --output "$WORK/retention-new.json"
 ```
+
+`opentransit build-generation --snapshot "$SNAPSHOT" --output "$WORK/candidate-new" --first-day "$FIRST_DAY" --days 31 [--addresses --photon-jar ... --osm-reader-path ...]`
+replaces the validate and build steps with one complete, verified generation (including
+localities and sealed Photon addresses); see [development](development.md#one-command-complete-generation).
 
 `WORK`, `SNAPSHOT`, `FIRST_DAY`, `CANDIDATE_ENGINE_URL`, `PROBE_CORPUS` and retention IDs
 must be set explicitly. Probe needs an already-running matching candidate engine and a

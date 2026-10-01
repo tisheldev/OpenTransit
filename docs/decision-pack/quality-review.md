@@ -1,6 +1,6 @@
 # Human quality review: prepared queue
 
-**H3 is ready for review:** [the regenerated route-quality sheet](../../poc/results/journeys-h3-review.md) uses the accepted 60-day primary. See [changed results](../../poc/docs/primary-feed-rerun.md). H4 search results still require a new generation and human review.
+**H3 is ready for your verdicts (1 October):** the API-path route sheet with a dated Moovit comparison is [here](../../services/api/results/acceptance-oct1b-20261001-02/h3-moovit-comparison.md) (generation `5eb4e43d…`); no H3 approval is recorded. The older [PoC route sheet](../../poc/results/journeys-h3-review.md) and [changed results](../../poc/docs/primary-feed-rerun.md) remain historical. **H4 was approved by you on 1 October** on the acceptance run, with addresses 16/22 and p95 above 40 ms accepted as known limits; the historical search sheets below remain unapproved evidence.
 
 ## What I can decide and verify
 

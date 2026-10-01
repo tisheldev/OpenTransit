@@ -8,7 +8,7 @@ Prepared 5 September 2026; reconciled 30 September. D1 (primary feed) is accepte
 2. **Await the MOT response; the 28-day decision point is October 19.** The September 21 email from the correct address is the request baseline. The email variant and attachments are not recorded. Keep any ticket/reference in the [access record](../data-usage-and-access.md).
 3. **If MOT still requires a signed application**, use the [field-by-field instructions](form-guide.md), review the Ministry terms and enter your personal details yourself. The prepared form is at `output/pdf/mot-siri-application-draft.pdf` from the repository root. Existing [Hebrew email drafts](mot-email-he.txt) remain reference material.
 
-The route review is ready on the accepted baseline. Search still needs rerunning before H4; [the review queue](quality-review.md) explains the remaining judgments.
+**H3 (your verdicts) is the open review:** the API-path route sheet with a dated Moovit comparison is ready ([comparison](../../services/api/results/acceptance-oct1b-20261001-02/h3-moovit-comparison.md)); fill in "Usable?" for each row. H4 you approved on 1 October with the address and latency limits accepted. [The review queue](quality-review.md) explains the judgments.
 
 ## Recommended technical package
 
@@ -17,7 +17,7 @@ The route review is ready on the accepted baseline. Search still needs rerunning
 | D1 | Use the 60-day GTFS + `TripIdToDate`; retain ten-day comparison evidence | Accepted ADR 0005; ingest/routing rerun completed | Accepted |
 | D2 | Use Python for the Phase 1 API and ingestion; FastAPI for the API | .NET API + Python ingestion: separate toolchains; benchmark the chosen runtime before claiming latency targets | Accepted September 25; ADR 0002 amendment |
 | D3 | Use POST `/v1/journeys` with a JSON body; retain GET for public non-sensitive resources | Earlier GET alternative: coordinates can enter URL/access logs unless specifically suppressed | Accepted September 30; ADR 0007 |
-| D4 | Start with MOTIS plus an in-process stop search index; benchmark address fixes before selecting an additional same-host geocoder | Adopt another geocoder now without knowing whether it fixes Hebrew/Latin/address failures or fits the host | Pending |
+| D4 | MOTIS places plus an in-process stop index and a generation-bound, source-enriched Photon address provider on the same host | Skip Photon: addresses fall to MOTIS quality (6/22) | Decided October 1; addresses 16/22 and p95 above 40 ms accepted by you as known limits |
 | D5 | ECS Fargate with API/MOTIS in one task; private ECR generation image; S3 optional; M1 local | VM proposal superseded; region, task size, ingress, retention automation and cost still need evidence; 8 GiB is an aggregate serving ceiling | Hosting accepted September 30; [ADR 0007](../../poc/docs/adr/0007-schedule-api-design.md#hosting-amendment--accepted-30-september-2026) |
 
 D1 is justified by 0% versus 100% static mapping-key overlap in the recorded samples. That is not proof of live matching. D2 builds on the recorded developer preference in ADR 0002; production performance remains to be measured. D3 reduces URL exposure but does not make request-body logging safe: logs must still omit precise coordinates.
@@ -37,7 +37,7 @@ D1 is justified by 0% versus 100% static mapping-key overlap in the recorded sam
 
 - I record accepted technical decisions and align the PRD/design documents.
 - Ingest, routing and engine capacity were rerun on the accepted primary; [results](../../poc/docs/primary-feed-rerun.md) and the H3 sheet are ready.
-- I preserve prior evidence, rerun search on that baseline and prepare H4 review. Per-service-date identity still needs validation for realtime matching.
+- Search was rerun on that baseline and you approved H4 on October 1. Per-service-date identity still needs validation for realtime matching.
 - Implement the scheduled API under September 30 authorization. Matcher, live adapters and alerts are deferred; future replay/synthetic tests remain labelled.
 - The access email was sent September 21 from the correct address per user confirmation. Await the response; the four-week decision point is October 19.
 - When MOT replies, provide its non-secret answers on access, IPs and terms. Credentials belong in local secret configuration, not documentation or chat examples.

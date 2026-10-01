@@ -128,12 +128,14 @@ init (SUCCESS) -> photon (HEALTHY) ---------------------------^
   up to 7 days after its source check; after that `/readyz` would reject it too.
 * **G3 (slot ports).** Generations built with `--local-engine-slot` bake `server.port` 59081 into
   `motis/config.yml` inside the hashed graph tree. The preserved M3/M4 generations are slot builds;
-  the H-0 generation needs a slot-free build (the October rebuild). `init` and `stage_bundle` reject
-  slot builds.
+  the H-0 generation must be slot-free. `opentransit build-generation` writes a slot-free config by
+  construction (the October 1 acceptance generation `oct1b` is one); staging it with `stage_bundle` has not been run yet.
+  `init` and `stage_bundle` reject slot builds.
 * **G4 (startup cost).** The reference database (about 3.0 GB in the preserved generations) is
   hashed by init twice, by the verifier once and by the API twice, and `ReferenceStore` runs
-  `PRAGMA integrity_check` plus a content hash in both verifier and API. Startup time on
-  0.5-1 vCPU is therefore unknown and probably minutes; measure before setting
+  `PRAGMA integrity_check` plus a content hash in both verifier and API. The October 1 acceptance runner measured about 9 minutes (530 s) for the API to become ready on a Windows
+  bind mount with one reference hash in the verifier and one in the API (full probe step 576 s). Startup time on
+  0.5-1 vCPU Fargate remains unknown; measure before setting
   `healthCheckGracePeriodSeconds` (draft 600) and `startTimeout` (draft 900).
 * **G5 (disk).** Uncompressed layers total about 4.1 GB (reference 3.0, graph 0.7, address
   catalog 0.13, Photon tree 0.08, Python base) and `init` writes about 3.9 GB more, plus the
@@ -278,4 +280,4 @@ before creating anything.
    H-0 start with option (c) (addresses off) while D4 is open?
 2. If 3 GiB fails, may the aggregate ceiling be read on measured usage (so two 4 GiB tasks are
    allowed), or must it hold by allocation?
-3. G1/G2 are resolved in code (see above); the Photon variant still needs a slot-free build (G3).
+3. G1/G2 are resolved in code (see above) and slot-free builds come from `build-generation` (G3); the staged bundle and images are still unbuilt.
