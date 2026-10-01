@@ -32,7 +32,7 @@ Measurements: [generated PoC report](poc/README.md), [raw results](poc/results/)
 | --- | --- | --- |
 | 0 | Static quality and scheduled integration; realtime/alerts proof deferred | Continue alongside API; required before static release |
 | 1 | Scheduled API: M1 basic local journey → M2 feeds → M3 routing/departures → M4 search → M7 operations/load → M8 deployment | Python/FastAPI and R1–R5 accepted; planning gate satisfied September 30. M5/M6 deferred |
-| 2 | First usable product client | NOT STARTED; API must be finished first. Local M1 test harness is an explicit September 30 exception |
+| 2 | First usable product client | NOT STARTED. October 1 gate revision: starts once M2–M4 are accepted locally and the private H-0/H-1 deployment begins, alongside M7; public release still gated. Local M1 test harness is an explicit September 30 exception |
 | 3 | Realtime/alerts integration, then realtime-aware routing | FUTURE; source access, terms and live proof required |
 | 4 | Reliability intelligence | FUTURE |
 | 5 | Public open-source product | FUTURE |

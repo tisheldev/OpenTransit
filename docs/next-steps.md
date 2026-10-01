@@ -145,9 +145,11 @@ After functional coverage, perform consolidated milestone acceptance, finish ref
 | 0 | Adopt snapshot branch; baseline tests; fix test collection and Windows failures; split `api/app.py` into per-area routers; condense docs; start daily feed fetch for M2.8 | Root + Sonnet T0-A/T0-B | Suite green with recorded counts; routers merged; first daily snapshot retained |
 | 1 | Parallel tracks: **T1** M3.2 walking-limit conformance, M3.6 deadline/body/overload, M3.8 one-command demo. **T2** M2.5 Linux Compose activation/rollback, M2.6 retention, readiness diagnosis (Opus). **T3** search quality (stations, translated stops, misspellings) then p95 — Opus diagnoses, Sonnet implements, two attempts per cell. **T4** M3.7 H3 sheet through the API; final H4 sheet. **T5** H-0 local preparation: images, task definition with Photon inside the memory budget, IAM/network drafts, no cloud | Sonnet per track; root accepts | Each slice's acceptance row above has evidence |
 | 2 | Consolidated M2–M4 acceptance from one fresh generation after the October rebuild (current graph ends October 30; DST October 25); M2.8 from two consecutive daily feeds | Root | Every M2.1–M4.5 row has a result |
-| 3 | M7: CI (after S5), rate limiting, activation under load, fault injection, restore drill, full-stack capacity including Photon under the 8 GiB aggregate cap | Sonnet tracks; root accepts | M7 acceptance evidence |
-| 4 | Bounded H-0 Fargate test → H-1 private preview week → M8 deployment | Root; user approval | H-0/H-1/M8 evidence |
-| 5 | Phase 2 product client against the completed, deployed API | Planned after step 4 | — |
+| 3 | Bounded H-0 Fargate test as soon as local images are measured, then start the H-1 private preview week | Root; user approval | H-0 evidence; H-1 week running |
+| 4 | **During the H-1 week:** M7 (CI after S5, rate limiting, activation under load, fault injection, restore drill, full-stack capacity including Photon under the 8 GiB aggregate cap) and the Phase 2 product client against the private deployment | Sonnet tracks; root accepts | M7 evidence; client usable against preview |
+| 5 | M8 public deployment: repeated weekday-evening p95, policies, status page, static terms | Root; user decisions | Static release gate |
+
+**Faster sequence, adopted by the user 1 October:** M7 and the client run during the H-1 week rather than after M8 (PRD gate revision). Public release gates are unchanged.
 
 **User inputs:** H3/H4 verdicts after T4; constrained-address decision if T3 exhausts its attempts; code licence and repository visibility before CI; AWS access and bounded H-0 spending approval; static GTFS terms before release; MOT follow-up October 19.
 
