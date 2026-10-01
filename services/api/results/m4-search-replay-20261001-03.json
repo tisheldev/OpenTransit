@@ -1,0 +1,6837 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-01T11:44:50.421938+00:00",
+  "label": "3d15961-osm-localities",
+  "scope": "Offline replay of stop-related cases: in-process search_stops on a real reference file, saved geocoder candidates in recorded order, production merge, production evaluator scoring. Not a fresh API run, not H4.",
+  "limitations": [
+    "Geocoder candidates are replayed from the saved merged top-10 only.",
+    "Timings are host in-process search_stops durations, not API durations.",
+    "Projected overall counts assume no non-stop case changes."
+  ],
+  "provenance": {
+    "gitHead": "3d1596197ebdf796e4bb86511e133b2e4e5a8cd5",
+    "savedRunPath": "results/m4-photon-bound-api-search-20261001-02.json",
+    "savedRunSha256": "adda359c527ef6f584ce0c366b81856199288808ff3fc6b3c23295547f82cbbb",
+    "referencePath": "D:/ot-loc/reference.sqlite",
+    "referenceContentSha256": "f10a1f2352c8e8da954e92b611f727727f80b51fda996996634c6ac677953fa0",
+    "referenceComponentGenerationId": "loc-ref-20261001",
+    "pythonVersion": "3.14.6",
+    "platform": "Windows-11-10.0.26200-SP0"
+  },
+  "referenceBuild": {
+    "note": "Reference rebuilt from the pinned inputs with schema 3 (OSM localities) by opentransit.reference.build_reference(feed, out, id, localities=load_locality_context(context, expected_osm_sha256=...)) at code 884efab. No Docker, no MOTIS graph. Built on D: because C: had under 5 GB free; the file is a local runtime artifact, not committed.",
+    "path": "D:/ot-loc/reference.sqlite",
+    "referenceSha256": "8c1ca5ce53cf3e7b534526b84a3780bd7b5b75822aab24a07098ee015ac41cbc",
+    "referenceBytes": 3034087424,
+    "contentSha256": "f10a1f2352c8e8da954e92b611f727727f80b51fda996996634c6ac677953fa0",
+    "schemaVersion": 3,
+    "buildSeconds": 1035.1,
+    "gtfs": {
+      "path": "C:/Projects/OpenTransit/.runtime/m1-20260930/inputs/israel-public-transportation.zip",
+      "sha256": "8629a73c3f6ff024a78e9b8c83602c09180e13e597b82b98a4377a78f3dd2fd9"
+    },
+    "localityContext": {
+      "path": "C:/Users/nhenr/.codex/worktrees/8007/OpenTransit/.runtime/m4-photon-context-20261001/context-v1.jsonl",
+      "contextSha256": "69cd607560dafbf0717771589e20ad58aabff186fb5fae806841aa30c1095a06",
+      "osmPbfSha256": "8a34b30f91a63ef9239961ba0e4d660ae22deda2f6da4b85ba4772a6b7c4c74f",
+      "reader": "pyosmium 4.3.1 (AreaManager), per extraction-manifest.json"
+    },
+    "counts": {
+      "stops": 35321,
+      "localities": 281,
+      "locality_names": 2206,
+      "stop_localities": 33844
+    },
+    "legacyTableContentSha256": "ba26bdb8858532f89e5fb0ae8844b4cd045522bae2ff3f97c5a5c804fe175a74",
+    "legacyTableContentMatchesPreviousReference": true,
+    "legacyTableContentNote": "Content hash over the 12 pre-schema-3 tables equals the previous reference's contentSha256 used by m4-search-replay-20261001-02, so the replay is comparable."
+  },
+  "caseCount": 47,
+  "recordedByCell": {
+    "misspelling": [
+      3,
+      6,
+      10
+    ],
+    "near_dependent": [
+      4,
+      4,
+      6
+    ],
+    "station": [
+      10,
+      11,
+      20
+    ],
+    "translated_stop": [
+      0,
+      0,
+      2
+    ],
+    "translit": [
+      4,
+      7,
+      9
+    ]
+  },
+  "replayedByCell": {
+    "misspelling": [
+      7,
+      9,
+      10
+    ],
+    "near_dependent": [
+      4,
+      5,
+      6
+    ],
+    "station": [
+      20,
+      20,
+      20
+    ],
+    "translated_stop": [
+      1,
+      2,
+      2
+    ],
+    "translit": [
+      9,
+      9,
+      9
+    ]
+  },
+  "diffVsRecorded": {
+    "top1Gained": [
+      "GTFS-TRANS-42658-en",
+      "P001",
+      "P002",
+      "P004",
+      "P005",
+      "P006",
+      "P009",
+      "P011",
+      "P012",
+      "P013",
+      "P020",
+      "P080",
+      "P081",
+      "P082",
+      "P084",
+      "P086",
+      "P087",
+      "P088",
+      "P089",
+      "P090"
+    ],
+    "top1Lost": [],
+    "top5Gained": [
+      "GTFS-TRANS-13583-en",
+      "GTFS-TRANS-42658-en",
+      "P001",
+      "P002",
+      "P004",
+      "P005",
+      "P006",
+      "P009",
+      "P011",
+      "P013",
+      "P020",
+      "P081",
+      "P082",
+      "P084",
+      "P087",
+      "P090",
+      "P095"
+    ],
+    "top5Lost": []
+  },
+  "indexBuildSeconds": 3.41,
+  "stopSearchInProcessMs": {
+    "samples": 47,
+    "p50": 3.68,
+    "p95": 11.76,
+    "max": 43.02
+  },
+  "cases": [
+    {
+      "caseId": "P001",
+      "category": "station",
+      "language": "en",
+      "query": "Tel Aviv Savidor Center",
+      "apiTypes": [
+        "stop",
+        "station"
+      ],
+      "near": null,
+      "recorded": {
+        "top1Hit": false,
+        "top5Hit": false,
+        "top5HitRank": null
+      },
+      "replayed": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1,
+        "top5": [
+          {
+            "kind": "station",
+            "displayName": "Tel Aviv Center",
+            "distanceMeters": 19
+          },
+          {
+            "kind": "station",
+            "displayName": "Tel Aviv Train Station Savidor/Namir Road",
+            "distanceMeters": 292
+          },
+          {
+            "kind": "stop",
+            "displayName": "Tel Aviv Train Station Savidor/Namir Road",
+            "distanceMeters": 444
+          },
+          {
+            "kind": "station",
+            "displayName": "Tel Aviv-Savidor Train Stations/Platforms A",
+            "distanceMeters": 196
+          },
+          {
+            "kind": "station",
+            "displayName": "Tel Aviv Savidor Train Station/Alight",
+            "distanceMeters": 161
+          }
+        ]
+      },
+      "stopSearchMs": 11.69
+    },
+    {
+      "caseId": "P002",
+      "category": "station",
+      "language": "he",
+      "query": "תחנת רכבת תל אביב סבידור מרכז",
+      "apiTypes": [
+        "stop",
+        "station"
+      ],
+      "near": null,
+      "recorded": {
+        "top1Hit": false,
+        "top5Hit": false,
+        "top5HitRank": null
+      },
+      "replayed": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1,
+        "top5": [
+          {
+            "kind": "station",
+            "displayName": "תל אביב מרכז",
+            "distanceMeters": 19
+          },
+          {
+            "kind": "station",
+            "displayName": "ת. רכבת תל אביב - סבידור/דרך נמיר",
+            "distanceMeters": 292
+          },
+          {
+            "kind": "stop",
+            "displayName": "ת. רכבת תל אביב - סבידור/דרך נמיר",
+            "distanceMeters": 444
+          },
+          {
+            "kind": "stop",
+            "displayName": "ת.מרכזית תל אביב קומה 6/הורדה",
+            "distanceMeters": 3544
+          },
+          {
+            "kind": "station",
+            "displayName": "ת.מרכזית תל אביב קומה 6/רציפים",
+            "distanceMeters": 3563
+          }
+        ]
+      },
+      "stopSearchMs": 43.02
+    },
+    {
+      "caseId": "P003",
+      "category": "station",
+      "language": "en",
+      "query": "HaShalom Station",
+      "apiTypes": [
+        "stop",
+        "station"
+      ],
+      "near": null,
+      "recorded": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1
+      },
+      "replayed": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1,
+        "top5": [
+          {
+            "kind": "station",
+            "displayName": "Hashalom",
+            "distanceMeters": 76
+          },
+          {
+            "kind": "stop",
+            "displayName": "HaShalom Rail Station",
+            "distanceMeters": 53
+          },
+          {
+            "kind": "stop",
+            "displayName": "HaShalom Rail Station",
+            "distanceMeters": 97
+          }
+        ]
+      },
+      "stopSearchMs": 5.46
+    },
+    {
+      "caseId": "P004",
+      "category": "station",
+      "language": "he",
+      "query": "תחנת השלום",
+      "apiTypes": [
+        "stop",
+        "station"
+      ],
+      "near": null,
+      "recorded": {
+        "top1Hit": false,
+        "top5Hit": false,
+        "top5HitRank": null
+      },
+      "replayed": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1,
+        "top5": [
+          {
+            "kind": "station",
+            "displayName": "השלום",
+            "distanceMeters": 76
+          },
+          {
+            "kind": "stop",
+            "displayName": "ת. רכבת השלום",
+            "distanceMeters": 53
+          },
+          {
+            "kind": "stop",
+            "displayName": "ת. רכבת השלום",
+            "distanceMeters": 97
+          }
+        ]
+      },
+      "stopSearchMs": 1.83
+    },
+    {
+      "caseId": "P005",
+      "category": "station",
+      "language": "en",
+      "query": "Yitzhak Navon",
+      "apiTypes": [
+        "stop",
+        "station"
+      ],
+      "near": null,
+      "recorded": {
+        "top1Hit": false,
+        "top5Hit": false,
+        "top5HitRank": null
+      },
+      "replayed": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1,
+        "top5": [
+          {
+            "kind": "station",
+            "displayName": "Yerushalayim/Yits'hak Navon",
+            "distanceMeters": 83
+          },
+          {
+            "kind": "stop",
+            "displayName": "Yitzhak Navon/HaBanim",
+            "distanceMeters": 100147
+          },
+          {
+            "kind": "stop",
+            "displayName": "Yitzhak Navon/HaBanim",
+            "distanceMeters": 100072
+          },
+          {
+            "kind": "stop",
+            "displayName": "Yitzhak Navon/Herzl",
+            "distanceMeters": 100008
+          },
+          {
+            "kind": "stop",
+            "displayName": "Yitzhak Navon/Herzl",
+            "distanceMeters": 100015
+          }
+        ]
+      },
+      "stopSearchMs": 1.42
+    },
+    {
+      "caseId": "P006",
+      "category": "station",
+      "language": "he",
+      "query": "תחנת יצחק נבון",
+      "apiTypes": [
+        "stop",
+        "station"
+      ],
+      "near": null,
+      "recorded": {
+        "top1Hit": false,
+        "top5Hit": false,
+        "top5HitRank": null
+      },
+      "replayed": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1,
+        "top5": [
+          {
+            "kind": "station",
+            "displayName": "ירושלים/יצחק נבון",
+            "distanceMeters": 83
+          }
+        ]
+      },
+      "stopSearchMs": 2.54
+    },
+    {
+      "caseId": "P007",
+      "category": "station",
+      "language": "en",
+      "query": "Haifa Center HaShmona",
+      "apiTypes": [
+        "stop",
+        "station"
+      ],
+      "near": null,
+      "recorded": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1
+      },
+      "replayed": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1,
+        "top5": [
+          {
+            "kind": "stop",
+            "displayName": "Haifa Center HaShmona Train Station",
+            "distanceMeters": 158
+          },
+          {
+            "kind": "stop",
+            "displayName": "Haifa Center HaShmona Train Station",
+            "distanceMeters": 195
+          },
+          {
+            "kind": "stop",
+            "displayName": "Haifa Center HaShmona Train Station",
+            "distanceMeters": 116
+          },
+          {
+            "kind": "stop",
+            "displayName": "Haifa Center HaShmona Train Station",
+            "distanceMeters": 222
+          },
+          {
+            "kind": "stop",
+            "displayName": "Haifa Center HaShmona Train Station",
+            "distanceMeters": 172
+          }
+        ]
+      },
+      "stopSearchMs": 4.17
+    },
+    {
+      "caseId": "P008",
+      "category": "station",
+      "language": "he",
+      "query": "חיפה מרכז השמונה",
+      "apiTypes": [
+        "stop",
+        "station"
+      ],
+      "near": null,
+      "recorded": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1
+      },
+      "replayed": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1,
+        "top5": [
+          {
+            "kind": "stop",
+            "displayName": "תחנת רכבת חיפה מרכז השמונה",
+            "distanceMeters": 158
+          },
+          {
+            "kind": "stop",
+            "displayName": "תחנת רכבת חיפה מרכז השמונה",
+            "distanceMeters": 195
+          },
+          {
+            "kind": "stop",
+            "displayName": "תחנת רכבת חיפה מרכז השמונה",
+            "distanceMeters": 116
+          },
+          {
+            "kind": "stop",
+            "displayName": "תחנת רכבת חיפה מרכז השמונה",
+            "distanceMeters": 222
+          },
+          {
+            "kind": "stop",
+            "displayName": "תחנת רכבת חיפה מרכז השמונה",
+            "distanceMeters": 172
+          }
+        ]
+      },
+      "stopSearchMs": 3.0
+    },
+    {
+      "caseId": "P009",
+      "category": "station",
+      "language": "en",
+      "query": "Beersheba Central Station",
+      "apiTypes": [
+        "stop",
+        "station"
+      ],
+      "near": null,
+      "recorded": {
+        "top1Hit": false,
+        "top5Hit": false,
+        "top5HitRank": null
+      },
+      "replayed": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1,
+        "top5": [
+          {
+            "kind": "stop",
+            "displayName": "Be'er Sheva Central Station/Alight",
+            "distanceMeters": 206
+          },
+          {
+            "kind": "stop",
+            "displayName": "Be'er Sheva Central Station/Alight",
+            "distanceMeters": 106
+          },
+          {
+            "kind": "station",
+            "displayName": "Be'er Sheva Central Station/Interurban Platforms",
+            "distanceMeters": 148
+          }
+        ]
+      },
+      "stopSearchMs": 6.24
+    },
+    {
+      "caseId": "P010",
+      "category": "station",
+      "language": "he",
+      "query": "באר שבע מרכז",
+      "apiTypes": [
+        "stop",
+        "station"
+      ],
+      "near": null,
+      "recorded": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1
+      },
+      "replayed": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1,
+        "top5": [
+          {
+            "kind": "station",
+            "displayName": "באר שבע מרכז",
+            "distanceMeters": 27
+          },
+          {
+            "kind": "stop",
+            "displayName": "ת.מרכזית באר שבע/הורדה",
+            "distanceMeters": 206
+          },
+          {
+            "kind": "stop",
+            "displayName": "ת.מרכזית באר שבע/הורדה",
+            "distanceMeters": 106
+          },
+          {
+            "kind": "station",
+            "displayName": "ת.מרכזית באר שבע/רציפים בינעירוני",
+            "distanceMeters": 148
+          }
+        ]
+      },
+      "stopSearchMs": 4.46
+    },
+    {
+      "caseId": "P011",
+      "category": "station",
+      "language": "en",
+      "query": "Ben Gurion Airport",
+      "apiTypes": [
+        "stop",
+        "station"
+      ],
+      "near": null,
+      "recorded": {
+        "top1Hit": false,
+        "top5Hit": false,
+        "top5HitRank": null
+      },
+      "replayed": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1,
+        "top5": [
+          {
+            "kind": "station",
+            "displayName": "נתב''ג",
+            "distanceMeters": 5
+          },
+          {
+            "kind": "stop",
+            "displayName": "נתב''ג/טרמינל 2",
+            "distanceMeters": 3154
+          },
+          {
+            "kind": "stop",
+            "displayName": "נתב''ג/טרמינל 2",
+            "distanceMeters": 3204
+          },
+          {
+            "kind": "stop",
+            "displayName": "נתב''ג טרמינל 3/קומת המראות",
+            "distanceMeters": 102
+          },
+          {
+            "kind": "stop",
+            "displayName": "נתב''ג טרמינל 3/קומת נחיתות",
+            "distanceMeters": 106
+          }
+        ]
+      },
+      "stopSearchMs": 3.45
+    },
+    {
+      "caseId": "P012",
+      "category": "station",
+      "language": "he",
+      "query": "נמל תעופה בן גוריון",
+      "apiTypes": [
+        "stop",
+        "station"
+      ],
+      "near": null,
+      "recorded": {
+        "top1Hit": false,
+        "top5Hit": true,
+        "top5HitRank": 2
+      },
+      "replayed": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1,
+        "top5": [
+          {
+            "kind": "station",
+            "displayName": "נתב''ג",
+            "distanceMeters": 5
+          },
+          {
+            "kind": "stop",
+            "displayName": "שדה תעופה בן גוריון/טרמינל 1",
+            "distanceMeters": 2545
+          },
+          {
+            "kind": "stop",
+            "displayName": "צומת אל על",
+            "distanceMeters": 3576
+          },
+          {
+            "kind": "stop",
+            "displayName": "צומת תעשייה אווירית",
+            "distanceMeters": 3473
+          },
+          {
+            "kind": "stop",
+            "displayName": "רשות שדות התעופה/העליה",
+            "distanceMeters": 2766
+          }
+        ]
+      },
+      "stopSearchMs": 1.06
+    },
+    {
+      "caseId": "P013",
+      "category": "station",
+      "language": "en",
+      "query": "Herzliya Station",
+      "apiTypes": [
+        "stop",
+        "station"
+      ],
+      "near": null,
+      "recorded": {
+        "top1Hit": false,
+        "top5Hit": false,
+        "top5HitRank": null
+      },
+      "replayed": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1,
+        "top5": [
+          {
+            "kind": "station",
+            "displayName": "Hertsliya",
+            "distanceMeters": 0
+          },
+          {
+            "kind": "stop",
+            "displayName": "Herzliya Marina Taxi Station",
+            "distanceMeters": 2010
+          },
+          {
+            "kind": "stop",
+            "displayName": "Marina Herzliya Taxi Station",
+            "distanceMeters": 1918
+          },
+          {
+            "kind": "stop",
+            "displayName": "Hertsliya Railway Station",
+            "distanceMeters": 105
+          },
+          {
+            "kind": "stop",
+            "displayName": "Hertsliya Railway Station",
+            "distanceMeters": 150
+          }
+        ]
+      },
+      "stopSearchMs": 4.11
+    },
+    {
+      "caseId": "P014",
+      "category": "station",
+      "language": "en",
+      "query": "Modi'in Center",
+      "apiTypes": [
+        "stop",
+        "station"
+      ],
+      "near": null,
+      "recorded": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1
+      },
+      "replayed": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1,
+        "top5": [
+          {
+            "kind": "stop",
+            "displayName": "Modi'in Railway Station/Center",
+            "distanceMeters": 232
+          },
+          {
+            "kind": "stop",
+            "displayName": "Modi'in Railway Station/Center",
+            "distanceMeters": 135
+          }
+        ]
+      },
+      "stopSearchMs": 3.14
+    },
+    {
+      "caseId": "P015",
+      "category": "station",
+      "language": "en",
+      "query": "Nahariya",
+      "apiTypes": [
+        "stop",
+        "station"
+      ],
+      "near": null,
+      "recorded": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1
+      },
+      "replayed": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1,
+        "top5": [
+          {
+            "kind": "station",
+            "displayName": "Nahariya",
+            "distanceMeters": 555
+          },
+          {
+            "kind": "station",
+            "displayName": "Nahariya Central Station/Platforms",
+            "distanceMeters": 424
+          },
+          {
+            "kind": "stop",
+            "displayName": "Nahariya Central Station/Alight",
+            "distanceMeters": 471
+          },
+          {
+            "kind": "stop",
+            "displayName": "HaNassi Ben Tsvi Blvd/HaGil'ad",
+            "distanceMeters": 795
+          },
+          {
+            "kind": "stop",
+            "displayName": "Nahariya Junction",
+            "distanceMeters": 660
+          }
+        ]
+      },
+      "stopSearchMs": 2.57
+    },
+    {
+      "caseId": "P016",
+      "category": "station",
+      "language": "en",
+      "query": "Ashdod Ad Halom",
+      "apiTypes": [
+        "stop",
+        "station"
+      ],
+      "near": null,
+      "recorded": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1
+      },
+      "replayed": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1,
+        "top5": [
+          {
+            "kind": "station",
+            "displayName": "Ashdod Ad Halom East Rail Station/Alight",
+            "distanceMeters": 76
+          },
+          {
+            "kind": "station",
+            "displayName": "Ashdod Ad Halom East Rail Station/Boarding",
+            "distanceMeters": 39
+          },
+          {
+            "kind": "station",
+            "displayName": "Ashdod Ad Halom – Metropolin",
+            "distanceMeters": 0
+          }
+        ]
+      },
+      "stopSearchMs": 1.59
+    },
+    {
+      "caseId": "P017",
+      "category": "station",
+      "language": "en",
+      "query": "Bat Galim",
+      "apiTypes": [
+        "stop",
+        "station"
+      ],
+      "near": null,
+      "recorded": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1
+      },
+      "replayed": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1,
+        "top5": [
+          {
+            "kind": "station",
+            "displayName": "Bat Galim",
+            "distanceMeters": 0
+          },
+          {
+            "kind": "stop",
+            "displayName": "Bat Galim Haifa Taxi Station",
+            "distanceMeters": 347
+          },
+          {
+            "kind": "stop",
+            "displayName": "Bat Galim Haifa Taxi Station",
+            "distanceMeters": 327
+          },
+          {
+            "kind": "stop",
+            "displayName": "Bat Galim Railway Station",
+            "distanceMeters": 96
+          },
+          {
+            "kind": "stop",
+            "displayName": "Bat Galim Railway Station",
+            "distanceMeters": 88
+          }
+        ]
+      },
+      "stopSearchMs": 0.74
+    },
+    {
+      "caseId": "P018",
+      "category": "station",
+      "language": "en",
+      "query": "Jerusalem Central Bus Station",
+      "apiTypes": [
+        "stop",
+        "station"
+      ],
+      "near": null,
+      "recorded": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1
+      },
+      "replayed": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1,
+        "top5": [
+          {
+            "kind": "station",
+            "displayName": "Jerusalem Central Bus Station 3rd Floor/Platforms",
+            "distanceMeters": 109
+          },
+          {
+            "kind": "stop",
+            "displayName": "Jerusalem Central Bus Station/Alight",
+            "distanceMeters": 64
+          },
+          {
+            "kind": "stop",
+            "displayName": "Central Bus Station Jerusalem Taxi Station",
+            "distanceMeters": 148
+          },
+          {
+            "kind": "stop",
+            "displayName": "Central Bus Station Jerusalem Taxi Station",
+            "distanceMeters": 138
+          }
+        ]
+      },
+      "stopSearchMs": 6.6
+    },
+    {
+      "caseId": "P019",
+      "category": "station",
+      "language": "he",
+      "query": "תחנה מרכזית ירושלים",
+      "apiTypes": [
+        "stop",
+        "station"
+      ],
+      "near": null,
+      "recorded": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1
+      },
+      "replayed": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1,
+        "top5": [
+          {
+            "kind": "stop",
+            "displayName": "תחנת מוניות ירושלים תחנה מרכזית",
+            "distanceMeters": 148
+          },
+          {
+            "kind": "stop",
+            "displayName": "תחנת מוניות ירושלים תחנה מרכזית",
+            "distanceMeters": 138
+          }
+        ]
+      },
+      "stopSearchMs": 4.23
+    },
+    {
+      "caseId": "P020",
+      "category": "station",
+      "language": "en",
+      "query": "Petah Tikva Kiryat Arye",
+      "apiTypes": [
+        "stop",
+        "station"
+      ],
+      "near": null,
+      "recorded": {
+        "top1Hit": false,
+        "top5Hit": false,
+        "top5HitRank": null
+      },
+      "replayed": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1,
+        "top5": [
+          {
+            "kind": "station",
+            "displayName": "Kiriyat Arieh",
+            "distanceMeters": 0
+          },
+          {
+            "kind": "stop",
+            "displayName": "Kiryat Arye Rail Station/Park & Ride",
+            "distanceMeters": 109
+          },
+          {
+            "kind": "stop",
+            "displayName": "Kiryat Arye Railway Station",
+            "distanceMeters": 139
+          },
+          {
+            "kind": "stop",
+            "displayName": "Kiryat Arye Railway Station",
+            "distanceMeters": 57
+          },
+          {
+            "kind": "stop",
+            "displayName": "Petah Tikva/Tiomkin",
+            "distanceMeters": 23913
+          }
+        ]
+      },
+      "stopSearchMs": 4.48
+    },
+    {
+      "caseId": "P076",
+      "category": "misspelling",
+      "language": "en",
+      "query": "Dizengof Center",
+      "apiTypes": [
+        "stop",
+        "station",
+        "poi",
+        "address"
+      ],
+      "near": null,
+      "recorded": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1
+      },
+      "replayed": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1,
+        "top5": [
+          {
+            "kind": "stop",
+            "displayName": "Dizengoff Center/Dizengoff",
+            "distanceMeters": 83
+          },
+          {
+            "kind": "poi",
+            "displayName": "Dizengoff Center",
+            "distanceMeters": 113
+          },
+          {
+            "kind": "stop",
+            "displayName": "Dizengoff Center/Dizengoff",
+            "distanceMeters": 34
+          },
+          {
+            "kind": "poi",
+            "displayName": "AC Center",
+            "distanceMeters": 46820
+          },
+          {
+            "kind": "stop",
+            "displayName": "Dizengoff Center/Tchernichovsky",
+            "distanceMeters": 87
+          }
+        ]
+      },
+      "stopSearchMs": 3.37
+    },
+    {
+      "caseId": "P077",
+      "category": "misspelling",
+      "language": "en",
+      "query": "Technyon",
+      "apiTypes": [
+        "stop",
+        "station",
+        "poi",
+        "address"
+      ],
+      "near": null,
+      "recorded": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1
+      },
+      "replayed": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1,
+        "top5": [
+          {
+            "kind": "stop",
+            "displayName": "Technion/Agricultural Engineering",
+            "distanceMeters": 477
+          },
+          {
+            "kind": "address",
+            "displayName": "Derech Ha'technion",
+            "distanceMeters": 797
+          },
+          {
+            "kind": "stop",
+            "displayName": "Technion/Biotechnology and Food",
+            "distanceMeters": 636
+          },
+          {
+            "kind": "poi",
+            "displayName": "Technion Obelisk",
+            "distanceMeters": 113
+          },
+          {
+            "kind": "stop",
+            "displayName": "Technion Center",
+            "distanceMeters": 560
+          }
+        ]
+      },
+      "stopSearchMs": 0.45
+    },
+    {
+      "caseId": "P078",
+      "category": "misspelling",
+      "language": "en",
+      "query": "Jerusalim",
+      "apiTypes": [
+        "stop",
+        "station",
+        "poi",
+        "address"
+      ],
+      "near": null,
+      "recorded": {
+        "top1Hit": false,
+        "top5Hit": true,
+        "top5HitRank": 5
+      },
+      "replayed": {
+        "top1Hit": false,
+        "top5Hit": true,
+        "top5HitRank": 5,
+        "top5": [
+          {
+            "kind": "address",
+            "displayName": "Jerusalem",
+            "distanceMeters": 68969
+          },
+          {
+            "kind": "address",
+            "displayName": "Jerusalem",
+            "distanceMeters": 110098
+          },
+          {
+            "kind": "address",
+            "displayName": "Jerusalem",
+            "distanceMeters": 55610
+          },
+          {
+            "kind": "address",
+            "displayName": "Jerusalem",
+            "distanceMeters": 47193
+          },
+          {
+            "kind": "poi",
+            "displayName": "Jerusalim",
+            "distanceMeters": 1592
+          }
+        ]
+      },
+      "stopSearchMs": 0.46
+    },
+    {
+      "caseId": "P079",
+      "category": "misspelling",
+      "language": "en",
+      "query": "Beer Sheva",
+      "apiTypes": [
+        "stop",
+        "station",
+        "poi",
+        "address"
+      ],
+      "near": null,
+      "recorded": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1
+      },
+      "replayed": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1,
+        "top5": [
+          {
+            "kind": "station",
+            "displayName": "Be'er Sheba - Center",
+            "distanceMeters": 27
+          },
+          {
+            "kind": "address",
+            "displayName": "Beer Sheva",
+            "distanceMeters": 88882
+          },
+          {
+            "kind": "stop",
+            "displayName": "Soroka Medical Center/Yitzhack Rager",
+            "distanceMeters": 1645
+          },
+          {
+            "kind": "address",
+            "displayName": "Beer Sheva",
+            "distanceMeters": 71611
+          },
+          {
+            "kind": "station",
+            "displayName": "Be'er Sheva North",
+            "distanceMeters": 2366
+          }
+        ]
+      },
+      "stopSearchMs": 5.35
+    },
+    {
+      "caseId": "P080",
+      "category": "misspelling",
+      "language": "en",
+      "query": "Herzliyya",
+      "apiTypes": [
+        "stop",
+        "station",
+        "poi",
+        "address"
+      ],
+      "near": null,
+      "recorded": {
+        "top1Hit": false,
+        "top5Hit": true,
+        "top5HitRank": 4
+      },
+      "replayed": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1,
+        "top5": [
+          {
+            "kind": "station",
+            "displayName": "Hertsliya",
+            "distanceMeters": 778
+          },
+          {
+            "kind": "address",
+            "displayName": "Herzliya",
+            "distanceMeters": 74166
+          },
+          {
+            "kind": "stop",
+            "displayName": "Hertsliya Junction",
+            "distanceMeters": 363
+          },
+          {
+            "kind": "poi",
+            "displayName": "Herzliya",
+            "distanceMeters": 2610
+          },
+          {
+            "kind": "stop",
+            "displayName": "Hertsliya Junction",
+            "distanceMeters": 416
+          }
+        ]
+      },
+      "stopSearchMs": 2.95
+    },
+    {
+      "caseId": "P081",
+      "category": "misspelling",
+      "language": "en",
+      "query": "Netania",
+      "apiTypes": [
+        "stop",
+        "station",
+        "poi",
+        "address"
+      ],
+      "near": null,
+      "recorded": {
+        "top1Hit": false,
+        "top5Hit": false,
+        "top5HitRank": null
+      },
+      "replayed": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1,
+        "top5": [
+          {
+            "kind": "station",
+            "displayName": "Netanya",
+            "distanceMeters": 1330
+          },
+          {
+            "kind": "address",
+            "displayName": "Netafim",
+            "distanceMeters": 16438
+          },
+          {
+            "kind": "stop",
+            "displayName": "Ben Tsvi Blvd/HaYahaloman Avraham",
+            "distanceMeters": 653
+          },
+          {
+            "kind": "address",
+            "displayName": "Netafim",
+            "distanceMeters": 122258
+          },
+          {
+            "kind": "stop",
+            "displayName": "Tchernichovsky School/Ben Tsvi",
+            "distanceMeters": 663
+          }
+        ]
+      },
+      "stopSearchMs": 4.77
+    },
+    {
+      "caseId": "P082",
+      "category": "misspelling",
+      "language": "en",
+      "query": "Rishon Lezion",
+      "apiTypes": [
+        "stop",
+        "station",
+        "poi",
+        "address"
+      ],
+      "near": null,
+      "recorded": {
+        "top1Hit": false,
+        "top5Hit": false,
+        "top5HitRank": null
+      },
+      "replayed": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1,
+        "top5": [
+          {
+            "kind": "stop",
+            "displayName": "Israel Galili/HaTkuma",
+            "distanceMeters": 2312
+          },
+          {
+            "kind": "address",
+            "displayName": "Rishon LeZion",
+            "distanceMeters": 22799
+          },
+          {
+            "kind": "station",
+            "displayName": "ת. מרכזית ראשל''צ/רציפים",
+            "distanceMeters": 1783
+          },
+          {
+            "kind": "address",
+            "displayName": "Rishon LeZion",
+            "distanceMeters": 16697
+          },
+          {
+            "kind": "stop",
+            "displayName": "ת. מרכזית ראשל''צ",
+            "distanceMeters": 1871
+          }
+        ]
+      },
+      "stopSearchMs": 4.63
+    },
+    {
+      "caseId": "P083",
+      "category": "misspelling",
+      "language": "en",
+      "query": "Savidor Merkaz",
+      "apiTypes": [
+        "stop",
+        "station",
+        "poi",
+        "address"
+      ],
+      "near": null,
+      "recorded": {
+        "top1Hit": false,
+        "top5Hit": false,
+        "top5HitRank": null
+      },
+      "replayed": {
+        "top1Hit": false,
+        "top5Hit": false,
+        "top5HitRank": null,
+        "top5": [
+          {
+            "kind": "poi",
+            "displayName": "Merkaz Omen",
+            "distanceMeters": 67797
+          },
+          {
+            "kind": "poi",
+            "displayName": "Merkaz HaIr",
+            "distanceMeters": 98629
+          },
+          {
+            "kind": "poi",
+            "displayName": "Merkaz HaIr",
+            "distanceMeters": 39607
+          },
+          {
+            "kind": "poi",
+            "displayName": "Merkaz Weis",
+            "distanceMeters": 52756
+          },
+          {
+            "kind": "poi",
+            "displayName": "Merkaz Pais",
+            "distanceMeters": 2370
+          }
+        ]
+      },
+      "stopSearchMs": 1.29
+    },
+    {
+      "caseId": "P084",
+      "category": "misspelling",
+      "language": "en",
+      "query": "Ben Gurion Airoport",
+      "apiTypes": [
+        "stop",
+        "station",
+        "poi",
+        "address"
+      ],
+      "near": null,
+      "recorded": {
+        "top1Hit": false,
+        "top5Hit": false,
+        "top5HitRank": null
+      },
+      "replayed": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1,
+        "top5": [
+          {
+            "kind": "station",
+            "displayName": "נתב''ג",
+            "distanceMeters": 5
+          },
+          {
+            "kind": "address",
+            "displayName": "Ben Gurion",
+            "distanceMeters": 80888
+          },
+          {
+            "kind": "stop",
+            "displayName": "Migdal Vita/Ben Gurion Road",
+            "distanceMeters": 11375
+          },
+          {
+            "kind": "address",
+            "displayName": "Polla Ben-Gurion",
+            "distanceMeters": 82068
+          },
+          {
+            "kind": "stop",
+            "displayName": "Migdal Concord/Ben Gurion Road",
+            "distanceMeters": 11297
+          }
+        ]
+      },
+      "stopSearchMs": 10.19
+    },
+    {
+      "caseId": "P085",
+      "category": "misspelling",
+      "language": "en",
+      "query": "Machne Yehuda",
+      "apiTypes": [
+        "stop",
+        "station",
+        "poi",
+        "address"
+      ],
+      "near": null,
+      "recorded": {
+        "top1Hit": false,
+        "top5Hit": true,
+        "top5HitRank": 5
+      },
+      "replayed": {
+        "top1Hit": false,
+        "top5Hit": true,
+        "top5HitRank": 5,
+        "top5": [
+          {
+            "kind": "address",
+            "displayName": "Malchee Yehuda",
+            "distanceMeters": 55184
+          },
+          {
+            "kind": "address",
+            "displayName": "Malchee Yehuda",
+            "distanceMeters": 55181
+          },
+          {
+            "kind": "address",
+            "displayName": "Malchei Yehuda",
+            "distanceMeters": 44730
+          },
+          {
+            "kind": "address",
+            "displayName": "Mahane Yehuda",
+            "distanceMeters": 44557
+          },
+          {
+            "kind": "address",
+            "displayName": "Mahane Yehuda",
+            "distanceMeters": 46
+          }
+        ]
+      },
+      "stopSearchMs": 2.21
+    },
+    {
+      "caseId": "P086",
+      "category": "translit",
+      "language": "en",
+      "query": "Petah Tikva",
+      "apiTypes": [
+        "stop",
+        "station",
+        "poi",
+        "address"
+      ],
+      "near": null,
+      "recorded": {
+        "top1Hit": false,
+        "top5Hit": true,
+        "top5HitRank": 5
+      },
+      "replayed": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1,
+        "top5": [
+          {
+            "kind": "stop",
+            "displayName": "ת.רק''ל/תחנה מרכזית למערב",
+            "distanceMeters": 870
+          },
+          {
+            "kind": "address",
+            "displayName": "Petah Tikva",
+            "distanceMeters": 39832
+          },
+          {
+            "kind": "stop",
+            "displayName": "Urban Market/Baron Hirsch",
+            "distanceMeters": 497
+          },
+          {
+            "kind": "address",
+            "displayName": "Petah Tikva",
+            "distanceMeters": 8722
+          },
+          {
+            "kind": "station",
+            "displayName": "Moshe Arens Terminal/Alight",
+            "distanceMeters": 1162
+          }
+        ]
+      },
+      "stopSearchMs": 4.17
+    },
+    {
+      "caseId": "P087",
+      "category": "translit",
+      "language": "en",
+      "query": "Petach Tikwa",
+      "apiTypes": [
+        "stop",
+        "station",
+        "poi",
+        "address"
+      ],
+      "near": null,
+      "recorded": {
+        "top1Hit": false,
+        "top5Hit": false,
+        "top5HitRank": null
+      },
+      "replayed": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1,
+        "top5": [
+          {
+            "kind": "stop",
+            "displayName": "ת.רק''ל/תחנה מרכזית למערב",
+            "distanceMeters": 870
+          },
+          {
+            "kind": "address",
+            "displayName": "Petach Tikvah",
+            "distanceMeters": 26280
+          },
+          {
+            "kind": "stop",
+            "displayName": "Urban Market/Baron Hirsch",
+            "distanceMeters": 497
+          },
+          {
+            "kind": "address",
+            "displayName": "Petah Tikva",
+            "distanceMeters": 8722
+          },
+          {
+            "kind": "station",
+            "displayName": "Moshe Arens Terminal/Alight",
+            "distanceMeters": 1162
+          }
+        ]
+      },
+      "stopSearchMs": 3.68
+    },
+    {
+      "caseId": "P088",
+      "category": "translit",
+      "language": "en",
+      "query": "Petah Tiqwa",
+      "apiTypes": [
+        "stop",
+        "station",
+        "poi",
+        "address"
+      ],
+      "near": null,
+      "recorded": {
+        "top1Hit": false,
+        "top5Hit": true,
+        "top5HitRank": 2
+      },
+      "replayed": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1,
+        "top5": [
+          {
+            "kind": "stop",
+            "displayName": "ת.רק''ל/תחנה מרכזית למערב",
+            "distanceMeters": 870
+          },
+          {
+            "kind": "poi",
+            "displayName": "Petah Tiqwa",
+            "distanceMeters": 3193
+          },
+          {
+            "kind": "stop",
+            "displayName": "Urban Market/Baron Hirsch",
+            "distanceMeters": 497
+          },
+          {
+            "kind": "poi",
+            "displayName": "Petah Tikwa",
+            "distanceMeters": 127
+          },
+          {
+            "kind": "station",
+            "displayName": "Moshe Arens Terminal/Alight",
+            "distanceMeters": 1162
+          }
+        ]
+      },
+      "stopSearchMs": 3.59
+    },
+    {
+      "caseId": "P089",
+      "category": "translit",
+      "language": "en",
+      "query": "Rishon LeTsiyon",
+      "apiTypes": [
+        "stop",
+        "station",
+        "poi",
+        "address"
+      ],
+      "near": null,
+      "recorded": {
+        "top1Hit": false,
+        "top5Hit": true,
+        "top5HitRank": 4
+      },
+      "replayed": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1,
+        "top5": [
+          {
+            "kind": "stop",
+            "displayName": "Israel Galili/HaTkuma",
+            "distanceMeters": 2312
+          },
+          {
+            "kind": "address",
+            "displayName": "Rishon LeTsiyon",
+            "distanceMeters": 6611
+          },
+          {
+            "kind": "station",
+            "displayName": "ת. מרכזית ראשל''צ/רציפים",
+            "distanceMeters": 1783
+          },
+          {
+            "kind": "poi",
+            "displayName": "Rishon LeTsiyon",
+            "distanceMeters": 579
+          },
+          {
+            "kind": "stop",
+            "displayName": "ת. מרכזית ראשל''צ",
+            "distanceMeters": 1871
+          }
+        ]
+      },
+      "stopSearchMs": 4.14
+    },
+    {
+      "caseId": "P090",
+      "category": "translit",
+      "language": "en",
+      "query": "Rishon LeZion",
+      "apiTypes": [
+        "stop",
+        "station",
+        "poi",
+        "address"
+      ],
+      "near": null,
+      "recorded": {
+        "top1Hit": false,
+        "top5Hit": false,
+        "top5HitRank": null
+      },
+      "replayed": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1,
+        "top5": [
+          {
+            "kind": "stop",
+            "displayName": "Israel Galili/HaTkuma",
+            "distanceMeters": 2312
+          },
+          {
+            "kind": "address",
+            "displayName": "Rishon LeZion",
+            "distanceMeters": 22799
+          },
+          {
+            "kind": "station",
+            "displayName": "ת. מרכזית ראשל''צ/רציפים",
+            "distanceMeters": 1783
+          },
+          {
+            "kind": "address",
+            "displayName": "Rishon LeZion",
+            "distanceMeters": 16697
+          },
+          {
+            "kind": "stop",
+            "displayName": "ת. מרכזית ראשל''צ",
+            "distanceMeters": 1871
+          }
+        ]
+      },
+      "stopSearchMs": 4.39
+    },
+    {
+      "caseId": "P091",
+      "category": "translit",
+      "language": "en",
+      "query": "Kfar Saba",
+      "apiTypes": [
+        "stop",
+        "station",
+        "poi",
+        "address"
+      ],
+      "near": null,
+      "recorded": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1
+      },
+      "replayed": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1,
+        "top5": [
+          {
+            "kind": "stop",
+            "displayName": "Weizmann/Rothschild",
+            "distanceMeters": 256
+          },
+          {
+            "kind": "address",
+            "displayName": "Kfar Saba",
+            "distanceMeters": 18321
+          },
+          {
+            "kind": "stop",
+            "displayName": "Weizmann/Rothschild",
+            "distanceMeters": 246
+          },
+          {
+            "kind": "poi",
+            "displayName": "Kfar Saba",
+            "distanceMeters": 2373
+          },
+          {
+            "kind": "stop",
+            "displayName": "Weizman/Nordau",
+            "distanceMeters": 1283
+          }
+        ]
+      },
+      "stopSearchMs": 2.89
+    },
+    {
+      "caseId": "P092",
+      "category": "translit",
+      "language": "en",
+      "query": "Kefar Sava",
+      "apiTypes": [
+        "stop",
+        "station",
+        "poi",
+        "address"
+      ],
+      "near": null,
+      "recorded": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1
+      },
+      "replayed": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1,
+        "top5": [
+          {
+            "kind": "poi",
+            "displayName": "Walk In - Kefar Sava",
+            "distanceMeters": 1940
+          },
+          {
+            "kind": "poi",
+            "displayName": "Kfar Sava",
+            "distanceMeters": 2373
+          },
+          {
+            "kind": "poi",
+            "displayName": "Kfar Sava",
+            "distanceMeters": 265
+          },
+          {
+            "kind": "poi",
+            "displayName": "Kefar Ivri",
+            "distanceMeters": 48656
+          },
+          {
+            "kind": "poi",
+            "displayName": "Kefar-Yasif",
+            "distanceMeters": 89875
+          }
+        ]
+      },
+      "stopSearchMs": 0.64
+    },
+    {
+      "caseId": "P093",
+      "category": "translit",
+      "language": "en",
+      "query": "Akko",
+      "apiTypes": [
+        "stop",
+        "station",
+        "poi",
+        "address"
+      ],
+      "near": null,
+      "recorded": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1
+      },
+      "replayed": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1,
+        "top5": [
+          {
+            "kind": "station",
+            "displayName": "Acre",
+            "distanceMeters": 99
+          },
+          {
+            "kind": "address",
+            "displayName": "Akko - Haifa",
+            "distanceMeters": 6158
+          },
+          {
+            "kind": "station",
+            "displayName": "Akko Central Station/HaArbaa Road",
+            "distanceMeters": 239
+          },
+          {
+            "kind": "poi",
+            "displayName": "Akko",
+            "distanceMeters": 594
+          },
+          {
+            "kind": "stop",
+            "displayName": "Acre Central Station",
+            "distanceMeters": 69
+          }
+        ]
+      },
+      "stopSearchMs": 7.32
+    },
+    {
+      "caseId": "P094",
+      "category": "translit",
+      "language": "en",
+      "query": "Acre",
+      "apiTypes": [
+        "stop",
+        "station",
+        "poi",
+        "address"
+      ],
+      "near": null,
+      "recorded": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1
+      },
+      "replayed": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1,
+        "top5": [
+          {
+            "kind": "station",
+            "displayName": "Acre",
+            "distanceMeters": 99
+          },
+          {
+            "kind": "address",
+            "displayName": "Acre",
+            "distanceMeters": 89336
+          },
+          {
+            "kind": "station",
+            "displayName": "Akko Central Station/HaArbaa Road",
+            "distanceMeters": 239
+          },
+          {
+            "kind": "address",
+            "displayName": "Acre",
+            "distanceMeters": 188798
+          },
+          {
+            "kind": "stop",
+            "displayName": "Acre Central Station",
+            "distanceMeters": 69
+          }
+        ]
+      },
+      "stopSearchMs": 1.59
+    },
+    {
+      "caseId": "P095",
+      "category": "near_dependent",
+      "language": "en",
+      "query": "Central Station",
+      "apiTypes": [
+        "stop",
+        "station",
+        "poi",
+        "address"
+      ],
+      "near": [
+        32.08,
+        34.78
+      ],
+      "recorded": {
+        "top1Hit": false,
+        "top5Hit": false,
+        "top5HitRank": null
+      },
+      "replayed": {
+        "top1Hit": false,
+        "top5Hit": true,
+        "top5HitRank": 3,
+        "top5": [
+          {
+            "kind": "stop",
+            "displayName": "Diamond excahnge market/Central Train Station",
+            "distanceMeters": 3436
+          },
+          {
+            "kind": "poi",
+            "displayName": "Central bus station",
+            "distanceMeters": 148039
+          },
+          {
+            "kind": "stop",
+            "displayName": "Tel Aviv Central Station/Levinsky",
+            "distanceMeters": 89
+          },
+          {
+            "kind": "poi",
+            "displayName": "Ramla central bus station",
+            "distanceMeters": 17130
+          },
+          {
+            "kind": "station",
+            "displayName": "Tel Aviv Central Bus Station 6th Floor/Platforms",
+            "distanceMeters": 66
+          }
+        ]
+      },
+      "stopSearchMs": 11.81
+    },
+    {
+      "caseId": "P096",
+      "category": "near_dependent",
+      "language": "en",
+      "query": "Central Station",
+      "apiTypes": [
+        "stop",
+        "station",
+        "poi",
+        "address"
+      ],
+      "near": [
+        31.7857,
+        35.211
+      ],
+      "recorded": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1
+      },
+      "replayed": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1,
+        "top5": [
+          {
+            "kind": "stop",
+            "displayName": "Central Station",
+            "distanceMeters": 52
+          },
+          {
+            "kind": "poi",
+            "displayName": "Central bus station",
+            "distanceMeters": 161776
+          },
+          {
+            "kind": "stop",
+            "displayName": "Central Station",
+            "distanceMeters": 44
+          },
+          {
+            "kind": "poi",
+            "displayName": "Ramla central bus station",
+            "distanceMeters": 34434
+          },
+          {
+            "kind": "stop",
+            "displayName": "Central Station/Yafo",
+            "distanceMeters": 121
+          }
+        ]
+      },
+      "stopSearchMs": 11.4
+    },
+    {
+      "caseId": "P097",
+      "category": "near_dependent",
+      "language": "en",
+      "query": "Herzl",
+      "apiTypes": [
+        "stop",
+        "station",
+        "poi",
+        "address"
+      ],
+      "near": [
+        32.08,
+        34.78
+      ],
+      "recorded": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1
+      },
+      "replayed": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1,
+        "top5": [
+          {
+            "kind": "stop",
+            "displayName": "Herzl/Yehuda Halevi",
+            "distanceMeters": 2021
+          },
+          {
+            "kind": "address",
+            "displayName": "Herzl",
+            "distanceMeters": 1855
+          },
+          {
+            "kind": "stop",
+            "displayName": "Herzl/Jaffa Road",
+            "distanceMeters": 2131
+          },
+          {
+            "kind": "address",
+            "displayName": "Herzl",
+            "distanceMeters": 2212
+          },
+          {
+            "kind": "stop",
+            "displayName": "Herzl/Wolfson",
+            "distanceMeters": 2423
+          }
+        ]
+      },
+      "stopSearchMs": 4.89
+    },
+    {
+      "caseId": "P098",
+      "category": "near_dependent",
+      "language": "en",
+      "query": "Herzl",
+      "apiTypes": [
+        "stop",
+        "station",
+        "poi",
+        "address"
+      ],
+      "near": [
+        32.8156,
+        34.9942
+      ],
+      "recorded": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1
+      },
+      "replayed": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1,
+        "top5": [
+          {
+            "kind": "stop",
+            "displayName": "Herzl/HaNevi'im",
+            "distanceMeters": 356
+          },
+          {
+            "kind": "address",
+            "displayName": "Herzl",
+            "distanceMeters": 975
+          },
+          {
+            "kind": "stop",
+            "displayName": "Herzl/Yo'el",
+            "distanceMeters": 367
+          },
+          {
+            "kind": "address",
+            "displayName": "Herzl",
+            "distanceMeters": 10589
+          },
+          {
+            "kind": "stop",
+            "displayName": "Herzl/Shmar'yahu Levin",
+            "distanceMeters": 479
+          }
+        ]
+      },
+      "stopSearchMs": 4.58
+    },
+    {
+      "caseId": "P099",
+      "category": "near_dependent",
+      "language": "en",
+      "query": "HaTachana",
+      "apiTypes": [
+        "stop",
+        "station",
+        "poi",
+        "address"
+      ],
+      "near": [
+        32.08,
+        34.78
+      ],
+      "recorded": {
+        "top1Hit": false,
+        "top5Hit": false,
+        "top5HitRank": null
+      },
+      "replayed": {
+        "top1Hit": false,
+        "top5Hit": false,
+        "top5HitRank": null,
+        "top5": [
+          {
+            "kind": "stop",
+            "displayName": "HaTahana Road/HaEla",
+            "distanceMeters": 123700
+          },
+          {
+            "kind": "address",
+            "displayName": "HaTahana",
+            "distanceMeters": 17479
+          },
+          {
+            "kind": "stop",
+            "displayName": "HaTahana Road/Ha'Alon",
+            "distanceMeters": 123904
+          },
+          {
+            "kind": "address",
+            "displayName": "HaTahana",
+            "distanceMeters": 17545
+          },
+          {
+            "kind": "stop",
+            "displayName": "HaTahana Road/HaTmarim",
+            "distanceMeters": 124002
+          }
+        ]
+      },
+      "stopSearchMs": 0.56
+    },
+    {
+      "caseId": "P100",
+      "category": "near_dependent",
+      "language": "en",
+      "query": "University",
+      "apiTypes": [
+        "stop",
+        "station",
+        "poi",
+        "address"
+      ],
+      "near": [
+        32.794,
+        34.9896
+      ],
+      "recorded": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1
+      },
+      "replayed": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1,
+        "top5": [
+          {
+            "kind": "stop",
+            "displayName": "University/I.B.M",
+            "distanceMeters": 522
+          },
+          {
+            "kind": "address",
+            "displayName": "To Arab American University",
+            "distanceMeters": 46199
+          },
+          {
+            "kind": "stop",
+            "displayName": "University/Eshkol Tower",
+            "distanceMeters": 229
+          },
+          {
+            "kind": "address",
+            "displayName": "Main Road Of American University",
+            "distanceMeters": 48053
+          },
+          {
+            "kind": "stop",
+            "displayName": "University/Eshkol Tower",
+            "distanceMeters": 177
+          }
+        ]
+      },
+      "stopSearchMs": 1.48
+    },
+    {
+      "caseId": "GTFS-TRANS-13583-en",
+      "category": "translated_stop",
+      "language": "en",
+      "query": "Dizengoff Center/Dizengoff",
+      "apiTypes": [
+        "stop"
+      ],
+      "near": null,
+      "recorded": {
+        "top1Hit": false,
+        "top5Hit": false,
+        "top5HitRank": null
+      },
+      "replayed": {
+        "top1Hit": false,
+        "top5Hit": true,
+        "top5HitRank": 2,
+        "top5": [
+          {
+            "kind": "stop",
+            "displayName": "Dizengoff Center/Dizengoff",
+            "distanceMeters": 54
+          },
+          {
+            "kind": "stop",
+            "displayName": "Dizengoff Center/Dizengoff",
+            "distanceMeters": 0
+          },
+          {
+            "kind": "stop",
+            "displayName": "Dizengoff Center/Tchernichovsky",
+            "distanceMeters": 116
+          }
+        ]
+      },
+      "stopSearchMs": 3.16
+    },
+    {
+      "caseId": "GTFS-TRANS-42658-en",
+      "category": "translated_stop",
+      "language": "en",
+      "query": "Naomi Shemer Blvd/Hatane Pras Israel",
+      "apiTypes": [
+        "stop"
+      ],
+      "near": null,
+      "recorded": {
+        "top1Hit": false,
+        "top5Hit": false,
+        "top5HitRank": null
+      },
+      "replayed": {
+        "top1Hit": true,
+        "top5Hit": true,
+        "top5HitRank": 1,
+        "top5": [
+          {
+            "kind": "stop",
+            "displayName": "Naomi Shemer Blvd/Hatane Pras Israel",
+            "distanceMeters": 0
+          }
+        ]
+      },
+      "stopSearchMs": 4.37
+    }
+  ],
+  "projectedOverall": {
+    "denominator": 183,
+    "recordedTop1": 130,
+    "recordedTop5": 150,
+    "projectedTop1": 150,
+    "projectedTop5": 167,
+    "note": "recorded overall with the stop-related subset swapped for replayed values"
+  },
+  "compare": [
+    {
+      "name": "prev02",
+      "path": "results/m4-search-replay-20261001-02.json",
+      "sha256": "1800e008540909e78ab36f67b741cedb648956b7b9ae73dc2f4720ddf3098d57",
+      "label": "22a597d-all-fixes",
+      "previousByCell": {
+        "misspelling": [
+          7,
+          9,
+          10
+        ],
+        "near_dependent": [
+          4,
+          5,
+          6
+        ],
+        "station": [
+          20,
+          20,
+          20
+        ],
+        "translated_stop": [
+          1,
+          2,
+          2
+        ],
+        "translit": [
+          9,
+          9,
+          9
+        ]
+      },
+      "diff": {
+        "top1Gained": [],
+        "top1Lost": [],
+        "top5Gained": [],
+        "top5Lost": []
+      }
+    }
+  ],
+  "localityProbe": {
+    "available": true,
+    "note": "before = same reference and code with only the feed-derived locality fallback; after = OSM localities. Judged by polygon containment of the stop in the expected OSM locality. A structural check, not an H4 verdict.",
+    "totals": {
+      "before": {
+        "queries": 50,
+        "top1Inside": 46,
+        "top5AllInside": 44
+      },
+      "after": {
+        "queries": 50,
+        "top1Inside": 50,
+        "top5AllInside": 50
+      }
+    },
+    "top1Lost": [],
+    "cases": [
+      {
+        "query": "Tel Aviv",
+        "language": "en",
+        "expectedLocality": "osm:relation:1382494",
+        "expectedName": "Tel-Aviv",
+        "before": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Tel Aviv Center",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 794,
+              "routeCount": 722
+            },
+            {
+              "displayName": "Tel Aviv Center Rail Taxi Station",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 558,
+              "routeCount": 0
+            },
+            {
+              "displayName": "Tel Aviv Center Rail Taxi Station",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 689,
+              "routeCount": 0
+            },
+            {
+              "displayName": "Tel Aviv Central Bus Station 6th Floor/Platforms",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 3360,
+              "routeCount": 0
+            },
+            {
+              "displayName": "Tel Aviv Central Bus Station 6th Floor/Platforms",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 3283,
+              "routeCount": 0
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Tel Aviv Center",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 794,
+              "routeCount": 722
+            },
+            {
+              "displayName": "Hashalom",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 1302,
+              "routeCount": 659
+            },
+            {
+              "displayName": "Tel Aviv Train Station Savidor/Namir Road",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 500,
+              "routeCount": 33
+            },
+            {
+              "displayName": "Tel Aviv Train Station Savidor/Namir Road",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 549,
+              "routeCount": 76
+            },
+            {
+              "displayName": "Azrieli Mall/Menahem Begin Road",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1127,
+              "routeCount": 132
+            }
+          ]
+        }
+      },
+      {
+        "query": "תל אביב",
+        "language": "he",
+        "expectedLocality": "osm:relation:1382494",
+        "expectedName": "Tel-Aviv",
+        "before": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "תל אביב האוניברסיטה - אקספו",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 2503,
+              "routeCount": 576
+            },
+            {
+              "displayName": "תל אביב ההגנה",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 3450,
+              "routeCount": 660
+            },
+            {
+              "displayName": "תל אביב מרכז",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 794,
+              "routeCount": 722
+            },
+            {
+              "displayName": "2040/יוניצמן",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 6378,
+              "routeCount": 0
+            },
+            {
+              "displayName": "2040/שושנה פרסיץ",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 5453,
+              "routeCount": 0
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "תל אביב מרכז",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 794,
+              "routeCount": 722
+            },
+            {
+              "displayName": "השלום",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 1302,
+              "routeCount": 659
+            },
+            {
+              "displayName": "ת. רכבת תל אביב - סבידור/דרך נמיר",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 500,
+              "routeCount": 33
+            },
+            {
+              "displayName": "ת. רכבת תל אביב - סבידור/דרך נמיר",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 549,
+              "routeCount": 76
+            },
+            {
+              "displayName": "קניון עזריאלי/דרך מנחם בגין",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1127,
+              "routeCount": 132
+            }
+          ]
+        }
+      },
+      {
+        "query": "Tel-Aviv",
+        "language": "en",
+        "expectedLocality": "osm:relation:1382494",
+        "expectedName": "Tel-Aviv",
+        "before": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Tel Aviv Center",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 794,
+              "routeCount": 722
+            },
+            {
+              "displayName": "Tel Aviv Center Rail Taxi Station",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 558,
+              "routeCount": 0
+            },
+            {
+              "displayName": "Tel Aviv Center Rail Taxi Station",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 689,
+              "routeCount": 0
+            },
+            {
+              "displayName": "Tel Aviv Central Bus Station 6th Floor/Platforms",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 3360,
+              "routeCount": 0
+            },
+            {
+              "displayName": "Tel Aviv Central Bus Station 6th Floor/Platforms",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 3283,
+              "routeCount": 0
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Tel Aviv Center",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 794,
+              "routeCount": 722
+            },
+            {
+              "displayName": "Hashalom",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 1302,
+              "routeCount": 659
+            },
+            {
+              "displayName": "Tel Aviv Train Station Savidor/Namir Road",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 500,
+              "routeCount": 33
+            },
+            {
+              "displayName": "Tel Aviv Train Station Savidor/Namir Road",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 549,
+              "routeCount": 76
+            },
+            {
+              "displayName": "Azrieli Mall/Menahem Begin Road",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1127,
+              "routeCount": 132
+            }
+          ]
+        }
+      },
+      {
+        "query": "Jerusalem",
+        "language": "en",
+        "expectedLocality": "osm:relation:1381350",
+        "expectedName": "Jerusalem",
+        "before": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Ali'ash",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1070,
+              "routeCount": 40
+            },
+            {
+              "displayName": "Bezalel/Trumpeldor",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 836,
+              "routeCount": 32
+            },
+            {
+              "displayName": "Ali'ash",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1071,
+              "routeCount": 27
+            },
+            {
+              "displayName": "HaDavidka Square/HaNevi'im",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1208,
+              "routeCount": 28
+            },
+            {
+              "displayName": "Bezalel/Trumpeldor",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 853,
+              "routeCount": 17
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Yerushalayim/Yits'hak Navon",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 1097,
+              "routeCount": 196
+            },
+            {
+              "displayName": "Gesher Hameitarim/Herzl Blvd",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1105,
+              "routeCount": 99
+            },
+            {
+              "displayName": "שדרות שז''ר/בנייני האומה",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1026,
+              "routeCount": 73
+            },
+            {
+              "displayName": "HaLe'om Parking/HaNassi HaShishi Blvd",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 559,
+              "routeCount": 36
+            },
+            {
+              "displayName": "Gesher Hameitarim/Herzl Blvd",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1128,
+              "routeCount": 75
+            }
+          ]
+        }
+      },
+      {
+        "query": "ירושלים",
+        "language": "he",
+        "expectedLocality": "osm:relation:1381350",
+        "expectedName": "Jerusalem",
+        "before": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "עליאש",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1070,
+              "routeCount": 40
+            },
+            {
+              "displayName": "בצלאל/טרומפלדור",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 836,
+              "routeCount": 32
+            },
+            {
+              "displayName": "עליאש",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1071,
+              "routeCount": 27
+            },
+            {
+              "displayName": "ככר הדוידקה/הנביאים",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1208,
+              "routeCount": 28
+            },
+            {
+              "displayName": "בצלאל/טרומפלדור",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 853,
+              "routeCount": 17
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "ירושלים/יצחק נבון",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 1097,
+              "routeCount": 196
+            },
+            {
+              "displayName": "גשר המיתרים/שד' הרצל",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1105,
+              "routeCount": 99
+            },
+            {
+              "displayName": "שדרות שז''ר/בנייני האומה",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1026,
+              "routeCount": 73
+            },
+            {
+              "displayName": "חניון הלאום/שד' הנשיא השישי",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 559,
+              "routeCount": 36
+            },
+            {
+              "displayName": "גשר המיתרים/שד' הרצל",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1128,
+              "routeCount": 75
+            }
+          ]
+        }
+      },
+      {
+        "query": "Haifa",
+        "language": "en",
+        "expectedLocality": "osm:relation:1387888",
+        "expectedName": "Haifa",
+        "before": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Ruppin/Kani'el",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 960,
+              "routeCount": 35
+            },
+            {
+              "displayName": "Bezalel/HaShilo'ah",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 869,
+              "routeCount": 27
+            },
+            {
+              "displayName": "Bezalel/Hatam Sofer",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 771,
+              "routeCount": 26
+            },
+            {
+              "displayName": "Kupat Holim/Ge'ula",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 928,
+              "routeCount": 23
+            },
+            {
+              "displayName": "Ge'ula/Rabbi Akiva",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 806,
+              "routeCount": 25
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Hallisa",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 349,
+              "routeCount": 38
+            },
+            {
+              "displayName": "Hallisa",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 382,
+              "routeCount": 34
+            },
+            {
+              "displayName": "Haifa Center",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 2083,
+              "routeCount": 309
+            },
+            {
+              "displayName": "יל''ג",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 419,
+              "routeCount": 33
+            },
+            {
+              "displayName": "Talpiot market",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 651,
+              "routeCount": 33
+            }
+          ]
+        }
+      },
+      {
+        "query": "חיפה",
+        "language": "he",
+        "expectedLocality": "osm:relation:1387888",
+        "expectedName": "Haifa",
+        "before": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "רופין/קניאל",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 960,
+              "routeCount": 35
+            },
+            {
+              "displayName": "בצלאל/השילוח",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 869,
+              "routeCount": 27
+            },
+            {
+              "displayName": "בצלאל/חתם סופר",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 771,
+              "routeCount": 26
+            },
+            {
+              "displayName": "קופת חולים/גאולה",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 928,
+              "routeCount": 23
+            },
+            {
+              "displayName": "גאולה/רבי עקיבא",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 806,
+              "routeCount": 25
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "חליסה",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 349,
+              "routeCount": 38
+            },
+            {
+              "displayName": "חליסה",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 382,
+              "routeCount": 34
+            },
+            {
+              "displayName": "חיפה מרכז",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 2083,
+              "routeCount": 309
+            },
+            {
+              "displayName": "יל''ג",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 419,
+              "routeCount": 33
+            },
+            {
+              "displayName": "שוק תלפיות",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 651,
+              "routeCount": 33
+            }
+          ]
+        }
+      },
+      {
+        "query": "Be'er Sheva",
+        "language": "en",
+        "expectedLocality": "osm:relation:1377264",
+        "expectedName": "Be’er-Sheva",
+        "before": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Be'er Sheva Central Station/Alight",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1721,
+              "routeCount": 99
+            },
+            {
+              "displayName": "Be'er Sheva Central Station/Alight",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1875,
+              "routeCount": 0
+            },
+            {
+              "displayName": "Be'er Sheva Central Station/Interurban Platforms",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 1746,
+              "routeCount": 0
+            },
+            {
+              "displayName": "Be'er Sheva Licensing Bureau/HaManof",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 3803,
+              "routeCount": 1
+            },
+            {
+              "displayName": "Be'er Sheva Licensing Bureau/HaManof",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 3890,
+              "routeCount": 1
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Be'er Sheba - Center",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 1843,
+              "routeCount": 180
+            },
+            {
+              "displayName": "Soroka Medical Center/Yitzhack Rager",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 931,
+              "routeCount": 45
+            },
+            {
+              "displayName": "Be'er Sheva North",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 2064,
+              "routeCount": 196
+            },
+            {
+              "displayName": "Soroka Medical Center/Yitzhack Rager",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 958,
+              "routeCount": 41
+            },
+            {
+              "displayName": "Be'er Sheva Central Station/Alight",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1721,
+              "routeCount": 99
+            }
+          ]
+        }
+      },
+      {
+        "query": "Beer Sheva",
+        "language": "en",
+        "expectedLocality": "osm:relation:1377264",
+        "expectedName": "Be’er-Sheva",
+        "before": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Be'er Sheva Central Station/Alight",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1721,
+              "routeCount": 99
+            },
+            {
+              "displayName": "Be'er Sheva Central Station/Alight",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1875,
+              "routeCount": 0
+            },
+            {
+              "displayName": "Be'er Sheva Central Station/Interurban Platforms",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 1746,
+              "routeCount": 0
+            },
+            {
+              "displayName": "Be'er Sheva Licensing Bureau/HaManof",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 3803,
+              "routeCount": 1
+            },
+            {
+              "displayName": "Be'er Sheva Licensing Bureau/HaManof",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 3890,
+              "routeCount": 1
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Be'er Sheba - Center",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 1843,
+              "routeCount": 180
+            },
+            {
+              "displayName": "Soroka Medical Center/Yitzhack Rager",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 931,
+              "routeCount": 45
+            },
+            {
+              "displayName": "Be'er Sheva North",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 2064,
+              "routeCount": 196
+            },
+            {
+              "displayName": "Soroka Medical Center/Yitzhack Rager",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 958,
+              "routeCount": 41
+            },
+            {
+              "displayName": "Be'er Sheva Central Station/Alight",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1721,
+              "routeCount": 99
+            }
+          ]
+        }
+      },
+      {
+        "query": "Beersheba",
+        "language": "en",
+        "expectedLocality": "osm:relation:1377264",
+        "expectedName": "Be’er-Sheva",
+        "before": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Be'er Sheba - Center",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 1843,
+              "routeCount": 180
+            },
+            {
+              "displayName": "Be'er Sheva Central Station/Alight",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1721,
+              "routeCount": 99
+            },
+            {
+              "displayName": "Be'er Sheva Central Station/Alight",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1875,
+              "routeCount": 0
+            },
+            {
+              "displayName": "Be'er Sheva Central Station/Interurban Platforms",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 1746,
+              "routeCount": 0
+            },
+            {
+              "displayName": "Be'er Sheva Licensing Bureau/HaManof",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 3803,
+              "routeCount": 1
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Be'er Sheba - Center",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 1843,
+              "routeCount": 180
+            },
+            {
+              "displayName": "Soroka Medical Center/Yitzhack Rager",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 931,
+              "routeCount": 45
+            },
+            {
+              "displayName": "Be'er Sheva North",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 2064,
+              "routeCount": 196
+            },
+            {
+              "displayName": "Soroka Medical Center/Yitzhack Rager",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 958,
+              "routeCount": 41
+            },
+            {
+              "displayName": "Be'er Sheva Central Station/Alight",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1721,
+              "routeCount": 99
+            }
+          ]
+        }
+      },
+      {
+        "query": "באר שבע",
+        "language": "he",
+        "expectedLocality": "osm:relation:1377264",
+        "expectedName": "Be’er-Sheva",
+        "before": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "מרכז רפואי סורוקה/יצחק רגר",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 931,
+              "routeCount": 45
+            },
+            {
+              "displayName": "מרכז רפואי סורוקה/יצחק רגר",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 958,
+              "routeCount": 41
+            },
+            {
+              "displayName": "ת.מרכזית באר שבע/הורדה",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1721,
+              "routeCount": 99
+            },
+            {
+              "displayName": "ת.מרכזית באר שבע/רציפים בינעירוני",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 1746,
+              "routeCount": 0
+            },
+            {
+              "displayName": "יצחק רגר/שדרות שז''ר",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1166,
+              "routeCount": 36
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "באר שבע מרכז",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 1843,
+              "routeCount": 180
+            },
+            {
+              "displayName": "מרכז רפואי סורוקה/יצחק רגר",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 931,
+              "routeCount": 45
+            },
+            {
+              "displayName": "באר שבע צפון",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 2064,
+              "routeCount": 196
+            },
+            {
+              "displayName": "מרכז רפואי סורוקה/יצחק רגר",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 958,
+              "routeCount": 41
+            },
+            {
+              "displayName": "ת.מרכזית באר שבע/הורדה",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1721,
+              "routeCount": 99
+            }
+          ]
+        }
+      },
+      {
+        "query": "Ashdod",
+        "language": "en",
+        "expectedLocality": "osm:relation:1380013",
+        "expectedName": "Ashdod",
+        "before": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Ashdod Ad Halom East Rail Station/Alight",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 4786,
+              "routeCount": 0
+            },
+            {
+              "displayName": "Ashdod Ad Halom East Rail Station/Boarding",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 4775,
+              "routeCount": 0
+            },
+            {
+              "displayName": "Ashdod Ad Halom – Metropolin",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 4754,
+              "routeCount": 188
+            },
+            {
+              "displayName": "Ashdod Central Station",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 3100,
+              "routeCount": 48
+            },
+            {
+              "displayName": "Ashdod Central Station/Platforms",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 3011,
+              "routeCount": 0
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "HaPalmach Boulevard/Hativat Carmeli",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1461,
+              "routeCount": 60
+            },
+            {
+              "displayName": "HaPalmach Boulevard/Hativat Carmeli",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1437,
+              "routeCount": 55
+            },
+            {
+              "displayName": "Bne Brit/Ha'Orgim",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1205,
+              "routeCount": 38
+            },
+            {
+              "displayName": "Bne Brit/HaPalmah",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1350,
+              "routeCount": 44
+            },
+            {
+              "displayName": "Bne Brit Blvd/HaNehoshet",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1214,
+              "routeCount": 34
+            }
+          ]
+        }
+      },
+      {
+        "query": "אשדוד",
+        "language": "he",
+        "expectedLocality": "osm:relation:1380013",
+        "expectedName": "Ashdod",
+        "before": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "הרותם/הצבעוני",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 2826,
+              "routeCount": 40
+            },
+            {
+              "displayName": "הרותם/החרצית",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 2885,
+              "routeCount": 44
+            },
+            {
+              "displayName": "הצבעוני/הרותם",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 2950,
+              "routeCount": 42
+            },
+            {
+              "displayName": "הרותם/החרצית",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 2896,
+              "routeCount": 43
+            },
+            {
+              "displayName": "הכלנית/הצבעוני",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 3107,
+              "routeCount": 44
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "שדרות הפלמח/חטיבת כרמלי",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1461,
+              "routeCount": 60
+            },
+            {
+              "displayName": "שדרות הפלמח/חטיבת כרמלי",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1437,
+              "routeCount": 55
+            },
+            {
+              "displayName": "בני ברית/האורגים",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1205,
+              "routeCount": 38
+            },
+            {
+              "displayName": "בני ברית/הפלמח",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1350,
+              "routeCount": 44
+            },
+            {
+              "displayName": "שד.בני ברית/הנחושת",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1214,
+              "routeCount": 34
+            }
+          ]
+        }
+      },
+      {
+        "query": "Holon",
+        "language": "en",
+        "expectedLocality": "osm:relation:1382460",
+        "expectedName": "Holon",
+        "before": {
+          "top1Inside": true,
+          "top5Inside": 3,
+          "top": [
+            {
+              "displayName": "Holon  Institute of Technology/Fichman",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 849,
+              "routeCount": 2
+            },
+            {
+              "displayName": "Holon  Institute of Technology/Hoofien",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1149,
+              "routeCount": 6
+            },
+            {
+              "displayName": "Holon  Institute of Technology/Hoofien",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 909,
+              "routeCount": 4
+            },
+            {
+              "displayName": "Holon Junction",
+              "kind": "stop",
+              "inside": false,
+              "centerDistanceMeters": 3014,
+              "routeCount": 37
+            },
+            {
+              "displayName": "Holon Junction",
+              "kind": "station",
+              "inside": false,
+              "centerDistanceMeters": 3006,
+              "routeCount": 104
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Kugel High School/Golda Meir",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 120,
+              "routeCount": 10
+            },
+            {
+              "displayName": "Bat Yam Eli Cohen- Yoseftal",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 2062,
+              "routeCount": 123
+            },
+            {
+              "displayName": "Kugel High School/Golda Meir",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 214,
+              "routeCount": 9
+            },
+            {
+              "displayName": "Alufe Tsahal/David Elazar",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 248,
+              "routeCount": 8
+            },
+            {
+              "displayName": "Holon Mall/Golda Meir",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 446,
+              "routeCount": 10
+            }
+          ]
+        }
+      },
+      {
+        "query": "חולון",
+        "language": "he",
+        "expectedLocality": "osm:relation:1382460",
+        "expectedName": "Holon",
+        "before": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "ההסתדרות/חנקין",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 930,
+              "routeCount": 13
+            },
+            {
+              "displayName": "ההסתדרות/ראש פינה",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 809,
+              "routeCount": 12
+            },
+            {
+              "displayName": "קניון חולון/גולדה מאיר",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 446,
+              "routeCount": 10
+            },
+            {
+              "displayName": "ההסתדרות/ראש פינה",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 743,
+              "routeCount": 11
+            },
+            {
+              "displayName": "גולדה מאיר/ראובן ברקת",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 773,
+              "routeCount": 10
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "תיכון קוגל/גולדה מאיר",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 120,
+              "routeCount": 10
+            },
+            {
+              "displayName": "בת ים אלי כהן - יוספטל",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 2062,
+              "routeCount": 123
+            },
+            {
+              "displayName": "תיכון קוגל/גולדה מאיר",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 214,
+              "routeCount": 9
+            },
+            {
+              "displayName": "אלופי צהל/דוד אלעזר",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 248,
+              "routeCount": 8
+            },
+            {
+              "displayName": "קניון חולון/גולדה מאיר",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 446,
+              "routeCount": 10
+            }
+          ]
+        }
+      },
+      {
+        "query": "Ramat Gan",
+        "language": "en",
+        "expectedLocality": "osm:relation:1382493",
+        "expectedName": "Ramat Gan",
+        "before": {
+          "top1Inside": false,
+          "top5Inside": 2,
+          "top": [
+            {
+              "displayName": "Derech Hatayassim Ramat Gan Taxi Station",
+              "kind": "stop",
+              "inside": false,
+              "centerDistanceMeters": 2119,
+              "routeCount": 2
+            },
+            {
+              "displayName": "Derech Hatayassim Ramat Gan Taxi Station",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 2340,
+              "routeCount": 0
+            },
+            {
+              "displayName": "Ganei Am junction/Ramatayim Road",
+              "kind": "stop",
+              "inside": false,
+              "centerDistanceMeters": 11582,
+              "routeCount": 23
+            },
+            {
+              "displayName": "Taxi Station Sheba Ramat Gan",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 2598,
+              "routeCount": 0
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Aluf Sadeh Terminal",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 1174,
+              "routeCount": 0
+            },
+            {
+              "displayName": "Road 4/Bar Ilan Interchange",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1072,
+              "routeCount": 43
+            },
+            {
+              "displayName": "Bar Ilan Bridge/Road 4",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1226,
+              "routeCount": 52
+            },
+            {
+              "displayName": "HaYarden/Pinhas",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 83,
+              "routeCount": 9
+            },
+            {
+              "displayName": "HaYarden/Pinhas",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 118,
+              "routeCount": 9
+            }
+          ]
+        }
+      },
+      {
+        "query": "רמת גן",
+        "language": "he",
+        "expectedLocality": "osm:relation:1382493",
+        "expectedName": "Ramat Gan",
+        "before": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "מסוף אלוף שדה",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 1174,
+              "routeCount": 0
+            },
+            {
+              "displayName": "גשר בר אילן/כביש 4",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1226,
+              "routeCount": 52
+            },
+            {
+              "displayName": "נגבה/ הרא''ה",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 737,
+              "routeCount": 9
+            },
+            {
+              "displayName": "כביש 4/מחלף בר אילן",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1072,
+              "routeCount": 43
+            },
+            {
+              "displayName": "ביה''ס חורב/עוזיאל",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 989,
+              "routeCount": 9
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "מסוף אלוף שדה",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 1174,
+              "routeCount": 0
+            },
+            {
+              "displayName": "כביש 4/מחלף בר אילן",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1072,
+              "routeCount": 43
+            },
+            {
+              "displayName": "גשר בר אילן/כביש 4",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1226,
+              "routeCount": 52
+            },
+            {
+              "displayName": "הירדן/ פנחס",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 83,
+              "routeCount": 9
+            },
+            {
+              "displayName": "הירדן/ פנחס",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 118,
+              "routeCount": 9
+            }
+          ]
+        }
+      },
+      {
+        "query": "Petah Tikva",
+        "language": "en",
+        "expectedLocality": "osm:relation:1382816",
+        "expectedName": "Petah Tikva",
+        "before": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Urban Market/Baron Hirsch",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 592,
+              "routeCount": 38
+            },
+            {
+              "displayName": "Urban Market/Baron Hirsch",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 599,
+              "routeCount": 31
+            },
+            {
+              "displayName": "Stampfer/Bar Kokhba",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 451,
+              "routeCount": 21
+            },
+            {
+              "displayName": "Baron Hirsch/Montefiore",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 728,
+              "routeCount": 21
+            },
+            {
+              "displayName": "HaMeyasdim Square/Shtampfer",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 474,
+              "routeCount": 16
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "ת.רק''ל/תחנה מרכזית למערב",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 70,
+              "routeCount": 24
+            },
+            {
+              "displayName": "Urban Market/Baron Hirsch",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 592,
+              "routeCount": 38
+            },
+            {
+              "displayName": "Moshe Arens Terminal/Alight",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 300,
+              "routeCount": 3
+            },
+            {
+              "displayName": "Moshe Arens Terminal/Platforms",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 365,
+              "routeCount": 0
+            },
+            {
+              "displayName": "Stampfer/Abarbanel",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 531,
+              "routeCount": 29
+            }
+          ]
+        }
+      },
+      {
+        "query": "Petach Tikvah",
+        "language": "en",
+        "expectedLocality": "osm:relation:1382816",
+        "expectedName": "Petah Tikva",
+        "before": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Urban Market/Baron Hirsch",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 592,
+              "routeCount": 38
+            },
+            {
+              "displayName": "Urban Market/Baron Hirsch",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 599,
+              "routeCount": 31
+            },
+            {
+              "displayName": "Stampfer/Bar Kokhba",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 451,
+              "routeCount": 21
+            },
+            {
+              "displayName": "Baron Hirsch/Montefiore",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 728,
+              "routeCount": 21
+            },
+            {
+              "displayName": "HaMeyasdim Square/Shtampfer",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 474,
+              "routeCount": 16
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "ת.רק''ל/תחנה מרכזית למערב",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 70,
+              "routeCount": 24
+            },
+            {
+              "displayName": "Urban Market/Baron Hirsch",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 592,
+              "routeCount": 38
+            },
+            {
+              "displayName": "Moshe Arens Terminal/Alight",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 300,
+              "routeCount": 3
+            },
+            {
+              "displayName": "Moshe Arens Terminal/Platforms",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 365,
+              "routeCount": 0
+            },
+            {
+              "displayName": "Stampfer/Abarbanel",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 531,
+              "routeCount": 29
+            }
+          ]
+        }
+      },
+      {
+        "query": "פתח תקווה",
+        "language": "he",
+        "expectedLocality": "osm:relation:1382816",
+        "expectedName": "Petah Tikva",
+        "before": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "שוק עירוני/ברון הירש",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 592,
+              "routeCount": 38
+            },
+            {
+              "displayName": "שוק עירוני/ברון הירש",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 599,
+              "routeCount": 31
+            },
+            {
+              "displayName": "שטמפפר/בר כוכבא",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 451,
+              "routeCount": 21
+            },
+            {
+              "displayName": "ברון הירש / מונטיפיורי",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 728,
+              "routeCount": 21
+            },
+            {
+              "displayName": "כיכר המייסדים/שטמפפר",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 474,
+              "routeCount": 16
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "ת.רק''ל/תחנה מרכזית למערב",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 70,
+              "routeCount": 24
+            },
+            {
+              "displayName": "שוק עירוני/ברון הירש",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 592,
+              "routeCount": 38
+            },
+            {
+              "displayName": "מסוף משה ארנס/הורדה",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 300,
+              "routeCount": 3
+            },
+            {
+              "displayName": "מסוף משה ארנס/רציפים",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 365,
+              "routeCount": 0
+            },
+            {
+              "displayName": "שטמפפר/אברבנל",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 531,
+              "routeCount": 29
+            }
+          ]
+        }
+      },
+      {
+        "query": "Rishon LeZion",
+        "language": "en",
+        "expectedLocality": "osm:relation:1382177",
+        "expectedName": "Rishon LeZion",
+        "before": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "ת. מרכזית ראשל''צ/רציפים",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 725,
+              "routeCount": 0
+            },
+            {
+              "displayName": "ת. מרכזית ראשל''צ",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 652,
+              "routeCount": 33
+            },
+            {
+              "displayName": "Ben Gurion/Katznelson",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1150,
+              "routeCount": 20
+            },
+            {
+              "displayName": "Katznelson/Kaplan Eliezer",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1562,
+              "routeCount": 21
+            },
+            {
+              "displayName": "Israel Galili/HaSahlav",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 526,
+              "routeCount": 18
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Israel Galili/HaTkuma",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 183,
+              "routeCount": 18
+            },
+            {
+              "displayName": "ת. מרכזית ראשל''צ/רציפים",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 725,
+              "routeCount": 0
+            },
+            {
+              "displayName": "ת. מרכזית ראשל''צ",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 652,
+              "routeCount": 33
+            },
+            {
+              "displayName": "Kiriyat HaLeom/Israel Galili",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 233,
+              "routeCount": 18
+            },
+            {
+              "displayName": "HaTkuma/HaHistadrut",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 190,
+              "routeCount": 15
+            }
+          ]
+        }
+      },
+      {
+        "query": "ראשון לציון",
+        "language": "he",
+        "expectedLocality": "osm:relation:1382177",
+        "expectedName": "Rishon LeZion",
+        "before": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "ת. מרכזית ראשל''צ/רציפים",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 725,
+              "routeCount": 0
+            },
+            {
+              "displayName": "ת. מרכזית ראשל''צ",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 652,
+              "routeCount": 33
+            },
+            {
+              "displayName": "בן גוריון/כצנלסון",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1150,
+              "routeCount": 20
+            },
+            {
+              "displayName": "כצנלסון/קפלן אליעזר",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1562,
+              "routeCount": 21
+            },
+            {
+              "displayName": "ישראל גלילי/הסחלב",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 526,
+              "routeCount": 18
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "ישראל גלילי/התקומה",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 183,
+              "routeCount": 18
+            },
+            {
+              "displayName": "ת. מרכזית ראשל''צ/רציפים",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 725,
+              "routeCount": 0
+            },
+            {
+              "displayName": "ת. מרכזית ראשל''צ",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 652,
+              "routeCount": 33
+            },
+            {
+              "displayName": "קרית הלאום/ישראל גלילי",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 233,
+              "routeCount": 18
+            },
+            {
+              "displayName": "התקומה/ההסתדרות",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 190,
+              "routeCount": 15
+            }
+          ]
+        }
+      },
+      {
+        "query": "Netanya",
+        "language": "en",
+        "expectedLocality": "osm:relation:1383391",
+        "expectedName": "Netanya",
+        "before": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Netanya",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 1833,
+              "routeCount": 215
+            },
+            {
+              "displayName": "Ben Tsvi Blvd/HaYahaloman Avraham",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 580,
+              "routeCount": 38
+            },
+            {
+              "displayName": "בן צבי/הגר''א",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 603,
+              "routeCount": 27
+            },
+            {
+              "displayName": "Tchernichovsky School/Ben Tsvi",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 473,
+              "routeCount": 27
+            },
+            {
+              "displayName": "Binyamin Blvd/HaRav Tabib",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1105,
+              "routeCount": 28
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Netanya",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 1833,
+              "routeCount": 215
+            },
+            {
+              "displayName": "Ben Tsvi Blvd/HaYahaloman Avraham",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 580,
+              "routeCount": 38
+            },
+            {
+              "displayName": "Tchernichovsky School/Ben Tsvi",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 473,
+              "routeCount": 27
+            },
+            {
+              "displayName": "Ben Tsvi/Nahum",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 692,
+              "routeCount": 33
+            },
+            {
+              "displayName": "בן צבי/הגר''א",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 603,
+              "routeCount": 27
+            }
+          ]
+        }
+      },
+      {
+        "query": "נתניה",
+        "language": "he",
+        "expectedLocality": "osm:relation:1383391",
+        "expectedName": "Netanya",
+        "before": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "נתניה",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 1833,
+              "routeCount": 215
+            },
+            {
+              "displayName": "שד. בן צבי/היהלומן אברהם",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 580,
+              "routeCount": 38
+            },
+            {
+              "displayName": "בן צבי/הגר''א",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 603,
+              "routeCount": 27
+            },
+            {
+              "displayName": "בית ספר טשרניחובסקי/בן צבי",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 473,
+              "routeCount": 27
+            },
+            {
+              "displayName": "שד. בנימין/הרב טביב",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1105,
+              "routeCount": 28
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "נתניה",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 1833,
+              "routeCount": 215
+            },
+            {
+              "displayName": "שד. בן צבי/היהלומן אברהם",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 580,
+              "routeCount": 38
+            },
+            {
+              "displayName": "בית ספר טשרניחובסקי/בן צבי",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 473,
+              "routeCount": 27
+            },
+            {
+              "displayName": "בן צבי/נחום",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 692,
+              "routeCount": 33
+            },
+            {
+              "displayName": "בן צבי/הגר''א",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 603,
+              "routeCount": 27
+            }
+          ]
+        }
+      },
+      {
+        "query": "Herzliya",
+        "language": "en",
+        "expectedLocality": "osm:relation:1382820",
+        "expectedName": "Herzliya",
+        "before": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Hertsliya",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 827,
+              "routeCount": 559
+            },
+            {
+              "displayName": "Weizmann School/Weizmann",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1182,
+              "routeCount": 9
+            },
+            {
+              "displayName": "Weizmann School/Weizmann",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1189,
+              "routeCount": 9
+            },
+            {
+              "displayName": "HaRav Kook/Weizmann",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1301,
+              "routeCount": 12
+            },
+            {
+              "displayName": "Shiv'at HaKokhavim Blvd/Ben Zion Micha'eli",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 618,
+              "routeCount": 16
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Hertsliya",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 827,
+              "routeCount": 559
+            },
+            {
+              "displayName": "Hertsliya Junction",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1105,
+              "routeCount": 51
+            },
+            {
+              "displayName": "Hertsliya Junction",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 980,
+              "routeCount": 38
+            },
+            {
+              "displayName": "Shiv'at HaKokhavim Mall/Ben Zion Micha'eli",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 519,
+              "routeCount": 17
+            },
+            {
+              "displayName": "Shiv'at HaKokhavim Mall",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 596,
+              "routeCount": 18
+            }
+          ]
+        }
+      },
+      {
+        "query": "הרצליה",
+        "language": "he",
+        "expectedLocality": "osm:relation:1382820",
+        "expectedName": "Herzliya",
+        "before": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "הרצליה",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 827,
+              "routeCount": 559
+            },
+            {
+              "displayName": "בית ספר וייצמן/וייצמן",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1182,
+              "routeCount": 9
+            },
+            {
+              "displayName": "בית ספר וייצמן/וייצמן",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1189,
+              "routeCount": 9
+            },
+            {
+              "displayName": "הרב קוק/ויצמן",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1301,
+              "routeCount": 12
+            },
+            {
+              "displayName": "שד. שבעת הכוכבים/בן ציון מיכאלי",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 618,
+              "routeCount": 16
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "הרצליה",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 827,
+              "routeCount": 559
+            },
+            {
+              "displayName": "צומת הרצליה",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1105,
+              "routeCount": 51
+            },
+            {
+              "displayName": "צומת הרצליה",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 980,
+              "routeCount": 38
+            },
+            {
+              "displayName": "קניון שבעת הכוכבים/בן ציון מיכאלי",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 519,
+              "routeCount": 17
+            },
+            {
+              "displayName": "קניון שבעת הכוכבים",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 596,
+              "routeCount": 18
+            }
+          ]
+        }
+      },
+      {
+        "query": "Ashkelon",
+        "language": "en",
+        "expectedLocality": "osm:relation:1376782",
+        "expectedName": "Ashkelon",
+        "before": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Ashkelon",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 3771,
+              "routeCount": 181
+            },
+            {
+              "displayName": "Ashkelon Academic College",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 710,
+              "routeCount": 22
+            },
+            {
+              "displayName": "Eli Cohen/Yitshak Ben Tsvi",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 590,
+              "routeCount": 22
+            },
+            {
+              "displayName": "Ben Gurion/Ne'ot Ashkelon",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 986,
+              "routeCount": 31
+            },
+            {
+              "displayName": "Eli Cohen/Pki'in",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 918,
+              "routeCount": 10
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Ashkelon",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 3771,
+              "routeCount": 181
+            },
+            {
+              "displayName": "Ashkelon Central Station/Alight",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 176,
+              "routeCount": 33
+            },
+            {
+              "displayName": "Ashkelon Central Bus Station Platforms/Intercity",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 128,
+              "routeCount": 0
+            },
+            {
+              "displayName": "Ashkelon Central Station/Inner-City Platforms",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 167,
+              "routeCount": 0
+            },
+            {
+              "displayName": "Kibuts Galuyot/Gibore Shihrur",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 40,
+              "routeCount": 12
+            }
+          ]
+        }
+      },
+      {
+        "query": "אשקלון",
+        "language": "he",
+        "expectedLocality": "osm:relation:1376782",
+        "expectedName": "Ashkelon",
+        "before": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "אשקלון",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 3771,
+              "routeCount": 181
+            },
+            {
+              "displayName": "מכללה אקדמית אשקלון",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 710,
+              "routeCount": 22
+            },
+            {
+              "displayName": "אלי כהן/יצחק בן צבי",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 590,
+              "routeCount": 22
+            },
+            {
+              "displayName": "בן גוריון/נאות אשקלון",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 986,
+              "routeCount": 31
+            },
+            {
+              "displayName": "אלי כהן/פקיעין",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 918,
+              "routeCount": 10
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "אשקלון",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 3771,
+              "routeCount": 181
+            },
+            {
+              "displayName": "ת.מרכזית אשקלון/הורדה",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 176,
+              "routeCount": 33
+            },
+            {
+              "displayName": "ת. מרכזית אשקלון רציפים/בינעירוני",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 128,
+              "routeCount": 0
+            },
+            {
+              "displayName": "ת. מרכזית אשקלון רציפים/עירוני",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 167,
+              "routeCount": 0
+            },
+            {
+              "displayName": "קיבוץ גלויות/גיבורי שיחרור",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 40,
+              "routeCount": 12
+            }
+          ]
+        }
+      },
+      {
+        "query": "Eilat",
+        "language": "en",
+        "expectedLocality": "osm:relation:1377284",
+        "expectedName": "Eilat",
+        "before": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Eilat Central Bus Station",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 2869,
+              "routeCount": 29
+            },
+            {
+              "displayName": "Eilat Central Station/Platforms",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 2928,
+              "routeCount": 0
+            },
+            {
+              "displayName": "Dakar/Halilan",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 2715,
+              "routeCount": 17
+            },
+            {
+              "displayName": "Zaharon/Enat Center",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 2538,
+              "routeCount": 17
+            },
+            {
+              "displayName": "Argaman/Yotam Road",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 2664,
+              "routeCount": 7
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Eilat Central Bus Station",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 2869,
+              "routeCount": 29
+            },
+            {
+              "displayName": "Yahel/Nirit",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 2074,
+              "routeCount": 10
+            },
+            {
+              "displayName": "Begin High School/Hasportayim",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 2014,
+              "routeCount": 9
+            },
+            {
+              "displayName": "Palace Hotel/Malkat Shva",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1595,
+              "routeCount": 5
+            },
+            {
+              "displayName": "Zaharon/Enat Center",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 2538,
+              "routeCount": 17
+            }
+          ]
+        }
+      },
+      {
+        "query": "אילת",
+        "language": "he",
+        "expectedLocality": "osm:relation:1377284",
+        "expectedName": "Eilat",
+        "before": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "ת. מרכזית אילת",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 2869,
+              "routeCount": 29
+            },
+            {
+              "displayName": "ת. מרכזית אילת/רציפים",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 2928,
+              "routeCount": 0
+            },
+            {
+              "displayName": "דקר/חלילן",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 2715,
+              "routeCount": 17
+            },
+            {
+              "displayName": "זהרון/מרכז עינת",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 2538,
+              "routeCount": 17
+            },
+            {
+              "displayName": "ארגמן/דרך יותם",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 2664,
+              "routeCount": 7
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "ת. מרכזית אילת",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 2869,
+              "routeCount": 29
+            },
+            {
+              "displayName": "יהל/נירית",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 2074,
+              "routeCount": 10
+            },
+            {
+              "displayName": "תיכון בגין/הספורטאים",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 2014,
+              "routeCount": 9
+            },
+            {
+              "displayName": "מלון פאלאס/מלכת שבא",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1595,
+              "routeCount": 5
+            },
+            {
+              "displayName": "זהרון/מרכז עינת",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 2538,
+              "routeCount": 17
+            }
+          ]
+        }
+      },
+      {
+        "query": "Kfar Saba",
+        "language": "en",
+        "expectedLocality": "osm:relation:1383631",
+        "expectedName": "Kfar Saba",
+        "before": {
+          "top1Inside": false,
+          "top5Inside": 4,
+          "top": [
+            {
+              "displayName": "Kfar Saba",
+              "kind": "station",
+              "inside": false,
+              "centerDistanceMeters": 1691,
+              "routeCount": 141
+            },
+            {
+              "displayName": "Weizmann/Rothschild",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1144,
+              "routeCount": 48
+            },
+            {
+              "displayName": "Weizmann/Rothschild",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1166,
+              "routeCount": 48
+            },
+            {
+              "displayName": "תחנה מרכזית כפ''ס/ויצמן",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1031,
+              "routeCount": 37
+            },
+            {
+              "displayName": "Weizmann/Yerushalayim",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1332,
+              "routeCount": 45
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Weizmann/Rothschild",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1144,
+              "routeCount": 48
+            },
+            {
+              "displayName": "Weizmann/Rothschild",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1166,
+              "routeCount": 48
+            },
+            {
+              "displayName": "Weizman/Nordau",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1138,
+              "routeCount": 45
+            },
+            {
+              "displayName": "Weizmann/Moshe Dayan",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1068,
+              "routeCount": 40
+            },
+            {
+              "displayName": "תחנה מרכזית כפ''ס/ויצמן",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1031,
+              "routeCount": 37
+            }
+          ]
+        }
+      },
+      {
+        "query": "Hadera",
+        "language": "en",
+        "expectedLocality": "osm:relation:1392860",
+        "expectedName": "Hadera",
+        "before": {
+          "top1Inside": false,
+          "top5Inside": 0,
+          "top": [
+            {
+              "displayName": "Hadera Central Bus Station/Platforms",
+              "kind": "station",
+              "inside": false,
+              "centerDistanceMeters": 2512,
+              "routeCount": 0
+            },
+            {
+              "displayName": "תיכון חדרה/רמב''ם",
+              "kind": "stop",
+              "inside": false,
+              "centerDistanceMeters": 2862,
+              "routeCount": 43
+            },
+            {
+              "displayName": "Hadera Central Bus Station",
+              "kind": "station",
+              "inside": false,
+              "centerDistanceMeters": 2447,
+              "routeCount": 0
+            },
+            {
+              "displayName": "Hadera Junction",
+              "kind": "stop",
+              "inside": false,
+              "centerDistanceMeters": 2723,
+              "routeCount": 37
+            },
+            {
+              "displayName": "HaNassi Weizmann/Yehuda Halevi",
+              "kind": "stop",
+              "inside": false,
+              "centerDistanceMeters": 3091,
+              "routeCount": 47
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Ya'ar Hadera Junction",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 478,
+              "routeCount": 17
+            },
+            {
+              "displayName": "Ya'ar Hadera Junction",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 653,
+              "routeCount": 17
+            },
+            {
+              "displayName": "Hadera West",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 2682,
+              "routeCount": 165
+            },
+            {
+              "displayName": "Ya’ar Hadera Junction/East",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 584,
+              "routeCount": 4
+            },
+            {
+              "displayName": "Olga Junction",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 2961,
+              "routeCount": 41
+            }
+          ]
+        }
+      },
+      {
+        "query": "Bat Yam",
+        "language": "en",
+        "expectedLocality": "osm:relation:1382458",
+        "expectedName": "Bat Yam",
+        "before": {
+          "top1Inside": true,
+          "top5Inside": 3,
+          "top": [
+            {
+              "displayName": "Bat Yam Amphitheatre/Ha'Atsma'ut Boulevard",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1090,
+              "routeCount": 2
+            },
+            {
+              "displayName": "Bat Yam Amphitheatre/Ha'Atsma'ut Boulevard",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1126,
+              "routeCount": 1
+            },
+            {
+              "displayName": "Bat Yam Coloni Beach Taxi Station",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 912,
+              "routeCount": 1
+            },
+            {
+              "displayName": "Bat Yam Eli Cohen- Yoseftal",
+              "kind": "station",
+              "inside": false,
+              "centerDistanceMeters": 1389,
+              "routeCount": 123
+            },
+            {
+              "displayName": "Bat Yam Komemiut",
+              "kind": "station",
+              "inside": false,
+              "centerDistanceMeters": 1881,
+              "routeCount": 104
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "ת.רק''ל בלפור",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 388,
+              "routeCount": 13
+            },
+            {
+              "displayName": "ת.רק''ל בנימין/יוספטל",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 218,
+              "routeCount": 9
+            },
+            {
+              "displayName": "ת.רק''ל בנימין/יוספטל",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 239,
+              "routeCount": 9
+            },
+            {
+              "displayName": "Balfour/Max Nordau",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 387,
+              "routeCount": 10
+            },
+            {
+              "displayName": "Balfour/Perlstein",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 722,
+              "routeCount": 15
+            }
+          ]
+        }
+      },
+      {
+        "query": "Bnei Brak",
+        "language": "en",
+        "expectedLocality": "osm:relation:1382817",
+        "expectedName": "Bnei Brak",
+        "before": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Bnei Brak",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 1526,
+              "routeCount": 141
+            },
+            {
+              "displayName": "ת.רק''ל אהרונוביץ'/דרך ז'בוטינסקי",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 348,
+              "routeCount": 94
+            },
+            {
+              "displayName": "Rabbi Akiva/Varsha Garden",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 574,
+              "routeCount": 97
+            },
+            {
+              "displayName": "Aharonovich/HaRav Reines",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 382,
+              "routeCount": 67
+            },
+            {
+              "displayName": "Jabotinsky/Abu Hatzeira",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 397,
+              "routeCount": 78
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Bnei Brak",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 1526,
+              "routeCount": 141
+            },
+            {
+              "displayName": "ת.רק''ל אהרונוביץ'/דרך ז'בוטינסקי",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 348,
+              "routeCount": 94
+            },
+            {
+              "displayName": "Jabotinsky/Abu Hatzeira",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 397,
+              "routeCount": 78
+            },
+            {
+              "displayName": "Rabbi Akiva/Varsha Garden",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 574,
+              "routeCount": 97
+            },
+            {
+              "displayName": "ת.רק''ל אהרונוביץ'/דרך ז'בוטינסקי",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 487,
+              "routeCount": 82
+            }
+          ]
+        }
+      },
+      {
+        "query": "בני ברק",
+        "language": "he",
+        "expectedLocality": "osm:relation:1382817",
+        "expectedName": "Bnei Brak",
+        "before": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "בני ברק",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 1526,
+              "routeCount": 141
+            },
+            {
+              "displayName": "ת.רק''ל אהרונוביץ'/דרך ז'בוטינסקי",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 348,
+              "routeCount": 94
+            },
+            {
+              "displayName": "רבי עקיבא/גן ורשה",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 574,
+              "routeCount": 97
+            },
+            {
+              "displayName": "אהרונוביץ'/הרב ריינס",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 382,
+              "routeCount": 67
+            },
+            {
+              "displayName": "ז'בוטינסקי/ אבו חצירא",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 397,
+              "routeCount": 78
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "בני ברק",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 1526,
+              "routeCount": 141
+            },
+            {
+              "displayName": "ת.רק''ל אהרונוביץ'/דרך ז'בוטינסקי",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 348,
+              "routeCount": 94
+            },
+            {
+              "displayName": "ז'בוטינסקי/ אבו חצירא",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 397,
+              "routeCount": 78
+            },
+            {
+              "displayName": "רבי עקיבא/גן ורשה",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 574,
+              "routeCount": 97
+            },
+            {
+              "displayName": "ת.רק''ל אהרונוביץ'/דרך ז'בוטינסקי",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 487,
+              "routeCount": 82
+            }
+          ]
+        }
+      },
+      {
+        "query": "Rehovot",
+        "language": "en",
+        "expectedLocality": "osm:relation:1246791",
+        "expectedName": "Rehovot",
+        "before": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Rehovot",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 1508,
+              "routeCount": 130
+            },
+            {
+              "displayName": "Rehovot Central Bus Station/Platforms",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 270,
+              "routeCount": 0
+            },
+            {
+              "displayName": "Herzl/Rotary",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 346,
+              "routeCount": 27
+            },
+            {
+              "displayName": "City Market/Lefkowitz",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 174,
+              "routeCount": 23
+            },
+            {
+              "displayName": "Herzl/Weizmann",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 287,
+              "routeCount": 36
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Rehovot",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 1508,
+              "routeCount": 130
+            },
+            {
+              "displayName": "Rehovot Central Bus Station/Platforms",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 270,
+              "routeCount": 0
+            },
+            {
+              "displayName": "Herzl/Weizmann",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 287,
+              "routeCount": 36
+            },
+            {
+              "displayName": "Herzl/Teller",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 199,
+              "routeCount": 29
+            },
+            {
+              "displayName": "Police/Herzl",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 550,
+              "routeCount": 38
+            }
+          ]
+        }
+      },
+      {
+        "query": "Nazareth",
+        "language": "en",
+        "expectedLocality": "osm:relation:1386836",
+        "expectedName": "Nazareth",
+        "before": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Nazareth Bypass/al-Qafzeh",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1815,
+              "routeCount": 17
+            },
+            {
+              "displayName": "Nazareth Bypass/al-Qafzeh",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1753,
+              "routeCount": 17
+            },
+            {
+              "displayName": "Nazareth Bypass/Umm Wassef Intersection",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1266,
+              "routeCount": 16
+            },
+            {
+              "displayName": "Nazareth Central Station",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 857,
+              "routeCount": 42
+            },
+            {
+              "displayName": "Nazareth Central Station",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 813,
+              "routeCount": 28
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Nazareth Central Station",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 857,
+              "routeCount": 42
+            },
+            {
+              "displayName": "al-Kurum/al-Batris",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 95,
+              "routeCount": 14
+            },
+            {
+              "displayName": "Paul VI/Pilgrims' Path",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 879,
+              "routeCount": 39
+            },
+            {
+              "displayName": "Paul VI/Pilgrims' Path",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 930,
+              "routeCount": 41
+            },
+            {
+              "displayName": "Paul VI/Abuna Ugo",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 761,
+              "routeCount": 30
+            }
+          ]
+        }
+      },
+      {
+        "query": "Tiberias",
+        "language": "en",
+        "expectedLocality": "osm:relation:1387273",
+        "expectedName": "Tiberias",
+        "before": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Sapir Blvd/HaNevi'im",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1087,
+              "routeCount": 28
+            },
+            {
+              "displayName": "Shaked/Rotem",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 465,
+              "routeCount": 14
+            },
+            {
+              "displayName": "Shaked/Rotem",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 426,
+              "routeCount": 14
+            },
+            {
+              "displayName": "מעלה קק''ל/הדקל",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 626,
+              "routeCount": 13
+            },
+            {
+              "displayName": "Tiberias Central Bus Station/Alight",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1096,
+              "routeCount": 63
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Tiberias Central Bus Station/Alight",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1096,
+              "routeCount": 63
+            },
+            {
+              "displayName": "Sapir Blvd/HaGefen",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 430,
+              "routeCount": 24
+            },
+            {
+              "displayName": "Sapir Boulevard/Yefe Nof",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 475,
+              "routeCount": 24
+            },
+            {
+              "displayName": "Sapir Blvd/Rakefet",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 487,
+              "routeCount": 21
+            },
+            {
+              "displayName": "מעלה קק''ל/שקד",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 235,
+              "routeCount": 14
+            }
+          ]
+        }
+      },
+      {
+        "query": "Acre",
+        "language": "en",
+        "expectedLocality": "osm:relation:1387962",
+        "expectedName": "Acre",
+        "before": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Acre",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 896,
+              "routeCount": 153
+            },
+            {
+              "displayName": "Acre Central Station",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 890,
+              "routeCount": 30
+            },
+            {
+              "displayName": "Akko Central Station/HaArbaa Road",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 929,
+              "routeCount": 5
+            },
+            {
+              "displayName": "Acre Rail Station/Herzl",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 885,
+              "routeCount": 24
+            },
+            {
+              "displayName": "Acre Rail Station/Herzl",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 865,
+              "routeCount": 22
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Acre",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 896,
+              "routeCount": 153
+            },
+            {
+              "displayName": "Akko Central Station/HaArbaa Road",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 929,
+              "routeCount": 5
+            },
+            {
+              "displayName": "Acre Central Station",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 890,
+              "routeCount": 30
+            },
+            {
+              "displayName": "Akko Central Station/HaArbaa Road",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 899,
+              "routeCount": 30
+            },
+            {
+              "displayName": "Ha'Arba'a Road/HaMel'akha Road",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 830,
+              "routeCount": 27
+            }
+          ]
+        }
+      },
+      {
+        "query": "עכו",
+        "language": "he",
+        "expectedLocality": "osm:relation:1387962",
+        "expectedName": "Acre",
+        "before": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "עכו",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 896,
+              "routeCount": 153
+            },
+            {
+              "displayName": "ת. רכבת עכו",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 890,
+              "routeCount": 30
+            },
+            {
+              "displayName": "ת.מרכזית עכו/דרך הארבעה",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 929,
+              "routeCount": 5
+            },
+            {
+              "displayName": "ת. רכבת עכו/הרצל",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 885,
+              "routeCount": 24
+            },
+            {
+              "displayName": "ת. רכבת עכו/הרצל",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 865,
+              "routeCount": 22
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "עכו",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 896,
+              "routeCount": 153
+            },
+            {
+              "displayName": "ת.מרכזית עכו/דרך הארבעה",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 929,
+              "routeCount": 5
+            },
+            {
+              "displayName": "ת. רכבת עכו",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 890,
+              "routeCount": 30
+            },
+            {
+              "displayName": "ת.מרכזית עכו/דרך הארבעה",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 899,
+              "routeCount": 30
+            },
+            {
+              "displayName": "דרך הארבעה/דרך המלאכה",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 830,
+              "routeCount": 27
+            }
+          ]
+        }
+      },
+      {
+        "query": "Modiin",
+        "language": "en",
+        "expectedLocality": "osm:relation:1381425",
+        "expectedName": "Modiin-Maccabim-Reut",
+        "before": {
+          "top1Inside": false,
+          "top5Inside": 0,
+          "top": [
+            {
+              "displayName": "Modi'in - East Junction",
+              "kind": "stop",
+              "inside": false,
+              "centerDistanceMeters": 2979,
+              "routeCount": 46
+            },
+            {
+              "displayName": "Modi'in - East Junction",
+              "kind": "stop",
+              "inside": false,
+              "centerDistanceMeters": 3224,
+              "routeCount": 0
+            },
+            {
+              "displayName": "Modi'in Ilit Terminal",
+              "kind": "station",
+              "inside": false,
+              "centerDistanceMeters": 6228,
+              "routeCount": 0
+            },
+            {
+              "displayName": "Modi'in Ilit Terminal/Alight",
+              "kind": "station",
+              "inside": false,
+              "centerDistanceMeters": 6231,
+              "routeCount": 0
+            },
+            {
+              "displayName": "Modi'in Junction",
+              "kind": "stop",
+              "inside": false,
+              "centerDistanceMeters": 4879,
+              "routeCount": 13
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Mode'ein Center",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 1565,
+              "routeCount": 199
+            },
+            {
+              "displayName": "HaHashmona'im Blvd/Lev Ha'Ir",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1620,
+              "routeCount": 69
+            },
+            {
+              "displayName": "Road 431/Yehuda HaMaccabi",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 267,
+              "routeCount": 9
+            },
+            {
+              "displayName": "Modi'in Railway Station/Center",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1503,
+              "routeCount": 39
+            },
+            {
+              "displayName": "Hashmona'im/Rabin",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1160,
+              "routeCount": 24
+            }
+          ]
+        }
+      },
+      {
+        "query": "Lod",
+        "language": "en",
+        "expectedLocality": "osm:relation:1381532",
+        "expectedName": "Lod",
+        "before": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Lod",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 1353,
+              "routeCount": 341
+            },
+            {
+              "displayName": "Lod Municipaliy/David HaMelekh Boulevard",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 819,
+              "routeCount": 19
+            },
+            {
+              "displayName": "HaNassi/Gratball",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 845,
+              "routeCount": 23
+            },
+            {
+              "displayName": "David HaMelekh Boulevard/Elfa'l",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 617,
+              "routeCount": 29
+            },
+            {
+              "displayName": "Lod Municipaliy/David HaMelekh Boulevard",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 749,
+              "routeCount": 18
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Lod",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 1353,
+              "routeCount": 341
+            },
+            {
+              "displayName": "Lod Central Bus Station/Platforms",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 734,
+              "routeCount": 0
+            },
+            {
+              "displayName": "David HaMelekh Boulevard/Elfa'l",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 617,
+              "routeCount": 29
+            },
+            {
+              "displayName": "Lod Gane Aviv",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 1688,
+              "routeCount": 102
+            },
+            {
+              "displayName": "Herzl/Brener",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 534,
+              "routeCount": 21
+            }
+          ]
+        }
+      },
+      {
+        "query": "Ramla",
+        "language": "en",
+        "expectedLocality": "osm:relation:1381458",
+        "expectedName": "Ramla",
+        "before": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Ramla",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 614,
+              "routeCount": 129
+            },
+            {
+              "displayName": "Herzl Blvd/Dani Mass",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 272,
+              "routeCount": 36
+            },
+            {
+              "displayName": "Herzl Boulevard/Trumpeldor",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 354,
+              "routeCount": 30
+            },
+            {
+              "displayName": "Herzl Boulevard/Aharon Ben Yosef",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 986,
+              "routeCount": 28
+            },
+            {
+              "displayName": "Ramla Municipaliy/Herzl",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 708,
+              "routeCount": 24
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Ramla",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 614,
+              "routeCount": 129
+            },
+            {
+              "displayName": "Herzl Blvd/Dani Mass",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 272,
+              "routeCount": 36
+            },
+            {
+              "displayName": "Herzl Boulevard/Shapira",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 202,
+              "routeCount": 31
+            },
+            {
+              "displayName": "City Market/Herzl Boulevard",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 331,
+              "routeCount": 32
+            },
+            {
+              "displayName": "Herzl Boulevard/HaGdud HaIvri",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 214,
+              "routeCount": 27
+            }
+          ]
+        }
+      },
+      {
+        "query": "Raanana",
+        "language": "en",
+        "expectedLocality": "osm:relation:1383630",
+        "expectedName": "Raanana",
+        "before": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Ra'anana Center Junction",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 2468,
+              "routeCount": 1
+            },
+            {
+              "displayName": "Ra’anana Lake/Derech HaPark",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1899,
+              "routeCount": 3
+            },
+            {
+              "displayName": "Ra’anana Lake/Derech HaPark",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1887,
+              "routeCount": 3
+            },
+            {
+              "displayName": "Ra'anana Municipality/Achuza",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1483,
+              "routeCount": 25
+            },
+            {
+              "displayName": "Ra'anana Municipality/Achuza",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1517,
+              "routeCount": 29
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Ahuza/Migdal",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 771,
+              "routeCount": 24
+            },
+            {
+              "displayName": "Ahuza/Migdal",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 757,
+              "routeCount": 23
+            },
+            {
+              "displayName": "Ahuza/HaMelakhim",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 815,
+              "routeCount": 24
+            },
+            {
+              "displayName": "Ahuza/Sokolov",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 849,
+              "routeCount": 25
+            },
+            {
+              "displayName": "Ahuza/HaMeitar",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 987,
+              "routeCount": 30
+            }
+          ]
+        }
+      },
+      {
+        "query": "Nahariya",
+        "language": "en",
+        "expectedLocality": "osm:relation:1932164",
+        "expectedName": "Nahariah",
+        "before": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Nahariya",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 984,
+              "routeCount": 153
+            },
+            {
+              "displayName": "Nahariya Central Station/Platforms",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 992,
+              "routeCount": 0
+            },
+            {
+              "displayName": "Nahariya Central Station/Alight",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 965,
+              "routeCount": 35
+            },
+            {
+              "displayName": "Nahariya Junction",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 889,
+              "routeCount": 26
+            },
+            {
+              "displayName": "HaNassi Ben Tsvi Blvd/HaGil'ad",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 875,
+              "routeCount": 26
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Nahariya",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 984,
+              "routeCount": 153
+            },
+            {
+              "displayName": "Nahariya Central Station/Platforms",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 992,
+              "routeCount": 0
+            },
+            {
+              "displayName": "Nahariya Central Station/Alight",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 965,
+              "routeCount": 35
+            },
+            {
+              "displayName": "HaNassi Ben Tsvi Blvd/HaGil'ad",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 875,
+              "routeCount": 26
+            },
+            {
+              "displayName": "Nahariya Junction",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 889,
+              "routeCount": 26
+            }
+          ]
+        }
+      },
+      {
+        "query": "Afula",
+        "language": "en",
+        "expectedLocality": "osm:relation:1380226",
+        "expectedName": "Afula",
+        "before": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Afula",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 1538,
+              "routeCount": 67
+            },
+            {
+              "displayName": "HaEmek Hospital",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1300,
+              "routeCount": 40
+            },
+            {
+              "displayName": "Ha'Emek Park",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1017,
+              "routeCount": 29
+            },
+            {
+              "displayName": "HaEmek Hospital",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1362,
+              "routeCount": 41
+            },
+            {
+              "displayName": "In front of Park Ha'emek/Yitshak Rabin Boulevard",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 918,
+              "routeCount": 27
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Afula",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 1538,
+              "routeCount": 67
+            },
+            {
+              "displayName": "Country Club/Yitzhak Rabin Avenue",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 703,
+              "routeCount": 39
+            },
+            {
+              "displayName": "Country Club/Yitzhak Rabin Avenue",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 637,
+              "routeCount": 32
+            },
+            {
+              "displayName": "Afula Central Station/Alight",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 1273,
+              "routeCount": 0
+            },
+            {
+              "displayName": "Afula Central Station/Platforms",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 1267,
+              "routeCount": 0
+            }
+          ]
+        }
+      },
+      {
+        "query": "Kiryat Shmona",
+        "language": "en",
+        "expectedLocality": "osm:relation:1378947",
+        "expectedName": "Kiryat Shmona",
+        "before": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "ת. מרכזית ק''ש/הורדה",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 541,
+              "routeCount": 47
+            },
+            {
+              "displayName": "ת. מרכזית ק''ש/רציפים",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 596,
+              "routeCount": 0
+            },
+            {
+              "displayName": "Urban Market/Tel Hai",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 345,
+              "routeCount": 12
+            },
+            {
+              "displayName": "HaYarden/Tel Hai",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 290,
+              "routeCount": 13
+            },
+            {
+              "displayName": "Tel Hai/HaYarden",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 319,
+              "routeCount": 9
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "ת. מרכזית ק''ש/הורדה",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 541,
+              "routeCount": 47
+            },
+            {
+              "displayName": "ת. מרכזית ק''ש/רציפים",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 596,
+              "routeCount": 0
+            },
+            {
+              "displayName": "HaYarden/Tel Hai",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 290,
+              "routeCount": 13
+            },
+            {
+              "displayName": "Urban Market/Tel Hai",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 345,
+              "routeCount": 12
+            },
+            {
+              "displayName": "HaYarden/Bialik",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 281,
+              "routeCount": 11
+            }
+          ]
+        }
+      },
+      {
+        "query": "Beit Shemesh",
+        "language": "en",
+        "expectedLocality": "osm:relation:1379449",
+        "expectedName": "Beit Shemesh",
+        "before": {
+          "top1Inside": true,
+          "top5Inside": 4,
+          "top": [
+            {
+              "displayName": "Beit Shemesh Interchange",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1807,
+              "routeCount": 2
+            },
+            {
+              "displayName": "Beit Shemesh Interchange",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1871,
+              "routeCount": 4
+            },
+            {
+              "displayName": "Harakefet and Ha'arazim Beit Shemesh Taxi Station",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1547,
+              "routeCount": 0
+            },
+            {
+              "displayName": "Harakefet and Ha'arazim Beit Shemesh Taxi Station",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1556,
+              "routeCount": 0
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Nahar HaDan Boulevard B",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 444,
+              "routeCount": 30
+            },
+            {
+              "displayName": "Nehar HaDan Blvd",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 484,
+              "routeCount": 30
+            },
+            {
+              "displayName": "Nahar HaDan Boulevard B",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 530,
+              "routeCount": 30
+            },
+            {
+              "displayName": "Nehar HaDan Blvd",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 640,
+              "routeCount": 30
+            },
+            {
+              "displayName": "Nahar HaYarden Blvd/Rabbi Yehuda HaNasi",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 1048,
+              "routeCount": 32
+            }
+          ]
+        }
+      },
+      {
+        "query": "Givatayim",
+        "language": "en",
+        "expectedLocality": "osm:relation:1382923",
+        "expectedName": "Givatayim",
+        "before": {
+          "top1Inside": true,
+          "top5Inside": 3,
+          "top": [
+            {
+              "displayName": "Giv'atayim Mall/Yitshak Rabin Road",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 530,
+              "routeCount": 5
+            },
+            {
+              "displayName": "Giv'atayim Mall/Yitshak Rabin Road",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 546,
+              "routeCount": 4
+            },
+            {
+              "displayName": "Country Giv'atayim Taxi Station",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 704,
+              "routeCount": 0
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "ויצמן/צה''ל",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 272,
+              "routeCount": 7
+            },
+            {
+              "displayName": "Weizmann/Reines",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 313,
+              "routeCount": 7
+            },
+            {
+              "displayName": "Weizmann/Reines",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 326,
+              "routeCount": 7
+            },
+            {
+              "displayName": "Weizmann/Jabotinsky",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 359,
+              "routeCount": 7
+            },
+            {
+              "displayName": "Katznelson/Weizmann",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 584,
+              "routeCount": 9
+            }
+          ]
+        }
+      },
+      {
+        "query": "Dimona",
+        "language": "en",
+        "expectedLocality": "osm:relation:1376826",
+        "expectedName": "Dimona",
+        "before": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Dimona",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 8237,
+              "routeCount": 16
+            },
+            {
+              "displayName": "מ''ד מעפילים/דאר",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 6258,
+              "routeCount": 31
+            },
+            {
+              "displayName": "Bar Lev Road/Appleman High School",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 6247,
+              "routeCount": 18
+            },
+            {
+              "displayName": "HaMa'pil/Ben Gurion",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 6520,
+              "routeCount": 18
+            },
+            {
+              "displayName": "HaMa'pil/HaShalva",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 6376,
+              "routeCount": 17
+            }
+          ]
+        },
+        "after": {
+          "top1Inside": true,
+          "top5Inside": 5,
+          "top": [
+            {
+              "displayName": "Dimona",
+              "kind": "station",
+              "inside": true,
+              "centerDistanceMeters": 8237,
+              "routeCount": 16
+            },
+            {
+              "displayName": "HaShahar Terminal/HaRav Ovadya Yosef",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 4911,
+              "routeCount": 20
+            },
+            {
+              "displayName": "HaShahar Terminal/HaRav Ovadya Yosef",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 4782,
+              "routeCount": 16
+            },
+            {
+              "displayName": "Yosef/Lubawitch",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 5185,
+              "routeCount": 16
+            },
+            {
+              "displayName": "Yosef/Lubawitch",
+              "kind": "stop",
+              "inside": true,
+              "centerDistanceMeters": 5140,
+              "routeCount": 13
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
