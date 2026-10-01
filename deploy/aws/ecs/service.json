@@ -1,0 +1,30 @@
+{
+  "cluster": "{{CLUSTER_ARN}}",
+  "serviceName": "opentransit-h0",
+  "taskDefinition": "opentransit-h0:{{TASK_DEFINITION_REVISION}}",
+  "desiredCount": 1,
+  "capacityProviderStrategy": [{"capacityProvider": "FARGATE", "weight": 1}],
+  "platformVersion": "1.4.0",
+  "schedulingStrategy": "REPLICA",
+  "deploymentController": {"type": "ECS"},
+  "deploymentConfiguration": {
+    "maximumPercent": 200,
+    "minimumHealthyPercent": 100,
+    "deploymentCircuitBreaker": {"enable": true, "rollback": true}
+  },
+  "networkConfiguration": {
+    "awsvpcConfiguration": {
+      "subnets": ["{{SUBNET_A}}", "{{SUBNET_B}}"],
+      "securityGroups": ["{{TASK_SECURITY_GROUP}}"],
+      "assignPublicIp": "ENABLED"
+    }
+  },
+  "loadBalancers": [
+    {"targetGroupArn": "{{TARGET_GROUP_ARN}}", "containerName": "api", "containerPort": 8000}
+  ],
+  "healthCheckGracePeriodSeconds": 600,
+  "enableExecuteCommand": false,
+  "enableECSManagedTags": true,
+  "propagateTags": "SERVICE",
+  "tags": [{"key": "project", "value": "opentransit"}, {"key": "purpose", "value": "h0-draft"}]
+}

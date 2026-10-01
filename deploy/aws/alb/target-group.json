@@ -1,0 +1,22 @@
+{
+  "Name": "opentransit-h0-api",
+  "Protocol": "HTTP",
+  "ProtocolVersion": "HTTP1",
+  "Port": 8000,
+  "VpcId": "{{VPC_ID}}",
+  "TargetType": "ip",
+  "HealthCheckProtocol": "HTTP",
+  "HealthCheckPort": "traffic-port",
+  "HealthCheckPath": "/readyz",
+  "HealthCheckIntervalSeconds": 10,
+  "HealthCheckTimeoutSeconds": 2,
+  "HealthyThresholdCount": 2,
+  "UnhealthyThresholdCount": 2,
+  "Matcher": {"HttpCode": "200"},
+  "Attributes": [
+    {"Key": "deregistration_delay.timeout_seconds", "Value": "30"},
+    {"Key": "stickiness.enabled", "Value": "false"},
+    {"Key": "load_balancing.algorithm.type", "Value": "round_robin"}
+  ],
+  "Tags": [{"Key": "project", "Value": "opentransit"}, {"Key": "purpose", "Value": "h0-draft"}]
+}
