@@ -114,14 +114,14 @@ def main(argv: list[str] | None = None) -> int:
     complete.add_argument("--osm-reader-path", type=Path, help="directory providing pyosmium")
     complete.add_argument("--import-timeout-seconds", type=int, default=1800)
     complete.add_argument("--photon-timeout-seconds", type=int, default=1800)
-    activate = commands.add_parser(
-        "activate", help="Select a verified, probed generation as current (Linux)"
+    select = commands.add_parser(
+        "select-generation", help="Select a verified, probed generation as current (Linux)"
     )
-    activate.add_argument("--generation", type=Path, required=True)
-    activate.add_argument("--generations-root", type=Path, required=True)
-    activate.add_argument("--engine-origin", required=True, help="loopback origin of its engine")
-    activate.add_argument("--probe", type=Path, help="default: <generation>/probe.json")
-    activate.add_argument("--source-check", type=Path)
+    select.add_argument("--generation", type=Path, required=True)
+    select.add_argument("--generations-root", type=Path, required=True)
+    select.add_argument("--engine-origin", required=True, help="loopback origin of its engine")
+    select.add_argument("--probe", type=Path, help="default: <generation>/probe.json")
+    select.add_argument("--source-check", type=Path)
     repair = commands.add_parser(
         "repair-reference",
         help="Clone a sealed generation and repair exact legacy translation keys",
@@ -151,6 +151,28 @@ def main(argv: list[str] | None = None) -> int:
     ids.add_argument("--previous-date", type=date.fromisoformat, required=True)
     ids.add_argument("--candidate-date", type=date.fromisoformat, required=True)
     ids.add_argument("--output", type=Path, required=True)
+    for name, helptext in (
+        ("activate", "Select a binding, signal the local worker and wait for its acknowledgement"),
+        ("rollback", "Re-check coverage/freshness, then reactivate an older generation binding"),
+    ):
+        op = commands.add_parser(name, help=helptext)
+        op.add_argument("--managed-root", type=Path, required=True)
+        op.add_argument("--ack-dir", type=Path, required=True)
+        op.add_argument("--binding", type=Path, required=True)
+        op.add_argument("--now", type=datetime.fromisoformat, help="Override the check clock")
+        op.add_argument("--timeout", type=float, default=900.0)
+        op.add_argument(
+            "--check-only", action="store_true", help="Report coverage/freshness eligibility only"
+        )
+    retire = commands.add_parser(
+        "await-retirement", help="Wait for the worker to retire the old snapshot"
+    )
+    retire.add_argument("--ack-dir", type=Path, required=True)
+    retire.add_argument("--old-token", required=True)
+    retire.add_argument("--new-token", required=True)
+    retire.add_argument("--incarnation", required=True)
+    retire.add_argument("--deadline-seconds", type=float, default=1.5)
+    retire.add_argument("--timeout", type=float, default=120.0)
     demo = commands.add_parser(
         "demo", help="Plan Dizengoff Center -> Technion against a running API (scheduled)"
     )
@@ -224,7 +246,7 @@ def main(argv: list[str] | None = None) -> int:
                     photon_timeout_seconds=args.photon_timeout_seconds,
                 )
             )
-        elif args.command == "activate":
+        elif args.command == "select-generation":
             from opentransit.build.select_generation import select_generation
 
             print(
@@ -275,6 +297,50 @@ def main(argv: list[str] | None = None) -> int:
             )
             write_evidence(args.output, plan.as_dict())
             print(args.output)
+        elif args.command in {"activate", "rollback", "await-retirement"}:
+            from opentransit.build import local_operator as operator
+
+            try:
+                if args.command == "await-retirement":
+                    result = operator.await_retirement(
+                        args.ack_dir,
+                        old_token=args.old_token,
+                        new_token=args.new_token,
+                        incarnation=args.incarnation,
+                        deadline_seconds=args.deadline_seconds,
+                        timeout=args.timeout,
+                    )
+                else:
+                    action = operator.activate if args.command == "activate" else operator.rollback
+                    extra = {"check_only": True} if args.check_only else {}
+                    if args.check_only and args.command == "activate":
+                        binding = operator.read_binding(
+                            args.binding, args.managed_root.resolve(strict=True), verify=False
+                        )
+                        result = {
+                            "status": "eligible",
+                            "action": "activate",
+                            "currency": operator.check_currency(
+                                binding, args.now or datetime.now(UTC)
+                            ),
+                        }
+                    else:
+                        result = action(
+                            args.managed_root,
+                            args.binding,
+                            args.ack_dir,
+                            now=args.now,
+                            timeout=args.timeout,
+                            **extra,
+                        )
+            except operator.ActivationRefused as exc:
+                result = {"status": "refused", "reasons": exc.reasons, "detail": exc.detail}
+            except operator.ActivationFailed as exc:
+                result = {"status": "failed", "message": str(exc), "detail": exc.detail}
+            except TimeoutError as exc:
+                result = {"status": "timeout", "message": str(exc)}
+            print(json.dumps(result, sort_keys=True, ensure_ascii=False))
+            return 0 if result.get("status") in {"acknowledged", "retired", "eligible"} else 2
     except (OSError, ValueError, RuntimeError, subprocess.SubprocessError) as exc:
         print(f"{type(exc).__name__}: {exc}", file=sys.stderr)
         return 1

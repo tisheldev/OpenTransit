@@ -8,7 +8,7 @@ import signal
 import sys
 import threading
 import time
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -342,6 +342,50 @@ def test_bad_candidate_probe_is_rejected_while_previous_snapshot_keeps_serving(
         assert manager.current_snapshot.motis.client.base_url.port == 58081
         assert client.get("/readyz").status_code == 200
     assert not client.app.state.worker_record_path.exists()
+
+
+@pytest.mark.skipif(os.name != "posix", reason="managed local worker requires Linux file locks")
+def test_rollback_binding_accepts_aging_generation_but_a_new_candidate_does_not(
+    manifest, engine_route, tmp_path, monkeypatch
+):
+    import opentransit.config as config
+
+    monkeypatch.setattr(config.sys, "platform", "linux")
+    root = tmp_path.resolve()
+    generation_dir = _managed_generation(root, manifest, engine_route)
+    current, ack_dir = root / "current.json", root / "acks"
+    candidate = _binding(root, generation_dir, "fresh-candidate")
+    rollback_data = json.loads(candidate.read_text(encoding="utf-8"))
+    rollback_data.update(activationToken="rolled-back", purpose="rollback")
+    rollback = root / "binding-rolled-back.json"
+    write_binding(rollback, rollback_data, root)
+    aging = NOW + timedelta(hours=40)
+    control = {}
+    app = create_app(
+        _settings(root, generation_dir, current, ack_dir),
+        transport=BlockingEngineTransport(engine_route),
+        clock=lambda: aging,
+        signal_installer=_installer(control),
+    )
+    with TestClient(app) as client:
+        manager = client.app.state.snapshot_manager
+        _select(current, candidate)
+        control["trigger"]()
+        failure_path = ack_dir / activation_failure_ack_filename(
+            "fresh-candidate", manager.worker_incarnation_id
+        )
+        deadline = time.monotonic() + 5
+        while not failure_path.exists() and time.monotonic() < deadline:
+            time.sleep(0.01)
+        assert failure_path.is_file()
+        assert manager.current_snapshot is None
+        _select(current, rollback)
+        control["trigger"]()
+        deadline = time.monotonic() + 5
+        while manager.current_snapshot is None and time.monotonic() < deadline:
+            time.sleep(0.01)
+        assert manager.current_binding.activation_token == "rolled-back"
+        assert manager.current_snapshot.generation.freshness(aging) == "aging"
 
 
 @pytest.mark.skipif(os.name != "posix", reason="managed local worker requires Linux file locks")

@@ -1,0 +1,1593 @@
+{
+  "schemaVersion": 1,
+  "kind": "m2-activation-compose",
+  "recordedAtUtc": "2026-10-01T11:16:20.857547+00:00",
+  "status": "failed",
+  "error": null,
+  "scope": "M2.5 local activate/rollback and M2.6 retention in Linux Compose; single local worker; not under-load capacity, crash or fault-injection (M7)",
+  "dataKind": "real generations (read-only artifact mounts) with the pinned real MOTIS engine; generations A and B share one graph volume and differ in reference data; the prune candidate is a labelled tiny synthetic generation",
+  "inputs": {
+    "images": {
+      "opentransit-api:latest": {
+        "id": "sha256:4fbaa262800851c1054617dee0569351f366eb3f5a4a18be5d57865ba434fd80",
+        "repoDigests": []
+      },
+      "ghcr.io/motis-project/motis@sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330": {
+        "id": "sha256:76a15c76bcff11c6f0595fed9a170284e49c2d9017c47bf4da6879a0e7452598",
+        "repoDigests": [
+          "ghcr.io/motis-project/motis@sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330"
+        ]
+      }
+    },
+    "generations": {
+      "m3-functional-blue-20260930-attempt3": {
+        "generationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
+        "manifestSha256": "b13ff51a9c43abc2dd7b383b2bd4a6f7784b5f4ce5efa1e2c0513cc3d9ff0bfd",
+        "referenceSha256": "fb7c677e43157a5431e4c1f51534c0008a93ac42341f9338a0ac1d8e4fbb43f2",
+        "graphTreeSha256": "96c8fb237576a50544a2c03ad1e840c2f12d2b96b9072250c1e66a61c8f7d263",
+        "configSha256": "2f75d87301d97b36461bd5826f0c46a1eb375f0da3434f39ee59563f21b6e998",
+        "parserVersion": 1,
+        "builtAt": "2026-09-30T18:21:10.700556+00:00",
+        "sourceCheckedAt": "2026-09-30T09:33:07.260277+00:00",
+        "coverage": {
+          "from": "2026-09-30T00:00:00+03:00",
+          "until": "2026-10-31T00:00:00+02:00"
+        }
+      },
+      "m4-translations-blue-20260930": {
+        "generationId": "c7b66eee1ad04dddba13f4c5dade5ef2023963a1ac0384857aaf173b9d164aa1",
+        "manifestSha256": "671c87a268060289d0af9dd3b57f8bdb7aa732d9dd288d4dff49a1853b53371a",
+        "referenceSha256": "8f81298d87dbe84478bfd22652b87bd5b7db1e61979a9d00187558fea64605b6",
+        "graphTreeSha256": "96c8fb237576a50544a2c03ad1e840c2f12d2b96b9072250c1e66a61c8f7d263",
+        "configSha256": "2f75d87301d97b36461bd5826f0c46a1eb375f0da3434f39ee59563f21b6e998",
+        "parserVersion": 2,
+        "builtAt": "2026-09-30T19:28:59.565385+00:00",
+        "sourceCheckedAt": "2026-09-30T09:33:07.260277+00:00",
+        "coverage": {
+          "from": "2026-09-30T00:00:00+03:00",
+          "until": "2026-10-31T00:00:00+02:00"
+        }
+      }
+    },
+    "realSourceTreesBefore": {
+      "m3-functional-blue-20260930-attempt3": {
+        "files": 74,
+        "metadataSha256": "c9f77058cb61970b5ea6d655b13d90ff43d07c0260513e5d6a17052213d6f8bf"
+      },
+      "m4-translations-blue-20260930": {
+        "files": 75,
+        "metadataSha256": "dcfe84a25a5600c216c8a329a52d99063d1753a85dd7d38d23b8616ef95e365b"
+      }
+    },
+    "code": {
+      "commit": "0bf945b05b4bea836a09afaa40dc84e163585227",
+      "uncommittedFiles": 0
+    },
+    "probeCorpus": {
+      "source": "m4-functional-evidence-20260930/probe-corpus.json",
+      "sha256": "ef06291bb02b60992e0825ab866916c1b0032805bbbb0b59c12806d98429f26a"
+    },
+    "initialActivation": {
+      "ack": {
+        "ackWriteStartedMonotonic": 4080.946244947,
+        "activationToken": "t2-a-initial",
+        "engineOrigin": "http://127.0.0.1:59081",
+        "generationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
+        "operationToken": "t2-a-initial",
+        "replacedGenerationId": null,
+        "replacedOperationToken": null,
+        "workerId": "api-worker",
+        "workerIncarnationId": "8ba87802fba4415e98ea005692ce128f"
+      },
+      "ackFileMtimeUtc": "2026-10-01T10:27:27.429962+00:00",
+      "action": "activate",
+      "currency": {
+        "checkedAt": "2026-10-01T10:18:32.506960+00:00",
+        "coverage": {
+          "from": "2026-09-30T00:00:00+03:00",
+          "until": "2026-10-31T00:00:00+02:00"
+        },
+        "freshness": "current",
+        "generationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
+        "purpose": "activate",
+        "sourceCheckedAt": "2026-09-30T09:33:07.260277+00:00"
+      },
+      "engineOrigin": "http://127.0.0.1:59081",
+      "generationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
+      "pointerSwappedAt": "2026-10-01T10:18:32.860698+00:00",
+      "previousGenerationId": null,
+      "previousToken": null,
+      "retiredOperationToken": null,
+      "signalledAt": "2026-10-01T10:18:48.156445+00:00",
+      "status": "acknowledged",
+      "token": "t2-a-initial",
+      "workerIncarnationId": "8ba87802fba4415e98ea005692ce128f"
+    },
+    "activation": {
+      "ack": {
+        "ackWriteStartedMonotonic": 5910.698595945,
+        "activationToken": "t2-b-activate",
+        "engineOrigin": "http://127.0.0.1:59082",
+        "generationId": "c7b66eee1ad04dddba13f4c5dade5ef2023963a1ac0384857aaf173b9d164aa1",
+        "operationToken": "t2-b-activate",
+        "replacedGenerationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
+        "replacedOperationToken": "t2-a-initial",
+        "workerId": "api-worker",
+        "workerIncarnationId": "8ba87802fba4415e98ea005692ce128f"
+      },
+      "ackFileMtimeUtc": "2026-10-01T10:57:57.112707+00:00",
+      "action": "activate",
+      "currency": {
+        "checkedAt": "2026-10-01T10:44:24.074526+00:00",
+        "coverage": {
+          "from": "2026-09-30T00:00:00+03:00",
+          "until": "2026-10-31T00:00:00+02:00"
+        },
+        "freshness": "current",
+        "generationId": "c7b66eee1ad04dddba13f4c5dade5ef2023963a1ac0384857aaf173b9d164aa1",
+        "purpose": "activate",
+        "sourceCheckedAt": "2026-09-30T09:33:07.260277+00:00"
+      },
+      "engineOrigin": "http://127.0.0.1:59082",
+      "generationId": "c7b66eee1ad04dddba13f4c5dade5ef2023963a1ac0384857aaf173b9d164aa1",
+      "pointerSwappedAt": "2026-10-01T10:44:24.436801+00:00",
+      "previousGenerationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
+      "previousToken": "671b25b2b40e45daa10329a235f30a2c",
+      "retiredOperationToken": "t2-a-initial",
+      "signalledAt": "2026-10-01T10:44:43.819095+00:00",
+      "status": "acknowledged",
+      "token": "t2-b-activate",
+      "workerIncarnationId": "8ba87802fba4415e98ea005692ce128f"
+    },
+    "retirement": {
+      "ackToRetirementSeconds": 15.019535,
+      "activationAckAtUtc": "2026-10-01T10:57:57.112707+00:00",
+      "graceSeconds": 15.0,
+      "newToken": "t2-b-activate",
+      "oldToken": "t2-a-initial",
+      "requiredSeconds": 15.0,
+      "retiredAtUtc": "2026-10-01T10:58:12.132242+00:00",
+      "retirement": {
+        "activationToken": "t2-a-initial",
+        "engineOrigin": "http://127.0.0.1:59081",
+        "generationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
+        "graceSeconds": 15.0,
+        "operationToken": "t2-a-initial",
+        "retiredAtMonotonic": 5925.711818942,
+        "workerId": "api-worker",
+        "workerIncarnationId": "8ba87802fba4415e98ea005692ce128f"
+      },
+      "status": "retired"
+    },
+    "rollback": {
+      "detail": {
+        "action": "rollback",
+        "currency": {
+          "checkedAt": "2026-10-01T10:58:41.233344+00:00",
+          "coverage": {
+            "from": "2026-09-30T00:00:00+03:00",
+            "until": "2026-10-31T00:00:00+02:00"
+          },
+          "freshness": "current",
+          "generationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
+          "purpose": "rollback",
+          "sourceCheckedAt": "2026-09-30T09:33:07.260277+00:00"
+        },
+        "engineOrigin": "http://127.0.0.1:59081",
+        "failureAck": {
+          "activationToken": "e909976a811740dbaa5a0a4f79b4a954",
+          "activeEngineOrigin": "http://127.0.0.1:59082",
+          "activeGenerationId": "c7b66eee1ad04dddba13f4c5dade5ef2023963a1ac0384857aaf173b9d164aa1",
+          "activeOperationToken": "t2-b-activate",
+          "engineOrigin": "http://127.0.0.1:59081",
+          "failureCode": "factory_rejected",
+          "generationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
+          "operationToken": "e909976a811740dbaa5a0a4f79b4a954",
+          "status": "rejected",
+          "workerId": "api-worker",
+          "workerIncarnationId": "8ba87802fba4415e98ea005692ce128f"
+        },
+        "generationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
+        "pointerGenerationId": "c7b66eee1ad04dddba13f4c5dade5ef2023963a1ac0384857aaf173b9d164aa1",
+        "pointerRestored": true,
+        "pointerSwappedAt": "2026-10-01T10:58:41.564654+00:00",
+        "pointerToken": "101f914eb4844da9af67f187fdc7e990",
+        "previousGenerationId": "c7b66eee1ad04dddba13f4c5dade5ef2023963a1ac0384857aaf173b9d164aa1",
+        "previousToken": "t2-b-activate",
+        "restoreToken": "101f914eb4844da9af67f187fdc7e990",
+        "signalledAt": "2026-10-01T10:58:59.756270+00:00",
+        "status": "rejected",
+        "token": "e909976a811740dbaa5a0a4f79b4a954",
+        "workerIncarnationId": "8ba87802fba4415e98ea005692ce128f"
+      },
+      "message": "Worker did not accept the candidate (rejected)",
+      "status": "failed"
+    },
+    "logExcerpts": {
+      "ot-t2-api": {
+        "lines": 69645,
+        "excerpt": [
+          "INFO:     Started server process [1]",
+          "generation_unavailable kind=FileNotFoundError",
+          "INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)",
+          "generation_reload_failed kind=ValueError",
+          "generation_reload_failed kind=TimeoutError",
+          "INFO:     Started server process [1]",
+          "generation_unavailable kind=FileNotFoundError",
+          "INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)",
+          "generation_reload_failed kind=ValueError",
+          "generation_reload_failed kind=TimeoutError"
+        ]
+      },
+      "ot-t2-motis-a": {
+        "lines": 6,
+        "excerpt": [
+          "2026-10-01T09:56:50Z [info] [server.cc:68] [motis.server] n_threads=16, listening on 127.0.0.1:59091",
+          "2026-10-01T10:58:20Z [info] [server.cc:68] [motis.server] n_threads=16, listening on 127.0.0.1:59091",
+          "2026-10-01T09:56:50Z [info] [server.cc:68] [motis.server] n_threads=16, listening on 127.0.0.1:59091",
+          "2026-10-01T10:58:20Z [info] [server.cc:68] [motis.server] n_threads=16, listening on 127.0.0.1:59091"
+        ]
+      },
+      "ot-t2-motis-b": {
+        "lines": 2,
+        "excerpt": [
+          "2026-10-01T09:56:50Z [info] [server.cc:68] [motis.server] n_threads=16, listening on 127.0.0.1:59092",
+          "2026-10-01T09:56:50Z [info] [server.cc:68] [motis.server] n_threads=16, listening on 127.0.0.1:59092"
+        ]
+      },
+      "ot-t2-proxy": {
+        "lines": 0,
+        "excerpt": []
+      }
+    },
+    "cleanup": {
+      "containersRemaining": 0,
+      "removedByHarness": [
+        "ot-t2-api",
+        "ot-t2-motis-a",
+        "ot-t2-motis-b",
+        "ot-t2-proxy",
+        "ot-t2-init (--rm)"
+      ],
+      "volumeRemoved": "ot-t2-root",
+      "graphVolumeUntouched": "opentransit-graph-d5a097a105eb4d739e683ae2e9910c8f"
+    },
+    "realSourceTreesAfter": {
+      "m3-functional-blue-20260930-attempt3": {
+        "files": 74,
+        "metadataSha256": "c9f77058cb61970b5ea6d655b13d90ff43d07c0260513e5d6a17052213d6f8bf"
+      },
+      "m4-translations-blue-20260930": {
+        "files": 75,
+        "metadataSha256": "dcfe84a25a5600c216c8a329a52d99063d1753a85dd7d38d23b8616ef95e365b"
+      }
+    },
+    "realSourceTreesUnchanged": true,
+    "oldGeneration": "m3-functional-blue-20260930-attempt3",
+    "newGeneration": "m4-translations-blue-20260930",
+    "graphVolume": "opentransit-graph-d5a097a105eb4d739e683ae2e9910c8f",
+    "sourceCheckNote": "per-generation records reconstructed from each manifest's recorded acquisition/validation times; no new upstream check or download",
+    "journeyDeadlineSeconds": 1.5,
+    "proxyDelaySeconds": 0.35,
+    "limits": {
+      "api": "1g",
+      "motisEach": "3g",
+      "proxy": "128m",
+      "hostPort": "127.0.0.1:8300"
+    }
+  },
+  "checks": {
+    "initial_activation_serves_old_generation": {
+      "passed": true,
+      "requests": {
+        "200:85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a": 3
+      },
+      "pointer": "binding-t2-a-initial.json"
+    },
+    "corrupt_candidate_refused_before_pointer_change": {
+      "passed": true,
+      "exitCode": 1,
+      "stderr": "ValueError: Artifact checksum differs from the manifest",
+      "pointer": "binding-t2-a-initial.json"
+    },
+    "failed_reload_preserves_old_serving_state_and_restores_pointer": {
+      "passed": false,
+      "pointerReadsDuringSwapAndRestore": {
+        "reads": 406342,
+        "errors": 0,
+        "targets": [
+          "binding-671b25b2b40e45daa10329a235f30a2c.json",
+          "binding-t2-a-initial.json",
+          "binding-t2-b-mismatched.json"
+        ]
+      },
+      "operator": {
+        "detail": {
+          "action": "activate",
+          "currency": {
+            "checkedAt": "2026-10-01T10:27:50.421177+00:00",
+            "coverage": {
+              "from": "2026-09-30T00:00:00+03:00",
+              "until": "2026-10-31T00:00:00+02:00"
+            },
+            "freshness": "current",
+            "generationId": "c7b66eee1ad04dddba13f4c5dade5ef2023963a1ac0384857aaf173b9d164aa1",
+            "purpose": "activate",
+            "sourceCheckedAt": "2026-09-30T09:33:07.260277+00:00"
+          },
+          "engineOrigin": "http://127.0.0.1:59083",
+          "failureAck": null,
+          "generationId": "c7b66eee1ad04dddba13f4c5dade5ef2023963a1ac0384857aaf173b9d164aa1",
+          "pointerGenerationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
+          "pointerRestored": true,
+          "pointerSwappedAt": "2026-10-01T10:27:50.775138+00:00",
+          "pointerToken": "671b25b2b40e45daa10329a235f30a2c",
+          "previousGenerationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
+          "previousToken": "t2-a-initial",
+          "restoreToken": "671b25b2b40e45daa10329a235f30a2c",
+          "signalledAt": "2026-10-01T10:28:10.102403+00:00",
+          "status": "timeout",
+          "token": "t2-b-mismatched",
+          "workerIncarnationId": "8ba87802fba4415e98ea005692ce128f"
+        },
+        "message": "Worker did not accept the candidate (timeout)",
+        "status": "failed"
+      },
+      "requestsDuringFailedReload": {
+        "200:85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a": 58468,
+        "0:None": 1
+      },
+      "requestCount": 58469,
+      "pointerBefore": "binding-t2-a-initial.json",
+      "pointerAfter": "binding-671b25b2b40e45daa10329a235f30a2c.json",
+      "restoredPointerGenerationIsOld": true,
+      "acksCreated": [
+        "t2-b-mismatched.8ba87802fba4415e98ea005692ce128f.failed.json"
+      ]
+    },
+    "inflight_requests_finish_on_old_generation_then_new_requests_use_new": {
+      "passed": false,
+      "pointerReadsDuringSwap": {
+        "reads": 350119,
+        "errors": 0,
+        "targets": [
+          "binding-671b25b2b40e45daa10329a235f30a2c.json",
+          "binding-t2-b-activate.json"
+        ]
+      },
+      "requestCount": 11155,
+      "perGeneration": {
+        "200:85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a": 10867,
+        "200:c7b66eee1ad04dddba13f4c5dade5ef2023963a1ac0384857aaf173b9d164aa1": 288
+      },
+      "inflightCrossingBoundary": 0,
+      "maxCrossingOverlapMs": 0,
+      "oldStartedAfterBoundaryPlus250ms": 0,
+      "nonSuccess": 0,
+      "proxyDelaySeconds": 0.35,
+      "hostToContainerClockSkewSeconds": -0.01,
+      "boundaryNote": "boundary = start of the first request answered by the new generation"
+    },
+    "old_engine_saw_inflight_requests_complete_after_acknowledgement": {
+      "passed": true,
+      "engineAProxyRequestsStartedBeforeAck": 69350,
+      "engineAProxyRequestsCompletingAfterAck": 6,
+      "engineAProxyRequestsStartedAfterAckDuringGrace": 0,
+      "note": "proxy log timestamps and the ack file mtime share the container clock"
+    },
+    "old_engine_stopped_only_after_ack_and_ten_request_deadlines": {
+      "passed": true,
+      "requiredSeconds": 15.0,
+      "ackToEngineStopSeconds": 15.461945,
+      "ackToRetirementAckSeconds": 15.019535,
+      "engineStillRunningWhenActivationAcked": true,
+      "engineStoppedAt": "2026-10-01T10:58:12.574652+00:00",
+      "activationAckedAt": "2026-10-01T10:57:57.112707+00:00",
+      "requestsAfterOldEngineStopped": {
+        "200:c7b66eee1ad04dddba13f4c5dade5ef2023963a1ac0384857aaf173b9d164aa1": 4
+      },
+      "stopCommandStartedAtHost": "2026-10-01T10:58:12.313939+00:00"
+    },
+    "rollback_refuses_expired_freshness_and_coverage_without_touching_pointer": {
+      "passed": true,
+      "reasons": {
+        "expired_freshness": [
+          "source_expired"
+        ],
+        "expired_coverage": [
+          "coverage_expired",
+          "source_expired"
+        ]
+      },
+      "pointerUnchanged": true,
+      "requestsAfterRefusal": {
+        "200:c7b66eee1ad04dddba13f4c5dade5ef2023963a1ac0384857aaf173b9d164aa1": 3
+      }
+    },
+    "stale_generation_is_rollback_serviceable_but_new_candidate_needs_current": {
+      "passed": true,
+      "simulatedNow": "2026-10-03T10:00:00+00:00",
+      "rollbackEligibility": {
+        "action": "rollback",
+        "currency": {
+          "checkedAt": "2026-10-03T10:00:00+00:00",
+          "coverage": {
+            "from": "2026-09-30T00:00:00+03:00",
+            "until": "2026-10-31T00:00:00+02:00"
+          },
+          "freshness": "stale",
+          "generationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
+          "purpose": "rollback",
+          "sourceCheckedAt": "2026-09-30T09:33:07.260277+00:00"
+        },
+        "status": "eligible"
+      },
+      "newCandidateRefusal": {
+        "detail": {
+          "checkedAt": "2026-10-03T10:00:00+00:00",
+          "coverage": {
+            "from": "2026-09-30T00:00:00+03:00",
+            "until": "2026-10-31T00:00:00+02:00"
+          },
+          "freshness": "stale",
+          "generationId": "c7b66eee1ad04dddba13f4c5dade5ef2023963a1ac0384857aaf173b9d164aa1",
+          "purpose": "activate",
+          "sourceCheckedAt": "2026-09-30T09:33:07.260277+00:00"
+        },
+        "reasons": [
+          "source_stale"
+        ],
+        "status": "refused"
+      },
+      "note": "simulated operator clock only; the worker serves with the real clock"
+    },
+    "rollback_succeeds_for_valid_previous_generation": {
+      "passed": false,
+      "operatorReport": {
+        "detail": {
+          "action": "rollback",
+          "currency": {
+            "checkedAt": "2026-10-01T10:58:41.233344+00:00",
+            "coverage": {
+              "from": "2026-09-30T00:00:00+03:00",
+              "until": "2026-10-31T00:00:00+02:00"
+            },
+            "freshness": "current",
+            "generationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
+            "purpose": "rollback",
+            "sourceCheckedAt": "2026-09-30T09:33:07.260277+00:00"
+          },
+          "engineOrigin": "http://127.0.0.1:59081",
+          "failureAck": {
+            "activationToken": "e909976a811740dbaa5a0a4f79b4a954",
+            "activeEngineOrigin": "http://127.0.0.1:59082",
+            "activeGenerationId": "c7b66eee1ad04dddba13f4c5dade5ef2023963a1ac0384857aaf173b9d164aa1",
+            "activeOperationToken": "t2-b-activate",
+            "engineOrigin": "http://127.0.0.1:59081",
+            "failureCode": "factory_rejected",
+            "generationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
+            "operationToken": "e909976a811740dbaa5a0a4f79b4a954",
+            "status": "rejected",
+            "workerId": "api-worker",
+            "workerIncarnationId": "8ba87802fba4415e98ea005692ce128f"
+          },
+          "generationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
+          "pointerGenerationId": "c7b66eee1ad04dddba13f4c5dade5ef2023963a1ac0384857aaf173b9d164aa1",
+          "pointerRestored": true,
+          "pointerSwappedAt": "2026-10-01T10:58:41.564654+00:00",
+          "pointerToken": "101f914eb4844da9af67f187fdc7e990",
+          "previousGenerationId": "c7b66eee1ad04dddba13f4c5dade5ef2023963a1ac0384857aaf173b9d164aa1",
+          "previousToken": "t2-b-activate",
+          "restoreToken": "101f914eb4844da9af67f187fdc7e990",
+          "signalledAt": "2026-10-01T10:58:59.756270+00:00",
+          "status": "rejected",
+          "token": "e909976a811740dbaa5a0a4f79b4a954",
+          "workerIncarnationId": "8ba87802fba4415e98ea005692ce128f"
+        },
+        "message": "Worker did not accept the candidate (rejected)",
+        "status": "failed"
+      },
+      "requestsAfterRollback": {
+        "200:c7b66eee1ad04dddba13f4c5dade5ef2023963a1ac0384857aaf173b9d164aa1": 4
+      },
+      "engineAReadySeconds": 3.8,
+      "retirementAfterRollback": false
+    },
+    "prune_dry_run_lists_candidates_and_deletes_nothing": {
+      "passed": true,
+      "plans": {
+        "unpinned": {
+          "exitCode": 0,
+          "deletionPerformed": false,
+          "candidates": [
+            "synthetic-synth-old"
+          ],
+          "retained": [
+            {
+              "generationId": null,
+              "reason": "unverified: [Errno 2] No such file or directory: '/managed/acks/manifest.json'"
+            },
+            {
+              "generationId": null,
+              "reason": "symlink or junction is retained without traversal"
+            },
+            {
+              "generationId": null,
+              "reason": "unverified: Artifact checksum differs from the manifest"
+            },
+            {
+              "generationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
+              "reason": "previous generation"
+            },
+            {
+              "generationId": "c7b66eee1ad04dddba13f4c5dade5ef2023963a1ac0384857aaf173b9d164aa1",
+              "reason": "active generation"
+            }
+          ]
+        }
+      },
+      "managedRootEntriesBefore": 44,
+      "managedRootEntriesAfter": 44,
+      "realSourceTreesUnchanged": true,
+      "note": "the candidate is a tiny synthetic generation; real generations have no older verified sibling"
+    }
+  },
+  "timings": {
+    "stackStartSeconds": 5.7,
+    "evidenceSeconds": 1269.4,
+    "initialActivationSeconds": 536.1,
+    "failedReloadSeconds": 971.0,
+    "activationUnderLoadSeconds": 815.2,
+    "rollbackSeconds": 842.9
+  },
+  "peakMemoryBytesSampled": {
+    "ot-t2-api": 109051904,
+    "ot-t2-motis-a": 717225984,
+    "ot-t2-motis-b": 697093324,
+    "ot-t2-proxy": 17605591
+  },
+  "commands": [
+    {
+      "label": "docker info",
+      "argv": [
+        "docker",
+        "info"
+      ],
+      "startedAt": "2026-10-01T09:56:46.276399+00:00",
+      "seconds": 0.63,
+      "exitCode": 0
+    },
+    {
+      "label": "docker ps -a --filter",
+      "argv": [
+        "docker",
+        "ps",
+        "-a",
+        "--filter",
+        "name=ot-t2-",
+        "-q"
+      ],
+      "startedAt": "2026-10-01T09:56:46.909035+00:00",
+      "seconds": 0.2,
+      "exitCode": 0
+    },
+    {
+      "label": "docker volume ls -q",
+      "argv": [
+        "docker",
+        "volume",
+        "ls",
+        "-q"
+      ],
+      "startedAt": "2026-10-01T09:56:47.108328+00:00",
+      "seconds": 0.2,
+      "exitCode": 0
+    },
+    {
+      "label": "docker image inspect opentransit-api:latest",
+      "argv": [
+        "docker",
+        "image",
+        "inspect",
+        "opentransit-api:latest"
+      ],
+      "startedAt": "2026-10-01T09:56:47.308586+00:00",
+      "seconds": 0.19,
+      "exitCode": 0
+    },
+    {
+      "label": "docker image inspect ghcr.io/motis-project/motis@sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330",
+      "argv": [
+        "docker",
+        "image",
+        "inspect",
+        "ghcr.io/motis-project/motis@sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330"
+      ],
+      "startedAt": "2026-10-01T09:56:47.498330+00:00",
+      "seconds": 0.18,
+      "exitCode": 0
+    },
+    {
+      "label": "git -C C:\\Projects\\OpenTransit\\.claude\\worktrees\\agent-a5a4e4dcafdaf06fe rev-parse",
+      "argv": [
+        "git",
+        "-C",
+        "C:\\Projects\\OpenTransit\\.claude\\worktrees\\agent-a5a4e4dcafdaf06fe",
+        "rev-parse",
+        "HEAD"
+      ],
+      "startedAt": "2026-10-01T09:56:47.731951+00:00",
+      "seconds": 0.03,
+      "exitCode": 0
+    },
+    {
+      "label": "git -C C:\\Projects\\OpenTransit\\.claude\\worktrees\\agent-a5a4e4dcafdaf06fe status",
+      "argv": [
+        "git",
+        "-C",
+        "C:\\Projects\\OpenTransit\\.claude\\worktrees\\agent-a5a4e4dcafdaf06fe",
+        "status",
+        "--porcelain"
+      ],
+      "startedAt": "2026-10-01T09:56:47.757577+00:00",
+      "seconds": 0.03,
+      "exitCode": 0
+    },
+    {
+      "label": "create managed volume",
+      "argv": [
+        "docker",
+        "volume",
+        "create",
+        "ot-t2-root"
+      ],
+      "startedAt": "2026-10-01T09:56:47.796618+00:00",
+      "seconds": 0.19,
+      "exitCode": 0
+    },
+    {
+      "label": "init managed volume (copy manifests and configs only)",
+      "argv": [
+        "docker",
+        "run",
+        "--rm",
+        "--name",
+        "ot-t2-init",
+        "--user",
+        "0",
+        "--memory",
+        "64m",
+        "-v",
+        "ot-t2-root:/managed",
+        "-v"
+      ],
+      "startedAt": "2026-10-01T09:56:47.988951+00:00",
+      "seconds": 1.01,
+      "exitCode": 0
+    },
+    {
+      "label": "compose up",
+      "argv": [
+        "docker",
+        "compose",
+        "-f",
+        "C:\\Projects\\OpenTransit\\.claude\\worktrees\\agent-a5a4e4dcafdaf06fe\\services\\api\\tools\\activation-compose.yaml",
+        "up",
+        "-d"
+      ],
+      "startedAt": "2026-10-01T09:56:48.995112+00:00",
+      "seconds": 0.99,
+      "exitCode": 0
+    },
+    {
+      "label": "python probe",
+      "argv": [
+        "docker",
+        "exec",
+        "ot-t2-api",
+        "/app/.venv/bin/python",
+        "-c",
+        "import urllib.request as u;u.urlopen('http://127.0.0.1:8000/healthz',timeout=3)"
+      ],
+      "startedAt": "2026-10-01T09:56:49.982251+00:00",
+      "seconds": 0.43,
+      "exitCode": 1
+    },
+    {
+      "label": "python probe",
+      "argv": [
+        "docker",
+        "exec",
+        "ot-t2-api",
+        "/app/.venv/bin/python",
+        "-c",
+        "import urllib.request as u;u.urlopen('http://127.0.0.1:8000/healthz',timeout=3)"
+      ],
+      "startedAt": "2026-10-01T09:56:52.416246+00:00",
+      "seconds": 0.38,
+      "exitCode": 0
+    },
+    {
+      "label": "python probe",
+      "argv": [
+        "docker",
+        "exec",
+        "ot-t2-api",
+        "/app/.venv/bin/python",
+        "-c",
+        "import urllib.request as u;u.urlopen('http://127.0.0.1:59081/api/v6/plan?fromPlace=32.0836,34.7981&toPlace=32.0838,34.8044&time=2026-10-05T05:00:00Z',timeout=5)"
+      ],
+      "startedAt": "2026-10-01T09:56:52.800345+00:00",
+      "seconds": 0.35,
+      "exitCode": 0
+    },
+    {
+      "label": "python probe",
+      "argv": [
+        "docker",
+        "exec",
+        "ot-t2-api",
+        "/app/.venv/bin/python",
+        "-c",
+        "import urllib.request as u;u.urlopen('http://127.0.0.1:59082/api/v6/plan?fromPlace=32.0836,34.7981&toPlace=32.0838,34.8044&time=2026-10-05T05:00:00Z',timeout=5)"
+      ],
+      "startedAt": "2026-10-01T09:56:53.153500+00:00",
+      "seconds": 0.36,
+      "exitCode": 0
+    },
+    {
+      "label": "tools source-check",
+      "argv": [
+        "docker",
+        "exec",
+        "ot-t2-api",
+        "/app/.venv/bin/python",
+        "/tools/activation_container_tools.py",
+        "source-check",
+        "--generation",
+        "/managed/gen-a",
+        "--out",
+        "/managed/gen-a/source-check.json"
+      ],
+      "startedAt": "2026-10-01T09:56:53.509107+00:00",
+      "seconds": 0.37,
+      "exitCode": 0
+    },
+    {
+      "label": "opentransit probe gen-a",
+      "argv": [
+        "docker",
+        "exec",
+        "ot-t2-api",
+        "/app/.venv/bin/python",
+        "-m",
+        "opentransit.build.cli",
+        "probe",
+        "--generation",
+        "/managed/gen-a",
+        "--engine-url",
+        "http://127.0.0.1:59081",
+        "--queries"
+      ],
+      "startedAt": "2026-10-01T09:56:53.882481+00:00",
+      "seconds": 637.47,
+      "exitCode": 0
+    },
+    {
+      "label": "tools source-check",
+      "argv": [
+        "docker",
+        "exec",
+        "ot-t2-api",
+        "/app/.venv/bin/python",
+        "/tools/activation_container_tools.py",
+        "source-check",
+        "--generation",
+        "/managed/gen-b",
+        "--out",
+        "/managed/gen-b/source-check.json"
+      ],
+      "startedAt": "2026-10-01T10:07:31.356180+00:00",
+      "seconds": 0.47,
+      "exitCode": 0
+    },
+    {
+      "label": "opentransit probe gen-b",
+      "argv": [
+        "docker",
+        "exec",
+        "ot-t2-api",
+        "/app/.venv/bin/python",
+        "-m",
+        "opentransit.build.cli",
+        "probe",
+        "--generation",
+        "/managed/gen-b",
+        "--engine-url",
+        "http://127.0.0.1:59082",
+        "--queries"
+      ],
+      "startedAt": "2026-10-01T10:07:31.829743+00:00",
+      "seconds": 631.05,
+      "exitCode": 0
+    },
+    {
+      "label": "bind t2-a-initial",
+      "argv": [
+        "docker",
+        "exec",
+        "ot-t2-api",
+        "/app/.venv/bin/python",
+        "/tools/activation_container_tools.py",
+        "bind",
+        "--generation",
+        "/managed/gen-a",
+        "--origin",
+        "http://127.0.0.1:59081",
+        "--probe",
+        "/managed/gen-a/probe.json"
+      ],
+      "startedAt": "2026-10-01T10:18:02.881854+00:00",
+      "seconds": 28.79,
+      "exitCode": 0
+    },
+    {
+      "label": "opentransit activate binding-t2-a-initial",
+      "argv": [
+        "docker",
+        "exec",
+        "ot-t2-api",
+        "/app/.venv/bin/python",
+        "-m",
+        "opentransit.build.cli",
+        "activate",
+        "--managed-root",
+        "/managed",
+        "--ack-dir",
+        "/managed/acks",
+        "--binding"
+      ],
+      "startedAt": "2026-10-01T10:18:31.682400+00:00",
+      "seconds": 536.08,
+      "exitCode": 0
+    },
+    {
+      "label": "docker exec ot-t2-api readlink",
+      "argv": [
+        "docker",
+        "exec",
+        "ot-t2-api",
+        "readlink",
+        "/managed/current"
+      ],
+      "startedAt": "2026-10-01T10:27:28.247030+00:00",
+      "seconds": 0.22,
+      "exitCode": 0
+    },
+    {
+      "label": "docker exec ot-t2-api readlink",
+      "argv": [
+        "docker",
+        "exec",
+        "ot-t2-api",
+        "readlink",
+        "/managed/current"
+      ],
+      "startedAt": "2026-10-01T10:27:28.465746+00:00",
+      "seconds": 0.19,
+      "exitCode": 0
+    },
+    {
+      "label": "docker exec ot-t2-api ls",
+      "argv": [
+        "docker",
+        "exec",
+        "ot-t2-api",
+        "ls",
+        "/managed/acks"
+      ],
+      "startedAt": "2026-10-01T10:27:28.651400+00:00",
+      "seconds": 0.22,
+      "exitCode": 0
+    },
+    {
+      "label": "tools corrupt",
+      "argv": [
+        "docker",
+        "exec",
+        "ot-t2-api",
+        "/app/.venv/bin/python",
+        "/tools/activation_container_tools.py",
+        "corrupt",
+        "--name",
+        "gen-x",
+        "--source",
+        "/managed/gen-b"
+      ],
+      "startedAt": "2026-10-01T10:27:28.867730+00:00",
+      "seconds": 0.37,
+      "exitCode": 0
+    },
+    {
+      "label": "tools source-check",
+      "argv": [
+        "docker",
+        "exec",
+        "ot-t2-api",
+        "/app/.venv/bin/python",
+        "/tools/activation_container_tools.py",
+        "source-check",
+        "--generation",
+        "/managed/gen-b",
+        "--out",
+        "/managed/gen-x/source-check.json"
+      ],
+      "startedAt": "2026-10-01T10:27:29.241231+00:00",
+      "seconds": 0.34,
+      "exitCode": 0
+    },
+    {
+      "label": "docker exec ot-t2-api /app/.venv/bin/python",
+      "argv": [
+        "docker",
+        "exec",
+        "ot-t2-api",
+        "/app/.venv/bin/python",
+        "-c",
+        "import shutil;shutil.copy('/managed/gen-b/probe.json','/managed/gen-x/probe.json')"
+      ],
+      "startedAt": "2026-10-01T10:27:29.583212+00:00",
+      "seconds": 0.22,
+      "exitCode": 0
+    },
+    {
+      "label": "docker exec ot-t2-api /app/.venv/bin/python",
+      "argv": [
+        "docker",
+        "exec",
+        "ot-t2-api",
+        "/app/.venv/bin/python",
+        "-c",
+        "import json;from pathlib import Path;m=json.loads(Path('/managed/gen-b/manifest.json').read_text());Path('/managed/binding-t2-corrupt.json').write_text(json.dumps({'generationDir':'/managed/gen-x','engineOrigin':'http://127.0.0.1:59082','probePath':'/managed/gen-x/probe.json','sourceCheckPath':'/managed/gen-x/source-check.json','activationToken':'t2-corrupt','generationId':m['generationId']}))"
+      ],
+      "startedAt": "2026-10-01T10:27:29.799757+00:00",
+      "seconds": 0.22,
+      "exitCode": 0
+    },
+    {
+      "label": "opentransit activate binding-t2-corrupt",
+      "argv": [
+        "docker",
+        "exec",
+        "ot-t2-api",
+        "/app/.venv/bin/python",
+        "-m",
+        "opentransit.build.cli",
+        "activate",
+        "--managed-root",
+        "/managed",
+        "--ack-dir",
+        "/managed/acks",
+        "--binding"
+      ],
+      "startedAt": "2026-10-01T10:27:30.016541+00:00",
+      "seconds": 1.21,
+      "exitCode": 1
+    },
+    {
+      "label": "docker exec ot-t2-api readlink",
+      "argv": [
+        "docker",
+        "exec",
+        "ot-t2-api",
+        "readlink",
+        "/managed/current"
+      ],
+      "startedAt": "2026-10-01T10:27:31.229781+00:00",
+      "seconds": 0.19,
+      "exitCode": 0
+    },
+    {
+      "label": "docker exec ot-t2-api readlink",
+      "argv": [
+        "docker",
+        "exec",
+        "ot-t2-api",
+        "readlink",
+        "/managed/current"
+      ],
+      "startedAt": "2026-10-01T10:27:31.415836+00:00",
+      "seconds": 0.19,
+      "exitCode": 0
+    },
+    {
+      "label": "bind t2-b-mismatched",
+      "argv": [
+        "docker",
+        "exec",
+        "ot-t2-api",
+        "/app/.venv/bin/python",
+        "/tools/activation_container_tools.py",
+        "bind",
+        "--generation",
+        "/managed/gen-b",
+        "--origin",
+        "http://127.0.0.1:59083",
+        "--probe",
+        "/managed/gen-b/probe.json"
+      ],
+      "startedAt": "2026-10-01T10:27:31.602567+00:00",
+      "seconds": 16.9,
+      "exitCode": 0
+    },
+    {
+      "label": "opentransit activate binding-t2-b-mismatched",
+      "argv": [
+        "docker",
+        "exec",
+        "ot-t2-api",
+        "/app/.venv/bin/python",
+        "-m",
+        "opentransit.build.cli",
+        "activate",
+        "--managed-root",
+        "/managed",
+        "--ack-dir",
+        "/managed/acks",
+        "--binding"
+      ],
+      "startedAt": "2026-10-01T10:27:49.512066+00:00",
+      "seconds": 971.03,
+      "exitCode": 2
+    },
+    {
+      "label": "docker exec ot-t2-api readlink",
+      "argv": [
+        "docker",
+        "exec",
+        "ot-t2-api",
+        "readlink",
+        "/managed/current"
+      ],
+      "startedAt": "2026-10-01T10:44:02.320521+00:00",
+      "seconds": 0.28,
+      "exitCode": 0
+    },
+    {
+      "label": "docker exec ot-t2-api cat",
+      "argv": [
+        "docker",
+        "exec",
+        "ot-t2-api",
+        "cat",
+        "/managed/binding-671b25b2b40e45daa10329a235f30a2c.json"
+      ],
+      "startedAt": "2026-10-01T10:44:02.599750+00:00",
+      "seconds": 0.23,
+      "exitCode": 0
+    },
+    {
+      "label": "docker exec ot-t2-api ls",
+      "argv": [
+        "docker",
+        "exec",
+        "ot-t2-api",
+        "ls",
+        "/managed/acks"
+      ],
+      "startedAt": "2026-10-01T10:44:02.847075+00:00",
+      "seconds": 0.23,
+      "exitCode": 0
+    },
+    {
+      "label": "bind t2-b-activate",
+      "argv": [
+        "docker",
+        "exec",
+        "ot-t2-api",
+        "/app/.venv/bin/python",
+        "/tools/activation_container_tools.py",
+        "bind",
+        "--generation",
+        "/managed/gen-b",
+        "--origin",
+        "http://127.0.0.1:59082",
+        "--probe",
+        "/managed/gen-b/probe.json"
+      ],
+      "startedAt": "2026-10-01T10:44:03.079998+00:00",
+      "seconds": 17.68,
+      "exitCode": 0
+    },
+    {
+      "label": "python probe",
+      "argv": [
+        "docker",
+        "exec",
+        "ot-t2-api",
+        "/app/.venv/bin/python",
+        "-c",
+        "import time;print(time.time())"
+      ],
+      "startedAt": "2026-10-01T10:44:20.758140+00:00",
+      "seconds": 0.24,
+      "exitCode": 0
+    },
+    {
+      "label": "opentransit activate binding-t2-b-activate",
+      "argv": [
+        "docker",
+        "exec",
+        "ot-t2-api",
+        "/app/.venv/bin/python",
+        "-m",
+        "opentransit.build.cli",
+        "activate",
+        "--managed-root",
+        "/managed",
+        "--ack-dir",
+        "/managed/acks",
+        "--binding"
+      ],
+      "startedAt": "2026-10-01T10:44:23.017905+00:00",
+      "seconds": 815.21,
+      "exitCode": 0
+    },
+    {
+      "label": "docker inspect ot-t2-motis-a",
+      "argv": [
+        "docker",
+        "inspect",
+        "ot-t2-motis-a"
+      ],
+      "startedAt": "2026-10-01T10:58:02.858936+00:00",
+      "seconds": 0.18,
+      "exitCode": 0
+    },
+    {
+      "label": "opentransit await-retirement",
+      "argv": [
+        "docker",
+        "exec",
+        "ot-t2-api",
+        "/app/.venv/bin/python",
+        "-m",
+        "opentransit.build.cli",
+        "await-retirement",
+        "--ack-dir",
+        "/managed/acks",
+        "--old-token",
+        "t2-a-initial",
+        "--new-token"
+      ],
+      "startedAt": "2026-10-01T10:58:03.037969+00:00",
+      "seconds": 9.28,
+      "exitCode": 0
+    },
+    {
+      "label": "docker stop ot-t2-motis-a (after retirement gate)",
+      "argv": [
+        "docker",
+        "stop",
+        "-t",
+        "20",
+        "ot-t2-motis-a"
+      ],
+      "startedAt": "2026-10-01T10:58:12.313953+00:00",
+      "seconds": 0.51,
+      "exitCode": 0
+    },
+    {
+      "label": "docker inspect ot-t2-motis-a",
+      "argv": [
+        "docker",
+        "inspect",
+        "ot-t2-motis-a"
+      ],
+      "startedAt": "2026-10-01T10:58:12.828813+00:00",
+      "seconds": 0.18,
+      "exitCode": 0
+    },
+    {
+      "label": "docker exec ot-t2-api readlink",
+      "argv": [
+        "docker",
+        "exec",
+        "ot-t2-api",
+        "readlink",
+        "/managed/current"
+      ],
+      "startedAt": "2026-10-01T10:58:13.196568+00:00",
+      "seconds": 0.2,
+      "exitCode": 0
+    },
+    {
+      "label": "opentransit rollback binding-t2-a-initial",
+      "argv": [
+        "docker",
+        "exec",
+        "ot-t2-api",
+        "/app/.venv/bin/python",
+        "-m",
+        "opentransit.build.cli",
+        "rollback",
+        "--managed-root",
+        "/managed",
+        "--ack-dir",
+        "/managed/acks",
+        "--binding"
+      ],
+      "startedAt": "2026-10-01T10:58:13.396849+00:00",
+      "seconds": 1.0,
+      "exitCode": 2
+    },
+    {
+      "label": "opentransit rollback binding-t2-a-initial",
+      "argv": [
+        "docker",
+        "exec",
+        "ot-t2-api",
+        "/app/.venv/bin/python",
+        "-m",
+        "opentransit.build.cli",
+        "rollback",
+        "--managed-root",
+        "/managed",
+        "--ack-dir",
+        "/managed/acks",
+        "--binding"
+      ],
+      "startedAt": "2026-10-01T10:58:14.395573+00:00",
+      "seconds": 1.08,
+      "exitCode": 2
+    },
+    {
+      "label": "docker exec ot-t2-api readlink",
+      "argv": [
+        "docker",
+        "exec",
+        "ot-t2-api",
+        "readlink",
+        "/managed/current"
+      ],
+      "startedAt": "2026-10-01T10:58:15.599589+00:00",
+      "seconds": 0.24,
+      "exitCode": 0
+    },
+    {
+      "label": "docker exec ot-t2-api readlink",
+      "argv": [
+        "docker",
+        "exec",
+        "ot-t2-api",
+        "readlink",
+        "/managed/current"
+      ],
+      "startedAt": "2026-10-01T10:58:15.843561+00:00",
+      "seconds": 0.25,
+      "exitCode": 0
+    },
+    {
+      "label": "opentransit rollback binding-t2-a-initial",
+      "argv": [
+        "docker",
+        "exec",
+        "ot-t2-api",
+        "/app/.venv/bin/python",
+        "-m",
+        "opentransit.build.cli",
+        "rollback",
+        "--managed-root",
+        "/managed",
+        "--ack-dir",
+        "/managed/acks",
+        "--binding"
+      ],
+      "startedAt": "2026-10-01T10:58:16.091737+00:00",
+      "seconds": 0.96,
+      "exitCode": 0
+    },
+    {
+      "label": "opentransit activate binding-t2-b-activate",
+      "argv": [
+        "docker",
+        "exec",
+        "ot-t2-api",
+        "/app/.venv/bin/python",
+        "-m",
+        "opentransit.build.cli",
+        "activate",
+        "--managed-root",
+        "/managed",
+        "--ack-dir",
+        "/managed/acks",
+        "--binding"
+      ],
+      "startedAt": "2026-10-01T10:58:17.054464+00:00",
+      "seconds": 0.98,
+      "exitCode": 2
+    },
+    {
+      "label": "docker exec ot-t2-api readlink",
+      "argv": [
+        "docker",
+        "exec",
+        "ot-t2-api",
+        "readlink",
+        "/managed/current"
+      ],
+      "startedAt": "2026-10-01T10:58:18.030562+00:00",
+      "seconds": 0.2,
+      "exitCode": 0
+    },
+    {
+      "label": "docker start ot-t2-motis-a",
+      "argv": [
+        "docker",
+        "start",
+        "ot-t2-motis-a"
+      ],
+      "startedAt": "2026-10-01T10:58:18.231454+00:00",
+      "seconds": 0.31,
+      "exitCode": 0
+    },
+    {
+      "label": "python probe",
+      "argv": [
+        "docker",
+        "exec",
+        "ot-t2-api",
+        "/app/.venv/bin/python",
+        "-c",
+        "import urllib.request as u;u.urlopen('http://127.0.0.1:59081/api/v6/plan?fromPlace=32.0836,34.7981&toPlace=32.0838,34.8044&time=2026-10-05T05:00:00Z',timeout=5)"
+      ],
+      "startedAt": "2026-10-01T10:58:18.541523+00:00",
+      "seconds": 0.42,
+      "exitCode": 1
+    },
+    {
+      "label": "python probe",
+      "argv": [
+        "docker",
+        "exec",
+        "ot-t2-api",
+        "/app/.venv/bin/python",
+        "-c",
+        "import urllib.request as u;u.urlopen('http://127.0.0.1:59081/api/v6/plan?fromPlace=32.0836,34.7981&toPlace=32.0838,34.8044&time=2026-10-05T05:00:00Z',timeout=5)"
+      ],
+      "startedAt": "2026-10-01T10:58:21.958400+00:00",
+      "seconds": 0.38,
+      "exitCode": 0
+    },
+    {
+      "label": "opentransit rollback binding-t2-a-initial",
+      "argv": [
+        "docker",
+        "exec",
+        "ot-t2-api",
+        "/app/.venv/bin/python",
+        "-m",
+        "opentransit.build.cli",
+        "rollback",
+        "--managed-root",
+        "/managed",
+        "--ack-dir",
+        "/managed/acks",
+        "--binding"
+      ],
+      "startedAt": "2026-10-01T10:58:22.334702+00:00",
+      "seconds": 842.94,
+      "exitCode": 2
+    },
+    {
+      "label": "opentransit await-retirement (after rollback)",
+      "argv": [
+        "docker",
+        "exec",
+        "ot-t2-api",
+        "/app/.venv/bin/python",
+        "-m",
+        "opentransit.build.cli",
+        "await-retirement",
+        "--ack-dir",
+        "/managed/acks",
+        "--old-token",
+        "unknown",
+        "--new-token"
+      ],
+      "startedAt": "2026-10-01T11:12:26.677452+00:00",
+      "seconds": 182.26,
+      "exitCode": 2
+    },
+    {
+      "label": "tools synth-old",
+      "argv": [
+        "docker",
+        "exec",
+        "ot-t2-api",
+        "/app/.venv/bin/python",
+        "/tools/activation_container_tools.py",
+        "synth-old",
+        "--name",
+        "synth-old"
+      ],
+      "startedAt": "2026-10-01T11:15:28.939070+00:00",
+      "seconds": 0.41,
+      "exitCode": 0
+    },
+    {
+      "label": "tools listing",
+      "argv": [
+        "docker",
+        "exec",
+        "ot-t2-api",
+        "/app/.venv/bin/python",
+        "/tools/activation_container_tools.py",
+        "listing"
+      ],
+      "startedAt": "2026-10-01T11:15:29.354102+00:00",
+      "seconds": 0.39,
+      "exitCode": 0
+    },
+    {
+      "label": "opentransit prune --dry-run (unpinned)",
+      "argv": [
+        "docker",
+        "exec",
+        "ot-t2-api",
+        "/app/.venv/bin/python",
+        "-m",
+        "opentransit.build.cli",
+        "prune",
+        "--generations-root",
+        "/managed",
+        "--active",
+        "c7b66eee1ad04dddba13f4c5dade5ef2023963a1ac0384857aaf173b9d164aa1",
+        "--previous"
+      ],
+      "startedAt": "2026-10-01T11:15:29.770553+00:00",
+      "seconds": 36.27,
+      "exitCode": 0
+    },
+    {
+      "label": "tools listing",
+      "argv": [
+        "docker",
+        "exec",
+        "ot-t2-api",
+        "/app/.venv/bin/python",
+        "/tools/activation_container_tools.py",
+        "listing"
+      ],
+      "startedAt": "2026-10-01T11:16:06.039320+00:00",
+      "seconds": 0.45,
+      "exitCode": 0
+    },
+    {
+      "label": "docker logs ot-t2-api",
+      "argv": [
+        "docker",
+        "logs",
+        "ot-t2-api"
+      ],
+      "startedAt": "2026-10-01T11:16:06.499369+00:00",
+      "seconds": 0.6,
+      "exitCode": 0
+    },
+    {
+      "label": "docker logs ot-t2-motis-a",
+      "argv": [
+        "docker",
+        "logs",
+        "ot-t2-motis-a"
+      ],
+      "startedAt": "2026-10-01T11:16:07.519734+00:00",
+      "seconds": 0.19,
+      "exitCode": 0
+    },
+    {
+      "label": "docker logs ot-t2-motis-b",
+      "argv": [
+        "docker",
+        "logs",
+        "ot-t2-motis-b"
+      ],
+      "startedAt": "2026-10-01T11:16:07.715428+00:00",
+      "seconds": 0.19,
+      "exitCode": 0
+    },
+    {
+      "label": "docker logs ot-t2-proxy",
+      "argv": [
+        "docker",
+        "logs",
+        "ot-t2-proxy"
+      ],
+      "startedAt": "2026-10-01T11:16:07.903068+00:00",
+      "seconds": 0.2,
+      "exitCode": 0
+    },
+    {
+      "label": "export bindings, acks, probes and checks (json only)",
+      "argv": [
+        "docker",
+        "exec",
+        "ot-t2-api",
+        "sh",
+        "-c",
+        "cd /managed && find . -path '*/motis' -prune -o -type f -name '*.json' -print | tar -cf /run-data/managed-evidence.tar -T -"
+      ],
+      "startedAt": "2026-10-01T11:16:08.104106+00:00",
+      "seconds": 0.29,
+      "exitCode": 0
+    },
+    {
+      "label": "compose down",
+      "argv": [
+        "docker",
+        "compose",
+        "-f",
+        "C:\\Projects\\OpenTransit\\.claude\\worktrees\\agent-a5a4e4dcafdaf06fe\\services\\api\\tools\\activation-compose.yaml",
+        "down"
+      ],
+      "startedAt": "2026-10-01T11:16:08.404375+00:00",
+      "seconds": 12.03,
+      "exitCode": 0
+    },
+    {
+      "label": "remove ot-t2-root",
+      "argv": [
+        "docker",
+        "volume",
+        "rm",
+        "ot-t2-root"
+      ],
+      "startedAt": "2026-10-01T11:16:20.431687+00:00",
+      "seconds": 0.21,
+      "exitCode": 0
+    },
+    {
+      "label": "docker ps -a --filter",
+      "argv": [
+        "docker",
+        "ps",
+        "-a",
+        "--filter",
+        "name=ot-t2-",
+        "-q"
+      ],
+      "startedAt": "2026-10-01T11:16:20.643749+00:00",
+      "seconds": 0.2,
+      "exitCode": 0
+    }
+  ],
+  "runId": "r03",
+  "evidenceKind": "first complete Compose run (r03); NOT an acceptance pass",
+  "ranOnCommit": "0bf945b (worktree HEAD at run time; includes feat/scheduled-api-m2-m4 with whole-second engine times and Generation.freshness_serviceable)",
+  "attempts": {
+    "r01": "aborted: stale console script in the old image (fixed: python -m opentransit.build.cli)",
+    "r02": "stopped by the operator before any check ran so the new rollback freshness rule could be merged",
+    "r03": "this file"
+  },
+  "analysis": {
+    "passed": [
+      "initial_activation_serves_old_generation",
+      "corrupt_candidate_refused_before_pointer_change",
+      "old_engine_saw_inflight_requests_complete_after_acknowledgement",
+      "old_engine_stopped_only_after_ack_and_ten_request_deadlines",
+      "rollback_refuses_expired_freshness_and_coverage_without_touching_pointer",
+      "stale_generation_is_rollback_serviceable_but_new_candidate_needs_current",
+      "prune_dry_run_lists_candidates_and_deletes_nothing"
+    ],
+    "failed": {
+      "failed_reload_preserves_old_serving_state_and_restores_pointer": "Old serving state was intact (58468 of 58469 requests answered 200 by the old generation; one client-side connection error, cause not captured) and the pointer was restored to a fresh-token binding of the old generation, but the operator reported timeout rather than the worker rejection because one reload took about 16 minutes (3.7 GB hashed several times from the Windows file share) against the 900 s default. The worker later rejected the candidate with a failure ack. The harness now passes --timeout 3600, caps load at 4 desynchronised clients and records client error types. Needs a live rerun.",
+      "inflight_requests_finish_on_old_generation_then_new_requests_use_new": "Harness analysis defect, not a product failure: the six load clients ran in lock-step behind the 0.35 s delay proxy, so the first new-generation request started only after every old request had finished and the boundary-based crossing count was 0. Engine-side evidence in the same run shows six requests started before the ack and completed after it on the old engine (check old_engine_saw_inflight_requests_complete_after_acknowledgement), 0 non-200 responses, 0 old-generation responses started after the boundary, and no pointer read errors across 350119 reads. The harness now classifies in-flight requests against the activation ack time and jitters the clients. Needs a live rerun to record a clean pass.",
+      "rollback_succeeds_for_valid_previous_generation": "The worker rejected the rollback candidate (factory_rejected) while the pointer was restored and requests kept answering from the serving generation. The API log shows generation_reload_failed kind=TimeoutError, most likely the 1.2 s candidate health check against a freshly restarted, cold engine after about 14 minutes of hashing. Not proven. Mitigations added: the harness warms the restarted engine, and failure acks now record the exception class (failureKind) so a rerun is conclusive. If it recurs, the candidate health check needs a bounded retry."
+    },
+    "notes": [
+      "After a timed-out or rejected activation the pointer token differs from the worker token; retirement is acknowledged under the worker token (replacedOperationToken in the activation ack), which the operator now reports as retiredOperationToken. Latent defect found while designing the gate and fixed with a test.",
+      "Rollback freshness rule (root decision): new candidates need current freshness; rollback accepts serviceable (current, aging, stale) and refuses expired freshness or lapsed coverage. Verified by the two refusal checks and the stale-eligibility check.",
+      "Per-reload hashing dominates: initial 536 s, failed reload 971 s, activation under load 815 s, rollback 843 s, with the 3 GB reference read from a Windows bind mount."
+    ]
+  }
+}

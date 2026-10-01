@@ -123,3 +123,44 @@ def test_retention_never_traverses_or_lists_external_symlink_candidate(tmp_path)
     plan = plan_prune(root, "previous", "previous")
     assert all(item["path"] != str(linked) for item in plan.candidates)
     assert any("symlink or junction" in item["reason"] for item in plan.retained)
+
+
+def test_prune_cli_lists_candidates_and_deletes_nothing(tmp_path):
+    from opentransit.build.cli import main
+
+    root = tmp_path / "generations"
+    root.mkdir()
+    for name, built in (
+        ("old", "2026-09-01T00:00:00+00:00"),
+        ("previous", "2026-09-28T00:00:00+00:00"),
+        ("active", "2026-09-29T00:00:00+00:00"),
+    ):
+        _generation(root, name, built)
+
+    def listing():
+        return sorted(
+            (str(path.relative_to(root)), path.stat().st_size)
+            for path in root.rglob("*")
+            if path.is_file()
+        )
+
+    before = listing()
+    output = tmp_path / "plan.json"
+    arguments = [
+        "prune",
+        "--generations-root",
+        str(root),
+        "--active",
+        "active",
+        "--previous",
+        "previous",
+    ]
+    assert main([*arguments, "--dry-run", "--output", str(output)]) == 0
+    plan = json.loads(output.read_text(encoding="utf-8"))
+    assert plan["deletionPerformed"] is False
+    assert [item["generationId"] for item in plan["candidates"]] == ["old"]
+    assert listing() == before
+    # Without --dry-run the command is refused by the parser: deletion is never implicit.
+    with pytest.raises(SystemExit):
+        main([*arguments, "--output", str(tmp_path / "other.json")])
+    assert listing() == before

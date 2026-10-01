@@ -28,9 +28,12 @@ class GenerationBinding:
     source_check_path: Path | None
     activation_token: str
     generation_id: str
+    # "rollback" re-serves a previously served generation and may be aging or stale (still
+    # serviceable); a new candidate ("activate") must have current source freshness.
+    purpose: str = "activate"
 
     def as_dict(self) -> dict:
-        return {
+        data = {
             "generationDir": str(self.generation_dir),
             "engineOrigin": self.engine_origin,
             "probePath": str(self.probe_path) if self.probe_path else None,
@@ -38,6 +41,9 @@ class GenerationBinding:
             "activationToken": self.activation_token,
             "generationId": self.generation_id,
         }
+        if self.purpose != "activate":
+            data["purpose"] = self.purpose
+        return data
 
 
 def _origin(value: object) -> str:
@@ -72,7 +78,17 @@ def _safe_path(value: object, label: str, required: bool = False) -> Path | None
     return path.resolve(strict=True)
 
 
-def validate_binding(data: dict, generations_root: Path | None = None) -> GenerationBinding:
+def _purpose(data: dict) -> str:
+    purpose = data.get("purpose", "activate")
+    if purpose not in {"activate", "rollback"}:
+        raise ValueError("Binding purpose must be activate or rollback")
+    return purpose
+
+
+def validate_binding(
+    data: dict, generations_root: Path | None = None, *, verify: bool = True
+) -> GenerationBinding:
+    """Validate a binding; ``verify=False`` skips hashing artifacts (cheap pre-checks only)."""
     if not isinstance(data, dict):
         raise ValueError("Binding must be a JSON object")
     token = data.get("activationToken")
@@ -93,7 +109,8 @@ def validate_binding(data: dict, generations_root: Path | None = None) -> Genera
     generation = Generation.load(manifest_path)
     if data.get("generationId") != generation.id:
         raise ValueError("Binding generationId differs from its manifest")
-    verify_artifacts(generation_dir, manifest)
+    if verify:
+        verify_artifacts(generation_dir, manifest)
     probe_path = _safe_path(data.get("probePath"), "probePath")
     source_check_path = _safe_path(data.get("sourceCheckPath"), "sourceCheckPath")
     for label, path in (("probePath", probe_path), ("sourceCheckPath", source_check_path)):
@@ -109,10 +126,11 @@ def validate_binding(data: dict, generations_root: Path | None = None) -> Genera
         source_check_path,
         token,
         generation.id,
+        _purpose(data),
     )
 
 
-def read_binding(path: Path, generations_root: Path) -> GenerationBinding:
+def read_binding(path: Path, generations_root: Path, *, verify: bool = True) -> GenerationBinding:
     pointer_or_file = Path(path)
     if not pointer_or_file.exists():
         raise FileNotFoundError(pointer_or_file)
@@ -124,7 +142,7 @@ def read_binding(path: Path, generations_root: Path) -> GenerationBinding:
         resolved.relative_to(root)
     except ValueError as exc:
         raise ValueError("Binding file escapes generations root") from exc
-    return validate_binding(json.loads(resolved.read_text(encoding="utf-8")), root)
+    return validate_binding(json.loads(resolved.read_text(encoding="utf-8")), root, verify=verify)
 
 
 def read_binding_metadata(path: Path, generations_root: Path) -> dict | None:

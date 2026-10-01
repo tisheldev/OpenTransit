@@ -1,0 +1,77 @@
+# Linux Compose harness for local activation/rollback (M2.5). Driven by
+# services/api/tools/activation_compose_harness.py, which supplies every OT_* variable.
+# All names are ot-t2-*; only 127.0.0.1:8300 is published. MOTIS blue/green engines and the
+# delay proxy share the API's network namespace because managed bindings are loopback-only.
+# Generation artifacts are read-only mounts of existing data; the managed root volume holds
+# only the current pointer, bindings, evidence and acknowledgements.
+name: ot-t2
+
+x-motis: &motis
+  image: ghcr.io/motis-project/motis@sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330
+  network_mode: "service:api"
+  mem_limit: 3g
+  memswap_limit: 3g
+  depends_on: [api]
+
+services:
+  api:
+    image: ${OT_API_IMAGE:-opentransit-api:latest}
+    container_name: ot-t2-api
+    mem_limit: 1g
+    memswap_limit: 1g
+    ports: ["127.0.0.1:8300:8000"]
+    environment:
+      PYTHONPATH: /src
+      PYTHONDONTWRITEBYTECODE: "1"
+      OPENTRANSIT_CURRENT_BINDING: /managed/current
+      OPENTRANSIT_MANAGED_ROOT: /managed
+      OPENTRANSIT_ACK_DIR: /managed/acks
+    volumes:
+      - root:/managed
+      - ${OT_SRC}:/src:ro
+      - ${OT_TOOLS}:/tools:ro
+      - ${OT_RUN}:/run-data
+      - ${OT_A_REFERENCE}:/managed/gen-a/reference.sqlite:ro
+      - graph:/managed/gen-a/motis:ro
+      - ${OT_B_REFERENCE}:/managed/gen-b/reference.sqlite:ro
+      - graph:/managed/gen-b/motis:ro
+
+  motis-a:
+    <<: *motis
+    container_name: ot-t2-motis-a
+    command: ["/motis", "server", "-d", "/data"]
+    volumes:
+      - graph:/data:ro
+      - ${OT_RUN}/motis-a.yml:/data/config.yml:ro
+
+  motis-b:
+    <<: *motis
+    container_name: ot-t2-motis-b
+    command: ["/motis", "server", "-d", "/data"]
+    volumes:
+      - graph:/data:ro
+      - ${OT_RUN}/motis-b.yml:/data/config.yml:ro
+
+  proxy:
+    image: ${OT_API_IMAGE:-opentransit-api:latest}
+    container_name: ot-t2-proxy
+    network_mode: "service:api"
+    mem_limit: 128m
+    depends_on: [api]
+    entrypoint: ["/app/.venv/bin/python", "/tools/activation_delay_proxy.py"]
+    command:
+      - "--route=a:59081:59091"
+      - "--route=b:59082:59092"
+      - "--control=/run-data"
+      - "--log=/run-data/proxy.jsonl"
+    volumes:
+      - ${OT_TOOLS}:/tools:ro
+      - ${OT_RUN}:/run-data
+
+volumes:
+  root:
+    name: ot-t2-root
+    external: true
+  graph:
+    name: ${OT_GRAPH_VOLUME:?graph volume}
+    external: true

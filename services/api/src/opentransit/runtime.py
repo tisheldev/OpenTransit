@@ -44,6 +44,40 @@ class AddressProviderBinding:
             raise TypeError("Address provider catalog must provide close()")
 
 
+def apply_source_check(
+    generation: Generation, manifest: dict, source_check_path: Path
+) -> Generation:
+    """Apply a successful same-hash paired upstream check to a generation's provenance."""
+    source_check_path = Path(source_check_path)
+    evidence = json.loads(source_check_path.read_text(encoding="utf-8"))
+    if evidence.get("pairedValidation") != "passed" or evidence["validation"]["valid"] is not True:
+        raise ValueError("Only a successful paired check can renew freshness")
+    checked_dates = []
+    for key, name in (
+        ("gtfs", "israel-public-transportation.zip"),
+        ("trip_id_to_date", "TripIdToDate.zip"),
+    ):
+        source = evidence["sources"][key]
+        if (
+            source["status"] not in {"new", "changed", "unchanged"}
+            or source["sha256"] != manifest["inputs"][name]["sha256"]
+        ):
+            raise ValueError("Source check does not describe this generation's input pair")
+        checked_dates.append(instant(source["checkedAt"]))
+    validated = instant(evidence["validatedAt"])
+    if validated < max(checked_dates):
+        raise ValueError("Pair validation precedes acquisition")
+    previous = (
+        generation.source_checked_at
+        if generation.source_check_recorded
+        else generation.validated_at
+    )
+    source_checked = min(checked_dates)
+    if previous is not None and source_checked < previous:
+        raise ValueError("Source check is older than existing provenance")
+    return replace(generation, source_checked_at=source_checked, source_check_recorded=True)
+
+
 def capture_snapshot(app_state) -> RuntimeSnapshot | None:
     """Capture one complete runtime generation for a request before its first await."""
     manager = getattr(app_state, "snapshot_manager", None)
@@ -90,38 +124,7 @@ class RuntimeSnapshot:
             if manifest.get("addressSearch") is not None:
                 address_metadata = verified_artifacts
         if source_check_path is not None:
-            evidence = json.loads(source_check_path.read_text(encoding="utf-8"))
-            if (
-                evidence.get("pairedValidation") != "passed"
-                or evidence["validation"]["valid"] is not True
-            ):
-                raise ValueError("Only a successful paired check can renew freshness")
-            checked_dates = []
-            for key, name in (
-                ("gtfs", "israel-public-transportation.zip"),
-                ("trip_id_to_date", "TripIdToDate.zip"),
-            ):
-                source = evidence["sources"][key]
-                if (
-                    source["status"] not in {"new", "changed", "unchanged"}
-                    or source["sha256"] != manifest["inputs"][name]["sha256"]
-                ):
-                    raise ValueError("Source check does not describe this generation's input pair")
-                checked_dates.append(instant(source["checkedAt"]))
-            validated = instant(evidence["validatedAt"])
-            if validated < max(checked_dates):
-                raise ValueError("Pair validation precedes acquisition")
-            previous = (
-                generation.source_checked_at
-                if generation.source_check_recorded
-                else generation.validated_at
-            )
-            source_checked = min(checked_dates)
-            if previous is not None and source_checked < previous:
-                raise ValueError("Source check is older than existing provenance")
-            generation = replace(
-                generation, source_checked_at=source_checked, source_check_recorded=True
-            )
+            generation = apply_source_check(generation, manifest, source_check_path)
         reference_info = manifest.get("artifacts", {}).get("reference")
         reference = None
         if reference_info is not None:
