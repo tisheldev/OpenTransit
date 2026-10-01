@@ -1,0 +1,46 @@
+# exit 0
+OpenTransit scheduled journey demo (Dizengoff Center -> Technion)
+  API:        http://127.0.0.1:8500
+  Requested:  departAt 2026-10-04T08:00:00+03:00 (Israel time)
+  Generation: 5eb4e43d9456b96a68ee44ffb7a58fe9137ed16bf40a670cf513c34564e44249 (real data, freshness current)
+  Coverage:   2026-10-01T00:00:00+03:00 .. 2026-11-01T00:00:00+02:00
+  Times:      scheduled timetable only; predicted times and delays are not provided
+  Realtime:   not_enabled
+  Alerts:     not_enabled (alerts list: None)
+  Outcome:    routes_found (3 journey(s))
+
+  Journey 1: depart 08:08 arrive 09:52 (1h44m, 2 transfer(s), walking 12m / 883 m)  [scheduled]
+    08:08-08:11  walk       START -> דיזנגוף סנטר/דיזנגוף  [scheduled]
+    08:11-08:18  bus        דיזנגוף סנטר/דיזנגוף -> ת. רכבת השלום line 8 to מסוף הטייסים (דן, service date 2026-10-04)  [scheduled]
+    08:19-08:21  walk       ת. רכבת השלום -> השלום  [scheduled]
+    08:21-09:24  rail       השלום -> חוף הכרמל line  to 156 (רכבת ישראל, service date 2026-10-04)  [scheduled]
+    09:24-09:26  walk       חוף הכרמל -> ת. רכבת חוף הכרמל  [scheduled]
+    09:33-09:47  bus        ת. רכבת חוף הכרמל -> טכניון/מעונות העמים line 1 to טכניון (אגד, service date 2026-10-04)  [scheduled]
+    09:47-09:52  walk       טכניון/מעונות העמים -> END  [scheduled]
+
+  Journey 2: depart 08:24 arrive 10:25 (2h01m, 2 transfer(s), walking 14m / unknown distance)  [scheduled]
+    08:24-08:27  walk       START -> דיזנגוף סנטר/דיזנגוף  [scheduled]
+    08:27-08:34  bus        דיזנגוף סנטר/דיזנגוף -> ת. רכבת השלום line 8 to מסוף הטייסים (דן, service date 2026-10-04)  [scheduled]
+    08:38-08:40  walk       ת. רכבת השלום -> השלום  [scheduled]
+    08:40-09:52  rail       השלום -> חיפה מרכז line  to 404 (רכבת ישראל, service date 2026-10-04)  [scheduled]
+    09:52-09:56  walk       חיפה מרכז -> תחנת רכבת חיפה מרכז השמונה  [scheduled]
+    09:56-10:20  bus        תחנת רכבת חיפה מרכז השמונה -> טכניון/מעונות העמים line 17 to טכניון (אגד, service date 2026-10-04)  [scheduled]
+    10:20-10:25  walk       טכניון/מעונות העמים -> END  [scheduled]
+
+  Journey 3: depart 08:26 arrive 10:37 (2h11m, 4 transfer(s), walking 15m / 919 m)  [scheduled]
+    08:26-08:28  walk       START -> דיזנגוף סנטר/דיזנגוף  [scheduled]
+    08:28-08:42  bus        דיזנגוף סנטר/דיזנגוף -> דרך נמיר/יהודה המכבי line 5 to תל אביב יפו_רכבת מרכז (דן, service date 2026-10-04)  [scheduled]
+    08:42-08:44  walk       דרך נמיר/יהודה המכבי -> דרך נמיר/יהודה המכבי  [scheduled]
+    08:44-09:04  bus        דרך נמיר/יהודה המכבי -> צומת אודים line 852 to פרדס חנה כרכור_תחנת הרכבת (אגד, service date 2026-10-04)  [scheduled]
+    09:06-09:08  walk       צומת אודים -> צומת אודים  [scheduled]
+    09:08-10:05  bus        צומת אודים -> ת. מרכזית חוף הכרמל/הורדה line 947 to חיפה_מרכזית חוף הכרמל (אגד, service date 2026-10-04)  [scheduled]
+    10:09-10:11  walk       ת. מרכזית חוף הכרמל/הורדה -> ת. מרכזית חוף הכרמל/רציפים עירוני  [scheduled]
+    10:11-10:19  bus        ת. מרכזית חוף הכרמל/רציפים עירוני -> גרנד קניון/שמחה גולן line 4 to קרית מוצקין_מרכזית הקריות (סופרבוס, service date 2026-10-04)  [scheduled]
+    10:19-10:21  walk       גרנד קניון/שמחה גולן -> גרנד קניון/שמחה גולן  [scheduled]
+    10:25-10:32  bus        גרנד קניון/שמחה גולן -> טכניון/מעונות העמים line 144 to חיפה_אוניברסיטה (אגד, service date 2026-10-04)  [scheduled]
+    10:32-10:37  walk       טכניון/מעונות העמים -> END  [scheduled]
+
+  Constraints: timeMode=departAt, modes=['bus', 'rail', 'light_rail'], maxAccessWalkMinutes=15, maxEgressWalkMinutes=15, maxDirectWalkMinutes=30, engineWalkCapConformance=unverified, transferWalkLimit=not_enforced
+  Warnings:    TRANSFER_STREET_PATH_UNAVAILABLE
+
+# stderr

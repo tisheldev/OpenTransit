@@ -1,0 +1,191 @@
+{
+  "source": "poc/corpora/journeys.json",
+  "dateResolution": "First declared weekday on or after September 30 in actual new generation; original corpus preserved, not a human H3 review",
+  "cases": [
+    {
+      "id": "J01",
+      "prd_ref": "PRD §7 #1 Tel Aviv → Ramat Gan",
+      "sourceDepartureRule": "weekday_morning",
+      "params": {
+        "fromPlace": "32.0757,34.7748",
+        "toPlace": "32.0838,34.8044",
+        "time": "2026-10-05T08:00:00+03:00",
+        "numItineraries": "1",
+        "realtimeMode": "OFF",
+        "withAlerts": "false"
+      },
+      "expect": {
+        "outcome": "route"
+      },
+      "sourceExpectedOutcome": "route"
+    },
+    {
+      "id": "J04",
+      "prd_ref": "PRD §7 #2 Tel Aviv → Petah Tikva",
+      "sourceDepartureRule": "weekday_evening",
+      "params": {
+        "fromPlace": "32.0757,34.7748",
+        "toPlace": "32.0956,34.8556",
+        "time": "2026-09-30T18:30:00+03:00",
+        "numItineraries": "1",
+        "realtimeMode": "OFF",
+        "withAlerts": "false"
+      },
+      "expect": {
+        "outcome": "route"
+      },
+      "sourceExpectedOutcome": "route",
+      "probeTime": "2026-10-07T18:30:00+03:00"
+    },
+    {
+      "id": "J11",
+      "prd_ref": "PRD §7 #3 Tel Aviv → Haifa",
+      "sourceDepartureRule": "weekday_morning",
+      "params": {
+        "fromPlace": "32.0836,34.7981",
+        "toPlace": "32.8206,34.9985",
+        "time": "2026-10-05T08:00:00+03:00",
+        "numItineraries": "1",
+        "realtimeMode": "OFF",
+        "withAlerts": "false"
+      },
+      "expect": {
+        "outcome": "route"
+      },
+      "sourceExpectedOutcome": "route"
+    },
+    {
+      "id": "J12",
+      "prd_ref": "PRD §7 #4 Tel Aviv → Jerusalem",
+      "sourceDepartureRule": "weekday_morning",
+      "params": {
+        "fromPlace": "32.0836,34.7981",
+        "toPlace": "31.7888,35.2027",
+        "time": "2026-10-05T08:00:00+03:00",
+        "numItineraries": "1",
+        "realtimeMode": "OFF",
+        "withAlerts": "false"
+      },
+      "expect": {
+        "outcome": "route"
+      },
+      "sourceExpectedOutcome": "route"
+    },
+    {
+      "id": "J15",
+      "prd_ref": "PRD §7 #5 bus → train",
+      "sourceDepartureRule": "weekday_morning",
+      "params": {
+        "fromPlace": "31.907,34.8102",
+        "toPlace": "32.8206,34.9985",
+        "time": "2026-10-05T08:00:00+03:00",
+        "numItineraries": "1",
+        "realtimeMode": "OFF",
+        "withAlerts": "false"
+      },
+      "expect": {
+        "outcome": "route"
+      },
+      "sourceExpectedOutcome": "route"
+    },
+    {
+      "id": "J16",
+      "prd_ref": "PRD §7 #6 train → bus",
+      "sourceDepartureRule": "weekday_morning",
+      "params": {
+        "fromPlace": "32.0836,34.7981",
+        "toPlace": "32.7767,35.0217",
+        "time": "2026-10-05T08:00:00+03:00",
+        "numItineraries": "1",
+        "realtimeMode": "OFF",
+        "withAlerts": "false"
+      },
+      "expect": {
+        "outcome": "route"
+      },
+      "sourceExpectedOutcome": "route"
+    },
+    {
+      "id": "J19",
+      "prd_ref": "PRD §7 #7 at least one transfer",
+      "sourceDepartureRule": "weekday_morning",
+      "params": {
+        "fromPlace": "32.1656,34.8095",
+        "toPlace": "32.087,34.858",
+        "time": "2026-10-05T08:00:00+03:00",
+        "numItineraries": "1",
+        "realtimeMode": "OFF",
+        "withAlerts": "false"
+      },
+      "expect": {
+        "outcome": "route"
+      },
+      "sourceExpectedOutcome": "route"
+    },
+    {
+      "id": "J21",
+      "prd_ref": "PRD §7 #8 late night",
+      "sourceDepartureRule": "late_night",
+      "params": {
+        "fromPlace": "32.0836,34.7981",
+        "toPlace": "32.0004,34.8705",
+        "time": "2026-10-06T23:40:00+03:00",
+        "numItineraries": "1",
+        "realtimeMode": "OFF",
+        "withAlerts": "false"
+      },
+      "expect": {
+        "outcome": "route"
+      },
+      "sourceExpectedOutcome": "route"
+    },
+    {
+      "id": "J22",
+      "prd_ref": "PRD §7 #9 crossing a service-day boundary",
+      "sourceDepartureRule": "after_midnight",
+      "params": {
+        "fromPlace": "32.0757,34.7748",
+        "toPlace": "32.0838,34.8044",
+        "time": "2026-09-30T02:30:00+03:00",
+        "numItineraries": "1",
+        "realtimeMode": "OFF",
+        "withAlerts": "false"
+      },
+      "expect": {
+        "outcome": "either"
+      },
+      "sourceExpectedOutcome": "either",
+      "probeTime": "2026-10-07T02:30:00+03:00"
+    },
+    {
+      "id": "J23",
+      "prd_ref": "PRD §7 #10 no reasonable transit route",
+      "sourceDepartureRule": "after_midnight",
+      "params": {
+        "fromPlace": "30.28,34.74",
+        "toPlace": "33.2778,35.5786",
+        "time": "2026-09-30T02:30:00+03:00",
+        "numItineraries": "1",
+        "realtimeMode": "OFF",
+        "withAlerts": "false"
+      },
+      "expect": {
+        "outcome": "no_route"
+      },
+      "sourceExpectedOutcome": "no-route",
+      "probeTime": "2026-10-07T02:30:00+03:00"
+    }
+  ],
+  "acceptanceRedating": {
+    "reason": "source departures outside this generation's coverage use probeTime",
+    "coverage": [
+      "2026-10-01T00:00:00+03:00",
+      "2026-11-01T00:00:00+02:00"
+    ],
+    "changedCaseIds": [
+      "J04",
+      "J22",
+      "J23"
+    ]
+  }
+}

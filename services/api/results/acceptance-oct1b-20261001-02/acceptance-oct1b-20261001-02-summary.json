@@ -1,0 +1,692 @@
+{
+  "schemaVersion": 1,
+  "tool": "services/api/tools/acceptance_run.py",
+  "runId": "oct1b2",
+  "status": "PASS",
+  "runnerError": null,
+  "startedAt": "2026-10-01T14:38:58+00:00",
+  "finishedAt": "2026-10-01T14:58:44+00:00",
+  "wallSeconds": 1185.4,
+  "scope": "live acceptance run; structural/mechanical only: no H3 or H4 approval",
+  "humanH3Approval": false,
+  "humanH4Approval": false,
+  "source": {
+    "commit": "6ed3f5bf6351280c4924c6a3b9d76e396a282016",
+    "branch": "HEAD",
+    "dirtyApiSource": false,
+    "treeOfApiSource": "c15b57e1a7587cd16129b751c65235743cda8b50"
+  },
+  "generation": {
+    "dir": "D:\\ot\\generations\\oct1b",
+    "generationId": "5eb4e43d9456b96a68ee44ffb7a58fe9137ed16bf40a670cf513c34564e44249",
+    "scheduleComponentGenerationId": "8f94fea34cf4a2fa63d45264158d77f3d7012d78385af8fbd42de4d67f5fcaf1",
+    "manifestSha256": "8ea8450f61b0837c55fead1dbbf8250666360705b1c495604cad8c357c025727",
+    "mode": "real",
+    "coverage": {
+      "from": "2026-10-01T00:00:00+03:00",
+      "until": "2026-11-01T00:00:00+02:00"
+    },
+    "engineDigest": "sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330",
+    "inputs": {
+      "TripIdToDate.zip": "5b4b09566d2b12b29bc6f16b82a3aceb07f247a59e36eee05df3dfde88eaf4f3",
+      "israel-and-palestine-latest.osm.pbf": "f98a8b9ad7fb3df19c846d3a562d9394abc5657173faeddcb033a53f4aa701f3",
+      "israel-public-transportation.zip": "7d628a2fd0fd11518eb5a0c922b4ac55f4ed1cf52c8251853484deab06247b2e"
+    },
+    "artifacts": {
+      "addressAttestation": "70185bb5a6558d32f5ed74e2d542fdefaa390505ab8d6fb839014ff0ab3f4598",
+      "addressCatalog": "8f2b8ec84aa3ac6044b6f0cfede00bacac502c835dd17600a4da6aba8fbb8f05",
+      "config": "c047fedfe95ffda5c6e30cd765419335d1b9a702f742321602300baf71c6c3b5",
+      "motis": "de66244793b1e886fbe0b171e472e7389fd8c353d75f337bd58487c29513fa44",
+      "reference": "0c63b84c1fc82aa3146c86a7c95d4efbf6e112cff395e0a262188696665aa88a",
+      "scheduleComponentManifest": "e51a56b8a86f4f527ee5dc13537624c2a053e01634016b3e2ce6462d197757dd"
+    },
+    "addressSearch": true
+  },
+  "images": {
+    "motis": {
+      "reference": "ghcr.io/motis-project/motis@sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330",
+      "present": true,
+      "id": "sha256:76a15c76bcff11c6f0595fed9a170284e49c2d9017c47bf4da6879a0e7452598",
+      "repoDigests": [
+        "ghcr.io/motis-project/motis@sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330"
+      ],
+      "created": "2026-08-12T09:07:42.796145338Z"
+    },
+    "api": {
+      "reference": "opentransit-api:latest",
+      "present": true,
+      "id": "sha256:4fbaa262800851c1054617dee0569351f366eb3f5a4a18be5d57865ba434fd80",
+      "repoDigests": [],
+      "created": "2026-09-30T10:48:25.760493258Z"
+    },
+    "java": {
+      "reference": "eclipse-temurin:21.0.12.1_1-jre@sha256:628467024d428251da635661936d6180717b1ac1119d41c76d28a03b7293c43c",
+      "present": true,
+      "id": "sha256:a357909fafe361a99d858524d3730be9686b8045d2a8edd7bc1a8eb74db69294",
+      "repoDigests": [
+        "eclipse-temurin@sha256:628467024d428251da635661936d6180717b1ac1119d41c76d28a03b7293c43c"
+      ],
+      "created": "2026-09-25T22:38:04.501987779Z"
+    }
+  },
+  "stack": {
+    "apiUrl": "http://127.0.0.1:8500",
+    "memoryCaps": {
+      "motis": "2g",
+      "photon": "1g",
+      "api": "1g",
+      "verifier": "512m",
+      "photon-init": "64m"
+    },
+    "cpus": null,
+    "departAtUsedForWalkCapsAndDemo": "2026-10-04T08:00:00+03:00",
+    "memorySamplesBytes": {
+      "ot-acc-oct1b2-motis": 651165696,
+      "ot-acc-oct1b2-photon": 484861542,
+      "ot-acc-oct1b2-api": 231211008
+    },
+    "memorySamplingNote": "docker stats snapshots at step boundaries, not true peaks",
+    "logs": {
+      "motis": "D:\\ot\\acc-oct1b-02\\acceptance-oct1b-20261001-02-motis.log",
+      "photon": "D:\\ot\\acc-oct1b-02\\acceptance-oct1b-20261001-02-photon.log",
+      "api": "D:\\ot\\acc-oct1b-02\\acceptance-oct1b-20261001-02-api.log",
+      "verifier": "D:\\ot\\acc-oct1b-02\\acceptance-oct1b-20261001-02-verifier.log",
+      "photon-init": "D:\\ot\\acc-oct1b-02\\acceptance-oct1b-20261001-02-photon-init.log"
+    },
+    "finalStates": {
+      "ot-acc-oct1b2-motis": "running exit=0 oom=false restarts=0",
+      "ot-acc-oct1b2-photon-init": "exited exit=0 oom=false restarts=0",
+      "ot-acc-oct1b2-photon": "running exit=0 oom=false restarts=0",
+      "ot-acc-oct1b2-verifier": "exited exit=0 oom=false restarts=0",
+      "ot-acc-oct1b2-api": "running exit=0 oom=false restarts=0"
+    },
+    "removed": [
+      "ot-acc-oct1b2-api",
+      "ot-acc-oct1b2-verifier",
+      "ot-acc-oct1b2-photon",
+      "ot-acc-oct1b2-photon-init",
+      "ot-acc-oct1b2-motis",
+      "ot-acc-oct1b2-photon"
+    ],
+    "problems": []
+  },
+  "checks": {
+    "stack": {
+      "status": "PASS",
+      "seconds": 19.3,
+      "finishedAt": "2026-10-01T14:39:20+00:00",
+      "motisHealthExit": 0,
+      "photon": {
+        "jar": "C:\\Users\\nhenr\\.codex\\worktrees\\8007\\OpenTransit\\.runtime\\m4-photon-spike-20260930\\photon-1.3.0.jar",
+        "volume": "ot-acc-oct1b2-photon"
+      }
+    },
+    "probe": {
+      "status": "PASS",
+      "seconds": 576.4,
+      "finishedAt": "2026-10-01T14:48:57+00:00",
+      "exitCode": 0,
+      "probeStatus": "passed",
+      "failure": null,
+      "cases": 10,
+      "passedJourneys": 10,
+      "failedJourneys": [],
+      "probeCorpusSource": "D:\\ot\\src-6ed3f5b\\services\\api\\tools\\acceptance-probe-corpus.json",
+      "probeCorpusSourceSha256": "8078c6b803d32f70fd950fa123677e71671de169f063e50af693e7c5437df4a3",
+      "probeCorpusUsedSha256": "05bb7b8ea63518da26789d438db1ae74ae9e2baf4f4bf2732968364e2561e540",
+      "redated": [
+        {
+          "id": "J04",
+          "from": "2026-09-30T18:30:00+03:00",
+          "probeTime": "2026-10-07T18:30:00+03:00",
+          "rule": "whole weeks, Israel local clock"
+        },
+        {
+          "id": "J22",
+          "from": "2026-09-30T02:30:00+03:00",
+          "probeTime": "2026-10-07T02:30:00+03:00",
+          "rule": "whole weeks, Israel local clock"
+        },
+        {
+          "id": "J23",
+          "from": "2026-09-30T02:30:00+03:00",
+          "probeTime": "2026-10-07T02:30:00+03:00",
+          "rule": "whole weeks, Israel local clock"
+        }
+      ],
+      "structuralOnly": true,
+      "humanH3Approval": false
+    },
+    "api_start": {
+      "status": "PASS",
+      "seconds": 530.3,
+      "finishedAt": "2026-10-01T14:57:47+00:00",
+      "healthzAfterSeconds": 527.9,
+      "firstReadyzOkAfterSeconds": 528.1,
+      "preReadyFailures": [],
+      "preReadyFailureCount": 0,
+      "photonBound": true,
+      "apiImage": "sha256:4fbaa262800851c1054617dee0569351f366eb3f5a4a18be5d57865ba434fd80"
+    },
+    "readyz": {
+      "status": "PASS",
+      "seconds": 27.7,
+      "finishedAt": "2026-10-01T14:58:15+00:00",
+      "requests": 50,
+      "ok": 50,
+      "failed": 0,
+      "statuses": [
+        200
+      ],
+      "failureReasons": {},
+      "generationIds": [
+        "5eb4e43d9456b96a68ee44ffb7a58fe9137ed16bf40a670cf513c34564e44249"
+      ],
+      "maxMs": 63.2,
+      "expected": 50,
+      "motisVerifyFailDuringReadyz": 0
+    },
+    "walk_caps": {
+      "status": "PASS",
+      "seconds": 2.5,
+      "finishedAt": "2026-10-01T14:58:17+00:00",
+      "exitCode": 0,
+      "departAt": "2026-10-04T08:00:00+03:00",
+      "violationCount": 0,
+      "errors": 0,
+      "cases": 8,
+      "statuses": [
+        200
+      ],
+      "stderr": null
+    },
+    "demo": {
+      "status": "PASS",
+      "seconds": 0.9,
+      "finishedAt": "2026-10-01T14:58:18+00:00",
+      "exitCode": 0,
+      "departAt": "2026-10-04T08:00:00+03:00",
+      "generationId": "5eb4e43d9456b96a68ee44ffb7a58fe9137ed16bf40a670cf513c34564e44249",
+      "outcome": "routes_found",
+      "journeyCount": 3,
+      "journeys": [
+        {
+          "number": 1,
+          "depart": "08:08",
+          "arrive": "09:52",
+          "duration": "1h44m",
+          "transfers": 2,
+          "legs": 7
+        },
+        {
+          "number": 2,
+          "depart": "08:24",
+          "arrive": "10:25",
+          "duration": "2h01m",
+          "transfers": 2,
+          "legs": 7
+        },
+        {
+          "number": 3,
+          "depart": "08:26",
+          "arrive": "10:37",
+          "duration": "2h11m",
+          "transfers": 4,
+          "legs": 11
+        }
+      ],
+      "scheduledLabelled": true,
+      "stderr": null
+    },
+    "h3_review": {
+      "status": "PASS",
+      "seconds": 3.8,
+      "finishedAt": "2026-10-01T14:58:22+00:00",
+      "exitCode": 0,
+      "toolOutput": "generation 5eb4e43d9456b96a68ee44ffb7a58fe9137ed16bf40a670cf513c34564e44249: 34 requests, 0 omitted, 0 errors, 0 mixed-generation\n",
+      "generationId": "5eb4e43d9456b96a68ee44ffb7a58fe9137ed16bf40a670cf513c34564e44249",
+      "casesGenerated": 34,
+      "casesErrored": [],
+      "casesNotGenerated": [],
+      "window": [
+        "2026-10-01T00:00:00+03:00",
+        "2026-11-01T00:00:00+02:00"
+      ],
+      "humanH3Approval": false,
+      "stderr": null
+    },
+    "search_cold_start": {
+      "status": "PASS",
+      "seconds": 0.4,
+      "finishedAt": "2026-10-01T14:58:22+00:00",
+      "samples": [
+        {
+          "query": "Jerusalem Central Bus Station",
+          "types": [
+            "stop",
+            "station"
+          ],
+          "status": 200,
+          "ms": 19.2
+        },
+        {
+          "query": "Ben Yehuda Street",
+          "types": [
+            "address"
+          ],
+          "status": 200,
+          "ms": 117.2
+        },
+        {
+          "query": "Ichilov Hospital",
+          "types": [
+            "poi"
+          ],
+          "status": 200,
+          "ms": 31.3
+        },
+        {
+          "query": "Beersheba",
+          "types": [
+            "stop",
+            "station",
+            "poi",
+            "address"
+          ],
+          "status": 200,
+          "ms": 94.5
+        },
+        {
+          "query": "Allenby 10 Tel Aviv",
+          "types": [
+            "stop",
+            "station",
+            "poi",
+            "address"
+          ],
+          "status": 200,
+          "ms": 28.4
+        },
+        {
+          "query": "Haifa Hof HaCarmel",
+          "types": [
+            "stop",
+            "station"
+          ],
+          "status": 200,
+          "ms": 6.0
+        },
+        {
+          "query": "Rothschild Boulevard",
+          "types": [
+            "address"
+          ],
+          "status": 200,
+          "ms": 48.8
+        },
+        {
+          "query": "Azrieli Center",
+          "types": [
+            "stop",
+            "station",
+            "poi",
+            "address"
+          ],
+          "status": 200,
+          "ms": 29.8
+        }
+      ],
+      "requests": 8,
+      "firstMs": 19.2,
+      "maxMs": 117.2,
+      "slowerThanClientTimeout": 0,
+      "nonOk": [],
+      "clean": true,
+      "note": "unscored; requests are in the API log but not in the evaluation"
+    },
+    "search": {
+      "status": "PASS",
+      "seconds": 15.8,
+      "finishedAt": "2026-10-01T14:58:38+00:00",
+      "evaluateExit": 0,
+      "stdout": "captured 183 variants / 732 requests\n",
+      "finalizeExit": 0,
+      "overall": {
+        "top1": 148,
+        "top5": 165,
+        "total": 183
+      },
+      "byCategory": {
+        "address": {
+          "top1": 16,
+          "top5": 16,
+          "total": 22,
+          "unavailable": 0
+        },
+        "misspelling": {
+          "top1": 7,
+          "top5": 8,
+          "total": 10,
+          "unavailable": 0
+        },
+        "near_dependent": {
+          "top1": 4,
+          "top5": 5,
+          "total": 6,
+          "unavailable": 0
+        },
+        "neighborhood": {
+          "top1": 7,
+          "top5": 10,
+          "total": 10,
+          "unavailable": 0
+        },
+        "poi_hospital": {
+          "top1": 4,
+          "top5": 4,
+          "total": 5,
+          "unavailable": 0
+        },
+        "poi_landmark": {
+          "top1": 9,
+          "top5": 11,
+          "total": 12,
+          "unavailable": 0
+        },
+        "poi_mall": {
+          "top1": 4,
+          "top5": 4,
+          "total": 4,
+          "unavailable": 0
+        },
+        "poi_university": {
+          "top1": 7,
+          "top5": 8,
+          "total": 9,
+          "unavailable": 0
+        },
+        "station": {
+          "top1": 20,
+          "top5": 20,
+          "total": 20,
+          "unavailable": 0
+        },
+        "translated_stop": {
+          "top1": 1,
+          "top5": 2,
+          "total": 2,
+          "unavailable": 0
+        },
+        "translit": {
+          "top1": 9,
+          "top5": 9,
+          "total": 9,
+          "unavailable": 0
+        },
+        "venue": {
+          "top1": 60,
+          "top5": 68,
+          "total": 74,
+          "unavailable": 0
+        }
+      },
+      "byLanguage": {
+        "en": {
+          "top1": 85,
+          "top5": 96,
+          "total": 109,
+          "unavailable": 0
+        },
+        "he": {
+          "top1": 63,
+          "top5": 69,
+          "total": 74,
+          "unavailable": 0
+        }
+      },
+      "byCorpus": {
+        "accepted-gtfs-translations": {
+          "top1": 1,
+          "top5": 2,
+          "total": 2,
+          "unavailable": 0
+        },
+        "accepted-osm-addresses": {
+          "top1": 7,
+          "top5": 7,
+          "total": 7,
+          "unavailable": 0
+        },
+        "places-100": {
+          "top1": 80,
+          "top5": 88,
+          "total": 100,
+          "unavailable": 0
+        },
+        "venues-48": {
+          "top1": 40,
+          "top5": 44,
+          "total": 48,
+          "unavailable": 0
+        },
+        "venues-language-variants": {
+          "top1": 20,
+          "top5": 24,
+          "total": 26,
+          "unavailable": 0
+        }
+      },
+      "firstPassOutcomes": {
+        "success": 183
+      },
+      "latencyApiProcess": {
+        "firstPass": {
+          "overall": {
+            "count": 183,
+            "p50Ms": 8.7,
+            "p95Ms": 46.2,
+            "maxMs": 67.0
+          },
+          "byCategory": {
+            "address": {
+              "count": 22,
+              "p50Ms": 16.6,
+              "p95Ms": 53.5,
+              "maxMs": 57.6
+            },
+            "misspelling": {
+              "count": 10,
+              "p50Ms": 27.5,
+              "p95Ms": 46.2,
+              "maxMs": 46.2
+            },
+            "near_dependent": {
+              "count": 6,
+              "p50Ms": 25.8,
+              "p95Ms": 66.0,
+              "maxMs": 66.0
+            },
+            "neighborhood": {
+              "count": 10,
+              "p50Ms": 5.1,
+              "p95Ms": 63.2,
+              "maxMs": 63.2
+            },
+            "poi_hospital": {
+              "count": 5,
+              "p50Ms": 7.2,
+              "p95Ms": 14.7,
+              "maxMs": 14.7
+            },
+            "poi_landmark": {
+              "count": 12,
+              "p50Ms": 5.0,
+              "p95Ms": 63.2,
+              "maxMs": 63.2
+            },
+            "poi_mall": {
+              "count": 4,
+              "p50Ms": 5.9,
+              "p95Ms": 28.5,
+              "maxMs": 28.5
+            },
+            "poi_university": {
+              "count": 9,
+              "p50Ms": 8.1,
+              "p95Ms": 61.8,
+              "maxMs": 61.8
+            },
+            "station": {
+              "count": 20,
+              "p50Ms": 5.3,
+              "p95Ms": 12.0,
+              "maxMs": 32.2
+            },
+            "translated_stop": {
+              "count": 2,
+              "p50Ms": 5.6,
+              "p95Ms": 5.6,
+              "maxMs": 5.6
+            },
+            "translit": {
+              "count": 9,
+              "p50Ms": 20.8,
+              "p95Ms": 42.4,
+              "maxMs": 42.4
+            },
+            "venue": {
+              "count": 74,
+              "p50Ms": 4.9,
+              "p95Ms": 45.2,
+              "maxMs": 67.0
+            }
+          }
+        },
+        "allRequests": {
+          "overall": {
+            "count": 732,
+            "p50Ms": 7.8,
+            "p95Ms": 42.5,
+            "maxMs": 77.5
+          },
+          "byCategory": {
+            "address": {
+              "count": 88,
+              "p50Ms": 11.6,
+              "p95Ms": 34.7,
+              "maxMs": 57.6
+            },
+            "misspelling": {
+              "count": 40,
+              "p50Ms": 18.1,
+              "p95Ms": 30.8,
+              "maxMs": 46.2
+            },
+            "near_dependent": {
+              "count": 24,
+              "p50Ms": 20.8,
+              "p95Ms": 46.1,
+              "maxMs": 66.0
+            },
+            "neighborhood": {
+              "count": 40,
+              "p50Ms": 5.1,
+              "p95Ms": 59.2,
+              "maxMs": 66.0
+            },
+            "poi_hospital": {
+              "count": 20,
+              "p50Ms": 5.5,
+              "p95Ms": 13.7,
+              "maxMs": 14.7
+            },
+            "poi_landmark": {
+              "count": 48,
+              "p50Ms": 5.1,
+              "p95Ms": 58.1,
+              "maxMs": 63.2
+            },
+            "poi_mall": {
+              "count": 16,
+              "p50Ms": 6.7,
+              "p95Ms": 28.5,
+              "maxMs": 28.5
+            },
+            "poi_university": {
+              "count": 36,
+              "p50Ms": 6.5,
+              "p95Ms": 47.9,
+              "maxMs": 61.8
+            },
+            "station": {
+              "count": 80,
+              "p50Ms": 5.6,
+              "p95Ms": 14.7,
+              "maxMs": 32.2
+            },
+            "translated_stop": {
+              "count": 8,
+              "p50Ms": 5.6,
+              "p95Ms": 6.7,
+              "maxMs": 6.7
+            },
+            "translit": {
+              "count": 36,
+              "p50Ms": 17.1,
+              "p95Ms": 30.0,
+              "maxMs": 42.4
+            },
+            "venue": {
+              "count": 296,
+              "p50Ms": 5.6,
+              "p95Ms": 45.2,
+              "maxMs": 77.5
+            }
+          }
+        }
+      },
+      "logCorrelation": {
+        "verified": true,
+        "requestCount": 732,
+        "matchedCount": 732,
+        "unmatchedCount": 0
+      },
+      "targets": {
+        "basis": "mechanical thresholds from PROJECT_STATUS; not an H4 approval",
+        "addressTop1Rate": 0.7272727272727273,
+        "addressTop1Meets80Percent": false,
+        "firstPassP95Meets40Ms": false,
+        "allRequestsP95Meets40Ms": false
+      },
+      "humanH4Approval": false,
+      "firstPassFailures": 0,
+      "warmedUp": true
+    },
+    "motis_verify_fail": {
+      "status": "PASS",
+      "seconds": 0.2,
+      "finishedAt": "2026-10-01T14:58:38+00:00",
+      "count": 0
+    }
+  },
+  "files": {
+    "probe_queries": "D:\\ot\\acc-oct1b-02\\acceptance-oct1b-20261001-02-probe-queries.json",
+    "probe": "D:\\ot\\acc-oct1b-02\\acceptance-oct1b-20261001-02-probe.json",
+    "readyz": "D:\\ot\\acc-oct1b-02\\acceptance-oct1b-20261001-02-readyz.json",
+    "walk_caps": "D:\\ot\\acc-oct1b-02\\acceptance-oct1b-20261001-02-walk-caps.json",
+    "demo": "D:\\ot\\acc-oct1b-02\\acceptance-oct1b-20261001-02-demo.txt",
+    "h3_raw": "D:\\ot\\acc-oct1b-02\\acceptance-oct1b-20261001-02-h3-review-raw.json",
+    "h3_sheet": "D:\\ot\\acc-oct1b-02\\acceptance-oct1b-20261001-02-h3-review.md",
+    "source_hashes": "D:\\ot\\acc-oct1b-02\\acceptance-oct1b-20261001-02-source-hashes.json",
+    "runtime": "D:\\ot\\acc-oct1b-02\\acceptance-oct1b-20261001-02-runtime.json",
+    "search_raw": "D:\\ot\\acc-oct1b-02\\acceptance-oct1b-20261001-02-search-raw.json",
+    "h4_sheet": "D:\\ot\\acc-oct1b-02\\acceptance-oct1b-20261001-02-h4-review.md",
+    "search_api_log": "D:\\ot\\acc-oct1b-02\\acceptance-oct1b-20261001-02-search-api-container.log",
+    "search": "D:\\ot\\acc-oct1b-02\\acceptance-oct1b-20261001-02-search.json",
+    "log_motis": "D:\\ot\\acc-oct1b-02\\acceptance-oct1b-20261001-02-motis.log",
+    "log_photon": "D:\\ot\\acc-oct1b-02\\acceptance-oct1b-20261001-02-photon.log",
+    "log_api": "D:\\ot\\acc-oct1b-02\\acceptance-oct1b-20261001-02-api.log",
+    "log_verifier": "D:\\ot\\acc-oct1b-02\\acceptance-oct1b-20261001-02-verifier.log",
+    "log_photon-init": "D:\\ot\\acc-oct1b-02\\acceptance-oct1b-20261001-02-photon-init.log"
+  }
+}
