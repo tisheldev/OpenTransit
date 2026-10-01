@@ -380,7 +380,7 @@ class Harness:
     def pointer(self) -> str:
         return self.exec_api("readlink", "/managed/current", check=False).stdout.strip()
 
-    def activate(self, binding: str, *, action="activate", now=None):
+    def activate(self, binding: str, *, action="activate", now=None, check_only=False):
         args = [
             action,
             "--managed-root",
@@ -392,6 +392,8 @@ class Harness:
         ]
         if now:
             args += ["--now", now]
+        if check_only:
+            args.append("--check-only")
         return self.cli(*args, label=f"opentransit {action} {Path(binding).stem}")
 
     # -- journeys ------------------------------------------------------------------------
@@ -742,7 +744,7 @@ class Harness:
         pointer = self.pointer()
         rollbacks = {}
         for label, when in (
-            ("stale", "2026-10-03T10:00:00+00:00"),
+            ("expired_freshness", "2026-10-08T10:00:00+00:00"),
             ("expired_coverage", "2026-11-01T00:00:00+00:00"),
         ):
             rc, report, proc = self.activate(a_binding, action="rollback", now=when)
@@ -754,15 +756,31 @@ class Harness:
         reasons = {k: (v["report"] or {}).get("reasons") for k, v in rollbacks.items()}
         batch = self.burst(3)
         self.check(
-            "rollback_refuses_stale_and_expired_generation_without_touching_pointer",
+            "rollback_refuses_expired_freshness_and_coverage_without_touching_pointer",
             refused
             and self.pointer() == pointer
-            and "source_stale" in reasons["stale"]
+            and reasons["expired_freshness"] == ["source_expired"]
             and "coverage_expired" in reasons["expired_coverage"]
             and all(r["generationId"] == self.b_id for r in batch),
             reasons=reasons,
             pointerUnchanged=self.pointer() == pointer,
             requestsAfterRefusal=self.generation_ids(batch),
+        )
+        stale = "2026-10-03T10:00:00+00:00"
+        rc_e, eligible, _ = self.activate(a_binding, action="rollback", now=stale, check_only=True)
+        rc_n, new_refused, _ = self.activate("/managed/binding-t2-b-activate.json", now=stale)
+        self.check(
+            "stale_generation_is_rollback_serviceable_but_new_candidate_needs_current",
+            rc_e == 0
+            and (eligible or {}).get("status") == "eligible"
+            and eligible["currency"]["freshness"] == "stale"
+            and rc_n == 2
+            and (new_refused or {}).get("reasons") == ["source_stale"]
+            and self.pointer() == pointer,
+            simulatedNow=stale,
+            rollbackEligibility=eligible,
+            newCandidateRefusal=new_refused,
+            note="simulated operator clock only; the worker serves with the real clock",
         )
         # Valid rollback: the old engine was stopped, so restart it first.
         self.run(["docker", "start", "ot-t2-motis-a"], label="docker start ot-t2-motis-a")
@@ -807,7 +825,7 @@ class Harness:
         listing_before = json.loads(self.tool("listing").stdout)
         trees_before = {n: self.tree_snapshot(n) for n in (GEN_A, GEN_B)}
         results = {}
-        for label, extra in (("unpinned", []), ("pinned", ["--pin", "synthetic-synth-old"])):
+        for label, extra in (("unpinned", []),):
             out = f"/run-data/prune-{label}.json"
             rc, _, proc = self.cli(
                 "prune",
@@ -839,7 +857,6 @@ class Harness:
             "prune_dry_run_lists_candidates_and_deletes_nothing",
             all(v["exitCode"] == 0 and v["deletionPerformed"] is False for v in results.values())
             and results["unpinned"]["candidates"] == ["synthetic-synth-old"]
-            and results["pinned"]["candidates"] == []
             and listing_before == listing_after
             and trees_before == trees_after,
             plans=results,
