@@ -16,6 +16,7 @@ the archive (research note, 1 October 2026):
 from __future__ import annotations
 
 import json
+from array import array
 from collections.abc import Iterable, Iterator
 from dataclasses import dataclass, field
 from datetime import UTC, date, datetime, timedelta
@@ -98,22 +99,39 @@ def parse_snapshot(raw: bytes, *, compressed: bool = True) -> tuple[list[Ping], 
 
 @dataclass(slots=True)
 class Ride:
-    """One service date's observations of one TripId, deduplicated by RecordedAtTime."""
+    """One service date's observations of one TripId.
+
+    Pings are kept in compact arrays (a month batch holds millions per day); `points`
+    deduplicates by RecordedAtTime, keeping the first copy, when a ride is processed.
+    """
 
     trip_ref: str
     line_ref: str
     operator_ref: str
     origin_departure: int
-    points: dict[int, tuple[int, int]] = field(default_factory=dict)  # at → (metres, order)
+    at: array = field(default_factory=lambda: array("q"))
+    metres: array = field(default_factory=lambda: array("i"))
+    orders: array = field(default_factory=lambda: array("i"))
     vehicles: set[str] = field(default_factory=set)
-    duplicates: int = 0
 
     def add(self, ping: Ping) -> None:
-        if ping.recorded_at in self.points:
-            self.duplicates += 1
-            return
-        self.points[ping.recorded_at] = (ping.distance_m, ping.order)
+        self.at.append(ping.recorded_at)
+        self.metres.append(ping.distance_m)
+        self.orders.append(ping.order)
         self.vehicles.add(ping.vehicle_ref)
+
+    @property
+    def points(self) -> dict[int, tuple[int, int]]:
+        """RecordedAtTime → (metres, order), first copy of each repeated snapshot."""
+        result: dict[int, tuple[int, int]] = {}
+        for at, metres, order in zip(self.at, self.metres, self.orders, strict=True):
+            if at not in result:
+                result[at] = (metres, order)
+        return result
+
+    @property
+    def duplicates(self) -> int:
+        return len(self.at) - len(set(self.at))
 
 
 def load_rides(
