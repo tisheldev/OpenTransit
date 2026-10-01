@@ -31,6 +31,11 @@ class GenerationBinding:
     # "rollback" re-serves a previously served generation and may be aging or stale (still
     # serviceable); a new candidate ("activate") must have current source freshness.
     purpose: str = "activate"
+    # Optional per-generation Photon query/admin origins. Address composites built separately
+    # carry different sealed indexes, so blue/green activation needs one Photon per binding;
+    # when absent the worker uses its fixed OPENTRANSIT_PHOTON_* origins.
+    photon_origin: str | None = None
+    photon_admin_origin: str | None = None
 
     def as_dict(self) -> dict:
         data = {
@@ -43,26 +48,38 @@ class GenerationBinding:
         }
         if self.purpose != "activate":
             data["purpose"] = self.purpose
+        if self.photon_origin is not None:
+            data["photonOrigin"] = self.photon_origin
+            data["photonAdminOrigin"] = self.photon_admin_origin
         return data
 
 
-def _origin(value: object) -> str:
+def _origin(value: object, label: str = "engineOrigin") -> str:
     if not isinstance(value, str):
-        raise ValueError("Binding engineOrigin must be an HTTP loopback origin")
+        raise ValueError(f"Binding {label} must be an HTTP loopback origin")
     parsed = urlsplit(value)
     if parsed.scheme != "http" or not parsed.hostname or parsed.path not in {"", "/"}:
-        raise ValueError("Binding engineOrigin must be an HTTP loopback origin")
+        raise ValueError(f"Binding {label} must be an HTTP loopback origin")
     if parsed.hostname not in {"127.0.0.1", "localhost", "::1"}:
-        raise ValueError("Binding engineOrigin must be loopback")
+        raise ValueError(f"Binding {label} must be loopback")
     try:
         port = parsed.port
     except ValueError as exc:
-        raise ValueError("Binding engineOrigin has an invalid port") from exc
+        raise ValueError(f"Binding {label} has an invalid port") from exc
     if parsed.username or parsed.password or parsed.query or parsed.fragment:
-        raise ValueError("Binding engineOrigin must contain only an origin")
+        raise ValueError(f"Binding {label} must contain only an origin")
     if port is None:
-        raise ValueError("Binding engineOrigin must include an explicit port")
+        raise ValueError(f"Binding {label} must include an explicit port")
     return value.rstrip("/")
+
+
+def _photon_origins(data: dict) -> tuple[str | None, str | None]:
+    query, admin = data.get("photonOrigin"), data.get("photonAdminOrigin")
+    if (query is None) != (admin is None):
+        raise ValueError("Binding photonOrigin and photonAdminOrigin must be set together")
+    if query is None:
+        return None, None
+    return _origin(query, "photonOrigin"), _origin(admin, "photonAdminOrigin")
 
 
 def _safe_path(value: object, label: str, required: bool = False) -> Path | None:
@@ -127,6 +144,7 @@ def validate_binding(
         token,
         generation.id,
         _purpose(data),
+        *_photon_origins(data),
     )
 
 
