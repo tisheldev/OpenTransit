@@ -61,7 +61,7 @@ Use these stable IDs in session claims. READY means prerequisites permit work, n
 | P1-03 | M3 routing/departures/trips; API-path H3 | WAITING ON USER (H3) | Functional and mechanical acceptance done; only the H3 verdict remains. |
 | P1-04 | M4 search; H4 | ACCEPTED WITH KNOWN LIMITS | No further M4 work before launch. |
 | H0-IMG | Build and measure the H-0 images locally under the proposed task limits (startup, disk, memory, readiness) | READY | Follows P1-02; [drafts](deploy/aws/README.md). Then ask the user for H-0 approval: region/ingress, reviewer IP, DNS name, bounded test ($10 ceiling, two tasks, two hours). |
-| M7 | CI (after code licence/visibility decision), rate limiting, load, fault injection, restore drill, full-stack capacity under 8 GiB | AFTER H-0 START | Runs during the H-1 week; [operations](docs/operations.md), [load](tools/load/README.md). |
+| M7 | CI (licence decided: MIT, public direction), rate limiting, load, fault injection, restore drill, full-stack capacity under 8 GiB | AFTER H-0 START | Runs during the H-1 week; [operations](docs/operations.md), [load](tools/load/README.md). |
 | CLIENT | Phase 2 product client against the private deployment | AFTER H-0 START | [Client design](docs/client-design.md); user review of the proposal. |
 
 Before reruns, preserve input/config/corpus hashes, prior outputs and human verdicts. Verify overwrite behavior; do not clear evidence or graph volumes.
@@ -82,7 +82,8 @@ Before reruns, preserve input/config/corpus hashes, prior outputs and human verd
 | H3 — route review | PASSED October 1: user judged 9/10 required journeys usable (J11 unsure); [verdicts](services/api/results/h3-verdicts-20261001-01.json). |
 | H4 — search review | APPROVED by the user October 1 with the accepted known limits. |
 | H5/H6 — fallback | Schedule-first scope accepted September 25; October 19 stays a live-feature follow-up. |
-| Gate revision (user, October 1) | Client and M7 run during the H-1 week; public release gates unchanged ([PRD](PRD.md)). Code licence/visibility is needed before CI. |
+| Gate revision (user, October 1) | Client and M7 run during the H-1 week; public release gates unchanged ([PRD](PRD.md)). |
+| S5 — code licence and visibility | DECIDED October 1 (user): MIT for original code and docs ([LICENSE](LICENSE)); public development direction and public GitHub visibility authorized. Dataset and third-party terms stay separate ([licence audit](docs/licence-audit.md)). |
 
 ## Active work and session handoff
 
