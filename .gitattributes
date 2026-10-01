@@ -1,0 +1,27 @@
+# Keep working-tree bytes identical on every platform. The index stores LF;
+# with core.autocrlf=true a Windows checkout rewrites everything to CRLF, so
+# recorded SHA-256 values only matched when they had been taken on that same
+# kind of checkout. Docker/ECS builds are Linux and expect LF as well.
+* text=auto eol=lf
+
+# A few recorded artifacts were hashed from CRLF working copies (the earlier
+# Windows checkout, later bind-mounted into Linux containers). Their recorded
+# hashes are evidence and must not be rewritten, so pin those exact files to
+# CRLF on every platform. All other hashed fixtures and evidence (for example
+# tests/fixtures/motis-v2.11.2/real-plan-depart-at.json) are LF.
+poc/corpora/places-venues.json text eol=crlf
+poc/corpora/places.json text eol=crlf
+poc/routing/config.yml text eol=crlf
+services/api/results/chronology-diagnostic-20260930-02.json text eol=crlf
+services/api/results/chronology-projection-20260930-02.json text eol=crlf
+services/api/results/m2-validation-attempt5-20260930.json text eol=crlf
+services/api/results/m3-m4-functional-http-20260930-01.json text eol=crlf
+services/api/results/m4-english-functional-runtime-20260930-03.json text eol=crlf
+services/api/results/m4-enrichment-output-audit-20261001-01.json text eol=crlf
+services/api/results/m4-legacy-translation-diagnostic-20260930-01.json text eol=crlf
+services/api/results/m4-photon-bound-api-functional-20261001-01.json text eol=crlf
+services/api/results/m4-photon-enriched-trial-20261001-01.json text eol=crlf
+services/api/results/m4-stop-prefilter-focused-linux-20260930-01.json text eol=crlf
+services/api/tests/fixtures/m4-api-search-language-variants-20260930.json text eol=crlf
+services/api/tests/fixtures/motis-v2.11.2/real-clamped-trip-20261005.json text eol=crlf
+services/api/tests/fixtures/motis-v2.11.2/real-clamped-trip-20261025.json text eol=crlf

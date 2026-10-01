@@ -197,6 +197,45 @@ def _write_event(day_dir: Path, result: FetchResult) -> None:
     os.replace(temporary, path)
 
 
+WINDOWS_MAX_PATH = 259  # MAX_PATH (260) includes the terminating NUL
+_EVENT_NAME_LENGTH = len("20260930T000000+0000-") + 32 + len(".json")
+
+
+def _windows_long_paths_enabled() -> bool:
+    try:
+        import winreg
+
+        with winreg.OpenKey(
+            winreg.HKEY_LOCAL_MACHINE, r"SYSTEM\CurrentControlSet\Control\FileSystem"
+        ) as key:
+            return bool(winreg.QueryValueEx(key, "LongPathsEnabled")[0])
+    except ImportError, OSError:
+        return False
+
+
+def _check_path_budget(day_dir: Path, sources: Mapping[str, SourceSpec]) -> None:
+    """Fail clearly instead of mid-run when Windows would hit MAX_PATH.
+
+    Evidence paths embed a 64-character digest (and a UUID on collisions), so
+    a deep ``--output`` directory otherwise surfaces as an opaque
+    FileNotFoundError and an unwritable failure event. Linux/Fargate has no
+    such limit.
+    """
+    if os.name != "nt" or _windows_long_paths_enabled():
+        return
+    longest = len(str(day_dir / "events")) + 1 + _EVENT_NAME_LENGTH
+    for key, spec in sources.items():
+        objects = len(str(day_dir / "objects" / key)) + 1 + 64 + 1 + 32 + 1 + len(spec.name)
+        staging = len(str(day_dir / ".staging")) + 1 + len(key) + 1 + 32 + len(".part")
+        longest = max(longest, objects, staging)
+    if longest > WINDOWS_MAX_PATH:
+        raise FetchError(
+            f"output directory is too deep for Windows MAX_PATH ({longest} > "
+            f"{WINDOWS_MAX_PATH} characters for the longest evidence path); use a shorter "
+            "--output path or enable Windows long paths (LongPathsEnabled)"
+        )
+
+
 def fetch_sources(
     inputs_root: Path,
     sources: Mapping[str, SourceSpec] = DEFAULT_SOURCES,
@@ -214,6 +253,7 @@ def fetch_sources(
     root = Path(inputs_root).resolve()
     checked = _utc(now)
     day_dir = root / checked.date().isoformat()
+    _check_path_budget(day_dir, sources)
     result: dict[str, FetchResult] = {}
     for key, spec in sources.items():
         previous = _events(root, key)

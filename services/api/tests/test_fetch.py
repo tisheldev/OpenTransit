@@ -2,8 +2,13 @@ import hashlib
 import io
 import zipfile
 from datetime import UTC, datetime, timedelta
+from pathlib import Path
+from types import SimpleNamespace
 
-from opentransit.build.fetch import SourceSpec, fetch_sources
+import pytest
+
+from opentransit.build import fetch as fetch_module
+from opentransit.build.fetch import FetchError, SourceSpec, fetch_sources
 
 
 def zip_bytes(members: dict[str, str]) -> bytes:
@@ -105,3 +110,22 @@ def test_osm_weekly_policy_reuses_last_verified_input_without_get(tmp_path, monk
     assert skipped.status == "skipped"
     assert skipped.path == first.path
     assert skipped.checked_at == first.checked_at
+
+
+def test_windows_max_path_is_reported_before_any_download(tmp_path, monkeypatch):
+    # Evidence paths embed a 64-character digest; a deep --output directory used
+    # to fail with an opaque FileNotFoundError and an unwritable failure event.
+    monkeypatch.setattr(fetch_module, "os", SimpleNamespace(name="nt"))
+    monkeypatch.setattr(fetch_module, "_windows_long_paths_enabled", lambda: False)
+    monkeypatch.setattr(
+        "urllib.request.urlopen", lambda *_a, **_k: pytest.fail("no download expected")
+    )
+    spec = {"feed": SourceSpec("feed.zip", "https://example.test/feed", ("feed.txt",))}
+    now = datetime(2026, 9, 30, tzinfo=UTC)
+
+    with pytest.raises(FetchError, match="MAX_PATH"):
+        fetch_sources(tmp_path / ("d" * 200), spec, now=now)
+
+    fetch_module._check_path_budget(Path("C:/inputs/2026-09-30"), spec)
+    monkeypatch.setattr(fetch_module, "_windows_long_paths_enabled", lambda: True)
+    fetch_module._check_path_budget(tmp_path / ("d" * 200) / "2026-09-30", spec)
