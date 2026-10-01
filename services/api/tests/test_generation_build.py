@@ -15,7 +15,7 @@ from opentransit.build import generations
 from opentransit.build.generations import CANONICAL_INPUTS, build_generation, verify_artifacts
 from opentransit.build.validation import validate_feed
 from opentransit.core.trip_calls import POLICY_ID
-from opentransit.reference import ReferenceStore
+from opentransit.reference import SCHEMA_VERSION, ReferenceStore
 
 
 def _zip(path, members):
@@ -171,7 +171,7 @@ def test_build_generation_validates_pins_and_writes_manifest(inputs, tmp_path):
     assert manifest["state"] == "ready"
     assert manifest["mode"] == "fixture"
     assert manifest["parserVersion"] == 2
-    assert manifest["referenceSchemaVersion"] == 2
+    assert manifest["referenceSchemaVersion"] == SCHEMA_VERSION == 3
     assert manifest["identity"]["timingPolicy"] == manifest["timingPolicy"]
     assert manifest["timingPolicy"]["policy_id"] == "motis-minute-bracket-v1"
     assert manifest["build"]["importMemoryCapBytes"] == 4 * 1024**3

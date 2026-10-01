@@ -14,6 +14,7 @@ from zipfile import ZipFile
 from opentransit.build.generations import PARSER_VERSION, verify_artifacts
 from opentransit.core.artifacts import file_sha256
 from opentransit.reference import (
+    COUNT_TABLES,
     ReferenceStore,
     _content_hash,
     _translation_rows,
@@ -80,20 +81,7 @@ def _repair_database(
             raise ValueError("Reference database source hash differs from the sealed parent")
         previous_counts = {
             table: connection.execute(f"SELECT count(*) FROM {table}").fetchone()[0]
-            for table in (
-                "agencies",
-                "routes",
-                "stops",
-                "translations",
-                "route_stops",
-                "patterns",
-                "pattern_stops",
-                "calendar_rules",
-                "calendar_exceptions",
-                "trip_profiles",
-                "clock_profiles",
-                "clock_profile_calls",
-            )
+            for table in COUNT_TABLES
         }
         connection.execute("DELETE FROM translations")
         _validate_translation_rows(connection, rows)

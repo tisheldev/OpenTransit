@@ -8,6 +8,8 @@ import sqlite3
 import statistics
 import threading
 import unicodedata
+from collections.abc import Callable
+from dataclasses import dataclass
 from functools import lru_cache
 from typing import Any
 
@@ -66,13 +68,31 @@ _NEAR_FAR_M = 10_000.0
 _DESC_CITY = re.compile(r"עיר:\s*(.*?)\s*(?:רציף:|קומה:|$)")
 # A query that is exactly a locality name ranks that locality's stops (central first,
 # then busiest) and any lexical match inside it ahead of lexical matches elsewhere,
-# which are usually street-named stops in other cities. Localities and their English
-# names are derived from the feed (stop descriptions and translations), not curated.
+# which are usually street-named stops in other cities. Localities come first from the
+# reference's OSM administrative level 8 table (names from OSM tags, stops assigned by
+# polygon containment at build time); a feed-derived fallback (stop descriptions and
+# translations) covers names OSM does not list as a municipality. Nothing is curated.
 _LOCALITY_TIER = 1.75
 _LOCALITY_OUTSIDE_PENALTY = 2
 _LOCALITY_MAX_ROWS = 400
-_LOCALITY_BAND_M = 750.0
+# Within a locality, stops rank by route count discounted with distance from the
+# locality's centre (e-folding length below), so a central hub beats both a remote
+# hub and a quiet street stop at the centre.
+_LOCALITY_DECAY_M = 750.0
 _LOCALITY_MIN_ALIAS_CHARS = 3
+# Compound OSM names such as "Tel-Aviv–Yafo" or "Kadima - Zoran" also name each part.
+_NAME_PART_SPLIT = re.compile(r"\s+[-\u2013\u2014]\s+|[\u2013\u2014]")
+
+
+@dataclass(frozen=True)
+class _LocalityIntent:
+    """The stops a locality-name query points at, and how to rank them."""
+
+    members: frozenset[int]
+    top_rows: tuple[int, ...]
+    centers: tuple[tuple[float, float], ...]
+    # True when the feed or the polygons place a row in a different locality.
+    foreign: Callable[[int], bool]
 
 
 def normalize_label(value: str) -> str:
@@ -261,8 +281,20 @@ def _locality_aliases(rows: list[dict[str, Any]], cities: set[str]) -> dict[str,
     return aliases
 
 
+def _locality_name_forms(name: str) -> list[str]:
+    """Normalized forms of an OSM locality name: whole name, then each dash-part."""
+    forms = []
+    for candidate in (name, *_NAME_PART_SPLIT.split(name)):
+        form = normalize_label(candidate)
+        if len(form) >= _LOCALITY_MIN_ALIAS_CHARS and any(char.isalpha() for char in form):
+            forms.append(form)
+    return list(dict.fromkeys(forms))
+
+
 class _SearchIndex:
-    def __init__(self, rows: list[dict[str, Any]]) -> None:
+    def __init__(
+        self, rows: list[dict[str, Any]], localities: list[dict[str, Any]] | None = None
+    ) -> None:
         self.rows = tuple(rows)
         self.by_source = {row["source_id"]: row for row in rows}
         self.by_source.update({row["stop_id"]: row for row in rows})
@@ -335,7 +367,9 @@ class _SearchIndex:
                 ]
             )
         }
+        self.city_members = {city: frozenset(members) for city, members in by_city.items()}
         self.locality_aliases = _locality_aliases(rows, set(by_city))
+        self._index_osm_localities(localities or [])
         self.connection = sqlite3.connect(":memory:", check_same_thread=False)
         self.lock = threading.Lock()
         self.connection.execute(
@@ -360,6 +394,37 @@ class _SearchIndex:
             "INSERT INTO compact_labels(candidate_index, label) VALUES (?, ?)",
             [(index, key) for index, keys in enumerate(self.compact) for key in keys],
         )
+
+    def _index_osm_localities(self, localities: list[dict[str, Any]]) -> None:
+        """Name forms and stop membership of the reference's OSM localities."""
+        self.osm_localities = localities
+        self.osm_by_name: dict[str, set[int]] = {}
+        self.osm_by_folded: dict[str, set[int]] = {}
+        self.osm_by_compact: dict[str, set[int]] = {}
+        index_of = {item["locality_id"]: number for number, item in enumerate(localities)}
+        members: dict[int, list[int]] = {}
+        self.row_localities: list[frozenset[int]] = []
+        for row_index, row in enumerate(self.rows):
+            held = frozenset(
+                index_of[key] for key in row.get("locality_ids") or () if key in index_of
+            )
+            self.row_localities.append(held)
+            for number in held:
+                members.setdefault(number, []).append(row_index)
+        for number, item in enumerate(localities):
+            for _language, name, _tag in item["names"]:
+                for form in _locality_name_forms(name):
+                    self.osm_by_name.setdefault(form, set()).add(number)
+                    if form.isascii():
+                        folded = fold_transliteration(form)
+                        self.osm_by_folded.setdefault(folded, set()).add(number)
+                        if len(key := compact_key(form)) >= _COMPACT_MIN_CHARS:
+                            self.osm_by_compact.setdefault(key, set()).add(number)
+        self.osm_members = {number: frozenset(rows) for number, rows in members.items()}
+        self.osm_top = {
+            number: tuple(sorted(rows, key=lambda i: (-self.importance[i], i))[:_LOCALITY_MAX_ROWS])
+            for number, rows in members.items()
+        }
 
     def _compact_rows(self, key: str) -> list[int]:
         escaped = key.replace('"', '""')
@@ -386,12 +451,52 @@ class _SearchIndex:
             matches = [self._token_rows(token) for token in tokens]
         return sorted(set.intersection(*matches)) if matches else []
 
-    def locality_for(self, query: str) -> str | None:
-        """The city whose name is exactly the query, in Hebrew or folded Latin."""
+    def locality_for(self, query: str) -> _LocalityIntent | None:
+        """The locality whose name is exactly the query, in Hebrew or folded Latin.
+
+        OSM localities (reference table) win; otherwise a feed-derived city name.
+        A locality that holds no stop is ignored: it is not a place to search stops in.
+        """
+        if (intent := self._osm_intent(query)) is not None:
+            return intent
         city = self.locality_aliases.get(query)
         if city is None and query.isascii():
             city = self.locality_aliases.get(fold_transliteration(query))
-        return city
+        if city is None:
+            return None
+        center = self.city_center.get(city)
+        return _LocalityIntent(
+            self.city_members[city],
+            tuple(self.city_rows[city]),
+            (center,) if center else (),
+            # No city in the feed (for example rail stops) is not evidence of another city.
+            lambda row_index: self.city_of[row_index] not in (None, city),
+        )
+
+    def _osm_intent(self, query: str) -> _LocalityIntent | None:
+        if not self.osm_localities:
+            return None
+        matched = set(self.osm_by_name.get(query, ()))
+        if query.isascii():
+            matched |= self.osm_by_folded.get(fold_transliteration(query), set())
+            if not matched and len(key := compact_key(query)) >= _COMPACT_MIN_CHARS:
+                matched = set(self.osm_by_compact.get(key, ()))
+        matched = {number for number in matched if number in self.osm_members}
+        if not matched:
+            return None
+        ordered = sorted(matched)
+        members = frozenset().union(*(self.osm_members[number] for number in ordered))
+        top = sorted(
+            {row for number in ordered for row in self.osm_top[number]},
+            key=lambda i: (-self.importance[i], i),
+        )[: _LOCALITY_MAX_ROWS * len(ordered)]
+        return _LocalityIntent(
+            members,
+            tuple(top),
+            tuple(self.osm_localities[number]["center"] for number in ordered),
+            # Placed in other polygons only; a row in no polygon is unknown, not foreign.
+            lambda row_index: bool(self.row_localities[row_index]) and row_index not in members,
+        )
 
     def strict_matches(self, query: str) -> dict[int, float]:
         """Best strict score per row; transliteration-folded matches rank lower."""
@@ -465,7 +570,9 @@ class _SearchIndex:
 def _search_index(reference: ReferenceStore) -> _SearchIndex:
     # Each instance belongs to one immutable generation; the bounded cache lets an
     # old captured snapshot finish while preventing unbounded index accumulation.
-    return _SearchIndex(reference.stop_search_candidates())
+    # References without OSM locality data (or test doubles) simply have no localities.
+    localities = getattr(reference, "search_localities", None)
+    return _SearchIndex(reference.stop_search_candidates(), localities() if localities else None)
 
 
 def search_stops(
@@ -512,27 +619,26 @@ def search_stops(
         partial = True
 
     locality = index.locality_for(normalized_query)
-    center: tuple[float, float] | None = None
+    centers: tuple[tuple[float, float], ...] = ()
     locality_hits: set[int] = set()
     if locality is not None:
-        # The query names a city: its stops lead (an exact label inside it still ranks
-        # first); lexical matches in other cities (street-named stops) rank after them.
+        # The query names a locality: its stops lead (an exact label inside it still
+        # ranks first); lexical matches placed in other localities (street-named stops)
+        # rank after them.
         ranked_scores: dict[int, float] = {}
         for row_index, score in (scored if not partial else {}).items():
-            city = index.city_of[row_index]
-            if city == locality:
+            if row_index in locality.members:
                 ranked_scores[row_index] = min(score, _LOCALITY_TIER)
-            elif city is None:
-                # No city in the feed (for example rail stops): not evidence of another city.
-                ranked_scores[row_index] = score
-            else:
+            elif locality.foreign(row_index):
                 ranked_scores[row_index] = score + _LOCALITY_OUTSIDE_PENALTY
-        for row_index in index.city_rows[locality]:
+            else:
+                ranked_scores[row_index] = score
+        for row_index in locality.top_rows:
             if row_index not in ranked_scores or ranked_scores[row_index] > _LOCALITY_TIER:
                 ranked_scores[row_index] = _LOCALITY_TIER
                 locality_hits.add(row_index)
         scored, partial = ranked_scores, False
-        center = index.city_center.get(locality)
+        centers = locality.centers
 
     grouped: dict[str, dict[str, Any]] = {}
     for row_index, score in scored.items():
@@ -601,15 +707,20 @@ def search_stops(
 
     candidates = list(grouped.values())
     for candidate in candidates:
-        if center is not None and candidate["coordinates"] is not None:
-            # Distance to the city centre in coarse bands: central stops first, then busiest.
-            offset = _distance_m(
-                center[0],
-                center[1],
-                candidate["coordinates"]["latitude"],
-                candidate["coordinates"]["longitude"],
+        if centers and candidate["coordinates"] is not None:
+            offset = min(
+                _distance_m(
+                    center[0],
+                    center[1],
+                    candidate["coordinates"]["latitude"],
+                    candidate["coordinates"]["longitude"],
+                )
+                for center in centers
             )
-            candidate["center_band"] = int(offset // _LOCALITY_BAND_M)
+            candidate["center_offset"] = offset
+            candidate["centrality"] = candidate["importance"] * math.exp(
+                -offset / _LOCALITY_DECAY_M
+            )
         if near is not None and candidate["coordinates"] is not None:
             lat, lon = near
             stop_lat = candidate["coordinates"]["latitude"]
@@ -625,8 +736,9 @@ def search_stops(
             return (score, distance, -item["importance"], name, item["id"])
         if locality is not None:
             effective = score + (2 if near is not None and distance > _NEAR_FAR_M else 0)
-            band = item.get("center_band", math.inf)
-            return (effective, distance, band, -item["importance"], name, item["id"])
+            offset = item.get("center_offset", math.inf)
+            centrality = -item.get("centrality", 0.0)
+            return (effective, distance, centrality, offset, -item["importance"], name, item["id"])
         if near is not None:
             # With a location, a distant match drops two tiers so a nearby all-token
             # match can outrank a far exact/prefix one; ties order by distance.
@@ -639,7 +751,8 @@ def search_stops(
         candidate.pop("score", None)
         candidate.pop("matched_source_id", None)
         candidate.pop("importance", None)
-        candidate.pop("center_band", None)
+        candidate.pop("center_offset", None)
+        candidate.pop("centrality", None)
         if candidate["distance"] is None:
             candidate.pop("distance")
     return {

@@ -29,8 +29,10 @@ from opentransit.core.trip_calls import (
     project_profile,
     source_profile_from_rows,
 )
+from opentransit.localities import LocalityDataset, assign_stops
 
-SCHEMA_VERSION = 2
+# 3: localities (OSM admin level 8), their names and the stop assignment.
+SCHEMA_VERSION = 3
 DEFAULT_PAGE_SIZE = 20
 MAX_PAGE_SIZE = 100
 MAX_SOURCE_PROFILE_CALLS = 10_000
@@ -41,6 +43,24 @@ EARTH_RADIUS_M = 6_371_008.8
 STOP_PREFIX = "mot:stop:"
 GTFS_RAIL_ROUTE_TYPE = 2
 ROUTE_PREFIX = "mot:route:"
+COUNT_TABLES = (
+    "agencies",
+    "routes",
+    "stops",
+    "translations",
+    "route_stops",
+    "patterns",
+    "pattern_stops",
+    "calendar_rules",
+    "calendar_exceptions",
+    "trip_profiles",
+    "clock_profiles",
+    "clock_profile_calls",
+    "localities",
+    "locality_names",
+    "stop_localities",
+)
+LOCALITY_PROVENANCE_KEY = "localityProvenance"
 
 
 class SourceProfileLimitError(ValueError):
@@ -188,27 +208,23 @@ def _content_hash(connection: sqlite3.Connection) -> str:
     digest = hashlib.sha256()
     digest.update(json.dumps(_timing_policy(), sort_keys=True, separators=(",", ":")).encode())
     digest.update(b"\n")
-    for table in (
-        "agencies",
-        "routes",
-        "stops",
-        "translations",
-        "route_stops",
-        "patterns",
-        "pattern_stops",
-        "calendar_rules",
-        "calendar_exceptions",
-        "trip_profiles",
-        "clock_profiles",
-        "clock_profile_calls",
-    ):
+    for table in COUNT_TABLES:
         columns = [row[1] for row in connection.execute(f"PRAGMA table_info({table})")]
+        if not columns:
+            continue  # tables from a later schema version are absent from older files
         order = ", ".join(f'"{name}"' for name in columns)
         for row in connection.execute(f'SELECT {order} FROM "{table}" ORDER BY {order}'):
             digest.update(
                 json.dumps(tuple(row), ensure_ascii=False, separators=(",", ":")).encode()
             )
             digest.update(b"\n")
+    # Locality provenance (OSM PBF and context hashes) is part of the content identity;
+    # a reference without localities adds nothing, so its hash is unchanged by them.
+    provenance = connection.execute(
+        "SELECT value FROM metadata WHERE key=?", (LOCALITY_PROVENANCE_KEY,)
+    ).fetchone()
+    if provenance is not None:
+        digest.update(LOCALITY_PROVENANCE_KEY.encode() + b"\n" + provenance[0].encode() + b"\n")
     return digest.hexdigest()
 
 
@@ -308,6 +324,27 @@ def _create_schema(connection: sqlite3.Connection) -> None:
             FOREIGN KEY(profile_id) REFERENCES clock_profiles(profile_id)
         );
         CREATE INDEX trip_profiles_service_idx ON trip_profiles(service_id, source_trip_id);
+        CREATE TABLE localities (
+            locality_id TEXT PRIMARY KEY, osm_type TEXT NOT NULL, osm_id INTEGER NOT NULL,
+            name TEXT, name_he TEXT, name_en TEXT, place TEXT, wikidata TEXT,
+            center_lat REAL NOT NULL, center_lon REAL NOT NULL,
+            min_lat REAL NOT NULL, min_lon REAL NOT NULL,
+            max_lat REAL NOT NULL, max_lon REAL NOT NULL,
+            geometry TEXT NOT NULL
+        );
+        CREATE TABLE locality_names (
+            locality_id TEXT NOT NULL, lang TEXT NOT NULL, name TEXT NOT NULL,
+            tag TEXT NOT NULL,
+            PRIMARY KEY(locality_id, tag, name),
+            FOREIGN KEY(locality_id) REFERENCES localities(locality_id)
+        );
+        CREATE TABLE stop_localities (
+            stop_id TEXT NOT NULL, locality_id TEXT NOT NULL,
+            PRIMARY KEY(stop_id, locality_id),
+            FOREIGN KEY(stop_id) REFERENCES stops(stop_id),
+            FOREIGN KEY(locality_id) REFERENCES localities(locality_id)
+        );
+        CREATE INDEX stop_localities_locality_idx ON stop_localities(locality_id, stop_id);
         CREATE TABLE trips_stage (
             trip_id TEXT PRIMARY KEY, service_id TEXT NOT NULL, route_id TEXT NOT NULL,
             direction_id TEXT, headsign TEXT
@@ -320,6 +357,48 @@ def _create_schema(connection: sqlite3.Connection) -> None:
             PRIMARY KEY(trip_id, stop_sequence)
         );
         """
+    )
+
+
+def _insert_localities(connection: sqlite3.Connection, dataset: LocalityDataset) -> None:
+    """Store localities, their names, polygons and the stop assignment (deterministic)."""
+    connection.executemany(
+        "INSERT INTO localities VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        [
+            (
+                item.locality_id,
+                item.osm_type,
+                item.osm_id,
+                item.name,
+                item.name_he,
+                item.name_en,
+                item.place,
+                item.wikidata,
+                item.center[0],
+                item.center[1],
+                *item.bbox[:2],
+                *item.bbox[2:],
+                json.dumps(item.geometry, ensure_ascii=False, separators=(",", ":")),
+            )
+            for item in dataset.localities
+        ],
+    )
+    connection.executemany(
+        "INSERT INTO locality_names VALUES (?, ?, ?, ?)",
+        [
+            (item.locality_id, language, name, tag)
+            for item in dataset.localities
+            for language, name, tag in item.names
+        ],
+    )
+    stops = connection.execute("SELECT stop_id, latitude, longitude FROM stops").fetchall()
+    connection.executemany(
+        "INSERT INTO stop_localities VALUES (?, ?)", assign_stops(dataset.localities, stops)
+    )
+    # Written before the content hash is computed so the OSM/context hashes are bound to it.
+    connection.execute(
+        "INSERT INTO metadata VALUES (?, ?)",
+        (LOCALITY_PROVENANCE_KEY, json.dumps(dataset.provenance, sort_keys=True)),
     )
 
 
@@ -361,8 +440,20 @@ def _batched(rows, size: int = 5000):
         yield batch
 
 
-def build_reference(feed_zip: Path, output_db: Path, generation_id: str) -> ReferenceMetadata:
-    """Build a new immutable reference database; an existing output is never replaced."""
+def build_reference(
+    feed_zip: Path,
+    output_db: Path,
+    generation_id: str,
+    *,
+    localities: LocalityDataset | None = None,
+) -> ReferenceMetadata:
+    """Build a new immutable reference database; an existing output is never replaced.
+
+    ``localities`` (``opentransit.localities.load_locality_context``) adds the OSM
+    administrative level 8 localities, their names and the point-in-polygon stop
+    assignment; its provenance joins the content identity. Without it the locality
+    tables are empty and search falls back to feed-derived city names only.
+    """
     feed_zip = Path(feed_zip)
     output_db = Path(output_db)
     if not generation_id or "\x00" in generation_id:
@@ -670,22 +761,11 @@ def build_reference(feed_zip: Path, output_db: Path, generation_id: str) -> Refe
             raise ValueError(f"Trip has no clock profile: {missing_profile[0]}")
         connection.execute("DROP TABLE trips_stage")
         connection.execute("DROP TABLE stop_times_stage")
+        if localities is not None:
+            _insert_localities(connection, localities)
         counts = {
             table: connection.execute(f"SELECT count(*) FROM {table}").fetchone()[0]
-            for table in (
-                "agencies",
-                "routes",
-                "stops",
-                "translations",
-                "route_stops",
-                "patterns",
-                "pattern_stops",
-                "calendar_rules",
-                "calendar_exceptions",
-                "trip_profiles",
-                "clock_profiles",
-                "clock_profile_calls",
-            )
+            for table in COUNT_TABLES
         }
         content_hash = _content_hash(connection)
         metadata = {
@@ -1077,6 +1157,11 @@ class ReferenceStore:
                     (GTFS_RAIL_ROUTE_TYPE,),
                 )
             }
+            localities_by_stop: dict[str, list[str]] = {}
+            for stop_id, locality_key in connection.execute(
+                "SELECT stop_id, locality_id FROM stop_localities ORDER BY stop_id, locality_id"
+            ):
+                localities_by_stop.setdefault(stop_id, []).append(locality_key)
             stops_by_source_id = {row["source_id"]: row for row in rows}
             source_ids_by_name: dict[str, list[str]] = {}
             for row in rows:
@@ -1106,9 +1191,41 @@ class ReferenceStore:
                 "translations": translations.get(row["source_id"], {}),
                 "route_count": route_counts.get(row["stop_id"], 0),
                 "rail": row["stop_id"] in rail_stop_ids,
+                "locality_ids": localities_by_stop.get(row["stop_id"], []),
             }
             for row in rows
         ]
+
+    def search_localities(self) -> list[dict[str, Any]]:
+        """Localities with their searchable names and representative point (no polygons).
+
+        Empty when the reference was built without OSM locality data.
+        """
+        with self._connect() as connection:
+            names: dict[str, list[tuple[str, str, str]]] = {}
+            for row in connection.execute(
+                "SELECT locality_id, lang, name, tag FROM locality_names "
+                "ORDER BY locality_id, tag, name"
+            ):
+                names.setdefault(row["locality_id"], []).append(
+                    (row["lang"], row["name"], row["tag"])
+                )
+            return [
+                {
+                    "locality_id": row["locality_id"],
+                    "name": row["name"],
+                    "name_he": row["name_he"],
+                    "name_en": row["name_en"],
+                    "place": row["place"],
+                    "center": (row["center_lat"], row["center_lon"]),
+                    "bbox": (row["min_lat"], row["min_lon"], row["max_lat"], row["max_lon"]),
+                    "names": names.get(row["locality_id"], []),
+                }
+                for row in connection.execute(
+                    "SELECT locality_id, name, name_he, name_en, place, center_lat, center_lon, "
+                    "min_lat, min_lon, max_lat, max_lon FROM localities ORDER BY locality_id"
+                )
+            ]
 
     @staticmethod
     def _translations(

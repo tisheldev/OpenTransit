@@ -190,3 +190,39 @@ def test_cli_writes_a_new_result_with_provenance_and_refuses_to_overwrite(tmp_pa
     assert compared["compare"][0]["diff"]["top1Lost"] == []
     with pytest.raises(SystemExit):
         main(args)
+
+
+def test_locality_probe_judges_results_by_polygon_containment(tmp_path):
+    from test_localities import PBF_SHA, TAGS_CENTRAL, _polygon, _square, _write_context
+
+    from opentransit.localities import load_locality_context
+    from tools.replay_search import locality_probe
+
+    feed = synthetic_feed(tmp_path / "feed.zip")
+    plain = tmp_path / "plain.sqlite"
+    build_reference(feed, plain, "probe-plain")
+    assert locality_probe(ReferenceStore(plain, "probe-plain"))["available"] is False
+
+    context = _write_context(
+        tmp_path / "context-v1.jsonl",
+        [(7, TAGS_CENTRAL, _polygon(_square(34.775, 32.075, 34.785, 32.0815)))],
+    )
+    database = tmp_path / "with-localities.sqlite"
+    build_reference(
+        feed,
+        database,
+        "probe",
+        localities=load_locality_context(context, expected_osm_sha256=PBF_SHA),
+    )
+    result = locality_probe(
+        ReferenceStore(database, "probe"),
+        (("Centralia", "en", "osm:relation:7"), ("מרכזיה", "he", "osm:relation:7")),
+    )
+    assert result["available"] is True
+    assert result["totals"]["after"] == {"queries": 2, "top1Inside": 2, "top5AllInside": 2}
+    assert result["top1Lost"] == []
+    first = result["cases"][0]
+    assert first["before"]["top1Inside"] is False  # feed-only search knows no "Centralia"
+    assert first["after"]["top"][0]["inside"] is True
+    with pytest.raises(ValueError, match="lacks"):
+        locality_probe(ReferenceStore(database, "probe"), (("X", "en", "osm:relation:99"),))
