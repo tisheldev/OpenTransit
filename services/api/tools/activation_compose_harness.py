@@ -6,6 +6,11 @@ Run on the Docker host (stdlib only):
     python services/api/tools/activation_compose_harness.py --run-id r01 \\
         --codex-runtime C:/Users/<you>/.codex/worktrees/8007/OpenTransit/.runtime
 
+Complete composite generations (schedule + sealed Photon, e.g. ``build-generation
+--addresses``) are selected with ``--old-generation``/``--new-generation`` and a real paired
+``--source-check``; each then gets its own graph mount and Photon (see
+activation-compose-composite.yaml), and the bindings name each generation's Photon origins.
+
 It serves two existing real generations (read-only mounts; nothing is copied or modified)
 behind one managed API worker with real pinned MOTIS engines, then checks: (1) in-flight
 requests finish on the old generation and later ones use the new one; (2) a failed reload
@@ -13,7 +18,8 @@ leaves old serving state intact and the pointer restored; (3) rollback refuses s
 expired generations and succeeds for a valid one; (4) the old engine stops only after the
 worker's retirement acknowledgement, at least ten request deadlines after activation;
 (5) prune --dry-run lists candidates and deletes nothing. Everything created is named
-ot-t2-*, uses host port 8300, caps memory, and is removed at the end after logs are exported.
+<prefix>-* (default ot-t2), uses host port 8300, caps memory, and is removed at the end after
+logs are exported.
 """
 
 import argparse
@@ -34,6 +40,7 @@ from pathlib import Path
 TOOLS = Path(__file__).resolve().parent
 REPO = TOOLS.parents[2]
 COMPOSE = TOOLS / "activation-compose.yaml"
+COMPOSITE_COMPOSE = TOOLS / "activation-compose-composite.yaml"
 RUNTIME = Path("C:/Projects/OpenTransit/.runtime/t2-activation")
 GEN_A = "m3-functional-blue-20260930-attempt3"
 GEN_B = "m4-translations-blue-20260930"
@@ -43,14 +50,35 @@ API = "http://127.0.0.1:8300"
 MOTIS_DIGEST = "sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330"
 MOTIS_IMAGE = f"ghcr.io/motis-project/motis@{MOTIS_DIGEST}"
 API_IMAGE = "opentransit-api:latest"
+JAVA_IMAGE_BASE = "eclipse-temurin:21.0.12.1_1-jre"
+PHOTON_JAR = "m4-photon-spike-20260930/photon-1.3.0.jar"
+# Loopback origins inside the API's network namespace (delay proxy -> per-generation Photon).
+PHOTON_ORIGINS = {
+    "a": ("http://127.0.0.1:2422", "http://127.0.0.1:9211"),
+    "b": ("http://127.0.0.1:2432", "http://127.0.0.1:9221"),
+}
+# Small composite files copied into the managed root; large artifacts are read-only mounts.
+COMPOSITE_COPIES = ("schedule-component-manifest.json", "photon-import-attestation.json")
 DEADLINE_SECONDS = 1.5
+# Standby engines are queried directly (bypassing the delay proxy, so proxy-based checks are
+# unaffected) to keep their graph pages resident: reloads rehash ~3 GB per generation over the
+# Windows share for 10-16 minutes, which evicts an idle engine and makes its first request
+# exceed the 1.2 s engine timeout (r03 rollback, r04 probe J01).
+ENGINE_DIRECT_PORTS = (59091, 59092)
+KEEP_WARM_SECONDS = 15
+WARM_QUERY = (
+    "import urllib.request as u;u.urlopen('http://127.0.0.1:{port}/api/v6/plan?"
+    "fromPlace=32.0757,34.7748&toPlace=32.0838,34.8044&time=2026-10-05T05:00:00Z',"
+    "timeout=10)"
+)
 PROXY_DELAY = 0.35
 JOURNEY = {
     "from": {"kind": "coordinate", "latitude": 32.0757, "longitude": 34.7748},
     "to": {"kind": "coordinate", "latitude": 32.0838, "longitude": 34.8044},
     "departAt": "2026-10-01T18:00:00+03:00",
 }
-CONTAINERS = ["ot-t2-api", "ot-t2-motis-a", "ot-t2-motis-b", "ot-t2-proxy"]
+BASE_ROLES = ["api", "motis-a", "motis-b", "proxy"]
+COMPOSITE_ROLES = ["photon-a", "photon-a-fwd", "photon-b", "photon-b-fwd"]
 
 POINTER_WATCH = """
 import json, os, sys, time
@@ -79,12 +107,29 @@ class Harness:
         self.args = args
         self.codex = Path(args.codex_runtime)
         self.run_dir = RUNTIME / args.run_id
+        self.prefix = args.prefix
+        self.composite = args.old_generation is not None
+        if self.composite:
+            self.gen_dirs = {"a": Path(args.old_generation), "b": Path(args.new_generation)}
+        else:
+            generations = self.codex / "generations"
+            self.gen_dirs = {"a": generations / GEN_A, "b": generations / GEN_B}
+        self.gen_names = {slot: path.name for slot, path in self.gen_dirs.items()}
+        roles = BASE_ROLES + (COMPOSITE_ROLES if self.composite else [])
+        self.containers = [f"{self.prefix}-{role}" for role in roles]
+        self.api_container = f"{self.prefix}-api"
+        self.root_volume = f"{self.prefix}-root"
+        self.photon_volumes = [f"{self.prefix}-photon-{slot}" for slot in "ab"]
+        self.java_image = None
+        self.photon_jar = None
         self.commands: list[dict] = []
         self.checks: dict[str, dict] = {}
         self.timings: dict[str, float] = {}
         self.data: dict = {}
         self.memory: dict[str, int] = {}
         self._sampling = False
+        self._warming = False
+        self.warm_counts: dict[str, dict[str, int]] = {}
         self.started = False
 
     # -- process helpers -------------------------------------------------------------
@@ -117,7 +162,10 @@ class Harness:
 
     def exec_api(self, *argv, timeout=1500, check=True, label=None):
         return self.run(
-            ["docker", "exec", "ot-t2-api", *argv], timeout=timeout, check=check, label=label
+            ["docker", "exec", self.api_container, *argv],
+            timeout=timeout,
+            check=check,
+            label=label,
         )
 
     def cli(self, *argv, timeout=1500, label=None):
@@ -160,27 +208,42 @@ class Harness:
     def env(self) -> dict:
         env = dict(os.environ)
         env.update(
+            OT_PREFIX=self.prefix,
             OT_API_IMAGE=API_IMAGE,
             OT_SRC=(REPO / "services/api/src").as_posix(),
             OT_TOOLS=TOOLS.as_posix(),
             OT_RUN=self.run_dir.as_posix(),
+            # Composite runs replace every graph mount; the base file still declares the
+            # legacy external volume, which is then never mounted.
             OT_GRAPH_VOLUME=GRAPH_VOLUME,
-            OT_A_REFERENCE=(self.codex / "generations" / GEN_A / "reference.sqlite").as_posix(),
-            OT_B_REFERENCE=(self.codex / "generations" / GEN_B / "reference.sqlite").as_posix(),
+            OT_A_REFERENCE=(self.gen_dirs["a"] / "reference.sqlite").as_posix(),
+            OT_B_REFERENCE=(self.gen_dirs["b"] / "reference.sqlite").as_posix(),
         )
+        if self.composite:
+            env.update(
+                OT_JAVA_IMAGE=self.java_image,
+                OT_PHOTON_JAR=self.photon_jar.as_posix(),
+                OT_A_GRAPH=(self.gen_dirs["a"] / "motis").as_posix(),
+                OT_B_GRAPH=(self.gen_dirs["b"] / "motis").as_posix(),
+                OT_A_CATALOG=(self.gen_dirs["a"] / "address-catalog.sqlite").as_posix(),
+                OT_B_CATALOG=(self.gen_dirs["b"] / "address-catalog.sqlite").as_posix(),
+            )
         return env
 
     def compose(self, *argv, timeout=600, check=True):
+        files = ["-f", str(COMPOSE)]
+        if self.composite:
+            files += ["-f", str(COMPOSITE_COMPOSE)]
         return self.run(
-            ["docker", "compose", "-f", str(COMPOSE), *argv],
+            ["docker", "compose", "-p", self.prefix, *files, *argv],
             timeout=timeout,
             check=check,
             env=self.env(),
             label=f"compose {argv[0]}",
         )
 
-    def tree_snapshot(self, name: str) -> dict:
-        root = self.codex / "generations" / name
+    def tree_snapshot(self, slot: str) -> dict:
+        root = self.gen_dirs[slot]
         files = {}
         for path in sorted(root.rglob("*")):
             if path.is_file():
@@ -191,29 +254,36 @@ class Harness:
 
     def preflight(self) -> None:
         self.run(["docker", "info"], timeout=60, label="docker info")
-        existing = self.run(["docker", "ps", "-a", "--filter", "name=ot-t2-", "-q"]).stdout.split()
+        existing = self.run(
+            ["docker", "ps", "-a", "--filter", f"name={self.prefix}-", "-q"]
+        ).stdout.split()
         if existing:
-            raise RuntimeError("ot-t2-* containers already exist; remove them first")
+            raise RuntimeError(f"{self.prefix}-* containers already exist; remove them first")
         volumes = self.run(["docker", "volume", "ls", "-q"]).stdout.split()
-        if "ot-t2-root" in volumes:
-            raise RuntimeError("ot-t2-root already exists; remove it first")
-        for volume in (GRAPH_VOLUME,):
-            if volume not in volumes:
-                raise RuntimeError(f"graph volume missing: {volume}")
+        for volume in [self.root_volume] + (self.photon_volumes if self.composite else []):
+            if volume in volumes:
+                raise RuntimeError(f"{volume} already exists; remove it first")
+        if not self.composite and GRAPH_VOLUME not in volumes:
+            raise RuntimeError(f"graph volume missing: {GRAPH_VOLUME}")
         self.run_dir.mkdir(parents=True, exist_ok=False)
-        images = {}
-        for ref in (API_IMAGE, MOTIS_IMAGE):
-            inspect = json.loads(self.run(["docker", "image", "inspect", ref]).stdout)[0]
-            images[ref] = {"id": inspect["Id"], "repoDigests": inspect.get("RepoDigests", [])}
-        self.data["images"] = images
         manifests = {}
-        for name in (GEN_A, GEN_B):
-            path = self.codex / "generations" / name / "manifest.json"
+        for slot, directory in self.gen_dirs.items():
+            path = directory / "manifest.json"
             manifest = json.loads(path.read_text(encoding="utf-8"))
-            manifests[name] = {
+            if self.composite and not manifest.get("addressSearch"):
+                raise RuntimeError(f"{directory} is not an address composite generation")
+            manifests[self.gen_names[slot]] = {
+                "slot": slot,
+                "path": directory.as_posix(),
                 "generationId": manifest["generationId"],
+                "scheduleComponentGenerationId": manifest.get("scheduleComponentGenerationId"),
+                "addressArtifactIdentity": (manifest.get("addressSearch") or {}).get(
+                    "artifactIdentity"
+                ),
+                "photonTreeSha256": (manifest.get("addressBuild") or {}).get("photonTreeSha256"),
                 "manifestSha256": hashlib.sha256(path.read_bytes()).hexdigest(),
                 "referenceSha256": manifest["artifacts"]["reference"]["sha256"],
+                "referenceContentSha256": manifest["artifacts"]["reference"].get("contentSha256"),
                 "graphTreeSha256": manifest["artifacts"]["motis"]["sha256"],
                 "configSha256": manifest["artifacts"]["config"]["sha256"],
                 "parserVersion": manifest.get("parserVersion"),
@@ -222,31 +292,104 @@ class Harness:
                 "coverage": manifest["coverage"],
             }
         self.data["generations"] = manifests
-        self.data["realSourceTreesBefore"] = {n: self.tree_snapshot(n) for n in (GEN_A, GEN_B)}
+        self.ids = {slot: manifests[self.gen_names[slot]]["generationId"] for slot in "ab"}
+        if self.ids["a"] == self.ids["b"]:
+            raise RuntimeError("old and new generations must differ")
+        refs = [API_IMAGE, MOTIS_IMAGE]
+        if self.composite:
+            address = json.loads(
+                (self.gen_dirs["b"] / "manifest.json").read_text(encoding="utf-8")
+            )["addressSearch"]
+            self.java_image = f"{JAVA_IMAGE_BASE}@{address['javaImageDigest']}"
+            refs.append(self.java_image)
+            self.photon_jar = Path(self.args.photon_jar or self.codex / PHOTON_JAR)
+            self.data["photonJar"] = {
+                "path": self.photon_jar.as_posix(),
+                "sha256": hashlib.sha256(self.photon_jar.read_bytes()).hexdigest(),
+                "expectedSha256": address["photonJarSha256"],
+            }
+            if self.data["photonJar"]["sha256"] != address["photonJarSha256"]:
+                raise RuntimeError("Photon JAR differs from the generation's pinned JAR")
+        images = {}
+        for ref in refs:
+            inspect = json.loads(self.run(["docker", "image", "inspect", ref]).stdout)[0]
+            images[ref] = {"id": inspect["Id"], "repoDigests": inspect.get("RepoDigests", [])}
+        self.data["images"] = images
+        self.data["realSourceTreesBefore"] = {
+            self.gen_names[slot]: self.tree_snapshot(slot) for slot in "ab"
+        }
         git = self.run(["git", "-C", str(REPO), "rev-parse", "HEAD"], check=False).stdout.strip()
         dirty = self.run(["git", "-C", str(REPO), "status", "--porcelain"], check=False).stdout
-        self.data["code"] = {"commit": git, "uncommittedFiles": len(dirty.splitlines())}
-        corpus = self.codex / CORPUS
+        branch = self.run(
+            ["git", "-C", str(REPO), "rev-parse", "--abbrev-ref", "HEAD"], check=False
+        ).stdout.strip()
+        self.data["code"] = {
+            "commit": git,
+            "branch": branch,
+            "uncommittedFiles": len(dirty.splitlines()),
+        }
+        corpus = Path(self.args.probe_corpus) if self.args.probe_corpus else self.codex / CORPUS
         (self.run_dir / "probe-corpus.json").write_bytes(corpus.read_bytes())
         self.data["probeCorpus"] = {
-            "source": CORPUS,
+            "source": self.args.probe_corpus or CORPUS,
             "sha256": hashlib.sha256(corpus.read_bytes()).hexdigest(),
         }
+        if self.args.source_check:
+            check = Path(self.args.source_check)
+            (self.run_dir / "source-check.json").write_bytes(check.read_bytes())
+            self.data["sourceCheck"] = {
+                "path": check.as_posix(),
+                "sha256": hashlib.sha256(check.read_bytes()).hexdigest(),
+                "kind": "real paired upstream check (copied into each managed generation)",
+            }
         for slot, port in (("a", 59091), ("b", 59092)):
-            config = (self.codex / "generations" / GEN_B / "motis" / "config.yml").read_text(
-                encoding="utf-8"
-            )
-            config = re.sub(r"(?m)^  port: \d+$", f"  port: {port}", config)
+            # Legacy generations share one graph volume; composites each serve their own graph.
+            source = self.gen_dirs[slot if self.composite else "b"] / "motis" / "config.yml"
+            config = source.read_text(encoding="utf-8")
+            if re.search(r"(?m)^server:", config):
+                config = re.sub(r"(?m)^  port: \d+$", f"  port: {port}", config)
+            else:
+                # Slot-free generation config: add a loopback listener for this engine slot.
+                config = f"server:\n  host: 127.0.0.1\n  port: {port}\n" + config
             (self.run_dir / f"motis-{slot}.yml").write_text(config, encoding="utf-8", newline="\n")
         (self.run_dir / "delay-a").write_text("0", encoding="utf-8")
         (self.run_dir / "delay-b").write_text("0", encoding="utf-8")
+
+    def warm_engine(self, port: int, count: int = 6) -> None:
+        for _ in range(count):
+            self.python_in_api(WARM_QUERY.format(port=port), timeout=30)
+
+    def keep_engines_warm(self) -> None:
+        """Operator-style standby keep-alive: one direct plan query per engine every 15 s."""
+
+        def loop():
+            while self._warming:
+                for port in ENGINE_DIRECT_PORTS:
+                    try:
+                        ok = (
+                            subprocess.run(
+                                ["docker", "exec", self.api_container, "/app/.venv/bin/python"]
+                                + ["-c", WARM_QUERY.format(port=port)],
+                                capture_output=True,
+                                timeout=60,
+                            ).returncode
+                            == 0
+                        )
+                    except subprocess.TimeoutExpired:
+                        ok = False
+                    counts = self.warm_counts.setdefault(str(port), {"ok": 0, "failed": 0})
+                    counts["ok" if ok else "failed"] += 1
+                time.sleep(KEEP_WARM_SECONDS)
+
+        self._warming = True
+        threading.Thread(target=loop, daemon=True).start()
 
     def sample_memory(self) -> None:
         def loop():
             while self._sampling:
                 proc = subprocess.run(
                     ["docker", "stats", "--no-stream", "--format", "{{.Name}}|{{.MemUsage}}"]
-                    + [c for c in CONTAINERS],
+                    + list(self.containers),
                     capture_output=True,
                     text=True,
                     encoding="utf-8",
@@ -255,7 +398,7 @@ class Harness:
                 for line in proc.stdout.splitlines():
                     name, _, usage = line.partition("|")
                     match = re.match(r"([\d.]+)(KiB|MiB|GiB)", usage)
-                    if match and name.startswith("ot-t2-"):
+                    if match and name.startswith(f"{self.prefix}-"):
                         factor = {"KiB": 1 << 10, "MiB": 1 << 20, "GiB": 1 << 30}[match[2]]
                         self.memory[name] = max(
                             self.memory.get(name, 0), int(float(match[1]) * factor)
@@ -269,22 +412,19 @@ class Harness:
     def start_stack(self) -> None:
         started = time.time()
         self.started = True
-        self.run(["docker", "volume", "create", "ot-t2-root"], label="create managed volume")
+        self.run(["docker", "volume", "create", self.root_volume], label="create managed volume")
         copies = []
         mounts = []
-        for slot, name in (("a", GEN_A), ("b", GEN_B)):
-            src = self.codex / "generations" / name
-            mounts += [
-                "-v",
-                f"{(src / 'manifest.json').as_posix()}:/in/{slot}-manifest.json:ro",
-                "-v",
-                f"{(src / 'config.yml').as_posix()}:/in/{slot}-config.yml:ro",
-            ]
-            copies.append(
-                f"mkdir -p /managed/gen-{slot} && cp /in/{slot}-manifest.json "
-                f"/managed/gen-{slot}/manifest.json && cp /in/{slot}-config.yml "
-                f"/managed/gen-{slot}/config.yml"
-            )
+        small = ["manifest.json", "config.yml"] + (list(COMPOSITE_COPIES) if self.composite else [])
+        for slot, src in self.gen_dirs.items():
+            copies.append(f"mkdir -p /managed/gen-{slot}")
+            for index, name in enumerate(small):
+                mounts += ["-v", f"{(src / name).as_posix()}:/in/{slot}-{index}:ro"]
+                copies.append(f"cp /in/{slot}-{index} /managed/gen-{slot}/{name}")
+            if self.args.source_check:
+                # Probe and source-check paths must stay inside the generation directory.
+                copies.append(f"cp /run-data/source-check.json /managed/gen-{slot}/")
+        mounts += ["-v", f"{self.run_dir.as_posix()}:/run-data:ro"]
         script = " && ".join(copies) + " && chown -R 10001:10001 /managed"
         self.run(
             [
@@ -292,21 +432,54 @@ class Harness:
                 "run",
                 "--rm",
                 "--name",
-                "ot-t2-init",
+                f"{self.prefix}-init",
                 "--user",
                 "0",
                 "--memory",
                 "64m",
                 "-v",
-                "ot-t2-root:/managed",
+                f"{self.root_volume}:/managed",
                 *mounts,
                 "alpine:3.20",
                 "sh",
                 "-c",
                 script,
             ],
-            label="init managed volume (copy manifests and configs only)",
+            label="init managed volume (copy manifests, configs and small evidence only)",
         )
+        if self.composite:
+            for slot, volume in zip("ab", self.photon_volumes, strict=True):
+                # The sealed checkpoint is copied into a run-private volume because Photon's
+                # index directory must be writable; the generation tree stays untouched.
+                self.run(["docker", "volume", "create", volume], label=f"create {volume}")
+                self.run(
+                    [
+                        "docker",
+                        "run",
+                        "--rm",
+                        "--name",
+                        f"{self.prefix}-photon-init-{slot}",
+                        "--network",
+                        "none",
+                        "--user",
+                        "0:0",
+                        "--memory",
+                        "64m",
+                        "--mount",
+                        f"type=volume,src={volume},dst=/photon_data",
+                        "--mount",
+                        f"type=bind,src={(self.gen_dirs[slot] / 'photon').as_posix()},"
+                        "dst=/src,readonly",
+                        "--entrypoint",
+                        "/bin/sh",
+                        self.java_image,
+                        "-c",
+                        "cp -a /src/. /photon_data/ && chown -R 10001:10001 /photon_data"
+                        " && chmod 0750 /photon_data",
+                    ],
+                    timeout=600,
+                    label=f"copy sealed Photon checkpoint {slot} into {volume}",
+                )
         self.compose("up", "-d", timeout=900)
         for _ in range(60):
             if (
@@ -321,8 +494,25 @@ class Harness:
             raise RuntimeError("API never became live")
         for port in (59081, 59082):
             self.wait_engine(port)
+        if self.composite:
+            for slot in "ab":
+                self.timings[f"photon{slot.upper()}ReadySeconds"] = self.wait_photon(slot)
         self.sample_memory()
+        self.keep_engines_warm()
         self.timings["stackStartSeconds"] = round(time.time() - started, 1)
+
+    def wait_photon(self, slot: str, timeout=600) -> float:
+        started = time.time()
+        query, admin = PHOTON_ORIGINS[slot]
+        code = (
+            f"import urllib.request as u;u.urlopen('{query}/status',timeout=5);"
+            f"u.urlopen('{admin}/photon/_count',timeout=5)"
+        )
+        while time.time() - started < timeout:
+            if self.python_in_api(code, timeout=30).returncode == 0:
+                return round(time.time() - started, 1)
+            time.sleep(3)
+        raise RuntimeError(f"Photon {slot} never answered through the proxy")
 
     def wait_engine(self, port: int, timeout=240) -> float:
         started = time.time()
@@ -339,10 +529,13 @@ class Harness:
 
     def prepare_evidence(self) -> None:
         started = time.time()
-        for slot, name, port in (("a", GEN_A, 59081), ("b", GEN_B, 59082)):
+        for slot, port in (("a", 59081), ("b", 59082)):
+            name = self.gen_names[slot]
             gen = f"/managed/gen-{slot}"
-            self.tool("source-check", "--generation", gen, "--out", f"{gen}/source-check.json")
+            if not self.args.source_check:
+                self.tool("source-check", "--generation", gen, "--out", f"{gen}/source-check.json")
             extra = ["--active", "/managed/gen-a"] if slot == "b" else []
+            self.warm_engine(port - 59081 + ENGINE_DIRECT_PORTS[0])
             rc, _, proc = self.cli(
                 "probe",
                 "--generation",
@@ -354,6 +547,7 @@ class Harness:
                 "--output",
                 f"{gen}/probe.json",
                 *extra,
+                timeout=3600,
                 label=f"opentransit probe gen-{slot}",
             )
             if rc != 0:
@@ -362,6 +556,10 @@ class Harness:
 
     def bind(self, slot: str, token: str, origin: str, probe_slot: str | None = None) -> str:
         probe_slot = probe_slot or slot
+        photon = []
+        if self.composite:
+            query, admin = PHOTON_ORIGINS[slot]
+            photon = ["--photon-origin", query, "--photon-admin-origin", admin]
         self.tool(
             "bind",
             "--generation",
@@ -374,6 +572,7 @@ class Harness:
             f"/managed/gen-{slot}/source-check.json",
             "--token",
             token,
+            *photon,
             label=f"bind {token}",
         )
         return f"/managed/binding-{token}.json"
@@ -397,7 +596,8 @@ class Harness:
             args += ["--now", now]
         if check_only:
             args.append("--check-only")
-        return self.cli(*args, label=f"opentransit {action} {Path(binding).stem}")
+        # docker exec must outlive the operator's own 3600 s acknowledgement timeout.
+        return self.cli(*args, timeout=3700, label=f"opentransit {action} {Path(binding).stem}")
 
     # -- journeys ------------------------------------------------------------------------
     def journey(self, timeout=8.0) -> dict:
@@ -466,7 +666,7 @@ class Harness:
             [
                 "docker",
                 "exec",
-                "ot-t2-api",
+                self.api_container,
                 "/app/.venv/bin/python",
                 "-c",
                 POINTER_WATCH,
@@ -517,8 +717,7 @@ class Harness:
 
     # -- phases ----------------------------------------------------------------------------
     def phase_initial(self) -> None:
-        ids = self.data["generations"]
-        self.a_id, self.b_id = ids[GEN_A]["generationId"], ids[GEN_B]["generationId"]
+        self.a_id, self.b_id = self.ids["a"], self.ids["b"]
         binding = self.bind("a", "t2-a-initial", "http://127.0.0.1:59081")
         started = time.time()
         rc, report, proc = self.activate(binding)
@@ -539,17 +738,12 @@ class Harness:
         ack_before = self.exec_api("ls", "/managed/acks").stdout.split()
         # (2b) corrupt artifacts are refused before the pointer is touched.
         self.tool("corrupt", "--name", "gen-x", "--source", "/managed/gen-b")
-        self.tool(
-            "source-check",
-            "--generation",
-            "/managed/gen-b",
-            "--out",
-            "/managed/gen-x/source-check.json",
-        )
+        # The corrupt candidate reuses the new generation's (valid) probe and source check.
         self.exec_api(
             "/app/.venv/bin/python",
             "-c",
-            "import shutil;shutil.copy('/managed/gen-b/probe.json','/managed/gen-x/probe.json')",
+            "import shutil;shutil.copy('/managed/gen-b/probe.json','/managed/gen-x/probe.json');"
+            "shutil.copy('/managed/gen-b/source-check.json','/managed/gen-x/source-check.json')",
         )
         corrupt_binding = self.write_corrupt_binding()
         rc_c, report_c, proc_c = self.activate(corrupt_binding)
@@ -698,7 +892,8 @@ class Harness:
                 note="proxy log timestamps and the ack file mtime share the container clock",
             )
         # Retirement gate: only after the worker confirms retirement may engine A stop.
-        engine_a_running_at_ack = self.container_running("ot-t2-motis-a")
+        motis_a = f"{self.prefix}-motis-a"
+        engine_a_running_at_ack = self.container_running(motis_a)
         rc_r, retired, proc_r = self.cli(
             "await-retirement",
             "--ack-dir",
@@ -718,11 +913,11 @@ class Harness:
         gate_open = rc_r == 0 and (retired or {}).get("status") == "retired"
         stop_started = time.time()
         stop_proc = self.run(
-            ["docker", "stop", "-t", "20", "ot-t2-motis-a"],
+            ["docker", "stop", "-t", "20", motis_a],
             check=False,
-            label="docker stop ot-t2-motis-a (after retirement gate)",
+            label=f"docker stop {motis_a} (after retirement gate)",
         )
-        finished_at = self.container_finished_at("ot-t2-motis-a")
+        finished_at = self.container_finished_at(motis_a)
         after_stop = self.burst(4)
         required = DEADLINE_SECONDS * 10
         elapsed = None
@@ -805,15 +1000,10 @@ class Harness:
             note="simulated operator clock only; the worker serves with the real clock",
         )
         # Valid rollback: the old engine was stopped, so restart it first.
-        self.run(["docker", "start", "ot-t2-motis-a"], label="docker start ot-t2-motis-a")
+        motis_a = f"{self.prefix}-motis-a"
+        self.run(["docker", "start", motis_a], label=f"docker start {motis_a}")
         ready = self.wait_engine(59081)
-        for _ in range(6):  # page the graph back in; the worker health check allows 1.2 s
-            self.python_in_api(
-                "import urllib.request as u;u.urlopen('http://127.0.0.1:59081/api/v6/plan?"
-                "fromPlace=32.0757,34.7748&toPlace=32.0838,34.8044&time=2026-10-05T05:00:00Z',"
-                "timeout=10)",
-                timeout=30,
-            )
+        self.warm_engine(ENGINE_DIRECT_PORTS[0])  # page the graph back in; health allows 1.2 s
         started = time.time()
         rc, report, proc = self.activate(a_binding, action="rollback")
         seconds = round(time.time() - started, 1)
@@ -852,7 +1042,7 @@ class Harness:
     def phase_prune(self) -> None:
         self.tool("synth-old", "--name", "synth-old")
         listing_before = json.loads(self.tool("listing").stdout)
-        trees_before = {n: self.tree_snapshot(n) for n in (GEN_A, GEN_B)}
+        trees_before = {self.gen_names[slot]: self.tree_snapshot(slot) for slot in "ab"}
         results = {}
         for label, extra in (("unpinned", []),):
             out = f"/run-data/prune-{label}.json"
@@ -881,7 +1071,7 @@ class Harness:
                 ],
             }
         listing_after = json.loads(self.tool("listing").stdout)
-        trees_after = {n: self.tree_snapshot(n) for n in (GEN_A, GEN_B)}
+        trees_after = {self.gen_names[slot]: self.tree_snapshot(slot) for slot in "ab"}
         self.check(
             "prune_dry_run_lists_candidates_and_deletes_nothing",
             all(v["exitCode"] == 0 and v["deletionPerformed"] is False for v in results.values())
@@ -899,8 +1089,9 @@ class Harness:
     # -- teardown ----------------------------------------------------------------------------
     def export_and_teardown(self) -> None:
         self._sampling = False
+        self._warming = False
         logs = {}
-        for name in CONTAINERS:
+        for name in self.containers:
             proc = self.run(["docker", "logs", name], check=False, label=f"docker logs {name}")
             text = proc.stdout + proc.stderr
             (self.run_dir / f"{name}.log").write_text(text, encoding="utf-8")
@@ -926,17 +1117,22 @@ class Harness:
             label="export bindings, acks, probes and checks (json only)",
         )
         self.compose("down", timeout=300, check=False)
-        self.run(["docker", "volume", "rm", "ot-t2-root"], check=False, label="remove ot-t2-root")
-        left = self.run(["docker", "ps", "-a", "--filter", "name=ot-t2-", "-q"]).stdout.split()
+        removed_volumes = [self.root_volume] + (self.photon_volumes if self.composite else [])
+        for volume in removed_volumes:
+            self.run(["docker", "volume", "rm", volume], check=False, label=f"remove {volume}")
+        left = self.run(
+            ["docker", "ps", "-a", "--filter", f"name={self.prefix}-", "-q"]
+        ).stdout.split()
+        remaining = self.run(["docker", "volume", "ls", "-q"]).stdout.split()
         self.data["cleanup"] = {
             "containersRemaining": len(left),
-            "removedByHarness": CONTAINERS + ["ot-t2-init (--rm)"],
-            "volumeRemoved": "ot-t2-root",
-            "graphVolumeUntouched": GRAPH_VOLUME,
+            "removedByHarness": self.containers + [f"{self.prefix}-init (--rm)"],
+            "volumesRemoved": [v for v in removed_volumes if v not in remaining],
+            "graphVolumeUntouched": None if self.composite else GRAPH_VOLUME,
         }
 
     def finish(self, error: str | None) -> dict:
-        trees_after = {n: self.tree_snapshot(n) for n in (GEN_A, GEN_B)}
+        trees_after = {self.gen_names[slot]: self.tree_snapshot(slot) for slot in "ab"}
         before = self.data.get("realSourceTreesBefore")
         result = {
             "schemaVersion": 1,
@@ -948,24 +1144,47 @@ class Harness:
             "error": error,
             "scope": "M2.5 local activate/rollback and M2.6 retention in Linux Compose; "
             "single local worker; not under-load capacity, crash or fault-injection (M7)",
-            "dataKind": "real generations (read-only artifact mounts) with the pinned real MOTIS "
-            "engine; generations A and B share one graph volume and differ in reference data; "
-            "the prune candidate is a labelled tiny synthetic generation",
+            "dataKind": (
+                "two complete real composite generations (schedule + sealed Photon addresses; "
+                "read-only artifact mounts), each served by its own pinned MOTIS graph and its "
+                "own Photon (run-private copy of the sealed checkpoint); "
+                if self.composite
+                else "real generations (read-only artifact mounts) with the pinned real MOTIS "
+                "engine; generations A and B share one graph volume and differ in reference "
+                "data; "
+            )
+            + "the prune candidate is a labelled tiny synthetic generation",
             "inputs": {
                 **self.data,
                 "realSourceTreesAfter": trees_after,
                 "realSourceTreesUnchanged": before == trees_after,
-                "oldGeneration": GEN_A,
-                "newGeneration": GEN_B,
-                "graphVolume": GRAPH_VOLUME,
-                "sourceCheckNote": "per-generation records reconstructed from each manifest's "
+                "oldGeneration": self.gen_dirs["a"].as_posix(),
+                "newGeneration": self.gen_dirs["b"].as_posix(),
+                "graphVolume": None if self.composite else GRAPH_VOLUME,
+                "photonOrigins": PHOTON_ORIGINS if self.composite else None,
+                "sourceCheckNote": "one real successful paired upstream check (same GTFS/"
+                "TripIdToDate hashes as both generations), copied into each managed generation; "
+                "no new upstream check or download by this harness"
+                if self.args.source_check
+                else "per-generation records reconstructed from each manifest's "
                 "recorded acquisition/validation times; no new upstream check or download",
+                "engineKeepWarm": {
+                    "intervalSeconds": KEEP_WARM_SECONDS,
+                    "directPorts": list(ENGINE_DIRECT_PORTS),
+                    "queries": self.warm_counts,
+                    "note": "standby engines queried directly (not through the delay proxy) "
+                    "so reload hashing does not evict their graphs; failures while an engine "
+                    "is deliberately stopped are expected",
+                },
                 "journeyDeadlineSeconds": DEADLINE_SECONDS,
                 "proxyDelaySeconds": PROXY_DELAY,
                 "limits": {
                     "api": "1g",
                     "motisEach": "3g",
                     "proxy": "128m",
+                    **(
+                        {"photonEach": "1g", "photonForwarderEach": "64m"} if self.composite else {}
+                    ),
                     "hostPort": "127.0.0.1:8300",
                 },
             },
@@ -1013,7 +1232,24 @@ def parse(argv):
     parser.add_argument("--codex-runtime", required=True)
     parser.add_argument("--results-out", help="exclusive-create the evidence JSON here")
     parser.add_argument("--keep", action="store_true", help="skip teardown (debugging)")
-    return parser.parse_args(argv)
+    parser.add_argument(
+        "--old-generation", help="complete composite generation served first (e.g. oct1a)"
+    )
+    parser.add_argument("--new-generation", help="complete composite candidate (e.g. oct1b)")
+    parser.add_argument(
+        "--source-check", help="successful same-hash paired source check used for both"
+    )
+    parser.add_argument("--probe-corpus", help="probe corpus (default: Codex functional corpus)")
+    parser.add_argument("--photon-jar", help="pinned photon-1.3.0.jar (default: Codex runtime)")
+    parser.add_argument("--prefix", default="ot-t2", help="container/volume name prefix")
+    args = parser.parse_args(argv)
+    if (args.old_generation is None) != (args.new_generation is None):
+        parser.error("--old-generation and --new-generation go together")
+    if args.old_generation and not args.source_check:
+        parser.error("composite generations need --source-check (real paired check)")
+    if not re.fullmatch(r"ot-[a-z0-9-]{1,20}", args.prefix):
+        parser.error("--prefix must look like ot-<name>")
+    return args
 
 
 if __name__ == "__main__":

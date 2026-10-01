@@ -206,7 +206,7 @@ Phase 0 is not one sequence. It splits into a track that needs nobody's permissi
 - **Static GTFS is open and verified.** `https://gtfs.mot.gov.il/gtfsfiles/` serves the nationwide feed over unauthenticated HTTP, updated nightly. POC-1, POC-2 and POC-5 are unblocked and can start immediately.
 - **SIRI and Service Alerts are not public.** Both require an application to MOT at `ptsupport@mot.gov.il`, which returns a base address, a RequestorRef and an access key by email. The SIRI hosts additionally refuse connections from non-permitted networks, so the realtime ingester likely needs a whitelisted (probably Israeli) egress IP.
 - **Blocking first action:** send that request now, asking in the same email for (a) SIRI-SM 2.8 access, (b) the Service Alerts feed URL, (c) whether the key is bound to a source IP, and (d) the usage terms for an open-source, publicly distributed application.
-- **Decision deadline:** if there is no usable answer within four weeks, Phase 0 must explicitly choose between Open Bus Stride as a permanent dependency, a static-only planner, or stopping under kill criterion #3.
+- **Decision deadline:** if there is no usable answer within four weeks, Phase 0 must explicitly choose between Open Bus Stride as a permanent dependency, a static-only planner, or stopping under kill criterion #3. (1 October 2026: Stride's ride-level GTFS linkage now works for most recent rides, but it remains a volunteer service with about 11 minutes lag, a fragile API and no stated data licence; see [Open Bus research](docs/research/open-bus.md).)
 
 ---
 
@@ -384,6 +384,8 @@ Once through, the service is well suited to the product: SIRI-Lite over HTTP GET
 Reconciliation has an official answer rather than being guesswork: MOT documents the SIRI↔GTFS field mapping, joining `FramedVehicleJourneyRef` to `TripId` in `TripIdToDate.txt`, `LineRef` to `route_id`, `StopPointRef` to `stop_code` and `Order` to `stop_sequence`. The open question is the match rate in practice.
 
 Note on the fallback: Open Bus Stride is live and serving current SIRI rides, but its GTFS linkage fields (`gtfs_ride_id`, `gtfs_stop_id`) came back null across sampled windows at 8 hours, 3 days and 30 days old. Prototyping there does not avoid writing the matcher ourselves.
+
+*Update, 1 October 2026:* Stride now links about 96% of sampled recent rides to `gtfs_ride_id` (route/time strategy; 2026-09-23 and 2026-09-30, 06:00–06:30), but a 2026-08-30 sample was 0%, stop-level linkage is unconfirmed, the service lags about 11 minutes and its API rejects large queries. The conclusion stands in narrower form: the matcher remains ours to write. Hasadna's public S3 archive of raw SIRI and daily GTFS supports offline matcher development and historical reliability work; it is not live proof. See the [Open Bus research note](docs/research/open-bus.md).
 
 ---
 

@@ -13,6 +13,9 @@ dependencies = [
 
 [dependency-groups]
 dev = ["pytest>=9,<10", "ruff>=0.15,<1"]
+history = [
+    "brotli>=1.1,<2",
+]
 
 [project.scripts]
 opentransit = "opentransit.build.cli:main"

@@ -209,6 +209,7 @@ def activate(
         "token": candidate.activation_token,
         "generationId": candidate.generation_id,
         "engineOrigin": candidate.engine_origin,
+        "photonOrigin": candidate.photon_origin,
         "previousToken": previous["activationToken"] if previous else None,
         "previousGenerationId": previous["generationId"] if previous else None,
         "currency": currency,

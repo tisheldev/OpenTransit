@@ -676,3 +676,37 @@ def test_same_operation_token_cannot_replay_different_binding(generation_factory
         await manager.aclose()
 
     asyncio.run(run())
+
+
+def test_binding_carries_optional_photon_origins_through_reissue(generation_factory, tmp_path):
+    from opentransit.build.activation import validate_binding
+    from opentransit.build.local_operator import reissue_binding
+
+    directory = generation_factory("photon-origins")
+    plain = json.loads(make_binding(directory, "plain").read_text(encoding="utf-8"))
+    assert "photonOrigin" not in plain
+    assert validate_binding(plain, tmp_path).photon_origin is None
+
+    raw = {
+        **plain,
+        "activationToken": "with-photon",
+        "photonOrigin": "http://127.0.0.1:2422/",
+        "photonAdminOrigin": "http://127.0.0.1:9211",
+    }
+    path = tmp_path / "binding-with-photon.json"
+    binding = write_binding(path, raw, tmp_path)
+    assert (binding.photon_origin, binding.photon_admin_origin) == (
+        "http://127.0.0.1:2422",
+        "http://127.0.0.1:9211",
+    )
+    rollback = read_binding(reissue_binding(tmp_path, path, "rollback"), tmp_path)
+    assert rollback.purpose == "rollback"
+    assert rollback.photon_origin == "http://127.0.0.1:2422"
+    assert rollback.photon_admin_origin == "http://127.0.0.1:9211"
+
+    with pytest.raises(ValueError, match="set together"):
+        validate_binding({**raw, "photonAdminOrigin": None}, tmp_path, verify=False)
+    with pytest.raises(ValueError, match="photonOrigin must be loopback"):
+        validate_binding({**raw, "photonOrigin": "http://photon-a:2322"}, tmp_path, verify=False)
+    with pytest.raises(ValueError, match="photonAdminOrigin must include an explicit port"):
+        validate_binding({**raw, "photonAdminOrigin": "http://127.0.0.1"}, tmp_path, verify=False)

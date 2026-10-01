@@ -1,0 +1,110 @@
+# Overlay for activation-compose.yaml when the two generations are complete composites
+# (schedule + sealed Photon addresses), such as D:/ot/generations/oct1a and oct1b.
+# Each generation keeps its own MOTIS graph (read-only bind of <generation>/motis) and its own
+# Photon serving a run-private copy of its sealed checkpoint. Photon and its embedded
+# OpenSearch listen on loopback only and their ports are fixed, so each Photon gets its own
+# network namespace with a forwarder sidecar; the delay proxy in the API's namespace exposes
+# them on loopback ports that the activation bindings name (photonOrigin/photonAdminOrigin).
+# Volume and mount targets match the base file so these entries replace its graph mounts.
+
+x-photon: &photon
+  image: ${OT_JAVA_IMAGE:?java image}
+  mem_limit: 1g
+  memswap_limit: 1g
+  user: "10001:10001"
+  tmpfs: [/tmp]
+
+x-forwarder: &forwarder
+  image: ${OT_API_IMAGE:-opentransit-api:latest}
+  mem_limit: 64m
+  memswap_limit: 64m
+  entrypoint: ["/app/.venv/bin/python", "/tools/activation_delay_proxy.py"]
+
+services:
+  api:
+    volumes:
+      - ${OT_A_GRAPH:?graph a}:/managed/gen-a/motis:ro
+      - ${OT_B_GRAPH:?graph b}:/managed/gen-b/motis:ro
+      - ${OT_A_CATALOG:?catalog a}:/managed/gen-a/address-catalog.sqlite:ro
+      - ${OT_B_CATALOG:?catalog b}:/managed/gen-b/address-catalog.sqlite:ro
+
+  motis-a:
+    volumes:
+      - ${OT_A_GRAPH}:/data:ro
+
+  motis-b:
+    volumes:
+      - ${OT_B_GRAPH}:/data:ro
+
+  proxy:
+    depends_on: [api, photon-a-fwd, photon-b-fwd]
+    command:
+      - "--route=a:59081:59091"
+      - "--route=b:59082:59092"
+      - "--route=pa:2422:photon-a:12322"
+      - "--route=pa-admin:9211:photon-a:19201"
+      - "--route=pb:2432:photon-b:12322"
+      - "--route=pb-admin:9221:photon-b:19201"
+      - "--control=/run-data"
+      - "--log=/run-data/proxy.jsonl"
+
+  photon-a:
+    <<: *photon
+    container_name: ${OT_PREFIX:-ot-t2}-photon-a
+    command: &photon-serve
+      - java
+      - -Xms256m
+      - -Xmx512m
+      - -jar
+      - /opt/photon/photon-1.3.0.jar
+      - -data-dir
+      - /photon_data
+      - serve
+      - -listen-ip
+      - 127.0.0.1
+      - -listen-port
+      - "2322"
+    volumes:
+      - photon-a:/photon_data
+      - ${OT_PHOTON_JAR:?photon jar}:/opt/photon/photon-1.3.0.jar:ro
+
+  photon-b:
+    <<: *photon
+    container_name: ${OT_PREFIX:-ot-t2}-photon-b
+    command: *photon-serve
+    volumes:
+      - photon-b:/photon_data
+      - ${OT_PHOTON_JAR}:/opt/photon/photon-1.3.0.jar:ro
+
+  photon-a-fwd:
+    <<: *forwarder
+    container_name: ${OT_PREFIX:-ot-t2}-photon-a-fwd
+    network_mode: "service:photon-a"
+    depends_on: [photon-a]
+    command: &forward-photon
+      - "--listen-host=0.0.0.0"
+      - "--route=q:12322:2322"
+      - "--route=admin:19201:9201"
+      - "--control=/fwd-control"
+      - "--log=/tmp/forward.jsonl"
+    tmpfs: [/tmp, /fwd-control]
+    volumes:
+      - ${OT_TOOLS}:/tools:ro
+
+  photon-b-fwd:
+    <<: *forwarder
+    container_name: ${OT_PREFIX:-ot-t2}-photon-b-fwd
+    network_mode: "service:photon-b"
+    depends_on: [photon-b]
+    command: *forward-photon
+    tmpfs: [/tmp, /fwd-control]
+    volumes:
+      - ${OT_TOOLS}:/tools:ro
+
+volumes:
+  photon-a:
+    name: ${OT_PREFIX:-ot-t2}-photon-a
+    external: true
+  photon-b:
+    name: ${OT_PREFIX:-ot-t2}-photon-b
+    external: true

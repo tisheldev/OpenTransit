@@ -2,7 +2,8 @@
 
 source-check  reconstruct a paired-check record from a manifest's own recorded provenance
               (no new upstream check is made or claimed)
-bind          write an immutable binding for one generation and engine origin
+bind          write an immutable binding for one generation and engine origin (optionally
+              with that generation's Photon query/admin origins)
 synth-old     create a tiny, labelled synthetic ready generation older than the real ones
 corrupt       create a candidate whose artifacts differ from its manifest
 listing       list a managed root without following mounts into their contents
@@ -51,20 +52,27 @@ def source_check(generation: Path, out: Path) -> None:
     )
 
 
-def bind(root: Path, generation: Path, origin: str, probe: Path, check: Path, token: str) -> None:
+def bind(
+    root: Path,
+    generation: Path,
+    origin: str,
+    probe: Path,
+    check: Path,
+    token: str,
+    photon: tuple[str, str] | None = None,
+) -> None:
     manifest = json.loads((generation / "manifest.json").read_text(encoding="utf-8"))
-    write_binding(
-        root / f"binding-{token}.json",
-        {
-            "generationDir": str(generation.resolve()),
-            "engineOrigin": origin,
-            "probePath": str(probe.resolve()),
-            "sourceCheckPath": str(check.resolve()),
-            "activationToken": token,
-            "generationId": manifest["generationId"],
-        },
-        root,
-    )
+    data = {
+        "generationDir": str(generation.resolve()),
+        "engineOrigin": origin,
+        "probePath": str(probe.resolve()),
+        "sourceCheckPath": str(check.resolve()),
+        "activationToken": token,
+        "generationId": manifest["generationId"],
+    }
+    if photon is not None:
+        data["photonOrigin"], data["photonAdminOrigin"] = photon
+    write_binding(root / f"binding-{token}.json", data, root)
 
 
 def _digest(data: bytes) -> str:
@@ -143,6 +151,8 @@ def main(argv) -> int:
             sub.add_argument("--probe", type=Path, required=True)
             sub.add_argument("--source-check", type=Path, required=True)
             sub.add_argument("--token", required=True)
+            sub.add_argument("--photon-origin")
+            sub.add_argument("--photon-admin-origin")
         if name in {"synth-old", "corrupt"}:
             sub.add_argument("--name", required=True)
         if name == "corrupt":
@@ -151,7 +161,20 @@ def main(argv) -> int:
     if args.command == "source-check":
         source_check(args.generation, args.out)
     elif args.command == "bind":
-        bind(args.root, args.generation, args.origin, args.probe, args.source_check, args.token)
+        photon = (
+            (args.photon_origin, args.photon_admin_origin)
+            if args.photon_origin or args.photon_admin_origin
+            else None
+        )
+        bind(
+            args.root,
+            args.generation,
+            args.origin,
+            args.probe,
+            args.source_check,
+            args.token,
+            photon,
+        )
     elif args.command == "synth-old":
         synth_old(args.root, args.name)
     elif args.command == "corrupt":
