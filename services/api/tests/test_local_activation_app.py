@@ -17,7 +17,8 @@ import pytest
 from fastapi.testclient import TestClient
 from test_reference_api import reference_client
 
-from opentransit.api.app import create_app, install_activation_signal
+from opentransit.api.app import create_app
+from opentransit.api.lifecycle import install_activation_signal
 from opentransit.build.activation import (
     activation_failure_ack_filename,
     write_binding,
@@ -214,7 +215,7 @@ def test_inflight_request_keeps_old_engine_while_signal_publishes_new_snapshot(
         assert record_path.name == "worker.json"
         assert record["workerIncarnationId"] == first_incarnation
         assert record["controlSignal"] == "SIGUSR1"
-        from opentransit.api.app import _acquire_worker_record
+        from opentransit.api.lifecycle import _acquire_worker_record
 
         with pytest.raises(RuntimeError, match="already owns"):
             _acquire_worker_record(ack_dir, manager=manager)
@@ -347,7 +348,7 @@ def test_bad_candidate_probe_is_rejected_while_previous_snapshot_keeps_serving(
 def test_snapshot_with_unowned_engine_client_is_rejected_and_old_snapshot_serves(
     manifest, engine_route, tmp_path, monkeypatch
 ):
-    import opentransit.api.app as app_module
+    import opentransit.api.lifecycle as lifecycle_module
     import opentransit.config as config
 
     monkeypatch.setattr(config.sys, "platform", "linux")
@@ -378,7 +379,7 @@ def test_snapshot_with_unowned_engine_client_is_rejected_and_old_snapshot_serves
                 return True
 
         monkeypatch.setattr(
-            app_module.RuntimeSnapshot,
+            lifecycle_module.RuntimeSnapshot,
             "load",
             classmethod(
                 lambda cls, path, motis, **kwargs: SimpleNamespace(

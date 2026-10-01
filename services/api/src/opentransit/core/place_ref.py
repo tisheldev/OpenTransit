@@ -67,11 +67,15 @@ def encode_place_ref(
         "generationId": generation,
         "kind": kind,
     }
-    encoded = base64.urlsafe_b64encode(
-        json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode(
-            "utf-8"
+    encoded = (
+        base64.urlsafe_b64encode(
+            json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode(
+                "utf-8"
+            )
         )
-    ).decode("ascii").rstrip("=")
+        .decode("ascii")
+        .rstrip("=")
+    )
     reference = PLACE_REF_PREFIX + encoded
     if len(reference) > MAX_PLACE_REF_CHARS:
         raise ValueError("Place reference is too large")

@@ -2,8 +2,8 @@ from datetime import UTC, datetime
 
 from test_reference_api import reference_client
 
-from opentransit.api.app import problem
-from opentransit.api.places import places_router
+from opentransit.api.responses import problem
+from opentransit.api.routes.places import places_router
 
 
 def places_client(manifest, engine_route):

@@ -2,9 +2,8 @@ import hashlib
 import json
 from pathlib import Path
 
-from compose_address_generation import compose_address_generation
-
 from opentransit.core.artifacts import JAVA_21_IMAGE_DIGEST, PHOTON_130_JAR_SHA256
+from tools.compose_address_generation import compose_address_generation
 
 
 def _sha(path: Path) -> str:

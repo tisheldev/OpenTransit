@@ -5,9 +5,9 @@ from datetime import UTC, datetime
 import httpx
 from test_reference_api import reference_client
 
-import opentransit.api.places as places_module
-from opentransit.api.app import problem
-from opentransit.api.places import places_router
+import opentransit.api.routes.places as places_module
+from opentransit.api.responses import problem
+from opentransit.api.routes.places import places_router
 from opentransit.build.prepare import sha256
 from opentransit.geocoding import GeocodingResult
 

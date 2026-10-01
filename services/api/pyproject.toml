@@ -26,6 +26,7 @@ packages = ["src/opentransit"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["."]
 markers = ["integration: needs a running API with real MOTIS data"]
 
 [tool.ruff]

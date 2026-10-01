@@ -7,7 +7,7 @@ import httpx
 import pytest
 from test_reference_api import reference_client
 
-from opentransit.api.app import _load_address_provider
+from opentransit.api.lifecycle import _load_address_provider
 from opentransit.build.address_catalog import build_address_catalog
 from opentransit.config import Settings
 from opentransit.runtime import AddressProviderBinding, RuntimeSnapshot
@@ -51,7 +51,7 @@ def test_address_provider_binding_pins_origin_and_artifact_identity():
     ],
 )
 def test_address_binding_rejects_live_index_mismatch(tmp_path, monkeypatch, mismatch, message):
-    import opentransit.api.app as app_module
+    import opentransit.api.lifecycle as lifecycle_module
 
     manifest_path = tmp_path / "manifest.json"
     manifest_path.write_text(json.dumps({"addressSearch": {"provider": "photon"}}))
@@ -63,7 +63,7 @@ def test_address_binding_rejects_live_index_mismatch(tmp_path, monkeypatch, mism
         "sourceDumpSha256": "b" * 64,
         "probes": [{"osmType": "N", "osmId": "7", "lat": 32.1, "lon": 34.8}],
     }
-    monkeypatch.setattr(app_module, "verify_address_composite", lambda *_: expected)
+    monkeypatch.setattr(lifecycle_module, "verify_address_composite", lambda *_: expected)
 
     class Catalog:
         closed = False
@@ -84,7 +84,7 @@ def test_address_binding_rejects_live_index_mismatch(tmp_path, monkeypatch, mism
         def close(self):
             self.closed = True
 
-    monkeypatch.setattr(app_module, "AddressCatalog", Catalog)
+    monkeypatch.setattr(lifecycle_module, "AddressCatalog", Catalog)
 
     def respond(request):
         if request.url.path == "/":
@@ -129,7 +129,7 @@ def test_address_binding_rejects_live_index_mismatch(tmp_path, monkeypatch, mism
 def test_address_binding_accepts_real_catalog_payload_and_source_document_ids(
     tmp_path, monkeypatch
 ):
-    import opentransit.api.app as app_module
+    import opentransit.api.lifecycle as lifecycle_module
 
     dump = tmp_path / "source-dump.jsonl"
     source_pbf_sha = "c" * 64
@@ -183,7 +183,7 @@ def test_address_binding_accepts_real_catalog_payload_and_source_document_ids(
         "sourceDumpSha256": source_dump_sha,
         "probes": [{"osmType": "N", "osmId": "300", "lat": 32.08, "lon": 34.78}],
     }
-    monkeypatch.setattr(app_module, "verify_address_composite", lambda *_: expected)
+    monkeypatch.setattr(lifecycle_module, "verify_address_composite", lambda *_: expected)
 
     def respond(request):
         if request.url.path == "/":

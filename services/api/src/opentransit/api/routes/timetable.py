@@ -11,7 +11,7 @@ from fastapi import APIRouter, Query, Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 
-from opentransit.api.reference import metadata
+from opentransit.api.responses import metadata
 from opentransit.core.time import parse_utc_instant
 from opentransit.motis_timetable import (
     InvalidDepartureCursor,

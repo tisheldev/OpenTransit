@@ -9,7 +9,7 @@ from fastapi import APIRouter, Query, Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 
-from opentransit.api.reference import metadata
+from opentransit.api.responses import metadata
 from opentransit.geocoding import geocode_places
 from opentransit.motis_geocoder import GeocoderUnavailable
 from opentransit.runtime import capture_snapshot

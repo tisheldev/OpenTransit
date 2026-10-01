@@ -2,33 +2,17 @@
 
 import math
 import sqlite3
-from datetime import datetime
 from typing import Annotated
 
 from fastapi import APIRouter, Query, Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 
-from opentransit.api.schemas import Coverage, Metadata
+from opentransit.api.responses import metadata
 from opentransit.runtime import capture_snapshot
 
 PageLimit = Annotated[int, Query(ge=1, le=100)]
 Cursor = Annotated[str | None, Query(max_length=2048)]
-
-
-def metadata(request: Request, snapshot, now: datetime) -> Metadata:
-    generation = snapshot.generation
-    freshness = generation.freshness(now)
-    return Metadata(
-        requestId=request.state.request_id,
-        generationId=generation.id,
-        generatedAt=now,
-        dataBuiltAt=generation.built_at,
-        mode=generation.mode,
-        coverage=Coverage(start=generation.coverage_from, until=generation.coverage_until),
-        freshness=freshness,
-        warnings=[] if freshness == "current" else ["STATIC_DATA_AGING"],
-    )
 
 
 def _public(value):
