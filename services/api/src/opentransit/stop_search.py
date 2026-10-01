@@ -8,9 +8,9 @@ import sqlite3
 import statistics
 import threading
 import unicodedata
+import weakref
 from collections.abc import Callable
 from dataclasses import dataclass
-from functools import lru_cache
 from typing import Any
 
 from opentransit.reference import STOP_PREFIX, ReferenceStore
@@ -574,13 +574,48 @@ class _SearchIndex:
         return result
 
 
-@lru_cache(maxsize=2)
+# One index per live reference (one per live snapshot). Keying weakly by the reference
+# ties the index's lifetime to its snapshot: an old snapshot that is still finishing
+# in-flight requests keeps its own index, and the index is released with the snapshot
+# instead of being evicted by whichever generations were activated most recently.
+_INDEXES: weakref.WeakKeyDictionary[ReferenceStore, _SearchIndex] = weakref.WeakKeyDictionary()
+# Serializes builds only. Lookups of an existing index never take it, so a candidate
+# snapshot's multi-second build cannot stall requests or readiness on the serving one.
+_BUILD_LOCK = threading.Lock()
+
+
 def _search_index(reference: ReferenceStore) -> _SearchIndex:
-    # Each instance belongs to one immutable generation; the bounded cache lets an
-    # old captured snapshot finish while preventing unbounded index accumulation.
-    # References without OSM locality data (or test doubles) simply have no localities.
-    localities = getattr(reference, "search_localities", None)
-    return _SearchIndex(reference.stop_search_candidates(), localities() if localities else None)
+    """Return the reference's index, building it exactly once if it does not exist yet.
+
+    Serving never relies on the lazy path: activation calls ``prepare_search_index``
+    before a snapshot is published. Concurrent first callers share one build.
+    """
+    index = _INDEXES.get(reference)
+    if index is not None:
+        return index
+    with _BUILD_LOCK:
+        index = _INDEXES.get(reference)
+        if index is None:
+            # References without OSM locality data (or test doubles) have no localities.
+            localities = getattr(reference, "search_localities", None)
+            index = _SearchIndex(
+                reference.stop_search_candidates(), localities() if localities else None
+            )
+            _INDEXES[reference] = index
+        return index
+
+
+def prepare_search_index(reference: ReferenceStore) -> None:
+    """Build the immutable stop-search index before any passenger request needs it.
+
+    Blocking (about 3.5 s on the national feed): call from a worker thread.
+    """
+    _search_index(reference)
+
+
+def search_index_ready(reference: ReferenceStore | None) -> bool:
+    """Whether the reference's index already exists (never builds it)."""
+    return reference is not None and reference in _INDEXES
 
 
 def search_stops(

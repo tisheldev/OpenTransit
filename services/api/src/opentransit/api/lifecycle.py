@@ -20,7 +20,15 @@ from opentransit.build.activation import read_binding
 from opentransit.config import Settings
 from opentransit.core.artifacts import verify_address_composite
 from opentransit.motis import MotisClient
-from opentransit.runtime import AddressProviderBinding, RuntimeSnapshot
+from opentransit.runtime import AddressProviderBinding, RuntimeSnapshot, capture_snapshot
+from opentransit.search_readiness import (
+    READY,
+    SearchWarmup,
+    enabled_backends,
+    install_warmup,
+    prepare_search,
+    retry_until_ready,
+)
 
 
 async def _load_address_provider(manifest_path: Path, settings: Settings, transport):
@@ -194,6 +202,51 @@ def _record_geocoding_config(app, manifest_path: Path, generation_id: str) -> No
         configured.pop(next(iter(configured)))
 
 
+async def _warm_search(app, settings: Settings, snapshot) -> SearchWarmup:
+    """Build the snapshot's stop index and warm its geocoders before it is published."""
+    enabled = app.state.generation_geocoding.get(snapshot.generation.id, False)
+    return await prepare_search(
+        snapshot,
+        enabled_backends(snapshot, enabled),
+        attempts=settings.warmup_attempts,
+        retry_seconds=settings.warmup_retry_seconds,
+        timeout_seconds=settings.journey_deadline_seconds,
+    )
+
+
+def _install_search(app, settings: Settings, snapshot, record: SearchWarmup) -> None:
+    """Record the warm-up outcome; a backend that stayed down keeps retrying in background."""
+    generation_id = snapshot.generation.id
+    install_warmup(app.state.search_warmup, generation_id, record)
+    if all(state == READY for state in record.backends.values()):
+        return
+
+    def is_current() -> bool:
+        current = capture_snapshot(app.state)
+        return current is not None and current.generation.id == generation_id
+
+    task = asyncio.create_task(
+        retry_until_ready(
+            snapshot,
+            record,
+            is_current=is_current,
+            timeout_seconds=settings.journey_deadline_seconds,
+            interval_seconds=settings.warmup_recovery_seconds,
+        )
+    )
+    record.retry_task = task
+    app.state.search_warmup_tasks.add(task)
+    task.add_done_callback(app.state.search_warmup_tasks.discard)
+
+
+async def _cancel_search_tasks(app) -> None:
+    tasks = tuple(app.state.search_warmup_tasks)
+    for task in tasks:
+        task.cancel()
+    if tasks:
+        await asyncio.gather(*tasks, return_exceptions=True)
+
+
 def install_activation_signal(loop, callback):
     """Install the private Linux worker control signal and return its remover."""
     if sys.platform != "linux":
@@ -338,6 +391,8 @@ def make_lifespan(settings: Settings, transport, clock, signal_installer):
         app.state.snapshot_manager = None
         app.state.snapshot = None
         app.state.generation_geocoding = {}
+        app.state.search_warmup = {}
+        app.state.search_warmup_tasks = set()
         app.state.worker_incarnation_id = None
         app.state.worker_record_path = None
         app.state.activation_reload_tasks = set()
@@ -392,6 +447,10 @@ def make_lifespan(settings: Settings, transport, clock, signal_installer):
                     async with asyncio.timeout(settings.engine_timeout_seconds):
                         if not await motis.ready(now):
                             raise ValueError("Candidate engine health check failed")
+                    # Stop index and geocoder warm-up complete before the candidate can be
+                    # swapped in, so in-flight requests never see a half-built index.
+                    warmup = await _warm_search(app, settings, snapshot)
+                    _install_search(app, settings, snapshot, warmup)
                     return SnapshotLease(
                         snapshot,
                         client,
@@ -463,10 +522,15 @@ def make_lifespan(settings: Settings, transport, clock, signal_installer):
                             await asyncio.gather(*tuple(reload_tasks), return_exceptions=True)
                     finally:
                         try:
-                            await manager.aclose()
+                            await _cancel_search_tasks(app)
                         finally:
-                            if worker_record is not None and worker_lock is not None:
-                                _release_worker_record(worker_record, worker_lock, manager=manager)
+                            try:
+                                await manager.aclose()
+                            finally:
+                                if worker_record is not None and worker_lock is not None:
+                                    _release_worker_record(
+                                        worker_record, worker_lock, manager=manager
+                                    )
             return
 
         async with httpx.AsyncClient(
@@ -481,23 +545,25 @@ def make_lifespan(settings: Settings, transport, clock, signal_installer):
                 address_provider = await _load_address_provider(
                     settings.manifest_path, settings, transport
                 )
-                app.state.snapshot = RuntimeSnapshot.load(
+                snapshot = RuntimeSnapshot.load(
                     settings.manifest_path,
                     MotisClient(client),
                     source_check_path=settings.source_check_path,
                     probe_path=settings.probe_path,
                     address_provider=address_provider,
                 )
-                if app.state.snapshot is not None:
-                    _record_geocoding_config(
-                        app, settings.manifest_path, app.state.snapshot.generation.id
-                    )
+                _record_geocoding_config(app, settings.manifest_path, snapshot.generation.id)
+                # Index and warm-up finish before the snapshot becomes visible to requests.
+                warmup = await _warm_search(app, settings, snapshot)
+                _install_search(app, settings, snapshot, warmup)
+                app.state.snapshot = snapshot
             except Exception:
                 app.state.snapshot = None
                 LOG.warning("generation_unavailable")
             try:
                 yield
             finally:
+                await _cancel_search_tasks(app)
                 if address_provider is not None:
                     try:
                         await _close_runtime_resources(

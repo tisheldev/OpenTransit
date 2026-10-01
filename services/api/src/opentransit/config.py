@@ -20,8 +20,18 @@ class Settings:
     ack_dir: Path | None = None
     photon_url: str | None = None
     photon_admin_url: str | None = None
+    # Bounded geocoder warm-up before a snapshot is published, then background recovery.
+    warmup_attempts: int = 5
+    warmup_retry_seconds: float = 0.5
+    warmup_recovery_seconds: float = 5.0
 
     def __post_init__(self) -> None:
+        if (
+            not 1 <= self.warmup_attempts <= 20
+            or not 0 <= self.warmup_retry_seconds <= 10
+            or not 0 < self.warmup_recovery_seconds <= 300
+        ):
+            raise ValueError("Invalid geocoder warm-up bounds")
         url = urlsplit(self.motis_url)
         if url.scheme != "http" or url.hostname not in {"127.0.0.1", "localhost", "motis"}:
             raise ValueError("MOTIS must be the local engine (localhost or Compose motis)")

@@ -10,6 +10,7 @@ from opentransit.api.log import LOG
 from opentransit.api.responses import metadata
 from opentransit.motis import EngineFailure
 from opentransit.runtime import capture_snapshot
+from opentransit.search_readiness import enabled_backends, readiness_reasons
 
 
 def _reason(condition: str, reason: str) -> dict[str, str]:
@@ -23,7 +24,7 @@ def health_router(settings, clock, problem) -> APIRouter:
     async def health():
         return {"status": "alive"}
 
-    async def readiness(snapshot, now):
+    async def readiness(snapshot, now, state):
         """Return usability, static/engine states and one safe reason per failing condition."""
         if snapshot is None:
             return False, "unavailable", "unavailable", [_reason("generation", "UNAVAILABLE")]
@@ -48,12 +49,22 @@ def health_router(settings, clock, problem) -> APIRouter:
             return False, "available", "unavailable", [{"condition": "engine", **failure}]
         if snapshot.reference is None:
             return False, "available", "available", [_reason("reference", "UNAVAILABLE")]
+        # Place search must be truthful too: the stop index must exist and every enabled
+        # geocoder backend must have answered its warm-up query.
+        enabled = getattr(state, "generation_geocoding", {}).get(generation.id, False)
+        reasons = readiness_reasons(
+            snapshot,
+            getattr(state, "search_warmup", {}).get(generation.id),
+            enabled_backends(snapshot, enabled),
+        )
+        if reasons:
+            return False, "available", "available", reasons
         return True, "available", "available", []
 
     @router.get("/readyz")
     async def ready(request: Request):
         snapshot = capture_snapshot(request.app.state)
-        usable, _, _, reasons = await readiness(snapshot, clock())
+        usable, _, _, reasons = await readiness(snapshot, clock(), request.app.state)
         if not usable:
             LOG.warning(
                 "readiness_failed reasons=%s",
@@ -72,7 +83,7 @@ def health_router(settings, clock, problem) -> APIRouter:
     async def status(request: Request):
         snapshot = capture_snapshot(request.app.state)
         now = clock()
-        usable, static_state, engine_state, _ = await readiness(snapshot, now)
+        usable, static_state, engine_state, _ = await readiness(snapshot, now, request.app.state)
         data = {
             "ready": usable,
             "staticData": static_state,
