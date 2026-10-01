@@ -24,6 +24,7 @@ from opentransit.core.artifacts import (
     canonical_sha256,
     verify_artifacts,
 )
+from opentransit.reference import ReferenceStore
 
 FIRST_DAY = date(2026, 9, 30)
 PBF_SHA = "a" * 64
@@ -206,20 +207,49 @@ class FakeDocker:
         return self.motis(command, stdout, stderr, check, timeout)
 
 
-def make_boundaries(docker: FakeDocker, calls: list[str], snapshot_sha: str = PBF_SHA):
+def _square(lon0, lat0, lon1, lat1):
+    return [[lon0, lat0], [lon1, lat0], [lon1, lat1], [lon0, lat1], [lon0, lat0]]
+
+
+def write_context(pbf: Path, output: Path, *, sha: str | None = None) -> dict:
+    """A real context file (header + one locality around the fixture stops) for ``pbf``."""
+    sha = sha or _sha(pbf)
+    rows = [
+        {"type": "ContextHeader", "sourceSha256": sha, "schemaVersion": 1},
+        {"type": "Street", "osmType": "W", "osmId": "1", "tags": {}, "coordinates": []},
+        {
+            "type": "Locality",
+            "osmType": "R",
+            "osmId": "7",
+            "tags": {
+                "boundary": "administrative",
+                "admin_level": "8",
+                "name": "Fixture City",
+                "name:en": "Fixture City",
+            },
+            "geometry": {"type": "Polygon", "coordinates": [_square(34.7, 32.0, 34.9, 32.2)]},
+        },
+    ]
+    Path(output).write_text("".join(json.dumps(row) + "\n" for row in rows), encoding="utf-8")
+    return {"sourcePbfSha256": sha, "counts": {"streetRecordsWritten": 1}}
+
+
+def make_boundaries(docker: FakeDocker, calls: list[str], context_sha: str | None = None):
+    seen: dict[str, str] = {}
+
     def export_houses(pbf, output, reader_path=None):
         calls.append("export_houses")
         Path(output).write_text("house dump\n", encoding="utf-8")
-        return {"houseRecords": 1, "sourcePbfSha256": snapshot_sha}
+        return {"houseRecords": 1, "sourcePbfSha256": seen["sha"]}
 
     def extract_context(pbf, output, reader_path=None):
         calls.append("extract_context")
-        Path(output).write_text("context\n", encoding="utf-8")
-        return {"sourcePbfSha256": snapshot_sha, "counts": {"streetRecordsWritten": 1}}
+        seen["sha"] = _sha(Path(pbf))
+        return write_context(Path(pbf), Path(output), sha=context_sha)
 
     def enrich(houses, context, output, provenance, pbf_sha256):
         calls.append("enrich")
-        assert pbf_sha256 == snapshot_sha
+        assert pbf_sha256 == seen["sha"] != PBF_SHA  # the snapshot PBF, shared with localities
         write_enriched_dump(Path(output))
         Path(provenance).write_text("{}\n", encoding="utf-8")
         return {
@@ -303,12 +333,24 @@ def test_address_stage_order_composite_identity_and_stage_bundle(inputs, tmp_pat
         photon_jar=jar,
         boundaries=make_boundaries(docker, calls),
     )
-    assert calls == ["export_houses", "extract_context", "enrich", "import_photon"]
+    # One context scan, before the schedule build, serves localities and the enrichment.
+    assert calls == ["extract_context", "export_houses", "enrich", "import_photon"]
     assert stage_names(output) == list(stage_order(True))
+    assert stage_names(output)[0] == "osm_context" and "photon_context" not in stage_names(output)
     manifest = json.loads((output / "manifest.json").read_text(encoding="utf-8"))
     component = json.loads(
         (output / "schedule-component-manifest.json").read_text(encoding="utf-8")
     )
+    context_sha = _sha(output / "pipeline" / "work" / "osm-context.jsonl")
+    assert component["identity"]["localityContextSha256"] == context_sha
+    provenance = component["artifacts"]["reference"]["localityProvenance"]
+    assert provenance["contextSha256"] == context_sha and provenance["localityCount"] == 1
+    reference = ReferenceStore(output / "reference.sqlite", component["generationId"])
+    assert [row["locality_id"] for row in reference.search_localities()] == ["osm:relation:7"]
+    evidence = json.loads((output / "pipeline" / "pipeline.json").read_text(encoding="utf-8"))
+    assert evidence["request"]["localities"] is True
+    scan = next(s for s in evidence["stages"] if s["name"] == "osm_context")
+    assert scan["details"]["localities"]["contextSha256"] == context_sha
     assert manifest["scheduleComponentGenerationId"] == component["generationId"]
     assert manifest["generationId"] != component["generationId"]
     attestation = json.loads(
@@ -418,13 +460,141 @@ def test_failed_motis_import_runs_no_address_stage_and_preserves_evidence(inputs
             boundaries=make_boundaries(docker, calls),
         )
     output = tmp_path / "gen"
-    assert calls == []
+    assert calls == ["extract_context"]  # no house export, enrichment or Photon stage
     evidence = json.loads((output / "pipeline" / "pipeline.json").read_text(encoding="utf-8"))
     assert evidence["failure"]["stage"] == "motis_import"
-    assert stage_names(output) == ["validate", "reference", "motis_import"]
+    assert stage_names(output) == ["osm_context", "validate", "reference", "motis_import"]
     manifest = json.loads((output / "manifest.json").read_text(encoding="utf-8"))
     assert manifest["state"] == "failed"
     assert (output / "import.log").read_text(encoding="utf-8") == "import failed\n"
+
+
+def _localities_boundaries(tmp_path, calls, *, context_sha=None):
+    boundaries = make_boundaries(FakeDocker(tmp_path / "unused"), calls, context_sha)
+    return boundaries
+
+
+def _reference(output):
+    manifest = json.loads((output / "manifest.json").read_text(encoding="utf-8"))
+    return ReferenceStore(output / "reference.sqlite", manifest["generationId"]), manifest
+
+
+def test_schedule_only_build_gets_localities_when_the_osm_reader_is_given(inputs, tmp_path):  # noqa: F811
+    calls: list[str] = []
+    output = build(
+        inputs,
+        tmp_path / "gen",
+        FIRST_DAY,
+        osm_reader_path=tmp_path / "reader",  # automatic mode: a reader path turns it on
+        boundaries=_localities_boundaries(tmp_path, calls),
+    )
+    assert calls == ["extract_context"]  # no Photon house export or enrichment
+    assert stage_names(output) == list(stage_order(False, True))
+    assert stage_names(output)[:2] == ["osm_context", "validate"]
+    reference, manifest = _reference(output)
+    assert [row["locality_id"] for row in reference.search_localities()] == ["osm:relation:7"]
+    assert all(
+        row["locality_ids"] == ["osm:relation:7"] for row in reference.stop_search_candidates()
+    )
+    context_sha = _sha(output / "pipeline" / "work" / "osm-context.jsonl")
+    assert manifest["identity"]["localityContextSha256"] == context_sha
+    assert manifest["artifacts"]["reference"]["localityProvenance"]["osmPbfSha256"] == _sha(
+        inputs / generations.CANONICAL_INPUTS["osm"]
+    )
+    evidence = json.loads((output / "pipeline" / "pipeline.json").read_text(encoding="utf-8"))
+    assert evidence["request"]["localities"] is True
+    assert evidence["request"]["localitiesRequested"] is None
+    assert verify_artifacts(output)["generationId"] == manifest["generationId"]
+
+
+def test_no_localities_flag_skips_the_scan_even_with_a_reader(inputs, tmp_path):  # noqa: F811
+    calls: list[str] = []
+    output = build(
+        inputs,
+        tmp_path / "gen",
+        FIRST_DAY,
+        osm_reader_path=tmp_path / "reader",
+        localities=False,
+        boundaries=_localities_boundaries(tmp_path, calls),
+    )
+    assert calls == [] and stage_names(output) == list(stage_order(False))
+    reference, manifest = _reference(output)
+    assert reference.search_localities() == []
+    assert "localityContextSha256" not in manifest["identity"]
+    assert "localityProvenance" not in manifest["artifacts"]["reference"]
+    evidence = json.loads((output / "pipeline" / "pipeline.json").read_text(encoding="utf-8"))
+    assert evidence["request"]["localities"] is False
+    assert evidence["request"]["localitiesRequested"] is False
+
+
+def test_address_build_without_localities_still_scans_once_for_the_enrichment(
+    inputs,  # noqa: F811
+    tmp_path,
+    jar,
+):
+    dump = tmp_path / "gen" / "pipeline" / "work" / "photon-enriched.jsonl"
+    calls: list[str] = []
+    output = build(
+        inputs,
+        tmp_path / "gen",
+        FIRST_DAY,
+        addresses=True,
+        localities=False,
+        photon_jar=jar,
+        boundaries=make_boundaries(FakeDocker(dump), calls),
+    )
+    assert calls == ["extract_context", "export_houses", "enrich", "import_photon"]
+    scan = json.loads((output / "pipeline" / "pipeline.json").read_text(encoding="utf-8"))
+    details = next(s for s in scan["stages"] if s["name"] == "osm_context")["details"]
+    assert details["localities"] is None  # context kept for the enrichment only
+    component = json.loads(
+        (output / "schedule-component-manifest.json").read_text(encoding="utf-8")
+    )
+    assert "localityContextSha256" not in component["identity"]
+    assert (
+        ReferenceStore(output / "reference.sqlite", component["generationId"]).search_localities()
+        == []
+    )
+
+
+def test_explicit_localities_fail_before_creating_output_without_the_reader(inputs, tmp_path):  # noqa: F811
+    def missing_osmium(_path):
+        raise RuntimeError("pyosmium is required")
+
+    with pytest.raises(RuntimeError, match="pyosmium"):
+        build(
+            inputs,
+            tmp_path / "gen",
+            FIRST_DAY,
+            localities=True,
+            boundaries=Boundaries(runner=FakeDocker(tmp_path), load_osmium=missing_osmium),
+        )
+    assert not (tmp_path / "gen").exists()
+    # Automatic mode never probes for pyosmium: no reader path and no addresses means no scan.
+    output = build(
+        inputs,
+        tmp_path / "plain",
+        FIRST_DAY,
+        boundaries=Boundaries(runner=FakeDocker(tmp_path), load_osmium=missing_osmium),
+    )
+    assert stage_names(output) == list(stage_order(False))
+
+
+def test_context_from_another_pbf_fails_the_context_stage_and_builds_nothing(inputs, tmp_path):  # noqa: F811
+    calls: list[str] = []
+    with pytest.raises(ValueError, match="different PBF"):
+        build(
+            inputs,
+            tmp_path / "gen",
+            FIRST_DAY,
+            osm_reader_path=tmp_path / "reader",
+            boundaries=_localities_boundaries(tmp_path, calls, context_sha="b" * 64),
+        )
+    output = tmp_path / "gen"
+    evidence = json.loads((output / "pipeline" / "pipeline.json").read_text(encoding="utf-8"))
+    assert evidence["failure"]["stage"] == "osm_context"
+    assert stage_names(output) == ["osm_context"]
+    assert not (output / "manifest.json").exists() and not (output / "reference.sqlite").exists()
 
 
 def test_refuses_existing_output_without_touching_it(inputs, tmp_path):  # noqa: F811
@@ -613,6 +783,13 @@ def test_cli_forwards_build_generation_arguments(tmp_path, monkeypatch):
     assert captured["kwargs"]["addresses"] is True
     assert captured["kwargs"]["memory_gib"] == 6 and captured["kwargs"]["photon_memory_gib"] == 2
     assert captured["kwargs"]["osm_reader_path"] == tmp_path / "reader"
+    assert captured["kwargs"]["localities"] is None  # automatic
+    for flag, expected in (("--localities", True), ("--no-localities", False)):
+        cli.main(
+            ["build-generation", "--snapshot", "s", "--output", "o", "--first-day", "2026-10-01"]
+            + [flag]
+        )
+        assert captured["kwargs"]["localities"] is expected
 
     def failing(*args, **kwargs):
         raise subprocess.TimeoutExpired("docker", 1)

@@ -33,6 +33,9 @@ from opentransit.localities import LocalityDataset, assign_stops
 
 # 3: localities (OSM admin level 8), their names and the stop assignment.
 SCHEMA_VERSION = 3
+# Schema 2 (no locality tables) stays readable: preserved generations keep their recorded
+# identity and are verified and searched by the rules of the version written in the file.
+SUPPORTED_SCHEMA_VERSIONS = (2, 3)
 DEFAULT_PAGE_SIZE = 20
 MAX_PAGE_SIZE = 100
 MAX_SOURCE_PROFILE_CALLS = 10_000
@@ -60,7 +63,17 @@ COUNT_TABLES = (
     "locality_names",
     "stop_localities",
 )
+LOCALITY_TABLES = ("localities", "locality_names", "stop_localities")
 LOCALITY_PROVENANCE_KEY = "localityProvenance"
+
+
+def tables_for_schema(schema_version: int) -> tuple[str, ...]:
+    """The content-addressed tables of a supported reference schema version."""
+    if schema_version == SCHEMA_VERSION:
+        return COUNT_TABLES
+    if schema_version == 2:
+        return tuple(table for table in COUNT_TABLES if table not in LOCALITY_TABLES)
+    raise ValueError("Unsupported reference database schema")
 
 
 class SourceProfileLimitError(ValueError):
@@ -204,27 +217,40 @@ def _source_hash(path: Path) -> str:
     return digest.hexdigest()
 
 
-def _content_hash(connection: sqlite3.Connection) -> str:
+def _content_hash(connection: sqlite3.Connection, schema_version: int | None = None) -> str:
+    """Content identity under the rules of ``schema_version`` (default: the file's own).
+
+    A file is always hashed by the version it records, never recomputed with a newer
+    table set: a schema-2 file has no locality tables and no locality provenance.
+    """
+    if schema_version is None:
+        recorded = connection.execute(
+            "SELECT value FROM metadata WHERE key='schemaVersion'"
+        ).fetchone()
+        schema_version = json.loads(recorded[0]) if recorded is not None else None
+    if isinstance(schema_version, bool) or schema_version not in SUPPORTED_SCHEMA_VERSIONS:
+        raise ValueError("Unsupported reference database schema")
     digest = hashlib.sha256()
     digest.update(json.dumps(_timing_policy(), sort_keys=True, separators=(",", ":")).encode())
     digest.update(b"\n")
-    for table in COUNT_TABLES:
+    for table in tables_for_schema(schema_version):
         columns = [row[1] for row in connection.execute(f"PRAGMA table_info({table})")]
         if not columns:
-            continue  # tables from a later schema version are absent from older files
+            raise ValueError(f"Reference database lacks its schema {schema_version} table {table}")
         order = ", ".join(f'"{name}"' for name in columns)
         for row in connection.execute(f'SELECT {order} FROM "{table}" ORDER BY {order}'):
             digest.update(
                 json.dumps(tuple(row), ensure_ascii=False, separators=(",", ":")).encode()
             )
             digest.update(b"\n")
-    # Locality provenance (OSM PBF and context hashes) is part of the content identity;
-    # a reference without localities adds nothing, so its hash is unchanged by them.
-    provenance = connection.execute(
-        "SELECT value FROM metadata WHERE key=?", (LOCALITY_PROVENANCE_KEY,)
-    ).fetchone()
-    if provenance is not None:
-        digest.update(LOCALITY_PROVENANCE_KEY.encode() + b"\n" + provenance[0].encode() + b"\n")
+    if schema_version >= 3:
+        # Locality provenance (OSM PBF and context hashes) is part of the content identity;
+        # a reference without localities adds nothing, so its hash is unchanged by them.
+        provenance = connection.execute(
+            "SELECT value FROM metadata WHERE key=?", (LOCALITY_PROVENANCE_KEY,)
+        ).fetchone()
+        if provenance is not None:
+            digest.update(LOCALITY_PROVENANCE_KEY.encode() + b"\n" + provenance[0].encode() + b"\n")
     return digest.hexdigest()
 
 
@@ -767,7 +793,7 @@ def build_reference(
             table: connection.execute(f"SELECT count(*) FROM {table}").fetchone()[0]
             for table in COUNT_TABLES
         }
-        content_hash = _content_hash(connection)
+        content_hash = _content_hash(connection, SCHEMA_VERSION)
         metadata = {
             "generationId": generation_id,
             "sourceSha256": source_hash,
@@ -886,19 +912,23 @@ class ReferenceStore:
                 key: json.loads(value)
                 for key, value in connection.execute("SELECT key, value FROM metadata")
             }
-            if values.get("schemaVersion") != SCHEMA_VERSION:
+            schema_version = values.get("schemaVersion")
+            if isinstance(schema_version, bool) or schema_version not in SUPPORTED_SCHEMA_VERSIONS:
                 raise ValueError("Unsupported reference database schema")
             if (
                 expected_generation_id is not None
                 and values.get("generationId") != expected_generation_id
             ):
                 raise ValueError("Reference database belongs to a different generation")
-            if _content_hash(connection) != values.get("contentSha256"):
+            if _content_hash(connection, schema_version) != values.get("contentSha256"):
                 raise ValueError("Reference database content verification failed")
         # A composed public generation can reuse these immutable bytes. Verify
         # their embedded component identity above, but scope pagination cursors
         # to the composed public identity so references cannot cross generations.
         self.component_generation_id = values["generationId"]
+        # Schema 2 predates the locality tables: nothing is read from them, and locality
+        # ranking falls back to the feed-derived city names.
+        self.has_localities = schema_version >= 3
         self.metadata = ReferenceMetadata(
             cursor_generation_id or values["generationId"],
             values["sourceSha256"],
@@ -1158,8 +1188,12 @@ class ReferenceStore:
                 )
             }
             localities_by_stop: dict[str, list[str]] = {}
-            for stop_id, locality_key in connection.execute(
-                "SELECT stop_id, locality_id FROM stop_localities ORDER BY stop_id, locality_id"
+            for stop_id, locality_key in (
+                connection.execute(
+                    "SELECT stop_id, locality_id FROM stop_localities ORDER BY stop_id, locality_id"
+                )
+                if self.has_localities
+                else ()
             ):
                 localities_by_stop.setdefault(stop_id, []).append(locality_key)
             stops_by_source_id = {row["source_id"]: row for row in rows}
@@ -1199,8 +1233,11 @@ class ReferenceStore:
     def search_localities(self) -> list[dict[str, Any]]:
         """Localities with their searchable names and representative point (no polygons).
 
-        Empty when the reference was built without OSM locality data.
+        Empty when the reference was built without OSM locality data, and always empty
+        for a schema-2 reference (which has no locality tables).
         """
+        if not self.has_localities:
+            return []
         with self._connect() as connection:
             names: dict[str, list[tuple[str, str, str]]] = {}
             for row in connection.execute(

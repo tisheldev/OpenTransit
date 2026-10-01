@@ -625,3 +625,54 @@ def test_invalid_feed_keeps_validation_report_and_never_calls_runner(inputs, tmp
         build_generation(inputs, output, date(2026, 9, 30), runner=successful_runner([]))
     manifest = json.loads((output / "manifest.json").read_text(encoding="utf-8"))
     assert manifest["state"] == "failed"
+
+
+def test_locality_context_joins_identity_and_must_match_the_osm_input(inputs, tmp_path):
+    from test_localities import TAGS_CENTRAL, _polygon, _square, _write_context
+
+    from opentransit.localities import load_locality_context
+
+    osm_sha = hashlib.sha256((inputs / CANONICAL_INPUTS["osm"]).read_bytes()).hexdigest()
+    context = _write_context(
+        tmp_path / "context-v1.jsonl",
+        [(7, TAGS_CENTRAL, _polygon(_square(34.7, 32.0, 34.9, 32.2)))],
+        sha=osm_sha,
+    )
+    dataset = load_locality_context(context, expected_osm_sha256=osm_sha)
+    runner = successful_runner([])
+    plain = build_generation(inputs, tmp_path / "plain", date(2026, 9, 30), runner=runner)
+    located = build_generation(
+        inputs, tmp_path / "located", date(2026, 9, 30), runner=runner, localities=dataset
+    )
+    plain_manifest = json.loads((plain / "manifest.json").read_text(encoding="utf-8"))
+    manifest = json.loads((located / "manifest.json").read_text(encoding="utf-8"))
+    assert "localityContextSha256" not in plain_manifest["identity"]
+    assert manifest["identity"]["localityContextSha256"] == dataset.provenance["contextSha256"]
+    assert manifest["generationId"] != plain_manifest["generationId"]
+    entry = manifest["artifacts"]["reference"]
+    assert entry["localityProvenance"] == dataset.provenance
+    assert entry["counts"]["localities"] == 1 and entry["counts"]["stop_localities"] == 2
+    assert entry["contentSha256"] != plain_manifest["artifacts"]["reference"]["contentSha256"]
+    store = ReferenceStore(located / "reference.sqlite", manifest["generationId"])
+    assert store.metadata.content_sha256 == entry["contentSha256"]
+    assert verify_artifacts(located)["generationId"] == manifest["generationId"]
+
+    # A context extracted from another OSM input is refused before any reference is built.
+    other = _write_context(
+        tmp_path / "other.jsonl",
+        [(7, TAGS_CENTRAL, _polygon(_square(34.7, 32.0, 34.9, 32.2)))],
+        sha="c" * 64,
+    )
+    with pytest.raises(ValueError, match="different OSM input"):
+        build_generation(
+            inputs,
+            tmp_path / "mismatch",
+            date(2026, 9, 30),
+            runner=runner,
+            localities=load_locality_context(other),
+        )
+    assert not (tmp_path / "mismatch" / "reference.sqlite").exists()
+    with pytest.raises(ValueError, match="loaded locality dataset"):
+        build_generation(
+            inputs, tmp_path / "bad", date(2026, 9, 30), runner=runner, localities=str(context)
+        )

@@ -14,11 +14,11 @@ from zipfile import ZipFile
 from opentransit.build.generations import PARSER_VERSION, verify_artifacts
 from opentransit.core.artifacts import file_sha256
 from opentransit.reference import (
-    COUNT_TABLES,
     ReferenceStore,
     _content_hash,
     _translation_rows,
     _validate_translation_rows,
+    tables_for_schema,
 )
 
 REPAIR_POLICY = "gtfs-legacy-trans-id-exact-field-value-v1"
@@ -79,9 +79,11 @@ def _repair_database(
         }
         if values.get("sourceSha256") != expected_source_sha256:
             raise ValueError("Reference database source hash differs from the sealed parent")
+        # The repair keeps the parent's reference schema version (2 or 3) and hashes by it.
+        schema_version = values.get("schemaVersion")
         previous_counts = {
             table: connection.execute(f"SELECT count(*) FROM {table}").fetchone()[0]
-            for table in COUNT_TABLES
+            for table in tables_for_schema(schema_version)
         }
         connection.execute("DELETE FROM translations")
         _validate_translation_rows(connection, rows)
@@ -94,7 +96,7 @@ def _repair_database(
         counts = dict(previous_counts)
         counts["translations"] = len(rows)
         # Recompute canonical reference content once after replacement.
-        content_hash = _content_hash(connection)
+        content_hash = _content_hash(connection, schema_version)
         metadata = {
             **values,
             "generationId": generation_id,

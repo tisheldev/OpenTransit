@@ -112,6 +112,16 @@ def main(argv: list[str] | None = None) -> int:
     complete.add_argument("--photon-jar", type=Path, help="pinned photon-1.3.0.jar (--addresses)")
     complete.add_argument("--photon-memory-gib", type=int, default=2, help="Photon import cap")
     complete.add_argument("--osm-reader-path", type=Path, help="directory providing pyosmium")
+    complete.add_argument(
+        "--localities",
+        action=argparse.BooleanOptionalAction,
+        default=None,
+        help=(
+            "add OSM admin-level-8 localities to the reference (one pyosmium scan of the "
+            "snapshot PBF, shared with --addresses). Default: on when --osm-reader-path or "
+            "--addresses is given, otherwise off; --localities fails if pyosmium is missing"
+        ),
+    )
     complete.add_argument("--import-timeout-seconds", type=int, default=1800)
     complete.add_argument("--photon-timeout-seconds", type=int, default=1800)
     select = commands.add_parser(
@@ -242,6 +252,7 @@ def main(argv: list[str] | None = None) -> int:
                     photon_memory_gib=args.photon_memory_gib,
                     photon_jar=args.photon_jar,
                     osm_reader_path=args.osm_reader_path,
+                    localities=args.localities,
                     import_timeout_seconds=args.import_timeout_seconds,
                     photon_timeout_seconds=args.photon_timeout_seconds,
                 )

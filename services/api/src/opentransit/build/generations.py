@@ -19,6 +19,7 @@ from opentransit.build.prepare import ENGINE_DIGEST, IMAGE
 from opentransit.build.validation import FeedValidationError, ValidationReport, validate_feed
 from opentransit.core.artifacts import verify_artifacts as _verify_artifacts
 from opentransit.core.trip_calls import PINNED_PROJECTION_POLICY, POLICY_ID
+from opentransit.localities import LocalityDataset
 from opentransit.reference import SCHEMA_VERSION as REFERENCE_SCHEMA_VERSION
 from opentransit.reference import ReferenceStore, build_reference
 
@@ -429,8 +430,14 @@ def build_generation(
     reference_reuse_generation_path: Path | None = None,
     on_stage: Callable[[str, str, dict], None] | None = None,
     reserved_entries: frozenset[str] = frozenset(),
+    localities: LocalityDataset | None = None,
 ) -> Path:
     """Validate inputs, build reference SQLite and import MOTIS into a new directory.
+
+    ``localities`` (``opentransit.localities.load_locality_context``) adds the OSM locality
+    tables to the reference. Its context hash joins the generation identity and its provenance
+    is recorded in the reference artifact entry; it must have been extracted from this build's
+    OSM input.
 
     ``runner`` is injectable so tests can exercise success/failure handling without
     launching Docker. The candidate directory is created with exclusive semantics;
@@ -478,6 +485,8 @@ def build_generation(
         reference_reuse_generation_path, (str, os.PathLike)
     ):
         raise ValueError("reference_reuse_generation_path must be a path or None")
+    if localities is not None and not isinstance(localities, LocalityDataset):
+        raise ValueError("localities must be a loaded locality dataset or None")
     if reserved_entries and output_dir.is_dir():
         unexpected = sorted(
             entry.name for entry in output_dir.iterdir() if entry.name not in reserved_entries
@@ -535,6 +544,10 @@ def build_generation(
             key: _find_input(inputs_dir, key, name) for key, name in CANONICAL_INPUTS.items()
         }
         manifest["inputs"] = {artifact.name: artifact.as_dict() for artifact in artifacts.values()}
+        if localities is not None and (
+            localities.provenance.get("osmPbfSha256") != artifacts["osm"].sha256
+        ):
+            raise ValueError("Locality context was extracted from a different OSM input")
         input_manifest, _ = _load_input_metadata(inputs_dir)
         if input_manifest.get("mode") == "fixture":
             manifest["mode"] = "fixture"
@@ -614,6 +627,8 @@ def build_generation(
         }
         if local_engine_slot is not None:
             identity["localEngineSlot"] = local_engine_slot
+        if localities is not None:
+            identity["localityContextSha256"] = localities.provenance["contextSha256"]
         if evidence_provenance is not None:
             identity["validationEvidenceSha256"] = evidence_provenance["sha256"]
         generation_id = hashlib.sha256(
@@ -633,7 +648,7 @@ def build_generation(
         stage("reference", "started")
         if reference_reuse_generation_path is None:
             reference_metadata = build_reference(
-                artifacts["gtfs"].path, reference_path, generation_id
+                artifacts["gtfs"].path, reference_path, generation_id, localities=localities
             )
             manifest["artifacts"]["reference"] = {
                 "path": reference_path.name,
@@ -642,6 +657,8 @@ def build_generation(
                 "counts": reference_metadata.counts,
                 "timingPolicy": reference_metadata.timing_policy,
             }
+            if localities is not None:
+                manifest["artifacts"]["reference"]["localityProvenance"] = localities.provenance
         else:
             reference_artifact = _reuse_reference_artifact(
                 Path(reference_reuse_generation_path),

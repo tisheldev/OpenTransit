@@ -261,3 +261,43 @@ def test_select_generation_requires_a_passed_probe_and_uses_existing_activation(
     assert result["previousTarget"] == "bindings/previous.json"
     with pytest.raises(ValueError, match="inside the generations root"):
         select_generation.select_generation(tmp_path, root, "http://127.0.0.1:59081")
+
+
+def test_extract_context_writes_the_manifest_that_locality_loading_verifies(tmp_path):
+    from opentransit.localities import load_locality_context
+
+    pbf = tmp_path / "source.osm.pbf"
+    pbf.write_bytes(b"synthetic pbf")
+    pbf_sha = hashlib.sha256(pbf.read_bytes()).hexdigest()
+    context_path = tmp_path / "context.jsonl"
+    result = photon_source.extract_context(pbf, context_path, osmium=fake_world())
+    manifest_path = tmp_path / "extraction-manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    context_sha = hashlib.sha256(context_path.read_bytes()).hexdigest()
+    assert result["manifest"] == str(manifest_path)
+    assert result["manifestSha256"] == hashlib.sha256(manifest_path.read_bytes()).hexdigest()
+    assert manifest["output"]["sha256"] == result["outputSha256"] == context_sha
+    assert manifest["source"]["sha256"] == pbf_sha
+    assert manifest["extractor"]["portedFromScriptSha256"] == photon_source.EXTRACTOR_SCRIPT_SHA256
+    assert manifest["counts"]["localityRecordsWritten"] == 1
+
+    dataset = load_locality_context(context_path, expected_osm_sha256=pbf_sha)
+    assert [item.locality_id for item in dataset.localities] == ["osm:relation:9001"]
+    assert dataset.provenance["contextSha256"] == context_sha
+    assert dataset.provenance["reader"]["library"] == "pyosmium"
+    assert dataset.provenance["reader"]["geometrySource"] == photon_source.GEOMETRY_SOURCE
+    # The manifest is bound to the file: a changed context no longer verifies.
+    context_path.write_bytes(context_path.read_bytes() + b"\n")
+    with pytest.raises(ValueError, match="disagrees"):
+        load_locality_context(context_path)
+
+
+def test_extract_context_refuses_an_existing_manifest_before_creating_output(tmp_path):
+    pbf = tmp_path / "source.osm.pbf"
+    pbf.write_bytes(b"x")
+    stale = tmp_path / "extraction-manifest.json"
+    stale.write_text("keep", encoding="utf-8")
+    with pytest.raises(FileExistsError, match="extraction-manifest"):
+        photon_source.extract_context(pbf, tmp_path / "context.jsonl", osmium=fake_world())
+    assert not (tmp_path / "context.jsonl").exists()
+    assert stale.read_text(encoding="utf-8") == "keep"

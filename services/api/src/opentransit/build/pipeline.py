@@ -1,12 +1,19 @@
 """One command from a fetch snapshot to a complete, verified generation (M2).
 
-``build_complete_generation`` runs, in order: paired validation, the reference SQLite build, the
-memory-capped geocoding-enabled MOTIS import and export (all through ``build_generation``), then
-with ``addresses=True`` the Photon preparation (house export, source context, enrichment, address
-catalog), the memory-capped Photon import and seal, the attestation and an in-place composite
-manifest, and finally a full artifact verification. Every stage is recorded in
-``<output>/pipeline/pipeline.json`` with timings and details; stage logs live next to it (MOTIS
-logs stay in the output root where ``build_generation`` writes them).
+``build_complete_generation`` runs, in order: the OSM context scan (one pyosmium pass over the
+snapshot PBF: named streets and administrative level 8 localities; only when localities or
+addresses are wanted), paired validation, the reference SQLite build (with the OSM localities
+loaded from that context), the memory-capped geocoding-enabled MOTIS import and export (all
+through ``build_generation``), then with ``addresses=True`` the Photon preparation (house export,
+enrichment from the same context, address catalog), the memory-capped Photon import and seal, the
+attestation and an in-place composite manifest, and finally a full artifact verification. Every
+stage is recorded in ``<output>/pipeline/pipeline.json`` with timings and details; stage logs live
+next to it (MOTIS logs stay in the output root where ``build_generation`` writes them).
+
+Localities (``localities=None`` is automatic): on when an OSM reader path is given or addresses
+are built, forced on by ``True`` (the build then fails if pyosmium cannot be loaded) and off for
+``False``. Without them the reference has empty locality tables and search falls back to
+feed-derived city names; the choice is recorded in ``pipeline.json`` (``request.localities``).
 
 The output directory must not exist. A failure keeps everything written so far (nothing is
 deleted or overwritten, and no input or earlier generation is touched), marks the failing stage in
@@ -40,13 +47,14 @@ from opentransit.core.artifacts import (
     PHOTON_130_JAR_SHA256,
     verify_artifacts,
 )
+from opentransit.localities import LocalityDataset, load_locality_context
 
 SCHEMA_VERSION = 1
+CONTEXT_STAGES = ("osm_context",)
 SCHEDULE_STAGES = ("validate", "reference", "motis_import", "motis_export")
 ADDRESS_STAGES = (
     "hold_component",
     "photon_houses",
-    "photon_context",
     "photon_enrich",
     "address_catalog",
     "photon_import",
@@ -59,8 +67,16 @@ RESERVED = frozenset({"pipeline"})
 _ECHOED_LIMIT = re.compile(r"^\s*(street_routing_max_\w+):\s*(\d+)\s*$", re.MULTILINE)
 
 
-def stage_order(addresses: bool) -> tuple[str, ...]:
-    return SCHEDULE_STAGES + (ADDRESS_STAGES if addresses else ()) + FINAL_STAGES
+def uses_localities(localities: bool | None, addresses: bool, osm_reader_path: Path | None) -> bool:
+    """Whether OSM localities go into the reference (``None`` selects automatically)."""
+    if localities is None:
+        return addresses or osm_reader_path is not None
+    return bool(localities)
+
+
+def stage_order(addresses: bool, localities: bool = False) -> tuple[str, ...]:
+    context = CONTEXT_STAGES if addresses or localities else ()
+    return context + SCHEDULE_STAGES + (ADDRESS_STAGES if addresses else ()) + FINAL_STAGES
 
 
 def _sha256(path: Path) -> str:
@@ -110,6 +126,7 @@ class Boundaries:
     load_osmium: Callable[[Path | None], Any] = photon_source.load_osmium
     export_houses: Callable[..., dict] = photon_source.export_house_dump
     extract_context: Callable[..., dict] = photon_source.extract_context
+    load_localities: Callable[..., LocalityDataset] = load_locality_context
     enrich: Callable[..., dict] = _enrich
     import_photon: Callable[..., dict] = photon.import_photon
     seal_photon: Callable[..., dict] = photon.seal_photon
@@ -249,6 +266,7 @@ def _preflight(
     first_day: date,
     days: int,
     addresses: bool,
+    use_localities: bool,
     photon_jar: Path | None,
     photon_memory_gib: int,
     osm_reader_path: Path | None,
@@ -265,13 +283,14 @@ def _preflight(
     for name in generations.CANONICAL_INPUTS.values():
         if not any(snapshot.rglob(name)):
             raise FileNotFoundError(f"Snapshot lacks {name}")
-    if not addresses:
-        return None
-    if photon_jar is None:
-        raise ValueError("--photon-jar is required with --addresses")
-    jar = photon.check_photon_jar(photon_jar)
-    photon.photon_memory_args(photon_memory_gib)
-    boundaries.load_osmium(osm_reader_path)
+    jar = None
+    if addresses:
+        if photon_jar is None:
+            raise ValueError("--photon-jar is required with --addresses")
+        jar = photon.check_photon_jar(photon_jar)
+        photon.photon_memory_args(photon_memory_gib)
+    if addresses or use_localities:
+        boundaries.load_osmium(osm_reader_path)
     return jar
 
 
@@ -286,6 +305,7 @@ def build_complete_generation(
     photon_memory_gib: int = photon.MAX_PHOTON_MEMORY_GIB,
     photon_jar: Path | None = None,
     osm_reader_path: Path | None = None,
+    localities: bool | None = None,
     import_timeout_seconds: int = 1800,
     photon_timeout_seconds: int = 1800,
     boundaries: Boundaries | None = None,
@@ -293,12 +313,15 @@ def build_complete_generation(
     """Build, validate and verify a complete generation in a new ``output`` directory."""
     boundaries = boundaries or Boundaries()
     snapshot, output = Path(snapshot).resolve(), Path(output).resolve()
+    use_localities = uses_localities(localities, addresses, osm_reader_path)
+    need_context = addresses or use_localities
     jar = _preflight(
         snapshot,
         output,
         first_day,
         days,
         addresses,
+        use_localities,
         photon_jar,
         photon_memory_gib,
         osm_reader_path,
@@ -318,6 +341,9 @@ def build_complete_generation(
         "firstDay": first_day.isoformat(),
         "days": days,
         "addresses": addresses,
+        "localities": use_localities,
+        "localitiesRequested": localities,
+        "osmReaderPath": str(osm_reader_path) if osm_reader_path else None,
         "geocoding": True,
         "motisImportMemoryGiB": memory_gib,
         "photonImportMemoryGiB": photon_memory_gib if addresses else None,
@@ -326,8 +352,16 @@ def build_complete_generation(
         "javaImage": photon.JAVA_IMAGE if addresses else None,
         "engineLimits": dict(generations.STREET_ROUTING_LIMITS),
     }
-    evidence = _Evidence(work / "pipeline.json", request, stage_order(addresses))
+    evidence = _Evidence(work / "pipeline.json", request, stage_order(addresses, use_localities))
     try:
+        context = scratch / "osm-context.jsonl"
+        dataset: LocalityDataset | None = None
+        pbf = None
+        if need_context:
+            pbf = generations._find_input(snapshot, "osm", generations.CANONICAL_INPUTS["osm"])
+            dataset = _context_stage(
+                pbf, context, evidence, boundaries, osm_reader_path, use_localities
+            )
         boundaries.build_schedule(
             snapshot,
             output,
@@ -339,11 +373,13 @@ def build_complete_generation(
             timeout_seconds=import_timeout_seconds,
             on_stage=evidence.on_stage,
             reserved_entries=RESERVED,
+            localities=dataset,
         )
         if addresses:
-            assert jar is not None
+            assert jar is not None and pbf is not None
             _address_stages(
-                snapshot,
+                pbf,
+                context,
                 output,
                 jar,
                 scratch,
@@ -386,8 +422,33 @@ def _check_photon_tree(output: Path) -> dict:
     return actual
 
 
+def _context_stage(
+    pbf: generations.InputArtifact,
+    context: Path,
+    evidence: _Evidence,
+    boundaries: Boundaries,
+    osm_reader_path: Path | None,
+    use_localities: bool,
+) -> LocalityDataset | None:
+    """Scan the snapshot PBF once; the context feeds the localities and the enrichment."""
+    evidence.begin("osm_context")
+    result = boundaries.extract_context(pbf.path, context, reader_path=osm_reader_path)
+    if result["sourcePbfSha256"] != pbf.sha256:
+        raise ValueError("OSM context was extracted from a different PBF than the snapshot input")
+    dataset = None
+    details = dict(result)
+    if use_localities:
+        dataset = boundaries.load_localities(context, expected_osm_sha256=pbf.sha256)
+        details["localities"] = dataset.provenance
+    else:
+        details["localities"] = None  # context kept for the Photon enrichment only
+    evidence.finish("osm_context", details)
+    return dataset
+
+
 def _address_stages(
-    snapshot: Path,
+    pbf: generations.InputArtifact,
+    context: Path,
     output: Path,
     jar: Path,
     scratch: Path,
@@ -411,25 +472,16 @@ def _address_stages(
         {"scheduleComponentGenerationId": component["generationId"], "heldAs": held.name},
     )
 
-    pbf_name = generations.CANONICAL_INPUTS["osm"]
-    pbf = generations._find_input(snapshot, "osm", pbf_name).path
     houses = scratch / "photon-houses.jsonl"
-    context = scratch / "osm-context.jsonl"
     enriched = scratch / "photon-enriched.jsonl"
     enrichment_provenance = scratch / "photon-enriched.provenance.json"
 
     evidence.begin("photon_houses")
-    house_result = boundaries.export_houses(pbf, houses, reader_path=osm_reader_path)
+    house_result = boundaries.export_houses(pbf.path, houses, reader_path=osm_reader_path)
     evidence.finish("photon_houses", house_result)
 
-    evidence.begin("photon_context")
-    context_result = boundaries.extract_context(pbf, context, reader_path=osm_reader_path)
-    evidence.finish("photon_context", context_result)
-
     evidence.begin("photon_enrich")
-    enrichment = boundaries.enrich(
-        houses, context, enriched, enrichment_provenance, context_result["sourcePbfSha256"]
-    )
+    enrichment = boundaries.enrich(houses, context, enriched, enrichment_provenance, pbf.sha256)
     counts = enrichment["counts"]
     expected_documents = int(counts["houseRecords"]) + int(counts["streetDocumentsAdded"])
     if expected_documents <= 0:

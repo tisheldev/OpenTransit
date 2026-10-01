@@ -5,6 +5,13 @@ They were first written as one-off scripts for the preserved September 4 extract
 hash is computed from the file actually supplied (the snapshot's recorded input), not pinned to
 one extract. ``osmium`` is not a locked dependency: it is imported lazily, optionally from a
 directory such as ``.runtime/osm-reader-20260930`` supplied by the operator.
+
+``extract_context`` is the tracked form of the M4 context extractor
+(``extract_photon_context.py``, SHA-256 ``EXTRACTOR_SCRIPT_SHA256``): the same Street and
+administrative level 8 Locality selection and records, written with the same ContextHeader, so
+one scan serves both the reference localities (``opentransit.localities``) and the Photon
+enrichment. Beside the JSONL it exclusive-creates ``extraction-manifest.json``, which
+``load_locality_context`` checks and copies reader identity from.
 """
 
 from __future__ import annotations
@@ -22,6 +29,9 @@ from pathlib import Path
 from typing import Any
 
 CONTEXT_SCHEMA_VERSION = 1
+EXTRACTOR_SCRIPT_SHA256 = "aa1fd2e15c819442a5703cacb88432484283be2f3b969feb5f8d2018e2347de5"
+EXTRACTION_MANIFEST_NAME = "extraction-manifest.json"
+GEOMETRY_SOURCE = "pyosmium locations and AreaManager; no bounding-box approximation"
 _NAME_KEYS = {"alt_name", "short_name", "official_name", "loc_name", "old_name"}
 
 
@@ -221,7 +231,11 @@ def _line(record: dict[str, Any]) -> str:
 def extract_context(
     pbf_path: Path, output_path: Path, *, reader_path: Path | None = None, osmium: Any = None
 ) -> dict:
-    """Exclusive-create the named-highway and admin-level-8 locality context JSONL."""
+    """Exclusive-create the named-highway and admin-level-8 locality context JSONL.
+
+    Also exclusive-creates ``extraction-manifest.json`` beside it (source and output hashes,
+    reader identity, counts, extractor identity), the sidecar ``load_locality_context`` verifies.
+    """
     osmium = osmium or load_osmium(reader_path)
     pbf = Path(pbf_path).resolve(strict=True)
     pbf_sha256 = sha256_file(pbf)
@@ -259,6 +273,9 @@ def extract_context(
                 self.target.write(_line(record))
                 counts["localityRecordsWritten"] += 1
 
+    manifest_path = Path(output_path).resolve().with_name(EXTRACTION_MANIFEST_NAME)
+    if manifest_path.exists():
+        raise FileExistsError(f"Refusing to overwrite {manifest_path}")
     output, target = _new_output(output_path)
     with target:
         target.write(
@@ -279,7 +296,7 @@ def extract_context(
         reader_version = importlib.metadata.version("osmium")
     except importlib.metadata.PackageNotFoundError:
         reader_version = None
-    return {
+    result = {
         "output": str(output),
         "outputSha256": sha256_file(output),
         "outputBytes": output.stat().st_size,
@@ -290,3 +307,38 @@ def extract_context(
         "startedAtUtc": started,
         "finishedAtUtc": datetime.now(UTC).isoformat(),
     }
+    manifest = {
+        "schemaVersion": CONTEXT_SCHEMA_VERSION,
+        "status": "extraction_complete",
+        "source": {"path": str(pbf), "sha256": pbf_sha256, "bytes": pbf.stat().st_size},
+        "output": {
+            "path": str(output),
+            "format": "UTF-8 JSONL; one ContextHeader followed by source Street/Locality records",
+            "sha256": result["outputSha256"],
+            "bytes": result["outputBytes"],
+        },
+        "reader": {
+            "library": "pyosmium",
+            "version": reader_version,
+            "internalPbfPasses": 2,
+            "index": "flex_mem",
+            "geometrySource": GEOMETRY_SOURCE,
+        },
+        "extractor": {
+            "module": "opentransit.build.photon_source.extract_context",
+            "moduleSha256": sha256_file(Path(__file__)),
+            "portedFromScriptSha256": EXTRACTOR_SCRIPT_SHA256,
+        },
+        "counts": result["counts"],
+        "elapsedSeconds": result["elapsedSeconds"],
+        "startedAtUtc": started,
+        "finishedAtUtc": result["finishedAtUtc"],
+    }
+    with manifest_path.open("x", encoding="utf-8", newline="\n") as stream:
+        json.dump(manifest, stream, ensure_ascii=False, indent=2, allow_nan=False)
+        stream.write("\n")
+        stream.flush()
+        os.fsync(stream.fileno())
+    result["manifest"] = str(manifest_path)
+    result["manifestSha256"] = sha256_file(manifest_path)
+    return result
