@@ -202,6 +202,14 @@ class SnapshotManager:
                                 "workerId": self.worker_id,
                                 "workerIncarnationId": self.worker_incarnation_id,
                                 "ackWriteStartedMonotonic": self.clock(),
+                                # The worker's own previously served binding, which may differ
+                                # from the pointer's earlier token after a restored failure.
+                                "replacedOperationToken": (
+                                    old_active[1].activation_token if old_active else None
+                                ),
+                                "replacedGenerationId": (
+                                    old_active[1].generation_id if old_active else None
+                                ),
                             },
                         )
                     except BaseException:

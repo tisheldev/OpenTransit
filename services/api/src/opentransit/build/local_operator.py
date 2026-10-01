@@ -214,7 +214,14 @@ def activate(
     except TimeoutError:
         status, data, path = "timeout", {}, None
     if status == "acknowledged":
-        report.update(status="acknowledged", ack=data, ackFileMtimeUtc=_utc_mtime(path))
+        report.update(
+            status="acknowledged",
+            ack=data,
+            ackFileMtimeUtc=_utc_mtime(path),
+            # Retirement is acknowledged under the token the worker actually served, which
+            # differs from previousToken after a failed activation restored the pointer.
+            retiredOperationToken=data.get("replacedOperationToken"),
+        )
         return report
     report.update(status=status, failureAck=data or None)
     if previous is None:

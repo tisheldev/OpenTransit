@@ -321,3 +321,29 @@ def test_cli_reports_refusal_without_touching_pointer(served, capsys):
     assert report["status"] == "refused"
     assert "coverage_expired" in report["reasons"]
     assert current_target(served.current) == before
+
+
+@posix_only
+def test_retirement_gate_uses_the_workers_token_after_a_restored_failure(served):
+    worker = served.worker
+    ack_dir = served.root / "acks"
+    served.rejected["tokens"].add("op-new-1")
+    with pytest.raises(operator.ActivationFailed) as failed:
+        operator.activate(served.root, served.new, ack_dir, signaller=worker.signaller, timeout=10)
+    restore_token = failed.value.detail["restoreToken"]
+    served.rejected["tokens"].clear()
+    fresh = operator.reissue_binding(served.root, served.new)
+    result = operator.activate(served.root, fresh, ack_dir, signaller=worker.signaller, timeout=10)
+    # The pointer's previous token is the restored binding, but the worker still served the
+    # original binding; retirement is acknowledged under the worker's token.
+    assert result["previousToken"] == restore_token
+    assert result["retiredOperationToken"] == "op-old-1"
+    retired = operator.await_retirement(
+        ack_dir,
+        old_token=result["retiredOperationToken"],
+        new_token=result["token"],
+        incarnation=worker.manager.worker_incarnation_id,
+        deadline_seconds=0.01,
+        timeout=10,
+    )
+    assert retired["status"] == "retired"
