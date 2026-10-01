@@ -13,6 +13,16 @@ curl.exe --json "@services/api/examples/journey.json" http://127.0.0.1:8000/v1/j
 
 Open [interactive API docs](http://127.0.0.1:8000/docs). The example plans Dizengoff Center → Technion on October 1 at 08:00 Israeli time. Change `departAt` to a desired explicit-offset time inside the manifest's half-open coverage. The September 30 graph covers `[2026-09-30T00:00:00+03:00, 2026-10-31T00:00:00+02:00)`; it includes the October DST offset change, but comprehensive DST correctness is an M3 check. Timings are scheduled; predictions/delays and alerts are null, with both live capabilities `not_enabled`.
 
+## One-command scheduled demo
+
+With an API running (Compose above, or the host-edit workflow below), plan Dizengoff Center → Technion by coordinates from the repository root:
+
+```powershell
+uv run --project services/api --locked opentransit demo --api-url http://127.0.0.1:8000
+```
+
+`--depart-at` takes an ISO time with an explicit offset (default: tomorrow 08:00 Israel time, so choose a date inside the graph's coverage when it differs); `--results` and `--lang` are optional. The summary shows the generation and coverage, each journey and leg with its scheduled `[scheduled]` label and service date, and the realtime/alerts capabilities as the API reports them (`not_enabled` for this scheduled API). Exit code 0 means routes were found, 1 a successful empty search (`no_route`), and 2 any connection, HTTP or response error. Walking caps are checked against a real engine with `uv run --project services/api --locked python services/api/tools/check_walk_caps.py --depart-at <time> --output <new file>`; that is real-engine evidence only when pointed at a real generation.
+
 ## Try the local test client
 
 Open the [journey playground](http://127.0.0.1:8000/playground/) after starting Compose above. This small browser harness was requested September 30 for manual M1 testing; it is not Phase 2 product acceptance.

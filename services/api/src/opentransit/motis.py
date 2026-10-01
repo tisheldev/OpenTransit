@@ -400,6 +400,10 @@ class MotisClient:
                 if len(journeys) >= query.results:
                     break
             if raw_alternatives and not journeys:
+                if warnings == ["INFEASIBLE_STREET_ALTERNATIVES_OMITTED"]:
+                    # Every alternative lacked a street path: an empty search with the
+                    # disclosure, not a malformed engine response.
+                    return PlanResult([], warnings, RANKING_POLICY, constraints)
                 raise EngineFailure("ENGINE_INVALID_RESPONSE")
             return PlanResult(journeys, warnings, RANKING_POLICY, constraints)
         except EngineFailure:

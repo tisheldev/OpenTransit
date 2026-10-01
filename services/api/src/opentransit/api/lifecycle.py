@@ -326,12 +326,15 @@ def _release_worker_record(path: Path, lock_file, *, manager: SnapshotManager) -
         lock_file.close()
 
 
+PLANNING_CONCURRENCY = 16  # One semaphore shared by journeys, departures and trips.
+
+
 def make_lifespan(settings: Settings, transport, clock, signal_installer):
     """Build the ASGI lifespan that owns the runtime snapshot and worker record."""
 
     @asynccontextmanager
     async def lifespan(app: FastAPI):
-        app.state.planning_semaphore = asyncio.Semaphore(16)
+        app.state.planning_semaphore = asyncio.Semaphore(PLANNING_CONCURRENCY)
         app.state.snapshot_manager = None
         app.state.snapshot = None
         app.state.generation_geocoding = {}

@@ -45,21 +45,57 @@ LocationInput = Annotated[Coordinate | StopLocation | PlaceLocation, Field(discr
 class JourneyRequest(Model):
     origin: LocationInput = Field(alias="from")
     destination: LocationInput = Field(alias="to")
-    depart_at: AwareDatetime | None = Field(default=None, alias="departAt")
-    arrive_by: AwareDatetime | None = Field(default=None, alias="arriveBy")
-    modes: list[Literal["bus", "rail", "light_rail"]] = Field(
-        default_factory=lambda: ["bus", "rail", "light_rail"], min_length=1
+    depart_at: AwareDatetime | None = Field(
+        default=None,
+        alias="departAt",
+        description="ISO timestamp with an explicit offset. Exactly one of departAt/arriveBy.",
     )
-    results: int = Field(default=3, ge=1, le=5, strict=True)
+    arrive_by: AwareDatetime | None = Field(
+        default=None,
+        alias="arriveBy",
+        description="ISO timestamp with an explicit offset. Exactly one of departAt/arriveBy.",
+    )
+    modes: list[Literal["bus", "rail", "light_rail"]] = Field(
+        default_factory=lambda: ["bus", "rail", "light_rail"],
+        min_length=1,
+        description="Unique transit modes the engine may use. Walking is always allowed.",
+    )
+    results: int = Field(
+        default=3, ge=1, le=5, strict=True, description="Maximum alternatives to return (1-5)."
+    )
     lang: Literal["he", "en"] = "he"
     max_access_walk_minutes: int = Field(
-        default=15, alias="maxAccessWalkMinutes", ge=1, le=30, strict=True
+        default=15,
+        alias="maxAccessWalkMinutes",
+        ge=1,
+        le=30,
+        strict=True,
+        description=(
+            "Cap on the first walk before boarding, in whole minutes (1-30). Sent to the "
+            "engine as maxPreTransitTime. Does not bound walking between transit legs."
+        ),
     )
     max_egress_walk_minutes: int = Field(
-        default=15, alias="maxEgressWalkMinutes", ge=1, le=30, strict=True
+        default=15,
+        alias="maxEgressWalkMinutes",
+        ge=1,
+        le=30,
+        strict=True,
+        description=(
+            "Cap on the last walk after alighting, in whole minutes (1-30). Sent to the "
+            "engine as maxPostTransitTime. Does not bound walking between transit legs."
+        ),
     )
     max_direct_walk_minutes: int = Field(
-        default=30, alias="maxDirectWalkMinutes", ge=1, le=30, strict=True
+        default=30,
+        alias="maxDirectWalkMinutes",
+        ge=1,
+        le=30,
+        strict=True,
+        description=(
+            "Cap on a walk-only alternative, in whole minutes (1-30). Sent to the engine "
+            "as maxDirectTime."
+        ),
     )
 
     @field_validator("depart_at", "arrive_by", mode="before")
@@ -192,7 +228,15 @@ class Metadata(Model):
         default_factory=lambda: ["Israel Ministry of Transport", "© OpenStreetMap contributors"]
     )
     rankingPolicy: str = "motis-v2.11.2-feasible-engine-order-v1"
-    appliedConstraints: dict[str, object] = Field(default_factory=dict)
+    appliedConstraints: dict[str, object] = Field(
+        default_factory=dict,
+        description=(
+            "Constraints the adapter sent to the engine, plus disclosures. "
+            "transferWalkLimit is always not_enforced: walking between transit legs is "
+            "unbounded and totalled per journey in walkingSeconds. engineWalkCapConformance "
+            "states whether the engine's enforcement of the caps has been verified."
+        ),
+    )
     warnings: list[str] = Field(default_factory=list)
 
 
