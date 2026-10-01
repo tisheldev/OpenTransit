@@ -23,6 +23,7 @@ Read [the form guide](decision-pack/form-guide.md) for its exact fields and a co
 | Redistribution | Not expressly settled by the one-page form | Public display, processed API responses, raw redistribution separately |
 | Storage/fixtures | Not expressly settled by the one-page form | Retention of observations and permission for public test samples |
 | Sustainable fallback | Stride used as an experimental candidate in planning | Separate terms, availability and dependency decision before production reliance |
+| Derived statistics from Hasadna's archive | Added 1 October 2026: Hasadna's public archive of MOT SIRI and GTFS states no data licence ([research note](research/open-bus.md)) | Question to ask at the October 19 follow-up (not sent): may statistics derived from archived MOT realtime data (delay distributions, reliability figures) be displayed publicly, and with what attribution? Ask Hasadna separately |
 
 The old `https://data.gov.il/he/terms-of-use` URL returned 404 during this review. Do not treat the old link as evidence of an accepted licence. This record does not replace reading authoritative terms or obtaining the outstanding answers.
 

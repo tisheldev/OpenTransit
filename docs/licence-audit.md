@@ -30,6 +30,7 @@ This did not inspect wheel licence files, vendored Rust code or build-isolation 
 | [annotated-doc](https://pypi.org/pypi/annotated-doc/0.0.5/json) | 0.0.5 | MIT |
 | [annotated-types](https://pypi.org/pypi/annotated-types/0.8.0/json) | 0.8.0 | MIT |
 | [anyio](https://pypi.org/pypi/anyio/4.15.1/json) | 4.15.1 | MIT |
+| [brotli](https://pypi.org/pypi/brotli/1.2.0/json) | 1.2.0 | MIT; optional `history` group (OB-01 batch only), not in the API image |
 | [certifi](https://pypi.org/pypi/certifi/2026.7.22/json) | 2026.7.22 | **MPL-2.0**; file-level copyleft/source obligations on distribution |
 | [click](https://pypi.org/pypi/click/8.5.0/json) | 8.5.0 | BSD-3-Clause |
 | [colorama](https://pypi.org/pypi/colorama/0.4.6/json) | 0.4.6 | BSD-3-Clause; conditional Windows dependency |
