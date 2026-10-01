@@ -22,7 +22,7 @@
   "loadBalancers": [
     {"targetGroupArn": "{{TARGET_GROUP_ARN}}", "containerName": "api", "containerPort": 8000}
   ],
-  "healthCheckGracePeriodSeconds": 600,
+  "healthCheckGracePeriodSeconds": 1200,
   "enableExecuteCommand": false,
   "enableECSManagedTags": true,
   "propagateTags": "SERVICE",
