@@ -1,0 +1,17 @@
+{
+  "journeys": [{
+    "from": {"kind": "coordinate", "latitude": 32.0757, "longitude": 34.7748},
+    "to": {"kind": "coordinate", "latitude": 32.7775, "longitude": 35.0219},
+    "departAt": "REPLACE_ISO_TIME_WITH_OFFSET_IN_COVERAGE"
+  }],
+  "places": [
+    {"q": "תל אביב", "lang": "he", "type": ["stop", "station"], "limit": 10},
+    {"q": "Tel Aviv", "lang": "en", "type": ["address", "poi"], "limit": 10}
+  ],
+  "departures": [{
+    "stopId": "REPLACE_CURRENT_MOT_STOP_ID",
+    "from": "REPLACE_ISO_TIME_WITH_OFFSET_IN_COVERAGE",
+    "horizonMinutes": 60, "limit": 20
+  }],
+  "trips": [{"tripRef": "REPLACE_DATED_TRIP_REF_FROM_CURRENT_DEPARTURES"}]
+}
