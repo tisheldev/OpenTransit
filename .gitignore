@@ -23,3 +23,6 @@ poc/routing/run_import.out
 # Prepared/private Ministry application copies and PDF working files
 output/pdf/
 tmp/pdfs/
+
+# Claude Code agent worktrees
+.claude/worktrees/
