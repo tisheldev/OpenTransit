@@ -230,11 +230,21 @@ def _score_normalized(query: str, normalized: list[str], norm_code: str) -> int 
 
 
 def _coverage(tokens: list[str], labels: list[str]) -> int:
-    """Largest number of query tokens prefix-matched by words of one label."""
+    """Largest number of query tokens prefix-matched by words of one label.
+
+    Labels are normalized (words joined by single spaces) and tokens hold no
+    whitespace, so "a word starts with the token" is exactly "space + token occurs
+    in space + label". The substring test runs in C instead of a per-word loop.
+    """
+    needles = [" " + token for token in tokens]
     best = 0
     for label in labels:
-        words = label.split()
-        best = max(best, sum(any(word.startswith(token) for word in words) for token in tokens))
+        padded = " " + label
+        covered = sum(needle in padded for needle in needles)
+        if covered > best:
+            best = covered
+            if best == len(needles):
+                break
     return best
 
 

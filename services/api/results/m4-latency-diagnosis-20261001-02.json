@@ -1,0 +1,675 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-01T13:41:47+00:00",
+  "scope": "Read-only latency diagnosis of the oct1a live acceptance search run (M4.5 /v1/places p95 < 40 ms at the API process) plus offline in-process stop-search replay on the same reference. No Docker, no HTTP, no new live measurement. Predictions are modelled from measured per-request phases; they are not measurements and not M4.5 acceptance.",
+  "acceptanceStatus": "M4.5 remains FAIL/open. API-side fixes are predicted to leave first-pass p95 near 57-58 ms because the remaining tail is MOTIS geocoder server time on Hebrew multi-token PLACE queries and cold Photon address queries.",
+  "provenance": {
+    "liveRun": "C:/Projects/OpenTransit/.runtime/acc-oct1a (runId oct1a, 2026-10-01 13:00-13:23 UTC)",
+    "summarySha256": "d0e46281083c614c3b4ce1b7373c446833933c6375701c466927f1ab7f4562a1",
+    "searchResultSha256": "443a5da33360948865dd8fbef87d723f4ba43140e22a5d4abd7506ccc76228fa",
+    "apiContainerLogSha256": "06fd5822ed20c7d8dfae2fa77f9cea31fa69680a40b59be7205ebdfc7a5632d0",
+    "generationId": "e8082e7e90e181633af267a9099024e597e9e0dc1a04addc29b65cc50c92a963",
+    "referenceSchemaVersion": 2,
+    "runSourceCommit": "5fb03291738d9815c28eced742fe2895d1b61c52",
+    "runSourceNote": "services/api/src is identical at 5fb0329 and 43e23e2 (empty diff); the API container bind-mounts that source",
+    "diagnosisBaseCommit": "43e23e2",
+    "offlineReplayPlatform": "Windows 11 host, CPython via services/api uv lock; reference opened read-only (mode=ro&immutable=1) without the integrity/content-hash pass; has_localities=false as in the live run"
+  },
+  "method": [
+    "Joined all 732 scored /v1/places requests (183 first pass + 3 warm passes) to the API process route log (duration_ms) and the geocoder phase logs (backend_ms, normalize_ms, responsebytes, resultcount) by X-Request-ID; 732/732 correlated.",
+    "Backend identity comes from the requested types: poi-only requests call only MOTIS /api/v1/geocode (type=PLACE); address-only requests call only Photon; stop/station-only requests call neither. The phase-log lines carry no backend name.",
+    "Non-backend time = API process duration - slowest backend phase (backend_ms + normalize_ms). For single-geocoder requests it is framework + merge + serialization; for requests with stop types it additionally contains the stop search.",
+    "Percentiles use services/api/tools/evaluate_search.py::_percentile (nearest rank); the measured first-pass 60.9 ms and all-request 47.0 ms p95 reproduce the run's summary."
+  ],
+  "measured": {
+    "byRequestShape": {
+      "stopOnly": {
+        "requests": 88,
+        "apiProcessP50Ms": 5.8,
+        "apiProcessP95Ms": 15.2,
+        "slowestBackendIncludingNormalizeP50Ms": 0.0,
+        "slowestBackendIncludingNormalizeP95Ms": 0.0,
+        "nonBackendP50Ms": 5.8,
+        "nonBackendP95Ms": 15.2,
+        "over40Ms": 4,
+        "firstPassOver40Ms": 1
+      },
+      "poiOnly_motisPlace": {
+        "requests": 456,
+        "apiProcessP50Ms": 6.2,
+        "apiProcessP95Ms": 51.7,
+        "slowestBackendIncludingNormalizeP50Ms": 5.2,
+        "slowestBackendIncludingNormalizeP95Ms": 50.5,
+        "nonBackendP50Ms": 1.0,
+        "nonBackendP95Ms": 1.2,
+        "over40Ms": 32,
+        "firstPassOver40Ms": 8
+      },
+      "addressOnly_photon": {
+        "requests": 88,
+        "apiProcessP50Ms": 12.9,
+        "apiProcessP95Ms": 41.0,
+        "slowestBackendIncludingNormalizeP50Ms": 11.9,
+        "slowestBackendIncludingNormalizeP95Ms": 39.5,
+        "nonBackendP50Ms": 0.9,
+        "nonBackendP95Ms": 1.2,
+        "over40Ms": 5,
+        "firstPassOver40Ms": 4
+      },
+      "allFourTypes_stopSearchPlusMotisPlusPhoton": {
+        "requests": 100,
+        "apiProcessP50Ms": 23.6,
+        "apiProcessP95Ms": 45.4,
+        "slowestBackendIncludingNormalizeP50Ms": 17.0,
+        "slowestBackendIncludingNormalizeP95Ms": 32.1,
+        "nonBackendP50Ms": 6.8,
+        "nonBackendP95Ms": 16.7,
+        "over40Ms": 6,
+        "firstPassOver40Ms": 5
+      }
+    },
+    "motisPlaceBackendByLanguage": {
+      "he": {
+        "requests": 248,
+        "p50Ms": 10.5,
+        "p95Ms": 60.5,
+        "maxMs": 73.0,
+        "over40Ms": 30
+      },
+      "en": {
+        "requests": 208,
+        "p50Ms": 4.4,
+        "p95Ms": 7.7,
+        "maxMs": 12.1,
+        "over40Ms": 0
+      }
+    },
+    "motisPlaceHebrewBackendByTokenCount": {
+      "1": {
+        "requests": 108,
+        "p50Ms": 8.7,
+        "p95Ms": 12.6
+      },
+      "2": {
+        "requests": 96,
+        "p50Ms": 11.1,
+        "p95Ms": 30.7
+      },
+      "3": {
+        "requests": 44,
+        "p50Ms": 50.5,
+        "p95Ms": 70.7
+      }
+    },
+    "motisPlaceSlowCaseRepeatability": {
+      "casesAbove40MsInAnyPass": 8,
+      "casesAbove40MsInAllFourPasses": 7,
+      "maxMinusMinAcrossFourPassesMs": [
+        1.9,
+        2.7,
+        3.0,
+        3.8,
+        5.1,
+        8.6,
+        10.5,
+        10.6
+      ]
+    },
+    "photonAddressOnlyBackendByPass": {
+      "first": {
+        "p50Ms": 20.9,
+        "p95Ms": 60.0,
+        "maxMs": 73.9
+      },
+      "warm1": {
+        "p50Ms": 12.3,
+        "p95Ms": 29.9,
+        "maxMs": 39.5
+      },
+      "warm2": {
+        "p50Ms": 9.6,
+        "p95Ms": 24.3,
+        "maxMs": 25.1
+      },
+      "warm3": {
+        "p50Ms": 9.1,
+        "p95Ms": 25.2,
+        "maxMs": 27.3
+      }
+    },
+    "over40MsAttribution": {
+      "allRequests": {
+        "stopOnly": 4,
+        "poiOnly_motisPlace": 32,
+        "addressOnly_photon": 5,
+        "allFourTypes_stopSearchPlusMotisPlusPhoton": 6
+      },
+      "firstPass": {
+        "stopOnly": 1,
+        "poiOnly_motisPlace": 8,
+        "addressOnly_photon": 4,
+        "allFourTypes_stopSearchPlusMotisPlusPhoton": 5
+      }
+    },
+    "slowestFirstPassRequests": [
+      {
+        "caseId": "P062",
+        "category": "address",
+        "language": "en",
+        "types": [
+          "address"
+        ],
+        "apiProcessMs": 75.0,
+        "backendPhases": [
+          {
+            "backendMs": 65.12,
+            "normalizeMs": 8.783,
+            "responseBytes": 2641,
+            "resultCount": 8
+          }
+        ]
+      },
+      {
+        "caseId": "P095",
+        "category": "near_dependent",
+        "language": "en",
+        "types": [
+          "stop",
+          "station",
+          "poi",
+          "address"
+        ],
+        "apiProcessMs": 73.8,
+        "backendPhases": [
+          {
+            "backendMs": 11.149,
+            "normalizeMs": 0.41,
+            "responseBytes": 5697,
+            "resultCount": 10
+          },
+          {
+            "backendMs": 56.253,
+            "normalizeMs": 0.022,
+            "responseBytes": 42,
+            "resultCount": 0
+          }
+        ]
+      },
+      {
+        "caseId": "V037",
+        "category": "venue",
+        "language": "he",
+        "types": [
+          "poi"
+        ],
+        "apiProcessMs": 72.0,
+        "backendPhases": [
+          {
+            "backendMs": 70.696,
+            "normalizeMs": 0.325,
+            "responseBytes": 5598,
+            "resultCount": 10
+          }
+        ]
+      },
+      {
+        "caseId": "P043",
+        "category": "poi_landmark",
+        "language": "he",
+        "types": [
+          "poi"
+        ],
+        "apiProcessMs": 70.6,
+        "backendPhases": [
+          {
+            "backendMs": 68.779,
+            "normalizeMs": 0.384,
+            "responseBytes": 6418,
+            "resultCount": 10
+          }
+        ]
+      },
+      {
+        "caseId": "P097",
+        "category": "near_dependent",
+        "language": "en",
+        "types": [
+          "stop",
+          "station",
+          "poi",
+          "address"
+        ],
+        "apiProcessMs": 69.0,
+        "backendPhases": [
+          {
+            "backendMs": 5.005,
+            "normalizeMs": 0.375,
+            "responseBytes": 5786,
+            "resultCount": 10
+          },
+          {
+            "backendMs": 54.584,
+            "normalizeMs": 4.61,
+            "responseBytes": 2030,
+            "resultCount": 4
+          }
+        ]
+      },
+      {
+        "caseId": "P084",
+        "category": "misspelling",
+        "language": "en",
+        "types": [
+          "stop",
+          "station",
+          "poi",
+          "address"
+        ],
+        "apiProcessMs": 67.8,
+        "backendPhases": [
+          {
+            "backendMs": 5.926,
+            "normalizeMs": 0.386,
+            "responseBytes": 5766,
+            "resultCount": 10
+          },
+          {
+            "backendMs": 42.234,
+            "normalizeMs": 6.146,
+            "responseBytes": 3345,
+            "resultCount": 6
+          }
+        ]
+      },
+      {
+        "caseId": "P075",
+        "category": "neighborhood",
+        "language": "he",
+        "types": [
+          "poi"
+        ],
+        "apiProcessMs": 67.3,
+        "backendPhases": [
+          {
+            "backendMs": 65.759,
+            "normalizeMs": 0.331,
+            "responseBytes": 7488,
+            "resultCount": 10
+          }
+        ]
+      },
+      {
+        "caseId": "P002",
+        "category": "station",
+        "language": "he",
+        "types": [
+          "stop",
+          "station"
+        ],
+        "apiProcessMs": 63.9,
+        "backendPhases": []
+      },
+      {
+        "caseId": "P024",
+        "category": "poi_university",
+        "language": "he",
+        "types": [
+          "poi"
+        ],
+        "apiProcessMs": 61.6,
+        "backendPhases": [
+          {
+            "backendMs": 60.273,
+            "normalizeMs": 0.327,
+            "responseBytes": 6234,
+            "resultCount": 10
+          }
+        ]
+      },
+      {
+        "caseId": "P056",
+        "category": "address",
+        "language": "en",
+        "types": [
+          "address"
+        ],
+        "apiProcessMs": 60.9,
+        "backendPhases": [
+          {
+            "backendMs": 55.529,
+            "normalizeMs": 4.422,
+            "responseBytes": 994,
+            "resultCount": 3
+          }
+        ]
+      },
+      {
+        "caseId": "V041",
+        "category": "venue",
+        "language": "he",
+        "types": [
+          "poi"
+        ],
+        "apiProcessMs": 60.9,
+        "backendPhases": [
+          {
+            "backendMs": 59.387,
+            "normalizeMs": 0.345,
+            "responseBytes": 6413,
+            "resultCount": 10
+          }
+        ]
+      },
+      {
+        "caseId": "V010",
+        "category": "venue",
+        "language": "he",
+        "types": [
+          "poi"
+        ],
+        "apiProcessMs": 58.4,
+        "backendPhases": [
+          {
+            "backendMs": 56.933,
+            "normalizeMs": 0.41,
+            "responseBytes": 5979,
+            "resultCount": 10
+          }
+        ]
+      },
+      {
+        "caseId": "P053",
+        "category": "address",
+        "language": "en",
+        "types": [
+          "address"
+        ],
+        "apiProcessMs": 55.7,
+        "backendPhases": [
+          {
+            "backendMs": 53.373,
+            "normalizeMs": 1.412,
+            "responseBytes": 783,
+            "resultCount": 2
+          }
+        ]
+      },
+      {
+        "caseId": "V021",
+        "category": "venue",
+        "language": "he",
+        "types": [
+          "poi"
+        ],
+        "apiProcessMs": 48.8,
+        "backendPhases": [
+          {
+            "backendMs": 47.447,
+            "normalizeMs": 0.345,
+            "responseBytes": 6801,
+            "resultCount": 10
+          }
+        ]
+      },
+      {
+        "caseId": "P096",
+        "category": "near_dependent",
+        "language": "en",
+        "types": [
+          "stop",
+          "station",
+          "poi",
+          "address"
+        ],
+        "apiProcessMs": 46.0,
+        "backendPhases": [
+          {
+            "backendMs": 10.549,
+            "normalizeMs": 0.684,
+            "responseBytes": 5697,
+            "resultCount": 10
+          },
+          {
+            "backendMs": 27.029,
+            "normalizeMs": 0.023,
+            "responseBytes": 42,
+            "resultCount": 0
+          }
+        ]
+      },
+      {
+        "caseId": "P085",
+        "category": "misspelling",
+        "language": "en",
+        "types": [
+          "stop",
+          "station",
+          "poi",
+          "address"
+        ],
+        "apiProcessMs": 45.4,
+        "backendPhases": [
+          {
+            "backendMs": 5.913,
+            "normalizeMs": 0.373,
+            "responseBytes": 5789,
+            "resultCount": 10
+          },
+          {
+            "backendMs": 33.861,
+            "normalizeMs": 6.624,
+            "responseBytes": 2708,
+            "resultCount": 6
+          }
+        ]
+      },
+      {
+        "caseId": "P064",
+        "category": "address",
+        "language": "en",
+        "types": [
+          "address"
+        ],
+        "apiProcessMs": 44.8,
+        "backendPhases": [
+          {
+            "backendMs": 42.4,
+            "normalizeMs": 1.665,
+            "responseBytes": 501,
+            "resultCount": 1
+          }
+        ]
+      },
+      {
+        "caseId": "V020",
+        "category": "venue",
+        "language": "he",
+        "types": [
+          "poi"
+        ],
+        "apiProcessMs": 42.2,
+        "backendPhases": [
+          {
+            "backendMs": 40.746,
+            "normalizeMs": 0.366,
+            "responseBytes": 6327,
+            "resultCount": 10
+          }
+        ]
+      }
+    ]
+  },
+  "findings": [
+    {
+      "id": "F1",
+      "title": "The tail is MOTIS geocoder server time on Hebrew multi-token PLACE queries",
+      "evidence": "32 of the 47 requests over 40 ms (8 of 18 in the first pass) are poi-only. Their non-backend time is p50 1.0 / p95 1.2 ms, so the API adds about 1 ms; the rest is MOTIS backend_ms. Hebrew PLACE p95 60.5 ms (3-token p50 50.5 ms) vs English p95 7.7 ms (max 12.1 ms). 7 of 8 slow cases exceed 40 ms in all four passes with a median spread of 4.5 ms: deterministic engine compute, not queueing, connection setup or event-loop contention (requests were sequential)."
+    },
+    {
+      "id": "F2",
+      "title": "Photon address queries are 2-3x slower on the first pass",
+      "evidence": "Address-only Photon backend p95 60.0 ms first pass vs 29.9/24.3/25.2 ms in warm passes (p50 20.9 vs 9.1-12.3). 4 of 18 first-pass tail requests are address-only and most of the 5 mixed ones have a slow Photon phase (e.g. P095: a 42-byte empty FeatureCollection after 56 ms). In the unscored 8-request warm-up the first address-only query returned 503 after 1209 ms (cold Photon)."
+    },
+    {
+      "id": "F3",
+      "title": "Stop search ran serially before the geocoders, not concurrently",
+      "evidence": "In all-four-type requests non-backend time is p50 6.8 / p95 16.7 ms vs 1.0 / 1.2 ms for single-geocoder requests, the same as stop-only request durations (p50 5.8 / p95 15.2): the stop search was added to, not overlapped with, the backend time. Mechanism: the route created the geocoder task, yielded once (asyncio.sleep(0)) and then ran search_stops synchronously on the event loop. One yield runs only the geocoder task's first step; asyncio.gather's child tasks and httpx/httpcore's pool lock and socket write need further loop iterations, so the backend requests left the process only after the stop search finished. The existing unit test passed because its fake geocoder slept on its first step. No evidence of the reverse (geocoder handling delaying stop search): geocoder normalization is <= 8.8 ms and runs after the backend wait."
+    },
+    {
+      "id": "F4",
+      "title": "One station query spends ~60 ms in partial-token coverage",
+      "evidence": "P002 'תחנת רכבת תל אביב סבידור מרכז' (stop/station only) took 59-64 ms in all four passes (offline 56.4 ms): no strict match, so partial_matches scored ~2,900 pool rows with a per-word Python startswith loop (_coverage), then ranked ~1,100 candidates."
+    },
+    {
+      "id": "F5",
+      "title": "Merge, serialization and connection handling are not material",
+      "evidence": "Single-geocoder requests spend p95 1.2 ms outside the backend (route, merge, jsonable_encoder, middleware). MOTIS/Photon clients are long-lived httpx AsyncClients with default keep-alive; English MOTIS PLACE requests complete in p50 4.4 ms including connection handling. JSON parse/normalize is <= 0.5 ms for MOTIS."
+    }
+  ],
+  "fixesImplemented": [
+    {
+      "id": "X1",
+      "change": "places route runs the stop search with asyncio.to_thread after starting the geocoder task, so backend requests leave and are awaited while the stop search runs; the search index build is guarded by a lock so concurrent first searches of a generation build one index (also keeps the ~3-5 s first-request index build off the event loop).",
+      "addresses": "F3 (and event-loop blocking under concurrent load, not measured here)",
+      "tests": [
+        "test_places_concurrency.py::test_real_geocoder_request_leaves_while_the_stop_search_runs (real MOTIS adapter; transport suspends 3 times before dispatch; failed before the fix: request sent after stop search ended)",
+        "test_places_concurrency.py::test_stop_search_runs_off_the_event_loop_thread",
+        "test_stop_search_threading.py::test_concurrent_first_searches_build_one_index",
+        "test_stop_search_threading.py::test_index_cache_stays_bounded_per_generation"
+      ],
+      "resultChange": "none: same search function and arguments; merged output asserted identical to an instant-backend run"
+    },
+    {
+      "id": "X2",
+      "change": "_coverage tests ' ' + token in ' ' + label instead of looping over label.split() with startswith; exactly equivalent for normalized single-space labels and whitespace-free tokens, with an early exit once every token is covered.",
+      "addresses": "F4",
+      "tests": [
+        "test_stop_search_threading.py::test_coverage_matches_the_word_prefix_definition_on_normalized_labels (3,000 randomized cases against the original definition; two plausible wrong rewrites are caught)"
+      ],
+      "offlineEquivalence": {
+        "queries": 384,
+        "queriesReachingPartialMatching": 220,
+        "mismatches": [],
+        "outputSha256": {
+          "original": "8a842910a79c8f51541a6c7b77a42ea8e04a2b42acce6f24a192d27b0eddaeee",
+          "new": "8a842910a79c8f51541a6c7b77a42ea8e04a2b42acce6f24a192d27b0eddaeee"
+        },
+        "totalSeconds": {
+          "original": 3.284,
+          "new": 1.785
+        }
+      },
+      "offlineEquivalenceNote": "Every corpus query x {he,en} x {near, none}: full search_stops output (all fields, top 10) compared original vs new _coverage on the real oct1a reference.",
+      "offlineTimingMs": {
+        "P002": {
+          "before": 56.36,
+          "after": 26.27
+        },
+        "P001": {
+          "before": 13.04,
+          "after": 8.75
+        },
+        "sumOfMediansOver47StopCases": {
+          "before": 232.2,
+          "after": 189.1
+        },
+        "identicalTop10IdsFor47StopCases": 47
+      }
+    },
+    {
+      "id": "X3",
+      "change": "Stop-search phase log (logger opentransit.requests.stopsearch): request_id, genid, search_ms, resultcount, outcome only; the same allowlisted shape as the geocoder phase logs, no query/location/candidates.",
+      "addresses": "Missing instrumentation: lets the next live run measure stop-search time and its overlap directly",
+      "tests": [
+        "test_places_concurrency.py::test_stop_search_phase_is_logged_without_query_text"
+      ]
+    }
+  ],
+  "prediction": {
+    "status": "modelled, not measured",
+    "model": "From each measured request: framework 1.0 ms (median single-geocoder non-backend time), stop search = non-backend time - 1.0 ms, scaled per case by the offline after/before median ratio for X2; with X1 duration = 1.0 + 0.3 ms thread hand-off + max(stop search, slowest backend). Backend times unchanged.",
+    "scenarios": {
+      "measured": {
+        "firstPassP95": 60.9,
+        "allRequestsP95": 47.0,
+        "allRequestsP50": 8.2,
+        "mixedP95": 45.4,
+        "stopOnlyP95": 15.2,
+        "poiOnlyP95": 51.7,
+        "requestsOver40": 47,
+        "firstPassOver40": 18
+      },
+      "concurrentStopSearch": {
+        "firstPassP95": 58.4,
+        "allRequestsP95": 47.0,
+        "allRequestsP50": 8.2,
+        "mixedP95": 33.4,
+        "stopOnlyP95": 15.5,
+        "poiOnlyP95": 51.7,
+        "requestsOver40": 45,
+        "firstPassOver40": 17
+      },
+      "fasterCoverage": {
+        "firstPassP95": 60.9,
+        "allRequestsP95": 44.3,
+        "allRequestsP50": 8.2,
+        "mixedP95": 44.0,
+        "stopOnlyP95": 10.5,
+        "poiOnlyP95": 51.7,
+        "requestsOver40": 43,
+        "firstPassOver40": 17
+      },
+      "both": {
+        "firstPassP95": 57.6,
+        "allRequestsP95": 41.8,
+        "allRequestsP50": 8.2,
+        "mixedP95": 33.4,
+        "stopOnlyP95": 10.8,
+        "poiOnlyP95": 51.7,
+        "requestsOver40": 41,
+        "firstPassOver40": 16
+      }
+    },
+    "expectedEffect": "First-pass p95 60.9 -> ~57.6 ms and all-request p95 47.0 -> ~41.8 ms; mixed-type p95 45.4 -> ~33.4 ms; stop-only p95 15.2 -> ~10.8 ms. Still FAILS 40 ms: 8 MOTIS PLACE and up to 4 cold Photon first-pass requests remain above 40 ms, and a first-pass p95 below 40 ms allows at most 9 of 183 requests above it.",
+    "risks": "GIL hand-offs (5 ms switch interval) can delay geocoder response handling while a stop search runs in a thread; the model ignores this. Under concurrent load the default executor (min(32, CPUs + 4) threads) bounds parallel stop searches."
+  },
+  "notImplemented": [
+    {
+      "option": "MOTIS geocode parameter tuning",
+      "reason": "Pinned v2.11.2 OpenAPI exposes text, language, type, mode, place, placeBias, numResults, min/max. type=PLACE and numResults=limit are already sent; mode only filters stops; a bounding box or fewer results changes results. No parameter reduces engine work while keeping results identical. Untested live."
+    },
+    {
+      "option": "Per-backend latency budget with partial results",
+      "reason": "A ~35 ms budget would mark poi unavailable for at least 30 of 248 Hebrew PLACE requests and most 3-token Hebrew venue queries, the ones that score; data-contracts.md defines unavailableTypes/partial for failed categories, not deliberate deadlines. Needs a user/root contract decision; not implemented."
+    },
+    {
+      "option": "Response caching",
+      "reason": "First-pass queries are all distinct, so a cache cannot change first-pass p95; it would only flatter warm repeats and retains query-derived keys in memory. Not implemented."
+    },
+    {
+      "option": "httpx keep-alive / JSON parse changes",
+      "reason": "No signal: non-backend time p95 1.2 ms; MOTIS normalize <= 0.5 ms (F5)."
+    },
+    {
+      "option": "Precomputed normalized display names for ranking",
+      "reason": "Would save a few ms only on P002-like queries after X2; not needed for the tail."
+    }
+  ],
+  "missingInstrumentation": [
+    "Geocoder phase logs carry no backend name (MOTIS and Photon lines are identical in shape); attribution here relied on request types and the 42-byte empty Photon FeatureCollection.",
+    "No stop-search duration in the run (added by X3 for the next run).",
+    "No MOTIS server-side timing, so engine compute vs Docker networking inside backend_ms is inferred from repeatability and English/Hebrew contrast, not measured.",
+    "No event-loop lag metric; no Photon warm/cold state marker."
+  ],
+  "contractQuestionsForRoot": [
+    "N02 (api-prd) says place search p95 < 40 ms with 'no external calls': does the target cover geocoder-backed poi/address categories (local sidecars), or stop/station search only with geocoder categories measured separately?",
+    "May a per-backend deadline below the 1.5 s timeout return partial:true with unavailableTypes:[poi], given the quality cost on Hebrew venue queries?",
+    "Is a production Photon (and MOTIS geocoder) warm-up before readiness acceptable, and should the acceptance first pass be measured after it (N02 asks for a cold/warm breakdown)?",
+    "Should Hebrew POI search move to another provider (e.g. Photon POI layers) or a different MOTIS geocoder configuration? Either changes results and needs H4 evidence."
+  ],
+  "liveRemeasure": {
+    "freshRun": "uv run --project services/api --locked python services/api/tools/acceptance_run.py --generation D:/ot/generations/oct1a --run-id lat02 --steps stack,probe,api_start,search --photon-jar C:/Users/nhenr/.codex/worktrees/8007/OpenTransit/.runtime/m4-photon-spike-20260930/photon-1.3.0.jar --results-prefix C:/Projects/OpenTransit/.runtime/acc-lat02/",
+    "attachVariant": "If a stack started from this commit is kept (--keep-stack), rerun only search with --attach --run-id <same id> --steps search; the API bind-mounts source at start, so a stack started from older source does not exercise these fixes.",
+    "verify": "In the API log, for all-four-type requests: duration_ms ~= max(search_ms, backend_ms) + ~1 ms instead of their sum; search results identical to oct1a for the same backend responses."
+  }
+}

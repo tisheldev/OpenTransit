@@ -1,9 +1,13 @@
 """Place search over one captured immutable generation."""
 
 import asyncio
+import json
+import logging
 import math
+import re
 import sqlite3
 from datetime import datetime
+from time import perf_counter
 from typing import Annotated
 
 from fastapi import APIRouter, Query, Request
@@ -18,6 +22,48 @@ from opentransit.stop_search import search_stops
 
 _VALID_TYPES = ("stop", "station", "poi", "address")
 _RANKING_POLICY = "alternating-stop-and-geocoder-order-v1"
+_STOP_SEARCH_LOGGER = logging.getLogger("opentransit.requests.stopsearch")
+_REQUEST_ID_PATTERN = re.compile(r"[0-9a-fA-F]{32}\Z")
+_GENERATION_ID_PATTERN = re.compile(r"[0-9a-fA-F]{64}\Z")
+
+
+def _timed_stop_search(request_id: str | None, generation_id: str, *args, **kwargs) -> dict:
+    """Run one stop search and log its duration with the geocoder phase-log fields.
+
+    Only validated identifiers, the duration, the result count and the outcome are
+    logged; never the query, location or candidates.
+    """
+    started = perf_counter()
+    result_count = None
+    outcome = "unavailable"
+    try:
+        result = search_stops(*args, **kwargs)
+        result_count = len(result["items"])
+        outcome = "success" if result_count else "validempty"
+        return result
+    except ValueError, TypeError:
+        outcome = "invalid"
+        raise
+    finally:
+        fields = {
+            "request_id": (
+                request_id.lower()
+                if isinstance(request_id, str) and _REQUEST_ID_PATTERN.fullmatch(request_id)
+                else None
+            ),
+            "genid": (
+                generation_id.lower()
+                if isinstance(generation_id, str)
+                and _GENERATION_ID_PATTERN.fullmatch(generation_id)
+                else None
+            ),
+            "search_ms": round(max(0.0, (perf_counter() - started) * 1000), 3),
+            "resultcount": result_count,
+            "outcome": outcome,
+        }
+        _STOP_SEARCH_LOGGER.info(
+            json.dumps(fields, sort_keys=True, separators=(",", ":")), extra=fields
+        )
 
 
 def places_router(clock, problem) -> APIRouter:
@@ -83,7 +129,10 @@ def places_router(clock, problem) -> APIRouter:
         geocoder_items: list[dict] = []
 
         # Geocoder backends are started first and awaited last: their network waits
-        # overlap with the in-process stop search instead of following it.
+        # overlap with the stop search instead of following it. The stop search runs
+        # in a worker thread because a real backend request suspends several times
+        # (pool lock, socket write) before it leaves; a synchronous search on this
+        # event loop would hold it back until the search finished.
         geocode_task: asyncio.Future | None = None
         if requested_geocoders:
             enabled = getattr(request.app.state, "generation_geocoding", {})
@@ -120,8 +169,8 @@ def places_router(clock, problem) -> APIRouter:
                         request_id=getattr(request.state, "request_id", None),
                     )
                 )
-                # Let the backend requests dispatch before the synchronous stop search
-                # occupies this event loop.
+                # Give the geocoder task its first step before the stop-search thread
+                # starts, so backend work is always begun first.
                 await asyncio.sleep(0)
 
         try:
@@ -130,7 +179,10 @@ def places_router(clock, problem) -> APIRouter:
                     unavailable_types.extend(requested_stops)
                 else:
                     try:
-                        result = search_stops(
+                        result = await asyncio.to_thread(
+                            _timed_stop_search,
+                            getattr(request.state, "request_id", None),
+                            generation.id,
                             snapshot.reference,
                             q,
                             language=lang,
