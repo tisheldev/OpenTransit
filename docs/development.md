@@ -161,7 +161,7 @@ $env:OPENTRANSIT_TEST_DEPART_AT = '2026-10-05T08:00:00+03:00'
 uv run --project services/api --locked pytest services/api/tests -m integration -q
 ```
 
-The focused suite uses labelled synthetic engine responses; `pyproject.toml` sets `pythonpath` and `testpaths`, so no `PYTHONPATH` is needed. At `5fb0329` it was 643 passed, 20 skipped, 0 failed (later commits added tests; rerun for a current count). Integration tests are skipped unless `OPENTRANSIT_TEST_URL` is set; their default departure is tomorrow 08:00, so choose a supported service date. Starlette emits a development-only warning about its legacy httpx TestClient fallback; checks pass. For the AWS drafts see [deploy/aws](../deploy/aws/README.md#validate-the-drafts-no-docker-no-network).
+The focused suite uses labelled synthetic engine responses; `pyproject.toml` sets `pythonpath` and `testpaths`, so no `PYTHONPATH` is needed. At `6ed3f5b` it was 693 passed, 20 skipped, 0 failed. Integration tests are skipped unless `OPENTRANSIT_TEST_URL` is set; their default departure is tomorrow 08:00, so choose a supported service date. Starlette emits a development-only warning about its legacy httpx TestClient fallback; checks pass. For the AWS drafts see [deploy/aws](../deploy/aws/README.md#validate-the-drafts-no-docker-no-network).
 
 ## Readiness, errors and logs
 
