@@ -1,8 +1,10 @@
 """Loopback TCP forwarder with a file-controlled request delay and a request log.
 
 Used only by the activation Compose harness to hold a real request in flight on the old
-engine while the generation is switched. The log records method, path (never the query or
-body), connection-relative request ids and wall-clock timestamps; it holds no coordinates.
+engine while the generation is switched, and to expose each generation's loopback-only
+Photon to the API's network namespace (``name:listen:host:target`` routes). The log records
+method, path (never the query or body), connection-relative request ids and wall-clock
+timestamps; it holds no coordinates.
 """
 
 import argparse
@@ -20,7 +22,9 @@ def delay_for(control: Path, name: str) -> float:
         return 0.0
 
 
-async def serve(name: str, listen: int, target: int, control: Path, log) -> None:
+async def serve(
+    name: str, listen: int, host: str, target: int, control: Path, log, listen_host: str
+) -> None:
     counter = iter(range(1, 1 << 62))
 
     def record(**fields):
@@ -29,7 +33,7 @@ async def serve(name: str, listen: int, target: int, control: Path, log) -> None
 
     async def handle(client_reader, client_writer):
         try:
-            backend_reader, backend_writer = await asyncio.open_connection("127.0.0.1", target)
+            backend_reader, backend_writer = await asyncio.open_connection(host, target)
         except OSError:
             record(ev="backend_unavailable", t=time.time())
             client_writer.close()
@@ -68,21 +72,31 @@ async def serve(name: str, listen: int, target: int, control: Path, log) -> None
         await asyncio.gather(upstream(), downstream(), return_exceptions=True)
         finish()
 
-    server = await asyncio.start_server(handle, "127.0.0.1", listen)
+    server = await asyncio.start_server(handle, listen_host, listen)
     async with server:
         await server.serve_forever()
 
 
 async def main(argv) -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--route", action="append", required=True, help="name:listen:target")
+    parser.add_argument("--route", action="append", required=True, help="name:listen:[host:]target")
+    parser.add_argument("--listen-host", default="127.0.0.1")
     parser.add_argument("--control", type=Path, required=True)
     parser.add_argument("--log", type=Path, required=True)
     args = parser.parse_args(argv)
+    routes = []
+    for item in args.route:
+        parts = item.split(":")
+        if len(parts) == 3:
+            parts.insert(2, "127.0.0.1")
+        name, listen, host, target = parts
+        routes.append((name, int(listen), host, int(target)))
     with args.log.open("a", encoding="utf-8") as log:
-        routes = [item.split(":") for item in args.route]
         await asyncio.gather(
-            *(serve(n, int(listen), int(target), args.control, log) for n, listen, target in routes)
+            *(
+                serve(name, listen, host, target, args.control, log, args.listen_host)
+                for name, listen, host, target in routes
+            )
         )
 
 

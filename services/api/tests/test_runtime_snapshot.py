@@ -322,3 +322,86 @@ def test_captured_snapshot_is_used_even_if_current_changes_during_engine_await(
     assert first["meta"]["generationId"] == "synthetic-test"
     assert second["meta"]["generationId"] == "next-generation"
     assert seen == ["synthetic-test", "next-generation"]
+
+
+def test_address_binding_prefers_explicit_binding_origins_over_settings(tmp_path, monkeypatch):
+    import opentransit.api.lifecycle as lifecycle_module
+
+    manifest_path = tmp_path / "manifest.json"
+    manifest_path.write_text(json.dumps({"addressSearch": {"provider": "photon"}}))
+    expected = {
+        "addressArtifactIdentity": "a" * 64,
+        "indexUuid": "index-uuid",
+        "clusterUuid": "cluster-uuid",
+        "documentCount": 1,
+        "sourceDumpSha256": "b" * 64,
+        "probes": [{"osmType": "N", "osmId": "7", "lat": 32.1, "lon": 34.8}],
+    }
+    monkeypatch.setattr(lifecycle_module, "verify_address_composite", lambda *_: expected)
+
+    class Catalog:
+        def __init__(self, path, expected_sha256):
+            pass
+
+        def lookup(self, osm_type, osm_id):
+            return {
+                "object_type": "N",
+                "object_id": 7,
+                "address_type": "house",
+                "centroid": [34.8, 32.1],
+            }
+
+        def close(self):
+            pass
+
+    monkeypatch.setattr(lifecycle_module, "AddressCatalog", Catalog)
+    ports = set()
+
+    def respond(request):
+        ports.add(request.url.port)
+        if request.url.path == "/":
+            return httpx.Response(200, json={"cluster_uuid": "cluster-uuid"})
+        if request.url.path == "/photon/_settings":
+            settings = {"index.uuid": "index-uuid", "index.blocks.write": "true"}
+            return httpx.Response(200, json={"photon": {"settings": settings}})
+        if request.url.path == "/photon/_count":
+            return httpx.Response(200, json={"count": 1, "_shards": {"failed": 0, "successful": 1}})
+        if request.url.path == "/photon/_doc/N7":
+            source = {
+                "osm_id": 7,
+                "osm_type": "N",
+                "type": "house",
+                "coordinate": {"lat": 32.1, "lon": 34.8},
+            }
+            return httpx.Response(200, json={"found": True, "_source": source})
+        return httpx.Response(404)
+
+    transport = httpx.MockTransport(respond)
+    # No fixed Photon origins configured: a composite needs the binding's origins.
+    settings = Settings(manifest_path)
+    with pytest.raises(ValueError, match="requires fixed Photon"):
+        asyncio.run(_load_address_provider(manifest_path, settings, transport))
+    with pytest.raises(ValueError, match="supplied together"):
+        asyncio.run(
+            _load_address_provider(
+                manifest_path, settings, transport, photon_url="http://127.0.0.1:2422"
+            )
+        )
+    configured = Settings(
+        manifest_path,
+        photon_url="http://127.0.0.1:2322",
+        photon_admin_url="http://127.0.0.1:9201",
+    )
+    provider = asyncio.run(
+        _load_address_provider(
+            manifest_path,
+            configured,
+            transport,
+            photon_url="http://127.0.0.1:2422",
+            photon_admin_url="http://127.0.0.1:9211",
+        )
+    )
+    assert provider.origin == "http://127.0.0.1:2422"
+    assert str(provider.client.base_url).startswith("http://127.0.0.1:2422")
+    assert ports == {9211}
+    asyncio.run(provider.client.aclose())

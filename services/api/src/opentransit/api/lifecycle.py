@@ -31,27 +31,42 @@ from opentransit.search_readiness import (
 )
 
 
-async def _load_address_provider(manifest_path: Path, settings: Settings, transport):
-    """Verify the sealed Photon binding before making it available to a snapshot."""
+async def _load_address_provider(
+    manifest_path: Path,
+    settings: Settings,
+    transport,
+    *,
+    photon_url: str | None = None,
+    photon_admin_url: str | None = None,
+):
+    """Verify the sealed Photon binding before making it available to a snapshot.
+
+    Explicit origins (from a managed activation binding) take precedence over the fixed
+    settings origins, so two address composites can each be served by their own Photon.
+    """
     manifest_path = Path(manifest_path)
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     if manifest.get("addressSearch") is None:
         return None
-    if settings.photon_url is None or settings.photon_admin_url is None:
+    if (photon_url is None) != (photon_admin_url is None):
+        raise ValueError("Photon query and admin origins must be supplied together")
+    if photon_url is None:
+        photon_url, photon_admin_url = settings.photon_url, settings.photon_admin_url
+    if photon_url is None or photon_admin_url is None:
         raise ValueError("Composite address generation requires fixed Photon query/admin origins")
     metadata = verify_address_composite(manifest_path.parent, manifest)
     catalog = AddressCatalog(
         manifest_path.parent / "address-catalog.sqlite", metadata["sourceDumpSha256"]
     )
     client = httpx.AsyncClient(
-        base_url=settings.photon_url,
+        base_url=photon_url,
         timeout=settings.engine_timeout_seconds,
         transport=transport,
         trust_env=False,
         follow_redirects=False,
     )
     admin = httpx.AsyncClient(
-        base_url=settings.photon_admin_url,
+        base_url=photon_admin_url,
         timeout=settings.engine_timeout_seconds,
         transport=transport,
         trust_env=False,
@@ -133,7 +148,7 @@ async def _load_address_provider(manifest_path: Path, settings: Settings, transp
                 raise ValueError("Live Photon document differs from its attested source object")
         return AddressProviderBinding(
             client,
-            settings.photon_url,
+            photon_url,
             metadata["addressArtifactIdentity"],
             metadata["indexUuid"],
             catalog,
@@ -414,7 +429,11 @@ def make_lifespan(settings: Settings, transport, clock, signal_installer):
                 address_provider = None
                 try:
                     address_provider = await _load_address_provider(
-                        binding.generation_dir / "manifest.json", settings, transport
+                        binding.generation_dir / "manifest.json",
+                        settings,
+                        transport,
+                        photon_url=binding.photon_origin,
+                        photon_admin_url=binding.photon_admin_origin,
                     )
                     motis = MotisClient(client)
                     snapshot = await asyncio.to_thread(
