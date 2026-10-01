@@ -28,6 +28,7 @@ import hashlib
 import heapq
 import io
 import json
+import os
 import shutil
 import sys
 import threading
@@ -310,14 +311,27 @@ def observe_one(args, day: date) -> dict:
 
 
 def observe(args) -> int:
-    for day in days_between(args.start, args.end, set(args.exclude)):
+    """Observe each fetched day once; a lock file lets several processes share a range."""
+    days = days_between(args.start, args.end, set(args.exclude))
+    for day in reversed(days) if args.reverse else days:
         if (day_dir(args.work, day) / "summary.json").exists():
             print(f"{day}: already observed", flush=True)
             continue
         if not manifest_path(args.work, day).exists():
             print(f"{day}: no manifest (fetch first); skipping", flush=True)
             continue
-        summary = observe_one(args, day)
+        lock = day_dir(args.work, day).with_name(f"{day:%Y-%m-%d}.lock")
+        try:
+            os.close(os.open(lock, os.O_CREAT | os.O_EXCL | os.O_WRONLY))
+        except FileExistsError:
+            print(f"{day}: locked by another process ({lock}); skipping", flush=True)
+            continue
+        try:
+            if (day_dir(args.work, day) / "summary.json").exists():
+                continue
+            summary = observe_one(args, day)
+        finally:
+            lock.unlink()
         matching = summary["matching"]
         print(
             f"{day}: {matching['scheduledTripsObserved']}/{matching['scheduledTrips']} trips, "
@@ -918,6 +932,7 @@ def main() -> int:
         command.add_argument("--work", type=Path, required=True)
         command.add_argument("--workers", type=int, default=16)
         command.add_argument("--decimation", type=float, default=0.02)
+        command.add_argument("--reverse", action="store_true")
     for name in ("aggregate", "validate"):
         command = sub.add_parser(name)
         command.add_argument("--start", type=date.fromisoformat, required=True)
