@@ -1,0 +1,170 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-01T05:12:06.782719+00:00",
+  "scope": "Read-only diagnosis of preserved baseline requests, process logs and source snapshots. No HTTP, Docker, PBF scans, runtime changes or new latency measurement. Only this result is written.",
+  "acceptanceStatus": "Open: no post-fix full-corpus p95 measurement or latency acceptance is established.",
+  "provenance": {
+    "baselinePath": "services/api/results/m4-api-search-20260930-02-corrected.json",
+    "baselineSha256": "f4e4a05e73aef2bd69b069d05cc34e3c639f39ba748fc6cdf16dcbcb08b4870d",
+    "baselineCapturedAt": "2026-09-30T23:19:32.905635+00:00",
+    "generationId": "c7b66eee1ad04dddba13f4c5dade5ef2023963a1ac0384857aaf173b9d164aa1",
+    "processLogPath": ".runtime/m4-search-evidence-20260930/api-request-log-01.txt",
+    "processLogSha256": "aab0e2ec60736e4550e6478b87be4ddac4e9acb939217f3166cdfdca22e764bd",
+    "processLogHashVerified": true,
+    "baselineStopSearchPath": ".runtime/m4-functional-evidence-20260930/api-source-for-http-02/opentransit/stop_search.py",
+    "baselineStopSearchSha256": "c57589e86fb4dbe66ead3fbdc8beae3abb05b770e4a91e5e47851c843c290605",
+    "currentStopSearchPathAtInspection": "services/api/src/opentransit/stop_search.py",
+    "currentStopSearchSha256AtInspection": "746b84f79d51f0a86a3d5bd4d02acca36245bc8083a4119933e355af36be703d",
+    "postfixRuntimeEvidencePath": "services/api/results/m4-stop-prefilter-runtime-20260930-01.json",
+    "postfixSourceMatchesCurrentAtInspection": true,
+    "privacy": "Case IDs identify frozen corpus records; raw query text, address labels and response bodies are omitted from this diagnostic."
+  },
+  "requestCorrelationAudit": {
+    "method": "Parse saved request_id, route, status and duration_ms; require exactly one process-log entry per recorded request and exact agreement with recorded HTTP status and processDurationMs.",
+    "requestCount": 732,
+    "exactUniqueMatches": 732,
+    "mismatches": 0,
+    "route": "/v1/places",
+    "allRecordedRequestsHttp200": true,
+    "timingMeaning": "API process duration, distinct from client round-trip time. No backend-phase duration is recorded."
+  },
+  "measuredBaseline": {
+    "sourceState": "Before the long-token prefilter fix",
+    "warmRequestCount": 549,
+    "warmRepeatCount": 3,
+    "warmP95Ms": 61.3,
+    "warmRequestsOver40Ms": 54,
+    "over40ByCategory": {
+      "station": 9,
+      "poi_university": 3,
+      "poi_landmark": 3,
+      "address": 15,
+      "neighborhood": 3,
+      "near_dependent": 5,
+      "venue": 16
+    },
+    "over40ByBackendPath": {
+      "stopOnly": 9,
+      "geocoderOnly": 40,
+      "mixedStopsAndGeocoder": 5
+    },
+    "largestUnaffectedCases": [
+      {
+        "caseId": "P054",
+        "category": "address",
+        "apiTypes": [
+          "address"
+        ],
+        "warmProcessMs": [
+          106.8,
+          110.1,
+          110.0
+        ]
+      },
+      {
+        "caseId": "OSM-ADDR-HE-001",
+        "category": "address",
+        "apiTypes": [
+          "address"
+        ],
+        "warmProcessMs": [
+          94.0,
+          98.5,
+          96.4
+        ]
+      },
+      {
+        "caseId": "V037",
+        "category": "venue",
+        "apiTypes": [
+          "poi"
+        ],
+        "warmProcessMs": [
+          76.6,
+          77.9,
+          72.4
+        ]
+      },
+      {
+        "caseId": "P052",
+        "category": "address",
+        "apiTypes": [
+          "address"
+        ],
+        "warmProcessMs": [
+          76.5,
+          76.7,
+          67.4
+        ]
+      }
+    ],
+    "allUnaffectedCasesWithAtLeastOneWarmSampleOver40Ms": [
+      "P024",
+      "P043",
+      "P052",
+      "P054",
+      "P057",
+      "P065",
+      "P075",
+      "P095",
+      "P096",
+      "V010",
+      "V020",
+      "V021",
+      "V030",
+      "V037",
+      "V041",
+      "OSM-ADDR-HE-001"
+    ],
+    "geocoderOnlyWarmRequestCount": 408,
+    "geocoderOnlyWarmP95Ms": 61.1,
+    "interpretation": "Geocoder-only requests bypass stop_search. Its prefilter cannot improve those recorded paths. Mixed-request attribution remains unresolved."
+  },
+  "measuredPostfixFocusedEvidence": {
+    "scope": "Three targeted queries, not full-corpus p95",
+    "generationId": "c7b66eee1ad04dddba13f4c5dade5ef2023963a1ac0384857aaf173b9d164aa1",
+    "warmProcessMsByCase": {
+      "P002": 8.3,
+      "P012": 2.9,
+      "P016": 1.7
+    },
+    "rankedIdentitiesAndLabelsUnchanged": true,
+    "firstIndexBuildProcessMs": 2538.4,
+    "firstIndexBuildExcludedFromWarmClaim": true,
+    "evidenceSha256": {
+      "services/api/results/m4-stop-prefilter-http-20260930-01.json": "9ca76e473f0cd5d6dfe50fe4065a035e70e4dff796bf03483daa76cd9ed1b988",
+      "services/api/results/m4-stop-prefilter-warm-http-20260930-01.json": "a0e10fbff8a916f3592f4c2aa9de80cd5bb0857aa49ea3e04fe3ac6e4e29a253"
+    }
+  },
+  "offlineSensitivity": {
+    "isMeasurement": false,
+    "isCurrentP95": false,
+    "isAcceptanceEvidence": false,
+    "method": "Keep the 549-sample denominator and hypothetically replace all nine P002/P012/P016 warm durations with zero; keep the other 540 measured baseline values unchanged. Nearest-rank p95 is rank ceil(0.95*549)=522, equivalent to rank 513 of the unchanged 540 samples.",
+    "hypotheticalReplacementCount": 9,
+    "hypotheticalReplacementDurationMs": 0,
+    "sampleCount": 549,
+    "nearestRankP95Ms": 52.6,
+    "purpose": "Demonstrates that eliminating the three station outliers alone cannot make the preserved baseline distribution meet 40 ms. It predicts neither current latency nor a new provider distribution."
+  },
+  "attributionLimit": {
+    "missingObservation": "Request-correlated backend request/body-read duration versus parsing/normalization duration on the current source, alongside total API process duration.",
+    "unsupportedClaims": [
+      "Engine computation is the cause",
+      "Adapter normalization is the cause",
+      "Current warm p95 equals the old baseline",
+      "A further stop-search optimization resolves the geocoder-only tail"
+    ]
+  },
+  "nextStep": {
+    "implementation": "Add sanitized request-correlated backend-phase timing to MotisGeocoder: backend request/body-read duration, parsing/normalization duration, bounded response byte/count metadata and explicit outcome.",
+    "privacy": "Use existing request ID and generation correlation. Do not log query text, near coordinates, street/house labels, outgoing query URLs or response bodies.",
+    "focusedChecks": [
+      "Request correlation and monotonic nonnegative phase durations",
+      "Unchanged ranked response identities and labels",
+      "Timeout, HTTP failure, malformed response and valid-empty outcomes remain distinct"
+    ],
+    "captureOwnership": "Root owns runtime integration and the already-authorized bounded timing check once implementation exists. No runtime work performed by this diagnosis.",
+    "acceptanceLimit": "Focused attribution does not replace the full frozen-corpus p95 requirement or alter its denominator, service-success eligibility or threshold."
+  }
+}

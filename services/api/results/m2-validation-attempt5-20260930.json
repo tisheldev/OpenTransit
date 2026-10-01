@@ -1,0 +1,2178 @@
+{
+  "auditType": "real-preserved-M1-input-validation-with-bounded-minute-policy",
+  "startedAtUtc": "2026-09-30T13:27:53.552294+00:00",
+  "createdAtUtc": "2026-09-30T13:32:56.701815+00:00",
+  "validatorSha256": "d28e8ed04673cca8489c01d64d25de20cec40edfd9da0c08538d7e1be41ea8fb",
+  "policyCodeSha256": "8e8ae52c94d4103d5535c97eae88ca9728a6bf6253e32abd5477e6718c63994b",
+  "policyId": "motis-minute-bracket-v1",
+  "validatorVersion": "d28e8ed04673cca8",
+  "inputSha256": {
+    "gtfs": "8629a73c3f6ff024a78e9b8c83602c09180e13e597b82b98a4377a78f3dd2fd9",
+    "tripIdToDate": "7775623cae79f80040d5bcfe5058fa489736d58da6919b65579424c417561da5"
+  },
+  "elapsedSeconds": 303.148,
+  "peakWorkingSetBytes": null,
+  "peakWorkingSetCapture": "not_observed",
+  "error": null,
+  "report": {
+    "gtfsPath": "C:\\Projects\\OpenTransit\\.runtime\\m1-20260930\\inputs\\israel-public-transportation.zip",
+    "tripIdToDatePath": "C:\\Projects\\OpenTransit\\.runtime\\m1-20260930\\inputs\\TripIdToDate.zip",
+    "valid": true,
+    "checks": [
+      {
+        "id": "E01",
+        "name": "GET content hash and archive validation",
+        "status": "not_observed",
+        "detail": "Package uses full GET, SHA-256, and ZIP checks without HEAD; live HEAD/GET comparison and refresh run were not performed.",
+        "evidence": {
+          "liveFetch": "not_observed",
+          "codePath": "implemented"
+        }
+      },
+      {
+        "id": "E02",
+        "name": "GTFS stop times",
+        "status": "pass",
+        "detail": "Stop times were streamed and parsed, including values over 24:00:00.",
+        "evidence": {
+          "afterMidnightRows": 346686,
+          "maxSeconds": 104759,
+          "integrity": {
+            "stopTimeRows": 16079349,
+            "afterMidnightRows": 346686,
+            "maxSeconds": 104759,
+            "maxTimeRoundTrip": {
+              "raw": "29:05:59",
+              "formatted": "29:05:59",
+              "matches": true
+            },
+            "non_chronological_stop_times": 832,
+            "cross_call_chronology": {
+              "count": 832,
+              "verdict": "diagnostic_fail",
+              "blocking": false,
+              "affectedTripCount": 168,
+              "affectedAgencyCount": 2,
+              "affectedOperatorCount": 2,
+              "affectedAgencyIds": [
+                "15",
+                "3"
+              ],
+              "affectedOperators": [
+                {
+                  "id": "15",
+                  "name": "מטרופולין"
+                },
+                {
+                  "id": "3",
+                  "name": "אגד"
+                }
+              ],
+              "samples": [
+                {
+                  "tripId": "211997_021026",
+                  "routeId": "957",
+                  "serviceId": "10409",
+                  "agencyId": "15",
+                  "agencyName": "מטרופולין",
+                  "operatorId": "15",
+                  "operatorName": "מטרופולין",
+                  "previousSequence": 4,
+                  "sequence": 5,
+                  "previousTime": "07:14:34",
+                  "currentTime": "07:14:15",
+                  "previousSourceLine": 2202708,
+                  "sourceLine": 2202706,
+                  "activeServiceDateCount": 0,
+                  "dormant": true,
+                  "activeInImportWindow": false
+                },
+                {
+                  "tripId": "211997_021026",
+                  "routeId": "957",
+                  "serviceId": "10409",
+                  "agencyId": "15",
+                  "agencyName": "מטרופולין",
+                  "operatorId": "15",
+                  "operatorName": "מטרופולין",
+                  "previousSequence": 5,
+                  "sequence": 6,
+                  "previousTime": "07:14:15",
+                  "currentTime": "07:14:09",
+                  "previousSourceLine": 2202706,
+                  "sourceLine": 2202705,
+                  "activeServiceDateCount": 0,
+                  "dormant": true,
+                  "activeInImportWindow": false
+                },
+                {
+                  "tripId": "211997_021026",
+                  "routeId": "957",
+                  "serviceId": "10409",
+                  "agencyId": "15",
+                  "agencyName": "מטרופולין",
+                  "operatorId": "15",
+                  "operatorName": "מטרופולין",
+                  "previousSequence": 8,
+                  "sequence": 9,
+                  "previousTime": "07:15:23",
+                  "currentTime": "07:15:15",
+                  "previousSourceLine": 2202713,
+                  "sourceLine": 2202712,
+                  "activeServiceDateCount": 0,
+                  "dormant": true,
+                  "activeInImportWindow": false
+                },
+                {
+                  "tripId": "211997_021026",
+                  "routeId": "957",
+                  "serviceId": "10409",
+                  "agencyId": "15",
+                  "agencyName": "מטרופולין",
+                  "operatorId": "15",
+                  "operatorName": "מטרופולין",
+                  "previousSequence": 9,
+                  "sequence": 10,
+                  "previousTime": "07:15:15",
+                  "currentTime": "07:15:11",
+                  "previousSourceLine": 2202712,
+                  "sourceLine": 2202710,
+                  "activeServiceDateCount": 0,
+                  "dormant": true,
+                  "activeInImportWindow": false
+                },
+                {
+                  "tripId": "211997_021026",
+                  "routeId": "957",
+                  "serviceId": "10409",
+                  "agencyId": "15",
+                  "agencyName": "מטרופולין",
+                  "operatorId": "15",
+                  "operatorName": "מטרופולין",
+                  "previousSequence": 10,
+                  "sequence": 11,
+                  "previousTime": "07:15:11",
+                  "currentTime": "07:15:09",
+                  "previousSourceLine": 2202710,
+                  "sourceLine": 2202709,
+                  "activeServiceDateCount": 0,
+                  "dormant": true,
+                  "activeInImportWindow": false
+                },
+                {
+                  "tripId": "211997_041026",
+                  "routeId": "957",
+                  "serviceId": "33208",
+                  "agencyId": "15",
+                  "agencyName": "מטרופולין",
+                  "operatorId": "15",
+                  "operatorName": "מטרופולין",
+                  "previousSequence": 4,
+                  "sequence": 5,
+                  "previousTime": "07:14:34",
+                  "currentTime": "07:14:15",
+                  "previousSourceLine": 2202725,
+                  "sourceLine": 2202723,
+                  "activeServiceDateCount": 5,
+                  "dormant": false,
+                  "activeInImportWindow": true
+                },
+                {
+                  "tripId": "211997_041026",
+                  "routeId": "957",
+                  "serviceId": "33208",
+                  "agencyId": "15",
+                  "agencyName": "מטרופולין",
+                  "operatorId": "15",
+                  "operatorName": "מטרופולין",
+                  "previousSequence": 5,
+                  "sequence": 6,
+                  "previousTime": "07:14:15",
+                  "currentTime": "07:14:09",
+                  "previousSourceLine": 2202723,
+                  "sourceLine": 2202722,
+                  "activeServiceDateCount": 5,
+                  "dormant": false,
+                  "activeInImportWindow": true
+                },
+                {
+                  "tripId": "211997_041026",
+                  "routeId": "957",
+                  "serviceId": "33208",
+                  "agencyId": "15",
+                  "agencyName": "מטרופולין",
+                  "operatorId": "15",
+                  "operatorName": "מטרופולין",
+                  "previousSequence": 8,
+                  "sequence": 9,
+                  "previousTime": "07:15:23",
+                  "currentTime": "07:15:15",
+                  "previousSourceLine": 2202730,
+                  "sourceLine": 2202729,
+                  "activeServiceDateCount": 5,
+                  "dormant": false,
+                  "activeInImportWindow": true
+                },
+                {
+                  "tripId": "211997_041026",
+                  "routeId": "957",
+                  "serviceId": "33208",
+                  "agencyId": "15",
+                  "agencyName": "מטרופולין",
+                  "operatorId": "15",
+                  "operatorName": "מטרופולין",
+                  "previousSequence": 9,
+                  "sequence": 10,
+                  "previousTime": "07:15:15",
+                  "currentTime": "07:15:11",
+                  "previousSourceLine": 2202729,
+                  "sourceLine": 2202727,
+                  "activeServiceDateCount": 5,
+                  "dormant": false,
+                  "activeInImportWindow": true
+                },
+                {
+                  "tripId": "211997_041026",
+                  "routeId": "957",
+                  "serviceId": "33208",
+                  "agencyId": "15",
+                  "agencyName": "מטרופולין",
+                  "operatorId": "15",
+                  "operatorName": "מטרופולין",
+                  "previousSequence": 10,
+                  "sequence": 11,
+                  "previousTime": "07:15:11",
+                  "currentTime": "07:15:09",
+                  "previousSourceLine": 2202727,
+                  "sourceLine": 2202726,
+                  "activeServiceDateCount": 5,
+                  "dormant": false,
+                  "activeInImportWindow": true
+                },
+                {
+                  "tripId": "211997_091026",
+                  "routeId": "957",
+                  "serviceId": "10410",
+                  "agencyId": "15",
+                  "agencyName": "מטרופולין",
+                  "operatorId": "15",
+                  "operatorName": "מטרופולין",
+                  "previousSequence": 4,
+                  "sequence": 5,
+                  "previousTime": "07:14:34",
+                  "currentTime": "07:14:15",
+                  "previousSourceLine": 2202742,
+                  "sourceLine": 2202740,
+                  "activeServiceDateCount": 0,
+                  "dormant": true,
+                  "activeInImportWindow": false
+                },
+                {
+                  "tripId": "211997_091026",
+                  "routeId": "957",
+                  "serviceId": "10410",
+                  "agencyId": "15",
+                  "agencyName": "מטרופולין",
+                  "operatorId": "15",
+                  "operatorName": "מטרופולין",
+                  "previousSequence": 5,
+                  "sequence": 6,
+                  "previousTime": "07:14:15",
+                  "currentTime": "07:14:09",
+                  "previousSourceLine": 2202740,
+                  "sourceLine": 2202739,
+                  "activeServiceDateCount": 0,
+                  "dormant": true,
+                  "activeInImportWindow": false
+                },
+                {
+                  "tripId": "211997_091026",
+                  "routeId": "957",
+                  "serviceId": "10410",
+                  "agencyId": "15",
+                  "agencyName": "מטרופולין",
+                  "operatorId": "15",
+                  "operatorName": "מטרופולין",
+                  "previousSequence": 8,
+                  "sequence": 9,
+                  "previousTime": "07:15:23",
+                  "currentTime": "07:15:15",
+                  "previousSourceLine": 2202747,
+                  "sourceLine": 2202746,
+                  "activeServiceDateCount": 0,
+                  "dormant": true,
+                  "activeInImportWindow": false
+                },
+                {
+                  "tripId": "211997_091026",
+                  "routeId": "957",
+                  "serviceId": "10410",
+                  "agencyId": "15",
+                  "agencyName": "מטרופולין",
+                  "operatorId": "15",
+                  "operatorName": "מטרופולין",
+                  "previousSequence": 9,
+                  "sequence": 10,
+                  "previousTime": "07:15:15",
+                  "currentTime": "07:15:11",
+                  "previousSourceLine": 2202746,
+                  "sourceLine": 2202744,
+                  "activeServiceDateCount": 0,
+                  "dormant": true,
+                  "activeInImportWindow": false
+                },
+                {
+                  "tripId": "211997_091026",
+                  "routeId": "957",
+                  "serviceId": "10410",
+                  "agencyId": "15",
+                  "agencyName": "מטרופולין",
+                  "operatorId": "15",
+                  "operatorName": "מטרופולין",
+                  "previousSequence": 10,
+                  "sequence": 11,
+                  "previousTime": "07:15:11",
+                  "currentTime": "07:15:09",
+                  "previousSourceLine": 2202744,
+                  "sourceLine": 2202743,
+                  "activeServiceDateCount": 0,
+                  "dormant": true,
+                  "activeInImportWindow": false
+                },
+                {
+                  "tripId": "211997_111026",
+                  "routeId": "957",
+                  "serviceId": "33598",
+                  "agencyId": "15",
+                  "agencyName": "מטרופולין",
+                  "operatorId": "15",
+                  "operatorName": "מטרופולין",
+                  "previousSequence": 4,
+                  "sequence": 5,
+                  "previousTime": "07:14:34",
+                  "currentTime": "07:14:15",
+                  "previousSourceLine": 2202759,
+                  "sourceLine": 2202757,
+                  "activeServiceDateCount": 10,
+                  "dormant": false,
+                  "activeInImportWindow": true
+                },
+                {
+                  "tripId": "211997_111026",
+                  "routeId": "957",
+                  "serviceId": "33598",
+                  "agencyId": "15",
+                  "agencyName": "מטרופולין",
+                  "operatorId": "15",
+                  "operatorName": "מטרופולין",
+                  "previousSequence": 5,
+                  "sequence": 6,
+                  "previousTime": "07:14:15",
+                  "currentTime": "07:14:09",
+                  "previousSourceLine": 2202757,
+                  "sourceLine": 2202756,
+                  "activeServiceDateCount": 10,
+                  "dormant": false,
+                  "activeInImportWindow": true
+                },
+                {
+                  "tripId": "211997_111026",
+                  "routeId": "957",
+                  "serviceId": "33598",
+                  "agencyId": "15",
+                  "agencyName": "מטרופולין",
+                  "operatorId": "15",
+                  "operatorName": "מטרופולין",
+                  "previousSequence": 8,
+                  "sequence": 9,
+                  "previousTime": "07:15:23",
+                  "currentTime": "07:15:15",
+                  "previousSourceLine": 2202764,
+                  "sourceLine": 2202763,
+                  "activeServiceDateCount": 10,
+                  "dormant": false,
+                  "activeInImportWindow": true
+                },
+                {
+                  "tripId": "211997_111026",
+                  "routeId": "957",
+                  "serviceId": "33598",
+                  "agencyId": "15",
+                  "agencyName": "מטרופולין",
+                  "operatorId": "15",
+                  "operatorName": "מטרופולין",
+                  "previousSequence": 9,
+                  "sequence": 10,
+                  "previousTime": "07:15:15",
+                  "currentTime": "07:15:11",
+                  "previousSourceLine": 2202763,
+                  "sourceLine": 2202761,
+                  "activeServiceDateCount": 10,
+                  "dormant": false,
+                  "activeInImportWindow": true
+                },
+                {
+                  "tripId": "211997_111026",
+                  "routeId": "957",
+                  "serviceId": "33598",
+                  "agencyId": "15",
+                  "agencyName": "מטרופולין",
+                  "operatorId": "15",
+                  "operatorName": "מטרופולין",
+                  "previousSequence": 10,
+                  "sequence": 11,
+                  "previousTime": "07:15:11",
+                  "currentTime": "07:15:09",
+                  "previousSourceLine": 2202761,
+                  "sourceLine": 2202760,
+                  "activeServiceDateCount": 10,
+                  "dormant": false,
+                  "activeInImportWindow": true
+                }
+              ]
+            },
+            "pickup_dropoff_rule_errors": 0,
+            "effective_chronology": {
+              "policyId": "motis-minute-bracket-v1",
+              "status": "pass",
+              "blocking": true,
+              "feedTripCount": 425160,
+              "validatedProfileCount": 425160,
+              "effectiveEventCount": 31308378,
+              "profileErrorCount": 0,
+              "samples": [],
+              "bounds": {
+                "resolutionSeconds": 60,
+                "eventFloorCeiling": "every effective event remains inside its raw minute",
+                "intervalDistortionStrictlyLessThanSeconds": 60,
+                "firstArrivalProjected": false,
+                "finalDepartureProjected": false
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "E03",
+        "name": "Hebrew encoding round-trip",
+        "status": "not_observed",
+        "detail": "CSV text decoded as strict UTF-8, but a database write/read round-trip is outside feed validation.",
+        "evidence": {
+          "strictUtf8": true,
+          "databaseRoundTrip": "not_observed"
+        }
+      },
+      {
+        "id": "E04",
+        "name": "Translations parsing and preservation",
+        "status": "pass",
+        "detail": "Translations were parsed without sanitization.",
+        "evidence": {
+          "rows": 102603,
+          "schema": "mot-legacy",
+          "languages": {
+            "HE": 36955,
+            "AR": 32831,
+            "EN": 32817
+          }
+        }
+      },
+      {
+        "id": "E05",
+        "name": "TripIdToDate key and service-window pairing",
+        "status": "pass",
+        "detail": "Static acceptance requires complete normalized key coverage and an overlapping known date window. Per-full-trip service-date and weekday gaps are diagnostic warnings, not realtime matching proof.",
+        "evidence": {
+          "feedTripCount": 425160,
+          "fullTripIdentityCount": 425160,
+          "dormantTripDefinitions": 28603,
+          "serviceDatePairsEvaluated": 3134997,
+          "feedJoinKeyCount": 252581,
+          "mappingKeyCount": 918492,
+          "unmatchedJoinKeyCount": 0,
+          "unmatchedJoinKeySamples": [],
+          "tripsWithoutMappedServiceDates": 267532,
+          "tripSamplesWithoutMappedDates": [
+            "30204012_041026",
+            "30204013_041026",
+            "30204014_041026",
+            "35232341_041026",
+            "47340583_041026",
+            "585586051_041026",
+            "585586052_041026",
+            "586150937_041026",
+            "17255791_041026",
+            "17255790_300926"
+          ],
+          "unmappedActiveServiceDateCount": 31,
+          "unmappedServiceDateSamples": [
+            "2026-09-30",
+            "2026-10-01",
+            "2026-10-02",
+            "2026-10-03",
+            "2026-10-04",
+            "2026-10-05",
+            "2026-10-06",
+            "2026-10-07",
+            "2026-10-08",
+            "2026-10-09",
+            "2026-10-10",
+            "2026-10-11",
+            "2026-10-12",
+            "2026-10-13",
+            "2026-10-14",
+            "2026-10-15",
+            "2026-10-16",
+            "2026-10-17",
+            "2026-10-18",
+            "2026-10-19"
+          ],
+          "matchedServiceDateCount": 31,
+          "feedServiceDateCount": 31,
+          "feedServiceDates": [
+            "2026-09-30",
+            "2026-10-01",
+            "2026-10-02",
+            "2026-10-03",
+            "2026-10-04",
+            "2026-10-05",
+            "2026-10-06",
+            "2026-10-07",
+            "2026-10-08",
+            "2026-10-09",
+            "2026-10-10",
+            "2026-10-11",
+            "2026-10-12",
+            "2026-10-13",
+            "2026-10-14",
+            "2026-10-15",
+            "2026-10-16",
+            "2026-10-17",
+            "2026-10-18",
+            "2026-10-19",
+            "2026-10-20",
+            "2026-10-21",
+            "2026-10-22",
+            "2026-10-23",
+            "2026-10-24",
+            "2026-10-25",
+            "2026-10-26",
+            "2026-10-27",
+            "2026-10-28",
+            "2026-10-29",
+            "2026-10-30"
+          ],
+          "mappingDateRange": [
+            "2023-10-08",
+            "2200-01-01"
+          ],
+          "feedDateWindow": [
+            "2026-09-30",
+            "2026-10-30"
+          ],
+          "dateWindowsOverlap": true,
+          "staticPairingVerdict": "ACCEPTED",
+          "serviceDateCoverageDiagnostic": "warning_only_not_realtime_proof",
+          "reversedRanges": [],
+          "fullTripIdentityUsedForValidation": true,
+          "tripDateEvidenceSamples": [
+            {
+              "tripId": "30204012_041026",
+              "serviceId": "8195",
+              "activeServiceDateCount": 20,
+              "mappingDateCount": 4,
+              "mappingServiceDates": [
+                "2026-10-04",
+                "2026-10-11",
+                "2026-10-18",
+                "2026-10-25"
+              ]
+            },
+            {
+              "tripId": "30204013_041026",
+              "serviceId": "8195",
+              "activeServiceDateCount": 20,
+              "mappingDateCount": 4,
+              "mappingServiceDates": [
+                "2026-10-04",
+                "2026-10-11",
+                "2026-10-18",
+                "2026-10-25"
+              ]
+            },
+            {
+              "tripId": "30204014_041026",
+              "serviceId": "8195",
+              "activeServiceDateCount": 20,
+              "mappingDateCount": 4,
+              "mappingServiceDates": [
+                "2026-10-04",
+                "2026-10-11",
+                "2026-10-18",
+                "2026-10-25"
+              ]
+            },
+            {
+              "tripId": "35232341_041026",
+              "serviceId": "8195",
+              "activeServiceDateCount": 20,
+              "mappingDateCount": 4,
+              "mappingServiceDates": [
+                "2026-10-04",
+                "2026-10-11",
+                "2026-10-18",
+                "2026-10-25"
+              ]
+            },
+            {
+              "tripId": "47340583_041026",
+              "serviceId": "8195",
+              "activeServiceDateCount": 20,
+              "mappingDateCount": 4,
+              "mappingServiceDates": [
+                "2026-10-04",
+                "2026-10-11",
+                "2026-10-18",
+                "2026-10-25"
+              ]
+            },
+            {
+              "tripId": "585586051_041026",
+              "serviceId": "8195",
+              "activeServiceDateCount": 20,
+              "mappingDateCount": 4,
+              "mappingServiceDates": [
+                "2026-10-04",
+                "2026-10-11",
+                "2026-10-18",
+                "2026-10-25"
+              ]
+            },
+            {
+              "tripId": "585586052_041026",
+              "serviceId": "8195",
+              "activeServiceDateCount": 20,
+              "mappingDateCount": 4,
+              "mappingServiceDates": [
+                "2026-10-04",
+                "2026-10-11",
+                "2026-10-18",
+                "2026-10-25"
+              ]
+            },
+            {
+              "tripId": "586150937_041026",
+              "serviceId": "8195",
+              "activeServiceDateCount": 20,
+              "mappingDateCount": 4,
+              "mappingServiceDates": [
+                "2026-10-04",
+                "2026-10-11",
+                "2026-10-18",
+                "2026-10-25"
+              ]
+            },
+            {
+              "tripId": "17255791_041026",
+              "serviceId": "8196",
+              "activeServiceDateCount": 24,
+              "mappingDateCount": 4,
+              "mappingServiceDates": [
+                "2026-10-04",
+                "2026-10-11",
+                "2026-10-18",
+                "2026-10-25"
+              ]
+            },
+            {
+              "tripId": "17255841_041026",
+              "serviceId": "8197",
+              "activeServiceDateCount": 4,
+              "mappingDateCount": 4,
+              "mappingServiceDates": [
+                "2026-10-09",
+                "2026-10-16",
+                "2026-10-23",
+                "2026-10-30"
+              ]
+            },
+            {
+              "tripId": "2039_041026",
+              "serviceId": "8197",
+              "activeServiceDateCount": 4,
+              "mappingDateCount": 4,
+              "mappingServiceDates": [
+                "2026-10-09",
+                "2026-10-16",
+                "2026-10-23",
+                "2026-10-30"
+              ]
+            },
+            {
+              "tripId": "2040_041026",
+              "serviceId": "8197",
+              "activeServiceDateCount": 4,
+              "mappingDateCount": 4,
+              "mappingServiceDates": [
+                "2026-10-09",
+                "2026-10-16",
+                "2026-10-23",
+                "2026-10-30"
+              ]
+            },
+            {
+              "tripId": "17255840_021026",
+              "serviceId": "16160",
+              "activeServiceDateCount": 1,
+              "mappingDateCount": 1,
+              "mappingServiceDates": [
+                "2026-10-02"
+              ]
+            },
+            {
+              "tripId": "17255841_021026",
+              "serviceId": "16160",
+              "activeServiceDateCount": 1,
+              "mappingDateCount": 1,
+              "mappingServiceDates": [
+                "2026-10-02"
+              ]
+            },
+            {
+              "tripId": "2039_021026",
+              "serviceId": "16160",
+              "activeServiceDateCount": 1,
+              "mappingDateCount": 1,
+              "mappingServiceDates": [
+                "2026-10-02"
+              ]
+            },
+            {
+              "tripId": "2040_021026",
+              "serviceId": "16160",
+              "activeServiceDateCount": 1,
+              "mappingDateCount": 1,
+              "mappingServiceDates": [
+                "2026-10-02"
+              ]
+            },
+            {
+              "tripId": "17255790_300926",
+              "serviceId": "23295",
+              "activeServiceDateCount": 2,
+              "mappingDateCount": 0,
+              "mappingServiceDates": []
+            },
+            {
+              "tripId": "17255791_300926",
+              "serviceId": "23295",
+              "activeServiceDateCount": 2,
+              "mappingDateCount": 0,
+              "mappingServiceDates": []
+            },
+            {
+              "tripId": "30204011_300926",
+              "serviceId": "23295",
+              "activeServiceDateCount": 2,
+              "mappingDateCount": 0,
+              "mappingServiceDates": []
+            },
+            {
+              "tripId": "30204012_300926",
+              "serviceId": "23295",
+              "activeServiceDateCount": 2,
+              "mappingDateCount": 0,
+              "mappingServiceDates": []
+            }
+          ]
+        }
+      },
+      {
+        "id": "E06",
+        "name": "Primary versus comparison feed",
+        "status": "not_observed",
+        "detail": "The schedule generation validates the accepted 60-day feed; the 10-day comparison feed was not fetched.",
+        "evidence": {
+          "comparison": "not_observed"
+        }
+      },
+      {
+        "id": "E07",
+        "name": "Service exceptions and reduced service",
+        "status": "not_observed",
+        "detail": "Actual active service dates were expanded; Shabbat/festival counts and reduced-service evidence were not computed.",
+        "evidence": {
+          "calendarRows": 41536,
+          "calendarDatesRows": 0,
+          "activeServiceDateCount": 31,
+          "dates": [
+            "2026-09-30",
+            "2026-10-01",
+            "2026-10-02",
+            "2026-10-03",
+            "2026-10-04",
+            "2026-10-05",
+            "2026-10-06",
+            "2026-10-07",
+            "2026-10-08",
+            "2026-10-09",
+            "2026-10-10",
+            "2026-10-11",
+            "2026-10-12",
+            "2026-10-13",
+            "2026-10-14",
+            "2026-10-15",
+            "2026-10-16",
+            "2026-10-17",
+            "2026-10-18",
+            "2026-10-19",
+            "2026-10-20",
+            "2026-10-21",
+            "2026-10-22",
+            "2026-10-23",
+            "2026-10-24",
+            "2026-10-25",
+            "2026-10-26",
+            "2026-10-27",
+            "2026-10-28",
+            "2026-10-29",
+            "2026-10-30"
+          ]
+        }
+      },
+      {
+        "id": "E08",
+        "name": "Foreign keys and orphans",
+        "status": "pass",
+        "detail": "Trip, route, service, stop, stop-time, and shape references were counted.",
+        "evidence": {
+          "counts": {
+            "stops_in_parent_cycle": 0,
+            "trips_with_no_stop_times": 0
+          },
+          "samples": {}
+        }
+      },
+      {
+        "id": "E09",
+        "name": "Parent stations and stop grouping",
+        "status": "pass",
+        "detail": "Parent stop references and cycles were checked structurally; human station resolution review remains separate.",
+        "evidence": {
+          "stopCount": 35321,
+          "parentCount": 1085,
+          "parentIssues": 0
+        }
+      },
+      {
+        "id": "E10",
+        "name": "Cold refresh through queryable generation",
+        "status": "not_observed",
+        "detail": "A validation pass does not build or query a generation.",
+        "evidence": {
+          "coldRun": "not_observed"
+        }
+      },
+      {
+        "id": "V01",
+        "name": "Duplicate identifiers",
+        "status": "pass",
+        "detail": "Found 0 duplicate primary identifiers.",
+        "evidence": {
+          "duplicates": {
+            "agency.txt": [],
+            "routes.txt": []
+          }
+        }
+      },
+      {
+        "id": "V02",
+        "name": "Stop coordinates",
+        "status": "pass",
+        "detail": "Found 0 invalid coordinate rows.",
+        "evidence": {}
+      },
+      {
+        "id": "V03",
+        "name": "Shape references and points",
+        "status": "pass",
+        "detail": "Shape points are streamed and trip shape references are checked.",
+        "evidence": {
+          "unknown_trip_shapes": 0,
+          "invalid_shape_points": 0
+        }
+      },
+      {
+        "id": "V04",
+        "name": "Stop time integrity",
+        "status": "pass",
+        "detail": "Arrival/departure values and duplicate per-trip stop sequences were checked; rows need not be pre-sorted. Raw cross-call decreases remain separately reported diagnostics; candidate validity requires each trip's bounded minute projection to pass.",
+        "evidence": {
+          "stopTimeRows": 16079349,
+          "afterMidnightRows": 346686,
+          "maxSeconds": 104759,
+          "maxTimeRoundTrip": {
+            "raw": "29:05:59",
+            "formatted": "29:05:59",
+            "matches": true
+          },
+          "non_chronological_stop_times": 832,
+          "cross_call_chronology": {
+            "count": 832,
+            "verdict": "diagnostic_fail",
+            "blocking": false,
+            "affectedTripCount": 168,
+            "affectedAgencyCount": 2,
+            "affectedOperatorCount": 2,
+            "affectedAgencyIds": [
+              "15",
+              "3"
+            ],
+            "affectedOperators": [
+              {
+                "id": "15",
+                "name": "מטרופולין"
+              },
+              {
+                "id": "3",
+                "name": "אגד"
+              }
+            ],
+            "samples": [
+              {
+                "tripId": "211997_021026",
+                "routeId": "957",
+                "serviceId": "10409",
+                "agencyId": "15",
+                "agencyName": "מטרופולין",
+                "operatorId": "15",
+                "operatorName": "מטרופולין",
+                "previousSequence": 4,
+                "sequence": 5,
+                "previousTime": "07:14:34",
+                "currentTime": "07:14:15",
+                "previousSourceLine": 2202708,
+                "sourceLine": 2202706,
+                "activeServiceDateCount": 0,
+                "dormant": true,
+                "activeInImportWindow": false
+              },
+              {
+                "tripId": "211997_021026",
+                "routeId": "957",
+                "serviceId": "10409",
+                "agencyId": "15",
+                "agencyName": "מטרופולין",
+                "operatorId": "15",
+                "operatorName": "מטרופולין",
+                "previousSequence": 5,
+                "sequence": 6,
+                "previousTime": "07:14:15",
+                "currentTime": "07:14:09",
+                "previousSourceLine": 2202706,
+                "sourceLine": 2202705,
+                "activeServiceDateCount": 0,
+                "dormant": true,
+                "activeInImportWindow": false
+              },
+              {
+                "tripId": "211997_021026",
+                "routeId": "957",
+                "serviceId": "10409",
+                "agencyId": "15",
+                "agencyName": "מטרופולין",
+                "operatorId": "15",
+                "operatorName": "מטרופולין",
+                "previousSequence": 8,
+                "sequence": 9,
+                "previousTime": "07:15:23",
+                "currentTime": "07:15:15",
+                "previousSourceLine": 2202713,
+                "sourceLine": 2202712,
+                "activeServiceDateCount": 0,
+                "dormant": true,
+                "activeInImportWindow": false
+              },
+              {
+                "tripId": "211997_021026",
+                "routeId": "957",
+                "serviceId": "10409",
+                "agencyId": "15",
+                "agencyName": "מטרופולין",
+                "operatorId": "15",
+                "operatorName": "מטרופולין",
+                "previousSequence": 9,
+                "sequence": 10,
+                "previousTime": "07:15:15",
+                "currentTime": "07:15:11",
+                "previousSourceLine": 2202712,
+                "sourceLine": 2202710,
+                "activeServiceDateCount": 0,
+                "dormant": true,
+                "activeInImportWindow": false
+              },
+              {
+                "tripId": "211997_021026",
+                "routeId": "957",
+                "serviceId": "10409",
+                "agencyId": "15",
+                "agencyName": "מטרופולין",
+                "operatorId": "15",
+                "operatorName": "מטרופולין",
+                "previousSequence": 10,
+                "sequence": 11,
+                "previousTime": "07:15:11",
+                "currentTime": "07:15:09",
+                "previousSourceLine": 2202710,
+                "sourceLine": 2202709,
+                "activeServiceDateCount": 0,
+                "dormant": true,
+                "activeInImportWindow": false
+              },
+              {
+                "tripId": "211997_041026",
+                "routeId": "957",
+                "serviceId": "33208",
+                "agencyId": "15",
+                "agencyName": "מטרופולין",
+                "operatorId": "15",
+                "operatorName": "מטרופולין",
+                "previousSequence": 4,
+                "sequence": 5,
+                "previousTime": "07:14:34",
+                "currentTime": "07:14:15",
+                "previousSourceLine": 2202725,
+                "sourceLine": 2202723,
+                "activeServiceDateCount": 5,
+                "dormant": false,
+                "activeInImportWindow": true
+              },
+              {
+                "tripId": "211997_041026",
+                "routeId": "957",
+                "serviceId": "33208",
+                "agencyId": "15",
+                "agencyName": "מטרופולין",
+                "operatorId": "15",
+                "operatorName": "מטרופולין",
+                "previousSequence": 5,
+                "sequence": 6,
+                "previousTime": "07:14:15",
+                "currentTime": "07:14:09",
+                "previousSourceLine": 2202723,
+                "sourceLine": 2202722,
+                "activeServiceDateCount": 5,
+                "dormant": false,
+                "activeInImportWindow": true
+              },
+              {
+                "tripId": "211997_041026",
+                "routeId": "957",
+                "serviceId": "33208",
+                "agencyId": "15",
+                "agencyName": "מטרופולין",
+                "operatorId": "15",
+                "operatorName": "מטרופולין",
+                "previousSequence": 8,
+                "sequence": 9,
+                "previousTime": "07:15:23",
+                "currentTime": "07:15:15",
+                "previousSourceLine": 2202730,
+                "sourceLine": 2202729,
+                "activeServiceDateCount": 5,
+                "dormant": false,
+                "activeInImportWindow": true
+              },
+              {
+                "tripId": "211997_041026",
+                "routeId": "957",
+                "serviceId": "33208",
+                "agencyId": "15",
+                "agencyName": "מטרופולין",
+                "operatorId": "15",
+                "operatorName": "מטרופולין",
+                "previousSequence": 9,
+                "sequence": 10,
+                "previousTime": "07:15:15",
+                "currentTime": "07:15:11",
+                "previousSourceLine": 2202729,
+                "sourceLine": 2202727,
+                "activeServiceDateCount": 5,
+                "dormant": false,
+                "activeInImportWindow": true
+              },
+              {
+                "tripId": "211997_041026",
+                "routeId": "957",
+                "serviceId": "33208",
+                "agencyId": "15",
+                "agencyName": "מטרופולין",
+                "operatorId": "15",
+                "operatorName": "מטרופולין",
+                "previousSequence": 10,
+                "sequence": 11,
+                "previousTime": "07:15:11",
+                "currentTime": "07:15:09",
+                "previousSourceLine": 2202727,
+                "sourceLine": 2202726,
+                "activeServiceDateCount": 5,
+                "dormant": false,
+                "activeInImportWindow": true
+              },
+              {
+                "tripId": "211997_091026",
+                "routeId": "957",
+                "serviceId": "10410",
+                "agencyId": "15",
+                "agencyName": "מטרופולין",
+                "operatorId": "15",
+                "operatorName": "מטרופולין",
+                "previousSequence": 4,
+                "sequence": 5,
+                "previousTime": "07:14:34",
+                "currentTime": "07:14:15",
+                "previousSourceLine": 2202742,
+                "sourceLine": 2202740,
+                "activeServiceDateCount": 0,
+                "dormant": true,
+                "activeInImportWindow": false
+              },
+              {
+                "tripId": "211997_091026",
+                "routeId": "957",
+                "serviceId": "10410",
+                "agencyId": "15",
+                "agencyName": "מטרופולין",
+                "operatorId": "15",
+                "operatorName": "מטרופולין",
+                "previousSequence": 5,
+                "sequence": 6,
+                "previousTime": "07:14:15",
+                "currentTime": "07:14:09",
+                "previousSourceLine": 2202740,
+                "sourceLine": 2202739,
+                "activeServiceDateCount": 0,
+                "dormant": true,
+                "activeInImportWindow": false
+              },
+              {
+                "tripId": "211997_091026",
+                "routeId": "957",
+                "serviceId": "10410",
+                "agencyId": "15",
+                "agencyName": "מטרופולין",
+                "operatorId": "15",
+                "operatorName": "מטרופולין",
+                "previousSequence": 8,
+                "sequence": 9,
+                "previousTime": "07:15:23",
+                "currentTime": "07:15:15",
+                "previousSourceLine": 2202747,
+                "sourceLine": 2202746,
+                "activeServiceDateCount": 0,
+                "dormant": true,
+                "activeInImportWindow": false
+              },
+              {
+                "tripId": "211997_091026",
+                "routeId": "957",
+                "serviceId": "10410",
+                "agencyId": "15",
+                "agencyName": "מטרופולין",
+                "operatorId": "15",
+                "operatorName": "מטרופולין",
+                "previousSequence": 9,
+                "sequence": 10,
+                "previousTime": "07:15:15",
+                "currentTime": "07:15:11",
+                "previousSourceLine": 2202746,
+                "sourceLine": 2202744,
+                "activeServiceDateCount": 0,
+                "dormant": true,
+                "activeInImportWindow": false
+              },
+              {
+                "tripId": "211997_091026",
+                "routeId": "957",
+                "serviceId": "10410",
+                "agencyId": "15",
+                "agencyName": "מטרופולין",
+                "operatorId": "15",
+                "operatorName": "מטרופולין",
+                "previousSequence": 10,
+                "sequence": 11,
+                "previousTime": "07:15:11",
+                "currentTime": "07:15:09",
+                "previousSourceLine": 2202744,
+                "sourceLine": 2202743,
+                "activeServiceDateCount": 0,
+                "dormant": true,
+                "activeInImportWindow": false
+              },
+              {
+                "tripId": "211997_111026",
+                "routeId": "957",
+                "serviceId": "33598",
+                "agencyId": "15",
+                "agencyName": "מטרופולין",
+                "operatorId": "15",
+                "operatorName": "מטרופולין",
+                "previousSequence": 4,
+                "sequence": 5,
+                "previousTime": "07:14:34",
+                "currentTime": "07:14:15",
+                "previousSourceLine": 2202759,
+                "sourceLine": 2202757,
+                "activeServiceDateCount": 10,
+                "dormant": false,
+                "activeInImportWindow": true
+              },
+              {
+                "tripId": "211997_111026",
+                "routeId": "957",
+                "serviceId": "33598",
+                "agencyId": "15",
+                "agencyName": "מטרופולין",
+                "operatorId": "15",
+                "operatorName": "מטרופולין",
+                "previousSequence": 5,
+                "sequence": 6,
+                "previousTime": "07:14:15",
+                "currentTime": "07:14:09",
+                "previousSourceLine": 2202757,
+                "sourceLine": 2202756,
+                "activeServiceDateCount": 10,
+                "dormant": false,
+                "activeInImportWindow": true
+              },
+              {
+                "tripId": "211997_111026",
+                "routeId": "957",
+                "serviceId": "33598",
+                "agencyId": "15",
+                "agencyName": "מטרופולין",
+                "operatorId": "15",
+                "operatorName": "מטרופולין",
+                "previousSequence": 8,
+                "sequence": 9,
+                "previousTime": "07:15:23",
+                "currentTime": "07:15:15",
+                "previousSourceLine": 2202764,
+                "sourceLine": 2202763,
+                "activeServiceDateCount": 10,
+                "dormant": false,
+                "activeInImportWindow": true
+              },
+              {
+                "tripId": "211997_111026",
+                "routeId": "957",
+                "serviceId": "33598",
+                "agencyId": "15",
+                "agencyName": "מטרופולין",
+                "operatorId": "15",
+                "operatorName": "מטרופולין",
+                "previousSequence": 9,
+                "sequence": 10,
+                "previousTime": "07:15:15",
+                "currentTime": "07:15:11",
+                "previousSourceLine": 2202763,
+                "sourceLine": 2202761,
+                "activeServiceDateCount": 10,
+                "dormant": false,
+                "activeInImportWindow": true
+              },
+              {
+                "tripId": "211997_111026",
+                "routeId": "957",
+                "serviceId": "33598",
+                "agencyId": "15",
+                "agencyName": "מטרופולין",
+                "operatorId": "15",
+                "operatorName": "מטרופולין",
+                "previousSequence": 10,
+                "sequence": 11,
+                "previousTime": "07:15:11",
+                "currentTime": "07:15:09",
+                "previousSourceLine": 2202761,
+                "sourceLine": 2202760,
+                "activeServiceDateCount": 10,
+                "dormant": false,
+                "activeInImportWindow": true
+              }
+            ]
+          },
+          "pickup_dropoff_rule_errors": 0,
+          "effective_chronology": {
+            "policyId": "motis-minute-bracket-v1",
+            "status": "pass",
+            "blocking": true,
+            "feedTripCount": 425160,
+            "validatedProfileCount": 425160,
+            "effectiveEventCount": 31308378,
+            "profileErrorCount": 0,
+            "samples": [],
+            "bounds": {
+              "resolutionSeconds": 60,
+              "eventFloorCeiling": "every effective event remains inside its raw minute",
+              "intervalDistortionStrictlyLessThanSeconds": 60,
+              "firstArrivalProjected": false,
+              "finalDepartureProjected": false
+            }
+          }
+        }
+      },
+      {
+        "id": "V05",
+        "name": "CSV row integrity",
+        "status": "pass",
+        "detail": "Found 0 rows with a different width than their header.",
+        "evidence": {
+          "counts": {}
+        }
+      },
+      {
+        "id": "V06",
+        "name": "Mapping ranges",
+        "status": "pass",
+        "detail": "All TripIdToDate date ranges are valid and non-reversed.",
+        "evidence": {
+          "reversedRanges": []
+        }
+      },
+      {
+        "id": "V07",
+        "name": "Actual service date coverage",
+        "status": "pass",
+        "detail": "Coverage uses actual active dates, including calendar-date additions and removals.",
+        "evidence": {
+          "dateCount": 31,
+          "first": "2026-09-30",
+          "last": "2026-10-30"
+        }
+      },
+      {
+        "id": "V08",
+        "name": "Parent reference graph",
+        "status": "pass",
+        "detail": "Parent stop links exist and do not form cycles.",
+        "evidence": {
+          "missing": 0,
+          "cycles": 0
+        }
+      },
+      {
+        "id": "V09",
+        "name": "Trip identity and service-date mapping",
+        "status": "pass",
+        "detail": "Complete normalized key coverage and overlapping known service windows gate the static build. Full identity date and weekday gaps remain diagnostic warnings and are not realtime proof.",
+        "evidence": {
+          "unmatchedKeys": 0,
+          "tripsWithDateGaps": 267532,
+          "unmappedActiveServiceDateCount": 31,
+          "dateWindowsOverlap": true,
+          "staticVerdict": "ACCEPTED",
+          "serviceDateCoverage": "warning_only_not_realtime_proof"
+        }
+      },
+      {
+        "id": "V10",
+        "name": "Calendar definitions",
+        "status": "pass",
+        "detail": "At least one real active service date is required.",
+        "evidence": {
+          "activeDateCount": 31
+        }
+      }
+    ],
+    "integrity": {
+      "duplicate_agency_ids": {
+        "count": 0,
+        "samples": []
+      },
+      "duplicate_routes_ids": {
+        "count": 0,
+        "samples": []
+      },
+      "foreign_keys": {
+        "counts": {
+          "stops_in_parent_cycle": 0,
+          "trips_with_no_stop_times": 0
+        },
+        "samples": {}
+      },
+      "stop_coordinates": {
+        "invalidRows": 0,
+        "samples": []
+      },
+      "malformed_rows": {},
+      "shape_references": {
+        "unknown_trip_shapes": 0,
+        "invalid_shape_points": 0
+      },
+      "time_integrity": {
+        "stopTimeRows": 16079349,
+        "afterMidnightRows": 346686,
+        "maxSeconds": 104759,
+        "maxTimeRoundTrip": {
+          "raw": "29:05:59",
+          "formatted": "29:05:59",
+          "matches": true
+        },
+        "non_chronological_stop_times": 832,
+        "cross_call_chronology": {
+          "count": 832,
+          "verdict": "diagnostic_fail",
+          "blocking": false,
+          "affectedTripCount": 168,
+          "affectedAgencyCount": 2,
+          "affectedOperatorCount": 2,
+          "affectedAgencyIds": [
+            "15",
+            "3"
+          ],
+          "affectedOperators": [
+            {
+              "id": "15",
+              "name": "מטרופולין"
+            },
+            {
+              "id": "3",
+              "name": "אגד"
+            }
+          ],
+          "samples": [
+            {
+              "tripId": "211997_021026",
+              "routeId": "957",
+              "serviceId": "10409",
+              "agencyId": "15",
+              "agencyName": "מטרופולין",
+              "operatorId": "15",
+              "operatorName": "מטרופולין",
+              "previousSequence": 4,
+              "sequence": 5,
+              "previousTime": "07:14:34",
+              "currentTime": "07:14:15",
+              "previousSourceLine": 2202708,
+              "sourceLine": 2202706,
+              "activeServiceDateCount": 0,
+              "dormant": true,
+              "activeInImportWindow": false
+            },
+            {
+              "tripId": "211997_021026",
+              "routeId": "957",
+              "serviceId": "10409",
+              "agencyId": "15",
+              "agencyName": "מטרופולין",
+              "operatorId": "15",
+              "operatorName": "מטרופולין",
+              "previousSequence": 5,
+              "sequence": 6,
+              "previousTime": "07:14:15",
+              "currentTime": "07:14:09",
+              "previousSourceLine": 2202706,
+              "sourceLine": 2202705,
+              "activeServiceDateCount": 0,
+              "dormant": true,
+              "activeInImportWindow": false
+            },
+            {
+              "tripId": "211997_021026",
+              "routeId": "957",
+              "serviceId": "10409",
+              "agencyId": "15",
+              "agencyName": "מטרופולין",
+              "operatorId": "15",
+              "operatorName": "מטרופולין",
+              "previousSequence": 8,
+              "sequence": 9,
+              "previousTime": "07:15:23",
+              "currentTime": "07:15:15",
+              "previousSourceLine": 2202713,
+              "sourceLine": 2202712,
+              "activeServiceDateCount": 0,
+              "dormant": true,
+              "activeInImportWindow": false
+            },
+            {
+              "tripId": "211997_021026",
+              "routeId": "957",
+              "serviceId": "10409",
+              "agencyId": "15",
+              "agencyName": "מטרופולין",
+              "operatorId": "15",
+              "operatorName": "מטרופולין",
+              "previousSequence": 9,
+              "sequence": 10,
+              "previousTime": "07:15:15",
+              "currentTime": "07:15:11",
+              "previousSourceLine": 2202712,
+              "sourceLine": 2202710,
+              "activeServiceDateCount": 0,
+              "dormant": true,
+              "activeInImportWindow": false
+            },
+            {
+              "tripId": "211997_021026",
+              "routeId": "957",
+              "serviceId": "10409",
+              "agencyId": "15",
+              "agencyName": "מטרופולין",
+              "operatorId": "15",
+              "operatorName": "מטרופולין",
+              "previousSequence": 10,
+              "sequence": 11,
+              "previousTime": "07:15:11",
+              "currentTime": "07:15:09",
+              "previousSourceLine": 2202710,
+              "sourceLine": 2202709,
+              "activeServiceDateCount": 0,
+              "dormant": true,
+              "activeInImportWindow": false
+            },
+            {
+              "tripId": "211997_041026",
+              "routeId": "957",
+              "serviceId": "33208",
+              "agencyId": "15",
+              "agencyName": "מטרופולין",
+              "operatorId": "15",
+              "operatorName": "מטרופולין",
+              "previousSequence": 4,
+              "sequence": 5,
+              "previousTime": "07:14:34",
+              "currentTime": "07:14:15",
+              "previousSourceLine": 2202725,
+              "sourceLine": 2202723,
+              "activeServiceDateCount": 5,
+              "dormant": false,
+              "activeInImportWindow": true
+            },
+            {
+              "tripId": "211997_041026",
+              "routeId": "957",
+              "serviceId": "33208",
+              "agencyId": "15",
+              "agencyName": "מטרופולין",
+              "operatorId": "15",
+              "operatorName": "מטרופולין",
+              "previousSequence": 5,
+              "sequence": 6,
+              "previousTime": "07:14:15",
+              "currentTime": "07:14:09",
+              "previousSourceLine": 2202723,
+              "sourceLine": 2202722,
+              "activeServiceDateCount": 5,
+              "dormant": false,
+              "activeInImportWindow": true
+            },
+            {
+              "tripId": "211997_041026",
+              "routeId": "957",
+              "serviceId": "33208",
+              "agencyId": "15",
+              "agencyName": "מטרופולין",
+              "operatorId": "15",
+              "operatorName": "מטרופולין",
+              "previousSequence": 8,
+              "sequence": 9,
+              "previousTime": "07:15:23",
+              "currentTime": "07:15:15",
+              "previousSourceLine": 2202730,
+              "sourceLine": 2202729,
+              "activeServiceDateCount": 5,
+              "dormant": false,
+              "activeInImportWindow": true
+            },
+            {
+              "tripId": "211997_041026",
+              "routeId": "957",
+              "serviceId": "33208",
+              "agencyId": "15",
+              "agencyName": "מטרופולין",
+              "operatorId": "15",
+              "operatorName": "מטרופולין",
+              "previousSequence": 9,
+              "sequence": 10,
+              "previousTime": "07:15:15",
+              "currentTime": "07:15:11",
+              "previousSourceLine": 2202729,
+              "sourceLine": 2202727,
+              "activeServiceDateCount": 5,
+              "dormant": false,
+              "activeInImportWindow": true
+            },
+            {
+              "tripId": "211997_041026",
+              "routeId": "957",
+              "serviceId": "33208",
+              "agencyId": "15",
+              "agencyName": "מטרופולין",
+              "operatorId": "15",
+              "operatorName": "מטרופולין",
+              "previousSequence": 10,
+              "sequence": 11,
+              "previousTime": "07:15:11",
+              "currentTime": "07:15:09",
+              "previousSourceLine": 2202727,
+              "sourceLine": 2202726,
+              "activeServiceDateCount": 5,
+              "dormant": false,
+              "activeInImportWindow": true
+            },
+            {
+              "tripId": "211997_091026",
+              "routeId": "957",
+              "serviceId": "10410",
+              "agencyId": "15",
+              "agencyName": "מטרופולין",
+              "operatorId": "15",
+              "operatorName": "מטרופולין",
+              "previousSequence": 4,
+              "sequence": 5,
+              "previousTime": "07:14:34",
+              "currentTime": "07:14:15",
+              "previousSourceLine": 2202742,
+              "sourceLine": 2202740,
+              "activeServiceDateCount": 0,
+              "dormant": true,
+              "activeInImportWindow": false
+            },
+            {
+              "tripId": "211997_091026",
+              "routeId": "957",
+              "serviceId": "10410",
+              "agencyId": "15",
+              "agencyName": "מטרופולין",
+              "operatorId": "15",
+              "operatorName": "מטרופולין",
+              "previousSequence": 5,
+              "sequence": 6,
+              "previousTime": "07:14:15",
+              "currentTime": "07:14:09",
+              "previousSourceLine": 2202740,
+              "sourceLine": 2202739,
+              "activeServiceDateCount": 0,
+              "dormant": true,
+              "activeInImportWindow": false
+            },
+            {
+              "tripId": "211997_091026",
+              "routeId": "957",
+              "serviceId": "10410",
+              "agencyId": "15",
+              "agencyName": "מטרופולין",
+              "operatorId": "15",
+              "operatorName": "מטרופולין",
+              "previousSequence": 8,
+              "sequence": 9,
+              "previousTime": "07:15:23",
+              "currentTime": "07:15:15",
+              "previousSourceLine": 2202747,
+              "sourceLine": 2202746,
+              "activeServiceDateCount": 0,
+              "dormant": true,
+              "activeInImportWindow": false
+            },
+            {
+              "tripId": "211997_091026",
+              "routeId": "957",
+              "serviceId": "10410",
+              "agencyId": "15",
+              "agencyName": "מטרופולין",
+              "operatorId": "15",
+              "operatorName": "מטרופולין",
+              "previousSequence": 9,
+              "sequence": 10,
+              "previousTime": "07:15:15",
+              "currentTime": "07:15:11",
+              "previousSourceLine": 2202746,
+              "sourceLine": 2202744,
+              "activeServiceDateCount": 0,
+              "dormant": true,
+              "activeInImportWindow": false
+            },
+            {
+              "tripId": "211997_091026",
+              "routeId": "957",
+              "serviceId": "10410",
+              "agencyId": "15",
+              "agencyName": "מטרופולין",
+              "operatorId": "15",
+              "operatorName": "מטרופולין",
+              "previousSequence": 10,
+              "sequence": 11,
+              "previousTime": "07:15:11",
+              "currentTime": "07:15:09",
+              "previousSourceLine": 2202744,
+              "sourceLine": 2202743,
+              "activeServiceDateCount": 0,
+              "dormant": true,
+              "activeInImportWindow": false
+            },
+            {
+              "tripId": "211997_111026",
+              "routeId": "957",
+              "serviceId": "33598",
+              "agencyId": "15",
+              "agencyName": "מטרופולין",
+              "operatorId": "15",
+              "operatorName": "מטרופולין",
+              "previousSequence": 4,
+              "sequence": 5,
+              "previousTime": "07:14:34",
+              "currentTime": "07:14:15",
+              "previousSourceLine": 2202759,
+              "sourceLine": 2202757,
+              "activeServiceDateCount": 10,
+              "dormant": false,
+              "activeInImportWindow": true
+            },
+            {
+              "tripId": "211997_111026",
+              "routeId": "957",
+              "serviceId": "33598",
+              "agencyId": "15",
+              "agencyName": "מטרופולין",
+              "operatorId": "15",
+              "operatorName": "מטרופולין",
+              "previousSequence": 5,
+              "sequence": 6,
+              "previousTime": "07:14:15",
+              "currentTime": "07:14:09",
+              "previousSourceLine": 2202757,
+              "sourceLine": 2202756,
+              "activeServiceDateCount": 10,
+              "dormant": false,
+              "activeInImportWindow": true
+            },
+            {
+              "tripId": "211997_111026",
+              "routeId": "957",
+              "serviceId": "33598",
+              "agencyId": "15",
+              "agencyName": "מטרופולין",
+              "operatorId": "15",
+              "operatorName": "מטרופולין",
+              "previousSequence": 8,
+              "sequence": 9,
+              "previousTime": "07:15:23",
+              "currentTime": "07:15:15",
+              "previousSourceLine": 2202764,
+              "sourceLine": 2202763,
+              "activeServiceDateCount": 10,
+              "dormant": false,
+              "activeInImportWindow": true
+            },
+            {
+              "tripId": "211997_111026",
+              "routeId": "957",
+              "serviceId": "33598",
+              "agencyId": "15",
+              "agencyName": "מטרופולין",
+              "operatorId": "15",
+              "operatorName": "מטרופולין",
+              "previousSequence": 9,
+              "sequence": 10,
+              "previousTime": "07:15:15",
+              "currentTime": "07:15:11",
+              "previousSourceLine": 2202763,
+              "sourceLine": 2202761,
+              "activeServiceDateCount": 10,
+              "dormant": false,
+              "activeInImportWindow": true
+            },
+            {
+              "tripId": "211997_111026",
+              "routeId": "957",
+              "serviceId": "33598",
+              "agencyId": "15",
+              "agencyName": "מטרופולין",
+              "operatorId": "15",
+              "operatorName": "מטרופולין",
+              "previousSequence": 10,
+              "sequence": 11,
+              "previousTime": "07:15:11",
+              "currentTime": "07:15:09",
+              "previousSourceLine": 2202761,
+              "sourceLine": 2202760,
+              "activeServiceDateCount": 10,
+              "dormant": false,
+              "activeInImportWindow": true
+            }
+          ]
+        },
+        "pickup_dropoff_rule_errors": 0,
+        "effective_chronology": {
+          "policyId": "motis-minute-bracket-v1",
+          "status": "pass",
+          "blocking": true,
+          "feedTripCount": 425160,
+          "validatedProfileCount": 425160,
+          "effectiveEventCount": 31308378,
+          "profileErrorCount": 0,
+          "samples": [],
+          "bounds": {
+            "resolutionSeconds": 60,
+            "eventFloorCeiling": "every effective event remains inside its raw minute",
+            "intervalDistortionStrictlyLessThanSeconds": 60,
+            "firstArrivalProjected": false,
+            "finalDepartureProjected": false
+          }
+        }
+      },
+      "translations": {
+        "rows": 102603,
+        "schema": "mot-legacy",
+        "languages": {
+          "HE": 36955,
+          "AR": 32831,
+          "EN": 32817
+        }
+      }
+    },
+    "serviceDates": [
+      "2026-09-30",
+      "2026-10-01",
+      "2026-10-02",
+      "2026-10-03",
+      "2026-10-04",
+      "2026-10-05",
+      "2026-10-06",
+      "2026-10-07",
+      "2026-10-08",
+      "2026-10-09",
+      "2026-10-10",
+      "2026-10-11",
+      "2026-10-12",
+      "2026-10-13",
+      "2026-10-14",
+      "2026-10-15",
+      "2026-10-16",
+      "2026-10-17",
+      "2026-10-18",
+      "2026-10-19",
+      "2026-10-20",
+      "2026-10-21",
+      "2026-10-22",
+      "2026-10-23",
+      "2026-10-24",
+      "2026-10-25",
+      "2026-10-26",
+      "2026-10-27",
+      "2026-10-28",
+      "2026-10-29",
+      "2026-10-30"
+    ],
+    "coverage": {
+      "from": "2026-09-30",
+      "through": "2026-10-30",
+      "activeDateCount": 31
+    },
+    "pairing": {
+      "feedTripCount": 425160,
+      "fullTripIdentityCount": 425160,
+      "dormantTripDefinitions": 28603,
+      "serviceDatePairsEvaluated": 3134997,
+      "feedJoinKeyCount": 252581,
+      "mappingKeyCount": 918492,
+      "unmatchedJoinKeyCount": 0,
+      "unmatchedJoinKeySamples": [],
+      "tripsWithoutMappedServiceDates": 267532,
+      "tripSamplesWithoutMappedDates": [
+        "30204012_041026",
+        "30204013_041026",
+        "30204014_041026",
+        "35232341_041026",
+        "47340583_041026",
+        "585586051_041026",
+        "585586052_041026",
+        "586150937_041026",
+        "17255791_041026",
+        "17255790_300926"
+      ],
+      "unmappedActiveServiceDateCount": 31,
+      "unmappedServiceDateSamples": [
+        "2026-09-30",
+        "2026-10-01",
+        "2026-10-02",
+        "2026-10-03",
+        "2026-10-04",
+        "2026-10-05",
+        "2026-10-06",
+        "2026-10-07",
+        "2026-10-08",
+        "2026-10-09",
+        "2026-10-10",
+        "2026-10-11",
+        "2026-10-12",
+        "2026-10-13",
+        "2026-10-14",
+        "2026-10-15",
+        "2026-10-16",
+        "2026-10-17",
+        "2026-10-18",
+        "2026-10-19"
+      ],
+      "matchedServiceDateCount": 31,
+      "feedServiceDateCount": 31,
+      "feedServiceDates": [
+        "2026-09-30",
+        "2026-10-01",
+        "2026-10-02",
+        "2026-10-03",
+        "2026-10-04",
+        "2026-10-05",
+        "2026-10-06",
+        "2026-10-07",
+        "2026-10-08",
+        "2026-10-09",
+        "2026-10-10",
+        "2026-10-11",
+        "2026-10-12",
+        "2026-10-13",
+        "2026-10-14",
+        "2026-10-15",
+        "2026-10-16",
+        "2026-10-17",
+        "2026-10-18",
+        "2026-10-19",
+        "2026-10-20",
+        "2026-10-21",
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-24",
+        "2026-10-25",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-28",
+        "2026-10-29",
+        "2026-10-30"
+      ],
+      "mappingDateRange": [
+        "2023-10-08",
+        "2200-01-01"
+      ],
+      "feedDateWindow": [
+        "2026-09-30",
+        "2026-10-30"
+      ],
+      "dateWindowsOverlap": true,
+      "staticPairingVerdict": "ACCEPTED",
+      "serviceDateCoverageDiagnostic": "warning_only_not_realtime_proof",
+      "reversedRanges": [],
+      "fullTripIdentityUsedForValidation": true,
+      "tripDateEvidenceSamples": [
+        {
+          "tripId": "30204012_041026",
+          "serviceId": "8195",
+          "activeServiceDateCount": 20,
+          "mappingDateCount": 4,
+          "mappingServiceDates": [
+            "2026-10-04",
+            "2026-10-11",
+            "2026-10-18",
+            "2026-10-25"
+          ]
+        },
+        {
+          "tripId": "30204013_041026",
+          "serviceId": "8195",
+          "activeServiceDateCount": 20,
+          "mappingDateCount": 4,
+          "mappingServiceDates": [
+            "2026-10-04",
+            "2026-10-11",
+            "2026-10-18",
+            "2026-10-25"
+          ]
+        },
+        {
+          "tripId": "30204014_041026",
+          "serviceId": "8195",
+          "activeServiceDateCount": 20,
+          "mappingDateCount": 4,
+          "mappingServiceDates": [
+            "2026-10-04",
+            "2026-10-11",
+            "2026-10-18",
+            "2026-10-25"
+          ]
+        },
+        {
+          "tripId": "35232341_041026",
+          "serviceId": "8195",
+          "activeServiceDateCount": 20,
+          "mappingDateCount": 4,
+          "mappingServiceDates": [
+            "2026-10-04",
+            "2026-10-11",
+            "2026-10-18",
+            "2026-10-25"
+          ]
+        },
+        {
+          "tripId": "47340583_041026",
+          "serviceId": "8195",
+          "activeServiceDateCount": 20,
+          "mappingDateCount": 4,
+          "mappingServiceDates": [
+            "2026-10-04",
+            "2026-10-11",
+            "2026-10-18",
+            "2026-10-25"
+          ]
+        },
+        {
+          "tripId": "585586051_041026",
+          "serviceId": "8195",
+          "activeServiceDateCount": 20,
+          "mappingDateCount": 4,
+          "mappingServiceDates": [
+            "2026-10-04",
+            "2026-10-11",
+            "2026-10-18",
+            "2026-10-25"
+          ]
+        },
+        {
+          "tripId": "585586052_041026",
+          "serviceId": "8195",
+          "activeServiceDateCount": 20,
+          "mappingDateCount": 4,
+          "mappingServiceDates": [
+            "2026-10-04",
+            "2026-10-11",
+            "2026-10-18",
+            "2026-10-25"
+          ]
+        },
+        {
+          "tripId": "586150937_041026",
+          "serviceId": "8195",
+          "activeServiceDateCount": 20,
+          "mappingDateCount": 4,
+          "mappingServiceDates": [
+            "2026-10-04",
+            "2026-10-11",
+            "2026-10-18",
+            "2026-10-25"
+          ]
+        },
+        {
+          "tripId": "17255791_041026",
+          "serviceId": "8196",
+          "activeServiceDateCount": 24,
+          "mappingDateCount": 4,
+          "mappingServiceDates": [
+            "2026-10-04",
+            "2026-10-11",
+            "2026-10-18",
+            "2026-10-25"
+          ]
+        },
+        {
+          "tripId": "17255841_041026",
+          "serviceId": "8197",
+          "activeServiceDateCount": 4,
+          "mappingDateCount": 4,
+          "mappingServiceDates": [
+            "2026-10-09",
+            "2026-10-16",
+            "2026-10-23",
+            "2026-10-30"
+          ]
+        },
+        {
+          "tripId": "2039_041026",
+          "serviceId": "8197",
+          "activeServiceDateCount": 4,
+          "mappingDateCount": 4,
+          "mappingServiceDates": [
+            "2026-10-09",
+            "2026-10-16",
+            "2026-10-23",
+            "2026-10-30"
+          ]
+        },
+        {
+          "tripId": "2040_041026",
+          "serviceId": "8197",
+          "activeServiceDateCount": 4,
+          "mappingDateCount": 4,
+          "mappingServiceDates": [
+            "2026-10-09",
+            "2026-10-16",
+            "2026-10-23",
+            "2026-10-30"
+          ]
+        },
+        {
+          "tripId": "17255840_021026",
+          "serviceId": "16160",
+          "activeServiceDateCount": 1,
+          "mappingDateCount": 1,
+          "mappingServiceDates": [
+            "2026-10-02"
+          ]
+        },
+        {
+          "tripId": "17255841_021026",
+          "serviceId": "16160",
+          "activeServiceDateCount": 1,
+          "mappingDateCount": 1,
+          "mappingServiceDates": [
+            "2026-10-02"
+          ]
+        },
+        {
+          "tripId": "2039_021026",
+          "serviceId": "16160",
+          "activeServiceDateCount": 1,
+          "mappingDateCount": 1,
+          "mappingServiceDates": [
+            "2026-10-02"
+          ]
+        },
+        {
+          "tripId": "2040_021026",
+          "serviceId": "16160",
+          "activeServiceDateCount": 1,
+          "mappingDateCount": 1,
+          "mappingServiceDates": [
+            "2026-10-02"
+          ]
+        },
+        {
+          "tripId": "17255790_300926",
+          "serviceId": "23295",
+          "activeServiceDateCount": 2,
+          "mappingDateCount": 0,
+          "mappingServiceDates": []
+        },
+        {
+          "tripId": "17255791_300926",
+          "serviceId": "23295",
+          "activeServiceDateCount": 2,
+          "mappingDateCount": 0,
+          "mappingServiceDates": []
+        },
+        {
+          "tripId": "30204011_300926",
+          "serviceId": "23295",
+          "activeServiceDateCount": 2,
+          "mappingDateCount": 0,
+          "mappingServiceDates": []
+        },
+        {
+          "tripId": "30204012_300926",
+          "serviceId": "23295",
+          "activeServiceDateCount": 2,
+          "mappingDateCount": 0,
+          "mappingServiceDates": []
+        }
+      ]
+    }
+  }
+}

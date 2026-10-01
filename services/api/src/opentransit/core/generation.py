@@ -6,6 +6,8 @@ from dataclasses import dataclass
 from datetime import datetime, timedelta
 from pathlib import Path
 
+from opentransit.core.time import as_utc_instant
+
 
 def instant(value: str) -> datetime:
     result = datetime.fromisoformat(value.replace("Z", "+00:00"))
@@ -23,6 +25,8 @@ class Generation:
     coverage_until: datetime
     engine_digest: str
     mode: str = "real"
+    source_checked_at: datetime | None = None
+    source_check_recorded: bool = False
 
     @classmethod
     def load(cls, path: Path) -> Generation:
@@ -40,18 +44,30 @@ class Generation:
             coverage_until=instant(data["coverage"]["until"]),
             engine_digest=digest,
             mode=data.get("mode", "real"),
+            source_checked_at=instant(data["sourceCheckedAt"])
+            if data.get("sourceCheckedAt")
+            else None,
+            source_check_recorded="sourceCheckedAt" in data,
         )
-        if result.coverage_from >= result.coverage_until:
+        if as_utc_instant(result.coverage_from) >= as_utc_instant(result.coverage_until):
             raise ValueError("Generation has no service coverage")
         if result.mode not in {"real", "fixture"}:
             raise ValueError("Unknown data mode")
         return result
 
     def contains(self, time: datetime) -> bool:
-        return self.coverage_from <= time < self.coverage_until
+        instant_utc = as_utc_instant(time)
+        return (
+            as_utc_instant(self.coverage_from) <= instant_utc < as_utc_instant(self.coverage_until)
+        )
 
     def freshness(self, now: datetime) -> str:
-        age = now - self.validated_at
+        checked_at = self.source_checked_at if self.source_check_recorded else self.validated_at
+        if checked_at is None:
+            return "expired"
+        age = as_utc_instant(now) - as_utc_instant(checked_at)
+        if age < timedelta(minutes=-5):
+            return "expired"
         if age >= timedelta(days=7):
             return "expired"
         if age >= timedelta(hours=48):

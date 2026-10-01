@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-10-01T00:20:05Z",
+  "scope": "Bounded gpt-6.1-sol/high analysis of preserved provider results and exported source records; no new query, source scan or import",
+  "status": "diagnosis_complete_enrichment_proposed",
+  "inputs": ["services/api/results/m4-photon-address-trial-20261001-01.json", ".runtime/m4-photon-spike-20260930/israel-address-nodes-photon-0.1.0.jsonl", "services/api/results/m4-api-search-20260930-02-corrected.json"],
+  "findings": [
+    {"caseIds": ["P051", "P052"], "sourceNodeId": "2078972536", "sourceStreet": "דיזנגוף", "sourceHouseNumber": "100", "distanceToFrozenReferenceApproxMeters": 12, "cityPresent": false, "explicitEnglishAliasPresent": false, "observed": "Both queries return valid empty responses despite a source house nearby", "causalLimit": "Missing context identified; exact query-matching cause not proven by controlled comparison"},
+    {"explicitStreetEnglishNodes": 45, "nodesWithCity": 28468, "eligibleHouseNodes": 125857, "observed": "Hebrew Rothschild/Jaffa cases match where city exists; English counterparts lack source aliases and return empty"},
+    {"caseId": "P064", "observed": "Street-only intent has no house number, while old provider helper forces layer=house and dump has no street documents", "requiredCorrection": "New source-backed street documents and explicitly reported house-plus-street provider coverage; preserve old trial and frozen criteria"},
+    {"caseId": "P065", "sourceNodeId": "13196140834", "sourceStreet": "הרצל", "sourceHouseNumber": "50", "sourceCity": "חיפה", "distanceMeters": 1088.7193588079695, "frozenToleranceMeters": 800, "observed": "Frozen geometry failure retained; source-versus-ground-truth uncertainty requires independent review, not moving expected coordinates"},
+    {"caseId": "P061", "observed": "English Allenby40 query returns Basel40 approximately2.86km away; matching house number and HTTP200 do not establish street correctness"}
+  ],
+  "complementaryProviderUpperBound": {"method": "Offline union of saved top5 hit flags; not implemented merging or ranked integration", "overall": "12/22", "originalAddresses": "5/15", "unassisted": "7/17", "newOriginalCorpusSuccessesFromPhoton": 0},
+  "nextSlice": {
+    "implementationState": "Delegated to lighter agents; not implemented or tested at capture time",
+    "contextOwner": "photon_spike_prep: new isolated runtime context extractor only",
+    "enrichmentOwner": "search_evaluator_finish: services/api/tools/enrich_photon_addresses.py and focused tests; new provider evaluation helper",
+    "sources": "Same preserved PBF, source highway ways and actual administrative-level8 polygons; reuse existing house export",
+    "rules": "Only explicit source-language aliases, unambiguous street/locality relationships, actual containing polygons respecting holes. Preserve original tags/full IDs/house coordinates/numbers. Record contributing way/relation IDs; ambiguity remains unresolved. No corpus-driven construction, guessed translation or bbox-as-city assignment.",
+    "rootNextAction": "Run extractor once after handoff; transform to a new exclusive dump; verify provenance/counts; import into another new volume under unchanged caps; run focused tests and one unchanged-case provider trial",
+    "apiWiring": "Deferred until grounded address correction improves failed original cell; later captured-generation artifact/identity/language/error contracts remain required"
+  },
+  "d4ArchitectureAccepted": false,
+  "acceptanceCriteriaChanged": false,
+  "providerReplacementApproved": false
+}

@@ -1,0 +1,60 @@
+{
+  "recordedAt": "2026-09-30T19:04:52.451178+00:00",
+  "scope": "Raw accepted-feed translation linkage diagnosis; source read-only, existing reference preserved; not repaired search or H4 approval",
+  "generationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
+  "sourcePath": "C:\\Projects\\OpenTransit\\.runtime\\m1-20260930\\inputs\\israel-public-transportation.zip",
+  "sourceSha256": "8629a73c3f6ff024a78e9b8c83602c09180e13e597b82b98a4377a78f3dd2fd9",
+  "headers": [
+    "trans_id",
+    "lang",
+    "translation"
+  ],
+  "stopCount": 35321,
+  "translationRowCount": 102603,
+  "rowsBySourceLanguage": {
+    "HE": 36955,
+    "AR": 32831,
+    "EN": 32817
+  },
+  "uniqueOriginalTextKeys": 36955,
+  "stopsWithExactOriginalNameTranslationByLanguage": {
+    "he": 32669,
+    "en": 32661,
+    "ar": 32660
+  },
+  "ambiguousEnglishOriginalTextKeys": 0,
+  "diagnosis": "Reference importer preserved lang/translation but discarded legacy trans_id original-text keys. Absence of linked index records does not imply absence of upstream English aliases. No association inferred from row ordering.",
+  "referenceImporterSha256AtDiagnosis": "713e2b288b49f96beace3da37c611c75ad249487c2b3d74c88f8bf6b32d31bbc",
+  "samples": [
+    {
+      "stopId": "13583",
+      "stopName": "דיזנגוף סנטר/דיזנגוף",
+      "translations": {
+        "ar": [
+          "ديزنچوف سنتر/ديزنچوف"
+        ],
+        "en": [
+          "Dizengoff Center/Dizengoff"
+        ],
+        "he": [
+          "דיזנגוף סנטר/דיזנגוף"
+        ]
+      }
+    },
+    {
+      "stopId": "42658",
+      "stopName": "שדרות נעומי שמר/חתני פרס ישראל",
+      "translations": {
+        "ar": [
+          "جادة نعومي شيمر/ حتاني براس يسرائيل"
+        ],
+        "en": [
+          "Naomi Shemer Blvd/Hatane Pras Israel"
+        ],
+        "he": [
+          "שדרות נעומי שמר/חתני פרס ישראל"
+        ]
+      }
+    }
+  ]
+}

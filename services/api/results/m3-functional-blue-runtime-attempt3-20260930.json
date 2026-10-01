@@ -1,0 +1,632 @@
+{
+  "schemaVersion": 1,
+  "evidenceType": "m3-functional-blue-runtime-startup",
+  "capturedAtUtc": "2026-09-30T18:35:25.600209+00:00",
+  "candidate": {
+    "generationDirectory": "C:\\Users\\nhenr\\.codex\\worktrees\\8007\\OpenTransit\\.runtime\\generations\\m3-functional-blue-20260930-attempt3",
+    "generationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
+    "graphTreeSha256": "96c8fb237576a50544a2c03ad1e840c2f12d2b96b9072250c1e66a61c8f7d263",
+    "graphBytes": 701482343,
+    "graphFileCount": 59,
+    "engineDigest": "sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330",
+    "configSha256": "2f75d87301d97b36461bd5826f0c46a1eb375f0da3434f39ee59563f21b6e998",
+    "engineOrigin": "http://127.0.0.1:59081",
+    "volumeName": "opentransit-graph-d5a097a105eb4d739e683ae2e9910c8f",
+    "coverage": {
+      "from": "2026-09-30T00:00:00+03:00",
+      "until": "2026-10-31T00:00:00+02:00"
+    }
+  },
+  "startupOnly": true,
+  "apiOrProbeStarted": false,
+  "acceptanceNote": "Listener startup and namespace connectivity only; no API integration or route probe performed.",
+  "launchProfiles": {
+    "initialFailedProfile": {
+      "path": "C:\\Users\\nhenr\\.codex\\worktrees\\8007\\OpenTransit\\.runtime\\generations\\m3-functional-blue-20260930-attempt3\\start-blue-runtime.ps1",
+      "sha256": "d2f73a2f639d324d72ffe45e77cdd04c65ed1c69e11764d536d2739c5a759394",
+      "reason": "A mistyped Alpine digest was rejected by Docker before any container was created.",
+      "dockerError": "manifest for alpine@sha256:d9e853e87e55526f6b2917df91a2115c36dd7c696a35be12163d44e2e6a2b6bc not found"
+    },
+    "correctedProfile": {
+      "path": "C:\\Users\\nhenr\\.codex\\worktrees\\8007\\OpenTransit\\.runtime\\generations\\m3-functional-blue-20260930-attempt3\\start-blue-runtime-attempt3-corrected.ps1",
+      "sha256": "bede48610b42a82cfd337e8cefbdfe21d97fea0d00eb4e5ba18671b02674322d",
+      "anchorImage": "alpine:3.20",
+      "motisImage": "ghcr.io/motis-project/motis@sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330"
+    }
+  },
+  "containers": {
+    "anchor": {
+      "command": [
+        "docker",
+        "inspect",
+        "opentransit-local-net-m3-attempt3"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        {
+          "Id": "54feb2d8e2bfe271a1c5cfafa24a79038a036f9c995d845160f7d670d6ca4dfa",
+          "Created": "2026-09-30T18:34:06.834787129Z",
+          "Path": "sleep",
+          "Args": [
+            "infinity"
+          ],
+          "State": {
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 9027,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2026-09-30T18:34:06.927071385Z",
+            "FinishedAt": "0001-01-01T00:00:00Z"
+          },
+          "Image": "sha256:bf8527eb54c3680e728d5b4b383a8ba730d72dae7236fbc8dff97ed6b224a731",
+          "ResolvConfPath": "/var/lib/docker/containers/54feb2d8e2bfe271a1c5cfafa24a79038a036f9c995d845160f7d670d6ca4dfa/resolv.conf",
+          "HostnamePath": "/var/lib/docker/containers/54feb2d8e2bfe271a1c5cfafa24a79038a036f9c995d845160f7d670d6ca4dfa/hostname",
+          "HostsPath": "/var/lib/docker/containers/54feb2d8e2bfe271a1c5cfafa24a79038a036f9c995d845160f7d670d6ca4dfa/hosts",
+          "LogPath": "/var/lib/docker/containers/54feb2d8e2bfe271a1c5cfafa24a79038a036f9c995d845160f7d670d6ca4dfa/54feb2d8e2bfe271a1c5cfafa24a79038a036f9c995d845160f7d670d6ca4dfa-json.log",
+          "Name": "/opentransit-local-net-m3-attempt3",
+          "RestartCount": 0,
+          "Driver": "overlay2",
+          "Platform": "linux",
+          "MountLabel": "",
+          "ProcessLabel": "",
+          "AppArmorProfile": "",
+          "ExecIDs": null,
+          "HostConfig": {
+            "Binds": null,
+            "ContainerIDFile": "",
+            "LogConfig": {
+              "Type": "json-file",
+              "Config": {}
+            },
+            "NetworkMode": "bridge",
+            "PortBindings": {
+              "8000/tcp": [
+                {
+                  "HostIp": "127.0.0.1",
+                  "HostPort": "8002"
+                }
+              ]
+            },
+            "RestartPolicy": {
+              "Name": "no",
+              "MaximumRetryCount": 0
+            },
+            "AutoRemove": false,
+            "VolumeDriver": "",
+            "VolumesFrom": null,
+            "ConsoleSize": [
+              0,
+              0
+            ],
+            "CapAdd": null,
+            "CapDrop": null,
+            "CgroupnsMode": "host",
+            "Dns": [],
+            "DnsOptions": [],
+            "DnsSearch": [],
+            "ExtraHosts": null,
+            "GroupAdd": null,
+            "IpcMode": "private",
+            "Cgroup": "",
+            "Links": null,
+            "OomScoreAdj": 0,
+            "PidMode": "",
+            "Privileged": false,
+            "PublishAllPorts": false,
+            "ReadonlyRootfs": false,
+            "SecurityOpt": null,
+            "UTSMode": "",
+            "UsernsMode": "",
+            "ShmSize": 67108864,
+            "Runtime": "runc",
+            "Isolation": "",
+            "CpuShares": 0,
+            "Memory": 67108864,
+            "NanoCpus": 0,
+            "CgroupParent": "",
+            "BlkioWeight": 0,
+            "BlkioWeightDevice": [],
+            "BlkioDeviceReadBps": [],
+            "BlkioDeviceWriteBps": [],
+            "BlkioDeviceReadIOps": [],
+            "BlkioDeviceWriteIOps": [],
+            "CpuPeriod": 0,
+            "CpuQuota": 0,
+            "CpuRealtimePeriod": 0,
+            "CpuRealtimeRuntime": 0,
+            "CpusetCpus": "",
+            "CpusetMems": "",
+            "Devices": [],
+            "DeviceCgroupRules": null,
+            "DeviceRequests": null,
+            "MemoryReservation": 0,
+            "MemorySwap": 134217728,
+            "MemorySwappiness": null,
+            "OomKillDisable": false,
+            "PidsLimit": null,
+            "Ulimits": [],
+            "CpuCount": 0,
+            "CpuPercent": 0,
+            "IOMaximumIOps": 0,
+            "IOMaximumBandwidth": 0,
+            "MaskedPaths": [
+              "/proc/asound",
+              "/proc/acpi",
+              "/proc/kcore",
+              "/proc/keys",
+              "/proc/latency_stats",
+              "/proc/timer_list",
+              "/proc/timer_stats",
+              "/proc/sched_debug",
+              "/proc/scsi",
+              "/sys/firmware",
+              "/sys/devices/virtual/powercap"
+            ],
+            "ReadonlyPaths": [
+              "/proc/bus",
+              "/proc/fs",
+              "/proc/irq",
+              "/proc/sys",
+              "/proc/sysrq-trigger"
+            ]
+          },
+          "GraphDriver": {
+            "Data": {
+              "LowerDir": "/var/lib/docker/overlay2/a8592de0e102a0e9f9fa257cc9b986cf179096b989ddcb906637ca35a53ed844-init/diff:/var/lib/docker/overlay2/4381a3fc0f247bfd9bb8fb8423bf88736dc8759095805153877229888bc3ffec/diff",
+              "MergedDir": "/var/lib/docker/overlay2/a8592de0e102a0e9f9fa257cc9b986cf179096b989ddcb906637ca35a53ed844/merged",
+              "UpperDir": "/var/lib/docker/overlay2/a8592de0e102a0e9f9fa257cc9b986cf179096b989ddcb906637ca35a53ed844/diff",
+              "WorkDir": "/var/lib/docker/overlay2/a8592de0e102a0e9f9fa257cc9b986cf179096b989ddcb906637ca35a53ed844/work"
+            },
+            "Name": "overlay2"
+          },
+          "Mounts": [],
+          "Config": {
+            "Hostname": "54feb2d8e2bf",
+            "Domainname": "",
+            "User": "",
+            "AttachStdin": false,
+            "AttachStdout": false,
+            "AttachStderr": false,
+            "ExposedPorts": {
+              "8000/tcp": {}
+            },
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+              "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+            ],
+            "Cmd": [
+              "sleep",
+              "infinity"
+            ],
+            "Image": "alpine:3.20",
+            "Volumes": null,
+            "WorkingDir": "/",
+            "Entrypoint": null,
+            "OnBuild": null,
+            "Labels": {}
+          },
+          "NetworkSettings": {
+            "Bridge": "",
+            "SandboxID": "ea6b2749f8b9f78c8ea920a2d9cf0b38e70577ed30eafa56956af0a9e7bb62a1",
+            "SandboxKey": "/var/run/docker/netns/ea6b2749f8b9",
+            "Ports": {
+              "8000/tcp": [
+                {
+                  "HostIp": "127.0.0.1",
+                  "HostPort": "8002"
+                }
+              ]
+            },
+            "HairpinMode": false,
+            "LinkLocalIPv6Address": "",
+            "LinkLocalIPv6PrefixLen": 0,
+            "SecondaryIPAddresses": null,
+            "SecondaryIPv6Addresses": null,
+            "EndpointID": "34f181a3eacf1817cfbcb124079a26cc5c1fb92811f08020ebe101d1167f4c2a",
+            "Gateway": "172.17.0.1",
+            "GlobalIPv6Address": "",
+            "GlobalIPv6PrefixLen": 0,
+            "IPAddress": "172.17.0.2",
+            "IPPrefixLen": 16,
+            "IPv6Gateway": "",
+            "MacAddress": "02:42:ac:11:00:02",
+            "Networks": {
+              "bridge": {
+                "IPAMConfig": null,
+                "Links": null,
+                "Aliases": null,
+                "MacAddress": "02:42:ac:11:00:02",
+                "DriverOpts": null,
+                "NetworkID": "203603b2e7bbb4400c4fa5a3fbe3ead0624173f93267871ccc9268193bdbf4ff",
+                "EndpointID": "34f181a3eacf1817cfbcb124079a26cc5c1fb92811f08020ebe101d1167f4c2a",
+                "Gateway": "172.17.0.1",
+                "IPAddress": "172.17.0.2",
+                "IPPrefixLen": 16,
+                "IPv6Gateway": "",
+                "GlobalIPv6Address": "",
+                "GlobalIPv6PrefixLen": 0,
+                "DNSNames": null
+              }
+            }
+          }
+        }
+      ],
+      "stderr": ""
+    },
+    "engine": {
+      "command": [
+        "docker",
+        "inspect",
+        "opentransit-motis-blue-m3-attempt3"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        {
+          "Id": "0ed186ad9d330a5cf102d316d926df069cef4f863837dab16bc80c4a9dc3ddb0",
+          "Created": "2026-09-30T18:34:07.300666035Z",
+          "Path": "/motis",
+          "Args": [
+            "server",
+            "-d",
+            "/data"
+          ],
+          "State": {
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 9079,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2026-09-30T18:34:07.352836846Z",
+            "FinishedAt": "0001-01-01T00:00:00Z"
+          },
+          "Image": "sha256:76a15c76bcff11c6f0595fed9a170284e49c2d9017c47bf4da6879a0e7452598",
+          "ResolvConfPath": "/var/lib/docker/containers/54feb2d8e2bfe271a1c5cfafa24a79038a036f9c995d845160f7d670d6ca4dfa/resolv.conf",
+          "HostnamePath": "/var/lib/docker/containers/54feb2d8e2bfe271a1c5cfafa24a79038a036f9c995d845160f7d670d6ca4dfa/hostname",
+          "HostsPath": "/var/lib/docker/containers/54feb2d8e2bfe271a1c5cfafa24a79038a036f9c995d845160f7d670d6ca4dfa/hosts",
+          "LogPath": "/var/lib/docker/containers/0ed186ad9d330a5cf102d316d926df069cef4f863837dab16bc80c4a9dc3ddb0/0ed186ad9d330a5cf102d316d926df069cef4f863837dab16bc80c4a9dc3ddb0-json.log",
+          "Name": "/opentransit-motis-blue-m3-attempt3",
+          "RestartCount": 0,
+          "Driver": "overlay2",
+          "Platform": "linux",
+          "MountLabel": "",
+          "ProcessLabel": "",
+          "AppArmorProfile": "",
+          "ExecIDs": null,
+          "HostConfig": {
+            "Binds": null,
+            "ContainerIDFile": "",
+            "LogConfig": {
+              "Type": "json-file",
+              "Config": {}
+            },
+            "NetworkMode": "container:54feb2d8e2bfe271a1c5cfafa24a79038a036f9c995d845160f7d670d6ca4dfa",
+            "PortBindings": {},
+            "RestartPolicy": {
+              "Name": "no",
+              "MaximumRetryCount": 0
+            },
+            "AutoRemove": false,
+            "VolumeDriver": "",
+            "VolumesFrom": null,
+            "ConsoleSize": [
+              0,
+              0
+            ],
+            "CapAdd": null,
+            "CapDrop": null,
+            "CgroupnsMode": "host",
+            "Dns": [],
+            "DnsOptions": [],
+            "DnsSearch": [],
+            "ExtraHosts": null,
+            "GroupAdd": null,
+            "IpcMode": "private",
+            "Cgroup": "",
+            "Links": null,
+            "OomScoreAdj": 0,
+            "PidMode": "",
+            "Privileged": false,
+            "PublishAllPorts": false,
+            "ReadonlyRootfs": false,
+            "SecurityOpt": null,
+            "UTSMode": "",
+            "UsernsMode": "",
+            "ShmSize": 67108864,
+            "Runtime": "runc",
+            "Isolation": "",
+            "CpuShares": 0,
+            "Memory": 2147483648,
+            "NanoCpus": 0,
+            "CgroupParent": "",
+            "BlkioWeight": 0,
+            "BlkioWeightDevice": [],
+            "BlkioDeviceReadBps": [],
+            "BlkioDeviceWriteBps": [],
+            "BlkioDeviceReadIOps": [],
+            "BlkioDeviceWriteIOps": [],
+            "CpuPeriod": 0,
+            "CpuQuota": 0,
+            "CpuRealtimePeriod": 0,
+            "CpuRealtimeRuntime": 0,
+            "CpusetCpus": "",
+            "CpusetMems": "",
+            "Devices": [],
+            "DeviceCgroupRules": null,
+            "DeviceRequests": null,
+            "MemoryReservation": 0,
+            "MemorySwap": 4294967296,
+            "MemorySwappiness": null,
+            "OomKillDisable": false,
+            "PidsLimit": null,
+            "Ulimits": [],
+            "CpuCount": 0,
+            "CpuPercent": 0,
+            "IOMaximumIOps": 0,
+            "IOMaximumBandwidth": 0,
+            "Mounts": [
+              {
+                "Type": "volume",
+                "Source": "opentransit-graph-d5a097a105eb4d739e683ae2e9910c8f",
+                "Target": "/data",
+                "ReadOnly": true
+              }
+            ],
+            "MaskedPaths": [
+              "/proc/asound",
+              "/proc/acpi",
+              "/proc/kcore",
+              "/proc/keys",
+              "/proc/latency_stats",
+              "/proc/timer_list",
+              "/proc/timer_stats",
+              "/proc/sched_debug",
+              "/proc/scsi",
+              "/sys/firmware",
+              "/sys/devices/virtual/powercap"
+            ],
+            "ReadonlyPaths": [
+              "/proc/bus",
+              "/proc/fs",
+              "/proc/irq",
+              "/proc/sys",
+              "/proc/sysrq-trigger"
+            ]
+          },
+          "GraphDriver": {
+            "Data": {
+              "LowerDir": "/var/lib/docker/overlay2/f7cb3a3bd89bf4eb64e0e24d634d13a3286f883a9edba6ffd160f8a4ca363d49-init/diff:/var/lib/docker/overlay2/96b73f5cae44c4cbc3eb5e96e372e2f9ef56c7ef687714056f71cd9b3ef7bc8f/diff:/var/lib/docker/overlay2/cacdd47d7a99cafc837e9273ecff3cc93ed3fed5af7742ed69c9f80d722d614e/diff:/var/lib/docker/overlay2/4381a3fc0f247bfd9bb8fb8423bf88736dc8759095805153877229888bc3ffec/diff",
+              "MergedDir": "/var/lib/docker/overlay2/f7cb3a3bd89bf4eb64e0e24d634d13a3286f883a9edba6ffd160f8a4ca363d49/merged",
+              "UpperDir": "/var/lib/docker/overlay2/f7cb3a3bd89bf4eb64e0e24d634d13a3286f883a9edba6ffd160f8a4ca363d49/diff",
+              "WorkDir": "/var/lib/docker/overlay2/f7cb3a3bd89bf4eb64e0e24d634d13a3286f883a9edba6ffd160f8a4ca363d49/work"
+            },
+            "Name": "overlay2"
+          },
+          "Mounts": [
+            {
+              "Type": "volume",
+              "Name": "opentransit-graph-d5a097a105eb4d739e683ae2e9910c8f",
+              "Source": "/var/lib/docker/volumes/opentransit-graph-d5a097a105eb4d739e683ae2e9910c8f/_data",
+              "Destination": "/data",
+              "Driver": "local",
+              "Mode": "z",
+              "RW": false,
+              "Propagation": ""
+            }
+          ],
+          "Config": {
+            "Hostname": "54feb2d8e2bf",
+            "Domainname": "",
+            "User": "motis",
+            "AttachStdin": false,
+            "AttachStdout": false,
+            "AttachStderr": false,
+            "ExposedPorts": {
+              "8080/tcp": {}
+            },
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+              "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+            ],
+            "Cmd": [
+              "/motis",
+              "server",
+              "-d",
+              "/data"
+            ],
+            "Image": "ghcr.io/motis-project/motis@sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330",
+            "Volumes": {
+              "/data": {}
+            },
+            "WorkingDir": "/",
+            "Entrypoint": null,
+            "OnBuild": null,
+            "Labels": {
+              "org.opencontainers.image.created": "2026-08-12T09:07:30.433Z",
+              "org.opencontainers.image.description": "multimodal routing, geocoding, and map tiles",
+              "org.opencontainers.image.licenses": "MIT",
+              "org.opencontainers.image.revision": "061857d38a375248ae62b4ce722753368a75e474",
+              "org.opencontainers.image.source": "https://github.com/motis-project/motis",
+              "org.opencontainers.image.title": "motis",
+              "org.opencontainers.image.url": "https://github.com/motis-project/motis",
+              "org.opencontainers.image.version": "2.11.2"
+            }
+          },
+          "NetworkSettings": {
+            "Bridge": "",
+            "SandboxID": "",
+            "SandboxKey": "",
+            "Ports": {},
+            "HairpinMode": false,
+            "LinkLocalIPv6Address": "",
+            "LinkLocalIPv6PrefixLen": 0,
+            "SecondaryIPAddresses": null,
+            "SecondaryIPv6Addresses": null,
+            "EndpointID": "",
+            "Gateway": "",
+            "GlobalIPv6Address": "",
+            "GlobalIPv6PrefixLen": 0,
+            "IPAddress": "",
+            "IPPrefixLen": 0,
+            "IPv6Gateway": "",
+            "MacAddress": "",
+            "Networks": {}
+          }
+        }
+      ],
+      "stderr": ""
+    },
+    "anchorImage": {
+      "command": [
+        "docker",
+        "image",
+        "inspect",
+        "alpine:3.20"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        {
+          "Id": "sha256:bf8527eb54c3680e728d5b4b383a8ba730d72dae7236fbc8dff97ed6b224a731",
+          "RepoTags": [
+            "alpine:3.20"
+          ],
+          "RepoDigests": [
+            "alpine@sha256:d9e853e87e55526f6b2917df91a2115c36dd7c696a35be12163d44e6e2a4b6bc"
+          ],
+          "Parent": "",
+          "Comment": "buildkit.dockerfile.v0",
+          "Created": "2026-04-16T23:53:26.803599608Z",
+          "DockerVersion": "",
+          "Author": "",
+          "Config": {
+            "Hostname": "",
+            "Domainname": "",
+            "User": "",
+            "AttachStdin": false,
+            "AttachStdout": false,
+            "AttachStderr": false,
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+              "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+            ],
+            "Cmd": [
+              "/bin/sh"
+            ],
+            "Image": "",
+            "Volumes": null,
+            "WorkingDir": "/",
+            "Entrypoint": null,
+            "OnBuild": null,
+            "Labels": null
+          },
+          "Architecture": "amd64",
+          "Os": "linux",
+          "Size": 7807582,
+          "GraphDriver": {
+            "Data": {
+              "MergedDir": "/var/lib/docker/overlay2/4381a3fc0f247bfd9bb8fb8423bf88736dc8759095805153877229888bc3ffec/merged",
+              "UpperDir": "/var/lib/docker/overlay2/4381a3fc0f247bfd9bb8fb8423bf88736dc8759095805153877229888bc3ffec/diff",
+              "WorkDir": "/var/lib/docker/overlay2/4381a3fc0f247bfd9bb8fb8423bf88736dc8759095805153877229888bc3ffec/work"
+            },
+            "Name": "overlay2"
+          },
+          "RootFS": {
+            "Type": "layers",
+            "Layers": [
+              "sha256:08bc4e534116aa76b16015484b82eac51f9a593416feae9296c8a2d4bb7aa4a2"
+            ]
+          },
+          "Metadata": {
+            "LastTagTime": "0001-01-01T00:00:00Z"
+          }
+        }
+      ],
+      "stderr": ""
+    },
+    "allRunning": {
+      "command": [
+        "docker",
+        "ps",
+        "--format",
+        "{{.Names}} {{.Ports}}"
+      ],
+      "exitCode": 0,
+      "stdout": "opentransit-motis-blue-m3-attempt3 \nopentransit-local-net-m3-attempt3 127.0.0.1:8002->8000/tcp\nopentransit-api-1 127.0.0.1:8000->8000/tcp\nopentransit-motis-1 127.0.0.1:58081->8080/tcp\nimagecreator 0.0.0.0:11311->80/tcp\ngpsbabel 0.0.0.0:11987->80/tcp\nelasticsearch 0.0.0.0:9200->9200/tcp, 0.0.0.0:9300->9300/tcp\ntranslation 0.0.0.0:5432->5000/tcp\n",
+      "stderr": ""
+    },
+    "engineLogs": {
+      "command": [
+        "docker",
+        "logs",
+        "opentransit-motis-blue-m3-attempt3"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "2026-09-30T18:34:07Z [info] [server.cc:68] [motis.server] n_threads=16, listening on 127.0.0.1:59081\nlocal link: http://localhost:59081\n"
+    }
+  },
+  "graphVolume": {
+    "command": [
+      "docker",
+      "volume",
+      "inspect",
+      "opentransit-graph-d5a097a105eb4d739e683ae2e9910c8f"
+    ],
+    "exitCode": 0,
+    "stdout": [
+      {
+        "CreatedAt": "2026-09-30T18:20:34Z",
+        "Driver": "local",
+        "Labels": null,
+        "Mountpoint": "/var/lib/docker/volumes/opentransit-graph-d5a097a105eb4d739e683ae2e9910c8f/_data",
+        "Name": "opentransit-graph-d5a097a105eb4d739e683ae2e9910c8f",
+        "Options": null,
+        "Scope": "local"
+      }
+    ],
+    "stderr": ""
+  },
+  "sameNamespaceListenerCheck": {
+    "command": [
+      "docker",
+      "run",
+      "--rm",
+      "--network",
+      "container:opentransit-local-net-m3-attempt3",
+      "--memory",
+      "64m",
+      "alpine:3.20",
+      "/bin/sh",
+      "-c",
+      "busybox nc -z -w 3 127.0.0.1 59081"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "",
+    "target": "127.0.0.1:59081",
+    "result": "connected"
+  },
+  "preflightInspectionLimitation": {
+    "container": "opentransit-volume-check-0b6af579b2f94930adddc3ee0d706e62",
+    "ranWithRm": true,
+    "startupStatusFromManifest": {
+      "exitCode": 0,
+      "imageUserWritable": true
+    },
+    "note": "Preflight container was auto-removed; do not treat missing inspect as live acceptance."
+  }
+}

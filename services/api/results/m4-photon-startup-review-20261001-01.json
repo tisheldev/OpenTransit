@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-10-01T00:00:24Z",
+  "scope": "Bounded gpt-6.1-sol/high planning and exact Photon source/artifact review; no import or serving experiment",
+  "status": "review_complete_runtime_unproven",
+  "artifact": {
+    "photonVersion": "1.3.0",
+    "jarSha256": "a89707c0045e4807b2a1180e132e68e108d998709f48b6c94b98a6e281f571a5",
+    "javaImageDigest": "sha256:628467024d428251da635661936d6180717b1ac1119d41c76d28a03b7293c43c"
+  },
+  "dumpReview": {
+    "stringPlaceIds": "N plus full OSM node ID satisfies documented parser bounds",
+    "explicitLanguageFields": "street:he/en and city:he/en accepted with languages he,en",
+    "unnamedHouseRecords": "house number makes records indexable",
+    "missingCountryCode": "accepted without a country filter; do not add an IL filter",
+    "preservedExtraTags": "unsupported full/postcode/country fields remain extras; not claimed searchable hierarchy",
+    "sourceRescanNeeded": false
+  },
+  "startupReview": {
+    "preferredUser": "10001:10001; only new dedicated volume owned by that user",
+    "dataDirectory": "/photon_data is parent; actual DB /photon_data/photon_data/node_1",
+    "importParallelism": "-j 1",
+    "embeddedBootstrap": "Photon uses OpenSearchRunner Node directly. Reviewer inspected prepared JAR bytecode: inherited Node.validateNodeBeforeAcceptingRequests is return/no-op. No evidenced admin/sysctl or root-bypass requirement.",
+    "importSuccess": "Exit zero insufficient: require successful setup evidence and exact indexed count; Photon catches some import failures and returns",
+    "privilegedContainerNeeded": false
+  },
+  "resourcePlan": {
+    "buildContainerBytes": 2147483648,
+    "buildHeapBytes": 1073741824,
+    "servingPhotonContainerBytes": 1073741824,
+    "servingPhotonSwapTotalBytes": 1073741824,
+    "servingPhotonHeapBytes": 536870912,
+    "oneCandidateBytes": 3825205248,
+    "preservedParentApiBytes": 536870912,
+    "currentTrialTotalBytes": 4362076160,
+    "twoCandidatePlusParentBytes": 8187281408,
+    "aggregateServingCeilingBytes": 8589934592,
+    "excluded": "Separate original M1 and unrelated desktop containers; no overall host capacity claim",
+    "measurementStatus": "limits/planning only; no serving peak, replacement, edge or full-stack acceptance established",
+    "failurePolicy": "Preserve OOM/failure and escalate; do not raise cap to pass"
+  },
+  "primarySources": [
+    "https://github.com/komoot/photon/blob/1.3.0/src/main/java/de/komoot/photon/json/NominatimPlaceDocument.java",
+    "https://github.com/komoot/photon/blob/1.3.0/src/main/java/de/komoot/photon/PhotonDoc.java",
+    "https://github.com/komoot/photon/blob/1.3.0/src/main/java/de/komoot/photon/Server.java",
+    "https://github.com/komoot/photon/blob/1.3.0/src/main/java/de/komoot/photon/App.java"
+  ],
+  "runtimeExperimentsPerformed": false,
+  "acceptanceClaim": false
+}

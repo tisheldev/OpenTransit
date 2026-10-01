@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-09-30T23:46:36+00:00",
+  "scope": "M4.2 bounded Photon preparation only; no Docker import/server, integration, M4 acceptance, or D4 decision",
+  "status": "prepared_pinned_runtime_import_deferred",
+  "baseline": {
+    "resultPath": "services/api/results/m4-api-search-20260930-01.json",
+    "resultSha256": "6353250c80a63ef60488fa1ee4eccf71b2a7ae658c826bdffcd2213612de7c2b",
+    "addresses": {
+      "top1": 6,
+      "top5": 6,
+      "total": 22,
+      "top1Misses": 16,
+      "failedCaseIds": [
+        "P051", "P056", "P058", "P059", "P060", "P061", "P062", "P063", "P064", "P065",
+        "OSM-ADDR-EN-001", "OSM-ADDR-EN-002", "OSM-ADDR-EN-003", "OSM-ADDR-EN-004", "OSM-ADDR-EN-005", "OSM-ADDR-EN-006"
+      ]
+    }
+  },
+  "source": {
+    "path": "C:/Projects/OpenTransit/.runtime/m1-20260930/inputs/israel-and-palestine-latest.osm.pbf",
+    "sha256": "8a34b30f91a63ef9239961ba0e4d660ae22deda2f6da4b85ba4772a6b7c4c74f",
+    "bytes": 119241930,
+    "eligibleDefinition": "OSM node with valid coordinates and non-empty addr:housenumber and addr:street after whitespace cleanup",
+    "priorReadOnlyScanPath": ".runtime/m4-address-corpus-20260930/scan_addresses.py",
+    "priorScanEligibleNodes": 125857,
+    "reader": "pyosmium 4.3.1",
+    "python": "3.14.6"
+  },
+  "export": {
+    "path": ".runtime/m4-photon-spike-20260930/israel-address-nodes-photon-0.1.0.jsonl",
+    "sha256": "6ddee9f640e11b7ec696690663da7d9d571e15a10f5b8836aac14ec73fc6faca",
+    "bytes": 42385602,
+    "format": "Photon-compatible Nominatim Dump File JSONL 0.1.0",
+    "placeCount": 125857,
+    "uniqueOsmNodeCount": 125857,
+    "invalidPlaceCount": 0,
+    "preservation": {
+      "fullOsmNodeIds": true,
+      "sourceWgs84Coordinates": true,
+      "addrHouseNumber": true,
+      "allOriginalAddrTagsAsStringExtraValues": true,
+      "onlyExplicitAddrStreetAndAddrCityMappedToAddressFields": true,
+      "guessedTranslations": false,
+      "inferredAdminHierarchy": false,
+      "wayGeometry": false,
+      "fabricatedPois": false
+    },
+    "tagCountsAcrossExport": {
+      "addr:city": 28468,
+      "addr:city:en": 23,
+      "addr:city:he": 2,
+      "addr:city_1": 1,
+      "addr:country": 195,
+      "addr:country:IL": 1,
+      "addr:flats": 4,
+      "addr:floor": 7,
+      "addr:full": 1,
+      "addr:housename": 46,
+      "addr:housenumber": 125857,
+      "addr:interpolation": 2,
+      "addr:neighbourhood": 7,
+      "addr:place": 2,
+      "addr:postcode": 1424,
+      "addr:street": 125857,
+      "addr:street:ar": 2,
+      "addr:street:en": 45,
+      "addr:street:he": 2,
+      "addr:street_1": 1,
+      "addr:suburb": 11,
+      "addr:unit": 12
+    }
+  },
+  "validation": {
+    "command": "C:/Projects/OpenTransit/services/api/.venv/Scripts/python.exe .runtime/m4-photon-spike-20260930/verify_photon_dump.py",
+    "validatedPreparedOutputOnly": true,
+    "sourcePbfReread": false,
+    "jsonLines": 125858,
+    "uniqueNodeIds": true,
+    "allRecordsParse": true,
+    "invalidPlaces": 0,
+    "powershellImportAndServeScriptParseErrors": 0
+  },
+  "runtime": {
+    "photonVersion": "1.3.0",
+    "photonReleaseUrl": "https://github.com/komoot/photon/releases/tag/1.3.0",
+    "photonJarUrlExpected": "https://github.com/komoot/photon/releases/download/1.3.0/photon-1.3.0.jar",
+    "photonJarSha256": "a89707c0045e4807b2a1180e132e68e108d998709f48b6c94b98a6e281f571a5",
+    "photonJarBytes": 98219380,
+    "photonJarDownloaded": true,
+    "photonReleaseMetadataUrl": "https://api.github.com/repos/komoot/photon/releases/tags/1.3.0",
+    "javaImage": "eclipse-temurin:21.0.12.1_1-jre",
+    "javaImagePlatform": "linux/amd64",
+    "javaImageDigest": "sha256:628467024d428251da635661936d6180717b1ac1119d41c76d28a03b7293c43c",
+    "javaImageDownloaded": true,
+    "javaImageDigestSource": "https://hub.docker.com/v2/repositories/library/eclipse-temurin/tags?page_size=100&name=21.0.12",
+    "javaImageLocalConfigId": "sha256:a357909fafe361a99d858524d3730be9686b8045d2a8edd7bc1a8eb74db69294",
+    "javaReleaseUrl": "https://github.com/adoptium/temurin21-binaries/releases/tag/jdk-21.0.12.1%2B1",
+    "initialUnprivilegedNetworkError": "Configured proxy at 127.0.0.1:9 refused connections; retrying with the approved elevated route succeeded.",
+    "preparedImportScript": ".runtime/m4-photon-spike-20260930/import_photon.ps1",
+    "preparedServeScript": ".runtime/m4-photon-spike-20260930/serve_photon.ps1",
+    "volumeName": "opentransit-photon-addressnodes-m4-20260930",
+    "importSafety": "refuses an existing volume; creates a dedicated empty volume; failed attempts retain the volume; import runs with network none",
+    "serveSafety": "requires a pre-existing API network; loopback-only host port; does not create/remove networks or volumes",
+    "proposedContainerMemoryBytes": 2147483648,
+    "proposedJavaHeapBytes": 1073741824,
+    "budgetStatus": "proposal_only; root session must enforce aggregate <= 8 GiB including overlap before launch",
+    "dockerImportRan": false,
+    "dockerServerRan": false,
+    "containersOrNetworksMutated": false,
+    "existingVolumesMutated": false
+  },
+  "primaryDocumentation": [
+    "https://github.com/komoot/photon/blob/1.3.0/docs/json-dump-format-0.1.0.md",
+    "https://github.com/komoot/photon/blob/1.3.0/docs/usage.md",
+    "https://github.com/komoot/photon/blob/1.3.0/docs/api-v1.md"
+  ],
+  "preparationArtifacts": {
+    "exportScriptSha256": "b072c8172912da5df92cc1dd5451c1cb4d4ef05a3f9c2836c3e10cbf8d394795",
+    "validatorScriptSha256": "3510d0af18a46bef505a3f8d966c1211e6fe86ee8912852c54adf5f6d2a9d934",
+    "importScriptSha256": "02df40381104f046f144fdff5d98cf77ebec01b3aa13bc7259baeff82f0a2537",
+    "serveScriptSha256": "0b17c7e20e806a89e0878b40c8dfb8c2933f80fb1d9e586ed3cc2703c48a7831",
+    "readmeSha256": "2e7a854672a4e76ef3837f20c3ff3a62d655dac75e5d3be60d4862a1d71877d8"
+  },
+  "interpretation": "The full eligible address-node dump, verified Photon JAR, cached digest-pinned Java image, and guarded import/serve commands are prepared. The actual same-host, budgeted import/serve experiment remains outstanding. This evidence is not M4 acceptance, H4 approval, or D4 architecture acceptance."
+}

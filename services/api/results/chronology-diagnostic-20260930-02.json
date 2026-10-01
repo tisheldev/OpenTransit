@@ -1,0 +1,5825 @@
+{
+  "kind": "read-only chronology blocker diagnosis",
+  "createdAtUtc": "2026-09-30T12:29:32.633532+00:00",
+  "sourceArchive": "C:\\Projects\\OpenTransit\\.runtime\\m1-20260930\\inputs\\israel-public-transportation.zip",
+  "sourceSha256": "8629a73c3f6ff024a78e9b8c83602c09180e13e597b82b98a4377a78f3dd2fd9",
+  "sourceBytes": 171085310,
+  "feedWindow": {
+    "from": "2026-09-30",
+    "through": "2026-10-30"
+  },
+  "method": "Streamed exact preserved ZIP stop_times into temporary disk-backed SQLite; compared current arrival (or departure if absent) with prior departure (or arrival if absent) after ordering by full trip_id and stop_sequence. Count summaries cover all rows; all affected trip IDs (168) are retained. The source ZIP remained read-only and the temporary spool was removed. Active service dates were derived from calendar.txt and calendar_dates.txt.",
+  "specReferences": [
+    "https://gtfs.org/documentation/schedule/reference/",
+    "https://gtfs-validator.mobilitydata.org/rules.html"
+  ],
+  "specObservation": "GTFS Schedule reference defines stop_sequence as increasing along a trip and requires after-midnight service-day times to be encoded above 24:00:00; its stop_times table does not directly state a monotonic-time rule. MobilityData validator documentation describes a stop arrival preceding the prior departure as backwards time travel, but marks the historic validator rule deprecated. Treat these as distinct: raw evidence proves decreasing times by stop_sequence; the project gate still needs an explicit product policy.",
+  "elapsedSeconds": 77.148,
+  "summary": {
+    "stopTimeRows": 16079349,
+    "eventCount": 832,
+    "affectedTripCount": 168,
+    "affectedTripCountActiveInImportWindow": 111,
+    "affectedTripCountDormantDefinitions": 57,
+    "eventEligibility": {
+      "dormant": 281,
+      "active_import_window": 551
+    },
+    "regressionMagnitudeSeconds": {
+      "<=60s": 832
+    },
+    "minRegressionSeconds": 2,
+    "timeOfDayClasses": {
+      "both_under24": 832
+    },
+    "sequenceAdjacency": {
+      "numeric_neighbors": 832
+    },
+    "sourceFileOrder": {
+      "current_source_line_before_previous": 832
+    },
+    "agencyEventCounts": {
+      "15": 830,
+      "3": 2
+    },
+    "topRoutesByEventCount": [
+      {
+        "agencyId": "15",
+        "routeId": "957",
+        "events": 830
+      },
+      {
+        "agencyId": "3",
+        "routeId": "19142",
+        "events": 2
+      }
+    ],
+    "sequencePairCounts": {
+      "4->5": 166,
+      "5->6": 166,
+      "8->9": 166,
+      "9->10": 166,
+      "10->11": 166,
+      "3->4": 2
+    },
+    "baseTripGroups": {
+      "211997": {
+        "affectedTripCount": 5,
+        "events": 25,
+        "routes": [
+          "957"
+        ],
+        "agencies": [
+          "15"
+        ],
+        "serviceIds": [
+          "10408",
+          "10409",
+          "10410",
+          "33208",
+          "33598"
+        ]
+      },
+      "211998": {
+        "affectedTripCount": 1,
+        "events": 5,
+        "routes": [
+          "957"
+        ],
+        "agencies": [
+          "15"
+        ],
+        "serviceIds": [
+          "25720"
+        ]
+      },
+      "212002": {
+        "affectedTripCount": 3,
+        "events": 15,
+        "routes": [
+          "957"
+        ],
+        "agencies": [
+          "15"
+        ],
+        "serviceIds": [
+          "25720",
+          "33208",
+          "33598"
+        ]
+      },
+      "212003": {
+        "affectedTripCount": 3,
+        "events": 15,
+        "routes": [
+          "957"
+        ],
+        "agencies": [
+          "15"
+        ],
+        "serviceIds": [
+          "10408",
+          "10409",
+          "10410"
+        ]
+      },
+      "212019": {
+        "affectedTripCount": 1,
+        "events": 5,
+        "routes": [
+          "957"
+        ],
+        "agencies": [
+          "15"
+        ],
+        "serviceIds": [
+          "25720"
+        ]
+      },
+      "212021": {
+        "affectedTripCount": 1,
+        "events": 5,
+        "routes": [
+          "957"
+        ],
+        "agencies": [
+          "15"
+        ],
+        "serviceIds": [
+          "25720"
+        ]
+      },
+      "212024": {
+        "affectedTripCount": 1,
+        "events": 5,
+        "routes": [
+          "957"
+        ],
+        "agencies": [
+          "15"
+        ],
+        "serviceIds": [
+          "25720"
+        ]
+      },
+      "212033": {
+        "affectedTripCount": 6,
+        "events": 30,
+        "routes": [
+          "957"
+        ],
+        "agencies": [
+          "15"
+        ],
+        "serviceIds": [
+          "10408",
+          "10409",
+          "10410",
+          "25720",
+          "33208",
+          "33598"
+        ]
+      },
+      "212037": {
+        "affectedTripCount": 5,
+        "events": 25,
+        "routes": [
+          "957"
+        ],
+        "agencies": [
+          "15"
+        ],
+        "serviceIds": [
+          "10408",
+          "10409",
+          "10410",
+          "33208",
+          "33598"
+        ]
+      },
+      "212041": {
+        "affectedTripCount": 1,
+        "events": 5,
+        "routes": [
+          "957"
+        ],
+        "agencies": [
+          "15"
+        ],
+        "serviceIds": [
+          "25720"
+        ]
+      },
+      "218743": {
+        "affectedTripCount": 6,
+        "events": 30,
+        "routes": [
+          "957"
+        ],
+        "agencies": [
+          "15"
+        ],
+        "serviceIds": [
+          "10408",
+          "10409",
+          "10410",
+          "25720",
+          "33208",
+          "33598"
+        ]
+      },
+      "24680439": {
+        "affectedTripCount": 2,
+        "events": 2,
+        "routes": [
+          "19142"
+        ],
+        "agencies": [
+          "3"
+        ],
+        "serviceIds": [
+          "11559",
+          "11560"
+        ]
+      },
+      "4935657": {
+        "affectedTripCount": 5,
+        "events": 25,
+        "routes": [
+          "957"
+        ],
+        "agencies": [
+          "15"
+        ],
+        "serviceIds": [
+          "10408",
+          "10409",
+          "10410",
+          "33208",
+          "33598"
+        ]
+      },
+      "49723093": {
+        "affectedTripCount": 5,
+        "events": 25,
+        "routes": [
+          "957"
+        ],
+        "agencies": [
+          "15"
+        ],
+        "serviceIds": [
+          "10408",
+          "10409",
+          "10410",
+          "33208",
+          "33598"
+        ]
+      },
+      "49723183": {
+        "affectedTripCount": 6,
+        "events": 30,
+        "routes": [
+          "957"
+        ],
+        "agencies": [
+          "15"
+        ],
+        "serviceIds": [
+          "10408",
+          "10409",
+          "10410",
+          "25720",
+          "33208",
+          "33598"
+        ]
+      },
+      "49723188": {
+        "affectedTripCount": 6,
+        "events": 30,
+        "routes": [
+          "957"
+        ],
+        "agencies": [
+          "15"
+        ],
+        "serviceIds": [
+          "10408",
+          "10409",
+          "10410",
+          "25720",
+          "33208",
+          "33598"
+        ]
+      },
+      "584910442": {
+        "affectedTripCount": 6,
+        "events": 30,
+        "routes": [
+          "957"
+        ],
+        "agencies": [
+          "15"
+        ],
+        "serviceIds": [
+          "10408",
+          "10409",
+          "10410",
+          "25720",
+          "33208",
+          "33598"
+        ]
+      },
+      "584910443": {
+        "affectedTripCount": 6,
+        "events": 30,
+        "routes": [
+          "957"
+        ],
+        "agencies": [
+          "15"
+        ],
+        "serviceIds": [
+          "10408",
+          "10409",
+          "10410",
+          "25720",
+          "33208",
+          "33598"
+        ]
+      },
+      "584910444": {
+        "affectedTripCount": 1,
+        "events": 5,
+        "routes": [
+          "957"
+        ],
+        "agencies": [
+          "15"
+        ],
+        "serviceIds": [
+          "25720"
+        ]
+      },
+      "584910445": {
+        "affectedTripCount": 6,
+        "events": 30,
+        "routes": [
+          "957"
+        ],
+        "agencies": [
+          "15"
+        ],
+        "serviceIds": [
+          "10408",
+          "10409",
+          "10410",
+          "25720",
+          "33208",
+          "33598"
+        ]
+      },
+      "584910446": {
+        "affectedTripCount": 1,
+        "events": 5,
+        "routes": [
+          "957"
+        ],
+        "agencies": [
+          "15"
+        ],
+        "serviceIds": [
+          "25720"
+        ]
+      },
+      "584910451": {
+        "affectedTripCount": 1,
+        "events": 5,
+        "routes": [
+          "957"
+        ],
+        "agencies": [
+          "15"
+        ],
+        "serviceIds": [
+          "25720"
+        ]
+      },
+      "585262567": {
+        "affectedTripCount": 1,
+        "events": 5,
+        "routes": [
+          "957"
+        ],
+        "agencies": [
+          "15"
+        ],
+        "serviceIds": [
+          "25720"
+        ]
+      },
+      "585262568": {
+        "affectedTripCount": 5,
+        "events": 25,
+        "routes": [
+          "957"
+        ],
+        "agencies": [
+          "15"
+        ],
+        "serviceIds": [
+          "10408",
+          "10409",
+          "10410",
+          "33208",
+          "33598"
+        ]
+      },
+      "585262569": {
+        "affectedTripCount": 5,
+        "events": 25,
+        "routes": [
+          "957"
+        ],
+        "agencies": [
+          "15"
+        ],
+        "serviceIds": [
+          "10408",
+          "10409",
+          "10410",
+          "33208",
+          "33598"
+        ]
+      },
+      "585262570": {
+        "affectedTripCount": 6,
+        "events": 30,
+        "routes": [
+          "957"
+        ],
+        "agencies": [
+          "15"
+        ],
+        "serviceIds": [
+          "10408",
+          "10409",
+          "10410",
+          "25720",
+          "33208",
+          "33598"
+        ]
+      },
+      "585262571": {
+        "affectedTripCount": 1,
+        "events": 5,
+        "routes": [
+          "957"
+        ],
+        "agencies": [
+          "15"
+        ],
+        "serviceIds": [
+          "25720"
+        ]
+      },
+      "585262572": {
+        "affectedTripCount": 5,
+        "events": 25,
+        "routes": [
+          "957"
+        ],
+        "agencies": [
+          "15"
+        ],
+        "serviceIds": [
+          "10408",
+          "10409",
+          "10410",
+          "33208",
+          "33598"
+        ]
+      },
+      "585890373": {
+        "affectedTripCount": 6,
+        "events": 30,
+        "routes": [
+          "957"
+        ],
+        "agencies": [
+          "15"
+        ],
+        "serviceIds": [
+          "10408",
+          "10409",
+          "10410",
+          "25720",
+          "33208",
+          "33598"
+        ]
+      },
+      "585893837": {
+        "affectedTripCount": 3,
+        "events": 15,
+        "routes": [
+          "957"
+        ],
+        "agencies": [
+          "15"
+        ],
+        "serviceIds": [
+          "25720",
+          "33208",
+          "33598"
+        ]
+      },
+      "585893846": {
+        "affectedTripCount": 6,
+        "events": 30,
+        "routes": [
+          "957"
+        ],
+        "agencies": [
+          "15"
+        ],
+        "serviceIds": [
+          "10408",
+          "10409",
+          "10410",
+          "25720",
+          "33208",
+          "33598"
+        ]
+      },
+      "585893853": {
+        "affectedTripCount": 6,
+        "events": 30,
+        "routes": [
+          "957"
+        ],
+        "agencies": [
+          "15"
+        ],
+        "serviceIds": [
+          "10408",
+          "10409",
+          "10410",
+          "25720",
+          "33208",
+          "33598"
+        ]
+      },
+      "585893859": {
+        "affectedTripCount": 6,
+        "events": 30,
+        "routes": [
+          "957"
+        ],
+        "agencies": [
+          "15"
+        ],
+        "serviceIds": [
+          "10408",
+          "10409",
+          "10410",
+          "25720",
+          "33208",
+          "33598"
+        ]
+      },
+      "586222747": {
+        "affectedTripCount": 5,
+        "events": 25,
+        "routes": [
+          "957"
+        ],
+        "agencies": [
+          "15"
+        ],
+        "serviceIds": [
+          "10408",
+          "10409",
+          "10410",
+          "33208",
+          "33598"
+        ]
+      },
+      "586222748": {
+        "affectedTripCount": 5,
+        "events": 25,
+        "routes": [
+          "957"
+        ],
+        "agencies": [
+          "15"
+        ],
+        "serviceIds": [
+          "10408",
+          "10409",
+          "10410",
+          "33208",
+          "33598"
+        ]
+      },
+      "586222749": {
+        "affectedTripCount": 5,
+        "events": 25,
+        "routes": [
+          "957"
+        ],
+        "agencies": [
+          "15"
+        ],
+        "serviceIds": [
+          "10408",
+          "10409",
+          "10410",
+          "33208",
+          "33598"
+        ]
+      },
+      "586222750": {
+        "affectedTripCount": 5,
+        "events": 25,
+        "routes": [
+          "957"
+        ],
+        "agencies": [
+          "15"
+        ],
+        "serviceIds": [
+          "10408",
+          "10409",
+          "10410",
+          "33208",
+          "33598"
+        ]
+      },
+      "586222751": {
+        "affectedTripCount": 5,
+        "events": 25,
+        "routes": [
+          "957"
+        ],
+        "agencies": [
+          "15"
+        ],
+        "serviceIds": [
+          "10408",
+          "10409",
+          "10410",
+          "33208",
+          "33598"
+        ]
+      },
+      "586222752": {
+        "affectedTripCount": 5,
+        "events": 25,
+        "routes": [
+          "957"
+        ],
+        "agencies": [
+          "15"
+        ],
+        "serviceIds": [
+          "10408",
+          "10409",
+          "10410",
+          "33208",
+          "33598"
+        ]
+      },
+      "586222753": {
+        "affectedTripCount": 5,
+        "events": 25,
+        "routes": [
+          "957"
+        ],
+        "agencies": [
+          "15"
+        ],
+        "serviceIds": [
+          "10408",
+          "10409",
+          "10410",
+          "33208",
+          "33598"
+        ]
+      },
+      "586222754": {
+        "affectedTripCount": 5,
+        "events": 25,
+        "routes": [
+          "957"
+        ],
+        "agencies": [
+          "15"
+        ],
+        "serviceIds": [
+          "10408",
+          "10409",
+          "10410",
+          "33208",
+          "33598"
+        ]
+      }
+    },
+    "suffixDateCoincidesWithActiveWindowDate": {
+      "testedDistinctAffectedTrips": 168,
+      "coincidentDistinctAffectedTrips": 83,
+      "interpretation": "diagnostic coincidence only; no suffix semantics assumed"
+    },
+    "duplicateTripSequenceRows": 0,
+    "affectedTripSummaries": [
+      {
+        "tripId": "211997_021026",
+        "baseTripId": "211997",
+        "routeId": "957",
+        "serviceId": "10409",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "211997_041026",
+        "baseTripId": "211997",
+        "routeId": "957",
+        "serviceId": "33208",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-04",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "211997_091026",
+        "baseTripId": "211997",
+        "routeId": "957",
+        "serviceId": "10410",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "211997_111026",
+        "baseTripId": "211997",
+        "routeId": "957",
+        "serviceId": "33598",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-11",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-18",
+          "2026-10-19",
+          "2026-10-20",
+          "2026-10-21",
+          "2026-10-22"
+        ],
+        "serviceActiveDayCountInCalendar": 10,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "211997_231026",
+        "baseTripId": "211997",
+        "routeId": "957",
+        "serviceId": "10408",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-25",
+          "2026-10-26",
+          "2026-10-27",
+          "2026-10-28",
+          "2026-10-29"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "211998_300926",
+        "baseTripId": "211998",
+        "routeId": "957",
+        "serviceId": "25720",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-09-30",
+          "2026-10-01"
+        ],
+        "serviceActiveDayCountInCalendar": 2,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "212002_041026",
+        "baseTripId": "212002",
+        "routeId": "957",
+        "serviceId": "33208",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-04",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "212002_111026",
+        "baseTripId": "212002",
+        "routeId": "957",
+        "serviceId": "33598",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-11",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-18",
+          "2026-10-19",
+          "2026-10-20",
+          "2026-10-21",
+          "2026-10-22"
+        ],
+        "serviceActiveDayCountInCalendar": 10,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "212002_300926",
+        "baseTripId": "212002",
+        "routeId": "957",
+        "serviceId": "25720",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-09-30",
+          "2026-10-01"
+        ],
+        "serviceActiveDayCountInCalendar": 2,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "212003_021026",
+        "baseTripId": "212003",
+        "routeId": "957",
+        "serviceId": "10409",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "212003_091026",
+        "baseTripId": "212003",
+        "routeId": "957",
+        "serviceId": "10410",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "212003_231026",
+        "baseTripId": "212003",
+        "routeId": "957",
+        "serviceId": "10408",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-25",
+          "2026-10-26",
+          "2026-10-27",
+          "2026-10-28",
+          "2026-10-29"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "212019_300926",
+        "baseTripId": "212019",
+        "routeId": "957",
+        "serviceId": "25720",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-09-30",
+          "2026-10-01"
+        ],
+        "serviceActiveDayCountInCalendar": 2,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "212021_300926",
+        "baseTripId": "212021",
+        "routeId": "957",
+        "serviceId": "25720",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-09-30",
+          "2026-10-01"
+        ],
+        "serviceActiveDayCountInCalendar": 2,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "212024_300926",
+        "baseTripId": "212024",
+        "routeId": "957",
+        "serviceId": "25720",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-09-30",
+          "2026-10-01"
+        ],
+        "serviceActiveDayCountInCalendar": 2,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "212033_021026",
+        "baseTripId": "212033",
+        "routeId": "957",
+        "serviceId": "10409",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "212033_041026",
+        "baseTripId": "212033",
+        "routeId": "957",
+        "serviceId": "33208",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-04",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "212033_091026",
+        "baseTripId": "212033",
+        "routeId": "957",
+        "serviceId": "10410",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "212033_111026",
+        "baseTripId": "212033",
+        "routeId": "957",
+        "serviceId": "33598",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-11",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-18",
+          "2026-10-19",
+          "2026-10-20",
+          "2026-10-21",
+          "2026-10-22"
+        ],
+        "serviceActiveDayCountInCalendar": 10,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "212033_231026",
+        "baseTripId": "212033",
+        "routeId": "957",
+        "serviceId": "10408",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-25",
+          "2026-10-26",
+          "2026-10-27",
+          "2026-10-28",
+          "2026-10-29"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "212033_300926",
+        "baseTripId": "212033",
+        "routeId": "957",
+        "serviceId": "25720",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-09-30",
+          "2026-10-01"
+        ],
+        "serviceActiveDayCountInCalendar": 2,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "212037_021026",
+        "baseTripId": "212037",
+        "routeId": "957",
+        "serviceId": "10409",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "212037_041026",
+        "baseTripId": "212037",
+        "routeId": "957",
+        "serviceId": "33208",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-04",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "212037_091026",
+        "baseTripId": "212037",
+        "routeId": "957",
+        "serviceId": "10410",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "212037_111026",
+        "baseTripId": "212037",
+        "routeId": "957",
+        "serviceId": "33598",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-11",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-18",
+          "2026-10-19",
+          "2026-10-20",
+          "2026-10-21",
+          "2026-10-22"
+        ],
+        "serviceActiveDayCountInCalendar": 10,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "212037_231026",
+        "baseTripId": "212037",
+        "routeId": "957",
+        "serviceId": "10408",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-25",
+          "2026-10-26",
+          "2026-10-27",
+          "2026-10-28",
+          "2026-10-29"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "212041_300926",
+        "baseTripId": "212041",
+        "routeId": "957",
+        "serviceId": "25720",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-09-30",
+          "2026-10-01"
+        ],
+        "serviceActiveDayCountInCalendar": 2,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "218743_021026",
+        "baseTripId": "218743",
+        "routeId": "957",
+        "serviceId": "10409",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "218743_041026",
+        "baseTripId": "218743",
+        "routeId": "957",
+        "serviceId": "33208",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-04",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "218743_091026",
+        "baseTripId": "218743",
+        "routeId": "957",
+        "serviceId": "10410",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "218743_111026",
+        "baseTripId": "218743",
+        "routeId": "957",
+        "serviceId": "33598",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-11",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-18",
+          "2026-10-19",
+          "2026-10-20",
+          "2026-10-21",
+          "2026-10-22"
+        ],
+        "serviceActiveDayCountInCalendar": 10,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "218743_231026",
+        "baseTripId": "218743",
+        "routeId": "957",
+        "serviceId": "10408",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-25",
+          "2026-10-26",
+          "2026-10-27",
+          "2026-10-28",
+          "2026-10-29"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "218743_300926",
+        "baseTripId": "218743",
+        "routeId": "957",
+        "serviceId": "25720",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-09-30",
+          "2026-10-01"
+        ],
+        "serviceActiveDayCountInCalendar": 2,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "4935657_021026",
+        "baseTripId": "4935657",
+        "routeId": "957",
+        "serviceId": "10409",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "4935657_041026",
+        "baseTripId": "4935657",
+        "routeId": "957",
+        "serviceId": "33208",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-04",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "4935657_091026",
+        "baseTripId": "4935657",
+        "routeId": "957",
+        "serviceId": "10410",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "4935657_111026",
+        "baseTripId": "4935657",
+        "routeId": "957",
+        "serviceId": "33598",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-11",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-18",
+          "2026-10-19",
+          "2026-10-20",
+          "2026-10-21",
+          "2026-10-22"
+        ],
+        "serviceActiveDayCountInCalendar": 10,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "4935657_231026",
+        "baseTripId": "4935657",
+        "routeId": "957",
+        "serviceId": "10408",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-25",
+          "2026-10-26",
+          "2026-10-27",
+          "2026-10-28",
+          "2026-10-29"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "49723093_021026",
+        "baseTripId": "49723093",
+        "routeId": "957",
+        "serviceId": "10409",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "49723093_041026",
+        "baseTripId": "49723093",
+        "routeId": "957",
+        "serviceId": "33208",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-04",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "49723093_091026",
+        "baseTripId": "49723093",
+        "routeId": "957",
+        "serviceId": "10410",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "49723093_111026",
+        "baseTripId": "49723093",
+        "routeId": "957",
+        "serviceId": "33598",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-11",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-18",
+          "2026-10-19",
+          "2026-10-20",
+          "2026-10-21",
+          "2026-10-22"
+        ],
+        "serviceActiveDayCountInCalendar": 10,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "49723093_231026",
+        "baseTripId": "49723093",
+        "routeId": "957",
+        "serviceId": "10408",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-25",
+          "2026-10-26",
+          "2026-10-27",
+          "2026-10-28",
+          "2026-10-29"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "49723183_021026",
+        "baseTripId": "49723183",
+        "routeId": "957",
+        "serviceId": "10409",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "49723183_041026",
+        "baseTripId": "49723183",
+        "routeId": "957",
+        "serviceId": "33208",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-04",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "49723183_091026",
+        "baseTripId": "49723183",
+        "routeId": "957",
+        "serviceId": "10410",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "49723183_111026",
+        "baseTripId": "49723183",
+        "routeId": "957",
+        "serviceId": "33598",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-11",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-18",
+          "2026-10-19",
+          "2026-10-20",
+          "2026-10-21",
+          "2026-10-22"
+        ],
+        "serviceActiveDayCountInCalendar": 10,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "49723183_231026",
+        "baseTripId": "49723183",
+        "routeId": "957",
+        "serviceId": "10408",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-25",
+          "2026-10-26",
+          "2026-10-27",
+          "2026-10-28",
+          "2026-10-29"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "49723183_300926",
+        "baseTripId": "49723183",
+        "routeId": "957",
+        "serviceId": "25720",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-09-30",
+          "2026-10-01"
+        ],
+        "serviceActiveDayCountInCalendar": 2,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "49723188_021026",
+        "baseTripId": "49723188",
+        "routeId": "957",
+        "serviceId": "10409",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "49723188_041026",
+        "baseTripId": "49723188",
+        "routeId": "957",
+        "serviceId": "33208",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-04",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "49723188_091026",
+        "baseTripId": "49723188",
+        "routeId": "957",
+        "serviceId": "10410",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "49723188_111026",
+        "baseTripId": "49723188",
+        "routeId": "957",
+        "serviceId": "33598",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-11",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-18",
+          "2026-10-19",
+          "2026-10-20",
+          "2026-10-21",
+          "2026-10-22"
+        ],
+        "serviceActiveDayCountInCalendar": 10,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "49723188_231026",
+        "baseTripId": "49723188",
+        "routeId": "957",
+        "serviceId": "10408",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-25",
+          "2026-10-26",
+          "2026-10-27",
+          "2026-10-28",
+          "2026-10-29"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "49723188_300926",
+        "baseTripId": "49723188",
+        "routeId": "957",
+        "serviceId": "25720",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-09-30",
+          "2026-10-01"
+        ],
+        "serviceActiveDayCountInCalendar": 2,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "584910442_021026",
+        "baseTripId": "584910442",
+        "routeId": "957",
+        "serviceId": "10409",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "584910442_041026",
+        "baseTripId": "584910442",
+        "routeId": "957",
+        "serviceId": "33208",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-04",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "584910442_091026",
+        "baseTripId": "584910442",
+        "routeId": "957",
+        "serviceId": "10410",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "584910442_111026",
+        "baseTripId": "584910442",
+        "routeId": "957",
+        "serviceId": "33598",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-11",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-18",
+          "2026-10-19",
+          "2026-10-20",
+          "2026-10-21",
+          "2026-10-22"
+        ],
+        "serviceActiveDayCountInCalendar": 10,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "584910442_231026",
+        "baseTripId": "584910442",
+        "routeId": "957",
+        "serviceId": "10408",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-25",
+          "2026-10-26",
+          "2026-10-27",
+          "2026-10-28",
+          "2026-10-29"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "584910442_300926",
+        "baseTripId": "584910442",
+        "routeId": "957",
+        "serviceId": "25720",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-09-30",
+          "2026-10-01"
+        ],
+        "serviceActiveDayCountInCalendar": 2,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "584910443_021026",
+        "baseTripId": "584910443",
+        "routeId": "957",
+        "serviceId": "10409",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "584910443_041026",
+        "baseTripId": "584910443",
+        "routeId": "957",
+        "serviceId": "33208",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-04",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "584910443_091026",
+        "baseTripId": "584910443",
+        "routeId": "957",
+        "serviceId": "10410",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "584910443_111026",
+        "baseTripId": "584910443",
+        "routeId": "957",
+        "serviceId": "33598",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-11",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-18",
+          "2026-10-19",
+          "2026-10-20",
+          "2026-10-21",
+          "2026-10-22"
+        ],
+        "serviceActiveDayCountInCalendar": 10,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "584910443_231026",
+        "baseTripId": "584910443",
+        "routeId": "957",
+        "serviceId": "10408",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-25",
+          "2026-10-26",
+          "2026-10-27",
+          "2026-10-28",
+          "2026-10-29"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "584910443_300926",
+        "baseTripId": "584910443",
+        "routeId": "957",
+        "serviceId": "25720",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-09-30",
+          "2026-10-01"
+        ],
+        "serviceActiveDayCountInCalendar": 2,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "584910444_300926",
+        "baseTripId": "584910444",
+        "routeId": "957",
+        "serviceId": "25720",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-09-30",
+          "2026-10-01"
+        ],
+        "serviceActiveDayCountInCalendar": 2,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "584910445_021026",
+        "baseTripId": "584910445",
+        "routeId": "957",
+        "serviceId": "10409",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "584910445_041026",
+        "baseTripId": "584910445",
+        "routeId": "957",
+        "serviceId": "33208",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-04",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "584910445_091026",
+        "baseTripId": "584910445",
+        "routeId": "957",
+        "serviceId": "10410",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "584910445_111026",
+        "baseTripId": "584910445",
+        "routeId": "957",
+        "serviceId": "33598",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-11",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-18",
+          "2026-10-19",
+          "2026-10-20",
+          "2026-10-21",
+          "2026-10-22"
+        ],
+        "serviceActiveDayCountInCalendar": 10,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "584910445_231026",
+        "baseTripId": "584910445",
+        "routeId": "957",
+        "serviceId": "10408",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-25",
+          "2026-10-26",
+          "2026-10-27",
+          "2026-10-28",
+          "2026-10-29"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "584910445_300926",
+        "baseTripId": "584910445",
+        "routeId": "957",
+        "serviceId": "25720",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-09-30",
+          "2026-10-01"
+        ],
+        "serviceActiveDayCountInCalendar": 2,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "584910446_300926",
+        "baseTripId": "584910446",
+        "routeId": "957",
+        "serviceId": "25720",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-09-30",
+          "2026-10-01"
+        ],
+        "serviceActiveDayCountInCalendar": 2,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "584910451_300926",
+        "baseTripId": "584910451",
+        "routeId": "957",
+        "serviceId": "25720",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-09-30",
+          "2026-10-01"
+        ],
+        "serviceActiveDayCountInCalendar": 2,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585262567_300926",
+        "baseTripId": "585262567",
+        "routeId": "957",
+        "serviceId": "25720",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-09-30",
+          "2026-10-01"
+        ],
+        "serviceActiveDayCountInCalendar": 2,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585262568_021026",
+        "baseTripId": "585262568",
+        "routeId": "957",
+        "serviceId": "10409",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585262568_041026",
+        "baseTripId": "585262568",
+        "routeId": "957",
+        "serviceId": "33208",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-04",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585262568_091026",
+        "baseTripId": "585262568",
+        "routeId": "957",
+        "serviceId": "10410",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585262568_111026",
+        "baseTripId": "585262568",
+        "routeId": "957",
+        "serviceId": "33598",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-11",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-18",
+          "2026-10-19",
+          "2026-10-20",
+          "2026-10-21",
+          "2026-10-22"
+        ],
+        "serviceActiveDayCountInCalendar": 10,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585262568_231026",
+        "baseTripId": "585262568",
+        "routeId": "957",
+        "serviceId": "10408",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-25",
+          "2026-10-26",
+          "2026-10-27",
+          "2026-10-28",
+          "2026-10-29"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585262569_021026",
+        "baseTripId": "585262569",
+        "routeId": "957",
+        "serviceId": "10409",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585262569_041026",
+        "baseTripId": "585262569",
+        "routeId": "957",
+        "serviceId": "33208",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-04",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585262569_091026",
+        "baseTripId": "585262569",
+        "routeId": "957",
+        "serviceId": "10410",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585262569_111026",
+        "baseTripId": "585262569",
+        "routeId": "957",
+        "serviceId": "33598",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-11",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-18",
+          "2026-10-19",
+          "2026-10-20",
+          "2026-10-21",
+          "2026-10-22"
+        ],
+        "serviceActiveDayCountInCalendar": 10,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585262569_231026",
+        "baseTripId": "585262569",
+        "routeId": "957",
+        "serviceId": "10408",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-25",
+          "2026-10-26",
+          "2026-10-27",
+          "2026-10-28",
+          "2026-10-29"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585262570_021026",
+        "baseTripId": "585262570",
+        "routeId": "957",
+        "serviceId": "10409",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585262570_041026",
+        "baseTripId": "585262570",
+        "routeId": "957",
+        "serviceId": "33208",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-04",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585262570_091026",
+        "baseTripId": "585262570",
+        "routeId": "957",
+        "serviceId": "10410",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585262570_111026",
+        "baseTripId": "585262570",
+        "routeId": "957",
+        "serviceId": "33598",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-11",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-18",
+          "2026-10-19",
+          "2026-10-20",
+          "2026-10-21",
+          "2026-10-22"
+        ],
+        "serviceActiveDayCountInCalendar": 10,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585262570_231026",
+        "baseTripId": "585262570",
+        "routeId": "957",
+        "serviceId": "10408",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-25",
+          "2026-10-26",
+          "2026-10-27",
+          "2026-10-28",
+          "2026-10-29"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585262570_300926",
+        "baseTripId": "585262570",
+        "routeId": "957",
+        "serviceId": "25720",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-09-30",
+          "2026-10-01"
+        ],
+        "serviceActiveDayCountInCalendar": 2,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585262571_300926",
+        "baseTripId": "585262571",
+        "routeId": "957",
+        "serviceId": "25720",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-09-30",
+          "2026-10-01"
+        ],
+        "serviceActiveDayCountInCalendar": 2,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585262572_021026",
+        "baseTripId": "585262572",
+        "routeId": "957",
+        "serviceId": "10409",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585262572_041026",
+        "baseTripId": "585262572",
+        "routeId": "957",
+        "serviceId": "33208",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-04",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585262572_091026",
+        "baseTripId": "585262572",
+        "routeId": "957",
+        "serviceId": "10410",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585262572_111026",
+        "baseTripId": "585262572",
+        "routeId": "957",
+        "serviceId": "33598",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-11",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-18",
+          "2026-10-19",
+          "2026-10-20",
+          "2026-10-21",
+          "2026-10-22"
+        ],
+        "serviceActiveDayCountInCalendar": 10,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585262572_231026",
+        "baseTripId": "585262572",
+        "routeId": "957",
+        "serviceId": "10408",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-25",
+          "2026-10-26",
+          "2026-10-27",
+          "2026-10-28",
+          "2026-10-29"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585890373_021026",
+        "baseTripId": "585890373",
+        "routeId": "957",
+        "serviceId": "10409",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585890373_041026",
+        "baseTripId": "585890373",
+        "routeId": "957",
+        "serviceId": "33208",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-04",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585890373_091026",
+        "baseTripId": "585890373",
+        "routeId": "957",
+        "serviceId": "10410",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585890373_111026",
+        "baseTripId": "585890373",
+        "routeId": "957",
+        "serviceId": "33598",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-11",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-18",
+          "2026-10-19",
+          "2026-10-20",
+          "2026-10-21",
+          "2026-10-22"
+        ],
+        "serviceActiveDayCountInCalendar": 10,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585890373_231026",
+        "baseTripId": "585890373",
+        "routeId": "957",
+        "serviceId": "10408",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-25",
+          "2026-10-26",
+          "2026-10-27",
+          "2026-10-28",
+          "2026-10-29"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585890373_300926",
+        "baseTripId": "585890373",
+        "routeId": "957",
+        "serviceId": "25720",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-09-30",
+          "2026-10-01"
+        ],
+        "serviceActiveDayCountInCalendar": 2,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585893837_041026",
+        "baseTripId": "585893837",
+        "routeId": "957",
+        "serviceId": "33208",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-04",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585893837_111026",
+        "baseTripId": "585893837",
+        "routeId": "957",
+        "serviceId": "33598",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-11",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-18",
+          "2026-10-19",
+          "2026-10-20",
+          "2026-10-21",
+          "2026-10-22"
+        ],
+        "serviceActiveDayCountInCalendar": 10,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585893837_300926",
+        "baseTripId": "585893837",
+        "routeId": "957",
+        "serviceId": "25720",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-09-30",
+          "2026-10-01"
+        ],
+        "serviceActiveDayCountInCalendar": 2,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585893846_021026",
+        "baseTripId": "585893846",
+        "routeId": "957",
+        "serviceId": "10409",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585893846_041026",
+        "baseTripId": "585893846",
+        "routeId": "957",
+        "serviceId": "33208",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-04",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585893846_091026",
+        "baseTripId": "585893846",
+        "routeId": "957",
+        "serviceId": "10410",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585893846_111026",
+        "baseTripId": "585893846",
+        "routeId": "957",
+        "serviceId": "33598",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-11",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-18",
+          "2026-10-19",
+          "2026-10-20",
+          "2026-10-21",
+          "2026-10-22"
+        ],
+        "serviceActiveDayCountInCalendar": 10,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585893846_231026",
+        "baseTripId": "585893846",
+        "routeId": "957",
+        "serviceId": "10408",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-25",
+          "2026-10-26",
+          "2026-10-27",
+          "2026-10-28",
+          "2026-10-29"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585893846_300926",
+        "baseTripId": "585893846",
+        "routeId": "957",
+        "serviceId": "25720",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-09-30",
+          "2026-10-01"
+        ],
+        "serviceActiveDayCountInCalendar": 2,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585893853_021026",
+        "baseTripId": "585893853",
+        "routeId": "957",
+        "serviceId": "10409",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585893853_041026",
+        "baseTripId": "585893853",
+        "routeId": "957",
+        "serviceId": "33208",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-04",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585893853_091026",
+        "baseTripId": "585893853",
+        "routeId": "957",
+        "serviceId": "10410",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585893853_111026",
+        "baseTripId": "585893853",
+        "routeId": "957",
+        "serviceId": "33598",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-11",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-18",
+          "2026-10-19",
+          "2026-10-20",
+          "2026-10-21",
+          "2026-10-22"
+        ],
+        "serviceActiveDayCountInCalendar": 10,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585893853_231026",
+        "baseTripId": "585893853",
+        "routeId": "957",
+        "serviceId": "10408",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-25",
+          "2026-10-26",
+          "2026-10-27",
+          "2026-10-28",
+          "2026-10-29"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585893853_300926",
+        "baseTripId": "585893853",
+        "routeId": "957",
+        "serviceId": "25720",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-09-30",
+          "2026-10-01"
+        ],
+        "serviceActiveDayCountInCalendar": 2,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585893859_021026",
+        "baseTripId": "585893859",
+        "routeId": "957",
+        "serviceId": "10409",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585893859_041026",
+        "baseTripId": "585893859",
+        "routeId": "957",
+        "serviceId": "33208",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-04",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585893859_091026",
+        "baseTripId": "585893859",
+        "routeId": "957",
+        "serviceId": "10410",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585893859_111026",
+        "baseTripId": "585893859",
+        "routeId": "957",
+        "serviceId": "33598",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-11",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-18",
+          "2026-10-19",
+          "2026-10-20",
+          "2026-10-21",
+          "2026-10-22"
+        ],
+        "serviceActiveDayCountInCalendar": 10,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585893859_231026",
+        "baseTripId": "585893859",
+        "routeId": "957",
+        "serviceId": "10408",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-25",
+          "2026-10-26",
+          "2026-10-27",
+          "2026-10-28",
+          "2026-10-29"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "585893859_300926",
+        "baseTripId": "585893859",
+        "routeId": "957",
+        "serviceId": "25720",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-09-30",
+          "2026-10-01"
+        ],
+        "serviceActiveDayCountInCalendar": 2,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "586222747_021026",
+        "baseTripId": "586222747",
+        "routeId": "957",
+        "serviceId": "10409",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "586222747_041026",
+        "baseTripId": "586222747",
+        "routeId": "957",
+        "serviceId": "33208",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-04",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "586222747_091026",
+        "baseTripId": "586222747",
+        "routeId": "957",
+        "serviceId": "10410",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "586222747_111026",
+        "baseTripId": "586222747",
+        "routeId": "957",
+        "serviceId": "33598",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-11",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-18",
+          "2026-10-19",
+          "2026-10-20",
+          "2026-10-21",
+          "2026-10-22"
+        ],
+        "serviceActiveDayCountInCalendar": 10,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "586222747_231026",
+        "baseTripId": "586222747",
+        "routeId": "957",
+        "serviceId": "10408",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-25",
+          "2026-10-26",
+          "2026-10-27",
+          "2026-10-28",
+          "2026-10-29"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "586222748_021026",
+        "baseTripId": "586222748",
+        "routeId": "957",
+        "serviceId": "10409",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "586222748_041026",
+        "baseTripId": "586222748",
+        "routeId": "957",
+        "serviceId": "33208",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-04",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "586222748_091026",
+        "baseTripId": "586222748",
+        "routeId": "957",
+        "serviceId": "10410",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "586222748_111026",
+        "baseTripId": "586222748",
+        "routeId": "957",
+        "serviceId": "33598",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-11",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-18",
+          "2026-10-19",
+          "2026-10-20",
+          "2026-10-21",
+          "2026-10-22"
+        ],
+        "serviceActiveDayCountInCalendar": 10,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "586222748_231026",
+        "baseTripId": "586222748",
+        "routeId": "957",
+        "serviceId": "10408",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-25",
+          "2026-10-26",
+          "2026-10-27",
+          "2026-10-28",
+          "2026-10-29"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "586222749_021026",
+        "baseTripId": "586222749",
+        "routeId": "957",
+        "serviceId": "10409",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "586222749_041026",
+        "baseTripId": "586222749",
+        "routeId": "957",
+        "serviceId": "33208",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-04",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "586222749_091026",
+        "baseTripId": "586222749",
+        "routeId": "957",
+        "serviceId": "10410",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "586222749_111026",
+        "baseTripId": "586222749",
+        "routeId": "957",
+        "serviceId": "33598",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-11",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-18",
+          "2026-10-19",
+          "2026-10-20",
+          "2026-10-21",
+          "2026-10-22"
+        ],
+        "serviceActiveDayCountInCalendar": 10,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "586222749_231026",
+        "baseTripId": "586222749",
+        "routeId": "957",
+        "serviceId": "10408",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-25",
+          "2026-10-26",
+          "2026-10-27",
+          "2026-10-28",
+          "2026-10-29"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "586222750_021026",
+        "baseTripId": "586222750",
+        "routeId": "957",
+        "serviceId": "10409",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "586222750_041026",
+        "baseTripId": "586222750",
+        "routeId": "957",
+        "serviceId": "33208",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-04",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "586222750_091026",
+        "baseTripId": "586222750",
+        "routeId": "957",
+        "serviceId": "10410",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "586222750_111026",
+        "baseTripId": "586222750",
+        "routeId": "957",
+        "serviceId": "33598",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-11",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-18",
+          "2026-10-19",
+          "2026-10-20",
+          "2026-10-21",
+          "2026-10-22"
+        ],
+        "serviceActiveDayCountInCalendar": 10,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "586222750_231026",
+        "baseTripId": "586222750",
+        "routeId": "957",
+        "serviceId": "10408",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-25",
+          "2026-10-26",
+          "2026-10-27",
+          "2026-10-28",
+          "2026-10-29"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "586222751_021026",
+        "baseTripId": "586222751",
+        "routeId": "957",
+        "serviceId": "10409",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "586222751_041026",
+        "baseTripId": "586222751",
+        "routeId": "957",
+        "serviceId": "33208",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-04",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "586222751_091026",
+        "baseTripId": "586222751",
+        "routeId": "957",
+        "serviceId": "10410",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "586222751_111026",
+        "baseTripId": "586222751",
+        "routeId": "957",
+        "serviceId": "33598",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-11",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-18",
+          "2026-10-19",
+          "2026-10-20",
+          "2026-10-21",
+          "2026-10-22"
+        ],
+        "serviceActiveDayCountInCalendar": 10,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "586222751_231026",
+        "baseTripId": "586222751",
+        "routeId": "957",
+        "serviceId": "10408",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-25",
+          "2026-10-26",
+          "2026-10-27",
+          "2026-10-28",
+          "2026-10-29"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "586222752_021026",
+        "baseTripId": "586222752",
+        "routeId": "957",
+        "serviceId": "10409",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "586222752_041026",
+        "baseTripId": "586222752",
+        "routeId": "957",
+        "serviceId": "33208",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-04",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "586222752_091026",
+        "baseTripId": "586222752",
+        "routeId": "957",
+        "serviceId": "10410",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "586222752_111026",
+        "baseTripId": "586222752",
+        "routeId": "957",
+        "serviceId": "33598",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-11",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-18",
+          "2026-10-19",
+          "2026-10-20",
+          "2026-10-21",
+          "2026-10-22"
+        ],
+        "serviceActiveDayCountInCalendar": 10,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "586222752_231026",
+        "baseTripId": "586222752",
+        "routeId": "957",
+        "serviceId": "10408",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-25",
+          "2026-10-26",
+          "2026-10-27",
+          "2026-10-28",
+          "2026-10-29"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "586222753_021026",
+        "baseTripId": "586222753",
+        "routeId": "957",
+        "serviceId": "10409",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "586222753_041026",
+        "baseTripId": "586222753",
+        "routeId": "957",
+        "serviceId": "33208",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-04",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "586222753_091026",
+        "baseTripId": "586222753",
+        "routeId": "957",
+        "serviceId": "10410",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "586222753_111026",
+        "baseTripId": "586222753",
+        "routeId": "957",
+        "serviceId": "33598",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-11",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-18",
+          "2026-10-19",
+          "2026-10-20",
+          "2026-10-21",
+          "2026-10-22"
+        ],
+        "serviceActiveDayCountInCalendar": 10,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "586222753_231026",
+        "baseTripId": "586222753",
+        "routeId": "957",
+        "serviceId": "10408",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-25",
+          "2026-10-26",
+          "2026-10-27",
+          "2026-10-28",
+          "2026-10-29"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "586222754_021026",
+        "baseTripId": "586222754",
+        "routeId": "957",
+        "serviceId": "10409",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "586222754_041026",
+        "baseTripId": "586222754",
+        "routeId": "957",
+        "serviceId": "33208",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-04",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "586222754_091026",
+        "baseTripId": "586222754",
+        "routeId": "957",
+        "serviceId": "10410",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "586222754_111026",
+        "baseTripId": "586222754",
+        "routeId": "957",
+        "serviceId": "33598",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-11",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-18",
+          "2026-10-19",
+          "2026-10-20",
+          "2026-10-21",
+          "2026-10-22"
+        ],
+        "serviceActiveDayCountInCalendar": 10,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "586222754_231026",
+        "baseTripId": "586222754",
+        "routeId": "957",
+        "serviceId": "10408",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-25",
+          "2026-10-26",
+          "2026-10-27",
+          "2026-10-28",
+          "2026-10-29"
+        ],
+        "serviceActiveDayCountInCalendar": 5,
+        "regressionEventCount": 5,
+        "maxRegressionSeconds": 19,
+        "sequencePairs": [
+          "4->5",
+          "5->6",
+          "8->9",
+          "9->10",
+          "10->11"
+        ]
+      },
+      {
+        "tripId": "24680439_031026",
+        "baseTripId": "24680439",
+        "routeId": "19142",
+        "serviceId": "11559",
+        "agencyId": "3",
+        "agencyName": "\u05d0\u05d2\u05d3",
+        "dormantDefinition": true,
+        "activeInImportWindow": false,
+        "activeDatesInImportWindow": [],
+        "serviceActiveDayCountInCalendar": 0,
+        "regressionEventCount": 1,
+        "maxRegressionSeconds": 40,
+        "sequencePairs": [
+          "3->4"
+        ]
+      },
+      {
+        "tripId": "24680439_051026",
+        "baseTripId": "24680439",
+        "routeId": "19142",
+        "serviceId": "11560",
+        "agencyId": "3",
+        "agencyName": "\u05d0\u05d2\u05d3",
+        "dormantDefinition": false,
+        "activeInImportWindow": true,
+        "activeDatesInImportWindow": [
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08",
+          "2026-10-11",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-18",
+          "2026-10-19",
+          "2026-10-20",
+          "2026-10-21",
+          "2026-10-22",
+          "2026-10-25",
+          "2026-10-26",
+          "2026-10-27",
+          "2026-10-28",
+          "2026-10-29"
+        ],
+        "serviceActiveDayCountInCalendar": 19,
+        "regressionEventCount": 1,
+        "maxRegressionSeconds": 40,
+        "sequencePairs": [
+          "3->4"
+        ]
+      }
+    ],
+    "representativeAdjacentPairs": [
+      {
+        "tripId": "211997_021026",
+        "routeId": "957",
+        "serviceId": "10409",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "previousSequence": 4,
+        "sequence": 5,
+        "previousDeparture": "07:14:34",
+        "currentArrival": "07:14:15",
+        "regressionSeconds": 19,
+        "previousStopId": "33944",
+        "previousStopName": "\u05de\u05e7\u05de\u05e6''\u05e8",
+        "stopId": "33957",
+        "stopName": "\u05de\u05d3''\u05d0",
+        "previousSourceLine": 2202708,
+        "sourceLine": 2202706,
+        "activeDatesInImportWindow": [],
+        "dormantDefinition": true,
+        "activeInImportWindow": false
+      },
+      {
+        "tripId": "211997_021026",
+        "routeId": "957",
+        "serviceId": "10409",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "previousSequence": 5,
+        "sequence": 6,
+        "previousDeparture": "07:14:15",
+        "currentArrival": "07:14:09",
+        "regressionSeconds": 6,
+        "previousStopId": "33957",
+        "previousStopName": "\u05de\u05d3''\u05d0",
+        "stopId": "33961",
+        "stopName": "\u05de\u05d9\u05d8\u05d1",
+        "previousSourceLine": 2202706,
+        "sourceLine": 2202705,
+        "activeDatesInImportWindow": [],
+        "dormantDefinition": true,
+        "activeInImportWindow": false
+      },
+      {
+        "tripId": "211997_021026",
+        "routeId": "957",
+        "serviceId": "10409",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "previousSequence": 8,
+        "sequence": 9,
+        "previousDeparture": "07:15:23",
+        "currentArrival": "07:15:15",
+        "regressionSeconds": 8,
+        "previousStopId": "33945",
+        "previousStopName": "\u05d1\u05e1\u05d9\u05e1 \u05e6\u05d9\u05d5\u05d3",
+        "stopId": "33956",
+        "stopName": "\u05de\u05d9\u05e6\u05d2 \u05d7\u05d9\u05dc\u05d5\u05ea",
+        "previousSourceLine": 2202713,
+        "sourceLine": 2202712,
+        "activeDatesInImportWindow": [],
+        "dormantDefinition": true,
+        "activeInImportWindow": false
+      },
+      {
+        "tripId": "211997_021026",
+        "routeId": "957",
+        "serviceId": "10409",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "previousSequence": 9,
+        "sequence": 10,
+        "previousDeparture": "07:15:15",
+        "currentArrival": "07:15:11",
+        "regressionSeconds": 4,
+        "previousStopId": "33956",
+        "previousStopName": "\u05de\u05d9\u05e6\u05d2 \u05d7\u05d9\u05dc\u05d5\u05ea",
+        "stopId": "33954",
+        "stopName": "\u05de\u05e8\u05db\u05d6 \u05d3\u05dc\u05e7",
+        "previousSourceLine": 2202712,
+        "sourceLine": 2202710,
+        "activeDatesInImportWindow": [],
+        "dormantDefinition": true,
+        "activeInImportWindow": false
+      },
+      {
+        "tripId": "211997_021026",
+        "routeId": "957",
+        "serviceId": "10409",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "previousSequence": 10,
+        "sequence": 11,
+        "previousDeparture": "07:15:11",
+        "currentArrival": "07:15:09",
+        "regressionSeconds": 2,
+        "previousStopId": "33954",
+        "previousStopName": "\u05de\u05e8\u05db\u05d6 \u05d3\u05dc\u05e7",
+        "stopId": "33952",
+        "stopName": "\u05de\u05e7\u05e9\u05d7''\u05e8",
+        "previousSourceLine": 2202710,
+        "sourceLine": 2202709,
+        "activeDatesInImportWindow": [],
+        "dormantDefinition": true,
+        "activeInImportWindow": false
+      },
+      {
+        "tripId": "211997_041026",
+        "routeId": "957",
+        "serviceId": "33208",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "previousSequence": 4,
+        "sequence": 5,
+        "previousDeparture": "07:14:34",
+        "currentArrival": "07:14:15",
+        "regressionSeconds": 19,
+        "previousStopId": "33944",
+        "previousStopName": "\u05de\u05e7\u05de\u05e6''\u05e8",
+        "stopId": "33957",
+        "stopName": "\u05de\u05d3''\u05d0",
+        "previousSourceLine": 2202725,
+        "sourceLine": 2202723,
+        "activeDatesInImportWindow": [
+          "2026-10-04",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08"
+        ],
+        "dormantDefinition": false,
+        "activeInImportWindow": true
+      },
+      {
+        "tripId": "211997_041026",
+        "routeId": "957",
+        "serviceId": "33208",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "previousSequence": 5,
+        "sequence": 6,
+        "previousDeparture": "07:14:15",
+        "currentArrival": "07:14:09",
+        "regressionSeconds": 6,
+        "previousStopId": "33957",
+        "previousStopName": "\u05de\u05d3''\u05d0",
+        "stopId": "33961",
+        "stopName": "\u05de\u05d9\u05d8\u05d1",
+        "previousSourceLine": 2202723,
+        "sourceLine": 2202722,
+        "activeDatesInImportWindow": [
+          "2026-10-04",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08"
+        ],
+        "dormantDefinition": false,
+        "activeInImportWindow": true
+      },
+      {
+        "tripId": "211997_041026",
+        "routeId": "957",
+        "serviceId": "33208",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "previousSequence": 8,
+        "sequence": 9,
+        "previousDeparture": "07:15:23",
+        "currentArrival": "07:15:15",
+        "regressionSeconds": 8,
+        "previousStopId": "33945",
+        "previousStopName": "\u05d1\u05e1\u05d9\u05e1 \u05e6\u05d9\u05d5\u05d3",
+        "stopId": "33956",
+        "stopName": "\u05de\u05d9\u05e6\u05d2 \u05d7\u05d9\u05dc\u05d5\u05ea",
+        "previousSourceLine": 2202730,
+        "sourceLine": 2202729,
+        "activeDatesInImportWindow": [
+          "2026-10-04",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08"
+        ],
+        "dormantDefinition": false,
+        "activeInImportWindow": true
+      },
+      {
+        "tripId": "211997_041026",
+        "routeId": "957",
+        "serviceId": "33208",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "previousSequence": 9,
+        "sequence": 10,
+        "previousDeparture": "07:15:15",
+        "currentArrival": "07:15:11",
+        "regressionSeconds": 4,
+        "previousStopId": "33956",
+        "previousStopName": "\u05de\u05d9\u05e6\u05d2 \u05d7\u05d9\u05dc\u05d5\u05ea",
+        "stopId": "33954",
+        "stopName": "\u05de\u05e8\u05db\u05d6 \u05d3\u05dc\u05e7",
+        "previousSourceLine": 2202729,
+        "sourceLine": 2202727,
+        "activeDatesInImportWindow": [
+          "2026-10-04",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08"
+        ],
+        "dormantDefinition": false,
+        "activeInImportWindow": true
+      },
+      {
+        "tripId": "211997_041026",
+        "routeId": "957",
+        "serviceId": "33208",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "previousSequence": 10,
+        "sequence": 11,
+        "previousDeparture": "07:15:11",
+        "currentArrival": "07:15:09",
+        "regressionSeconds": 2,
+        "previousStopId": "33954",
+        "previousStopName": "\u05de\u05e8\u05db\u05d6 \u05d3\u05dc\u05e7",
+        "stopId": "33952",
+        "stopName": "\u05de\u05e7\u05e9\u05d7''\u05e8",
+        "previousSourceLine": 2202727,
+        "sourceLine": 2202726,
+        "activeDatesInImportWindow": [
+          "2026-10-04",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08"
+        ],
+        "dormantDefinition": false,
+        "activeInImportWindow": true
+      },
+      {
+        "tripId": "211997_091026",
+        "routeId": "957",
+        "serviceId": "10410",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "previousSequence": 4,
+        "sequence": 5,
+        "previousDeparture": "07:14:34",
+        "currentArrival": "07:14:15",
+        "regressionSeconds": 19,
+        "previousStopId": "33944",
+        "previousStopName": "\u05de\u05e7\u05de\u05e6''\u05e8",
+        "stopId": "33957",
+        "stopName": "\u05de\u05d3''\u05d0",
+        "previousSourceLine": 2202742,
+        "sourceLine": 2202740,
+        "activeDatesInImportWindow": [],
+        "dormantDefinition": true,
+        "activeInImportWindow": false
+      },
+      {
+        "tripId": "211997_091026",
+        "routeId": "957",
+        "serviceId": "10410",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "previousSequence": 5,
+        "sequence": 6,
+        "previousDeparture": "07:14:15",
+        "currentArrival": "07:14:09",
+        "regressionSeconds": 6,
+        "previousStopId": "33957",
+        "previousStopName": "\u05de\u05d3''\u05d0",
+        "stopId": "33961",
+        "stopName": "\u05de\u05d9\u05d8\u05d1",
+        "previousSourceLine": 2202740,
+        "sourceLine": 2202739,
+        "activeDatesInImportWindow": [],
+        "dormantDefinition": true,
+        "activeInImportWindow": false
+      },
+      {
+        "tripId": "211997_091026",
+        "routeId": "957",
+        "serviceId": "10410",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "previousSequence": 8,
+        "sequence": 9,
+        "previousDeparture": "07:15:23",
+        "currentArrival": "07:15:15",
+        "regressionSeconds": 8,
+        "previousStopId": "33945",
+        "previousStopName": "\u05d1\u05e1\u05d9\u05e1 \u05e6\u05d9\u05d5\u05d3",
+        "stopId": "33956",
+        "stopName": "\u05de\u05d9\u05e6\u05d2 \u05d7\u05d9\u05dc\u05d5\u05ea",
+        "previousSourceLine": 2202747,
+        "sourceLine": 2202746,
+        "activeDatesInImportWindow": [],
+        "dormantDefinition": true,
+        "activeInImportWindow": false
+      },
+      {
+        "tripId": "211997_091026",
+        "routeId": "957",
+        "serviceId": "10410",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "previousSequence": 9,
+        "sequence": 10,
+        "previousDeparture": "07:15:15",
+        "currentArrival": "07:15:11",
+        "regressionSeconds": 4,
+        "previousStopId": "33956",
+        "previousStopName": "\u05de\u05d9\u05e6\u05d2 \u05d7\u05d9\u05dc\u05d5\u05ea",
+        "stopId": "33954",
+        "stopName": "\u05de\u05e8\u05db\u05d6 \u05d3\u05dc\u05e7",
+        "previousSourceLine": 2202746,
+        "sourceLine": 2202744,
+        "activeDatesInImportWindow": [],
+        "dormantDefinition": true,
+        "activeInImportWindow": false
+      },
+      {
+        "tripId": "211997_091026",
+        "routeId": "957",
+        "serviceId": "10410",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "previousSequence": 10,
+        "sequence": 11,
+        "previousDeparture": "07:15:11",
+        "currentArrival": "07:15:09",
+        "regressionSeconds": 2,
+        "previousStopId": "33954",
+        "previousStopName": "\u05de\u05e8\u05db\u05d6 \u05d3\u05dc\u05e7",
+        "stopId": "33952",
+        "stopName": "\u05de\u05e7\u05e9\u05d7''\u05e8",
+        "previousSourceLine": 2202744,
+        "sourceLine": 2202743,
+        "activeDatesInImportWindow": [],
+        "dormantDefinition": true,
+        "activeInImportWindow": false
+      },
+      {
+        "tripId": "211997_111026",
+        "routeId": "957",
+        "serviceId": "33598",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "previousSequence": 4,
+        "sequence": 5,
+        "previousDeparture": "07:14:34",
+        "currentArrival": "07:14:15",
+        "regressionSeconds": 19,
+        "previousStopId": "33944",
+        "previousStopName": "\u05de\u05e7\u05de\u05e6''\u05e8",
+        "stopId": "33957",
+        "stopName": "\u05de\u05d3''\u05d0",
+        "previousSourceLine": 2202759,
+        "sourceLine": 2202757,
+        "activeDatesInImportWindow": [
+          "2026-10-11",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-18",
+          "2026-10-19",
+          "2026-10-20",
+          "2026-10-21",
+          "2026-10-22"
+        ],
+        "dormantDefinition": false,
+        "activeInImportWindow": true
+      },
+      {
+        "tripId": "211997_111026",
+        "routeId": "957",
+        "serviceId": "33598",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "previousSequence": 5,
+        "sequence": 6,
+        "previousDeparture": "07:14:15",
+        "currentArrival": "07:14:09",
+        "regressionSeconds": 6,
+        "previousStopId": "33957",
+        "previousStopName": "\u05de\u05d3''\u05d0",
+        "stopId": "33961",
+        "stopName": "\u05de\u05d9\u05d8\u05d1",
+        "previousSourceLine": 2202757,
+        "sourceLine": 2202756,
+        "activeDatesInImportWindow": [
+          "2026-10-11",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-18",
+          "2026-10-19",
+          "2026-10-20",
+          "2026-10-21",
+          "2026-10-22"
+        ],
+        "dormantDefinition": false,
+        "activeInImportWindow": true
+      },
+      {
+        "tripId": "211997_111026",
+        "routeId": "957",
+        "serviceId": "33598",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "previousSequence": 8,
+        "sequence": 9,
+        "previousDeparture": "07:15:23",
+        "currentArrival": "07:15:15",
+        "regressionSeconds": 8,
+        "previousStopId": "33945",
+        "previousStopName": "\u05d1\u05e1\u05d9\u05e1 \u05e6\u05d9\u05d5\u05d3",
+        "stopId": "33956",
+        "stopName": "\u05de\u05d9\u05e6\u05d2 \u05d7\u05d9\u05dc\u05d5\u05ea",
+        "previousSourceLine": 2202764,
+        "sourceLine": 2202763,
+        "activeDatesInImportWindow": [
+          "2026-10-11",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-18",
+          "2026-10-19",
+          "2026-10-20",
+          "2026-10-21",
+          "2026-10-22"
+        ],
+        "dormantDefinition": false,
+        "activeInImportWindow": true
+      },
+      {
+        "tripId": "211997_111026",
+        "routeId": "957",
+        "serviceId": "33598",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "previousSequence": 9,
+        "sequence": 10,
+        "previousDeparture": "07:15:15",
+        "currentArrival": "07:15:11",
+        "regressionSeconds": 4,
+        "previousStopId": "33956",
+        "previousStopName": "\u05de\u05d9\u05e6\u05d2 \u05d7\u05d9\u05dc\u05d5\u05ea",
+        "stopId": "33954",
+        "stopName": "\u05de\u05e8\u05db\u05d6 \u05d3\u05dc\u05e7",
+        "previousSourceLine": 2202763,
+        "sourceLine": 2202761,
+        "activeDatesInImportWindow": [
+          "2026-10-11",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-18",
+          "2026-10-19",
+          "2026-10-20",
+          "2026-10-21",
+          "2026-10-22"
+        ],
+        "dormantDefinition": false,
+        "activeInImportWindow": true
+      },
+      {
+        "tripId": "211997_111026",
+        "routeId": "957",
+        "serviceId": "33598",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "previousSequence": 10,
+        "sequence": 11,
+        "previousDeparture": "07:15:11",
+        "currentArrival": "07:15:09",
+        "regressionSeconds": 2,
+        "previousStopId": "33954",
+        "previousStopName": "\u05de\u05e8\u05db\u05d6 \u05d3\u05dc\u05e7",
+        "stopId": "33952",
+        "stopName": "\u05de\u05e7\u05e9\u05d7''\u05e8",
+        "previousSourceLine": 2202761,
+        "sourceLine": 2202760,
+        "activeDatesInImportWindow": [
+          "2026-10-11",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-18",
+          "2026-10-19",
+          "2026-10-20",
+          "2026-10-21",
+          "2026-10-22"
+        ],
+        "dormantDefinition": false,
+        "activeInImportWindow": true
+      },
+      {
+        "tripId": "211997_231026",
+        "routeId": "957",
+        "serviceId": "10408",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "previousSequence": 4,
+        "sequence": 5,
+        "previousDeparture": "07:14:34",
+        "currentArrival": "07:14:15",
+        "regressionSeconds": 19,
+        "previousStopId": "33944",
+        "previousStopName": "\u05de\u05e7\u05de\u05e6''\u05e8",
+        "stopId": "33957",
+        "stopName": "\u05de\u05d3''\u05d0",
+        "previousSourceLine": 2202776,
+        "sourceLine": 2202774,
+        "activeDatesInImportWindow": [
+          "2026-10-25",
+          "2026-10-26",
+          "2026-10-27",
+          "2026-10-28",
+          "2026-10-29"
+        ],
+        "dormantDefinition": false,
+        "activeInImportWindow": true
+      },
+      {
+        "tripId": "211997_231026",
+        "routeId": "957",
+        "serviceId": "10408",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "previousSequence": 5,
+        "sequence": 6,
+        "previousDeparture": "07:14:15",
+        "currentArrival": "07:14:09",
+        "regressionSeconds": 6,
+        "previousStopId": "33957",
+        "previousStopName": "\u05de\u05d3''\u05d0",
+        "stopId": "33961",
+        "stopName": "\u05de\u05d9\u05d8\u05d1",
+        "previousSourceLine": 2202774,
+        "sourceLine": 2202773,
+        "activeDatesInImportWindow": [
+          "2026-10-25",
+          "2026-10-26",
+          "2026-10-27",
+          "2026-10-28",
+          "2026-10-29"
+        ],
+        "dormantDefinition": false,
+        "activeInImportWindow": true
+      },
+      {
+        "tripId": "211997_231026",
+        "routeId": "957",
+        "serviceId": "10408",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "previousSequence": 8,
+        "sequence": 9,
+        "previousDeparture": "07:15:23",
+        "currentArrival": "07:15:15",
+        "regressionSeconds": 8,
+        "previousStopId": "33945",
+        "previousStopName": "\u05d1\u05e1\u05d9\u05e1 \u05e6\u05d9\u05d5\u05d3",
+        "stopId": "33956",
+        "stopName": "\u05de\u05d9\u05e6\u05d2 \u05d7\u05d9\u05dc\u05d5\u05ea",
+        "previousSourceLine": 2202781,
+        "sourceLine": 2202780,
+        "activeDatesInImportWindow": [
+          "2026-10-25",
+          "2026-10-26",
+          "2026-10-27",
+          "2026-10-28",
+          "2026-10-29"
+        ],
+        "dormantDefinition": false,
+        "activeInImportWindow": true
+      },
+      {
+        "tripId": "211997_231026",
+        "routeId": "957",
+        "serviceId": "10408",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "previousSequence": 9,
+        "sequence": 10,
+        "previousDeparture": "07:15:15",
+        "currentArrival": "07:15:11",
+        "regressionSeconds": 4,
+        "previousStopId": "33956",
+        "previousStopName": "\u05de\u05d9\u05e6\u05d2 \u05d7\u05d9\u05dc\u05d5\u05ea",
+        "stopId": "33954",
+        "stopName": "\u05de\u05e8\u05db\u05d6 \u05d3\u05dc\u05e7",
+        "previousSourceLine": 2202780,
+        "sourceLine": 2202778,
+        "activeDatesInImportWindow": [
+          "2026-10-25",
+          "2026-10-26",
+          "2026-10-27",
+          "2026-10-28",
+          "2026-10-29"
+        ],
+        "dormantDefinition": false,
+        "activeInImportWindow": true
+      },
+      {
+        "tripId": "211997_231026",
+        "routeId": "957",
+        "serviceId": "10408",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "previousSequence": 10,
+        "sequence": 11,
+        "previousDeparture": "07:15:11",
+        "currentArrival": "07:15:09",
+        "regressionSeconds": 2,
+        "previousStopId": "33954",
+        "previousStopName": "\u05de\u05e8\u05db\u05d6 \u05d3\u05dc\u05e7",
+        "stopId": "33952",
+        "stopName": "\u05de\u05e7\u05e9\u05d7''\u05e8",
+        "previousSourceLine": 2202778,
+        "sourceLine": 2202777,
+        "activeDatesInImportWindow": [
+          "2026-10-25",
+          "2026-10-26",
+          "2026-10-27",
+          "2026-10-28",
+          "2026-10-29"
+        ],
+        "dormantDefinition": false,
+        "activeInImportWindow": true
+      },
+      {
+        "tripId": "211998_300926",
+        "routeId": "957",
+        "serviceId": "25720",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "previousSequence": 4,
+        "sequence": 5,
+        "previousDeparture": "07:24:34",
+        "currentArrival": "07:24:15",
+        "regressionSeconds": 19,
+        "previousStopId": "33944",
+        "previousStopName": "\u05de\u05e7\u05de\u05e6''\u05e8",
+        "stopId": "33957",
+        "stopName": "\u05de\u05d3''\u05d0",
+        "previousSourceLine": 2202793,
+        "sourceLine": 2202791,
+        "activeDatesInImportWindow": [
+          "2026-09-30",
+          "2026-10-01"
+        ],
+        "dormantDefinition": false,
+        "activeInImportWindow": true
+      },
+      {
+        "tripId": "211998_300926",
+        "routeId": "957",
+        "serviceId": "25720",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "previousSequence": 5,
+        "sequence": 6,
+        "previousDeparture": "07:24:15",
+        "currentArrival": "07:24:09",
+        "regressionSeconds": 6,
+        "previousStopId": "33957",
+        "previousStopName": "\u05de\u05d3''\u05d0",
+        "stopId": "33961",
+        "stopName": "\u05de\u05d9\u05d8\u05d1",
+        "previousSourceLine": 2202791,
+        "sourceLine": 2202790,
+        "activeDatesInImportWindow": [
+          "2026-09-30",
+          "2026-10-01"
+        ],
+        "dormantDefinition": false,
+        "activeInImportWindow": true
+      },
+      {
+        "tripId": "211998_300926",
+        "routeId": "957",
+        "serviceId": "25720",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "previousSequence": 8,
+        "sequence": 9,
+        "previousDeparture": "07:25:23",
+        "currentArrival": "07:25:15",
+        "regressionSeconds": 8,
+        "previousStopId": "33945",
+        "previousStopName": "\u05d1\u05e1\u05d9\u05e1 \u05e6\u05d9\u05d5\u05d3",
+        "stopId": "33956",
+        "stopName": "\u05de\u05d9\u05e6\u05d2 \u05d7\u05d9\u05dc\u05d5\u05ea",
+        "previousSourceLine": 2202798,
+        "sourceLine": 2202797,
+        "activeDatesInImportWindow": [
+          "2026-09-30",
+          "2026-10-01"
+        ],
+        "dormantDefinition": false,
+        "activeInImportWindow": true
+      },
+      {
+        "tripId": "211998_300926",
+        "routeId": "957",
+        "serviceId": "25720",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "previousSequence": 9,
+        "sequence": 10,
+        "previousDeparture": "07:25:15",
+        "currentArrival": "07:25:11",
+        "regressionSeconds": 4,
+        "previousStopId": "33956",
+        "previousStopName": "\u05de\u05d9\u05e6\u05d2 \u05d7\u05d9\u05dc\u05d5\u05ea",
+        "stopId": "33954",
+        "stopName": "\u05de\u05e8\u05db\u05d6 \u05d3\u05dc\u05e7",
+        "previousSourceLine": 2202797,
+        "sourceLine": 2202795,
+        "activeDatesInImportWindow": [
+          "2026-09-30",
+          "2026-10-01"
+        ],
+        "dormantDefinition": false,
+        "activeInImportWindow": true
+      },
+      {
+        "tripId": "211998_300926",
+        "routeId": "957",
+        "serviceId": "25720",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "previousSequence": 10,
+        "sequence": 11,
+        "previousDeparture": "07:25:11",
+        "currentArrival": "07:25:09",
+        "regressionSeconds": 2,
+        "previousStopId": "33954",
+        "previousStopName": "\u05de\u05e8\u05db\u05d6 \u05d3\u05dc\u05e7",
+        "stopId": "33952",
+        "stopName": "\u05de\u05e7\u05e9\u05d7''\u05e8",
+        "previousSourceLine": 2202795,
+        "sourceLine": 2202794,
+        "activeDatesInImportWindow": [
+          "2026-09-30",
+          "2026-10-01"
+        ],
+        "dormantDefinition": false,
+        "activeInImportWindow": true
+      },
+      {
+        "tripId": "212002_041026",
+        "routeId": "957",
+        "serviceId": "33208",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "previousSequence": 4,
+        "sequence": 5,
+        "previousDeparture": "07:54:34",
+        "currentArrival": "07:54:15",
+        "regressionSeconds": 19,
+        "previousStopId": "33944",
+        "previousStopName": "\u05de\u05e7\u05de\u05e6''\u05e8",
+        "stopId": "33957",
+        "stopName": "\u05de\u05d3''\u05d0",
+        "previousSourceLine": 2202810,
+        "sourceLine": 2202808,
+        "activeDatesInImportWindow": [
+          "2026-10-04",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08"
+        ],
+        "dormantDefinition": false,
+        "activeInImportWindow": true
+      },
+      {
+        "tripId": "212002_041026",
+        "routeId": "957",
+        "serviceId": "33208",
+        "agencyId": "15",
+        "agencyName": "\u05de\u05d8\u05e8\u05d5\u05e4\u05d5\u05dc\u05d9\u05df",
+        "previousSequence": 5,
+        "sequence": 6,
+        "previousDeparture": "07:54:15",
+        "currentArrival": "07:54:09",
+        "regressionSeconds": 6,
+        "previousStopId": "33957",
+        "previousStopName": "\u05de\u05d3''\u05d0",
+        "stopId": "33961",
+        "stopName": "\u05de\u05d9\u05d8\u05d1",
+        "previousSourceLine": 2202808,
+        "sourceLine": 2202807,
+        "activeDatesInImportWindow": [
+          "2026-10-04",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08"
+        ],
+        "dormantDefinition": false,
+        "activeInImportWindow": true
+      }
+    ]
+  }
+}

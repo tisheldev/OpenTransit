@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 1,
+  "captureKind": "single local protocol conformance request",
+  "capturedOnUtcDate": "2026-09-30",
+  "capturedAtUtc": null,
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/geocode",
+    "query": {
+      "text": "Dizengoff",
+      "language": ["en", "he"],
+      "type": "ADDRESS,PLACE",
+      "numResults": 5
+    },
+    "client": "docker exec opentransit-local-net-m3-attempt3 wget",
+    "engineOrigin": "http://127.0.0.1:59081"
+  },
+  "provenance": {
+    "generationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
+    "generationState": "ready",
+    "engineDigest": "sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330",
+    "containerImage": "ghcr.io/motis-project/motis@sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330",
+    "containerImageId": "sha256:76a15c76bcff11c6f0595fed9a170284e49c2d9017c47bf4da6879a0e7452598",
+    "configSha256": "2f75d87301d97b36461bd5826f0c46a1eb375f0da3434f39ee59563f21b6e998",
+    "referenceSha256": "fb7c677e43157a5431e4c1f51534c0008a93ac42341f9338a0ac1d8e4fbb43f2",
+    "gtfsSha256": "8629a73c3f6ff024a78e9b8c83602c09180e13e597b82b98a4377a78f3dd2fd9",
+    "tripIdToDateSha256": "7775623cae79f80040d5bcfe5058fa489736d58da6919b65579424c417561da5",
+    "osmSha256": "8a34b30f91a63ef9239961ba0e4d660ae22deda2f6da4b85ba4772a6b7c4c74f",
+    "motisSourceCommit": "061857d38a375248ae62b4ce722753368a75e474",
+    "networkNamespaceHelper": "opentransit-local-net-m3-attempt3"
+  },
+  "responseStatus": 200,
+  "responseShape": "top-level JSON array",
+  "responseBodyRepresentation": "Parsed response copied from the single docker stdout capture; numeric scientific-notation lexemes are represented as equivalent JSON decimals.",
+  "responseBody": [
+    {
+      "type": "PLACE",
+      "category": "memorial_16",
+      "tokens": [[0, 9]],
+      "name": "Meir Dizengoff",
+      "id": "node/[4975920089]",
+      "lat": 32.0629711,
+      "lon": 34.7709366,
+      "country": "IL",
+      "areas": [
+        {"name": "Israel", "adminLevel": 2, "matched": false, "unique": false, "default": false},
+        {"name": "Tel-Aviv District", "adminLevel": 4, "matched": false, "unique": false, "default": false},
+        {"name": "Tel Aviv Subdistrict", "adminLevel": 5, "matched": false, "unique": false, "default": false},
+        {"name": "Tel-Aviv", "adminLevel": 8, "matched": false, "unique": true, "default": true}
+      ],
+      "score": -15.75
+    },
+    {
+      "type": "PLACE",
+      "category": "cafe_16",
+      "tokens": [[0, 9]],
+      "name": "Cafe Dizengoff",
+      "id": "node/[12809524285]",
+      "lat": 32.0857649,
+      "lon": 34.7747866,
+      "country": "IL",
+      "areas": [
+        {"name": "Israel", "adminLevel": 2, "matched": false, "unique": false, "default": false},
+        {"name": "Tel-Aviv District", "adminLevel": 4, "matched": false, "unique": false, "default": false},
+        {"name": "Tel Aviv Subdistrict", "adminLevel": 5, "matched": false, "unique": false, "default": false},
+        {"name": "Tel-Aviv", "adminLevel": 8, "matched": false, "unique": true, "default": true}
+      ],
+      "score": -15.5
+    },
+    {
+      "type": "PLACE",
+      "category": "rect",
+      "tokens": [[0, 9]],
+      "name": "Dizengoff Tower",
+      "id": "node/[3868300059]",
+      "lat": 32.0753617,
+      "lon": 34.7754221,
+      "country": "IL",
+      "areas": [
+        {"name": "Israel", "adminLevel": 2, "matched": false, "unique": false, "default": false},
+        {"name": "Tel-Aviv District", "adminLevel": 4, "matched": false, "unique": false, "default": false},
+        {"name": "Tel Aviv Subdistrict", "adminLevel": 5, "matched": false, "unique": false, "default": false},
+        {"name": "Tel-Aviv", "adminLevel": 8, "matched": false, "unique": true, "default": true}
+      ],
+      "score": -15.25
+    },
+    {
+      "type": "PLACE",
+      "category": "cinema_16",
+      "tokens": [[0, 9]],
+      "name": "Rav Hen Dizengoff",
+      "id": "node/[962966928]",
+      "lat": 32.0780861,
+      "lon": 34.7734776,
+      "country": "IL",
+      "areas": [
+        {"name": "Israel", "adminLevel": 2, "matched": false, "unique": false, "default": false},
+        {"name": "Tel-Aviv District", "adminLevel": 4, "matched": false, "unique": false, "default": false},
+        {"name": "Tel Aviv Subdistrict", "adminLevel": 5, "matched": false, "unique": false, "default": false},
+        {"name": "Tel-Aviv", "adminLevel": 8, "matched": false, "unique": true, "default": true}
+      ],
+      "score": -15
+    },
+    {
+      "type": "PLACE",
+      "category": "shop_other_16",
+      "tokens": [[0, 9]],
+      "name": "Dizengoff Center",
+      "id": "way/[30622051]",
+      "lat": 32.075301,
+      "lon": 34.773702,
+      "country": "IL",
+      "areas": [
+        {"name": "Israel", "adminLevel": 2, "matched": false, "unique": false, "default": false},
+        {"name": "Tel-Aviv District", "adminLevel": 4, "matched": false, "unique": false, "default": false},
+        {"name": "Tel Aviv Subdistrict", "adminLevel": 5, "matched": false, "unique": false, "default": false},
+        {"name": "Tel-Aviv", "adminLevel": 8, "matched": false, "unique": true, "default": true}
+      ],
+      "score": -15
+    }
+  ],
+  "observations": [
+    "Pinned image returned a top-level array of PLACE records for combined ADDRESS,PLACE filters.",
+    "PLACE records supplied category, name, OSM-style id, coordinates and locality areas.",
+    "The response contains bracketed OSM id strings; the adapter preserves these strings and does not deduplicate by id.",
+    "This one request does not establish address coverage or search quality."
+  ]
+}

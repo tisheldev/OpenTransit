@@ -1,6 +1,6 @@
 # Phase 0 POC — status
 
-Generated 2026-09-30 10:52 UTC from `poc/results/` at commit `b09ab5c`.
+Generated 2026-10-01 06:43 UTC from `poc/results/` at commit `d82534d`.
 **Machine-generated. Do not hand-edit — run `python poc/poc_status.py --write`.**
 
 ## Dependency status (PRD §13)

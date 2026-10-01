@@ -1,0 +1,1080 @@
+{
+  "audit": "M2 real preserved M1 inputs; read-only; no acquisition freshness renewal",
+  "reportCreatedAtUtc": "2026-09-30T11:39:57Z",
+  "inputs": {
+    "C:\\Projects\\OpenTransit\\.runtime\\m1-20260930\\inputs\\israel-public-transportation.zip": {
+      "sizeBytes": 171085310,
+      "sha256": "8629a73c3f6ff024a78e9b8c83602c09180e13e597b82b98a4377a78f3dd2fd9"
+    },
+    "C:\\Projects\\OpenTransit\\.runtime\\m1-20260930\\inputs\\TripIdToDate.zip": {
+      "sizeBytes": 8179075,
+      "sha256": "7775623cae79f80040d5bcfe5058fa489736d58da6919b65579424c417561da5"
+    }
+  },
+  "mappingEvidence": {
+    "header": [
+      "LineDetailRecordId",
+      "OfficeLineId",
+      "Direction",
+      "LineAlternative",
+      "FromDate",
+      "ToDate",
+      "TripId",
+      "DayInWeek",
+      "DepartureTime"
+    ],
+    "dayInWeekCounts": {
+      "1": 295274,
+      "4": 281436,
+      "2": 281456,
+      "3": 281379,
+      "5": 270090,
+      "6": 120347,
+      "7": 44822
+    },
+    "samplesByValue": {
+      "1": [
+        {
+          "TripId": "1",
+          "FromDate": "27/09/2026 00:00:00",
+          "ToDate": "01/10/2026 00:00:00",
+          "DayInWeek": "1",
+          "DepartureTime": "05:10"
+        },
+        {
+          "TripId": "16660708",
+          "FromDate": "27/09/2026 00:00:00",
+          "ToDate": "01/10/2026 00:00:00",
+          "DayInWeek": "1",
+          "DepartureTime": "20:35"
+        }
+      ],
+      "4": [
+        {
+          "TripId": "13711613",
+          "FromDate": "27/09/2026 00:00:00",
+          "ToDate": "01/10/2026 00:00:00",
+          "DayInWeek": "4",
+          "DepartureTime": "08:45"
+        },
+        {
+          "TripId": "17336120",
+          "FromDate": "27/09/2026 00:00:00",
+          "ToDate": "01/10/2026 00:00:00",
+          "DayInWeek": "4",
+          "DepartureTime": "09:45"
+        }
+      ],
+      "2": [
+        {
+          "TripId": "15",
+          "FromDate": "27/09/2026 00:00:00",
+          "ToDate": "01/10/2026 00:00:00",
+          "DayInWeek": "2",
+          "DepartureTime": "05:10"
+        },
+        {
+          "TripId": "16",
+          "FromDate": "27/09/2026 00:00:00",
+          "ToDate": "01/10/2026 00:00:00",
+          "DayInWeek": "2",
+          "DepartureTime": "05:40"
+        }
+      ],
+      "3": [
+        {
+          "TripId": "17336093",
+          "FromDate": "27/09/2026 00:00:00",
+          "ToDate": "01/10/2026 00:00:00",
+          "DayInWeek": "3",
+          "DepartureTime": "09:45"
+        },
+        {
+          "TripId": "17336095",
+          "FromDate": "27/09/2026 00:00:00",
+          "ToDate": "01/10/2026 00:00:00",
+          "DayInWeek": "3",
+          "DepartureTime": "10:45"
+        }
+      ],
+      "5": [
+        {
+          "TripId": "17336145",
+          "FromDate": "27/09/2026 00:00:00",
+          "ToDate": "01/10/2026 00:00:00",
+          "DayInWeek": "5",
+          "DepartureTime": "08:45"
+        },
+        {
+          "TripId": "17336147",
+          "FromDate": "27/09/2026 00:00:00",
+          "ToDate": "01/10/2026 00:00:00",
+          "DayInWeek": "5",
+          "DepartureTime": "09:45"
+        }
+      ],
+      "6": [
+        {
+          "TripId": "17336167",
+          "FromDate": "02/10/2026 00:00:00",
+          "ToDate": "02/10/2026 00:00:00",
+          "DayInWeek": "6",
+          "DepartureTime": "05:05"
+        },
+        {
+          "TripId": "17336169",
+          "FromDate": "02/10/2026 00:00:00",
+          "ToDate": "02/10/2026 00:00:00",
+          "DayInWeek": "6",
+          "DepartureTime": "06:00"
+        }
+      ],
+      "7": [
+        {
+          "TripId": "16681576",
+          "FromDate": "03/10/2026 00:00:00",
+          "ToDate": "03/10/2026 00:00:00",
+          "DayInWeek": "7",
+          "DepartureTime": "20:45"
+        },
+        {
+          "TripId": "20188287",
+          "FromDate": "03/10/2026 00:00:00",
+          "ToDate": "03/10/2026 00:00:00",
+          "DayInWeek": "7",
+          "DepartureTime": "20:10"
+        }
+      ]
+    }
+  },
+  "elapsedSeconds": 174.821,
+  "peakWorkingSetBytes": 0,
+  "status": "rejected",
+  "error": null,
+  "validation": {
+    "gtfsPath": "C:\\Projects\\OpenTransit\\.runtime\\m1-20260930\\inputs\\israel-public-transportation.zip",
+    "tripIdToDatePath": "C:\\Projects\\OpenTransit\\.runtime\\m1-20260930\\inputs\\TripIdToDate.zip",
+    "valid": false,
+    "checks": [
+      {
+        "id": "E01",
+        "name": "GET content hash and archive validation",
+        "status": "not_observed",
+        "detail": "Package uses full GET, SHA-256, and ZIP checks without HEAD; live HEAD/GET comparison and refresh run were not performed.",
+        "evidence": {
+          "liveFetch": "not_observed",
+          "codePath": "implemented"
+        }
+      },
+      {
+        "id": "E02",
+        "name": "GTFS stop times",
+        "status": "fail",
+        "detail": "Stop times were streamed and parsed, including values over 24:00:00.",
+        "evidence": {
+          "afterMidnightRows": 346686,
+          "maxSeconds": 104759,
+          "integrity": {
+            "stopTimeRows": 16079349,
+            "afterMidnightRows": 346686,
+            "maxSeconds": 104759,
+            "non_chronological_stop_times": 832,
+            "pickup_dropoff_rule_errors": 0
+          }
+        }
+      },
+      {
+        "id": "E03",
+        "name": "Hebrew encoding round-trip",
+        "status": "not_observed",
+        "detail": "CSV text decoded as strict UTF-8, but a database write/read round-trip is outside feed validation.",
+        "evidence": {
+          "strictUtf8": true,
+          "databaseRoundTrip": "not_observed"
+        }
+      },
+      {
+        "id": "E04",
+        "name": "Translations parsing and preservation",
+        "status": "pass",
+        "detail": "Translations were parsed without sanitization.",
+        "evidence": {
+          "rows": 102603,
+          "schema": "mot-legacy",
+          "languages": {
+            "HE": 36955,
+            "AR": 32831,
+            "EN": 32817
+          }
+        }
+      },
+      {
+        "id": "E05",
+        "name": "TripIdToDate date-aware pairing",
+        "status": "fail",
+        "detail": "Every full trip identity was checked against mapping rows over its actual active service dates.",
+        "evidence": {
+          "feedTripCount": 425160,
+          "fullTripIdentityCount": 425160,
+          "dormantTripDefinitions": 28603,
+          "serviceDatePairsEvaluated": 3134997,
+          "feedJoinKeyCount": 252581,
+          "mappingKeyCount": 918492,
+          "unmatchedJoinKeyCount": 0,
+          "unmatchedJoinKeySamples": [],
+          "tripsWithoutMappedServiceDates": 267532,
+          "tripSamplesWithoutMappedDates": [
+            "30204012_041026",
+            "30204013_041026",
+            "30204014_041026",
+            "35232341_041026",
+            "47340583_041026",
+            "585586051_041026",
+            "585586052_041026",
+            "586150937_041026",
+            "17255791_041026",
+            "17255790_300926"
+          ],
+          "unmappedActiveServiceDateCount": 31,
+          "unmappedServiceDateSamples": [
+            "2026-09-30",
+            "2026-10-01",
+            "2026-10-02",
+            "2026-10-03",
+            "2026-10-04",
+            "2026-10-05",
+            "2026-10-06",
+            "2026-10-07",
+            "2026-10-08",
+            "2026-10-09",
+            "2026-10-10",
+            "2026-10-11",
+            "2026-10-12",
+            "2026-10-13",
+            "2026-10-14",
+            "2026-10-15",
+            "2026-10-16",
+            "2026-10-17",
+            "2026-10-18",
+            "2026-10-19"
+          ],
+          "matchedServiceDateCount": 31,
+          "feedServiceDateCount": 31,
+          "feedServiceDates": [
+            "2026-09-30",
+            "2026-10-01",
+            "2026-10-02",
+            "2026-10-03",
+            "2026-10-04",
+            "2026-10-05",
+            "2026-10-06",
+            "2026-10-07",
+            "2026-10-08",
+            "2026-10-09",
+            "2026-10-10",
+            "2026-10-11",
+            "2026-10-12",
+            "2026-10-13",
+            "2026-10-14",
+            "2026-10-15",
+            "2026-10-16",
+            "2026-10-17",
+            "2026-10-18",
+            "2026-10-19",
+            "2026-10-20",
+            "2026-10-21",
+            "2026-10-22",
+            "2026-10-23",
+            "2026-10-24",
+            "2026-10-25",
+            "2026-10-26",
+            "2026-10-27",
+            "2026-10-28",
+            "2026-10-29",
+            "2026-10-30"
+          ],
+          "mappingDateRange": [
+            "2023-10-08",
+            "2200-01-01"
+          ],
+          "reversedRanges": [],
+          "fullTripIdentityUsedForValidation": true,
+          "tripDateEvidenceSamples": [
+            {
+              "tripId": "30204012_041026",
+              "serviceId": "8195",
+              "activeServiceDateCount": 20,
+              "mappingDateCount": 4,
+              "mappingServiceDates": [
+                "2026-10-04",
+                "2026-10-11",
+                "2026-10-18",
+                "2026-10-25"
+              ]
+            },
+            {
+              "tripId": "30204013_041026",
+              "serviceId": "8195",
+              "activeServiceDateCount": 20,
+              "mappingDateCount": 4,
+              "mappingServiceDates": [
+                "2026-10-04",
+                "2026-10-11",
+                "2026-10-18",
+                "2026-10-25"
+              ]
+            },
+            {
+              "tripId": "30204014_041026",
+              "serviceId": "8195",
+              "activeServiceDateCount": 20,
+              "mappingDateCount": 4,
+              "mappingServiceDates": [
+                "2026-10-04",
+                "2026-10-11",
+                "2026-10-18",
+                "2026-10-25"
+              ]
+            },
+            {
+              "tripId": "35232341_041026",
+              "serviceId": "8195",
+              "activeServiceDateCount": 20,
+              "mappingDateCount": 4,
+              "mappingServiceDates": [
+                "2026-10-04",
+                "2026-10-11",
+                "2026-10-18",
+                "2026-10-25"
+              ]
+            },
+            {
+              "tripId": "47340583_041026",
+              "serviceId": "8195",
+              "activeServiceDateCount": 20,
+              "mappingDateCount": 4,
+              "mappingServiceDates": [
+                "2026-10-04",
+                "2026-10-11",
+                "2026-10-18",
+                "2026-10-25"
+              ]
+            },
+            {
+              "tripId": "585586051_041026",
+              "serviceId": "8195",
+              "activeServiceDateCount": 20,
+              "mappingDateCount": 4,
+              "mappingServiceDates": [
+                "2026-10-04",
+                "2026-10-11",
+                "2026-10-18",
+                "2026-10-25"
+              ]
+            },
+            {
+              "tripId": "585586052_041026",
+              "serviceId": "8195",
+              "activeServiceDateCount": 20,
+              "mappingDateCount": 4,
+              "mappingServiceDates": [
+                "2026-10-04",
+                "2026-10-11",
+                "2026-10-18",
+                "2026-10-25"
+              ]
+            },
+            {
+              "tripId": "586150937_041026",
+              "serviceId": "8195",
+              "activeServiceDateCount": 20,
+              "mappingDateCount": 4,
+              "mappingServiceDates": [
+                "2026-10-04",
+                "2026-10-11",
+                "2026-10-18",
+                "2026-10-25"
+              ]
+            },
+            {
+              "tripId": "17255791_041026",
+              "serviceId": "8196",
+              "activeServiceDateCount": 24,
+              "mappingDateCount": 4,
+              "mappingServiceDates": [
+                "2026-10-04",
+                "2026-10-11",
+                "2026-10-18",
+                "2026-10-25"
+              ]
+            },
+            {
+              "tripId": "17255841_041026",
+              "serviceId": "8197",
+              "activeServiceDateCount": 4,
+              "mappingDateCount": 4,
+              "mappingServiceDates": [
+                "2026-10-09",
+                "2026-10-16",
+                "2026-10-23",
+                "2026-10-30"
+              ]
+            },
+            {
+              "tripId": "2039_041026",
+              "serviceId": "8197",
+              "activeServiceDateCount": 4,
+              "mappingDateCount": 4,
+              "mappingServiceDates": [
+                "2026-10-09",
+                "2026-10-16",
+                "2026-10-23",
+                "2026-10-30"
+              ]
+            },
+            {
+              "tripId": "2040_041026",
+              "serviceId": "8197",
+              "activeServiceDateCount": 4,
+              "mappingDateCount": 4,
+              "mappingServiceDates": [
+                "2026-10-09",
+                "2026-10-16",
+                "2026-10-23",
+                "2026-10-30"
+              ]
+            },
+            {
+              "tripId": "17255840_021026",
+              "serviceId": "16160",
+              "activeServiceDateCount": 1,
+              "mappingDateCount": 1,
+              "mappingServiceDates": [
+                "2026-10-02"
+              ]
+            },
+            {
+              "tripId": "17255841_021026",
+              "serviceId": "16160",
+              "activeServiceDateCount": 1,
+              "mappingDateCount": 1,
+              "mappingServiceDates": [
+                "2026-10-02"
+              ]
+            },
+            {
+              "tripId": "2039_021026",
+              "serviceId": "16160",
+              "activeServiceDateCount": 1,
+              "mappingDateCount": 1,
+              "mappingServiceDates": [
+                "2026-10-02"
+              ]
+            },
+            {
+              "tripId": "2040_021026",
+              "serviceId": "16160",
+              "activeServiceDateCount": 1,
+              "mappingDateCount": 1,
+              "mappingServiceDates": [
+                "2026-10-02"
+              ]
+            },
+            {
+              "tripId": "17255790_300926",
+              "serviceId": "23295",
+              "activeServiceDateCount": 2,
+              "mappingDateCount": 0,
+              "mappingServiceDates": []
+            },
+            {
+              "tripId": "17255791_300926",
+              "serviceId": "23295",
+              "activeServiceDateCount": 2,
+              "mappingDateCount": 0,
+              "mappingServiceDates": []
+            },
+            {
+              "tripId": "30204011_300926",
+              "serviceId": "23295",
+              "activeServiceDateCount": 2,
+              "mappingDateCount": 0,
+              "mappingServiceDates": []
+            },
+            {
+              "tripId": "30204012_300926",
+              "serviceId": "23295",
+              "activeServiceDateCount": 2,
+              "mappingDateCount": 0,
+              "mappingServiceDates": []
+            }
+          ]
+        }
+      },
+      {
+        "id": "E06",
+        "name": "Primary versus comparison feed",
+        "status": "not_observed",
+        "detail": "The schedule generation validates the accepted 60-day feed; the 10-day comparison feed was not fetched.",
+        "evidence": {
+          "comparison": "not_observed"
+        }
+      },
+      {
+        "id": "E07",
+        "name": "Service exceptions and reduced service",
+        "status": "not_observed",
+        "detail": "Actual active service dates were expanded; Shabbat/festival counts and reduced-service evidence were not computed.",
+        "evidence": {
+          "calendarRows": 41536,
+          "calendarDatesRows": 0,
+          "activeServiceDateCount": 31,
+          "dates": [
+            "2026-09-30",
+            "2026-10-01",
+            "2026-10-02",
+            "2026-10-03",
+            "2026-10-04",
+            "2026-10-05",
+            "2026-10-06",
+            "2026-10-07",
+            "2026-10-08",
+            "2026-10-09",
+            "2026-10-10",
+            "2026-10-11",
+            "2026-10-12",
+            "2026-10-13",
+            "2026-10-14",
+            "2026-10-15",
+            "2026-10-16",
+            "2026-10-17",
+            "2026-10-18",
+            "2026-10-19",
+            "2026-10-20",
+            "2026-10-21",
+            "2026-10-22",
+            "2026-10-23",
+            "2026-10-24",
+            "2026-10-25",
+            "2026-10-26",
+            "2026-10-27",
+            "2026-10-28",
+            "2026-10-29",
+            "2026-10-30"
+          ]
+        }
+      },
+      {
+        "id": "E08",
+        "name": "Foreign keys and orphans",
+        "status": "pass",
+        "detail": "Trip, route, service, stop, stop-time, and shape references were counted.",
+        "evidence": {
+          "counts": {
+            "stops_in_parent_cycle": 0,
+            "trips_with_no_stop_times": 0
+          },
+          "samples": {}
+        }
+      },
+      {
+        "id": "E09",
+        "name": "Parent stations and stop grouping",
+        "status": "pass",
+        "detail": "Parent stop references and cycles were checked structurally; human station resolution review remains separate.",
+        "evidence": {
+          "stopCount": 35321,
+          "parentCount": 1085,
+          "parentIssues": 0
+        }
+      },
+      {
+        "id": "E10",
+        "name": "Cold refresh through queryable generation",
+        "status": "not_observed",
+        "detail": "A validation pass does not build or query a generation.",
+        "evidence": {
+          "coldRun": "not_observed"
+        }
+      },
+      {
+        "id": "V01",
+        "name": "Duplicate identifiers",
+        "status": "pass",
+        "detail": "Found 0 duplicate primary identifiers.",
+        "evidence": {
+          "duplicates": {
+            "agency.txt": [],
+            "routes.txt": []
+          }
+        }
+      },
+      {
+        "id": "V02",
+        "name": "Stop coordinates",
+        "status": "pass",
+        "detail": "Found 0 invalid coordinate rows.",
+        "evidence": {}
+      },
+      {
+        "id": "V03",
+        "name": "Shape references and points",
+        "status": "pass",
+        "detail": "Shape points are streamed and trip shape references are checked.",
+        "evidence": {
+          "unknown_trip_shapes": 0,
+          "invalid_shape_points": 0
+        }
+      },
+      {
+        "id": "V04",
+        "name": "Stop time integrity",
+        "status": "fail",
+        "detail": "Arrival/departure values and duplicate per-trip stop sequences were checked; rows need not be pre-sorted.",
+        "evidence": {
+          "stopTimeRows": 16079349,
+          "afterMidnightRows": 346686,
+          "maxSeconds": 104759,
+          "non_chronological_stop_times": 832,
+          "pickup_dropoff_rule_errors": 0
+        }
+      },
+      {
+        "id": "V05",
+        "name": "CSV row integrity",
+        "status": "pass",
+        "detail": "Found 0 rows with a different width than their header.",
+        "evidence": {
+          "counts": {}
+        }
+      },
+      {
+        "id": "V06",
+        "name": "Mapping ranges",
+        "status": "pass",
+        "detail": "All TripIdToDate date ranges are valid and non-reversed.",
+        "evidence": {
+          "reversedRanges": []
+        }
+      },
+      {
+        "id": "V07",
+        "name": "Actual service date coverage",
+        "status": "pass",
+        "detail": "Coverage uses actual active dates, including calendar-date additions and removals.",
+        "evidence": {
+          "dateCount": 31,
+          "first": "2026-09-30",
+          "last": "2026-10-30"
+        }
+      },
+      {
+        "id": "V08",
+        "name": "Parent reference graph",
+        "status": "pass",
+        "detail": "Parent stop links exist and do not form cycles.",
+        "evidence": {
+          "missing": 0,
+          "cycles": 0
+        }
+      },
+      {
+        "id": "V09",
+        "name": "Trip identity and service-date mapping",
+        "status": "fail",
+        "detail": "Trip ID base keys locate mapping rows; full trip IDs and active dates are checked and sampled in evidence.",
+        "evidence": {
+          "unmatchedKeys": 0,
+          "tripsWithDateGaps": 267532,
+          "unmappedActiveServiceDateCount": 31
+        }
+      },
+      {
+        "id": "V10",
+        "name": "Calendar definitions",
+        "status": "pass",
+        "detail": "At least one real active service date is required.",
+        "evidence": {
+          "activeDateCount": 31
+        }
+      }
+    ],
+    "integrity": {
+      "duplicate_agency_ids": {
+        "count": 0,
+        "samples": []
+      },
+      "duplicate_routes_ids": {
+        "count": 0,
+        "samples": []
+      },
+      "foreign_keys": {
+        "counts": {
+          "stops_in_parent_cycle": 0,
+          "trips_with_no_stop_times": 0
+        },
+        "samples": {}
+      },
+      "stop_coordinates": {
+        "invalidRows": 0,
+        "samples": []
+      },
+      "malformed_rows": {},
+      "shape_references": {
+        "unknown_trip_shapes": 0,
+        "invalid_shape_points": 0
+      },
+      "time_integrity": {
+        "stopTimeRows": 16079349,
+        "afterMidnightRows": 346686,
+        "maxSeconds": 104759,
+        "non_chronological_stop_times": 832,
+        "pickup_dropoff_rule_errors": 0
+      },
+      "translations": {
+        "rows": 102603,
+        "schema": "mot-legacy",
+        "languages": {
+          "HE": 36955,
+          "AR": 32831,
+          "EN": 32817
+        }
+      }
+    },
+    "serviceDates": [
+      "2026-09-30",
+      "2026-10-01",
+      "2026-10-02",
+      "2026-10-03",
+      "2026-10-04",
+      "2026-10-05",
+      "2026-10-06",
+      "2026-10-07",
+      "2026-10-08",
+      "2026-10-09",
+      "2026-10-10",
+      "2026-10-11",
+      "2026-10-12",
+      "2026-10-13",
+      "2026-10-14",
+      "2026-10-15",
+      "2026-10-16",
+      "2026-10-17",
+      "2026-10-18",
+      "2026-10-19",
+      "2026-10-20",
+      "2026-10-21",
+      "2026-10-22",
+      "2026-10-23",
+      "2026-10-24",
+      "2026-10-25",
+      "2026-10-26",
+      "2026-10-27",
+      "2026-10-28",
+      "2026-10-29",
+      "2026-10-30"
+    ],
+    "coverage": {
+      "from": "2026-09-30",
+      "through": "2026-10-30",
+      "activeDateCount": 31
+    },
+    "pairing": {
+      "feedTripCount": 425160,
+      "fullTripIdentityCount": 425160,
+      "dormantTripDefinitions": 28603,
+      "serviceDatePairsEvaluated": 3134997,
+      "feedJoinKeyCount": 252581,
+      "mappingKeyCount": 918492,
+      "unmatchedJoinKeyCount": 0,
+      "unmatchedJoinKeySamples": [],
+      "tripsWithoutMappedServiceDates": 267532,
+      "tripSamplesWithoutMappedDates": [
+        "30204012_041026",
+        "30204013_041026",
+        "30204014_041026",
+        "35232341_041026",
+        "47340583_041026",
+        "585586051_041026",
+        "585586052_041026",
+        "586150937_041026",
+        "17255791_041026",
+        "17255790_300926"
+      ],
+      "unmappedActiveServiceDateCount": 31,
+      "unmappedServiceDateSamples": [
+        "2026-09-30",
+        "2026-10-01",
+        "2026-10-02",
+        "2026-10-03",
+        "2026-10-04",
+        "2026-10-05",
+        "2026-10-06",
+        "2026-10-07",
+        "2026-10-08",
+        "2026-10-09",
+        "2026-10-10",
+        "2026-10-11",
+        "2026-10-12",
+        "2026-10-13",
+        "2026-10-14",
+        "2026-10-15",
+        "2026-10-16",
+        "2026-10-17",
+        "2026-10-18",
+        "2026-10-19"
+      ],
+      "matchedServiceDateCount": 31,
+      "feedServiceDateCount": 31,
+      "feedServiceDates": [
+        "2026-09-30",
+        "2026-10-01",
+        "2026-10-02",
+        "2026-10-03",
+        "2026-10-04",
+        "2026-10-05",
+        "2026-10-06",
+        "2026-10-07",
+        "2026-10-08",
+        "2026-10-09",
+        "2026-10-10",
+        "2026-10-11",
+        "2026-10-12",
+        "2026-10-13",
+        "2026-10-14",
+        "2026-10-15",
+        "2026-10-16",
+        "2026-10-17",
+        "2026-10-18",
+        "2026-10-19",
+        "2026-10-20",
+        "2026-10-21",
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-24",
+        "2026-10-25",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-28",
+        "2026-10-29",
+        "2026-10-30"
+      ],
+      "mappingDateRange": [
+        "2023-10-08",
+        "2200-01-01"
+      ],
+      "reversedRanges": [],
+      "fullTripIdentityUsedForValidation": true,
+      "tripDateEvidenceSamples": [
+        {
+          "tripId": "30204012_041026",
+          "serviceId": "8195",
+          "activeServiceDateCount": 20,
+          "mappingDateCount": 4,
+          "mappingServiceDates": [
+            "2026-10-04",
+            "2026-10-11",
+            "2026-10-18",
+            "2026-10-25"
+          ]
+        },
+        {
+          "tripId": "30204013_041026",
+          "serviceId": "8195",
+          "activeServiceDateCount": 20,
+          "mappingDateCount": 4,
+          "mappingServiceDates": [
+            "2026-10-04",
+            "2026-10-11",
+            "2026-10-18",
+            "2026-10-25"
+          ]
+        },
+        {
+          "tripId": "30204014_041026",
+          "serviceId": "8195",
+          "activeServiceDateCount": 20,
+          "mappingDateCount": 4,
+          "mappingServiceDates": [
+            "2026-10-04",
+            "2026-10-11",
+            "2026-10-18",
+            "2026-10-25"
+          ]
+        },
+        {
+          "tripId": "35232341_041026",
+          "serviceId": "8195",
+          "activeServiceDateCount": 20,
+          "mappingDateCount": 4,
+          "mappingServiceDates": [
+            "2026-10-04",
+            "2026-10-11",
+            "2026-10-18",
+            "2026-10-25"
+          ]
+        },
+        {
+          "tripId": "47340583_041026",
+          "serviceId": "8195",
+          "activeServiceDateCount": 20,
+          "mappingDateCount": 4,
+          "mappingServiceDates": [
+            "2026-10-04",
+            "2026-10-11",
+            "2026-10-18",
+            "2026-10-25"
+          ]
+        },
+        {
+          "tripId": "585586051_041026",
+          "serviceId": "8195",
+          "activeServiceDateCount": 20,
+          "mappingDateCount": 4,
+          "mappingServiceDates": [
+            "2026-10-04",
+            "2026-10-11",
+            "2026-10-18",
+            "2026-10-25"
+          ]
+        },
+        {
+          "tripId": "585586052_041026",
+          "serviceId": "8195",
+          "activeServiceDateCount": 20,
+          "mappingDateCount": 4,
+          "mappingServiceDates": [
+            "2026-10-04",
+            "2026-10-11",
+            "2026-10-18",
+            "2026-10-25"
+          ]
+        },
+        {
+          "tripId": "586150937_041026",
+          "serviceId": "8195",
+          "activeServiceDateCount": 20,
+          "mappingDateCount": 4,
+          "mappingServiceDates": [
+            "2026-10-04",
+            "2026-10-11",
+            "2026-10-18",
+            "2026-10-25"
+          ]
+        },
+        {
+          "tripId": "17255791_041026",
+          "serviceId": "8196",
+          "activeServiceDateCount": 24,
+          "mappingDateCount": 4,
+          "mappingServiceDates": [
+            "2026-10-04",
+            "2026-10-11",
+            "2026-10-18",
+            "2026-10-25"
+          ]
+        },
+        {
+          "tripId": "17255841_041026",
+          "serviceId": "8197",
+          "activeServiceDateCount": 4,
+          "mappingDateCount": 4,
+          "mappingServiceDates": [
+            "2026-10-09",
+            "2026-10-16",
+            "2026-10-23",
+            "2026-10-30"
+          ]
+        },
+        {
+          "tripId": "2039_041026",
+          "serviceId": "8197",
+          "activeServiceDateCount": 4,
+          "mappingDateCount": 4,
+          "mappingServiceDates": [
+            "2026-10-09",
+            "2026-10-16",
+            "2026-10-23",
+            "2026-10-30"
+          ]
+        },
+        {
+          "tripId": "2040_041026",
+          "serviceId": "8197",
+          "activeServiceDateCount": 4,
+          "mappingDateCount": 4,
+          "mappingServiceDates": [
+            "2026-10-09",
+            "2026-10-16",
+            "2026-10-23",
+            "2026-10-30"
+          ]
+        },
+        {
+          "tripId": "17255840_021026",
+          "serviceId": "16160",
+          "activeServiceDateCount": 1,
+          "mappingDateCount": 1,
+          "mappingServiceDates": [
+            "2026-10-02"
+          ]
+        },
+        {
+          "tripId": "17255841_021026",
+          "serviceId": "16160",
+          "activeServiceDateCount": 1,
+          "mappingDateCount": 1,
+          "mappingServiceDates": [
+            "2026-10-02"
+          ]
+        },
+        {
+          "tripId": "2039_021026",
+          "serviceId": "16160",
+          "activeServiceDateCount": 1,
+          "mappingDateCount": 1,
+          "mappingServiceDates": [
+            "2026-10-02"
+          ]
+        },
+        {
+          "tripId": "2040_021026",
+          "serviceId": "16160",
+          "activeServiceDateCount": 1,
+          "mappingDateCount": 1,
+          "mappingServiceDates": [
+            "2026-10-02"
+          ]
+        },
+        {
+          "tripId": "17255790_300926",
+          "serviceId": "23295",
+          "activeServiceDateCount": 2,
+          "mappingDateCount": 0,
+          "mappingServiceDates": []
+        },
+        {
+          "tripId": "17255791_300926",
+          "serviceId": "23295",
+          "activeServiceDateCount": 2,
+          "mappingDateCount": 0,
+          "mappingServiceDates": []
+        },
+        {
+          "tripId": "30204011_300926",
+          "serviceId": "23295",
+          "activeServiceDateCount": 2,
+          "mappingDateCount": 0,
+          "mappingServiceDates": []
+        },
+        {
+          "tripId": "30204012_300926",
+          "serviceId": "23295",
+          "activeServiceDateCount": 2,
+          "mappingDateCount": 0,
+          "mappingServiceDates": []
+        }
+      ]
+    }
+  }
+}

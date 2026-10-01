@@ -1,0 +1,1009 @@
+{
+  "recordedAtUtc": "2026-09-30T18:06:42.281728+00:00",
+  "scope": "Real preserved-input functional candidate attempt1; complete source/reference stage, failed MOTIS graph import. No serving, API-runtime, capacity, H3 or deployment acceptance.",
+  "candidatePath": "C:\\Users\\nhenr\\.codex\\worktrees\\8007\\OpenTransit\\.runtime\\generations\\m3-functional-blue-20260930",
+  "manifestSha256": "2de5f000663818cdcf906603c93525746d8806ee77923ddf3ce35a54baef1d34",
+  "manifest": {
+    "schemaVersion": 1,
+    "state": "failed",
+    "mode": "real",
+    "engineDigest": "sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330",
+    "parserVersion": 1,
+    "referenceSchemaVersion": 2,
+    "timingPolicy": {
+      "policy_id": "motis-minute-bracket-v1",
+      "motis_source_commit": "061857d38a375248ae62b4ce722753368a75e474",
+      "nigiri_source_commit": "0a08a1c09dad25c5d892b2fd7166b03e82d62970",
+      "version": 1,
+      "resolution_seconds": 60
+    },
+    "localEngineSlot": "blue",
+    "engineOrigin": "http://127.0.0.1:59081",
+    "inputs": {
+      "israel-public-transportation.zip": {
+        "sha256": "8629a73c3f6ff024a78e9b8c83602c09180e13e597b82b98a4377a78f3dd2fd9",
+        "bytes": 171085310,
+        "acquiredAt": "2026-09-30T09:33:07.260277+00:00",
+        "checkedAt": null,
+        "status": null,
+        "url": "https://gtfs.mot.gov.il/gtfsfiles/israel-public-transportation.zip",
+        "lastModified": "Tue, 29 Sep 2026 16:59:05 GMT",
+        "reusedLocalPath": null,
+        "note": null,
+        "sourcePath": "israel-public-transportation.zip"
+      },
+      "TripIdToDate.zip": {
+        "sha256": "7775623cae79f80040d5bcfe5058fa489736d58da6919b65579424c417561da5",
+        "bytes": 8179075,
+        "acquiredAt": "2026-09-30T09:33:11.146493+00:00",
+        "checkedAt": null,
+        "status": null,
+        "url": "https://gtfs.mot.gov.il/gtfsfiles/TripIdToDate.zip",
+        "lastModified": "Tue, 29 Sep 2026 16:59:18 GMT",
+        "reusedLocalPath": null,
+        "note": null,
+        "sourcePath": "TripIdToDate.zip"
+      },
+      "israel-and-palestine-latest.osm.pbf": {
+        "sha256": "8a34b30f91a63ef9239961ba0e4d660ae22deda2f6da4b85ba4772a6b7c4c74f",
+        "bytes": 119241930,
+        "acquiredAt": null,
+        "checkedAt": null,
+        "status": null,
+        "url": null,
+        "lastModified": null,
+        "reusedLocalPath": "C:\\Projects\\OpenTransit\\poc\\data\\israel-and-palestine-latest.osm.pbf",
+        "note": "Existing OSM snapshot copied explicitly; not a fresh OSM download",
+        "sourcePath": "israel-and-palestine-latest.osm.pbf"
+      }
+    },
+    "artifacts": {
+      "reference": {
+        "path": "reference.sqlite",
+        "sha256": "fb7c677e43157a5431e4c1f51534c0008a93ac42341f9338a0ac1d8e4fbb43f2",
+        "contentSha256": "99e9ace0c7327008bd553de06e85c229c49bced8fc6653b0f40d172bc61e5914",
+        "counts": {
+          "agencies": 36,
+          "routes": 7884,
+          "stops": 35321,
+          "translations": 102603,
+          "route_stops": 240992,
+          "patterns": 7998,
+          "pattern_stops": 245843,
+          "calendar_rules": 41536,
+          "calendar_exceptions": 0,
+          "trip_profiles": 425160,
+          "clock_profiles": 220263,
+          "clock_profile_calls": 8188812
+        },
+        "timingPolicy": {
+          "policyId": "motis-minute-bracket-v1",
+          "version": 1,
+          "resolutionSeconds": 60,
+          "motisSourceCommit": "061857d38a375248ae62b4ce722753368a75e474",
+          "nigiriSourceCommit": "0a08a1c09dad25c5d892b2fd7166b03e82d62970",
+          "firstArrivalProjected": false,
+          "finalDepartureProjected": false
+        }
+      },
+      "motis": {
+        "path": "motis"
+      },
+      "config": {
+        "path": "config.yml",
+        "sha256": "2f75d87301d97b36461bd5826f0c46a1eb375f0da3434f39ee59563f21b6e998"
+      }
+    },
+    "build": {
+      "importMemoryCapBytes": 6442450944,
+      "resourceScope": "MOTIS import container only; validation and reference build are uncapped",
+      "timeoutSeconds": 600,
+      "containerName": "opentransit-builder-02dcb908774849feabc8f22416878f62",
+      "startedAt": "2026-09-30T17:54:58.743733+00:00",
+      "elapsedSeconds": 5.11,
+      "exitCode": 1,
+      "finishedAt": "2026-09-30T17:55:03.856611+00:00"
+    },
+    "validationEvidence": {
+      "path": "C:\\Users\\nhenr\\.codex\\worktrees\\8007\\OpenTransit\\services\\api\\results\\m2-validation-attempt5-20260930.json",
+      "sha256": "81e4aaa8cd0beaa2c80739abf380e01eae0062f6915cc71cf94f62d84d2b5e45",
+      "validatorSha256": "d28e8ed04673cca8489c01d64d25de20cec40edfd9da0c08538d7e1be41ea8fb",
+      "policyCodeSha256": "8e8ae52c94d4103d5535c97eae88ca9728a6bf6253e32abd5477e6718c63994b",
+      "policyId": "motis-minute-bracket-v1",
+      "createdAtUtc": "2026-09-30T13:32:56.701815+00:00"
+    },
+    "coverage": {
+      "from": "2026-09-30T00:00:00+03:00",
+      "until": "2026-10-31T00:00:00+02:00"
+    },
+    "serviceDates": {
+      "from": "2026-09-30",
+      "through": "2026-10-30"
+    },
+    "preflight": {
+      "integrity": {
+        "duplicate_agency_ids": {
+          "count": 0,
+          "samples": []
+        },
+        "duplicate_routes_ids": {
+          "count": 0,
+          "samples": []
+        },
+        "foreign_keys": {
+          "counts": {
+            "stops_in_parent_cycle": 0,
+            "trips_with_no_stop_times": 0
+          },
+          "samples": {}
+        },
+        "stop_coordinates": {
+          "invalidRows": 0,
+          "samples": []
+        },
+        "malformed_rows": {},
+        "shape_references": {
+          "unknown_trip_shapes": 0,
+          "invalid_shape_points": 0
+        },
+        "time_integrity": {
+          "stopTimeRows": 16079349,
+          "afterMidnightRows": 346686,
+          "maxSeconds": 104759,
+          "maxTimeRoundTrip": {
+            "raw": "29:05:59",
+            "formatted": "29:05:59",
+            "matches": true
+          },
+          "non_chronological_stop_times": 832,
+          "cross_call_chronology": {
+            "count": 832,
+            "verdict": "diagnostic_fail",
+            "blocking": false,
+            "affectedTripCount": 168,
+            "affectedAgencyCount": 2,
+            "affectedOperatorCount": 2,
+            "affectedAgencyIds": [
+              "15",
+              "3"
+            ],
+            "affectedOperators": [
+              {
+                "id": "15",
+                "name": "מטרופולין"
+              },
+              {
+                "id": "3",
+                "name": "אגד"
+              }
+            ],
+            "samples": [
+              {
+                "tripId": "211997_021026",
+                "routeId": "957",
+                "serviceId": "10409",
+                "agencyId": "15",
+                "agencyName": "מטרופולין",
+                "operatorId": "15",
+                "operatorName": "מטרופולין",
+                "previousSequence": 4,
+                "sequence": 5,
+                "previousTime": "07:14:34",
+                "currentTime": "07:14:15",
+                "previousSourceLine": 2202708,
+                "sourceLine": 2202706,
+                "activeServiceDateCount": 0,
+                "dormant": true,
+                "activeInImportWindow": false
+              },
+              {
+                "tripId": "211997_021026",
+                "routeId": "957",
+                "serviceId": "10409",
+                "agencyId": "15",
+                "agencyName": "מטרופולין",
+                "operatorId": "15",
+                "operatorName": "מטרופולין",
+                "previousSequence": 5,
+                "sequence": 6,
+                "previousTime": "07:14:15",
+                "currentTime": "07:14:09",
+                "previousSourceLine": 2202706,
+                "sourceLine": 2202705,
+                "activeServiceDateCount": 0,
+                "dormant": true,
+                "activeInImportWindow": false
+              },
+              {
+                "tripId": "211997_021026",
+                "routeId": "957",
+                "serviceId": "10409",
+                "agencyId": "15",
+                "agencyName": "מטרופולין",
+                "operatorId": "15",
+                "operatorName": "מטרופולין",
+                "previousSequence": 8,
+                "sequence": 9,
+                "previousTime": "07:15:23",
+                "currentTime": "07:15:15",
+                "previousSourceLine": 2202713,
+                "sourceLine": 2202712,
+                "activeServiceDateCount": 0,
+                "dormant": true,
+                "activeInImportWindow": false
+              },
+              {
+                "tripId": "211997_021026",
+                "routeId": "957",
+                "serviceId": "10409",
+                "agencyId": "15",
+                "agencyName": "מטרופולין",
+                "operatorId": "15",
+                "operatorName": "מטרופולין",
+                "previousSequence": 9,
+                "sequence": 10,
+                "previousTime": "07:15:15",
+                "currentTime": "07:15:11",
+                "previousSourceLine": 2202712,
+                "sourceLine": 2202710,
+                "activeServiceDateCount": 0,
+                "dormant": true,
+                "activeInImportWindow": false
+              },
+              {
+                "tripId": "211997_021026",
+                "routeId": "957",
+                "serviceId": "10409",
+                "agencyId": "15",
+                "agencyName": "מטרופולין",
+                "operatorId": "15",
+                "operatorName": "מטרופולין",
+                "previousSequence": 10,
+                "sequence": 11,
+                "previousTime": "07:15:11",
+                "currentTime": "07:15:09",
+                "previousSourceLine": 2202710,
+                "sourceLine": 2202709,
+                "activeServiceDateCount": 0,
+                "dormant": true,
+                "activeInImportWindow": false
+              },
+              {
+                "tripId": "211997_041026",
+                "routeId": "957",
+                "serviceId": "33208",
+                "agencyId": "15",
+                "agencyName": "מטרופולין",
+                "operatorId": "15",
+                "operatorName": "מטרופולין",
+                "previousSequence": 4,
+                "sequence": 5,
+                "previousTime": "07:14:34",
+                "currentTime": "07:14:15",
+                "previousSourceLine": 2202725,
+                "sourceLine": 2202723,
+                "activeServiceDateCount": 5,
+                "dormant": false,
+                "activeInImportWindow": true
+              },
+              {
+                "tripId": "211997_041026",
+                "routeId": "957",
+                "serviceId": "33208",
+                "agencyId": "15",
+                "agencyName": "מטרופולין",
+                "operatorId": "15",
+                "operatorName": "מטרופולין",
+                "previousSequence": 5,
+                "sequence": 6,
+                "previousTime": "07:14:15",
+                "currentTime": "07:14:09",
+                "previousSourceLine": 2202723,
+                "sourceLine": 2202722,
+                "activeServiceDateCount": 5,
+                "dormant": false,
+                "activeInImportWindow": true
+              },
+              {
+                "tripId": "211997_041026",
+                "routeId": "957",
+                "serviceId": "33208",
+                "agencyId": "15",
+                "agencyName": "מטרופולין",
+                "operatorId": "15",
+                "operatorName": "מטרופולין",
+                "previousSequence": 8,
+                "sequence": 9,
+                "previousTime": "07:15:23",
+                "currentTime": "07:15:15",
+                "previousSourceLine": 2202730,
+                "sourceLine": 2202729,
+                "activeServiceDateCount": 5,
+                "dormant": false,
+                "activeInImportWindow": true
+              },
+              {
+                "tripId": "211997_041026",
+                "routeId": "957",
+                "serviceId": "33208",
+                "agencyId": "15",
+                "agencyName": "מטרופולין",
+                "operatorId": "15",
+                "operatorName": "מטרופולין",
+                "previousSequence": 9,
+                "sequence": 10,
+                "previousTime": "07:15:15",
+                "currentTime": "07:15:11",
+                "previousSourceLine": 2202729,
+                "sourceLine": 2202727,
+                "activeServiceDateCount": 5,
+                "dormant": false,
+                "activeInImportWindow": true
+              },
+              {
+                "tripId": "211997_041026",
+                "routeId": "957",
+                "serviceId": "33208",
+                "agencyId": "15",
+                "agencyName": "מטרופולין",
+                "operatorId": "15",
+                "operatorName": "מטרופולין",
+                "previousSequence": 10,
+                "sequence": 11,
+                "previousTime": "07:15:11",
+                "currentTime": "07:15:09",
+                "previousSourceLine": 2202727,
+                "sourceLine": 2202726,
+                "activeServiceDateCount": 5,
+                "dormant": false,
+                "activeInImportWindow": true
+              },
+              {
+                "tripId": "211997_091026",
+                "routeId": "957",
+                "serviceId": "10410",
+                "agencyId": "15",
+                "agencyName": "מטרופולין",
+                "operatorId": "15",
+                "operatorName": "מטרופולין",
+                "previousSequence": 4,
+                "sequence": 5,
+                "previousTime": "07:14:34",
+                "currentTime": "07:14:15",
+                "previousSourceLine": 2202742,
+                "sourceLine": 2202740,
+                "activeServiceDateCount": 0,
+                "dormant": true,
+                "activeInImportWindow": false
+              },
+              {
+                "tripId": "211997_091026",
+                "routeId": "957",
+                "serviceId": "10410",
+                "agencyId": "15",
+                "agencyName": "מטרופולין",
+                "operatorId": "15",
+                "operatorName": "מטרופולין",
+                "previousSequence": 5,
+                "sequence": 6,
+                "previousTime": "07:14:15",
+                "currentTime": "07:14:09",
+                "previousSourceLine": 2202740,
+                "sourceLine": 2202739,
+                "activeServiceDateCount": 0,
+                "dormant": true,
+                "activeInImportWindow": false
+              },
+              {
+                "tripId": "211997_091026",
+                "routeId": "957",
+                "serviceId": "10410",
+                "agencyId": "15",
+                "agencyName": "מטרופולין",
+                "operatorId": "15",
+                "operatorName": "מטרופולין",
+                "previousSequence": 8,
+                "sequence": 9,
+                "previousTime": "07:15:23",
+                "currentTime": "07:15:15",
+                "previousSourceLine": 2202747,
+                "sourceLine": 2202746,
+                "activeServiceDateCount": 0,
+                "dormant": true,
+                "activeInImportWindow": false
+              },
+              {
+                "tripId": "211997_091026",
+                "routeId": "957",
+                "serviceId": "10410",
+                "agencyId": "15",
+                "agencyName": "מטרופולין",
+                "operatorId": "15",
+                "operatorName": "מטרופולין",
+                "previousSequence": 9,
+                "sequence": 10,
+                "previousTime": "07:15:15",
+                "currentTime": "07:15:11",
+                "previousSourceLine": 2202746,
+                "sourceLine": 2202744,
+                "activeServiceDateCount": 0,
+                "dormant": true,
+                "activeInImportWindow": false
+              },
+              {
+                "tripId": "211997_091026",
+                "routeId": "957",
+                "serviceId": "10410",
+                "agencyId": "15",
+                "agencyName": "מטרופולין",
+                "operatorId": "15",
+                "operatorName": "מטרופולין",
+                "previousSequence": 10,
+                "sequence": 11,
+                "previousTime": "07:15:11",
+                "currentTime": "07:15:09",
+                "previousSourceLine": 2202744,
+                "sourceLine": 2202743,
+                "activeServiceDateCount": 0,
+                "dormant": true,
+                "activeInImportWindow": false
+              },
+              {
+                "tripId": "211997_111026",
+                "routeId": "957",
+                "serviceId": "33598",
+                "agencyId": "15",
+                "agencyName": "מטרופולין",
+                "operatorId": "15",
+                "operatorName": "מטרופולין",
+                "previousSequence": 4,
+                "sequence": 5,
+                "previousTime": "07:14:34",
+                "currentTime": "07:14:15",
+                "previousSourceLine": 2202759,
+                "sourceLine": 2202757,
+                "activeServiceDateCount": 10,
+                "dormant": false,
+                "activeInImportWindow": true
+              },
+              {
+                "tripId": "211997_111026",
+                "routeId": "957",
+                "serviceId": "33598",
+                "agencyId": "15",
+                "agencyName": "מטרופולין",
+                "operatorId": "15",
+                "operatorName": "מטרופולין",
+                "previousSequence": 5,
+                "sequence": 6,
+                "previousTime": "07:14:15",
+                "currentTime": "07:14:09",
+                "previousSourceLine": 2202757,
+                "sourceLine": 2202756,
+                "activeServiceDateCount": 10,
+                "dormant": false,
+                "activeInImportWindow": true
+              },
+              {
+                "tripId": "211997_111026",
+                "routeId": "957",
+                "serviceId": "33598",
+                "agencyId": "15",
+                "agencyName": "מטרופולין",
+                "operatorId": "15",
+                "operatorName": "מטרופולין",
+                "previousSequence": 8,
+                "sequence": 9,
+                "previousTime": "07:15:23",
+                "currentTime": "07:15:15",
+                "previousSourceLine": 2202764,
+                "sourceLine": 2202763,
+                "activeServiceDateCount": 10,
+                "dormant": false,
+                "activeInImportWindow": true
+              },
+              {
+                "tripId": "211997_111026",
+                "routeId": "957",
+                "serviceId": "33598",
+                "agencyId": "15",
+                "agencyName": "מטרופולין",
+                "operatorId": "15",
+                "operatorName": "מטרופולין",
+                "previousSequence": 9,
+                "sequence": 10,
+                "previousTime": "07:15:15",
+                "currentTime": "07:15:11",
+                "previousSourceLine": 2202763,
+                "sourceLine": 2202761,
+                "activeServiceDateCount": 10,
+                "dormant": false,
+                "activeInImportWindow": true
+              },
+              {
+                "tripId": "211997_111026",
+                "routeId": "957",
+                "serviceId": "33598",
+                "agencyId": "15",
+                "agencyName": "מטרופולין",
+                "operatorId": "15",
+                "operatorName": "מטרופולין",
+                "previousSequence": 10,
+                "sequence": 11,
+                "previousTime": "07:15:11",
+                "currentTime": "07:15:09",
+                "previousSourceLine": 2202761,
+                "sourceLine": 2202760,
+                "activeServiceDateCount": 10,
+                "dormant": false,
+                "activeInImportWindow": true
+              }
+            ]
+          },
+          "pickup_dropoff_rule_errors": 0,
+          "effective_chronology": {
+            "policyId": "motis-minute-bracket-v1",
+            "status": "pass",
+            "blocking": true,
+            "feedTripCount": 425160,
+            "validatedProfileCount": 425160,
+            "effectiveEventCount": 31308378,
+            "profileErrorCount": 0,
+            "samples": [],
+            "bounds": {
+              "resolutionSeconds": 60,
+              "eventFloorCeiling": "every effective event remains inside its raw minute",
+              "intervalDistortionStrictlyLessThanSeconds": 60,
+              "firstArrivalProjected": false,
+              "finalDepartureProjected": false
+            }
+          }
+        },
+        "translations": {
+          "rows": 102603,
+          "schema": "mot-legacy",
+          "languages": {
+            "HE": 36955,
+            "AR": 32831,
+            "EN": 32817
+          }
+        }
+      },
+      "pairing": {
+        "feedTripCount": 425160,
+        "fullTripIdentityCount": 425160,
+        "dormantTripDefinitions": 28603,
+        "serviceDatePairsEvaluated": 3134997,
+        "feedJoinKeyCount": 252581,
+        "mappingKeyCount": 918492,
+        "unmatchedJoinKeyCount": 0,
+        "unmatchedJoinKeySamples": [],
+        "tripsWithoutMappedServiceDates": 267532,
+        "tripSamplesWithoutMappedDates": [
+          "30204012_041026",
+          "30204013_041026",
+          "30204014_041026",
+          "35232341_041026",
+          "47340583_041026",
+          "585586051_041026",
+          "585586052_041026",
+          "586150937_041026",
+          "17255791_041026",
+          "17255790_300926"
+        ],
+        "unmappedActiveServiceDateCount": 31,
+        "unmappedServiceDateSamples": [
+          "2026-09-30",
+          "2026-10-01",
+          "2026-10-02",
+          "2026-10-03",
+          "2026-10-04",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08",
+          "2026-10-09",
+          "2026-10-10",
+          "2026-10-11",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-16",
+          "2026-10-17",
+          "2026-10-18",
+          "2026-10-19"
+        ],
+        "matchedServiceDateCount": 31,
+        "feedServiceDateCount": 31,
+        "feedServiceDates": [
+          "2026-09-30",
+          "2026-10-01",
+          "2026-10-02",
+          "2026-10-03",
+          "2026-10-04",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08",
+          "2026-10-09",
+          "2026-10-10",
+          "2026-10-11",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-16",
+          "2026-10-17",
+          "2026-10-18",
+          "2026-10-19",
+          "2026-10-20",
+          "2026-10-21",
+          "2026-10-22",
+          "2026-10-23",
+          "2026-10-24",
+          "2026-10-25",
+          "2026-10-26",
+          "2026-10-27",
+          "2026-10-28",
+          "2026-10-29",
+          "2026-10-30"
+        ],
+        "mappingDateRange": [
+          "2023-10-08",
+          "2200-01-01"
+        ],
+        "feedDateWindow": [
+          "2026-09-30",
+          "2026-10-30"
+        ],
+        "dateWindowsOverlap": true,
+        "staticPairingVerdict": "ACCEPTED",
+        "serviceDateCoverageDiagnostic": "warning_only_not_realtime_proof",
+        "reversedRanges": [],
+        "fullTripIdentityUsedForValidation": true,
+        "tripDateEvidenceSamples": [
+          {
+            "tripId": "30204012_041026",
+            "serviceId": "8195",
+            "activeServiceDateCount": 20,
+            "mappingDateCount": 4,
+            "mappingServiceDates": [
+              "2026-10-04",
+              "2026-10-11",
+              "2026-10-18",
+              "2026-10-25"
+            ]
+          },
+          {
+            "tripId": "30204013_041026",
+            "serviceId": "8195",
+            "activeServiceDateCount": 20,
+            "mappingDateCount": 4,
+            "mappingServiceDates": [
+              "2026-10-04",
+              "2026-10-11",
+              "2026-10-18",
+              "2026-10-25"
+            ]
+          },
+          {
+            "tripId": "30204014_041026",
+            "serviceId": "8195",
+            "activeServiceDateCount": 20,
+            "mappingDateCount": 4,
+            "mappingServiceDates": [
+              "2026-10-04",
+              "2026-10-11",
+              "2026-10-18",
+              "2026-10-25"
+            ]
+          },
+          {
+            "tripId": "35232341_041026",
+            "serviceId": "8195",
+            "activeServiceDateCount": 20,
+            "mappingDateCount": 4,
+            "mappingServiceDates": [
+              "2026-10-04",
+              "2026-10-11",
+              "2026-10-18",
+              "2026-10-25"
+            ]
+          },
+          {
+            "tripId": "47340583_041026",
+            "serviceId": "8195",
+            "activeServiceDateCount": 20,
+            "mappingDateCount": 4,
+            "mappingServiceDates": [
+              "2026-10-04",
+              "2026-10-11",
+              "2026-10-18",
+              "2026-10-25"
+            ]
+          },
+          {
+            "tripId": "585586051_041026",
+            "serviceId": "8195",
+            "activeServiceDateCount": 20,
+            "mappingDateCount": 4,
+            "mappingServiceDates": [
+              "2026-10-04",
+              "2026-10-11",
+              "2026-10-18",
+              "2026-10-25"
+            ]
+          },
+          {
+            "tripId": "585586052_041026",
+            "serviceId": "8195",
+            "activeServiceDateCount": 20,
+            "mappingDateCount": 4,
+            "mappingServiceDates": [
+              "2026-10-04",
+              "2026-10-11",
+              "2026-10-18",
+              "2026-10-25"
+            ]
+          },
+          {
+            "tripId": "586150937_041026",
+            "serviceId": "8195",
+            "activeServiceDateCount": 20,
+            "mappingDateCount": 4,
+            "mappingServiceDates": [
+              "2026-10-04",
+              "2026-10-11",
+              "2026-10-18",
+              "2026-10-25"
+            ]
+          },
+          {
+            "tripId": "17255791_041026",
+            "serviceId": "8196",
+            "activeServiceDateCount": 24,
+            "mappingDateCount": 4,
+            "mappingServiceDates": [
+              "2026-10-04",
+              "2026-10-11",
+              "2026-10-18",
+              "2026-10-25"
+            ]
+          },
+          {
+            "tripId": "17255841_041026",
+            "serviceId": "8197",
+            "activeServiceDateCount": 4,
+            "mappingDateCount": 4,
+            "mappingServiceDates": [
+              "2026-10-09",
+              "2026-10-16",
+              "2026-10-23",
+              "2026-10-30"
+            ]
+          },
+          {
+            "tripId": "2039_041026",
+            "serviceId": "8197",
+            "activeServiceDateCount": 4,
+            "mappingDateCount": 4,
+            "mappingServiceDates": [
+              "2026-10-09",
+              "2026-10-16",
+              "2026-10-23",
+              "2026-10-30"
+            ]
+          },
+          {
+            "tripId": "2040_041026",
+            "serviceId": "8197",
+            "activeServiceDateCount": 4,
+            "mappingDateCount": 4,
+            "mappingServiceDates": [
+              "2026-10-09",
+              "2026-10-16",
+              "2026-10-23",
+              "2026-10-30"
+            ]
+          },
+          {
+            "tripId": "17255840_021026",
+            "serviceId": "16160",
+            "activeServiceDateCount": 1,
+            "mappingDateCount": 1,
+            "mappingServiceDates": [
+              "2026-10-02"
+            ]
+          },
+          {
+            "tripId": "17255841_021026",
+            "serviceId": "16160",
+            "activeServiceDateCount": 1,
+            "mappingDateCount": 1,
+            "mappingServiceDates": [
+              "2026-10-02"
+            ]
+          },
+          {
+            "tripId": "2039_021026",
+            "serviceId": "16160",
+            "activeServiceDateCount": 1,
+            "mappingDateCount": 1,
+            "mappingServiceDates": [
+              "2026-10-02"
+            ]
+          },
+          {
+            "tripId": "2040_021026",
+            "serviceId": "16160",
+            "activeServiceDateCount": 1,
+            "mappingDateCount": 1,
+            "mappingServiceDates": [
+              "2026-10-02"
+            ]
+          },
+          {
+            "tripId": "17255790_300926",
+            "serviceId": "23295",
+            "activeServiceDateCount": 2,
+            "mappingDateCount": 0,
+            "mappingServiceDates": []
+          },
+          {
+            "tripId": "17255791_300926",
+            "serviceId": "23295",
+            "activeServiceDateCount": 2,
+            "mappingDateCount": 0,
+            "mappingServiceDates": []
+          },
+          {
+            "tripId": "30204011_300926",
+            "serviceId": "23295",
+            "activeServiceDateCount": 2,
+            "mappingDateCount": 0,
+            "mappingServiceDates": []
+          },
+          {
+            "tripId": "30204012_300926",
+            "serviceId": "23295",
+            "activeServiceDateCount": 2,
+            "mappingDateCount": 0,
+            "mappingServiceDates": []
+          }
+        ]
+      },
+      "importDays": 31,
+      "importServiceDates": [
+        "2026-09-30",
+        "2026-10-01",
+        "2026-10-02",
+        "2026-10-03",
+        "2026-10-04",
+        "2026-10-05",
+        "2026-10-06",
+        "2026-10-07",
+        "2026-10-08",
+        "2026-10-09",
+        "2026-10-10",
+        "2026-10-11",
+        "2026-10-12",
+        "2026-10-13",
+        "2026-10-14",
+        "2026-10-15",
+        "2026-10-16",
+        "2026-10-17",
+        "2026-10-18",
+        "2026-10-19",
+        "2026-10-20",
+        "2026-10-21",
+        "2026-10-22",
+        "2026-10-23",
+        "2026-10-24",
+        "2026-10-25",
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-28",
+        "2026-10-29",
+        "2026-10-30"
+      ],
+      "tripCount": 425160,
+      "stopTimeCount": 16079349
+    },
+    "validatedAt": "2026-09-30T13:32:56.701815+00:00",
+    "validationRunAt": "2026-09-30T13:32:56.701815+00:00",
+    "sourceCheckedAt": "2026-09-30T09:33:07.260277+00:00",
+    "generationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
+    "configSha256": "2f75d87301d97b36461bd5826f0c46a1eb375f0da3434f39ee59563f21b6e998",
+    "identity": {
+      "inputs": {
+        "israel-public-transportation.zip": "8629a73c3f6ff024a78e9b8c83602c09180e13e597b82b98a4377a78f3dd2fd9",
+        "TripIdToDate.zip": "7775623cae79f80040d5bcfe5058fa489736d58da6919b65579424c417561da5",
+        "israel-and-palestine-latest.osm.pbf": "8a34b30f91a63ef9239961ba0e4d660ae22deda2f6da4b85ba4772a6b7c4c74f"
+      },
+      "configSha256": "2f75d87301d97b36461bd5826f0c46a1eb375f0da3434f39ee59563f21b6e998",
+      "engineDigest": "sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330",
+      "parserVersion": 1,
+      "referenceSchemaVersion": 2,
+      "timingPolicy": {
+        "policy_id": "motis-minute-bracket-v1",
+        "motis_source_commit": "061857d38a375248ae62b4ce722753368a75e474",
+        "nigiri_source_commit": "0a08a1c09dad25c5d892b2fd7166b03e82d62970",
+        "version": 1,
+        "resolution_seconds": 60
+      },
+      "mode": "real",
+      "window": {
+        "firstDay": "2026-09-30",
+        "days": 31
+      },
+      "importMemoryCapBytes": 6442450944,
+      "localEngineSlot": "blue",
+      "validationEvidenceSha256": "81e4aaa8cd0beaa2c80739abf380e01eae0062f6915cc71cf94f62d84d2b5e45"
+    },
+    "failure": "MOTIS import returned a non-zero exit code"
+  },
+  "importLogSha256": "795c90546d72a20076827bf960ff614b7ef19f38fa8504db533369939a35868d",
+  "importLog": "osr\n  existing: {}\n  current: {\"elevation_dir\":14695981039346656037,\"osm\":18082151005999835212,\"osr_bin_ver\":37}\nadr\n  existing: {}\n  current: {\"adr_bin_ver\":15,\"geocoding\":1,\"osm\":18082151005999835212,\"reverse_geocoding\":0}\ntt\n  existing: {}\n  current: {\"nigiri_bin_ver\":37,\"timetable\":1807312777267473824}\nadr_extend\n  existing: {}\n  current: {\"adr_bin_ver\":15,\"adr_ext_bin_ver\":6,\"geocoding\":1,\"nigiri_bin_ver\":37,\"osm\":18082151005999835212,\"reverse_geocoding\":0,\"timetable\":1807312777267473824}\nmatches\n  existing: {}\n  current: {\"matches_bin_ver\":6,\"nigiri_bin_ver\":37,\"osm\":18082151005999835212,\"osr_bin_ver\":37,\"timetable\":1807312777267473824,\"way_matches\":12638357624858014701}\nrunning tasks: [osr ready, adr ready, tt ready, adr_extend waiting for {adr, tt}, matches waiting for {tt, osr}]\n\u001b[K         adr: [■                                                       ]   0%\n\u001b[K  adr_extend: [■                                                       ]   0%\n\u001b[K     matches: [■                                                       ]   0%\n\u001b[K         osr: [■                                                       ]   0% | Load OSM / Pass 1\n\u001b[K          tt: [■                                                       ]   0%\nunable to import: resize error\nconfig:\nserver:\n  host: 127.0.0.1\n  port: 59081\n  web_folder: ui\n  n_threads: 0\n  gpu_states: 2\nosm: /input/israel-and-palestine-latest.osm.pbf\ntimetable:\n  first_day: 2026-09-30\n  num_days: 31\n  tb: false\n  railviz: true\n  with_shapes: true\n  adjust_footpaths: true\n  merge_dupes_intra_src: false\n  merge_dupes_inter_src: false\n  link_stop_distance: 100\n  update_interval: 60\n  http_timeout: 30\n  canned_rt: false\n  incremental_rt_update: false\n  extend_missing_footpaths: false\n  max_footpath_length: 15\n  default_transfer_time: 2\n  max_matching_distance: 25.000000\n  preprocess_max_matching_distance: 250.000000\n  datasets:\n    mot60day:\n      path: /input/israel-public-transportation.zip\n      extend_calendar: false\n      default_bikes_allowed: false\n      default_cars_allowed: false\n      default_reservation_not_required: true\n      clasz_reservation_not_required:\n        AIR: false\n        COACH: false\n        NIGHT: false\n        ODM: false\n        RIDESHARING: false\nelevators: false\nstreet_routing: true\nlimits:\n  stoptimes_max_results: 1024\n  plan_max_results: 256\n  plan_max_search_window_minutes: 5760\n  stops_max_results: 8192\n  onetomany_max_many: 128\n  onetoall_max_results: 65535\n  onetoall_max_travel_minutes: 90\n  routing_max_timeout_seconds: 90\n  gtfsrt_expose_max_trip_updates: 100\n  street_routing_max_prepost_transit_seconds: 3600\n  street_routing_max_direct_seconds: 21600\n  geocode_max_suggestions: 512\n  reverse_geocode_max_results: 512\n  max_max_matching_distance: 250.000000\nosr_footpath: false\ngeocoding: true\nreverse_geocoding: false\n",
+  "container": {
+    "id": "ecf7e6a6daddec92d5bb1d526f64448714217194c849bb4e041304e6b493a6d1",
+    "imageId": "sha256:76a15c76bcff11c6f0595fed9a170284e49c2d9017c47bf4da6879a0e7452598",
+    "state": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 1,
+      "Error": "",
+      "StartedAt": "2026-09-30T17:54:59.013182389Z",
+      "FinishedAt": "2026-09-30T17:55:03.448911176Z"
+    },
+    "memoryLimitBytes": 6442450944,
+    "mounts": [
+      {
+        "Type": "bind",
+        "Source": "C:/Projects/OpenTransit/.runtime/m1-20260930/inputs/israel-public-transportation.zip",
+        "Destination": "/input/israel-public-transportation.zip",
+        "Mode": "",
+        "RW": false,
+        "Propagation": "rprivate"
+      },
+      {
+        "Type": "bind",
+        "Source": "C:/Projects/OpenTransit/.runtime/m1-20260930/inputs/TripIdToDate.zip",
+        "Destination": "/input/TripIdToDate.zip",
+        "Mode": "",
+        "RW": false,
+        "Propagation": "rprivate"
+      },
+      {
+        "Type": "bind",
+        "Source": "C:/Projects/OpenTransit/.runtime/m1-20260930/inputs/israel-and-palestine-latest.osm.pbf",
+        "Destination": "/input/israel-and-palestine-latest.osm.pbf",
+        "Mode": "",
+        "RW": false,
+        "Propagation": "rprivate"
+      },
+      {
+        "Type": "bind",
+        "Source": "C:/Users/nhenr/.codex/worktrees/8007/OpenTransit/.runtime/generations/m3-functional-blue-20260930/config.yml",
+        "Destination": "/config.yml",
+        "Mode": "",
+        "RW": false,
+        "Propagation": "rprivate"
+      },
+      {
+        "Type": "bind",
+        "Source": "C:/Users/nhenr/.codex/worktrees/8007/OpenTransit/.runtime/generations/m3-functional-blue-20260930/motis",
+        "Destination": "/data",
+        "Mode": "",
+        "RW": true,
+        "Propagation": "rprivate"
+      }
+    ]
+  },
+  "nextAction": "Import graph into a new Linux named volume and export it; reuse the completed exact-identity reference and full audit in a new candidate. Preserve this failed attempt."
+}

@@ -1,0 +1,1688 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-10-01T06:20:44.235961+00:00",
+  "scope": "Preserved-copy provider sealing/checkpoint preparation and unresolved focused adapter checks",
+  "status": "provider_identity_prepared_adapter_checks_failed_no_api_acceptance",
+  "originalTrialEvidence": {
+    "path": "services\\api\\results\\m4-photon-enriched-trial-20261001-01.json",
+    "sha256": "13529bcbfff539ef4cbbcbdf7dd4f119c9291d914b252e020701a6381f57d840",
+    "bytes": 178537
+  },
+  "originalTrialVolume": "opentransit-photon-enriched-m4-20261001-01",
+  "originalTrialVolumeModified": false,
+  "runtimeCandidateVolume": "opentransit-photon-bound-m4-20261001-01",
+  "preservedNeverServedCheckpointVolume": "opentransit-photon-bound-checkpoint-m4-20261001-01",
+  "checkpoint": {
+    "schemaVersion": 1,
+    "capturedAt": "2026-10-01T06:14:40.026328+00:00",
+    "candidateVolume": "opentransit-photon-bound-m4-20261001-01",
+    "serverStopped": true,
+    "mountReadOnly": true,
+    "treeSha256": "4d25fad6638a5dc0c4c289781a798a6cf9bc4ad599265a5c348056bba1db1140",
+    "files": [
+      {
+        "path": "photon_data/node_1/config/log4j2.properties",
+        "bytes": 10908,
+        "sha256": "1a860fd33dd1fc159010819c16ad7442d3a85728efb9be8418e11df4311187b5"
+      },
+      {
+        "path": "photon_data/node_1/config/opensearch.yml",
+        "bytes": 2800,
+        "sha256": "c4432c459f7a2c79d9427df2afde393f6816cab49bd858250b56c851ee7ef56c"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/_state/_11.fdm",
+        "bytes": 157,
+        "sha256": "d1414dcde39a1d06493ec26d9de9eb6f1d71a5922db8fe0fc753a6fd654c9a02"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/_state/_11.fdt",
+        "bytes": 391,
+        "sha256": "793fb203f964880a05b64822b8cb782e13fc59bc805f9aa4b191c9b001ce091f"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/_state/_11.fdx",
+        "bytes": 64,
+        "sha256": "76143052626641f576093a0a87a7734e99fec773506569ad0ce8147f0f2ff224"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/_state/_11.fnm",
+        "bytes": 280,
+        "sha256": "5f6a63080cb0b1e4b068d54024f10e55a2b9ce41311f6f16174add813c6dd381"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/_state/_11.si",
+        "bytes": 509,
+        "sha256": "16f9f8daa935fd2525776719b1d3e14ec05446749cd5c697e11b7b65ed5ac415"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/_state/_11_Lucene104_0.doc",
+        "bytes": 79,
+        "sha256": "50aa0b039d4b5953a522511313c79d257432d5892ecad844374a48c739f5807d"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/_state/_11_Lucene104_0.psm",
+        "bytes": 104,
+        "sha256": "83b97f50e75702b7ae4381d2fb3a936024249020d6371c36fbd86015060442b3"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/_state/_11_Lucene104_0.tim",
+        "bytes": 86,
+        "sha256": "debac475de7e9cb9e2ce20515a3450053beafcbba20761a270050e7049f30238"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/_state/_11_Lucene104_0.tip",
+        "bytes": 82,
+        "sha256": "312ea8db633d44000c2ee48329bebc4e720ce7b87a7ec621f36406792d1b41cb"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/_state/_11_Lucene104_0.tmd",
+        "bytes": 176,
+        "sha256": "da98b580401a3603bf3328534de844746fd641739742f1ecf7a990096d167874"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/_state/_14.cfe",
+        "bytes": 315,
+        "sha256": "cf45f3f66817f940b58220d576487bdea40be4157ae7d239b44f7165afc0fa21"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/_state/_14.cfs",
+        "bytes": 5690,
+        "sha256": "c06cbb8bdc175a7fbf19c45f9401bd38d5a498333f03bf928e8d055f9a5feac4"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/_state/_14.si",
+        "bytes": 356,
+        "sha256": "9f0770bd6fd9ab2d14ed3284d5c92e8586422a6a5a88ad3b378a098ab785ff0f"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/_state/manifest-3.st",
+        "bytes": 109,
+        "sha256": "b69bfd1b00be70215581058c48c4f5afbabd143638d4c460ef3ac1820176344f"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/_state/node-3.st",
+        "bytes": 90,
+        "sha256": "750f144fced55872dfeda214c51295ba0162415c2b6fb3bff83c9fe7405c7930"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/_state/segments_17",
+        "bytes": 335,
+        "sha256": "e00ef2a57cdc4c7e39a076dd6eecdbcbcdfc19bfe275755608f6b03e873782d6"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/_state/write.lock",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/0/_state/retention-leases-3.st",
+        "bytes": 183,
+        "sha256": "61755328b0f588eb757a1ff8eb371187ed13e11dc4ead7ae5e993f7eb309e718"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/0/_state/state-3.st",
+        "bytes": 125,
+        "sha256": "fa6f4e4f892eec35998d2944dd14732bae3f699b8779c85cd7b8852a37c1ce5c"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/0/index/_0.cfe",
+        "bytes": 549,
+        "sha256": "1f937186b2c2a842c5e3ed77f5f75025c38c48246750e258f3f9456f37fc7a8f"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/0/index/_0.cfs",
+        "bytes": 9197159,
+        "sha256": "1a8a272c6b6a7403dbb072dc66b358b4917db3f5c0e9eb5ea9cfb01b142ed47b"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/0/index/_0.si",
+        "bytes": 359,
+        "sha256": "b386dde1e09b7b3a06e1e4587e9a45e9e41aa9751849b3f8a6157eac37ed9629"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/0/index/_1.cfe",
+        "bytes": 507,
+        "sha256": "81066511d9a31a4cd3d081a7f1fa1f508c65731829c9149746123e69ef35cf21"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/0/index/_1.cfs",
+        "bytes": 6450079,
+        "sha256": "cdcbb4b65126f6c66f00f8e54600b320624f571457874fd55a83cff43e2d3a98"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/0/index/_1.si",
+        "bytes": 359,
+        "sha256": "aa854eb32d0b659f72f421e1235ab2864731716309cf0cba6e893a377e56a70f"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/0/index/segments_3",
+        "bytes": 405,
+        "sha256": "a95edb973157b61a6825527f3b8331068ee3753b9e475a3a4d686f8862376d29"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/0/index/write.lock",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/0/translog/translog-6.tlog",
+        "bytes": 55,
+        "sha256": "b9a2509b4cb0b48225ef50db6bb379da8e1806d489fee4df3ba0e6cf34c2a77a"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/0/translog/translog.ckp",
+        "bytes": 88,
+        "sha256": "200667fcd99a3fc087f90b691d9e8f448b2a17d7ce9bf2486dda22213b0e200f"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/1/_state/retention-leases-3.st",
+        "bytes": 183,
+        "sha256": "3ccb2512dfb023f506553d3eca64289e1faa10685b70a73a873a7c9a5ac768e1"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/1/_state/state-3.st",
+        "bytes": 125,
+        "sha256": "1beb5fbb83a77d6e928e2369a2c139ef63c2c7d0b97ab28d2f0eae79606d81aa"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/1/index/_0.cfe",
+        "bytes": 549,
+        "sha256": "6ad331571023db811902b671e050eb4182f14a8f3ed5f55a52da472529c39531"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/1/index/_0.cfs",
+        "bytes": 12953040,
+        "sha256": "11c851f91bb2d64d50e8f908048905206402a37e577ce3719e273dbb8b365f3b"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/1/index/_0.si",
+        "bytes": 359,
+        "sha256": "c29df510f7e481c443d639b7551060d7bdd5dc4a6252b0a35f3c181a0051794d"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/1/index/_1.cfe",
+        "bytes": 507,
+        "sha256": "edd069b79748adf6b7586a9f4fb6a7226f9c0ad14c075981739884ea3f521403"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/1/index/_1.cfs",
+        "bytes": 2774476,
+        "sha256": "8aa0703b90ac6a101c1105aaf621d9fdd0beacfc83318092adad287cb6562162"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/1/index/_1.si",
+        "bytes": 359,
+        "sha256": "c5a409c3fae68104b394801c43dedef7c71ceb279ee3f19204be4d68af2f6de3"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/1/index/segments_3",
+        "bytes": 405,
+        "sha256": "5b42c2ae257cdfffcc45b8b8994ab429b10f3bc0e2ecaa7f90a7526b783c5c62"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/1/index/write.lock",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/1/translog/translog-6.tlog",
+        "bytes": 55,
+        "sha256": "f0b59f1803c469098f40ed4b099c1e6282a7165ad61c7555c424b31d7b8dc3ae"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/1/translog/translog.ckp",
+        "bytes": 88,
+        "sha256": "5bf618687697738a951e3e97c7f818abecdc8dfb2c62e2f32b9e8001e721a258"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/2/_state/retention-leases-3.st",
+        "bytes": 183,
+        "sha256": "a142067753eff992d4600f8c0a837b28fc69f19ae90b57c28bf8e6ab485e915e"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/2/_state/state-3.st",
+        "bytes": 125,
+        "sha256": "a4e0cacdffe06fd6ab563f88684da2f74c5a963040ebd2dcedef2bab408f6e1f"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/2/index/_0.cfe",
+        "bytes": 549,
+        "sha256": "6eb3c770bbf03f6b5ae44a8d262891a116139ace1d3c4bb5670210b053b42a3f"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/2/index/_0.cfs",
+        "bytes": 11189673,
+        "sha256": "f582f0041c4c0d37e5ea53e3717b995257d23e076d1c1fc56069b15108763092"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/2/index/_0.si",
+        "bytes": 359,
+        "sha256": "05d172329c1f2e7a5dd81fe486c08681c9b0fa85d873fa65598c9acfa8be0c1a"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/2/index/_1.cfe",
+        "bytes": 507,
+        "sha256": "6dc935a698e444ae3c4d055accd2471595ce0e56d132795cf058254a338ccd72"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/2/index/_1.cfs",
+        "bytes": 4674094,
+        "sha256": "f5ea22a8078cce70ed34486b07b2c56de65f2615739ec9af14f1643409654ead"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/2/index/_1.si",
+        "bytes": 359,
+        "sha256": "76b6d291844cf4cd197653d413d496a384488c836d6d4df77cbecbbbc66a76cb"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/2/index/segments_3",
+        "bytes": 405,
+        "sha256": "767e30596b4ac02a0d66db6fbf49dcddf614f19202a2fe70c280a1d0202fa67d"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/2/index/write.lock",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/2/translog/translog-6.tlog",
+        "bytes": 55,
+        "sha256": "34f13a92da616ce7b49d6b6fa3457b32f1c2f4956ffd55a01dfa288e9e5289a6"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/2/translog/translog.ckp",
+        "bytes": 88,
+        "sha256": "bf9a7f02cf82f1027079de8c552fc94486cd2c61374dbf1ec469f69775ca1307"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/3/_state/retention-leases-3.st",
+        "bytes": 183,
+        "sha256": "9ac0a1c51cfbbb45b94aa5151705683c3fa90e85d84f72ff566f904a962e4b34"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/3/_state/state-3.st",
+        "bytes": 125,
+        "sha256": "efd5cc1b645f5d6a787aa67d08198bdfee4ac32f78a3fb6886e6d360a49fd274"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/3/index/_0.cfe",
+        "bytes": 549,
+        "sha256": "f1adb38fdafe9865d95dc880c087b04c6144e3e6ffe2632f494e9c4e476ada95"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/3/index/_0.cfs",
+        "bytes": 15155307,
+        "sha256": "52c86df76a009f688b4ff0ca91a73690eef03c341edc817f85585f066e637047"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/3/index/_0.si",
+        "bytes": 359,
+        "sha256": "4bf61a8370307a09e85b7443c02bde97dd0163f0a22f5adc9aa051229a60eae1"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/3/index/segments_3",
+        "bytes": 322,
+        "sha256": "663f98bf18ffd3cf25b824e9b31b6978750aa44de665fad25bbe6620723ddf47"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/3/index/write.lock",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/3/translog/translog-6.tlog",
+        "bytes": 55,
+        "sha256": "70781c2cecf5a9c5e441bec7f13b829afcab1e1c4cf0f47cff58e4e6b0f4c664"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/3/translog/translog.ckp",
+        "bytes": 88,
+        "sha256": "ed159a6f96e778022fcbaeda23b2d71a6bdcab08b4dec6d450c03a33745aff82"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/4/_state/retention-leases-3.st",
+        "bytes": 183,
+        "sha256": "47f3e4be95376f2b4911af02720d76fa86fd824d5aea09d33ec9ed23f45e0811"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/4/_state/state-3.st",
+        "bytes": 125,
+        "sha256": "2506e75dbb467058935a6ccd94ddd1344475d99d0d21f682105ad503b3f6f0da"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/4/index/_0.cfe",
+        "bytes": 549,
+        "sha256": "c0853d46b7a9b9d603beadd45173fd22b4a643c8d0605dd16b840d71b1e26c81"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/4/index/_0.cfs",
+        "bytes": 15139214,
+        "sha256": "2ca25cbdab48156b31d0c002e2606d5c6b987040f367fc7e5aae8ef45e451e4f"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/4/index/_0.si",
+        "bytes": 359,
+        "sha256": "188748fee368df2c754209fa863706b2fb70294952b12edf69d207fff1175c46"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/4/index/segments_3",
+        "bytes": 322,
+        "sha256": "63528286a5ce03a6fef7f2ad44adb0d64c8c86fed0726cd49ba006ad7316aca7"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/4/index/write.lock",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/4/translog/translog-6.tlog",
+        "bytes": 55,
+        "sha256": "41943f30d95cb06c38118c062ef7bad8389b1ceba48acb073fd4872103ef404b"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/4/translog/translog.ckp",
+        "bytes": 88,
+        "sha256": "4e4c338d4d2082127eec86e115a3b59021325359325b5b1e8be47448857f699c"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/indices/MRubk1LdQP2TIVxEUhU0pg/_state/state-24.st",
+        "bytes": 9684,
+        "sha256": "9ee86f5ea651497dea55eeb1dc2374396ee586b2d38cb325692efddf669d4772"
+      },
+      {
+        "path": "photon_data/node_1/data/nodes/0/node.lock",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "photon_data/node_1/logs/photon.log",
+        "bytes": 42268,
+        "sha256": "61b10085756d2503117742b905f021d337a6a3fa90b6e75cc5c9b0ad1ea51c41"
+      },
+      {
+        "path": "photon_data/node_1/logs/photon_deprecation.json",
+        "bytes": 404,
+        "sha256": "01780049855821b40febb0f64febd679e32b49c22c11503fccc0bd0abb2c2588"
+      },
+      {
+        "path": "photon_data/node_1/logs/photon_deprecation.log",
+        "bytes": 668,
+        "sha256": "bb4c591088ab0df66f33f4252c4b69bac6979915d84e594ebcd1101a72bcf20d"
+      },
+      {
+        "path": "photon_data/node_1/logs/photon_index_indexing_slowlog.json",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "photon_data/node_1/logs/photon_index_indexing_slowlog.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "photon_data/node_1/logs/photon_index_search_slowlog.json",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "photon_data/node_1/logs/photon_index_search_slowlog.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "photon_data/node_1/logs/photon_server.json",
+        "bytes": 24004,
+        "sha256": "b2abf5c946ce86d5ce8bd23242b4dceca70bc45a1de332ab9852b6fc85512c60"
+      }
+    ],
+    "scope": "Quiescent checkpoint; live writable index files are not immutable artifacts"
+  },
+  "sealHttp": {
+    "schemaVersion": 1,
+    "capturedAt": "2026-10-01T06:11:45.204089+00:00",
+    "status": "passed",
+    "candidateVolume": "opentransit-photon-bound-m4-20261001-01",
+    "originalTrialVolumeModified": false,
+    "requests": [
+      {
+        "startedAt": "2026-10-01T06:11:45.020547+00:00",
+        "method": "GET",
+        "path": "/",
+        "status": 200,
+        "body": {
+          "name": "Node 1",
+          "cluster_name": "photon",
+          "cluster_uuid": "3xU4JzCwTSugIms1SuRlMg",
+          "version": {
+            "distribution": "opensearch",
+            "number": "3.8.0",
+            "build_type": "unknown",
+            "build_hash": "unknown",
+            "build_date": "unknown",
+            "build_snapshot": true,
+            "lucene_version": "10.5.0",
+            "minimum_wire_compatibility_version": "2.19.0",
+            "minimum_index_compatibility_version": "2.0.0"
+          },
+          "tagline": "The OpenSearch Project: https://opensearch.org/"
+        }
+      },
+      {
+        "startedAt": "2026-10-01T06:11:45.060760+00:00",
+        "method": "GET",
+        "path": "/photon/_settings?flat_settings=true",
+        "status": 200,
+        "body": {
+          "photon": {
+            "settings": {
+              "index.analysis.analyzer.index_categories.filter": [
+                "split_category"
+              ],
+              "index.analysis.analyzer.index_categories.tokenizer": "keyword",
+              "index.analysis.analyzer.index_categories.type": "custom",
+              "index.analysis.analyzer.index_fullword.char_filter": [
+                "normalize_apostrophes"
+              ],
+              "index.analysis.analyzer.index_fullword.filter": [
+                "delimited_term_freq",
+                "multiplexer_fullword",
+                "drop_empty_tokens",
+                "unique"
+              ],
+              "index.analysis.analyzer.index_fullword.tokenizer": "collection_split",
+              "index.analysis.analyzer.index_fullword.type": "custom",
+              "index.analysis.analyzer.index_housenumber.filter": [
+                "lowercase",
+                "delimiter_alphanum",
+                "delimiter_terms"
+              ],
+              "index.analysis.analyzer.index_housenumber.tokenizer": "collection_split",
+              "index.analysis.analyzer.index_housenumber.type": "custom",
+              "index.analysis.analyzer.index_name_full.char_filter": [
+                "normalize_apostrophes"
+              ],
+              "index.analysis.analyzer.index_name_full.filter": [
+                "keep_alphanum",
+                "lowercase",
+                "asciifolding",
+                "german_normalization",
+                "unique"
+              ],
+              "index.analysis.analyzer.index_name_full.tokenizer": "keyword",
+              "index.analysis.analyzer.index_name_full.type": "custom",
+              "index.analysis.analyzer.index_name_ngram.char_filter": [
+                "normalize_apostrophes",
+                "expand_possessive",
+                "expand_prefix_contraction"
+              ],
+              "index.analysis.analyzer.index_name_ngram.filter": [
+                "delimited_term_freq",
+                "delimiter_whitespace",
+                "delimiter_terms",
+                "name_edge_ngram",
+                "lowercase",
+                "asciifolding",
+                "german_normalization",
+                "unique"
+              ],
+              "index.analysis.analyzer.index_name_ngram.tokenizer": "collection_split",
+              "index.analysis.analyzer.index_name_ngram.type": "custom",
+              "index.analysis.analyzer.index_name_prefix.char_filter": [
+                "normalize_apostrophes"
+              ],
+              "index.analysis.analyzer.index_name_prefix.filter": [
+                "delimited_term_freq",
+                "keep_alphanum",
+                "lowercase",
+                "asciifolding",
+                "german_normalization",
+                "prefix_edge_ngram",
+                "unique"
+              ],
+              "index.analysis.analyzer.index_name_prefix.tokenizer": "collection_split",
+              "index.analysis.analyzer.index_name_prefix.type": "custom",
+              "index.analysis.analyzer.index_ngram.char_filter": [
+                "normalize_apostrophes"
+              ],
+              "index.analysis.analyzer.index_ngram.filter": [
+                "delimited_term_freq",
+                "multiplexer_ngram",
+                "drop_empty_tokens",
+                "unique"
+              ],
+              "index.analysis.analyzer.index_ngram.tokenizer": "collection_split",
+              "index.analysis.analyzer.index_ngram.type": "custom",
+              "index.analysis.analyzer.index_raw.char_filter": [
+                "normalize_apostrophes",
+                "punctuationgreedy"
+              ],
+              "index.analysis.analyzer.index_raw.filter": [
+                "lowercase",
+                "asciifolding",
+                "german_normalization"
+              ],
+              "index.analysis.analyzer.index_raw.tokenizer": "standard",
+              "index.analysis.analyzer.index_raw.type": "custom",
+              "index.analysis.analyzer.lowercase_keyword.filter": [
+                "lowercase"
+              ],
+              "index.analysis.analyzer.lowercase_keyword.tokenizer": "keyword",
+              "index.analysis.analyzer.lowercase_keyword.type": "custom",
+              "index.analysis.analyzer.search.char_filter": [
+                "normalize_apostrophes"
+              ],
+              "index.analysis.analyzer.search.filter": [
+                "lowercase",
+                "asciifolding",
+                "german_normalization",
+                "multiplexer_search"
+              ],
+              "index.analysis.analyzer.search.tokenizer": "search_tokenizer",
+              "index.analysis.analyzer.search.type": "custom",
+              "index.analysis.analyzer.search_prefix.char_filter": [
+                "normalize_apostrophes"
+              ],
+              "index.analysis.analyzer.search_prefix.filter": [
+                "keep_alphanum",
+                "lowercase",
+                "asciifolding",
+                "german_normalization"
+              ],
+              "index.analysis.analyzer.search_prefix.tokenizer": "keyword",
+              "index.analysis.analyzer.search_prefix.type": "custom",
+              "index.analysis.char_filter.expand_possessive.pattern": "(?U)(\\p{L}{2,})'(\\p{L}{1,2})\\b|(\\p{L})'(\\p{L})\\b",
+              "index.analysis.char_filter.expand_possessive.replacement": "$1$3 $1$2$3$4",
+              "index.analysis.char_filter.expand_possessive.type": "pattern_replace",
+              "index.analysis.char_filter.expand_prefix_contraction.pattern": "(?U)\\b(\\p{L})'(\\p{L}{2,})\\b",
+              "index.analysis.char_filter.expand_prefix_contraction.replacement": "$1$2 $2",
+              "index.analysis.char_filter.expand_prefix_contraction.type": "pattern_replace",
+              "index.analysis.char_filter.normalize_apostrophes.mappings": [
+                "’ => '",
+                "‘ => '",
+                "ʼ => '",
+                "ʻ => '"
+              ],
+              "index.analysis.char_filter.normalize_apostrophes.type": "mapping",
+              "index.analysis.char_filter.punctuationgreedy.pattern": "'",
+              "index.analysis.char_filter.punctuationgreedy.replacement": " ",
+              "index.analysis.char_filter.punctuationgreedy.type": "pattern_replace",
+              "index.analysis.filter.delimiter_alphanum.preserve_original": "false",
+              "index.analysis.filter.delimiter_alphanum.split_on_case_change": "false",
+              "index.analysis.filter.delimiter_alphanum.split_on_numerics": "false",
+              "index.analysis.filter.delimiter_alphanum.stem_english_possessive": "false",
+              "index.analysis.filter.delimiter_alphanum.type": "word_delimiter_graph",
+              "index.analysis.filter.delimiter_search.preserve_original": "false",
+              "index.analysis.filter.delimiter_search.split_on_numerics": "false",
+              "index.analysis.filter.delimiter_search.stem_english_possessive": "false",
+              "index.analysis.filter.delimiter_search.type": "word_delimiter_graph",
+              "index.analysis.filter.delimiter_terms.catenate_all": "true",
+              "index.analysis.filter.delimiter_terms.preserve_original": "false",
+              "index.analysis.filter.delimiter_terms.stem_english_possessive": "false",
+              "index.analysis.filter.delimiter_terms.type": "word_delimiter_graph",
+              "index.analysis.filter.delimiter_whitespace.preserve_original": "false",
+              "index.analysis.filter.delimiter_whitespace.split_on_case_change": "false",
+              "index.analysis.filter.delimiter_whitespace.split_on_numerics": "false",
+              "index.analysis.filter.delimiter_whitespace.stem_english_possessive": "false",
+              "index.analysis.filter.delimiter_whitespace.type": "word_delimiter_graph",
+              "index.analysis.filter.delimiter_whitespace.type_table": [
+                "- => ALPHA",
+                "' => ALPHA",
+                ". => ALPHA"
+              ],
+              "index.analysis.filter.drop_classification.flags": "",
+              "index.analysis.filter.drop_classification.pattern": "^#.*$",
+              "index.analysis.filter.drop_classification.replacement": "",
+              "index.analysis.filter.drop_classification.type": "pattern_replace",
+              "index.analysis.filter.drop_empty_tokens.max": "500",
+              "index.analysis.filter.drop_empty_tokens.min": "1",
+              "index.analysis.filter.drop_empty_tokens.type": "length",
+              "index.analysis.filter.keep_alphanum.flags": "",
+              "index.analysis.filter.keep_alphanum.pattern": "[^\\p{IsAlphabetic}\\p{IsDigit}]",
+              "index.analysis.filter.keep_alphanum.replacement": "",
+              "index.analysis.filter.keep_alphanum.type": "pattern_replace",
+              "index.analysis.filter.keep_classification.flags": "",
+              "index.analysis.filter.keep_classification.pattern": "^[^#].*$",
+              "index.analysis.filter.keep_classification.replacement": "",
+              "index.analysis.filter.keep_classification.type": "pattern_replace",
+              "index.analysis.filter.multiplexer_fullword.filters": [
+                "keep_classification,drop_empty_tokens,split_classification,lowercase,asciifolding,german_normalization",
+                "drop_classification,delimiter_whitespace,delimiter_terms,lowercase,asciifolding,german_normalization"
+              ],
+              "index.analysis.filter.multiplexer_fullword.preserve_original": "false",
+              "index.analysis.filter.multiplexer_fullword.type": "multiplexer",
+              "index.analysis.filter.multiplexer_ngram.filters": [
+                "keep_classification,drop_empty_tokens,split_classification,lowercase,asciifolding,german_normalization",
+                "drop_classification,delimiter_whitespace,delimiter_terms,lowercase,asciifolding,german_normalization,prefix_edge_ngram"
+              ],
+              "index.analysis.filter.multiplexer_ngram.preserve_original": "false",
+              "index.analysis.filter.multiplexer_ngram.type": "multiplexer",
+              "index.analysis.filter.multiplexer_search.filters": [
+                "drop_classification,drop_empty_tokens,delimiter_search",
+                "keep_classification,drop_empty_tokens"
+              ],
+              "index.analysis.filter.multiplexer_search.preserve_original": "false",
+              "index.analysis.filter.multiplexer_search.type": "multiplexer",
+              "index.analysis.filter.name_edge_ngram.max_gram": "30",
+              "index.analysis.filter.name_edge_ngram.min_gram": "5",
+              "index.analysis.filter.name_edge_ngram.preserve_original": "true",
+              "index.analysis.filter.name_edge_ngram.type": "edge_ngram",
+              "index.analysis.filter.prefix_edge_ngram.max_gram": "30",
+              "index.analysis.filter.prefix_edge_ngram.min_gram": "1",
+              "index.analysis.filter.prefix_edge_ngram.preserve_original": "false",
+              "index.analysis.filter.prefix_edge_ngram.type": "edge_ngram",
+              "index.analysis.filter.split_category.patterns": [
+                "^([^.]+\\.[^.]+)",
+                "^([^.]+\\.[^.]+\\.[^.]+)",
+                "^([^.]+\\.[^.]+\\.[^.]+\\.[^.]+)",
+                "^([^.]+\\.[^.]+\\.[^.]+\\.[^.]+\\.[^.]+)"
+              ],
+              "index.analysis.filter.split_category.preserve_original": "false",
+              "index.analysis.filter.split_category.type": "pattern_capture",
+              "index.analysis.filter.split_classification.patterns": [
+                "^(#[^.]+\\.[^.]+)",
+                "^(#[^.]+\\.[^.]+\\.[^.]+)",
+                "^(#[^.]+\\.[^.]+\\.[^.]+\\.[^.]+)",
+                "^(#[^.]+\\.[^.]+\\.[^.]+\\.[^.]+\\.[^.]+)"
+              ],
+              "index.analysis.filter.split_classification.preserve_original": "false",
+              "index.analysis.filter.split_classification.type": "pattern_capture",
+              "index.analysis.tokenizer.collection_split.pattern": ";",
+              "index.analysis.tokenizer.collection_split.type": "simple_pattern_split",
+              "index.analysis.tokenizer.search_tokenizer.pattern": "[ ,!?;]+",
+              "index.analysis.tokenizer.search_tokenizer.type": "simple_pattern_split",
+              "index.creation_date": "1790833013746",
+              "index.number_of_replicas": "1",
+              "index.number_of_shards": "5",
+              "index.provided_name": "photon",
+              "index.refresh_interval": "1s",
+              "index.replication.type": "DOCUMENT",
+              "index.uuid": "MRubk1LdQP2TIVxEUhU0pg",
+              "index.version.created": "137297827"
+            }
+          }
+        }
+      },
+      {
+        "startedAt": "2026-10-01T06:11:45.064656+00:00",
+        "method": "GET",
+        "path": "/photon/_count",
+        "status": 200,
+        "body": {
+          "count": 237207,
+          "_shards": {
+            "total": 5,
+            "successful": 5,
+            "skipped": 0,
+            "failed": 0
+          }
+        }
+      },
+      {
+        "startedAt": "2026-10-01T06:11:45.086381+00:00",
+        "method": "PUT",
+        "path": "/photon/_settings",
+        "status": 200,
+        "body": {
+          "acknowledged": true
+        }
+      },
+      {
+        "startedAt": "2026-10-01T06:11:45.147072+00:00",
+        "method": "POST",
+        "path": "/photon/_flush?wait_if_ongoing=true",
+        "status": 200,
+        "body": {
+          "_shards": {
+            "total": 10,
+            "successful": 5,
+            "failed": 0
+          }
+        }
+      },
+      {
+        "startedAt": "2026-10-01T06:11:45.153541+00:00",
+        "method": "GET",
+        "path": "/photon/_settings?flat_settings=true",
+        "status": 200,
+        "body": {
+          "photon": {
+            "settings": {
+              "index.analysis.analyzer.index_categories.filter": [
+                "split_category"
+              ],
+              "index.analysis.analyzer.index_categories.tokenizer": "keyword",
+              "index.analysis.analyzer.index_categories.type": "custom",
+              "index.analysis.analyzer.index_fullword.char_filter": [
+                "normalize_apostrophes"
+              ],
+              "index.analysis.analyzer.index_fullword.filter": [
+                "delimited_term_freq",
+                "multiplexer_fullword",
+                "drop_empty_tokens",
+                "unique"
+              ],
+              "index.analysis.analyzer.index_fullword.tokenizer": "collection_split",
+              "index.analysis.analyzer.index_fullword.type": "custom",
+              "index.analysis.analyzer.index_housenumber.filter": [
+                "lowercase",
+                "delimiter_alphanum",
+                "delimiter_terms"
+              ],
+              "index.analysis.analyzer.index_housenumber.tokenizer": "collection_split",
+              "index.analysis.analyzer.index_housenumber.type": "custom",
+              "index.analysis.analyzer.index_name_full.char_filter": [
+                "normalize_apostrophes"
+              ],
+              "index.analysis.analyzer.index_name_full.filter": [
+                "keep_alphanum",
+                "lowercase",
+                "asciifolding",
+                "german_normalization",
+                "unique"
+              ],
+              "index.analysis.analyzer.index_name_full.tokenizer": "keyword",
+              "index.analysis.analyzer.index_name_full.type": "custom",
+              "index.analysis.analyzer.index_name_ngram.char_filter": [
+                "normalize_apostrophes",
+                "expand_possessive",
+                "expand_prefix_contraction"
+              ],
+              "index.analysis.analyzer.index_name_ngram.filter": [
+                "delimited_term_freq",
+                "delimiter_whitespace",
+                "delimiter_terms",
+                "name_edge_ngram",
+                "lowercase",
+                "asciifolding",
+                "german_normalization",
+                "unique"
+              ],
+              "index.analysis.analyzer.index_name_ngram.tokenizer": "collection_split",
+              "index.analysis.analyzer.index_name_ngram.type": "custom",
+              "index.analysis.analyzer.index_name_prefix.char_filter": [
+                "normalize_apostrophes"
+              ],
+              "index.analysis.analyzer.index_name_prefix.filter": [
+                "delimited_term_freq",
+                "keep_alphanum",
+                "lowercase",
+                "asciifolding",
+                "german_normalization",
+                "prefix_edge_ngram",
+                "unique"
+              ],
+              "index.analysis.analyzer.index_name_prefix.tokenizer": "collection_split",
+              "index.analysis.analyzer.index_name_prefix.type": "custom",
+              "index.analysis.analyzer.index_ngram.char_filter": [
+                "normalize_apostrophes"
+              ],
+              "index.analysis.analyzer.index_ngram.filter": [
+                "delimited_term_freq",
+                "multiplexer_ngram",
+                "drop_empty_tokens",
+                "unique"
+              ],
+              "index.analysis.analyzer.index_ngram.tokenizer": "collection_split",
+              "index.analysis.analyzer.index_ngram.type": "custom",
+              "index.analysis.analyzer.index_raw.char_filter": [
+                "normalize_apostrophes",
+                "punctuationgreedy"
+              ],
+              "index.analysis.analyzer.index_raw.filter": [
+                "lowercase",
+                "asciifolding",
+                "german_normalization"
+              ],
+              "index.analysis.analyzer.index_raw.tokenizer": "standard",
+              "index.analysis.analyzer.index_raw.type": "custom",
+              "index.analysis.analyzer.lowercase_keyword.filter": [
+                "lowercase"
+              ],
+              "index.analysis.analyzer.lowercase_keyword.tokenizer": "keyword",
+              "index.analysis.analyzer.lowercase_keyword.type": "custom",
+              "index.analysis.analyzer.search.char_filter": [
+                "normalize_apostrophes"
+              ],
+              "index.analysis.analyzer.search.filter": [
+                "lowercase",
+                "asciifolding",
+                "german_normalization",
+                "multiplexer_search"
+              ],
+              "index.analysis.analyzer.search.tokenizer": "search_tokenizer",
+              "index.analysis.analyzer.search.type": "custom",
+              "index.analysis.analyzer.search_prefix.char_filter": [
+                "normalize_apostrophes"
+              ],
+              "index.analysis.analyzer.search_prefix.filter": [
+                "keep_alphanum",
+                "lowercase",
+                "asciifolding",
+                "german_normalization"
+              ],
+              "index.analysis.analyzer.search_prefix.tokenizer": "keyword",
+              "index.analysis.analyzer.search_prefix.type": "custom",
+              "index.analysis.char_filter.expand_possessive.pattern": "(?U)(\\p{L}{2,})'(\\p{L}{1,2})\\b|(\\p{L})'(\\p{L})\\b",
+              "index.analysis.char_filter.expand_possessive.replacement": "$1$3 $1$2$3$4",
+              "index.analysis.char_filter.expand_possessive.type": "pattern_replace",
+              "index.analysis.char_filter.expand_prefix_contraction.pattern": "(?U)\\b(\\p{L})'(\\p{L}{2,})\\b",
+              "index.analysis.char_filter.expand_prefix_contraction.replacement": "$1$2 $2",
+              "index.analysis.char_filter.expand_prefix_contraction.type": "pattern_replace",
+              "index.analysis.char_filter.normalize_apostrophes.mappings": [
+                "’ => '",
+                "‘ => '",
+                "ʼ => '",
+                "ʻ => '"
+              ],
+              "index.analysis.char_filter.normalize_apostrophes.type": "mapping",
+              "index.analysis.char_filter.punctuationgreedy.pattern": "'",
+              "index.analysis.char_filter.punctuationgreedy.replacement": " ",
+              "index.analysis.char_filter.punctuationgreedy.type": "pattern_replace",
+              "index.analysis.filter.delimiter_alphanum.preserve_original": "false",
+              "index.analysis.filter.delimiter_alphanum.split_on_case_change": "false",
+              "index.analysis.filter.delimiter_alphanum.split_on_numerics": "false",
+              "index.analysis.filter.delimiter_alphanum.stem_english_possessive": "false",
+              "index.analysis.filter.delimiter_alphanum.type": "word_delimiter_graph",
+              "index.analysis.filter.delimiter_search.preserve_original": "false",
+              "index.analysis.filter.delimiter_search.split_on_numerics": "false",
+              "index.analysis.filter.delimiter_search.stem_english_possessive": "false",
+              "index.analysis.filter.delimiter_search.type": "word_delimiter_graph",
+              "index.analysis.filter.delimiter_terms.catenate_all": "true",
+              "index.analysis.filter.delimiter_terms.preserve_original": "false",
+              "index.analysis.filter.delimiter_terms.stem_english_possessive": "false",
+              "index.analysis.filter.delimiter_terms.type": "word_delimiter_graph",
+              "index.analysis.filter.delimiter_whitespace.preserve_original": "false",
+              "index.analysis.filter.delimiter_whitespace.split_on_case_change": "false",
+              "index.analysis.filter.delimiter_whitespace.split_on_numerics": "false",
+              "index.analysis.filter.delimiter_whitespace.stem_english_possessive": "false",
+              "index.analysis.filter.delimiter_whitespace.type": "word_delimiter_graph",
+              "index.analysis.filter.delimiter_whitespace.type_table": [
+                "- => ALPHA",
+                "' => ALPHA",
+                ". => ALPHA"
+              ],
+              "index.analysis.filter.drop_classification.flags": "",
+              "index.analysis.filter.drop_classification.pattern": "^#.*$",
+              "index.analysis.filter.drop_classification.replacement": "",
+              "index.analysis.filter.drop_classification.type": "pattern_replace",
+              "index.analysis.filter.drop_empty_tokens.max": "500",
+              "index.analysis.filter.drop_empty_tokens.min": "1",
+              "index.analysis.filter.drop_empty_tokens.type": "length",
+              "index.analysis.filter.keep_alphanum.flags": "",
+              "index.analysis.filter.keep_alphanum.pattern": "[^\\p{IsAlphabetic}\\p{IsDigit}]",
+              "index.analysis.filter.keep_alphanum.replacement": "",
+              "index.analysis.filter.keep_alphanum.type": "pattern_replace",
+              "index.analysis.filter.keep_classification.flags": "",
+              "index.analysis.filter.keep_classification.pattern": "^[^#].*$",
+              "index.analysis.filter.keep_classification.replacement": "",
+              "index.analysis.filter.keep_classification.type": "pattern_replace",
+              "index.analysis.filter.multiplexer_fullword.filters": [
+                "keep_classification,drop_empty_tokens,split_classification,lowercase,asciifolding,german_normalization",
+                "drop_classification,delimiter_whitespace,delimiter_terms,lowercase,asciifolding,german_normalization"
+              ],
+              "index.analysis.filter.multiplexer_fullword.preserve_original": "false",
+              "index.analysis.filter.multiplexer_fullword.type": "multiplexer",
+              "index.analysis.filter.multiplexer_ngram.filters": [
+                "keep_classification,drop_empty_tokens,split_classification,lowercase,asciifolding,german_normalization",
+                "drop_classification,delimiter_whitespace,delimiter_terms,lowercase,asciifolding,german_normalization,prefix_edge_ngram"
+              ],
+              "index.analysis.filter.multiplexer_ngram.preserve_original": "false",
+              "index.analysis.filter.multiplexer_ngram.type": "multiplexer",
+              "index.analysis.filter.multiplexer_search.filters": [
+                "drop_classification,drop_empty_tokens,delimiter_search",
+                "keep_classification,drop_empty_tokens"
+              ],
+              "index.analysis.filter.multiplexer_search.preserve_original": "false",
+              "index.analysis.filter.multiplexer_search.type": "multiplexer",
+              "index.analysis.filter.name_edge_ngram.max_gram": "30",
+              "index.analysis.filter.name_edge_ngram.min_gram": "5",
+              "index.analysis.filter.name_edge_ngram.preserve_original": "true",
+              "index.analysis.filter.name_edge_ngram.type": "edge_ngram",
+              "index.analysis.filter.prefix_edge_ngram.max_gram": "30",
+              "index.analysis.filter.prefix_edge_ngram.min_gram": "1",
+              "index.analysis.filter.prefix_edge_ngram.preserve_original": "false",
+              "index.analysis.filter.prefix_edge_ngram.type": "edge_ngram",
+              "index.analysis.filter.split_category.patterns": [
+                "^([^.]+\\.[^.]+)",
+                "^([^.]+\\.[^.]+\\.[^.]+)",
+                "^([^.]+\\.[^.]+\\.[^.]+\\.[^.]+)",
+                "^([^.]+\\.[^.]+\\.[^.]+\\.[^.]+\\.[^.]+)"
+              ],
+              "index.analysis.filter.split_category.preserve_original": "false",
+              "index.analysis.filter.split_category.type": "pattern_capture",
+              "index.analysis.filter.split_classification.patterns": [
+                "^(#[^.]+\\.[^.]+)",
+                "^(#[^.]+\\.[^.]+\\.[^.]+)",
+                "^(#[^.]+\\.[^.]+\\.[^.]+\\.[^.]+)",
+                "^(#[^.]+\\.[^.]+\\.[^.]+\\.[^.]+\\.[^.]+)"
+              ],
+              "index.analysis.filter.split_classification.preserve_original": "false",
+              "index.analysis.filter.split_classification.type": "pattern_capture",
+              "index.analysis.tokenizer.collection_split.pattern": ";",
+              "index.analysis.tokenizer.collection_split.type": "simple_pattern_split",
+              "index.analysis.tokenizer.search_tokenizer.pattern": "[ ,!?;]+",
+              "index.analysis.tokenizer.search_tokenizer.type": "simple_pattern_split",
+              "index.blocks.write": "true",
+              "index.creation_date": "1790833013746",
+              "index.number_of_replicas": "1",
+              "index.number_of_shards": "5",
+              "index.provided_name": "photon",
+              "index.refresh_interval": "1s",
+              "index.replication.type": "DOCUMENT",
+              "index.uuid": "MRubk1LdQP2TIVxEUhU0pg",
+              "index.version.created": "137297827"
+            }
+          }
+        }
+      },
+      {
+        "startedAt": "2026-10-01T06:11:45.157064+00:00",
+        "method": "GET",
+        "path": "/photon/_count",
+        "status": 200,
+        "body": {
+          "count": 237207,
+          "_shards": {
+            "total": 5,
+            "successful": 5,
+            "skipped": 0,
+            "failed": 0
+          }
+        }
+      },
+      {
+        "startedAt": "2026-10-01T06:11:45.177961+00:00",
+        "method": "GET",
+        "path": "/photon/_doc/N2078972536",
+        "status": 200,
+        "body": {
+          "_index": "photon",
+          "_id": "N2078972536",
+          "_version": 1,
+          "_seq_no": 4106,
+          "_primary_term": 1,
+          "found": true,
+          "_source": {
+            "osm_id": 2078972536,
+            "osm_type": "N",
+            "coordinate": {
+              "lat": 32.079249,
+              "lon": 34.774114
+            },
+            "osm_key": "addr:housenumber",
+            "housenumber": "100",
+            "city": {
+              "default": "תל־אביב–יפו",
+              "en": "Tel-Aviv",
+              "he": "תל־אביב–יפו"
+            },
+            "importance": 0.0,
+            "street": {
+              "default": "דיזנגוף",
+              "en": "Dizengoff",
+              "he": "דיזנגוף"
+            },
+            "extra": {
+              "addr:housenumber": "100",
+              "addr:street": "דיזנגוף"
+            },
+            "osm_value": "100",
+            "type": "house"
+          }
+        }
+      },
+      {
+        "startedAt": "2026-10-01T06:11:45.184609+00:00",
+        "method": "GET",
+        "path": "/photon/_doc/W5005029",
+        "status": 200,
+        "body": {
+          "_index": "photon",
+          "_id": "W5005029",
+          "_version": 1,
+          "_seq_no": 25355,
+          "_primary_term": 1,
+          "found": true,
+          "_source": {
+            "osm_id": 5005029,
+            "osm_type": "W",
+            "coordinate": {
+              "lat": 31.24372605841935,
+              "lon": 34.79357708190895
+            },
+            "osm_key": "highway",
+            "city": {
+              "default": "באר שבע",
+              "en": "Be’er-Sheva",
+              "he": "באר שבע"
+            },
+            "importance": 0.0,
+            "extra": {
+              "highway": "primary",
+              "lanes": "3",
+              "maxspeed": "60",
+              "name": "שדרות יצחק רגר",
+              "name:en": "Yitzhack Rager Avenue",
+              "name:he": "שדרות יצחק רגר",
+              "oneway": "yes",
+              "surface": "asphalt"
+            },
+            "osm_value": "primary",
+            "name": {
+              "default": "שדרות יצחק רגר",
+              "en": "Yitzhack Rager Avenue",
+              "he": "שדרות יצחק רגר"
+            },
+            "type": "street"
+          }
+        }
+      }
+    ],
+    "scope": "Exact identity, write-block and source-object verification; not H4/API/full-stack acceptance"
+  },
+  "liveAfterRestart": {
+    "/": {
+      "command": [
+        "docker",
+        "exec",
+        "opentransit-local-net-m3-attempt3",
+        "wget",
+        "-q",
+        "-O",
+        "-",
+        "http://127.0.0.1:9201/"
+      ],
+      "exitCode": 0,
+      "stdout": "{\n  \"name\" : \"Node 1\",\n  \"cluster_name\" : \"photon\",\n  \"cluster_uuid\" : \"3xU4JzCwTSugIms1SuRlMg\",\n  \"version\" : {\n    \"distribution\" : \"opensearch\",\n    \"number\" : \"3.8.0\",\n    \"build_type\" : \"unknown\",\n    \"build_hash\" : \"unknown\",\n    \"build_date\" : \"unknown\",\n    \"build_snapshot\" : true,\n    \"lucene_version\" : \"10.5.0\",\n    \"minimum_wire_compatibility_version\" : \"2.19.0\",\n    \"minimum_index_compatibility_version\" : \"2.0.0\"\n  },\n  \"tagline\" : \"The OpenSearch Project: https://opensearch.org/\"\n}\n",
+      "stderr": ""
+    },
+    "/photon/_settings?flat_settings=true": {
+      "command": [
+        "docker",
+        "exec",
+        "opentransit-local-net-m3-attempt3",
+        "wget",
+        "-q",
+        "-O",
+        "-",
+        "http://127.0.0.1:9201/photon/_settings?flat_settings=true"
+      ],
+      "exitCode": 0,
+      "stdout": "{\"photon\":{\"settings\":{\"index.analysis.analyzer.index_categories.filter\":[\"split_category\"],\"index.analysis.analyzer.index_categories.tokenizer\":\"keyword\",\"index.analysis.analyzer.index_categories.type\":\"custom\",\"index.analysis.analyzer.index_fullword.char_filter\":[\"normalize_apostrophes\"],\"index.analysis.analyzer.index_fullword.filter\":[\"delimited_term_freq\",\"multiplexer_fullword\",\"drop_empty_tokens\",\"unique\"],\"index.analysis.analyzer.index_fullword.tokenizer\":\"collection_split\",\"index.analysis.analyzer.index_fullword.type\":\"custom\",\"index.analysis.analyzer.index_housenumber.filter\":[\"lowercase\",\"delimiter_alphanum\",\"delimiter_terms\"],\"index.analysis.analyzer.index_housenumber.tokenizer\":\"collection_split\",\"index.analysis.analyzer.index_housenumber.type\":\"custom\",\"index.analysis.analyzer.index_name_full.char_filter\":[\"normalize_apostrophes\"],\"index.analysis.analyzer.index_name_full.filter\":[\"keep_alphanum\",\"lowercase\",\"asciifolding\",\"german_normalization\",\"unique\"],\"index.analysis.analyzer.index_name_full.tokenizer\":\"keyword\",\"index.analysis.analyzer.index_name_full.type\":\"custom\",\"index.analysis.analyzer.index_name_ngram.char_filter\":[\"normalize_apostrophes\",\"expand_possessive\",\"expand_prefix_contraction\"],\"index.analysis.analyzer.index_name_ngram.filter\":[\"delimited_term_freq\",\"delimiter_whitespace\",\"delimiter_terms\",\"name_edge_ngram\",\"lowercase\",\"asciifolding\",\"german_normalization\",\"unique\"],\"index.analysis.analyzer.index_name_ngram.tokenizer\":\"collection_split\",\"index.analysis.analyzer.index_name_ngram.type\":\"custom\",\"index.analysis.analyzer.index_name_prefix.char_filter\":[\"normalize_apostrophes\"],\"index.analysis.analyzer.index_name_prefix.filter\":[\"delimited_term_freq\",\"keep_alphanum\",\"lowercase\",\"asciifolding\",\"german_normalization\",\"prefix_edge_ngram\",\"unique\"],\"index.analysis.analyzer.index_name_prefix.tokenizer\":\"collection_split\",\"index.analysis.analyzer.index_name_prefix.type\":\"custom\",\"index.analysis.analyzer.index_ngram.char_filter\":[\"normalize_apostrophes\"],\"index.analysis.analyzer.index_ngram.filter\":[\"delimited_term_freq\",\"multiplexer_ngram\",\"drop_empty_tokens\",\"unique\"],\"index.analysis.analyzer.index_ngram.tokenizer\":\"collection_split\",\"index.analysis.analyzer.index_ngram.type\":\"custom\",\"index.analysis.analyzer.index_raw.char_filter\":[\"normalize_apostrophes\",\"punctuationgreedy\"],\"index.analysis.analyzer.index_raw.filter\":[\"lowercase\",\"asciifolding\",\"german_normalization\"],\"index.analysis.analyzer.index_raw.tokenizer\":\"standard\",\"index.analysis.analyzer.index_raw.type\":\"custom\",\"index.analysis.analyzer.lowercase_keyword.filter\":[\"lowercase\"],\"index.analysis.analyzer.lowercase_keyword.tokenizer\":\"keyword\",\"index.analysis.analyzer.lowercase_keyword.type\":\"custom\",\"index.analysis.analyzer.search.char_filter\":[\"normalize_apostrophes\"],\"index.analysis.analyzer.search.filter\":[\"lowercase\",\"asciifolding\",\"german_normalization\",\"multiplexer_search\"],\"index.analysis.analyzer.search.tokenizer\":\"search_tokenizer\",\"index.analysis.analyzer.search.type\":\"custom\",\"index.analysis.analyzer.search_prefix.char_filter\":[\"normalize_apostrophes\"],\"index.analysis.analyzer.search_prefix.filter\":[\"keep_alphanum\",\"lowercase\",\"asciifolding\",\"german_normalization\"],\"index.analysis.analyzer.search_prefix.tokenizer\":\"keyword\",\"index.analysis.analyzer.search_prefix.type\":\"custom\",\"index.analysis.char_filter.expand_possessive.pattern\":\"(?U)(\\\\p{L}{2,})'(\\\\p{L}{1,2})\\\\b|(\\\\p{L})'(\\\\p{L})\\\\b\",\"index.analysis.char_filter.expand_possessive.replacement\":\"$1$3 $1$2$3$4\",\"index.analysis.char_filter.expand_possessive.type\":\"pattern_replace\",\"index.analysis.char_filter.expand_prefix_contraction.pattern\":\"(?U)\\\\b(\\\\p{L})'(\\\\p{L}{2,})\\\\b\",\"index.analysis.char_filter.expand_prefix_contraction.replacement\":\"$1$2 $2\",\"index.analysis.char_filter.expand_prefix_contraction.type\":\"pattern_replace\",\"index.analysis.char_filter.normalize_apostrophes.mappings\":[\"’ => '\",\"‘ => '\",\"ʼ => '\",\"ʻ => '\"],\"index.analysis.char_filter.normalize_apostrophes.type\":\"mapping\",\"index.analysis.char_filter.punctuationgreedy.pattern\":\"'\",\"index.analysis.char_filter.punctuationgreedy.replacement\":\" \",\"index.analysis.char_filter.punctuationgreedy.type\":\"pattern_replace\",\"index.analysis.filter.delimiter_alphanum.preserve_original\":\"false\",\"index.analysis.filter.delimiter_alphanum.split_on_case_change\":\"false\",\"index.analysis.filter.delimiter_alphanum.split_on_numerics\":\"false\",\"index.analysis.filter.delimiter_alphanum.stem_english_possessive\":\"false\",\"index.analysis.filter.delimiter_alphanum.type\":\"word_delimiter_graph\",\"index.analysis.filter.delimiter_search.preserve_original\":\"false\",\"index.analysis.filter.delimiter_search.split_on_numerics\":\"false\",\"index.analysis.filter.delimiter_search.stem_english_possessive\":\"false\",\"index.analysis.filter.delimiter_search.type\":\"word_delimiter_graph\",\"index.analysis.filter.delimiter_terms.catenate_all\":\"true\",\"index.analysis.filter.delimiter_terms.preserve_original\":\"false\",\"index.analysis.filter.delimiter_terms.stem_english_possessive\":\"false\",\"index.analysis.filter.delimiter_terms.type\":\"word_delimiter_graph\",\"index.analysis.filter.delimiter_whitespace.preserve_original\":\"false\",\"index.analysis.filter.delimiter_whitespace.split_on_case_change\":\"false\",\"index.analysis.filter.delimiter_whitespace.split_on_numerics\":\"false\",\"index.analysis.filter.delimiter_whitespace.stem_english_possessive\":\"false\",\"index.analysis.filter.delimiter_whitespace.type\":\"word_delimiter_graph\",\"index.analysis.filter.delimiter_whitespace.type_table\":[\"- => ALPHA\",\"' => ALPHA\",\". => ALPHA\"],\"index.analysis.filter.drop_classification.flags\":\"\",\"index.analysis.filter.drop_classification.pattern\":\"^#.*$\",\"index.analysis.filter.drop_classification.replacement\":\"\",\"index.analysis.filter.drop_classification.type\":\"pattern_replace\",\"index.analysis.filter.drop_empty_tokens.max\":\"500\",\"index.analysis.filter.drop_empty_tokens.min\":\"1\",\"index.analysis.filter.drop_empty_tokens.type\":\"length\",\"index.analysis.filter.keep_alphanum.flags\":\"\",\"index.analysis.filter.keep_alphanum.pattern\":\"[^\\\\p{IsAlphabetic}\\\\p{IsDigit}]\",\"index.analysis.filter.keep_alphanum.replacement\":\"\",\"index.analysis.filter.keep_alphanum.type\":\"pattern_replace\",\"index.analysis.filter.keep_classification.flags\":\"\",\"index.analysis.filter.keep_classification.pattern\":\"^[^#].*$\",\"index.analysis.filter.keep_classification.replacement\":\"\",\"index.analysis.filter.keep_classification.type\":\"pattern_replace\",\"index.analysis.filter.multiplexer_fullword.filters\":[\"keep_classification,drop_empty_tokens,split_classification,lowercase,asciifolding,german_normalization\",\"drop_classification,delimiter_whitespace,delimiter_terms,lowercase,asciifolding,german_normalization\"],\"index.analysis.filter.multiplexer_fullword.preserve_original\":\"false\",\"index.analysis.filter.multiplexer_fullword.type\":\"multiplexer\",\"index.analysis.filter.multiplexer_ngram.filters\":[\"keep_classification,drop_empty_tokens,split_classification,lowercase,asciifolding,german_normalization\",\"drop_classification,delimiter_whitespace,delimiter_terms,lowercase,asciifolding,german_normalization,prefix_edge_ngram\"],\"index.analysis.filter.multiplexer_ngram.preserve_original\":\"false\",\"index.analysis.filter.multiplexer_ngram.type\":\"multiplexer\",\"index.analysis.filter.multiplexer_search.filters\":[\"drop_classification,drop_empty_tokens,delimiter_search\",\"keep_classification,drop_empty_tokens\"],\"index.analysis.filter.multiplexer_search.preserve_original\":\"false\",\"index.analysis.filter.multiplexer_search.type\":\"multiplexer\",\"index.analysis.filter.name_edge_ngram.max_gram\":\"30\",\"index.analysis.filter.name_edge_ngram.min_gram\":\"5\",\"index.analysis.filter.name_edge_ngram.preserve_original\":\"true\",\"index.analysis.filter.name_edge_ngram.type\":\"edge_ngram\",\"index.analysis.filter.prefix_edge_ngram.max_gram\":\"30\",\"index.analysis.filter.prefix_edge_ngram.min_gram\":\"1\",\"index.analysis.filter.prefix_edge_ngram.preserve_original\":\"false\",\"index.analysis.filter.prefix_edge_ngram.type\":\"edge_ngram\",\"index.analysis.filter.split_category.patterns\":[\"^([^.]+\\\\.[^.]+)\",\"^([^.]+\\\\.[^.]+\\\\.[^.]+)\",\"^([^.]+\\\\.[^.]+\\\\.[^.]+\\\\.[^.]+)\",\"^([^.]+\\\\.[^.]+\\\\.[^.]+\\\\.[^.]+\\\\.[^.]+)\"],\"index.analysis.filter.split_category.preserve_original\":\"false\",\"index.analysis.filter.split_category.type\":\"pattern_capture\",\"index.analysis.filter.split_classification.patterns\":[\"^(#[^.]+\\\\.[^.]+)\",\"^(#[^.]+\\\\.[^.]+\\\\.[^.]+)\",\"^(#[^.]+\\\\.[^.]+\\\\.[^.]+\\\\.[^.]+)\",\"^(#[^.]+\\\\.[^.]+\\\\.[^.]+\\\\.[^.]+\\\\.[^.]+)\"],\"index.analysis.filter.split_classification.preserve_original\":\"false\",\"index.analysis.filter.split_classification.type\":\"pattern_capture\",\"index.analysis.tokenizer.collection_split.pattern\":\";\",\"index.analysis.tokenizer.collection_split.type\":\"simple_pattern_split\",\"index.analysis.tokenizer.search_tokenizer.pattern\":\"[ ,!?;]+\",\"index.analysis.tokenizer.search_tokenizer.type\":\"simple_pattern_split\",\"index.blocks.write\":\"true\",\"index.creation_date\":\"1790833013746\",\"index.number_of_replicas\":\"1\",\"index.number_of_shards\":\"5\",\"index.provided_name\":\"photon\",\"index.refresh_interval\":\"1s\",\"index.replication.type\":\"DOCUMENT\",\"index.uuid\":\"MRubk1LdQP2TIVxEUhU0pg\",\"index.version.created\":\"137297827\"}}}",
+      "stderr": ""
+    },
+    "/photon/_count": {
+      "command": [
+        "docker",
+        "exec",
+        "opentransit-local-net-m3-attempt3",
+        "wget",
+        "-q",
+        "-O",
+        "-",
+        "http://127.0.0.1:9201/photon/_count"
+      ],
+      "exitCode": 0,
+      "stdout": "{\"count\":237207,\"_shards\":{\"total\":5,\"successful\":5,\"skipped\":0,\"failed\":0}}",
+      "stderr": ""
+    }
+  },
+  "containers": [
+    {
+      "Id": "5a4616e0e404b4eb347b049d4d88b43496499e15774b78b55e80d423f469f5ca",
+      "Name": "/opentransit-photon-bound-copy-20261001-01",
+      "Image": "sha256:a357909fafe361a99d858524d3730be9686b8045d2a8edd7bc1a8eb74db69294",
+      "State": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-01T06:10:02.06682738Z",
+        "FinishedAt": "2026-10-01T06:10:02.370407986Z"
+      },
+      "Mounts": [
+        {
+          "Type": "volume",
+          "Name": "opentransit-photon-enriched-m4-20261001-01",
+          "Source": "/var/lib/docker/volumes/opentransit-photon-enriched-m4-20261001-01/_data",
+          "Destination": "/source",
+          "Driver": "local",
+          "Mode": "z",
+          "RW": false,
+          "Propagation": ""
+        },
+        {
+          "Type": "volume",
+          "Name": "opentransit-photon-bound-m4-20261001-01",
+          "Source": "/var/lib/docker/volumes/opentransit-photon-bound-m4-20261001-01/_data",
+          "Destination": "/candidate",
+          "Driver": "local",
+          "Mode": "z",
+          "RW": true,
+          "Propagation": ""
+        }
+      ],
+      "command": [
+        "-c",
+        "cp -a /source/. /candidate/ && chown 10001:10001 /candidate && du -s -B1 /source /candidate"
+      ],
+      "memoryBytes": 268435456,
+      "memorySwapBytes": 268435456,
+      "networkMode": "none"
+    },
+    {
+      "Id": "dd6221c88bd5064caa333a5cf891d1fc8b8feb66a6b9020bedd2f4af2bd793ab",
+      "Name": "/opentransit-photon-bound-serve-20261001-01",
+      "Image": "sha256:a357909fafe361a99d858524d3730be9686b8045d2a8edd7bc1a8eb74db69294",
+      "State": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 11245,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-01T06:14:40.245473455Z",
+        "FinishedAt": "2026-10-01T06:14:38.727729791Z"
+      },
+      "Mounts": [
+        {
+          "Type": "volume",
+          "Name": "opentransit-photon-bound-m4-20261001-01",
+          "Source": "/var/lib/docker/volumes/opentransit-photon-bound-m4-20261001-01/_data",
+          "Destination": "/photon_data",
+          "Driver": "local",
+          "Mode": "z",
+          "RW": true,
+          "Propagation": ""
+        },
+        {
+          "Type": "bind",
+          "Source": "/run/desktop/mnt/host/c/Users/nhenr/.codex/worktrees/8007/OpenTransit/.runtime/m4-photon-spike-20260930/photon-1.3.0.jar",
+          "Destination": "/opt/photon/photon-1.3.0.jar",
+          "Mode": "",
+          "RW": false,
+          "Propagation": "rprivate"
+        }
+      ],
+      "command": [
+        "java",
+        "-Xms256m",
+        "-Xmx512m",
+        "-jar",
+        "/opt/photon/photon-1.3.0.jar",
+        "-data-dir",
+        "/photon_data",
+        "serve",
+        "-listen-ip",
+        "127.0.0.1",
+        "-listen-port",
+        "2322"
+      ],
+      "memoryBytes": 1073741824,
+      "memorySwapBytes": 1073741824,
+      "networkMode": "container:54feb2d8e2bfe271a1c5cfafa24a79038a036f9c995d845160f7d670d6ca4dfa"
+    },
+    {
+      "Id": "f84147c34bc8fd2e0ecf061231592dd816311373ded7d3759dcf16d57fbfcb5c",
+      "Name": "/opentransit-photon-bound-seal-20261001-01",
+      "Image": "sha256:1b15d2e1f72e1fb10cdaae8b0a6662816171706a4f261922b7cbd4754ddc4841",
+      "State": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-01T06:11:44.780746409Z",
+        "FinishedAt": "2026-10-01T06:11:45.216388662Z"
+      },
+      "Mounts": [
+        {
+          "Type": "bind",
+          "Source": "C:\\Users\\nhenr\\.codex\\worktrees\\8007\\OpenTransit",
+          "Destination": "/workspace",
+          "Mode": "",
+          "RW": true,
+          "Propagation": "rprivate"
+        }
+      ],
+      "command": [
+        "/workspace/.runtime/m4-photon-binding-20261001/seal_provider.py"
+      ],
+      "memoryBytes": 134217728,
+      "memorySwapBytes": 134217728,
+      "networkMode": "container:54feb2d8e2bfe271a1c5cfafa24a79038a036f9c995d845160f7d670d6ca4dfa"
+    },
+    {
+      "Id": "4fa8bcca3de5d2e5122d3857d3e00692a382a04e15d185b07713a2ba279e4fd2",
+      "Name": "/opentransit-photon-bound-checkpoint-20261001-01",
+      "Image": "sha256:1b15d2e1f72e1fb10cdaae8b0a6662816171706a4f261922b7cbd4754ddc4841",
+      "State": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-01T06:13:36.786581708Z",
+        "FinishedAt": "2026-10-01T06:13:37.068094739Z"
+      },
+      "Mounts": [
+        {
+          "Type": "volume",
+          "Name": "opentransit-photon-bound-m4-20261001-01",
+          "Source": "/var/lib/docker/volumes/opentransit-photon-bound-m4-20261001-01/_data",
+          "Destination": "/checkpoint",
+          "Driver": "local",
+          "Mode": "z",
+          "RW": false,
+          "Propagation": ""
+        },
+        {
+          "Type": "bind",
+          "Source": "/run/desktop/mnt/host/c/Users/nhenr/.codex/worktrees/8007/OpenTransit",
+          "Destination": "/workspace",
+          "Mode": "",
+          "RW": true,
+          "Propagation": "rprivate"
+        }
+      ],
+      "command": [
+        "/workspace/.runtime/m4-photon-binding-20261001/checkpoint_provider.py"
+      ],
+      "memoryBytes": 134217728,
+      "memorySwapBytes": 134217728,
+      "networkMode": "none"
+    },
+    {
+      "Id": "52a14766d1908be77e28b5e1c0d7d2d714360c7a4a7fcb35bcdd995eaf913c00",
+      "Name": "/opentransit-photon-bound-checkpoint-copy-20261001-01",
+      "Image": "sha256:a357909fafe361a99d858524d3730be9686b8045d2a8edd7bc1a8eb74db69294",
+      "State": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-01T06:14:39.352574776Z",
+        "FinishedAt": "2026-10-01T06:14:39.53661864Z"
+      },
+      "Mounts": [
+        {
+          "Type": "volume",
+          "Name": "opentransit-photon-bound-m4-20261001-01",
+          "Source": "/var/lib/docker/volumes/opentransit-photon-bound-m4-20261001-01/_data",
+          "Destination": "/source",
+          "Driver": "local",
+          "Mode": "z",
+          "RW": false,
+          "Propagation": ""
+        },
+        {
+          "Type": "volume",
+          "Name": "opentransit-photon-bound-checkpoint-m4-20261001-01",
+          "Source": "/var/lib/docker/volumes/opentransit-photon-bound-checkpoint-m4-20261001-01/_data",
+          "Destination": "/checkpoint",
+          "Driver": "local",
+          "Mode": "z",
+          "RW": true,
+          "Propagation": ""
+        }
+      ],
+      "command": [
+        "-c",
+        "cp -a /source/. /checkpoint/ && du -s -B1 /source /checkpoint"
+      ],
+      "memoryBytes": 268435456,
+      "memorySwapBytes": 268435456,
+      "networkMode": "none"
+    },
+    {
+      "Id": "83509eefd6d48ac907dc9cdd623191e54d0e79ebc0407ea0efbd4e96ed451713",
+      "Name": "/opentransit-photon-bound-checkpoint-hash-20261001-02",
+      "Image": "sha256:1b15d2e1f72e1fb10cdaae8b0a6662816171706a4f261922b7cbd4754ddc4841",
+      "State": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-01T06:14:39.831688172Z",
+        "FinishedAt": "2026-10-01T06:14:40.033291098Z"
+      },
+      "Mounts": [
+        {
+          "Type": "volume",
+          "Name": "opentransit-photon-bound-checkpoint-m4-20261001-01",
+          "Source": "/var/lib/docker/volumes/opentransit-photon-bound-checkpoint-m4-20261001-01/_data",
+          "Destination": "/checkpoint",
+          "Driver": "local",
+          "Mode": "z",
+          "RW": false,
+          "Propagation": ""
+        },
+        {
+          "Type": "bind",
+          "Source": "/run/desktop/mnt/host/c/Users/nhenr/.codex/worktrees/8007/OpenTransit",
+          "Destination": "/workspace",
+          "Mode": "",
+          "RW": true,
+          "Propagation": "rprivate"
+        }
+      ],
+      "command": [
+        "/workspace/.runtime/m4-photon-binding-20261001/checkpoint_provider.py",
+        "/workspace/.runtime/m4-photon-binding-20261001/checkpoint-02.json"
+      ],
+      "memoryBytes": 134217728,
+      "memorySwapBytes": 134217728,
+      "networkMode": "none"
+    },
+    {
+      "Id": "0d31f4a746abdeca8333b4bb6dcfbc909bbcc807de1790cb187f78d4eb556900",
+      "Name": "/opentransit-m4-photon-light-a-focused-20261001-01",
+      "Image": "sha256:1b15d2e1f72e1fb10cdaae8b0a6662816171706a4f261922b7cbd4754ddc4841",
+      "State": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 2,
+        "Error": "",
+        "StartedAt": "2026-10-01T06:16:31.468089733Z",
+        "FinishedAt": "2026-10-01T06:16:33.692445913Z"
+      },
+      "Mounts": [
+        {
+          "Type": "bind",
+          "Source": "C:\\Users\\nhenr\\.codex\\worktrees\\8007\\OpenTransit",
+          "Destination": "/workspace",
+          "Mode": "",
+          "RW": false,
+          "Propagation": "rprivate"
+        }
+      ],
+      "command": [
+        "-m",
+        "pytest",
+        "/workspace/.runtime/m4-photon-binding-20261001/light-a-check-01/tests",
+        "-q",
+        "-p",
+        "no:cacheprovider",
+        "--basetemp=/tmp/photon-light-a-01"
+      ],
+      "memoryBytes": 536870912,
+      "memorySwapBytes": 536870912,
+      "networkMode": "none"
+    },
+    {
+      "Id": "a84246afde31fc408547127a9a47da12bb2623acb3f6dad4e6d280efb540703f",
+      "Name": "/opentransit-m4-photon-light-a-focused-20261001-02",
+      "Image": "sha256:1b15d2e1f72e1fb10cdaae8b0a6662816171706a4f261922b7cbd4754ddc4841",
+      "State": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 137,
+        "Error": "",
+        "StartedAt": "2026-10-01T06:17:27.822199154Z",
+        "FinishedAt": "2026-10-01T06:18:50.095097218Z"
+      },
+      "Mounts": [
+        {
+          "Type": "bind",
+          "Source": "C:\\Users\\nhenr\\.codex\\worktrees\\8007\\OpenTransit",
+          "Destination": "/workspace",
+          "Mode": "",
+          "RW": false,
+          "Propagation": "rprivate"
+        }
+      ],
+      "command": [
+        "-m",
+        "pytest",
+        "test_address_catalog.py",
+        "test_photon_geocoder.py",
+        "test_geocoding.py",
+        "test_geocode_places_api.py",
+        "-q",
+        "-p",
+        "no:cacheprovider",
+        "--basetemp=/tmp/photon-light-a-02"
+      ],
+      "memoryBytes": 536870912,
+      "memorySwapBytes": 536870912,
+      "networkMode": "none"
+    },
+    {
+      "Id": "b736ceb5ec9ba150cc2daa8c54b462a6a5ef95815e9b897bed5a6dae2d36fc6f",
+      "Name": "/opentransit-m4-photon-light-a-lint-20261001-01",
+      "Image": "sha256:1b15d2e1f72e1fb10cdaae8b0a6662816171706a4f261922b7cbd4754ddc4841",
+      "State": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 1,
+        "Error": "",
+        "StartedAt": "2026-10-01T06:16:54.71915745Z",
+        "FinishedAt": "2026-10-01T06:16:54.874895173Z"
+      },
+      "Mounts": [
+        {
+          "Type": "bind",
+          "Source": "C:\\Users\\nhenr\\.codex\\worktrees\\8007\\OpenTransit",
+          "Destination": "/workspace",
+          "Mode": "",
+          "RW": false,
+          "Propagation": "rprivate"
+        }
+      ],
+      "command": [
+        "check",
+        "--no-cache",
+        "--config",
+        "/workspace/services/api/pyproject.toml",
+        "/workspace/.runtime/m4-photon-binding-20261001/light-a-check-01/source/opentransit/address_catalog.py",
+        "/workspace/.runtime/m4-photon-binding-20261001/light-a-check-01/source/opentransit/build/address_catalog.py",
+        "/workspace/.runtime/m4-photon-binding-20261001/light-a-check-01/source/opentransit/photon_geocoder.py",
+        "/workspace/.runtime/m4-photon-binding-20261001/light-a-check-01/source/opentransit/geocoding.py",
+        "/workspace/.runtime/m4-photon-binding-20261001/light-a-check-01/source/opentransit/api/places.py",
+        "/workspace/.runtime/m4-photon-binding-20261001/light-a-check-01/tests"
+      ],
+      "memoryBytes": 268435456,
+      "memorySwapBytes": 268435456,
+      "networkMode": "none"
+    }
+  ],
+  "logs": {
+    "opentransit-photon-bound-copy-20261001-01": {
+      "command": [
+        "docker",
+        "logs",
+        "opentransit-photon-bound-copy-20261001-01"
+      ],
+      "exitCode": 0,
+      "stdout": "78008320\t/source\n78008320\t/candidate\n",
+      "stderr": ""
+    },
+    "opentransit-photon-bound-serve-20261001-01": {
+      "command": [
+        "docker",
+        "logs",
+        "opentransit-photon-bound-serve-20261001-01"
+      ],
+      "exitCode": 0,
+      "stdout": "Cluster Name: photon\nBase Path:    /photon_data/photon_data\nNum Of Node:  1\nNode Name:      Node 1\nHTTP Port:      9201\nData Directory: /photon_data/photon_data/node_1/data\nLog Directory:  /photon_data/photon_data/node_1/logs\n[2026-10-01T06:10:04,161][INFO ][o.o.n.Node               ] version[3.8.0], pid[1], build[unknown/unknown/unknown], OS[Linux/5.15.167.4-microsoft-standard-WSL2/amd64], JVM[Eclipse Adoptium/OpenJDK 64-Bit Server VM/21.0.12.1/21.0.12.1+1-LTS]\n[2026-10-01T06:10:04,161][INFO ][o.o.n.Node               ] JVM home [/opt/java/openjdk]\n[2026-10-01T06:10:04,165][INFO ][o.o.n.Node               ] JVM arguments [-Xms256m, -Xmx512m]\n[2026-10-01T06:10:04,171][INFO ][o.o.p.PluginsService     ] no modules loaded\n[2026-10-01T06:10:04,172][INFO ][o.o.p.PluginsService     ] loaded plugin [org.opensearch.analysis.common.CommonAnalysisModulePlugin]\n[2026-10-01T06:10:04,173][INFO ][o.o.p.PluginsService     ] loaded plugin [org.opensearch.geo.GeoModulePlugin]\n[2026-10-01T06:10:04,173][INFO ][o.o.p.PluginsService     ] loaded plugin [org.opensearch.transport.Netty4ModulePlugin]\n[2026-10-01T06:10:04,257][WARN ][stderr                   ] WARNING: A restricted method in java.lang.foreign.Linker has been called\n[2026-10-01T06:10:04,257][WARN ][stderr                   ] WARNING: java.lang.foreign.Linker::downcallHandle has been called by the unnamed module\n[2026-10-01T06:10:04,257][WARN ][stderr                   ] WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for this module\n[2026-10-01T06:10:04,324][INFO ][o.o.e.NodeEnvironment    ] using [1] data paths, mounts [[/photon_data (/dev/sdd)]], net usable_space [934.3gb], net total_space [1006.8gb], types [ext4]\n[2026-10-01T06:10:04,325][INFO ][o.o.e.NodeEnvironment    ] heap size [494.9mb], compressed ordinary object pointers [true]\n[2026-10-01T06:10:04,411][WARN ][o.a.l.i.v.VectorizationProvider] Java vector incubator module is not readable. For optimal vector performance, pass '--add-modules jdk.incubator.vector' to enable Vector API.\n[2026-10-01T06:10:04,543][INFO ][o.o.n.Node               ] node name [Node 1], node ID [rjoUqSLLTMGEuczNdd5RtA], cluster name [photon], roles [data, cluster_manager]\n[2026-10-01T06:10:04,578][INFO ][o.o.e.ExtensionsManager  ] ExtensionsManager initialized\n[2026-10-01T06:10:04,841][INFO ][o.o.i.MergeSchedulerConfig] Updating autoThrottle for index _na_ from [false] to [true]\n[2026-10-01T06:10:04,842][INFO ][o.o.i.MergeSchedulerConfig] Updating maxThreadCount from [0] to [4] and maxMergeCount from [0] to [9] for index _na_.\n[2026-10-01T06:10:04,842][INFO ][o.o.i.MergeSchedulerConfig] Initialized index _na_ with maxMergeCount=9, maxThreadCount=4, autoThrottleEnabled=true\n[2026-10-01T06:10:05,091][INFO ][o.o.i.MergeSchedulerConfig] Updating autoThrottle for index _na_ from [false] to [true]\n[2026-10-01T06:10:05,092][INFO ][o.o.i.MergeSchedulerConfig] Updating maxThreadCount from [0] to [4] and maxMergeCount from [0] to [9] for index _na_.\n[2026-10-01T06:10:05,092][INFO ][o.o.i.MergeSchedulerConfig] Initialized index _na_ with maxMergeCount=9, maxThreadCount=4, autoThrottleEnabled=true\n[2026-10-01T06:10:06,367][INFO ][o.o.t.NettyAllocator     ] creating NettyAllocator with the following configs: [name=unpooled, suggested_max_allocation_size=1mb, factors={opensearch.unsafe.use_unpooled_allocator=null, g1gc_enabled=false, g1gc_region_size=0b, heap_size=494.9mb}]\n[2026-10-01T06:10:06,440][INFO ][o.o.d.DiscoveryModule    ] using discovery type [single-node] and seed hosts providers [settings]\n[2026-10-01T06:10:06,844][WARN ][o.o.g.DanglingIndicesState] gateway.auto_import_dangling_indices is disabled, dangling indices will not be automatically detected or imported and must be managed manually\n[2026-10-01T06:10:07,081][INFO ][o.o.n.Node               ] initialized\n[2026-10-01T06:10:07,082][INFO ][o.o.n.Node               ] starting ...\n[2026-10-01T06:10:07,203][INFO ][o.o.t.TransportService   ] publish_address {127.0.0.1:9300}, bound_addresses {[::1]:9300}, {127.0.0.1:9300}\n[2026-10-01T06:10:07,406][INFO ][o.o.c.c.Coordinator      ] cluster UUID [3xU4JzCwTSugIms1SuRlMg]\n[2026-10-01T06:10:07,482][INFO ][o.o.c.s.ClusterManagerService] Tasks batched with key: org.opensearch.cluster.coordination.JoinHelper, count:3 and sample tasks: elected-as-cluster-manager ([1] nodes joined)[{Node 1}{rjoUqSLLTMGEuczNdd5RtA}{a0cqsPv8SweEheUAjOcHHA}{127.0.0.1}{127.0.0.1:9300}{dm}{shard_indexing_pressure_enabled=true} elect leader, _BECOME_CLUSTER_MANAGER_TASK_, _FINISH_ELECTION_], term: 3, version: 19, delta: cluster-manager node changed {previous [], current [{Node 1}{rjoUqSLLTMGEuczNdd5RtA}{a0cqsPv8SweEheUAjOcHHA}{127.0.0.1}{127.0.0.1:9300}{dm}{shard_indexing_pressure_enabled=true}]}\n[2026-10-01T06:10:07,524][INFO ][o.o.c.s.ClusterApplierService] cluster-manager node changed {previous [], current [{Node 1}{rjoUqSLLTMGEuczNdd5RtA}{a0cqsPv8SweEheUAjOcHHA}{127.0.0.1}{127.0.0.1:9300}{dm}{shard_indexing_pressure_enabled=true}]}, term: 3, version: 19, reason: Publication{term=3, version=19}\n[2026-10-01T06:10:07,534][INFO ][o.o.d.PeerFinder         ] setting findPeersInterval to [1s] as node commission status = [true] for local node [{Node 1}{rjoUqSLLTMGEuczNdd5RtA}{a0cqsPv8SweEheUAjOcHHA}{127.0.0.1}{127.0.0.1:9300}{dm}{shard_indexing_pressure_enabled=true}]\n[2026-10-01T06:10:07,545][INFO ][o.o.h.AbstractHttpServerTransport] publish_address {127.0.0.1:9201}, bound_addresses {[::1]:9201}, {127.0.0.1:9201}\n[2026-10-01T06:10:07,546][INFO ][o.o.n.Node               ] started\n[2026-10-01T06:10:07,584][INFO ][o.o.g.GatewayService     ] recovered [1] indices into cluster_state\n[2026-10-01T06:10:07,675][INFO ][o.o.i.MergeSchedulerConfig] Updating autoThrottle for index photon from [false] to [true]\n[2026-10-01T06:10:07,676][INFO ][o.o.i.MergeSchedulerConfig] Updating maxThreadCount from [0] to [4] and maxMergeCount from [0] to [9] for index photon.\n[2026-10-01T06:10:07,676][INFO ][o.o.i.MergeSchedulerConfig] Initialized index photon with maxMergeCount=9, maxThreadCount=4, autoThrottleEnabled=true\n[2026-10-01T06:10:07,692][INFO ][o.o.p.PluginsService     ] PluginService:onIndexModule index:[photon/MRubk1LdQP2TIVxEUhU0pg]\n[2026-10-01T06:10:07,780][INFO ][o.o.i.MergeSchedulerConfig] Updating autoThrottle for index photon from [true] to [true]\n[2026-10-01T06:10:08,130][INFO ][o.o.c.r.a.AllocationService] Cluster health status changed from [RED] to [YELLOW] (reason: [shards started [[photon][4]]]).\n[2026-10-01T06:10:08,647][INFO ][d.k.p.App                ] Database cluster is now ready.\n[2026-10-01T06:10:08,836][INFO ][d.k.p.App                ] Starting API with the following settings:\n\n Languages: [en, he]\n Import Date: null\n Support Structured Queries: true\n Support Geometries: false\n[2026-10-01T06:10:09,159][INFO ][i.j.Javalin              ] Starting Javalin ...\n[2026-10-01T06:10:09,162][INFO ][o.e.j.s.Server           ] jetty-12.1.8; built: 2026-04-01T01:09:18.991Z; git: c9cdc9aaa434a3665b8a53b4d1cc3684992da649; jvm 21.0.12.1+1-LTS\n[2026-10-01T06:10:09,203][INFO ][o.e.j.s.DefaultSessionIdManager] Session workerName=node0\n[2026-10-01T06:10:09,211][INFO ][o.e.j.s.h.ContextHandler ] Started oeje10s.ServletContextHandler@326489c4{ROOT,/,b=null,a=AVAILABLE,h=oeje10s.SessionHandler@50165a6d{STARTED}}\n[2026-10-01T06:10:09,215][INFO ][o.e.j.e.s.ServletContextHandler] Started oeje10s.ServletContextHandler@326489c4{ROOT,/,b=null,a=AVAILABLE,h=oeje10s.SessionHandler@50165a6d{STARTED}}\n[2026-10-01T06:10:09,221][INFO ][o.e.j.s.AbstractConnector] Started oejs.ServerConnector@65689000{HTTP/1.1, (http/1.1)}{127.0.0.1:2322}\n[2026-10-01T06:10:09,239][INFO ][o.e.j.s.Server           ] Started oejs.Server@441d3ddf{STARTING}[12.1.8,sto=0] @80ms\n[2026-10-01T06:10:09,239][INFO ][i.j.Javalin              ] \n       __                  ___          _____\n      / /___ __   ______ _/ (_)___     /__  /\n __  / / __ `/ | / / __ `/ / / __ \\      / /\n/ /_/ / /_/ /| |/ / /_/ / / / / / /     / /\n\\____/\\__,_/ |___/\\__,_/_/_/_/ /_/     /_/\n\n       https://javalin.io/documentation\n\n[2026-10-01T06:10:09,240][INFO ][i.j.Javalin              ] Javalin started in 295ms \\o/\n[2026-10-01T06:10:09,241][INFO ][i.j.Javalin              ] Listening on http://127.0.0.1:2322/\n[2026-10-01T06:10:09,248][INFO ][i.j.Javalin              ] You are running Javalin 7.2.2 (released May 14, 2026. Your Javalin version is 139 days old. Consider checking for a newer version.).\n[2026-10-01T06:11:45,094][INFO ][o.o.c.s.ClusterManagerTaskThrottler] Starting cluster manager throttling as all nodes are higher than or equal to 2.5.0\n[2026-10-01T06:11:45,100][INFO ][o.o.i.MergeSchedulerConfig] Updating autoThrottle for index photon from [false] to [true]\n[2026-10-01T06:11:45,100][INFO ][o.o.i.MergeSchedulerConfig] Updating maxThreadCount from [0] to [4] and maxMergeCount from [0] to [9] for index photon.\n[2026-10-01T06:11:45,100][INFO ][o.o.i.MergeSchedulerConfig] Initialized index photon with maxMergeCount=9, maxThreadCount=4, autoThrottleEnabled=true\n[2026-10-01T06:11:45,103][INFO ][o.o.p.PluginsService     ] PluginService:onIndexModule index:[photon/MRubk1LdQP2TIVxEUhU0pg]\n[2026-10-01T06:11:45,107][INFO ][o.o.i.MergeSchedulerConfig] Updating autoThrottle for index photon from [true] to [true]\n[2026-10-01T06:13:14,853][INFO ][d.k.p.App                ] Shutdown requested.\n[2026-10-01T06:13:14,855][INFO ][d.k.p.App                ] Shutting down the service.\n[2026-10-01T06:13:14,855][INFO ][i.j.Javalin              ] Stopping Javalin ...\n[2026-10-01T06:13:14,855][INFO ][o.e.j.s.Server           ] Stopped oejs.Server@441d3ddf{STOPPING}[12.1.8,sto=0]\n[2026-10-01T06:13:14,860][INFO ][o.e.j.s.AbstractConnector] Stopped oejs.ServerConnector@65689000{HTTP/1.1, (http/1.1)}{127.0.0.1:2322}\n[2026-10-01T06:13:14,866][INFO ][o.e.j.e.s.ServletContextHandler] Stopped oeje10s.ServletContextHandler@326489c4{ROOT,/,b=null,a=AVAILABLE,h=oeje10s.SessionHandler@50165a6d{STOPPED}}\n[2026-10-01T06:13:14,868][INFO ][i.j.Javalin              ] Javalin has stopped\n[2026-10-01T06:13:14,868][INFO ][d.k.p.App                ] Server has been stopped. Shutting down node.\n[2026-10-01T06:13:14,868][INFO ][d.k.p.Server             ] Shutting down OpenSearch runner\n[2026-10-01T06:13:14,868][INFO ][o.o.n.Node               ] stopping ...\n[2026-10-01T06:13:14,887][INFO ][o.o.n.Node               ] stopped\n[2026-10-01T06:13:14,887][INFO ][o.o.n.Node               ] closing ...\n[2026-10-01T06:13:14,892][INFO ][o.o.n.Node               ] closed\n[2026-10-01T06:13:14,892][INFO ][stdout                   ] Closed all nodes.\nCluster Name: photon\nBase Path:    /photon_data/photon_data\nNum Of Node:  1\nNode Name:      Node 1\nHTTP Port:      9201\nData Directory: /photon_data/photon_data/node_1/data\nLog Directory:  /photon_data/photon_data/node_1/logs\n[2026-10-01T06:13:38,463][INFO ][o.o.n.Node               ] version[3.8.0], pid[1], build[unknown/unknown/unknown], OS[Linux/5.15.167.4-microsoft-standard-WSL2/amd64], JVM[Eclipse Adoptium/OpenJDK 64-Bit Server VM/21.0.12.1/21.0.12.1+1-LTS]\n[2026-10-01T06:13:38,463][INFO ][o.o.n.Node               ] JVM home [/opt/java/openjdk]\n[2026-10-01T06:13:38,468][INFO ][o.o.n.Node               ] JVM arguments [-Xms256m, -Xmx512m]\n[2026-10-01T06:13:38,473][INFO ][o.o.p.PluginsService     ] no modules loaded\n[2026-10-01T06:13:38,474][INFO ][o.o.p.PluginsService     ] loaded plugin [org.opensearch.analysis.common.CommonAnalysisModulePlugin]\n[2026-10-01T06:13:38,474][INFO ][o.o.p.PluginsService     ] loaded plugin [org.opensearch.geo.GeoModulePlugin]\n[2026-10-01T06:13:38,474][INFO ][o.o.p.PluginsService     ] loaded plugin [org.opensearch.transport.Netty4ModulePlugin]\n[2026-10-01T06:13:38,539][WARN ][stderr                   ] WARNING: A restricted method in java.lang.foreign.Linker has been called\n[2026-10-01T06:13:38,539][WARN ][stderr                   ] WARNING: java.lang.foreign.Linker::downcallHandle has been called by the unnamed module\n[2026-10-01T06:13:38,539][WARN ][stderr                   ] WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for this module\n[2026-10-01T06:13:38,591][INFO ][o.o.e.NodeEnvironment    ] using [1] data paths, mounts [[/photon_data (/dev/sdd)]], net usable_space [934.3gb], net total_space [1006.8gb], types [ext4]\n[2026-10-01T06:13:38,592][INFO ][o.o.e.NodeEnvironment    ] heap size [494.9mb], compressed ordinary object pointers [true]\n[2026-10-01T06:13:38,685][WARN ][o.a.l.i.v.VectorizationProvider] Java vector incubator module is not readable. For optimal vector performance, pass '--add-modules jdk.incubator.vector' to enable Vector API.\n[2026-10-01T06:13:38,820][INFO ][o.o.n.Node               ] node name [Node 1], node ID [rjoUqSLLTMGEuczNdd5RtA], cluster name [photon], roles [data, cluster_manager]\n[2026-10-01T06:13:38,854][INFO ][o.o.e.ExtensionsManager  ] ExtensionsManager initialized\n[2026-10-01T06:13:39,126][INFO ][o.o.i.MergeSchedulerConfig] Updating autoThrottle for index _na_ from [false] to [true]\n[2026-10-01T06:13:39,126][INFO ][o.o.i.MergeSchedulerConfig] Updating maxThreadCount from [0] to [4] and maxMergeCount from [0] to [9] for index _na_.\n[2026-10-01T06:13:39,126][INFO ][o.o.i.MergeSchedulerConfig] Initialized index _na_ with maxMergeCount=9, maxThreadCount=4, autoThrottleEnabled=true\n[2026-10-01T06:13:39,336][INFO ][o.o.i.MergeSchedulerConfig] Updating autoThrottle for index _na_ from [false] to [true]\n[2026-10-01T06:13:39,336][INFO ][o.o.i.MergeSchedulerConfig] Updating maxThreadCount from [0] to [4] and maxMergeCount from [0] to [9] for index _na_.\n[2026-10-01T06:13:39,336][INFO ][o.o.i.MergeSchedulerConfig] Initialized index _na_ with maxMergeCount=9, maxThreadCount=4, autoThrottleEnabled=true\n[2026-10-01T06:13:40,587][INFO ][o.o.t.NettyAllocator     ] creating NettyAllocator with the following configs: [name=unpooled, suggested_max_allocation_size=1mb, factors={opensearch.unsafe.use_unpooled_allocator=null, g1gc_enabled=false, g1gc_region_size=0b, heap_size=494.9mb}]\n[2026-10-01T06:13:40,655][INFO ][o.o.d.DiscoveryModule    ] using discovery type [single-node] and seed hosts providers [settings]\n[2026-10-01T06:13:41,018][WARN ][o.o.g.DanglingIndicesState] gateway.auto_import_dangling_indices is disabled, dangling indices will not be automatically detected or imported and must be managed manually\n[2026-10-01T06:13:41,240][INFO ][o.o.n.Node               ] initialized\n[2026-10-01T06:13:41,240][INFO ][o.o.n.Node               ] starting ...\n[2026-10-01T06:13:41,369][INFO ][o.o.t.TransportService   ] publish_address {127.0.0.1:9300}, bound_addresses {[::1]:9300}, {127.0.0.1:9300}\n[2026-10-01T06:13:41,556][INFO ][o.o.c.c.Coordinator      ] cluster UUID [3xU4JzCwTSugIms1SuRlMg]\n[2026-10-01T06:13:41,652][INFO ][o.o.c.s.ClusterManagerService] Tasks batched with key: org.opensearch.cluster.coordination.JoinHelper, count:3 and sample tasks: elected-as-cluster-manager ([1] nodes joined)[{Node 1}{rjoUqSLLTMGEuczNdd5RtA}{pZOJ-5rhQ_qmP4mMooNoaQ}{127.0.0.1}{127.0.0.1:9300}{dm}{shard_indexing_pressure_enabled=true} elect leader, _BECOME_CLUSTER_MANAGER_TASK_, _FINISH_ELECTION_], term: 4, version: 27, delta: cluster-manager node changed {previous [], current [{Node 1}{rjoUqSLLTMGEuczNdd5RtA}{pZOJ-5rhQ_qmP4mMooNoaQ}{127.0.0.1}{127.0.0.1:9300}{dm}{shard_indexing_pressure_enabled=true}]}\n[2026-10-01T06:13:41,693][INFO ][o.o.c.s.ClusterApplierService] cluster-manager node changed {previous [], current [{Node 1}{rjoUqSLLTMGEuczNdd5RtA}{pZOJ-5rhQ_qmP4mMooNoaQ}{127.0.0.1}{127.0.0.1:9300}{dm}{shard_indexing_pressure_enabled=true}]}, term: 4, version: 27, reason: Publication{term=4, version=27}\n[2026-10-01T06:13:41,702][INFO ][o.o.d.PeerFinder         ] setting findPeersInterval to [1s] as node commission status = [true] for local node [{Node 1}{rjoUqSLLTMGEuczNdd5RtA}{pZOJ-5rhQ_qmP4mMooNoaQ}{127.0.0.1}{127.0.0.1:9300}{dm}{shard_indexing_pressure_enabled=true}]\n[2026-10-01T06:13:41,713][INFO ][o.o.h.AbstractHttpServerTransport] publish_address {127.0.0.1:9201}, bound_addresses {[::1]:9201}, {127.0.0.1:9201}\n[2026-10-01T06:13:41,714][INFO ][o.o.n.Node               ] started\n[2026-10-01T06:13:41,748][INFO ][o.o.g.GatewayService     ] recovered [1] indices into cluster_state\n[2026-10-01T06:13:41,834][INFO ][o.o.i.MergeSchedulerConfig] Updating autoThrottle for index photon from [false] to [true]\n[2026-10-01T06:13:41,834][INFO ][o.o.i.MergeSchedulerConfig] Updating maxThreadCount from [0] to [4] and maxMergeCount from [0] to [9] for index photon.\n[2026-10-01T06:13:41,834][INFO ][o.o.i.MergeSchedulerConfig] Initialized index photon with maxMergeCount=9, maxThreadCount=4, autoThrottleEnabled=true\n[2026-10-01T06:13:41,852][INFO ][o.o.p.PluginsService     ] PluginService:onIndexModule index:[photon/MRubk1LdQP2TIVxEUhU0pg]\n[2026-10-01T06:13:41,946][INFO ][o.o.i.MergeSchedulerConfig] Updating autoThrottle for index photon from [true] to [true]\n[2026-10-01T06:13:42,349][INFO ][o.o.c.r.a.AllocationService] Cluster health status changed from [RED] to [YELLOW] (reason: [shards started [[photon][1]]]).\n[2026-10-01T06:13:42,968][INFO ][d.k.p.App                ] Database cluster is now ready.\n[2026-10-01T06:13:43,183][INFO ][d.k.p.App                ] Starting API with the following settings:\n\n Languages: [en, he]\n Import Date: null\n Support Structured Queries: true\n Support Geometries: false\n[2026-10-01T06:13:43,592][INFO ][i.j.Javalin              ] Starting Javalin ...\n[2026-10-01T06:13:43,597][INFO ][o.e.j.s.Server           ] jetty-12.1.8; built: 2026-04-01T01:09:18.991Z; git: c9cdc9aaa434a3665b8a53b4d1cc3684992da649; jvm 21.0.12.1+1-LTS\n[2026-10-01T06:13:43,657][INFO ][o.e.j.s.DefaultSessionIdManager] Session workerName=node0\n[2026-10-01T06:13:43,666][INFO ][o.e.j.s.h.ContextHandler ] Started oeje10s.ServletContextHandler@38f7a20{ROOT,/,b=null,a=AVAILABLE,h=oeje10s.SessionHandler@2c39c520{STARTED}}\n[2026-10-01T06:13:43,673][INFO ][o.e.j.e.s.ServletContextHandler] Started oeje10s.ServletContextHandler@38f7a20{ROOT,/,b=null,a=AVAILABLE,h=oeje10s.SessionHandler@2c39c520{STARTED}}\n[2026-10-01T06:13:43,681][INFO ][o.e.j.s.AbstractConnector] Started oejs.ServerConnector@32a541a8{HTTP/1.1, (http/1.1)}{127.0.0.1:2322}\n[2026-10-01T06:13:43,682][INFO ][o.e.j.s.Server           ] Started oejs.Server@63b85d97{STARTING}[12.1.8,sto=0] @89ms\n[2026-10-01T06:13:43,682][INFO ][i.j.Javalin              ] \n       __                  ___          _____\n      / /___ __   ______ _/ (_)___     /__  /\n __  / / __ `/ | / / __ `/ / / __ \\      / /\n/ /_/ / /_/ /| |/ / /_/ / / / / / /     / /\n\\____/\\__,_/ |___/\\__,_/_/_/_/ /_/     /_/\n\n       https://javalin.io/documentation\n\n[2026-10-01T06:13:43,682][INFO ][i.j.Javalin              ] Javalin started in 367ms \\o/\n[2026-10-01T06:13:43,683][INFO ][i.j.Javalin              ] Listening on http://127.0.0.1:2322/\n[2026-10-01T06:13:43,690][INFO ][i.j.Javalin              ] You are running Javalin 7.2.2 (released May 14, 2026. Your Javalin version is 139 days old. Consider checking for a newer version.).\n[2026-10-01T06:14:38,375][INFO ][d.k.p.App                ] Shutdown requested.\n[2026-10-01T06:14:38,376][INFO ][d.k.p.App                ] Shutting down the service.\n[2026-10-01T06:14:38,376][INFO ][i.j.Javalin              ] Stopping Javalin ...\n[2026-10-01T06:14:38,376][INFO ][o.e.j.s.Server           ] Stopped oejs.Server@63b85d97{STOPPING}[12.1.8,sto=0]\n[2026-10-01T06:14:38,379][INFO ][o.e.j.s.AbstractConnector] Stopped oejs.ServerConnector@32a541a8{HTTP/1.1, (http/1.1)}{127.0.0.1:2322}\n[2026-10-01T06:14:38,382][INFO ][o.e.j.e.s.ServletContextHandler] Stopped oeje10s.ServletContextHandler@38f7a20{ROOT,/,b=null,a=AVAILABLE,h=oeje10s.SessionHandler@2c39c520{STOPPED}}\n[2026-10-01T06:14:38,384][INFO ][i.j.Javalin              ] Javalin has stopped\n[2026-10-01T06:14:38,384][INFO ][d.k.p.App                ] Server has been stopped. Shutting down node.\n[2026-10-01T06:14:38,384][INFO ][d.k.p.Server             ] Shutting down OpenSearch runner\n[2026-10-01T06:14:38,384][INFO ][o.o.n.Node               ] stopping ...\n[2026-10-01T06:14:38,398][INFO ][o.o.n.Node               ] stopped\n[2026-10-01T06:14:38,398][INFO ][o.o.n.Node               ] closing ...\n[2026-10-01T06:14:38,401][INFO ][o.o.n.Node               ] closed\n[2026-10-01T06:14:38,401][INFO ][stdout                   ] Closed all nodes.\nCluster Name: photon\nBase Path:    /photon_data/photon_data\nNum Of Node:  1\nNode Name:      Node 1\nHTTP Port:      9201\nData Directory: /photon_data/photon_data/node_1/data\nLog Directory:  /photon_data/photon_data/node_1/logs\n[2026-10-01T06:14:41,294][INFO ][o.o.n.Node               ] version[3.8.0], pid[1], build[unknown/unknown/unknown], OS[Linux/5.15.167.4-microsoft-standard-WSL2/amd64], JVM[Eclipse Adoptium/OpenJDK 64-Bit Server VM/21.0.12.1/21.0.12.1+1-LTS]\n[2026-10-01T06:14:41,294][INFO ][o.o.n.Node               ] JVM home [/opt/java/openjdk]\n[2026-10-01T06:14:41,298][INFO ][o.o.n.Node               ] JVM arguments [-Xms256m, -Xmx512m]\n[2026-10-01T06:14:41,303][INFO ][o.o.p.PluginsService     ] no modules loaded\n[2026-10-01T06:14:41,303][INFO ][o.o.p.PluginsService     ] loaded plugin [org.opensearch.analysis.common.CommonAnalysisModulePlugin]\n[2026-10-01T06:14:41,304][INFO ][o.o.p.PluginsService     ] loaded plugin [org.opensearch.geo.GeoModulePlugin]\n[2026-10-01T06:14:41,304][INFO ][o.o.p.PluginsService     ] loaded plugin [org.opensearch.transport.Netty4ModulePlugin]\n[2026-10-01T06:14:41,380][WARN ][stderr                   ] WARNING: A restricted method in java.lang.foreign.Linker has been called\n[2026-10-01T06:14:41,381][WARN ][stderr                   ] WARNING: java.lang.foreign.Linker::downcallHandle has been called by the unnamed module\n[2026-10-01T06:14:41,381][WARN ][stderr                   ] WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for this module\n[2026-10-01T06:14:41,442][INFO ][o.o.e.NodeEnvironment    ] using [1] data paths, mounts [[/photon_data (/dev/sdd)]], net usable_space [934.3gb], net total_space [1006.8gb], types [ext4]\n[2026-10-01T06:14:41,444][INFO ][o.o.e.NodeEnvironment    ] heap size [494.9mb], compressed ordinary object pointers [true]\n[2026-10-01T06:14:41,520][WARN ][o.a.l.i.v.VectorizationProvider] Java vector incubator module is not readable. For optimal vector performance, pass '--add-modules jdk.incubator.vector' to enable Vector API.\n[2026-10-01T06:14:41,638][INFO ][o.o.n.Node               ] node name [Node 1], node ID [rjoUqSLLTMGEuczNdd5RtA], cluster name [photon], roles [data, cluster_manager]\n[2026-10-01T06:14:41,670][INFO ][o.o.e.ExtensionsManager  ] ExtensionsManager initialized\n[2026-10-01T06:14:41,888][INFO ][o.o.i.MergeSchedulerConfig] Updating autoThrottle for index _na_ from [false] to [true]\n[2026-10-01T06:14:41,888][INFO ][o.o.i.MergeSchedulerConfig] Updating maxThreadCount from [0] to [4] and maxMergeCount from [0] to [9] for index _na_.\n[2026-10-01T06:14:41,888][INFO ][o.o.i.MergeSchedulerConfig] Initialized index _na_ with maxMergeCount=9, maxThreadCount=4, autoThrottleEnabled=true\n[2026-10-01T06:14:42,082][INFO ][o.o.i.MergeSchedulerConfig] Updating autoThrottle for index _na_ from [false] to [true]\n[2026-10-01T06:14:42,082][INFO ][o.o.i.MergeSchedulerConfig] Updating maxThreadCount from [0] to [4] and maxMergeCount from [0] to [9] for index _na_.\n[2026-10-01T06:14:42,082][INFO ][o.o.i.MergeSchedulerConfig] Initialized index _na_ with maxMergeCount=9, maxThreadCount=4, autoThrottleEnabled=true\n[2026-10-01T06:14:43,255][INFO ][o.o.t.NettyAllocator     ] creating NettyAllocator with the following configs: [name=unpooled, suggested_max_allocation_size=1mb, factors={opensearch.unsafe.use_unpooled_allocator=null, g1gc_enabled=false, g1gc_region_size=0b, heap_size=494.9mb}]\n[2026-10-01T06:14:43,314][INFO ][o.o.d.DiscoveryModule    ] using discovery type [single-node] and seed hosts providers [settings]\n[2026-10-01T06:14:43,631][WARN ][o.o.g.DanglingIndicesState] gateway.auto_import_dangling_indices is disabled, dangling indices will not be automatically detected or imported and must be managed manually\n[2026-10-01T06:14:43,834][INFO ][o.o.n.Node               ] initialized\n[2026-10-01T06:14:43,835][INFO ][o.o.n.Node               ] starting ...\n[2026-10-01T06:14:43,933][INFO ][o.o.t.TransportService   ] publish_address {127.0.0.1:9300}, bound_addresses {[::1]:9300}, {127.0.0.1:9300}\n[2026-10-01T06:14:44,094][INFO ][o.o.c.c.Coordinator      ] cluster UUID [3xU4JzCwTSugIms1SuRlMg]\n[2026-10-01T06:14:44,208][INFO ][o.o.c.s.ClusterManagerService] Tasks batched with key: org.opensearch.cluster.coordination.JoinHelper, count:3 and sample tasks: elected-as-cluster-manager ([1] nodes joined)[{Node 1}{rjoUqSLLTMGEuczNdd5RtA}{P0n1hESRTlG53JB3kRlTZQ}{127.0.0.1}{127.0.0.1:9300}{dm}{shard_indexing_pressure_enabled=true} elect leader, _BECOME_CLUSTER_MANAGER_TASK_, _FINISH_ELECTION_], term: 5, version: 34, delta: cluster-manager node changed {previous [], current [{Node 1}{rjoUqSLLTMGEuczNdd5RtA}{P0n1hESRTlG53JB3kRlTZQ}{127.0.0.1}{127.0.0.1:9300}{dm}{shard_indexing_pressure_enabled=true}]}\n[2026-10-01T06:14:44,249][INFO ][o.o.c.s.ClusterApplierService] cluster-manager node changed {previous [], current [{Node 1}{rjoUqSLLTMGEuczNdd5RtA}{P0n1hESRTlG53JB3kRlTZQ}{127.0.0.1}{127.0.0.1:9300}{dm}{shard_indexing_pressure_enabled=true}]}, term: 5, version: 34, reason: Publication{term=5, version=34}\n[2026-10-01T06:14:44,257][INFO ][o.o.d.PeerFinder         ] setting findPeersInterval to [1s] as node commission status = [true] for local node [{Node 1}{rjoUqSLLTMGEuczNdd5RtA}{P0n1hESRTlG53JB3kRlTZQ}{127.0.0.1}{127.0.0.1:9300}{dm}{shard_indexing_pressure_enabled=true}]\n[2026-10-01T06:14:44,266][INFO ][o.o.h.AbstractHttpServerTransport] publish_address {127.0.0.1:9201}, bound_addresses {[::1]:9201}, {127.0.0.1:9201}\n[2026-10-01T06:14:44,266][INFO ][o.o.n.Node               ] started\n[2026-10-01T06:14:44,301][INFO ][o.o.g.GatewayService     ] recovered [1] indices into cluster_state\n[2026-10-01T06:14:44,382][INFO ][o.o.i.MergeSchedulerConfig] Updating autoThrottle for index photon from [false] to [true]\n[2026-10-01T06:14:44,382][INFO ][o.o.i.MergeSchedulerConfig] Updating maxThreadCount from [0] to [4] and maxMergeCount from [0] to [9] for index photon.\n[2026-10-01T06:14:44,382][INFO ][o.o.i.MergeSchedulerConfig] Initialized index photon with maxMergeCount=9, maxThreadCount=4, autoThrottleEnabled=true\n[2026-10-01T06:14:44,396][INFO ][o.o.p.PluginsService     ] PluginService:onIndexModule index:[photon/MRubk1LdQP2TIVxEUhU0pg]\n[2026-10-01T06:14:44,471][INFO ][o.o.i.MergeSchedulerConfig] Updating autoThrottle for index photon from [true] to [true]\n[2026-10-01T06:14:44,822][INFO ][o.o.c.r.a.AllocationService] Cluster health status changed from [RED] to [YELLOW] (reason: [shards started [[photon][0]]]).\n[2026-10-01T06:14:45,339][INFO ][d.k.p.App                ] Database cluster is now ready.\n[2026-10-01T06:14:45,539][INFO ][d.k.p.App                ] Starting API with the following settings:\n\n Languages: [en, he]\n Import Date: null\n Support Structured Queries: true\n Support Geometries: false\n[2026-10-01T06:14:45,857][INFO ][i.j.Javalin              ] Starting Javalin ...\n[2026-10-01T06:14:45,861][INFO ][o.e.j.s.Server           ] jetty-12.1.8; built: 2026-04-01T01:09:18.991Z; git: c9cdc9aaa434a3665b8a53b4d1cc3684992da649; jvm 21.0.12.1+1-LTS\n[2026-10-01T06:14:45,905][INFO ][o.e.j.s.DefaultSessionIdManager] Session workerName=node0\n[2026-10-01T06:14:45,912][INFO ][o.e.j.s.h.ContextHandler ] Started oeje10s.ServletContextHandler@326489c4{ROOT,/,b=null,a=AVAILABLE,h=oeje10s.SessionHandler@50165a6d{STARTED}}\n[2026-10-01T06:14:45,917][INFO ][o.e.j.e.s.ServletContextHandler] Started oeje10s.ServletContextHandler@326489c4{ROOT,/,b=null,a=AVAILABLE,h=oeje10s.SessionHandler@50165a6d{STARTED}}\n[2026-10-01T06:14:45,923][INFO ][o.e.j.s.AbstractConnector] Started oejs.ServerConnector@65689000{HTTP/1.1, (http/1.1)}{127.0.0.1:2322}\n[2026-10-01T06:14:45,924][INFO ][o.e.j.s.Server           ] Started oejs.Server@441d3ddf{STARTING}[12.1.8,sto=0] @65ms\n[2026-10-01T06:14:45,924][INFO ][i.j.Javalin              ] \n       __                  ___          _____\n      / /___ __   ______ _/ (_)___     /__  /\n __  / / __ `/ | / / __ `/ / / __ \\      / /\n/ /_/ / /_/ /| |/ / /_/ / / / / / /     / /\n\\____/\\__,_/ |___/\\__,_/_/_/_/ /_/     /_/\n\n       https://javalin.io/documentation\n\n[2026-10-01T06:14:45,924][INFO ][i.j.Javalin              ] Javalin started in 279ms \\o/\n[2026-10-01T06:14:45,925][INFO ][i.j.Javalin              ] Listening on http://127.0.0.1:2322/\n[2026-10-01T06:14:45,931][INFO ][i.j.Javalin              ] You are running Javalin 7.2.2 (released May 14, 2026. Your Javalin version is 139 days old. Consider checking for a newer version.).\n",
+      "stderr": "2026-10-01 06:10:03,718 [main] INFO  de.komoot.photon.App - Start up database cluster, this might take some time.\n2026-10-01 06:13:38,084 [main] INFO  de.komoot.photon.App - Start up database cluster, this might take some time.\n2026-10-01 06:14:40,918 [main] INFO  de.komoot.photon.App - Start up database cluster, this might take some time.\n"
+    },
+    "opentransit-photon-bound-seal-20261001-01": {
+      "command": [
+        "docker",
+        "logs",
+        "opentransit-photon-bound-seal-20261001-01"
+      ],
+      "exitCode": 0,
+      "stdout": "{\"status\": \"passed\", \"requests\": 9, \"output\": \"/workspace/.runtime/m4-photon-binding-20261001/seal-http-01.json\"}\n",
+      "stderr": ""
+    },
+    "opentransit-photon-bound-checkpoint-20261001-01": {
+      "command": [
+        "docker",
+        "logs",
+        "opentransit-photon-bound-checkpoint-20261001-01"
+      ],
+      "exitCode": 0,
+      "stdout": "{\"files\": 83, \"bytes\": 77628604, \"treeSha256\": \"cc7d7bb04d0a52974af6719a6ac70c98c821f5ce246676d5445fdd2e8724318e\"}\n",
+      "stderr": ""
+    },
+    "opentransit-photon-bound-checkpoint-copy-20261001-01": {
+      "command": [
+        "docker",
+        "logs",
+        "opentransit-photon-bound-checkpoint-copy-20261001-01"
+      ],
+      "exitCode": 0,
+      "stdout": "78036992\t/source\n78036992\t/checkpoint\n",
+      "stderr": ""
+    },
+    "opentransit-photon-bound-checkpoint-hash-20261001-02": {
+      "command": [
+        "docker",
+        "logs",
+        "opentransit-photon-bound-checkpoint-hash-20261001-02"
+      ],
+      "exitCode": 0,
+      "stdout": "{\"files\": 83, \"bytes\": 77643853, \"treeSha256\": \"4d25fad6638a5dc0c4c289781a798a6cf9bc4ad599265a5c348056bba1db1140\"}\n",
+      "stderr": ""
+    },
+    "opentransit-m4-photon-light-a-focused-20261001-01": {
+      "command": [
+        "docker",
+        "logs",
+        "opentransit-m4-photon-light-a-focused-20261001-01"
+      ],
+      "exitCode": 0,
+      "stdout": "\n==================================== ERRORS ====================================\n_ ERROR collecting .runtime/m4-photon-binding-20261001/light-a-check-01/tests/test_geocode_places_api.py _\nImportError while importing test module '/workspace/.runtime/m4-photon-binding-20261001/light-a-check-01/tests/test_geocode_places_api.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/local/lib/python3.14/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n.runtime/m4-photon-binding-20261001/light-a-check-01/tests/test_geocode_places_api.py:6: in <module>\n    from test_reference_api import reference_client\nE   ModuleNotFoundError: No module named 'test_reference_api'\n=========================== short test summary info ============================\nERROR .runtime/m4-photon-binding-20261001/light-a-check-01/tests/test_geocode_places_api.py\n!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!\n1 error in 0.66s\n",
+      "stderr": ""
+    },
+    "opentransit-m4-photon-light-a-focused-20261001-02": {
+      "command": [
+        "docker",
+        "logs",
+        "opentransit-m4-photon-light-a-focused-20261001-02"
+      ],
+      "exitCode": 0,
+      "stdout": "...FF....FF.",
+      "stderr": ""
+    },
+    "opentransit-m4-photon-light-a-lint-20261001-01": {
+      "command": [
+        "docker",
+        "logs",
+        "opentransit-m4-photon-light-a-lint-20261001-01"
+      ],
+      "exitCode": 0,
+      "stdout": "F401 [*] `hashlib` imported but unused\n --> .runtime/m4-photon-binding-20261001/light-a-check-01/source/opentransit/address_catalog.py:5:8\n  |\n3 | from __future__ import annotations\n4 |\n5 | import hashlib\n  |        ^^^^^^^\n6 | import json\n7 | import re\n  |\nhelp: Remove unused import: `hashlib`\n  |\n4 |\n  - import hashlib\n5 | import json\n  |\n\nUP035 [*] Import from `collections.abc` instead: `Mapping`\n  --> .runtime/m4-photon-binding-20261001/light-a-check-01/source/opentransit/address_catalog.py:11:1\n   |\n 9 | from pathlib import Path\n10 | from types import MappingProxyType\n11 | from typing import Any, Mapping\n   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n12 |\n13 | CATALOG_SCHEMA_VERSION = 1\n   |\nhelp: Import from `collections.abc`\n   |\n10 | from types import MappingProxyType\n   - from typing import Any, Mapping\n11 + from typing import Any\n12 + from collections.abc import Mapping\n13 |\n   |\n\nE501 Line too long (103 > 100)\n  --> .runtime/m4-photon-binding-20261001/light-a-check-01/source/opentransit/address_catalog.py:69:101\n   |\n68 |     def lookup(self, osm_type: str, full_osm_id: str) -> dict[str, Any] | None:\n69 |         if osm_type not in _OSM_TYPES or not isinstance(full_osm_id, str) or not full_osm_id.isdigit():\n   |                                                                                                     ^^^\n70 |             return None\n71 |         row = self._connection.execute(\n   |\n\nE501 Line too long (105 > 100)\n  --> .runtime/m4-photon-binding-20261001/light-a-check-01/source/opentransit/build/address_catalog.py:92:101\n   |\n90 |                     raise ValueError(\"Enriched Photon dump header is invalid\") from exc\n91 |                 content = header.get(\"content\") if isinstance(header, dict) else None\n92 |                 database_version = content.get(\"database_version\") if isinstance(content, dict) else None\n   |                                                                                                     ^^^^^\n93 |                 generator = content.get(\"generator\") if isinstance(content, dict) else None\n94 |                 if (\n   |\n\nE501 Line too long (101 > 100)\n   --> .runtime/m4-photon-binding-20261001/light-a-check-01/source/opentransit/build/address_catalog.py:102:101\n    |\n100 |                     or not isinstance(database_version, str)\n101 |                 ):\n102 |                     raise ValueError(\"Input must be a preserved source-context enriched Photon dump\")\n    |                                                                                                     ^\n103 |                 source_pbf = _SOURCE_PBF.search(database_version)\n104 |                 if source_pbf is None:\n    |\n\nE501 Line too long (103 > 100)\n   --> .runtime/m4-photon-binding-20261001/light-a-check-01/source/opentransit/build/address_catalog.py:111:101\n    |\n109 |                         row = json.loads(line)\n110 |                     except json.JSONDecodeError as exc:\n111 |                         raise ValueError(f\"Enriched Photon row {line_number} is invalid JSON\") from exc\n    |                                                                                                     ^^^\n112 |                     if not isinstance(row, dict) or row.get(\"type\") != \"Place\":\n113 |                         raise ValueError(f\"Enriched Photon row {line_number} is not a Place\")\n    |\n\nE501 Line too long (101 > 100)\n   --> .runtime/m4-photon-binding-20261001/light-a-check-01/source/opentransit/build/address_catalog.py:122:101\n    |\n120 |                     identity = _source_identity(place)\n121 |                     if identity in seen:\n122 |                         raise ValueError(\"Enriched Photon dump contains duplicate source identities\")\n    |                                                                                                     ^\n123 |                     seen.add(identity)\n124 |                     payload = json.dumps(\n    |\n\nI001 [*] Import block is un-sorted or un-formatted\n --> .runtime/m4-photon-binding-20261001/light-a-check-01/source/opentransit/geocoding.py:3:1\n  |\n1 |   \"\"\"Deterministic orchestration for Photon addresses and MOTIS place search.\"\"\"\n2 |\n3 | / from __future__ import annotations\n4 | |\n5 | | from dataclasses import dataclass\n6 | | from typing import Any\n7 | |\n8 | | from opentransit.motis_geocoder import GeocoderUnavailable, geocode_places as geocode_with_motis\n9 | | from opentransit.photon_geocoder import PhotonGeocoder, PhotonUnavailable\n  | |_________________________________________________________________________^\nhelp: Organize imports\n   |\n7  |\n   - from opentransit.motis_geocoder import GeocoderUnavailable, geocode_places as geocode_with_motis\n8  + from opentransit.motis_geocoder import GeocoderUnavailable\n9  + from opentransit.motis_geocoder import geocode_places as geocode_with_motis\n10 | from opentransit.photon_geocoder import PhotonGeocoder, PhotonUnavailable\n   |\n\nE501 Line too long (108 > 100)\n  --> .runtime/m4-photon-binding-20261001/light-a-check-01/source/opentransit/photon_geocoder.py:44:101\n   |\n43 | class PhotonGeocoder:\n44 |     def __init__(self, binding, generation_id: str, *, timeout_seconds: float = MAX_PHOTON_TIMEOUT_SECONDS):\n   |                                                                                                     ^^^^^^^^\n45 |         if not isinstance(generation_id, str) or not generation_id:\n46 |             raise ValueError(\"A generation ID is required\")\n   |\n\nE501 Line too long (103 > 100)\n  --> .runtime/m4-photon-binding-20261001/light-a-check-01/source/opentransit/photon_geocoder.py:47:101\n   |\n45 |         if not isinstance(generation_id, str) or not generation_id:\n46 |             raise ValueError(\"A generation ID is required\")\n47 |         if not math.isfinite(timeout_seconds) or not 0 < timeout_seconds <= MAX_PHOTON_TIMEOUT_SECONDS:\n   |                                                                                                     ^^^\n48 |             raise ValueError(\"Photon timeout must be in (0, 1.5] seconds\")\n49 |         self.binding = binding\n   |\n\nE501 Line too long (101 > 100)\n  --> .runtime/m4-photon-binding-20261001/light-a-check-01/source/opentransit/photon_geocoder.py:59:101\n   |\n57 |         ):\n58 |             raise ValueError(\"Photon artifact identity is invalid\")\n59 |         if not isinstance(self.index_uuid, str) or not self.index_uuid or len(self.index_uuid) > 128:\n   |                                                                                                     ^\n60 |             raise ValueError(\"Photon index identity is invalid\")\n61 |         if self.catalog is None or not callable(getattr(self.catalog, \"lookup\", None)):\n   |\n\nI001 [*] Import block is un-sorted or un-formatted\n  --> .runtime/m4-photon-binding-20261001/light-a-check-01/tests/test_address_catalog.py:1:1\n   |\n 1 | / import hashlib\n 2 | | import json\n 3 | | import sqlite3\n 4 | |\n 5 | | import pytest\n 6 | |\n 7 | | from opentransit.address_catalog import AddressCatalog\n 8 | | from opentransit.build.address_catalog import build_address_catalog\n   | |___________________________________________________________________^\n 9 |\n10 |   PBF_SHA = \"a\" * 64\n   |\nhelp: Organize imports\n  |\n5 | import pytest\n  -\n6 | from opentransit.address_catalog import AddressCatalog\n  |\n\nE501 Line too long (121 > 100)\n  --> .runtime/m4-photon-binding-20261001/light-a-check-01/tests/test_address_catalog.py:43:101\n   |\n41 |         \"\".join(\n42 |             json.dumps(row, ensure_ascii=False, separators=(\",\", \":\")) + \"\\n\"\n43 |             for row in [header, *(rows or [_place(\"N\", \"300\", \"house\", housenumber=\"24\"), _place(\"W\", \"300\", \"street\")])]\n   |                                                                                                     ^^^^^^^^^^^^^^^^^^^^^\n44 |         ),\n45 |         encoding=\"utf-8\",\n   |\n\nI001 [*] Import block is un-sorted or un-formatted\n  --> .runtime/m4-photon-binding-20261001/light-a-check-01/tests/test_geocode_places_api.py:1:1\n   |\n 1 | / import json\n 2 | | from dataclasses import replace\n 3 | | from datetime import UTC, datetime\n 4 | |\n 5 | | import httpx\n 6 | | from test_reference_api import reference_client\n 7 | |\n 8 | | from opentransit.api.app import problem\n 9 | | from opentransit.api.places import places_router\n10 | | from opentransit.build.prepare import sha256\n11 | | from opentransit.geocoding import GeocodingResult\n12 | | import opentransit.api.places as places_module\n   | |______________________________________________^\nhelp: Organize imports\n   |\n5  | import httpx\n   - from test_reference_api import reference_client\n   -\n6  + import opentransit.api.places as places_module\n7  | from opentransit.api.app import problem\n8  | from opentransit.api.places import places_router\n9  | from opentransit.build.prepare import sha256\n10 | from opentransit.geocoding import GeocodingResult\n   - import opentransit.api.places as places_module\n11 + from test_reference_api import reference_client\n12 |\n   |\n\nI001 [*] Import block is un-sorted or un-formatted\n --> .runtime/m4-photon-binding-20261001/light-a-check-01/tests/test_geocoding.py:1:1\n  |\n1 | / import asyncio\n2 | | from types import SimpleNamespace\n3 | |\n4 | | import pytest\n5 | |\n6 | | import opentransit.geocoding as geocoding\n7 | | from opentransit.motis_geocoder import GeocoderUnavailable\n8 | | from opentransit.photon_geocoder import PhotonUnavailable\n  | |_________________________________________________________^\nhelp: Organize imports\n  |\n3 |\n  - import pytest\n  -\n4 | import opentransit.geocoding as geocoding\n5 + import pytest\n6 | from opentransit.motis_geocoder import GeocoderUnavailable\n  |\n\nE501 Line too long (108 > 100)\n  --> .runtime/m4-photon-binding-20261001/light-a-check-01/tests/test_geocoding.py:24:101\n   |\n22 |     async def motis(snapshot, query, **kwargs):\n23 |         calls.append(kwargs)\n24 |         return SimpleNamespace(items=[{\"kind\": \"poi\"}, {\"kind\": \"address\"}], searched_types=kwargs[\"types\"])\n   |                                                                                                     ^^^^^^^^\n25 |\n26 |     monkeypatch.setattr(geocoding, \"geocode_with_motis\", motis)\n   |\n\nI001 [*] Import block is un-sorted or un-formatted\n  --> .runtime/m4-photon-binding-20261001/light-a-check-01/tests/test_photon_geocoder.py:1:1\n   |\n 1 | / import asyncio\n 2 | | import json\n 3 | | import logging\n 4 | | from types import SimpleNamespace\n 5 | |\n 6 | | import httpx\n 7 | | import pytest\n 8 | |\n 9 | | from opentransit.core.place_ref import decode_place_ref\n10 | | from opentransit.photon_geocoder import PhotonGeocoder, PhotonUnavailable\n   | |_________________________________________________________________________^\n11 |\n12 |   GENERATION = \"photon-test-generation\"\n   |\nhelp: Organize imports\n  |\n7 | import pytest\n  -\n8 | from opentransit.core.place_ref import decode_place_ref\n  |\n\nE501 Line too long (101 > 100)\n  --> .runtime/m4-photon-binding-20261001/light-a-check-01/tests/test_photon_geocoder.py:46:101\n   |\n46 | def _feature(osm_type=\"node\", osm_id=300, *, lon=34.78, lat=32.08, name=\"Herzl Street\", number=\"24\"):\n   |                                                                                                     ^\n47 |     properties = {\"osm_type\": osm_type, \"osm_id\": osm_id, \"name\": name}\n48 |     if osm_type in {\"node\", \"N\"}:\n   |\n\nE501 Line too long (102 > 100)\n   --> .runtime/m4-photon-binding-20261001/light-a-check-01/tests/test_photon_geocoder.py:280:101\n    |\n278 |     assert fields[\"backend_ms\"] >= 0 and fields[\"normalize_ms\"] >= 0\n279 |     assert set(fields) == {\n280 |         \"request_id\", \"genid\", \"backend_ms\", \"normalize_ms\", \"responsebytes\", \"resultcount\", \"outcome\"\n    |                                                                                                     ^^\n281 |     }\n282 |     assert \"secret place query\" not in record.getMessage()\n    |\n\nFound 19 errors.\n[*] 7 fixable with the `--fix` option.\n",
+      "stderr": ""
+    }
+  },
+  "artifacts": [
+    {
+      "path": ".runtime\\m4-photon-binding-20261001\\clone_provider.ps1",
+      "sha256": "b610250eed2aa69c87602e2f4531618049a2126bfe9618e15069fb1e5d2cd33a",
+      "bytes": 3020
+    },
+    {
+      "path": ".runtime\\m4-photon-binding-20261001\\seal_provider.py",
+      "sha256": "ec89f3152bd8bb58dec8b4f24258bbffb6e9c37d7a1ea42cca303ee37385d8bc",
+      "bytes": 3310
+    },
+    {
+      "path": ".runtime\\m4-photon-binding-20261001\\checkpoint_provider.py",
+      "sha256": "45d2e6fd73ac87c5eaf0bd7cd1ac0e80a8979f4f342cb55ed1cd82670d498457",
+      "bytes": 1578
+    },
+    {
+      "path": ".runtime\\m4-photon-binding-20261001\\checkpoint-01.json",
+      "sha256": "0e6e41e487a4229fb5a4922e8f42ad4fde49d6eb855e0c28a0109c353f50cf88",
+      "bytes": 17353
+    },
+    {
+      "path": ".runtime\\m4-photon-binding-20261001\\checkpoint-02.json",
+      "sha256": "6c90423f93d6300bc1e7f491168195ec70bd4412a69e5a37c5649c7d7ce63039",
+      "bytes": 17367
+    },
+    {
+      "path": ".runtime\\m4-photon-binding-20261001\\checkpoint-stop-state-01.json",
+      "sha256": "a504b96410b3bc9f58225487d3979a449be5212091b6e3065a30d742f9b48073",
+      "bytes": 225
+    },
+    {
+      "path": ".runtime\\m4-photon-binding-20261001\\checkpoint-stop-state-02.json",
+      "sha256": "cba373ec664ce9069e30fc63c20ef75cfdba5d88772df20fd0924c999b368abc",
+      "bytes": 225
+    },
+    {
+      "path": ".runtime\\m4-photon-binding-20261001\\budget-01.json",
+      "sha256": "0bd48cc9f5ae3ee490f21f45bdd499981acbeabbd6fd07a8b26bbc55ece77a08",
+      "bytes": 1285
+    },
+    {
+      "path": ".runtime\\m4-photon-binding-20261001\\light-a-check-01\\source-sha256.json",
+      "sha256": "25528e40a858adcdd38a02c04b8dff107a401e3b28c91ab20c83788ff760d15f",
+      "bytes": 5759
+    },
+    {
+      "path": ".runtime\\m4-photon-binding-20261001\\light-a-check-02\\source-sha256.json",
+      "sha256": "59d5a95aff9365e36db954b6435b2e307a5267f062b0fbedcefa578078c6cb39",
+      "bytes": 12060
+    }
+  ],
+  "focusedChecks": {
+    "attempt1": "Collection failed: missing shared fixture helpers; no assertions ran",
+    "attempt2": "Adapter assertions fail; origin check prevents transport entry; cancellation fixture hangs. Root stopped after83s, exit137/noOOM. Not a completed pytest run.",
+    "lint1": "19 errors; code/import/format corrections pending",
+    "review": "6.1-sol/high: bytes URL authority, unnamed source-house rejection and unsupported real house/display-label shape; corrections delegated to lighter owner"
+  },
+  "interpretation": {
+    "apiAcceptance": false,
+    "h4": false,
+    "qualityScoreUnchanged": "16/22",
+    "fullStackCapacity": false,
+    "firstCheckpointNote": "checkpoint-01 records quiescent hashes only; actual separately preserved bytes are checkpoint-02 with its never-served volume."
+  }
+}

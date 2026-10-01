@@ -1,0 +1,7 @@
+{
+  "sourceUrl": "https://raw.githubusercontent.com/motis-project/motis/v2.11.2/openapi.yaml",
+  "release": "v2.11.2",
+  "sha256": "947bd5a43e8d5583cf6988968d5bc7c249339b54f4674d42801c3104f549533a",
+  "bytes": 210971,
+  "scope": "Upstream release-tag contract, not a fetched /openapi endpoint. Local pinned image reports MOTIS v2.11.2. Representative response conformance still required."
+}

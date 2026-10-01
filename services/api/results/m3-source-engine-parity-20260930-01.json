@@ -1,0 +1,184 @@
+{
+  "recordedAtUtc": "2026-09-30T18:04:47.485659+00:00",
+  "scope": "Complete source-vector/clock adapter conformance using preserved M1 engine responses and the independently built same-feed source index. The candidate graph import failed; this is not API runtime-generation, managed build, H3 or activation acceptance.",
+  "engineGenerationId": "fac861c2b4fb058b944302a26f7275d48bf17358dac7a62ee40871f1805f62a7",
+  "referenceGenerationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
+  "engineDigest": "sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330",
+  "referenceSha256": "fb7c677e43157a5431e4c1f51534c0008a93ac42341f9338a0ac1d8e4fbb43f2",
+  "referenceContentSha256": "99e9ace0c7327008bd553de06e85c229c49bced8fc6653b0f40d172bc61e5914",
+  "gtfsSha256": "8629a73c3f6ff024a78e9b8c83602c09180e13e597b82b98a4377a78f3dd2fd9",
+  "policy": {
+    "finalDepartureProjected": false,
+    "firstArrivalProjected": false,
+    "motisSourceCommit": "061857d38a375248ae62b4ce722753368a75e474",
+    "nigiriSourceCommit": "0a08a1c09dad25c5d892b2fd7166b03e82d62970",
+    "policyId": "motis-minute-bracket-v1",
+    "resolutionSeconds": 60,
+    "version": 1
+  },
+  "adapterCodeSha256": "b65cca9c89223ceab05af44b3c1eb443c760d3e3f286054b883244d5aff936ff",
+  "cases": [
+    {
+      "fixture": "real-trip",
+      "fixtureSha256": "6ac5cef3897b6aa8f3dcc093e6643f2b01ad38cb6cec601dcd86540660ff01d4",
+      "engineTripId": "20261001_07:47_mot60day_585619721_300926",
+      "sourceTripId": "585619721_300926",
+      "serviceDate": "2026-10-01",
+      "status": "pass",
+      "callCount": 50,
+      "firstCall": {
+        "callSequence": 1,
+        "ordinal": 0,
+        "stopId": "mot:stop:43787",
+        "scheduledArrival": null,
+        "scheduledDeparture": "2026-10-01T04:47:00Z",
+        "pickupType": 0,
+        "dropOffType": 1
+      },
+      "lastCall": {
+        "callSequence": 50,
+        "ordinal": 49,
+        "stopId": "mot:stop:14532",
+        "scheduledArrival": "2026-10-01T05:44:00Z",
+        "scheduledDeparture": null,
+        "pickupType": 1,
+        "dropOffType": 0
+      }
+    },
+    {
+      "fixture": "real-clamped-trip-20261005",
+      "fixtureSha256": "f0cb8f5d3b35c8b4f49828c919c058c97718b5b1f93c8f560b86f615ed46ccd6",
+      "engineTripId": "20261005_07:25_mot60day_24680439_051026",
+      "sourceTripId": "24680439_051026",
+      "serviceDate": "2026-10-05",
+      "status": "pass",
+      "callCount": 20,
+      "firstCall": {
+        "callSequence": 1,
+        "ordinal": 0,
+        "stopId": "mot:stop:9422",
+        "scheduledArrival": null,
+        "scheduledDeparture": "2026-10-05T04:25:00Z",
+        "pickupType": 0,
+        "dropOffType": 1
+      },
+      "lastCall": {
+        "callSequence": 20,
+        "ordinal": 19,
+        "stopId": "mot:stop:10073",
+        "scheduledArrival": "2026-10-05T04:29:00Z",
+        "scheduledDeparture": null,
+        "pickupType": 1,
+        "dropOffType": 0
+      }
+    },
+    {
+      "fixture": "real-clamped-trip-20261025",
+      "fixtureSha256": "7155d7b2e124739ec85e200b41267cb3d309cd0fba99b5365deb116048a68095",
+      "engineTripId": "20261025_07:25_mot60day_24680439_051026",
+      "sourceTripId": "24680439_051026",
+      "serviceDate": "2026-10-25",
+      "status": "pass",
+      "callCount": 20,
+      "firstCall": {
+        "callSequence": 1,
+        "ordinal": 0,
+        "stopId": "mot:stop:9422",
+        "scheduledArrival": null,
+        "scheduledDeparture": "2026-10-25T05:25:00Z",
+        "pickupType": 0,
+        "dropOffType": 1
+      },
+      "lastCall": {
+        "callSequence": 20,
+        "ordinal": 19,
+        "stopId": "mot:stop:10073",
+        "scheduledArrival": "2026-10-25T05:29:00Z",
+        "scheduledDeparture": null,
+        "pickupType": 1,
+        "dropOffType": 0
+      }
+    },
+    {
+      "fixture": "real-stop-overnight-20261001-trip",
+      "fixtureSha256": "7b9d4a1a59d6ff93d7412a849a414d2eccbb0278018cd3312b04826ac500f5b1",
+      "engineTripId": "20260930_23:50_mot60day_584668860_300926",
+      "sourceTripId": "584668860_300926",
+      "serviceDate": "2026-09-30",
+      "status": "pass",
+      "callCount": 40,
+      "firstCall": {
+        "callSequence": 1,
+        "ordinal": 0,
+        "stopId": "mot:stop:13112",
+        "scheduledArrival": null,
+        "scheduledDeparture": "2026-09-30T20:50:00Z",
+        "pickupType": 0,
+        "dropOffType": 1
+      },
+      "lastCall": {
+        "callSequence": 40,
+        "ordinal": 39,
+        "stopId": "mot:stop:14126",
+        "scheduledArrival": "2026-09-30T21:42:00Z",
+        "scheduledDeparture": null,
+        "pickupType": 1,
+        "dropOffType": 0
+      }
+    },
+    {
+      "fixture": "real-stop-fold-first-20261025-trip",
+      "fixtureSha256": "ac11182597bdcc0932ddf810be34d600cc4f1c07792b31546bd2b1f9f225e8ba",
+      "engineTripId": "20261025_00:00_mot60day_463093_081026",
+      "sourceTripId": "463093_081026",
+      "serviceDate": "2026-10-25",
+      "status": "pass",
+      "callCount": 37,
+      "firstCall": {
+        "callSequence": 1,
+        "ordinal": 0,
+        "stopId": "mot:stop:24660",
+        "scheduledArrival": null,
+        "scheduledDeparture": "2026-10-24T22:00:00Z",
+        "pickupType": 0,
+        "dropOffType": 1
+      },
+      "lastCall": {
+        "callSequence": 37,
+        "ordinal": 36,
+        "stopId": "mot:stop:52253",
+        "scheduledArrival": "2026-10-24T22:42:00Z",
+        "scheduledDeparture": null,
+        "pickupType": 1,
+        "dropOffType": 0
+      }
+    },
+    {
+      "fixture": "real-stop-fold-second-20261025-trip",
+      "fixtureSha256": "cbe9b7984e09b3a851efb94f9f5ee6f8e2480f5be7882fe2cbde80791144d58c",
+      "engineTripId": "20261025_01:00_mot60day_24467154_081026",
+      "sourceTripId": "24467154_081026",
+      "serviceDate": "2026-10-25",
+      "status": "pass",
+      "callCount": 37,
+      "firstCall": {
+        "callSequence": 1,
+        "ordinal": 0,
+        "stopId": "mot:stop:24660",
+        "scheduledArrival": null,
+        "scheduledDeparture": "2026-10-24T23:00:00Z",
+        "pickupType": 0,
+        "dropOffType": 1
+      },
+      "lastCall": {
+        "callSequence": 37,
+        "ordinal": 36,
+        "stopId": "mot:stop:52253",
+        "scheduledArrival": "2026-10-24T23:42:00Z",
+        "scheduledDeparture": null,
+        "pickupType": 1,
+        "dropOffType": 0
+      }
+    }
+  ]
+}

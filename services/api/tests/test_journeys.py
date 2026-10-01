@@ -17,7 +17,7 @@ def test_schedule_response_identity_and_geojson(client_factory, query, engine_ro
         assert client.get("/healthz").json() == {"status": "alive"}
         assert client.get("/docs").status_code == 200
         schema = client.get("/openapi.json").json()
-        assert set(schema["paths"]) == {"/healthz", "/v1/journeys"}
+        assert {"/healthz", "/v1/journeys", "/v1/status", "/readyz"} <= set(schema["paths"])
         response = client.post("/v1/journeys", json=query, headers={"X-Request-ID": "unsafe-id"})
     assert response.status_code == 200
     body = response.json()
@@ -65,7 +65,7 @@ def test_empty_search_and_walk_only(client_factory, query, engine_route):
         ("departAt", 1790744400),
         ("departAt", "2026-11-30T08:00:00+02:00"),
         ("arriveBy", "2026-09-30T08:00:00+03:00"),
-        ("results", 3),
+        ("results", 6),
     ],
 )
 def test_time_and_unsupported_fields(client_factory, query, field, value):

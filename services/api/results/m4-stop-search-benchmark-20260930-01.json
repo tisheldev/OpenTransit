@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 1,
+  "measuredAt": "2026-09-30",
+  "task": "bounded stop-search strategy benchmark",
+  "source": {
+    "generationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
+    "referencePath": ".runtime\\generations\\m3-functional-blue-20260930\\reference.sqlite",
+    "referenceSha256": "fb7c677e43157a5431e4c1f51534c0008a93ac42341f9338a0ac1d8e4fbb43f2",
+    "sourceFeedSha256": "8629a73c3f6ff024a78e9b8c83602c09180e13e597b82b98a4377a78f3dd2fd9",
+    "referenceSchemaVersion": 2,
+    "stopCount": 35321,
+    "stopNameTranslationCount": 0
+  },
+  "methods": {
+    "inProcess": {
+      "completeCorpusLabels": 105887,
+      "loadSeconds": 0.491,
+      "normalizedIndexUtf8Bytes": 7077681,
+      "tracemallocPeakBytes": 10384034
+    },
+    "fts5TrigramScratch": {
+      "databasePath": ".runtime\\m4-stop-search-benchmark-20260930-01\\fts.sqlite",
+      "buildSeconds": 0.571,
+      "databaseBytes": 13144064,
+      "sourceDatabaseModified": false
+    }
+  },
+  "queries": {
+    "central": {
+      "counts": {
+        "inprocess": 0,
+        "fts5": 0
+      },
+      "latency": {
+        "inprocess": {
+          "p50_ms": 12.21,
+          "mean_ms": 12.162
+        },
+        "fts5": {
+          "p50_ms": 0.043,
+          "mean_ms": 0.062
+        }
+      }
+    },
+    "תחנה מרכזית": {
+      "counts": {
+        "inprocess": 118,
+        "fts5": 118
+      },
+      "latency": {
+        "inprocess": {
+          "p50_ms": 4.547,
+          "mean_ms": 4.603
+        },
+        "fts5": {
+          "p50_ms": 0.26,
+          "mean_ms": 0.277
+        }
+      }
+    },
+    "harbor": {
+      "counts": {
+        "inprocess": 0,
+        "fts5": 0
+      },
+      "latency": {
+        "inprocess": {
+          "p50_ms": 13.527,
+          "mean_ms": 13.855
+        },
+        "fts5": {
+          "p50_ms": 0.042,
+          "mean_ms": 0.052
+        }
+      }
+    },
+    "תחנה": {
+      "counts": {
+        "inprocess": 172,
+        "fts5": 172
+      },
+      "latency": {
+        "inprocess": {
+          "p50_ms": 4.75,
+          "mean_ms": 4.823
+        },
+        "fts5": {
+          "p50_ms": 0.074,
+          "mean_ms": 0.084
+        }
+      }
+    },
+    "central a": {
+      "counts": {
+        "inprocess": 0,
+        "fts5": 0
+      },
+      "latency": {
+        "inprocess": {
+          "p50_ms": 12.721,
+          "mean_ms": 12.792
+        },
+        "fts5": {
+          "p50_ms": 0.044,
+          "mean_ms": 0.053
+        }
+      }
+    },
+    "7": {
+      "counts": {
+        "inprocess": 14216,
+        "fts5": 0
+      },
+      "latency": {
+        "inprocess": {
+          "p50_ms": 3.955,
+          "mean_ms": 3.995
+        },
+        "fts5": {
+          "p50_ms": 0.037,
+          "mean_ms": 0.047
+        }
+      }
+    }
+  },
+  "selection": "in-process normalized corpus cache: measured lower per-query cost on this bounded corpus; FTS5 scratch retained as comparative measurement only; no reference DB schema change",
+  "limits": "Synthetic benchmark examples exercise exact/prefix/substring and Hebrew; not H4 accuracy evidence, not API p95 acceptance, not POI/address coverage."
+}

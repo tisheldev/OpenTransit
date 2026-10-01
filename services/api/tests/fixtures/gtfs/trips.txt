@@ -1,0 +1,2 @@
+route_id,service_id,trip_id,shape_id
+r1,weekday,101_280926,shape1

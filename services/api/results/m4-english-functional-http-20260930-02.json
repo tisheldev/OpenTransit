@@ -1,0 +1,90 @@
+{
+  "recordedAt": "2026-09-30T23:00:24.213862+00:00",
+  "scope": "Actual translation-repaired generation API English search-to-journey and generation isolation; not H4, p95, activation or deployment acceptance",
+  "apiOrigin": "http://127.0.0.1:8001",
+  "networkScope": "Shared existing local-net Docker namespace; original host port8002 API preserved",
+  "generationId": "c7b66eee1ad04dddba13f4c5dade5ef2023963a1ac0384857aaf173b9d164aa1",
+  "artifactHashes": {
+    "reference": "8f81298d87dbe84478bfd22652b87bd5b7db1e61979a9d00187558fea64605b6",
+    "motis": "96c8fb237576a50544a2c03ad1e840c2f12d2b96b9072250c1e66a61c8f7d263",
+    "config": "2f75d87301d97b36461bd5826f0c46a1eb375f0da3434f39ee59563f21b6e998"
+  },
+  "engineDigest": "sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330",
+  "sourceCheckedAt": "2026-09-30T09:33:07.260277+00:00",
+  "frozenSourceRoot": ".runtime/m4-functional-evidence-20260930/api-source-for-http-02",
+  "cases": [
+    {
+      "id": "ready",
+      "path": "/readyz",
+      "method": "GET",
+      "params": null,
+      "body": null,
+      "httpStatus": 503,
+      "elapsedMs": 11.529,
+      "responseSha256": "b0ce762cd0831a0fb2ea154b2c5e190669761572baa06f3487cf570f4d19fafb",
+      "response": {
+        "type": "urn:opentransit:problem:not-ready",
+        "title": "Not ready",
+        "status": 503,
+        "code": "NOT_READY",
+        "detail": "A complete usable generation is required.",
+        "requestId": "11fde2e8885c4746855bcb4ccbdb75bd"
+      }
+    }
+  ],
+  "failures": [
+    {
+      "type": "AssertionError",
+      "message": "('ready', 503, {'type': 'urn:opentransit:problem:not-ready', 'title': 'Not ready', 'status': 503, 'code': 'NOT_READY', 'detail': 'A complete usable generation is required.', 'requestId': '11fde2e8885c4746855bcb4ccbdb75bd'})",
+      "traceback": "Traceback (most recent call last):\n  File \"/workspace/.runtime/m4-functional-evidence-20260930/verify-english-http-02.py\", line 13, in <module>\n    ready=call(c,'ready','/readyz');assert ready['generationId']==manifest['generationId']\n  File \"/workspace/.runtime/m4-functional-evidence-20260930/verify-english-http-02.py\", line 8, in call\n    start=time.perf_counter();r=c.post(path,json=body) if body is not None else c.get(path,params=params);d=r.json();cases.append({'id':id,'path':path,'method':'POST' if body is not None else 'GET','params':params,'body':body,'httpStatus':r.status_code,'elapsedMs':round((time.perf_counter()-start)*1000,3),'responseSha256':hashlib.sha256(r.content).hexdigest(),'response':d});assert r.status_code==status,(id,r.status_code,d);\n                                                                                                                                                                                                                                                                                                                                                                                                ^^^^^^^^^^^^^^^^^^^^^\nAssertionError: ('ready', 503, {'type': 'urn:opentransit:problem:not-ready', 'title': 'Not ready', 'status': 503, 'code': 'NOT_READY', 'detail': 'A complete usable generation is required.', 'requestId': '11fde2e8885c4746855bcb4ccbdb75bd'})\n"
+    }
+  ],
+  "status": "failed",
+  "frozenSourceSha256": {
+    "opentransit/__init__.py": "f953c5f7653ce55912ac1aa8c8fbd40594f4c47fa8702587d04af34ad49e5ef8",
+    "opentransit/activation.py": "08bcb2bd68dcef7ae1c69305ae650212bb320b2d57400d12543ded271861672f",
+    "opentransit/api/__init__.py": "6596a31fd9c14ba08c000f7f8e01d3e7dd6323f28d435228abbb7b8ffd3aea2f",
+    "opentransit/api/app.py": "c977ddefebd86ba68f1e7576ac69efdb3745ac8f0c5d3b57d348bb7058bbebe4",
+    "opentransit/api/places.py": "1435f27508ca0259957104561f7600107ad4aa69f9f39c0e1a02dff4533eab64",
+    "opentransit/api/playground/app.mjs": "283f12bc254cd14e78177a0f797d8435046f0c7606dc49c43ab0d1e4e56815a9",
+    "opentransit/api/playground/index.html": "3c5c4fc1b66d370590f2dba6f8e58a0c86e703750714ba51f238b533a0b3ea42",
+    "opentransit/api/playground/style.css": "1278cf9951dd2a47a3275b99f91c2f15be3d6be740be41439081515b2cdab8ff",
+    "opentransit/api/playground/time.mjs": "322477ffe13ae4e70736285f80c444946eab45368d3c4db66565b06578bb1ec0",
+    "opentransit/api/playground/vendor/images/layers-2x.png": "066daca850d8ffbef007af00b06eac0015728dee279c51f3cb6c716df7c42edf",
+    "opentransit/api/playground/vendor/images/layers.png": "1dbbe9d028e292f36fcba8f8b3a28d5e8932754fc2215b9ac69e4cdecf5107c6",
+    "opentransit/api/playground/vendor/images/marker-icon-2x.png": "00179c4c1ee830d3a108412ae0d294f55776cfeb085c60129a39aa6fc4ae2528",
+    "opentransit/api/playground/vendor/images/marker-icon.png": "574c3a5cca85f4114085b6841596d62f00d7c892c7b03f28cbfa301deb1dc437",
+    "opentransit/api/playground/vendor/images/marker-shadow.png": "264f5c640339f042dd729062cfc04c17f8ea0f29882b538e3848ed8f10edb4da",
+    "opentransit/api/playground/vendor/leaflet.css": "a7837102824184820dfa198d1ebcd109ff6d0ff9a2672a074b9a1b4d147d04c6",
+    "opentransit/api/playground/vendor/leaflet.js": "3104b526504d0d61fd3099a4521e87f732ccc3174dec54e08de6ba8bde3e15ff",
+    "opentransit/api/playground/vendor/LICENSE": "53e8dc25862014e4324741ca18fbe3611e11d42ef69f59f86ea8c5389647d4cb",
+    "opentransit/api/playground/vendor/NOTICE.md": "3584ebd211c8839612484c56950531880467ce4320d8f6dadbfd1e52d85ea9e8",
+    "opentransit/api/reference.py": "583f84396d8b65310e06477cca3c517630099a8185b589c4d470bde6adf070f7",
+    "opentransit/api/schemas.py": "c2e7a9eb80b3b58c7f536e8943cb22c0586c7a17dfcd6953cf252c65ee558b20",
+    "opentransit/api/timetable.py": "4053f1dbe401b69364727813b71c8a943196e771c79820c0c6d591a8adadd94b",
+    "opentransit/build/__init__.py": "381e101e4f61d7d4ab26963b32c9ae4ca622056561429e227760804df7c55331",
+    "opentransit/build/activation.py": "34592fab79ffdc446d7a16a0527c1c498f9cf42985002c9ffe03169328317635",
+    "opentransit/build/cli.py": "ac191c7d6c2c0c2d54f928513d9dd67159e9fa052dcbda64dcb8149b21dd3032",
+    "opentransit/build/fetch.py": "b967877a3aeff520ce0b18884b90532dc8b99d9322aaebd3a7903d1a8ca4a936",
+    "opentransit/build/generations.py": "51a2c689d9110f8716277df00fc22d025a26424a9482df3e48441ca62a86991a",
+    "opentransit/build/identity.py": "a6bda445cf759bdbb4f16159c7e5e709d111a61a84a54b493c05c1ff4abb9494",
+    "opentransit/build/prepare.py": "b418b698b2ff84b34240e4a70bdeadc43bfdfb2343675abc4cfb084572654454",
+    "opentransit/build/probe.py": "246e51144fe9f30c417878e8f7b915c4ea08455c78831598fd01cca41774278c",
+    "opentransit/build/reference_repair.py": "a1511777eaf34d11849532a22818517e618c2b55b7271bfb3bf83a338e128ebb",
+    "opentransit/build/retention.py": "b0b81b2599672a18db9253da62d2521e7b925726b4956b0974e3ae7805728635",
+    "opentransit/build/validation.py": "d28e8ed04673cca8489c01d64d25de20cec40edfd9da0c08538d7e1be41ea8fb",
+    "opentransit/config.py": "9e1ab38e52b627316bfb5803dfeaf635e6cf42f3de62c01c5b3c6e3ce411decb",
+    "opentransit/core/__init__.py": "f56abd88840946ed290c0330ddfdce595012b1aa7dbc5426c581a98802b56d83",
+    "opentransit/core/artifacts.py": "3e6f0c417eedbaca1685fba7d56a684f1711edabaaa0f7b36ef500b73659b389",
+    "opentransit/core/generation.py": "cdfd342ef917c76bb0b1a0be407680ffca89667ea3d5168bb407b4f4a782bc8b",
+    "opentransit/core/place_ref.py": "f1f8bd64c021cb0896a787adee24118bf9f401e308c35c671bb95c640e9e0ef4",
+    "opentransit/core/time.py": "d1cf682613497c9cba19041f29dc59f0213742f75e50b7c669c6d69a1645e278",
+    "opentransit/core/trip_calls.py": "8e8ae52c94d4103d5535c97eae88ca9728a6bf6253e32abd5477e6718c63994b",
+    "opentransit/motis.py": "c0f786ab453054b8503d6b5469346232b4821dec0d4f4030bc73389ed8b9dd5a",
+    "opentransit/motis_geocoder.py": "19e56513466c339dd7ed6a9759f8bd6239dbf8d331982ccc61d76de3acc72c1a",
+    "opentransit/motis_timetable.py": "7da44ff1d22ab89163b71e9dfc4f2a530102c95a38430fc650e0ff6c41a78e4d",
+    "opentransit/reference.py": "f321035e1a604a9af87c3f619769db93002ef48ca38807271fd4a579e62a4eaf",
+    "opentransit/runtime.py": "18ae6c17a55e023dc48546383ba55e6f66ba01e6da86e7539c7a71a60e0ac4da",
+    "opentransit/stop_search.py": "c57589e86fb4dbe66ead3fbdc8beae3abb05b770e4a91e5e47851c843c290605"
+  }
+}

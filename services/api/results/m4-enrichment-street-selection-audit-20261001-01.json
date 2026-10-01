@@ -1,0 +1,2619 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-01T05:35:46.516Z",
+  "purpose": "Complete source-way selection audit explaining the 169-record difference between retained context inventory and emitted Photon street documents; not a status report or address/provider acceptance.",
+  "scope": "Saved context JSONL, transform provenance sidecar and current parser selection condition only. No PBF scan, transform rerun, dump rewrite, import, HTTP or runtime changes.",
+  "provenance": {
+    "sourcePbfSha256": "8a34b30f91a63ef9239961ba0e4d660ae22deda2f6da4b85ba4772a6b7c4c74f",
+    "retainedContextPath": ".runtime/m4-photon-context-20261001/context-v1.jsonl",
+    "retainedContextSha256": "69cd607560dafbf0717771589e20ad58aabff186fb5fae806841aa30c1095a06",
+    "retainedContextHashMatchesSidecar": true,
+    "sidecarPath": ".runtime/m4-photon-enrichment-20261001/israel-addresses-enriched-photon-0.1.0.provenance.json",
+    "sidecarSha256": "b257f71101f8d40acdabd95c195e898af70f9ba633b5e2e5aeb31f591fe29c47",
+    "enricherPath": "services/api/tools/enrich_photon_addresses.py",
+    "enricherSha256RecordedByTransform": "a7ec1f15b4b8835e7d4a73d54e43b8524938542ddf10fe2d694cd02a04142ca8",
+    "sourceHouseDumpSha256RecordedByTransform": "6ddee9f640e11b7ec696690663da7d9d571e15a10f5b8836aac14ec73fc6faca",
+    "enrichedDumpPath": ".runtime/m4-photon-enrichment-20261001/israel-addresses-enriched-photon-0.1.0.jsonl",
+    "enrichedDumpSha256RecordedByTransform": "b93cb6f60cb6b475ae904acef72b73ea1ae3e152f72dee88f8635502c8c6d1e1",
+    "enrichedDumpHashRecomputedInThisAudit": false
+  },
+  "method": "Read each saved Street context row once, retaining its full source tags and way ID. Compare the complete source ID set with sidecar.streetDocumentSourceWayIds. Evaluate the parser condition: nonblank name, name:he or name:en, plus highway. All omissions have highway but none of those three name keys.",
+  "counts": {
+    "retainedSourceStreetWays": 111519,
+    "emittedStreetDocuments": 111350,
+    "omittedStreetWays": 169,
+    "omittedEligibleUnderCurrentPrimaryNamePolicy": 0,
+    "emittedIneligibleUnderCurrentPrimaryNamePolicy": 0,
+    "emittedWayIdsAbsentFromRetainedContext": 0,
+    "houseRecordsRecordedByTransform": 125857,
+    "actualTotalDocumentsFromSidecarCounts": 237207
+  },
+  "omittedNameRelatedTagCounts": {
+    "name:ru": 6,
+    "name:ro": 12,
+    "name:de": 4,
+    "name:ar": 27,
+    "alt_name": 32,
+    "int_name": 3,
+    "alt_name:ar": 28,
+    "alt_name:he": 11,
+    "name:pt": 4,
+    "alt_name:en": 16,
+    "name:en1": 40,
+    "name:ar1": 7,
+    "name:cs": 1,
+    "name:en2": 21,
+    "name:en3": 11,
+    "name:en4": 11,
+    "name:he1": 6,
+    "loc_name": 7,
+    "loc_name:he": 4,
+    "mtb:name": 2,
+    "mtb:name:he": 2,
+    "short_name:ar": 11,
+    "loc_name:en": 3
+  },
+  "omittedNameTagCombinations": {
+    "name:ru": 6,
+    "name:ro": 12,
+    "name:de": 4,
+    "name:ar": 26,
+    "alt_name|int_name": 3,
+    "alt_name|alt_name:ar": 21,
+    "alt_name": 6,
+    "alt_name:he|name:ar": 1,
+    "alt_name:ar": 1,
+    "name:pt": 4,
+    "alt_name:ar|alt_name:en|alt_name:he": 6,
+    "alt_name:en": 8,
+    "name:en1": 19,
+    "alt_name|alt_name:en|alt_name:he": 2,
+    "name:ar1": 7,
+    "name:cs": 1,
+    "name:en1|name:en2|name:en3|name:en4": 8,
+    "name:en1|name:en2": 6,
+    "name:en1|name:en2|name:he1": 4,
+    "name:en1|name:en2|name:en3": 1,
+    "loc_name|loc_name:he|mtb:name|mtb:name:he": 1,
+    "name:en4": 1,
+    "short_name:ar": 11,
+    "name:en1|name:en2|name:en3|name:en4|name:he1": 2,
+    "loc_name|loc_name:en|loc_name:he": 3,
+    "alt_name:he": 2,
+    "loc_name|mtb:name|mtb:name:he": 1,
+    "loc_name": 2
+  },
+  "supportedLanguageAliasOnlyLimit": {
+    "altNameHeOrEnWayCount": 19,
+    "altNameHeOrEnWayIds": [
+      "41255170",
+      "41307443",
+      "41307984",
+      "46705077",
+      "87192319",
+      "97099797",
+      "173032759",
+      "203768185",
+      "964674061",
+      "1064530486",
+      "1134725778",
+      "1219381712",
+      "1219381718",
+      "1226228906",
+      "1226228907",
+      "1282229415",
+      "1282229417",
+      "1543114781",
+      "1554299363"
+    ],
+    "localNameHeOrEnWayCount": 4,
+    "localNameHeOrEnWayIds": [
+      "393199572",
+      "506234199",
+      "970172563",
+      "970172564"
+    ],
+    "interpretation": "The omissions are not all Arabic-only or wholly without Hebrew/English source labels. Explicit alt_name:en/alt_name:he and loc_name:en/loc_name:he labels exist on omitted records. These alternative/local-name-only records are excluded by the current primary-name policy. Numbered keys such as name:en1/name:he1 are retained raw and are not silently reinterpreted as name:en/name:he."
+  },
+  "finding": {
+    "classification": "Consistent intentional primary-name eligibility exclusion; no accidental loss of currently eligible primary-name records.",
+    "countRecommendation": "Use 237207 as the actual transform document count: 125857 houses plus 111350 eligible street documents. Keep 111519 as the full retained source-context inventory.",
+    "repairRequiredForCountDiscrepancy": false,
+    "qualification": "This validates the count under the narrow name/name:he/name:en policy, not completeness of all source-supported street aliases. The 19 alternative-name and 4 local-name source ways with explicit supported-language labels are a disclosed coverage gap. No claim that all 169 are unsupported-language-only is justified.",
+    "acceptanceLimits": [
+      "No original-15 quality improvement is established by this audit.",
+      "No provider adoption, house identity/precision, import/index completion, full-stack capacity, API integration, p95 or H4 acceptance is established.",
+      "Frozen criteria remain unchanged; alias-only exclusions must remain visible in D4."
+    ],
+    "preservation": "Retain all 111519 context street records, the old house dump, current enriched dump and sidecar. Do not rewrite source tags or add names from corpus expectations."
+  },
+  "omittedWayRecords": [
+    {
+      "osmType": "W",
+      "osmId": "27098875",
+      "sourceTags": {
+        "highway": "residential",
+        "junction": "roundabout",
+        "name:ru": "Ханкин",
+        "surface": "asphalt"
+      },
+      "coordinateCount": 21,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "29388393",
+      "sourceTags": {
+        "highway": "steps",
+        "incline": "up",
+        "name:ro": "scări",
+        "surface": "cobblestone"
+      },
+      "coordinateCount": 6,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "29388395",
+      "sourceTags": {
+        "highway": "steps",
+        "incline": "down",
+        "name:ro": "scări"
+      },
+      "coordinateCount": 3,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "29388399",
+      "sourceTags": {
+        "highway": "steps",
+        "incline": "down",
+        "name:ro": "scări",
+        "surface": "cobblestone"
+      },
+      "coordinateCount": 2,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "29881233",
+      "sourceTags": {
+        "access": "designated",
+        "highway": "pedestrian",
+        "name:de": "Zionstor",
+        "oneway": "yes",
+        "surface": "sett"
+      },
+      "coordinateCount": 5,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "37146155",
+      "sourceTags": {
+        "highway": "tertiary",
+        "lanes": "1",
+        "maxspeed": "40",
+        "name:ar": "شارع الفارعة - طمون",
+        "surface": "paved"
+      },
+      "coordinateCount": 47,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "37163252",
+      "sourceTags": {
+        "highway": "secondary",
+        "name:ar": "فكيكس - خربت سلامة",
+        "ref": "3265"
+      },
+      "coordinateCount": 33,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "37172823",
+      "sourceTags": {
+        "highway": "tertiary",
+        "name:ar": "مسحة",
+        "surface": "paved",
+        "width": "3"
+      },
+      "coordinateCount": 39,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "40350123",
+      "sourceTags": {
+        "alt_name": "Exit Bekoa",
+        "bicycle": "yes",
+        "highway": "trunk_link",
+        "int_name": "Highway number 3 West/South lane exit to Bekoa",
+        "maxspeed": "70",
+        "oneway": "yes",
+        "surface": "asphalt"
+      },
+      "coordinateCount": 5,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "40350234",
+      "sourceTags": {
+        "alt_name": "Bekoa Exit",
+        "bicycle": "yes",
+        "cycleway": "no",
+        "foot": "yes",
+        "highway": "trunk_link",
+        "int_name": "Highway number 3 East/Nort lane exit to Bekoa",
+        "maxspeed": "70",
+        "oneway": "yes",
+        "surface": "asphalt"
+      },
+      "coordinateCount": 7,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "41243104",
+      "sourceTags": {
+        "alt_name": "Aslan Street",
+        "alt_name:ar": "شارع أصلان",
+        "highway": "residential",
+        "lanes": "2",
+        "maxspeed": "40",
+        "median": "no",
+        "oneway": "no",
+        "surface": "interlock",
+        "width": "12"
+      },
+      "coordinateCount": 7,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "41243135",
+      "sourceTags": {
+        "alt_name": "Al Sersawi Street",
+        "alt_name:ar": "شارع السرساوي",
+        "highway": "residential",
+        "lanes": "2",
+        "maxspeed": "40",
+        "median": "no",
+        "oneway": "no",
+        "surface": "interlock",
+        "width": "12"
+      },
+      "coordinateCount": 15,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "41243431",
+      "sourceTags": {
+        "alt_name": "Ghaben Street",
+        "alt_name:ar": "شارع غبن",
+        "highway": "residential",
+        "lanes": "2",
+        "maxspeed": "40",
+        "median": "no",
+        "oneway": "no",
+        "surface": "interlock",
+        "width": "12"
+      },
+      "coordinateCount": 3,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "41243669",
+      "sourceTags": {
+        "alt_name": "Al Sersawi Street",
+        "alt_name:ar": "شارع السرساوي",
+        "highway": "residential",
+        "lanes": "2",
+        "maxspeed": "40",
+        "median": "no",
+        "oneway": "no",
+        "surface": "interlock"
+      },
+      "coordinateCount": 10,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "41244022",
+      "sourceTags": {
+        "alt_name": "Beit Lahia Roundabout I",
+        "highway": "secondary",
+        "junction": "roundabout"
+      },
+      "coordinateCount": 41,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "41244075",
+      "sourceTags": {
+        "alt_name": "Almothaf Street",
+        "alt_name:ar": "شارع المتحف",
+        "highway": "residential",
+        "lanes": "2",
+        "maxspeed": "40",
+        "median": "no",
+        "oneway": "no",
+        "surface": "asphalt",
+        "width": "16"
+      },
+      "coordinateCount": 5,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "41244783",
+      "sourceTags": {
+        "alt_name": "Ghaben Street",
+        "alt_name:ar": "شارع غبن",
+        "highway": "residential",
+        "lanes": "2",
+        "maxspeed": "40",
+        "median": "no",
+        "oneway": "no",
+        "surface": "interlock",
+        "width": "12"
+      },
+      "coordinateCount": 6,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "41244849",
+      "sourceTags": {
+        "alt_name": "Aslan Street",
+        "alt_name:ar": "شارع أصلان",
+        "highway": "residential",
+        "lanes": "2",
+        "maxspeed": "40",
+        "median": "no",
+        "oneway": "no",
+        "surface": "interlock",
+        "width": "8"
+      },
+      "coordinateCount": 4,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "41253951",
+      "sourceTags": {
+        "alt_name": "Al Rayes",
+        "highway": "residential",
+        "lanes": "2",
+        "maxspeed": "40",
+        "median": "no",
+        "oneway": "no",
+        "surface": "interlock",
+        "width": "10"
+      },
+      "coordinateCount": 7,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "41254058",
+      "sourceTags": {
+        "alt_name": "Al_Beltaji Street",
+        "alt_name:ar": "شارع البلتاجي",
+        "highway": "residential",
+        "lanes": "2",
+        "maxspeed": "50",
+        "median": "no",
+        "oneway": "no",
+        "surface": "interlock",
+        "width": "8"
+      },
+      "coordinateCount": 15,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "41254158",
+      "sourceTags": {
+        "alt_name": "no",
+        "highway": "residential",
+        "lanes": "2",
+        "maxspeed": "20",
+        "median": "no",
+        "oneway": "no",
+        "surface": "unpaved"
+      },
+      "coordinateCount": 12,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "41254247",
+      "sourceTags": {
+        "alt_name": "Salah Al amoudi",
+        "alt_name:ar": "الشهيد صلاح العمودي",
+        "highway": "residential",
+        "lanes": "2",
+        "maxspeed": "40",
+        "median": "no",
+        "oneway": "no",
+        "surface": "unpaved"
+      },
+      "coordinateCount": 19,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "41254964",
+      "sourceTags": {
+        "alt_name": "Al Rayes",
+        "alt_name:ar": "الريس",
+        "highway": "residential",
+        "lanes": "2",
+        "maxspeed": "40",
+        "median": "no",
+        "oneway": "no",
+        "surface": "interlock",
+        "width": "12"
+      },
+      "coordinateCount": 11,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "41255124",
+      "sourceTags": {
+        "alt_name": "Salah Al amoudi",
+        "alt_name:ar": "الشهيد صلاح العمودي",
+        "highway": "residential",
+        "lanes": "2",
+        "maxspeed": "20",
+        "median": "no",
+        "oneway": "no",
+        "surface": "unpaved"
+      },
+      "coordinateCount": 3,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "41255170",
+      "sourceTags": {
+        "alt_name:he": "שארע שהדאא אלבטש",
+        "highway": "residential",
+        "lanes": "2",
+        "maxspeed": "40",
+        "median": "no",
+        "name:ar": "شارع شهداء البطش",
+        "oneway": "no",
+        "surface": "paved"
+      },
+      "coordinateCount": 10,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "41255195",
+      "sourceTags": {
+        "alt_name": "Salah Al amoudi",
+        "alt_name:ar": "الشهيد صلاح العمودي",
+        "highway": "residential",
+        "lanes": "2",
+        "maxspeed": "40",
+        "median": "no",
+        "oneway": "no",
+        "surface": "interlock",
+        "width": "8"
+      },
+      "coordinateCount": 9,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "41255278",
+      "sourceTags": {
+        "alt_name": "Al Rayes",
+        "alt_name:ar": "الريس",
+        "highway": "residential",
+        "lanes": "2",
+        "maxspeed": "40",
+        "median": "no",
+        "oneway": "no",
+        "surface": "interlock"
+      },
+      "coordinateCount": 6,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "41255890",
+      "sourceTags": {
+        "alt_name": "no",
+        "highway": "residential",
+        "lanes": "2",
+        "maxspeed": "20",
+        "median": "no",
+        "oneway": "no",
+        "surface": "unpaved",
+        "width": "6"
+      },
+      "coordinateCount": 6,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "41255983",
+      "sourceTags": {
+        "alt_name": "Al Rayes",
+        "highway": "residential",
+        "lanes": "2",
+        "maxspeed": "40",
+        "median": "no",
+        "oneway": "no",
+        "surface": "interlock"
+      },
+      "coordinateCount": 4,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "41256095",
+      "sourceTags": {
+        "alt_name": "Al Rayes",
+        "alt_name:ar": "الريس",
+        "highway": "residential",
+        "lanes": "2",
+        "maxspeed": "40",
+        "median": "no",
+        "oneway": "no",
+        "surface": "interlock",
+        "width": "12"
+      },
+      "coordinateCount": 6,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "41256128",
+      "sourceTags": {
+        "alt_name:ar": "الريس",
+        "description": "شارع متفرع من شارع الثلاثيني مقابل عمو عماد",
+        "highway": "residential",
+        "lanes": "2",
+        "maxspeed": "40",
+        "median": "no",
+        "oneway": "no",
+        "surface": "interlock"
+      },
+      "coordinateCount": 8,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "41256653",
+      "sourceTags": {
+        "alt_name": "no",
+        "highway": "residential",
+        "lanes": "2",
+        "maxspeed": "20",
+        "median": "no",
+        "oneway": "no",
+        "surface": "unpaved"
+      },
+      "coordinateCount": 4,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "41256955",
+      "sourceTags": {
+        "alt_name": "Al dreimly",
+        "alt_name:ar": "الدريملي",
+        "highway": "residential",
+        "lanes": "2",
+        "maxspeed": "40",
+        "median": "no",
+        "oneway": "no",
+        "surface": "interlock",
+        "width": "8"
+      },
+      "coordinateCount": 7,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "41257603",
+      "sourceTags": {
+        "highway": "residential",
+        "lanes": "6",
+        "maxspeed": "40",
+        "median": "no",
+        "name:pt": "Rua Hebrom",
+        "oneway": "no",
+        "surface": "unpaved",
+        "width": "24"
+      },
+      "coordinateCount": 4,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "41257752",
+      "sourceTags": {
+        "admin_level": "10",
+        "boundary": "administrative",
+        "highway": "residential",
+        "lanes": "2",
+        "maxspeed": "40",
+        "median": "no",
+        "name:ar": "شارع شهداء البطش",
+        "oneway": "no",
+        "surface": "paved",
+        "width": "8"
+      },
+      "coordinateCount": 16,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "41258015",
+      "sourceTags": {
+        "alt_name": "Al Rayes",
+        "alt_name:ar": "الريس",
+        "highway": "residential",
+        "lanes": "2",
+        "maxspeed": "40",
+        "median": "no",
+        "oneway": "no",
+        "surface": "interlock"
+      },
+      "coordinateCount": 3,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "41258020",
+      "sourceTags": {
+        "alt_name": "Al Salam Mosque Street",
+        "alt_name:ar": "شارع مسجد السلام",
+        "highway": "residential",
+        "lanes": "2",
+        "maxspeed": "40",
+        "median": "no",
+        "oneway": "no",
+        "surface": "interlock"
+      },
+      "coordinateCount": 14,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "41258126",
+      "sourceTags": {
+        "alt_name": "Al Rayes",
+        "alt_name:ar": "الريس",
+        "highway": "residential",
+        "lanes": "2",
+        "maxspeed": "40",
+        "median": "no",
+        "oneway": "no",
+        "surface": "interlock"
+      },
+      "coordinateCount": 3,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "41307443",
+      "sourceTags": {
+        "alt_name:ar": "مؤيد الآغا",
+        "alt_name:en": "Mua'ayad al-Agha",
+        "alt_name:he": "מאיד אלאע'א",
+        "highway": "secondary",
+        "lanes": "2",
+        "maxspeed": "40",
+        "median": "no",
+        "oneway": "no",
+        "surface": "asphalt",
+        "width": "10"
+      },
+      "coordinateCount": 10,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "41307984",
+      "sourceTags": {
+        "alt_name:ar": "مؤيد الآغا",
+        "alt_name:en": "Mua'ayad al-Agha",
+        "alt_name:he": "מאיד אלאע'א",
+        "highway": "secondary",
+        "lanes": "2",
+        "maxspeed": "50",
+        "median": "no",
+        "oneway": "no",
+        "surface": "paved",
+        "width": "8"
+      },
+      "coordinateCount": 36,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "41455870",
+      "sourceTags": {
+        "highway": "unclassified",
+        "name:ar": "شارع شعب العرب"
+      },
+      "coordinateCount": 4,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "44172745",
+      "sourceTags": {
+        "highway": "steps",
+        "incline": "down",
+        "name:ro": "scări",
+        "surface": "sett"
+      },
+      "coordinateCount": 2,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "44376173",
+      "sourceTags": {
+        "highway": "steps",
+        "name:ro": "scări"
+      },
+      "coordinateCount": 4,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "45081547",
+      "sourceTags": {
+        "handrail": "yes",
+        "highway": "steps",
+        "name:ro": "scări"
+      },
+      "coordinateCount": 4,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "46705077",
+      "sourceTags": {
+        "alt_name:en": "Har Vagay Way",
+        "highway": "service",
+        "maxspeed": "30",
+        "maxspeed:type": "IL:zone30",
+        "oneway": "no",
+        "surface": "asphalt"
+      },
+      "coordinateCount": 18,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "54420085",
+      "sourceTags": {
+        "foot": "yes",
+        "highway": "steps",
+        "name:ro": "scări",
+        "surface": "paving_stones"
+      },
+      "coordinateCount": 4,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "60393742",
+      "sourceTags": {
+        "highway": "unclassified",
+        "name:en1": "Ramon Crater"
+      },
+      "coordinateCount": 117,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "87192319",
+      "sourceTags": {
+        "alt_name": "\"העליה הרעה\"",
+        "alt_name:en": "\"the bad climb\"",
+        "alt_name:he": "\"העליה הרעה\"",
+        "bicycle": "no",
+        "colour": "red",
+        "foot": "yes",
+        "highway": "footway",
+        "horse": "no",
+        "surface": "ground"
+      },
+      "coordinateCount": 10,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "88827136",
+      "sourceTags": {
+        "highway": "tertiary",
+        "name:ru": "Гай Бен Еином",
+        "surface": "asphalt"
+      },
+      "coordinateCount": 21,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "91304539",
+      "sourceTags": {
+        "highway": "residential",
+        "name:ar": "أربيل",
+        "oneway": "yes"
+      },
+      "coordinateCount": 9,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "91935828",
+      "sourceTags": {
+        "highway": "residential",
+        "name:ar1": "إيلا",
+        "source": "bing"
+      },
+      "coordinateCount": 76,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "91935833",
+      "sourceTags": {
+        "highway": "residential",
+        "name:ar1": "حروب",
+        "source": "bing"
+      },
+      "coordinateCount": 38,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "93144480",
+      "sourceTags": {
+        "highway": "track",
+        "name:ar": "ألون",
+        "source": "bing",
+        "tracktype": "grade1"
+      },
+      "coordinateCount": 2,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "96319644",
+      "sourceTags": {
+        "highway": "steps",
+        "name:ro": "scări"
+      },
+      "coordinateCount": 11,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "97099797",
+      "sourceTags": {
+        "alt_name:en": "Malal",
+        "haifa-ref": "1046",
+        "highway": "busway",
+        "lanes": "1",
+        "oneway": "yes"
+      },
+      "coordinateCount": 5,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "104599755",
+      "sourceTags": {
+        "highway": "residential",
+        "name:ar1": "إيلا",
+        "source": "bing"
+      },
+      "coordinateCount": 58,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "104599761",
+      "sourceTags": {
+        "highway": "residential",
+        "name:ar1": "اورن"
+      },
+      "coordinateCount": 21,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "113563316",
+      "sourceTags": {
+        "highway": "residential",
+        "name:ar1": "إيلا",
+        "source": "bing"
+      },
+      "coordinateCount": 25,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "122299943",
+      "sourceTags": {
+        "highway": "residential",
+        "name:ar": "شارع الشاغور"
+      },
+      "coordinateCount": 4,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "124365401",
+      "sourceTags": {
+        "highway": "residential",
+        "name:ar": "ألرازي"
+      },
+      "coordinateCount": 14,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "124718532",
+      "sourceTags": {
+        "alt_name": "Exit Bekoa",
+        "bicycle": "yes",
+        "foot": "yes",
+        "highway": "trunk_link",
+        "int_name": "Highway number 3 West/South lane entry from Bekoa",
+        "maxspeed": "70",
+        "oneway": "yes",
+        "surface": "asphalt"
+      },
+      "coordinateCount": 8,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "125314999",
+      "sourceTags": {
+        "highway": "residential",
+        "name:ar": "شارع الموسنين"
+      },
+      "coordinateCount": 5,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "137729560",
+      "sourceTags": {
+        "highway": "unclassified",
+        "name:ru": "Аль-Мансурия",
+        "surface": "asphalt"
+      },
+      "coordinateCount": 3,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "158939495",
+      "sourceTags": {
+        "highway": "residential",
+        "name:ar": "ممر هناحل"
+      },
+      "coordinateCount": 27,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "173032759",
+      "sourceTags": {
+        "alt_name:en": "El'Harizi;ElHarizi",
+        "highway": "steps"
+      },
+      "coordinateCount": 2,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "203768185",
+      "sourceTags": {
+        "alt_name:en": "Wadi Mileck",
+        "highway": "primary_link",
+        "lanes": "3",
+        "oneway": "yes",
+        "ref": "722"
+      },
+      "coordinateCount": 9,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "217547414",
+      "sourceTags": {
+        "area": "yes",
+        "highway": "pedestrian",
+        "name:cs": "Herodova brána"
+      },
+      "coordinateCount": 17,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "218994344",
+      "sourceTags": {
+        "highway": "trunk",
+        "name:en1": "HaHeshmonaiim",
+        "name:en2": "Ha'Chashmonaim",
+        "name:en3": "HaHashmona'im",
+        "name:en4": "Ha'Hashmonaim",
+        "oneway": "yes",
+        "ref": "44",
+        "surface": "asphalt"
+      },
+      "coordinateCount": 75,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "218994354",
+      "sourceTags": {
+        "highway": "trunk",
+        "name:en1": "HaHeshmonaiim",
+        "name:en2": "Ha'Chashmonaim",
+        "name:en3": "HaHashmona'im",
+        "name:en4": "Ha'Hashmonaim",
+        "oneway": "yes",
+        "ref": "44",
+        "surface": "asphalt"
+      },
+      "coordinateCount": 38,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "219146318",
+      "sourceTags": {
+        "highway": "secondary",
+        "lanes": "3",
+        "maxspeed": "70",
+        "name:en1": "Tashah Avenue",
+        "oneway": "yes",
+        "ref": "4311",
+        "source:maxspeed": "sign",
+        "surface": "asphalt"
+      },
+      "coordinateCount": 7,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "223074197",
+      "sourceTags": {
+        "highway": "residential",
+        "name:en1": "Mish'ol Mishpakhat Maklev"
+      },
+      "coordinateCount": 3,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "225076804",
+      "sourceTags": {
+        "highway": "residential",
+        "junction": "roundabout",
+        "name:en1": "Ha'Sahlav",
+        "name:en2": "Hasakhlav",
+        "name:en3": "HaSachlav",
+        "name:en4": "Ha'Sakhlav"
+      },
+      "coordinateCount": 20,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "230561180",
+      "sourceTags": {
+        "destination:lanes": "חיפה|חיפה;תל אביב|תל אביב",
+        "highway": "motorway",
+        "lanes": "4",
+        "maxspeed": "90",
+        "name:ar": "طريق عابر السامرة",
+        "oneway": "yes",
+        "ref": "5",
+        "source:maxspeed": "sign",
+        "surface": "asphalt"
+      },
+      "coordinateCount": 9,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "233170276",
+      "sourceTags": {
+        "destination": "חיפה",
+        "highway": "trunk_link",
+        "lanes": "1",
+        "name:en1": "Sderot HaHistadrut",
+        "oneway": "yes",
+        "surface": "asphalt"
+      },
+      "coordinateCount": 8,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "242912467",
+      "sourceTags": {
+        "fixme": "streetname could be wrong",
+        "highway": "service",
+        "name:en1": "Etzel",
+        "source": "GPS"
+      },
+      "coordinateCount": 2,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "242933120",
+      "sourceTags": {
+        "highway": "residential",
+        "name:en1": "Eliyau Hanavi",
+        "name:en2": "Eliyaho Ha'navi"
+      },
+      "coordinateCount": 2,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "242933128",
+      "sourceTags": {
+        "highway": "residential",
+        "name:en1": "Ha'Zayit",
+        "name:en2": "Ha'Zait",
+        "name:en3": "HaZait",
+        "name:en4": "Hzayeet"
+      },
+      "coordinateCount": 2,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "287511288",
+      "sourceTags": {
+        "highway": "steps",
+        "name:ro": "scări"
+      },
+      "coordinateCount": 5,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "288016710",
+      "sourceTags": {
+        "highway": "steps",
+        "incline": "down",
+        "name:ro": "scări"
+      },
+      "coordinateCount": 5,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "288893630",
+      "sourceTags": {
+        "highway": "trunk",
+        "lanes": "3",
+        "name:en1": "Sderot HaHistadrut",
+        "oneway": "yes",
+        "ref": "4"
+      },
+      "coordinateCount": 10,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "288893636",
+      "sourceTags": {
+        "highway": "tertiary",
+        "name:en1": "HaTa'asiya",
+        "name:en2": "Ha'Ta'asia",
+        "name:he1": "התעשייה",
+        "oneway": "yes"
+      },
+      "coordinateCount": 4,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "291836764",
+      "sourceTags": {
+        "highway": "footway",
+        "layer": "-1",
+        "name:ar": "باب الغوانمة",
+        "tunnel": "yes"
+      },
+      "coordinateCount": 2,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "305937618",
+      "sourceTags": {
+        "haifa-ref": "1107",
+        "highway": "service",
+        "name:en1": "Daniel Feizer",
+        "service": "parking_aisle",
+        "surface": "asphalt"
+      },
+      "coordinateCount": 6,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "308590976",
+      "sourceTags": {
+        "access": "private",
+        "highway": "service",
+        "name:en1": "Ramon Crater"
+      },
+      "coordinateCount": 15,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "310060517",
+      "sourceTags": {
+        "highway": "unclassified",
+        "name:ar": "شارع شعب العرب"
+      },
+      "coordinateCount": 5,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "314825648",
+      "sourceTags": {
+        "highway": "path",
+        "name:en1": "Lotam"
+      },
+      "coordinateCount": 5,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "318301330",
+      "sourceTags": {
+        "highway": "trunk",
+        "name:en1": "HaHeshmonaiim",
+        "name:en2": "Ha'Chashmonaim",
+        "name:en3": "HaHashmona'im",
+        "name:en4": "Ha'Hashmonaim",
+        "oneway": "yes",
+        "ref": "44"
+      },
+      "coordinateCount": 29,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "331671552",
+      "sourceTags": {
+        "highway": "footway",
+        "name:en1": "Shlomzion Ha'Malka",
+        "name:en2": "Shlomtsiyon Ha'malka",
+        "surface": "paving_stones"
+      },
+      "coordinateCount": 8,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "336641535",
+      "sourceTags": {
+        "bicycle": "yes",
+        "colour": "blue",
+        "foot": "yes",
+        "highway": "service",
+        "name:en1": "Shvil Israel",
+        "network": "itc",
+        "surface": "dirt"
+      },
+      "coordinateCount": 19,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "337177038",
+      "sourceTags": {
+        "highway": "service",
+        "name:en1": "Ha'Rav Kook",
+        "name:en2": "HaRav Kuk",
+        "name:en3": "Ha'Rav Kuk"
+      },
+      "coordinateCount": 2,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "349857423",
+      "sourceTags": {
+        "access": "no",
+        "bicycle": "no",
+        "foot": "no",
+        "highway": "service",
+        "horse": "no",
+        "name:ro": "Drum militar"
+      },
+      "coordinateCount": 54,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "368474893",
+      "sourceTags": {
+        "handrail": "yes",
+        "highway": "steps",
+        "incline": "down",
+        "name:ro": "scări",
+        "surface": "cobblestone"
+      },
+      "coordinateCount": 3,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "393199572",
+      "sourceTags": {
+        "bicycle": "permissive",
+        "colour": "blue",
+        "description": "קשה מאוד עם קטעים מאתגרים",
+        "description:he": "קשה מאוד עם קטעים מאתגרים",
+        "foot": "yes",
+        "highway": "path",
+        "loc_name": "מעלה ג'למה",
+        "loc_name:he": "מעלה ג'למה",
+        "mtb:name": "מעלה ג'למה",
+        "mtb:name:he": "מעלה ג'למה",
+        "mtb:scale": "3"
+      },
+      "coordinateCount": 111,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "393459223",
+      "sourceTags": {
+        "highway": "secondary",
+        "name:de": "Jerusalemer Straße",
+        "oneway": "yes"
+      },
+      "coordinateCount": 2,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "398561539",
+      "sourceTags": {
+        "highway": "service",
+        "name:en1": "Hayim"
+      },
+      "coordinateCount": 7,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "404645046",
+      "sourceTags": {
+        "bus": "designated",
+        "highway": "secondary_link",
+        "lanes": "3",
+        "maxspeed": "70",
+        "name:en4": "Menahem Begin Avenue",
+        "oneway": "yes",
+        "surface": "asphalt"
+      },
+      "coordinateCount": 7,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "441137240",
+      "sourceTags": {
+        "highway": "trunk",
+        "lanes": "2",
+        "maxspeed": "90",
+        "oneway": "yes",
+        "ref": "79",
+        "short_name:ar": "79"
+      },
+      "coordinateCount": 25,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "446139938",
+      "sourceTags": {
+        "highway": "unclassified",
+        "name:ar": "ممر إسرائيل الوطني",
+        "source": "GPS"
+      },
+      "coordinateCount": 24,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "454626813",
+      "sourceTags": {
+        "bicycle": "yes",
+        "colour": "red",
+        "foot": "yes",
+        "highway": "track",
+        "mtb:scale": "4",
+        "name:en1": "The Bad Ascent",
+        "surface": "ground"
+      },
+      "coordinateCount": 38,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "454650215",
+      "sourceTags": {
+        "highway": "service",
+        "name:en1": "Ha'Iris",
+        "service": "parking_aisle"
+      },
+      "coordinateCount": 3,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "488431660",
+      "sourceTags": {
+        "highway": "tertiary",
+        "lanes": "2",
+        "lit": "yes",
+        "name:en1": "HaPalmah",
+        "name:en2": "Ha'Palmach",
+        "name:en3": "Ha'Palmah",
+        "name:en4": "Palmach",
+        "name:he1": "הפלמח",
+        "oneway": "yes",
+        "surface": "asphalt"
+      },
+      "coordinateCount": 2,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "505664912",
+      "sourceTags": {
+        "highway": "trunk",
+        "lanes": "2",
+        "maxspeed": "90",
+        "oneway": "yes",
+        "ref": "79",
+        "short_name:ar": "79"
+      },
+      "coordinateCount": 36,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "506234199",
+      "sourceTags": {
+        "crossing": "zebra",
+        "footway": "crossing",
+        "highway": "footway",
+        "junction": "yes",
+        "loc_name": "צומת עלית",
+        "loc_name:en": "Elite Junction",
+        "loc_name:he": "צומת עלית"
+      },
+      "coordinateCount": 4,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "507385652",
+      "sourceTags": {
+        "highway": "trunk",
+        "lanes": "2",
+        "maxspeed": "90",
+        "oneway": "yes",
+        "ref": "79",
+        "short_name:ar": "79"
+      },
+      "coordinateCount": 98,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "529568574",
+      "sourceTags": {
+        "highway": "trunk",
+        "name:en1": "HaHeshmonaiim",
+        "name:en2": "Ha'Chashmonaim",
+        "name:en3": "HaHashmona'im",
+        "name:en4": "Ha'Hashmonaim",
+        "oneway": "yes",
+        "ref": "44",
+        "surface": "asphalt"
+      },
+      "coordinateCount": 21,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "529568583",
+      "sourceTags": {
+        "highway": "trunk",
+        "name:en1": "HaHeshmonaiim",
+        "name:en2": "Ha'Chashmonaim",
+        "name:en3": "HaHashmona'im",
+        "name:en4": "Ha'Hashmonaim",
+        "oneway": "yes",
+        "ref": "44",
+        "surface": "asphalt"
+      },
+      "coordinateCount": 14,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "532993346",
+      "sourceTags": {
+        "highway": "trunk",
+        "name:en1": "HaHeshmonaiim",
+        "name:en2": "Ha'Chashmonaim",
+        "name:en3": "HaHashmona'im",
+        "name:en4": "Ha'Hashmonaim",
+        "oneway": "yes",
+        "ref": "44"
+      },
+      "coordinateCount": 8,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "549603085",
+      "sourceTags": {
+        "bridge": "yes",
+        "highway": "tertiary",
+        "layer": "1",
+        "name:en1": "HaTa'asiya",
+        "name:en2": "Ha'Ta'asia",
+        "name:he1": "התעשייה",
+        "oneway": "yes"
+      },
+      "coordinateCount": 4,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "549603086",
+      "sourceTags": {
+        "highway": "tertiary",
+        "name:en1": "HaTa'asiya",
+        "name:en2": "Ha'Ta'asia",
+        "name:he1": "התעשייה",
+        "oneway": "yes"
+      },
+      "coordinateCount": 2,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "549635791",
+      "sourceTags": {
+        "highway": "track",
+        "name:en1": "Ester HaMalka",
+        "note": "fixme",
+        "source": "bing",
+        "tracktype": "grade4"
+      },
+      "coordinateCount": 10,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "555967549",
+      "sourceTags": {
+        "highway": "residential",
+        "lit": "no",
+        "name:ar": "ألرازي",
+        "sidewalk": "right",
+        "surface": "asphalt"
+      },
+      "coordinateCount": 20,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "624760633",
+      "sourceTags": {
+        "highway": "residential",
+        "name:ar": "شارع عمر الخيام",
+        "surface": "paved",
+        "width": "3"
+      },
+      "coordinateCount": 5,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "651536580",
+      "sourceTags": {
+        "highway": "path",
+        "name:ar": "ممر إسرائيل الوطني",
+        "source": "GPS"
+      },
+      "coordinateCount": 18,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "652778382",
+      "sourceTags": {
+        "highway": "tertiary",
+        "lanes": "2",
+        "lit": "yes",
+        "name:en1": "HaPalmah",
+        "name:en2": "Ha'Palmach",
+        "name:en3": "Ha'Palmah",
+        "name:en4": "Palmach",
+        "name:he1": "הפלמח",
+        "oneway": "yes",
+        "surface": "asphalt"
+      },
+      "coordinateCount": 2,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "691557861",
+      "sourceTags": {
+        "highway": "trunk",
+        "lanes": "2",
+        "name:en1": "Sderot HaHistadrut",
+        "oneway": "yes",
+        "ref": "4"
+      },
+      "coordinateCount": 6,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "698193585",
+      "sourceTags": {
+        "highway": "residential",
+        "name:ar": "ألون",
+        "source": "bing",
+        "tracktype": "grade1"
+      },
+      "coordinateCount": 10,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "722050433",
+      "sourceTags": {
+        "highway": "secondary",
+        "name:en1": "Zcharia HaNavi",
+        "name:en2": "Zeharya Hanavi",
+        "oneway": "yes",
+        "surface": "asphalt"
+      },
+      "coordinateCount": 14,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "722675053",
+      "sourceTags": {
+        "access": "designated",
+        "highway": "pedestrian",
+        "name:de": "Zionstor",
+        "oneway": "yes",
+        "surface": "sett"
+      },
+      "coordinateCount": 2,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "722675054",
+      "sourceTags": {
+        "access": "designated",
+        "highway": "pedestrian",
+        "name:de": "Zionstor",
+        "oneway": "yes",
+        "surface": "sett",
+        "tunnel": "building_passage"
+      },
+      "coordinateCount": 3,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "755371126",
+      "sourceTags": {
+        "highway": "track",
+        "name:en1": "Ester HaMalka",
+        "tracktype": "grade2"
+      },
+      "coordinateCount": 6,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "782110075",
+      "sourceTags": {
+        "highway": "tertiary",
+        "name:en1": "Bareqet"
+      },
+      "coordinateCount": 8,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "959791573",
+      "sourceTags": {
+        "highway": "trunk",
+        "oneway": "yes",
+        "ref": "75",
+        "short_name:ar": "هتسيونوت",
+        "surface": "paved"
+      },
+      "coordinateCount": 7,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "964674061",
+      "sourceTags": {
+        "alt_name:en": "Malal",
+        "haifa-ref": "1046",
+        "highway": "busway",
+        "oneway": "yes"
+      },
+      "coordinateCount": 6,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "967359550",
+      "sourceTags": {
+        "highway": "residential",
+        "name:ar": "أربيل",
+        "oneway": "yes"
+      },
+      "coordinateCount": 9,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "967359551",
+      "sourceTags": {
+        "highway": "residential",
+        "name:ar": "أربيل",
+        "oneway": "yes"
+      },
+      "coordinateCount": 10,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "967364806",
+      "sourceTags": {
+        "highway": "residential",
+        "name:ar": "أربيل",
+        "oneway": "yes"
+      },
+      "coordinateCount": 4,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "970172563",
+      "sourceTags": {
+        "crossing": "zebra",
+        "footway": "crossing",
+        "highway": "footway",
+        "junction": "yes",
+        "loc_name": "צומת עלית",
+        "loc_name:en": "Elite Junction",
+        "loc_name:he": "צומת עלית",
+        "surface": "paving_stones"
+      },
+      "coordinateCount": 4,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "970172564",
+      "sourceTags": {
+        "crossing": "zebra",
+        "footway": "crossing",
+        "highway": "footway",
+        "junction": "yes",
+        "loc_name": "צומת עלית",
+        "loc_name:en": "Elite Junction",
+        "loc_name:he": "צומת עלית",
+        "surface": "paving_stones"
+      },
+      "coordinateCount": 3,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "980861403",
+      "sourceTags": {
+        "admin_level": "10",
+        "boundary": "administrative",
+        "highway": "residential",
+        "lanes": "2",
+        "maxspeed": "40",
+        "median": "no",
+        "name:ar": "شارع شهداء البطش",
+        "oneway": "no",
+        "surface": "unpaved",
+        "width": "8"
+      },
+      "coordinateCount": 17,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "1003909087",
+      "sourceTags": {
+        "highway": "service",
+        "name:ar1": "هزايت",
+        "source": "bing"
+      },
+      "coordinateCount": 8,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "1003909089",
+      "sourceTags": {
+        "highway": "residential",
+        "name:ar1": "إيلا",
+        "source": "bing"
+      },
+      "coordinateCount": 38,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "1006129359",
+      "sourceTags": {
+        "highway": "secondary",
+        "name:pt": "Rua Al Aqsa",
+        "oneway": "yes"
+      },
+      "coordinateCount": 2,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "1010234233",
+      "sourceTags": {
+        "highway": "residential",
+        "name:pt": "Rua Yahya Abbas"
+      },
+      "coordinateCount": 2,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "1015425141",
+      "sourceTags": {
+        "highway": "secondary",
+        "name:pt": "Rua da Liga Árabe",
+        "oneway": "yes"
+      },
+      "coordinateCount": 4,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "1064530486",
+      "sourceTags": {
+        "alt_name:en": "Glosca;Galuska",
+        "highway": "residential",
+        "oneway": "yes"
+      },
+      "coordinateCount": 4,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "1079527814",
+      "sourceTags": {
+        "highway": "secondary",
+        "junction": "roundabout",
+        "name:en1": "Okef Beit Shemesh"
+      },
+      "coordinateCount": 2,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "1093564795",
+      "sourceTags": {
+        "highway": "residential",
+        "name:ar": "ألرازي"
+      },
+      "coordinateCount": 4,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "1107392532",
+      "sourceTags": {
+        "highway": "secondary_link",
+        "name:en1": "Ma'ale Yitzhak",
+        "oneway": "yes"
+      },
+      "coordinateCount": 9,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "1110131180",
+      "sourceTags": {
+        "highway": "unclassified",
+        "name:ru": "Аль-Мансурия",
+        "surface": "asphalt"
+      },
+      "coordinateCount": 2,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "1114972468",
+      "sourceTags": {
+        "highway": "unclassified",
+        "name:en1": "Ha'Yetzira",
+        "name:en2": "HaYezira",
+        "oneway": "yes"
+      },
+      "coordinateCount": 3,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "1114972469",
+      "sourceTags": {
+        "highway": "unclassified",
+        "name:en1": "Ha'Yetzira",
+        "name:en2": "HaYezira",
+        "oneway": "yes"
+      },
+      "coordinateCount": 2,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "1114972521",
+      "sourceTags": {
+        "highway": "unclassified",
+        "name:en1": "Ha'Yetzira",
+        "name:en2": "HaYezira",
+        "oneway": "yes"
+      },
+      "coordinateCount": 3,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "1134725778",
+      "sourceTags": {
+        "alt_name": "קפלן",
+        "alt_name:en": "Kaplan",
+        "alt_name:he": "קפלן",
+        "highway": "tertiary",
+        "lanes": "3",
+        "lanes:psv": "1",
+        "maxspeed": "50",
+        "oneway": "yes",
+        "parking:right:zone": "7",
+        "surface": "asphalt",
+        "wikidata": "Q2920272",
+        "wikipedia": "he:רחוב קפלן",
+        "wikipedia:he": "רחוב קפלן"
+      },
+      "coordinateCount": 4,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "1173966245",
+      "sourceTags": {
+        "highway": "tertiary",
+        "name:en1": "HaTa'asiya",
+        "name:en2": "Ha'Ta'asia",
+        "name:he1": "התעשייה",
+        "oneway": "yes"
+      },
+      "coordinateCount": 8,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "1219381712",
+      "sourceTags": {
+        "alt_name:he": "שארע אלסלטאן מחמד אלפאתח",
+        "highway": "residential",
+        "lanes": "2",
+        "maxspeed": "40",
+        "median": "no",
+        "oneway": "yes",
+        "source": "digitalglobe",
+        "surface": "unpaved",
+        "width": "8"
+      },
+      "coordinateCount": 2,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "1219381718",
+      "sourceTags": {
+        "alt_name:he": "שארע אלסלטאן מחמד אלפאתח",
+        "highway": "service",
+        "lanes": "2",
+        "maxspeed": "40",
+        "median": "no",
+        "source": "digitalglobe",
+        "surface": "unpaved",
+        "width": "8"
+      },
+      "coordinateCount": 4,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "1226228906",
+      "sourceTags": {
+        "alt_name:ar": "مؤيد الآغا",
+        "alt_name:en": "Mua'ayad al-Agha",
+        "alt_name:he": "מאיד אלאע'א",
+        "highway": "secondary",
+        "lanes": "2",
+        "maxspeed": "40",
+        "median": "no",
+        "oneway": "yes",
+        "surface": "asphalt",
+        "width": "10"
+      },
+      "coordinateCount": 8,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "1226228907",
+      "sourceTags": {
+        "alt_name:ar": "مؤيد الآغا",
+        "alt_name:en": "Mua'ayad al-Agha",
+        "alt_name:he": "מאיד אלאע'א",
+        "highway": "secondary",
+        "lanes": "2",
+        "maxspeed": "40",
+        "median": "no",
+        "oneway": "yes",
+        "surface": "asphalt",
+        "width": "10"
+      },
+      "coordinateCount": 9,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "1226971379",
+      "sourceTags": {
+        "alt_name": "Aslan Street",
+        "alt_name:ar": "شارع أصلان",
+        "highway": "residential",
+        "lanes": "2",
+        "maxspeed": "40",
+        "median": "no",
+        "oneway": "no",
+        "surface": "interlock",
+        "width": "12"
+      },
+      "coordinateCount": 6,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "1227202394",
+      "sourceTags": {
+        "alt_name": "Al Amal Street",
+        "alt_name:ar": "شارع حي الأمل",
+        "highway": "secondary",
+        "lanes": "2",
+        "maxspeed": "40",
+        "median": "no",
+        "oneway": "yes",
+        "surface": "unpaved",
+        "width": "12"
+      },
+      "coordinateCount": 19,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "1261371804",
+      "sourceTags": {
+        "alt_name": "Salah Al amoudi",
+        "alt_name:ar": "الشهيد صلاح العمودي",
+        "highway": "path",
+        "lanes": "2",
+        "maxspeed": "40",
+        "median": "no",
+        "oneway": "no",
+        "surface": "unpaved"
+      },
+      "coordinateCount": 2,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "1278537568",
+      "sourceTags": {
+        "fixme": "not sure if trails follow this road since farm built",
+        "highway": "tertiary",
+        "name:ru": "Гай Бен Еином",
+        "surface": "asphalt"
+      },
+      "coordinateCount": 22,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "1282229415",
+      "sourceTags": {
+        "alt_name:ar": "مؤيد الآغا",
+        "alt_name:en": "Mua'ayad al-Agha",
+        "alt_name:he": "מאיד אלאע'א",
+        "highway": "secondary",
+        "lanes": "2",
+        "maxspeed": "50",
+        "median": "no",
+        "oneway": "no",
+        "surface": "paved",
+        "width": "8"
+      },
+      "coordinateCount": 28,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "1282229417",
+      "sourceTags": {
+        "alt_name:ar": "مؤيد الآغا",
+        "alt_name:en": "Mua'ayad al-Agha",
+        "alt_name:he": "מאיד אלאע'א",
+        "highway": "secondary",
+        "lanes": "2",
+        "maxspeed": "50",
+        "median": "no",
+        "old_ref": "240",
+        "oneway": "no",
+        "surface": "paved",
+        "width": "8"
+      },
+      "coordinateCount": 6,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "1297409345",
+      "sourceTags": {
+        "bridge": "yes",
+        "highway": "trunk",
+        "lanes": "2",
+        "layer": "1",
+        "maxspeed": "90",
+        "oneway": "yes",
+        "ref": "79",
+        "short_name:ar": "79"
+      },
+      "coordinateCount": 2,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "1311982736",
+      "sourceTags": {
+        "bicycle": "designated",
+        "foot": "yes",
+        "highway": "path",
+        "incline": "0%",
+        "loc_name": "מישור יחוס",
+        "mtb:name": "מישור יחוס",
+        "mtb:name:he": "מישור יחוס",
+        "mtb:scale": "0",
+        "oneway": "no",
+        "surface": "ground"
+      },
+      "coordinateCount": 18,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "1358350532",
+      "sourceTags": {
+        "admin_level": "10",
+        "boundary": "administrative",
+        "highway": "residential",
+        "lanes": "2",
+        "maxspeed": "40",
+        "median": "no",
+        "name:ar": "شارع شهداء البطش",
+        "oneway": "yes",
+        "surface": "paved",
+        "width": "8"
+      },
+      "coordinateCount": 3,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "1385694461",
+      "sourceTags": {
+        "highway": "trunk",
+        "lanes": "2",
+        "maxspeed": "90",
+        "oneway": "yes",
+        "ref": "79",
+        "short_name:ar": "79"
+      },
+      "coordinateCount": 97,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "1385694462",
+      "sourceTags": {
+        "highway": "trunk",
+        "lanes": "2",
+        "maxspeed": "90",
+        "oneway": "yes",
+        "ref": "79",
+        "short_name:ar": "79"
+      },
+      "coordinateCount": 27,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "1386170540",
+      "sourceTags": {
+        "highway": "residential",
+        "name:ar": "ألرازي"
+      },
+      "coordinateCount": 10,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "1387125987",
+      "sourceTags": {
+        "highway": "trunk",
+        "lanes": "2",
+        "maxspeed": "90",
+        "oneway": "yes",
+        "ref": "79",
+        "short_name:ar": "79"
+      },
+      "coordinateCount": 14,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "1387125988",
+      "sourceTags": {
+        "highway": "trunk",
+        "lanes": "2",
+        "maxspeed": "90",
+        "oneway": "yes",
+        "ref": "79",
+        "short_name:ar": "79"
+      },
+      "coordinateCount": 19,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "1482917402",
+      "sourceTags": {
+        "access": "no",
+        "foot": "yes",
+        "highway": "footway",
+        "incline": "steep",
+        "informal": "yes",
+        "loc_name": "רוגומים 2 יגור",
+        "sac_scale": "alpine_hiking",
+        "trail_visibility": "bad"
+      },
+      "coordinateCount": 49,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "1483447556",
+      "sourceTags": {
+        "access": "no",
+        "description": "מרוג'ם, תלול, מעט קטעי טיפוס קל",
+        "foot": "yes",
+        "highway": "footway",
+        "incline": "steep",
+        "informal": "yes",
+        "loc_name": "גיא התהומות",
+        "sac_scale": "alpine_hiking",
+        "trail_visibility": "bad"
+      },
+      "coordinateCount": 30,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "1495975979",
+      "sourceTags": {
+        "highway": "trunk",
+        "lanes": "2",
+        "maxspeed": "90",
+        "oneway": "yes",
+        "ref": "79",
+        "short_name:ar": "79"
+      },
+      "coordinateCount": 12,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "1499520780",
+      "sourceTags": {
+        "highway": "trunk",
+        "lanes": "2",
+        "maxspeed": "90",
+        "oneway": "yes",
+        "ref": "79",
+        "short_name:ar": "79"
+      },
+      "coordinateCount": 12,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "1543114781",
+      "sourceTags": {
+        "alt_name:en": "Anen",
+        "highway": "secondary",
+        "ref": "6539",
+        "surface": "paved"
+      },
+      "coordinateCount": 10,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "1545305109",
+      "sourceTags": {
+        "highway": "tertiary",
+        "name:ru": "Гай Бен Еином",
+        "surface": "asphalt"
+      },
+      "coordinateCount": 2,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    },
+    {
+      "osmType": "W",
+      "osmId": "1554299363",
+      "sourceTags": {
+        "alt_name:en": "HaHeshmonaiim;Ha'Chashmonaim;HaHashmona'im;Ha'Hashmonaim",
+        "highway": "tertiary_link",
+        "lanes": "1",
+        "maxspeed:type": "IL:urban",
+        "oneway": "yes",
+        "surface": "asphalt",
+        "wikidata": "Q6590995",
+        "wikipedia": "he:רחוב החשמונאים",
+        "wikipedia:he": "רחוב החשמונאים"
+      },
+      "coordinateCount": 8,
+      "selectionEligible": false,
+      "reason": "no_nonblank_default_he_or_en_name"
+    }
+  ],
+  "emittedWayIdsAbsentFromContext": [],
+  "emittedIneligibleWayIds": []
+}

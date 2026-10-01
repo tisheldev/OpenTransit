@@ -1,0 +1,74 @@
+{
+  "recordedAt": "2026-09-30T23:40:02.818777+00:00",
+  "scope": "One additional P002 request to resolve warm-vs-cold timing uncertainty: the first targeted batch paid index construction in its first query. No corpus rerun or p95 acceptance.",
+  "baselineEvidence": "services/api/results/m4-stop-prefilter-http-20260930-01.json",
+  "baselineSha256": "9ca76e473f0cd5d6dfe50fe4065a035e70e4dff796bf03483daa76cd9ed1b988",
+  "generationId": "c7b66eee1ad04dddba13f4c5dade5ef2023963a1ac0384857aaf173b9d164aa1",
+  "params": [
+    [
+      "q",
+      "תחנת רכבת תל אביב סבידור מרכז"
+    ],
+    [
+      "lang",
+      "he"
+    ],
+    [
+      "limit",
+      "10"
+    ],
+    [
+      "type",
+      "stop"
+    ],
+    [
+      "type",
+      "station"
+    ]
+  ],
+  "httpStatus": 200,
+  "clientRoundTripMs": 16.29736099857837,
+  "requestId": "1024a7bf7d25477c8e56bc278413b4eb",
+  "responseSha256": "8b54837e2c1a286fd2e390d778b659ee2bed9e58309355d1aba7fb18a07eb37c",
+  "response": {
+    "data": [],
+    "meta": {
+      "requestId": "1024a7bf7d25477c8e56bc278413b4eb",
+      "generationId": "c7b66eee1ad04dddba13f4c5dade5ef2023963a1ac0384857aaf173b9d164aa1",
+      "generatedAt": "2026-09-30T23:40:02.809875Z",
+      "dataBuiltAt": "2026-09-30T19:28:59.565385Z",
+      "mode": "real",
+      "coverage": {
+        "from": "2026-09-30T00:00:00+03:00",
+        "until": "2026-10-31T00:00:00+02:00"
+      },
+      "freshness": "current",
+      "capabilities": {
+        "realtime": "not_enabled",
+        "alerts": "not_enabled"
+      },
+      "attribution": [
+        "Israel Ministry of Transport",
+        "© OpenStreetMap contributors"
+      ],
+      "rankingPolicy": "motis-v2.11.2-feasible-engine-order-v1",
+      "appliedConstraints": {},
+      "warnings": []
+    },
+    "matchedTypes": [
+      "stop",
+      "station"
+    ],
+    "unavailableTypes": [],
+    "partial": false,
+    "rankingPolicy": "alternating-stop-and-geocoder-order-v1"
+  },
+  "rankedDataUnchanged": true,
+  "coldFirstRequestMs": 2539.64056300174,
+  "baselineWarmProcessMs": [
+    1311.6,
+    1274.4,
+    1289.6
+  ],
+  "status": "passed"
+}

@@ -1,0 +1,1318 @@
+{
+  "recordedAt": "2026-09-30T23:25:31.368721+00:00",
+  "scope": "One bounded category-routed API search evaluation with frozen source/corpora and offline log correlation. Original historical corpora/results/reviews preserved. Not H4 approval, p95 PASS, cold-start, full-stack capacity or deployment proof.",
+  "files": {
+    "services\\api\\results\\m4-api-search-20260930-01.json": "6353250c80a63ef60488fa1ee4eccf71b2a7ae658c826bdffcd2213612de7c2b",
+    "services\\api\\results\\m4-api-search-20260930-01-raw.json": "523e2dd6c73c48353815b2b919ec131ed3cd76130b5cccf79886a100c7e68460",
+    "services\\api\\results\\m4-api-search-20260930-01-h4-review.md": "bcaa383e224aa4782a4b0da32349186e09d939a0956afd74ebcb4edb6245476d",
+    ".runtime\\m4-search-evidence-20260930\\api-request-log-01.txt": "aab0e2ec60736e4550e6478b87be4ddac4e9acb939217f3166cdfdca22e764bd",
+    ".runtime\\m4-search-evidence-20260930\\frozen-source-and-corpora-sha256.json": "f733fcc4f7168c585d9541018215a3f49c3e6dc7114c8022bb0ecf03b050ad6e"
+  },
+  "frozenSourceAndCorporaSha256": {
+    "services/api/tools/evaluate_search.py": "23b4833ad10af84591eb41f6a69e31c383111062747fc8e600ecf3f4ebcaaaa3",
+    "services/api/tests/test_evaluate_search.py": "284d625440eda7b442c2d90e0ab65886d130eedb95764556dfd9b78db786cea9",
+    "services/api/tests/fixtures/m4-api-search-language-variants-20260930.json": "f4e8f6f66276a56a2ec1b31d64c228a96f9e0f0a396898f2beff59db47f3b233",
+    "poc/corpora/places.json": "ffddc758d03f5acc8dc5e97d697b31400e4bbb8d4d8c44b9c3d1280356530cf8",
+    "poc/corpora/places-venues.json": "e9356230c11145f5c954b04356d454eae43857e3984e407b837f931c1c81c58b",
+    "poc/geocoding/score.py": "6773ee3823254fa1c7d64053f7cb47794de61d71728d278436f631485572924b",
+    "poc/geocoding/venues.py": "ccb824b2503b73859fa0aaddafb71fd5eb47c011fc71da5fe571fd8bce07de8a"
+  },
+  "containers": {
+    "opentransit-m4-search-evaluation-20260930-01": {
+      "Id": "e3a21bc2c8b4291d5abae9da8602d8f012837892a784e00eae2f7565a16d4aa5",
+      "Created": "2026-09-30T23:19:04.071219085Z",
+      "Image": "sha256:1b15d2e1f72e1fb10cdaae8b0a6662816171706a4f261922b7cbd4754ddc4841",
+      "State": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-09-30T23:19:04.133551231Z",
+        "FinishedAt": "2026-09-30T23:19:33.023385728Z"
+      },
+      "Config": {
+        "Hostname": "54feb2d8e2bf",
+        "Domainname": "",
+        "User": "10001",
+        "AttachStdin": false,
+        "AttachStdout": true,
+        "AttachStderr": true,
+        "Tty": false,
+        "OpenStdin": false,
+        "StdinOnce": false,
+        "Env": [
+          "PYTHONDONTWRITEBYTECODE=1",
+          "PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "PYTHON_VERSION=3.14.6",
+          "PYTHON_SHA256=143b1dddefaec3bd2e21e3b839b34a2b7fb9842272883c576420d605e9f30c63",
+          "UV_PYTHON_DOWNLOADS=0",
+          "PYTHONPATH=/workspace/services/api/src"
+        ],
+        "Cmd": [
+          "/app/.venv/bin/python",
+          "/workspace/.runtime/m4-search-evidence-20260930/frozen/services/api/tools/evaluate_search.py",
+          "--api-url",
+          "http://127.0.0.1:8001",
+          "--manifest",
+          "/generation/manifest.json",
+          "--output",
+          "/workspace/services/api/results/m4-api-search-20260930-01-raw.json",
+          "--review-output",
+          "/workspace/services/api/results/m4-api-search-20260930-01-h4-review.md",
+          "--source-hashes",
+          "/workspace/.runtime/m4-functional-evidence-20260930/api-source-for-http-02-sha256.json",
+          "--runtime-evidence",
+          "/workspace/services/api/results/m4-english-functional-runtime-20260930-03.json"
+        ],
+        "Image": "opentransit-m2-tests:20260930",
+        "Volumes": null,
+        "WorkingDir": "/workspace",
+        "Entrypoint": null,
+        "OnBuild": null,
+        "Labels": {
+          "com.docker.compose.project": "opentransit",
+          "com.docker.compose.service": "api",
+          "com.docker.compose.version": "2.31.0"
+        }
+      },
+      "HostConfig": {
+        "Binds": null,
+        "ContainerIDFile": "",
+        "LogConfig": {
+          "Type": "json-file",
+          "Config": {}
+        },
+        "NetworkMode": "container:54feb2d8e2bfe271a1c5cfafa24a79038a036f9c995d845160f7d670d6ca4dfa",
+        "PortBindings": {},
+        "RestartPolicy": {
+          "Name": "no",
+          "MaximumRetryCount": 0
+        },
+        "AutoRemove": false,
+        "VolumeDriver": "",
+        "VolumesFrom": null,
+        "ConsoleSize": [
+          0,
+          0
+        ],
+        "CapAdd": null,
+        "CapDrop": null,
+        "CgroupnsMode": "host",
+        "Dns": [],
+        "DnsOptions": [],
+        "DnsSearch": [],
+        "ExtraHosts": null,
+        "GroupAdd": null,
+        "IpcMode": "private",
+        "Cgroup": "",
+        "Links": null,
+        "OomScoreAdj": 0,
+        "PidMode": "",
+        "Privileged": false,
+        "PublishAllPorts": false,
+        "ReadonlyRootfs": false,
+        "SecurityOpt": null,
+        "UTSMode": "",
+        "UsernsMode": "",
+        "ShmSize": 67108864,
+        "Runtime": "runc",
+        "Isolation": "",
+        "CpuShares": 0,
+        "Memory": 536870912,
+        "NanoCpus": 0,
+        "CgroupParent": "",
+        "BlkioWeight": 0,
+        "BlkioWeightDevice": [],
+        "BlkioDeviceReadBps": [],
+        "BlkioDeviceWriteBps": [],
+        "BlkioDeviceReadIOps": [],
+        "BlkioDeviceWriteIOps": [],
+        "CpuPeriod": 0,
+        "CpuQuota": 0,
+        "CpuRealtimePeriod": 0,
+        "CpuRealtimeRuntime": 0,
+        "CpusetCpus": "",
+        "CpusetMems": "",
+        "Devices": [],
+        "DeviceCgroupRules": null,
+        "DeviceRequests": null,
+        "MemoryReservation": 0,
+        "MemorySwap": 1073741824,
+        "MemorySwappiness": null,
+        "OomKillDisable": false,
+        "PidsLimit": null,
+        "Ulimits": [],
+        "CpuCount": 0,
+        "CpuPercent": 0,
+        "IOMaximumIOps": 0,
+        "IOMaximumBandwidth": 0,
+        "Mounts": [
+          {
+            "Type": "bind",
+            "Source": "C:\\Users\\nhenr\\.codex\\worktrees\\8007\\OpenTransit",
+            "Target": "/workspace",
+            "ReadOnly": true
+          },
+          {
+            "Type": "bind",
+            "Source": "C:\\Users\\nhenr\\.codex\\worktrees\\8007\\OpenTransit\\services\\api\\results",
+            "Target": "/workspace/services/api/results"
+          },
+          {
+            "Type": "volume",
+            "Source": "opentransit-generation-m4-c7b66eee-20260930",
+            "Target": "/generation",
+            "ReadOnly": true
+          }
+        ],
+        "MaskedPaths": [
+          "/proc/asound",
+          "/proc/acpi",
+          "/proc/kcore",
+          "/proc/keys",
+          "/proc/latency_stats",
+          "/proc/timer_list",
+          "/proc/timer_stats",
+          "/proc/sched_debug",
+          "/proc/scsi",
+          "/sys/firmware",
+          "/sys/devices/virtual/powercap"
+        ],
+        "ReadonlyPaths": [
+          "/proc/bus",
+          "/proc/fs",
+          "/proc/irq",
+          "/proc/sys",
+          "/proc/sysrq-trigger"
+        ]
+      },
+      "Mounts": [
+        {
+          "Type": "bind",
+          "Source": "C:\\Users\\nhenr\\.codex\\worktrees\\8007\\OpenTransit",
+          "Destination": "/workspace",
+          "Mode": "",
+          "RW": false,
+          "Propagation": "rprivate"
+        },
+        {
+          "Type": "bind",
+          "Source": "C:\\Users\\nhenr\\.codex\\worktrees\\8007\\OpenTransit\\services\\api\\results",
+          "Destination": "/workspace/services/api/results",
+          "Mode": "",
+          "RW": true,
+          "Propagation": "rprivate"
+        },
+        {
+          "Type": "volume",
+          "Name": "opentransit-generation-m4-c7b66eee-20260930",
+          "Source": "/var/lib/docker/volumes/opentransit-generation-m4-c7b66eee-20260930/_data",
+          "Destination": "/generation",
+          "Driver": "local",
+          "Mode": "z",
+          "RW": false,
+          "Propagation": ""
+        }
+      ],
+      "NetworkSettings": {
+        "Bridge": "",
+        "SandboxID": "",
+        "SandboxKey": "",
+        "Ports": {},
+        "HairpinMode": false,
+        "LinkLocalIPv6Address": "",
+        "LinkLocalIPv6PrefixLen": 0,
+        "SecondaryIPAddresses": null,
+        "SecondaryIPv6Addresses": null,
+        "EndpointID": "",
+        "Gateway": "",
+        "GlobalIPv6Address": "",
+        "GlobalIPv6PrefixLen": 0,
+        "IPAddress": "",
+        "IPPrefixLen": 0,
+        "IPv6Gateway": "",
+        "MacAddress": "",
+        "Networks": {}
+      }
+    },
+    "opentransit-m4-search-timing-finalize-20260930-01": {
+      "Id": "1f180804e2be8195886e717c7430e1f460878c37a6b5bd390ed04081a8023fd1",
+      "Created": "2026-09-30T23:20:49.797986027Z",
+      "Image": "sha256:1b15d2e1f72e1fb10cdaae8b0a6662816171706a4f261922b7cbd4754ddc4841",
+      "State": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-09-30T23:20:49.867030471Z",
+        "FinishedAt": "2026-09-30T23:20:50.636159804Z"
+      },
+      "Config": {
+        "Hostname": "1f180804e2be",
+        "Domainname": "",
+        "User": "10001",
+        "AttachStdin": false,
+        "AttachStdout": true,
+        "AttachStderr": true,
+        "Tty": false,
+        "OpenStdin": false,
+        "StdinOnce": false,
+        "Env": [
+          "PYTHONDONTWRITEBYTECODE=1",
+          "PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "PYTHON_VERSION=3.14.6",
+          "PYTHON_SHA256=143b1dddefaec3bd2e21e3b839b34a2b7fb9842272883c576420d605e9f30c63",
+          "UV_PYTHON_DOWNLOADS=0",
+          "PYTHONPATH=/workspace/services/api/src"
+        ],
+        "Cmd": [
+          "/app/.venv/bin/python",
+          "/workspace/.runtime/m4-search-evidence-20260930/frozen/services/api/tools/evaluate_search.py",
+          "--finalize-input",
+          "/workspace/services/api/results/m4-api-search-20260930-01-raw.json",
+          "--container-log-file",
+          "/workspace/.runtime/m4-search-evidence-20260930/api-request-log-01.txt",
+          "--output",
+          "/workspace/services/api/results/m4-api-search-20260930-01.json"
+        ],
+        "Image": "opentransit-m2-tests:20260930",
+        "Volumes": null,
+        "WorkingDir": "/workspace",
+        "Entrypoint": null,
+        "OnBuild": null,
+        "Labels": {
+          "com.docker.compose.project": "opentransit",
+          "com.docker.compose.service": "api",
+          "com.docker.compose.version": "2.31.0"
+        }
+      },
+      "HostConfig": {
+        "Binds": null,
+        "ContainerIDFile": "",
+        "LogConfig": {
+          "Type": "json-file",
+          "Config": {}
+        },
+        "NetworkMode": "none",
+        "PortBindings": {},
+        "RestartPolicy": {
+          "Name": "no",
+          "MaximumRetryCount": 0
+        },
+        "AutoRemove": false,
+        "VolumeDriver": "",
+        "VolumesFrom": null,
+        "ConsoleSize": [
+          0,
+          0
+        ],
+        "CapAdd": null,
+        "CapDrop": null,
+        "CgroupnsMode": "host",
+        "Dns": [],
+        "DnsOptions": [],
+        "DnsSearch": [],
+        "ExtraHosts": null,
+        "GroupAdd": null,
+        "IpcMode": "private",
+        "Cgroup": "",
+        "Links": null,
+        "OomScoreAdj": 0,
+        "PidMode": "",
+        "Privileged": false,
+        "PublishAllPorts": false,
+        "ReadonlyRootfs": false,
+        "SecurityOpt": null,
+        "UTSMode": "",
+        "UsernsMode": "",
+        "ShmSize": 67108864,
+        "Runtime": "runc",
+        "Isolation": "",
+        "CpuShares": 0,
+        "Memory": 268435456,
+        "NanoCpus": 0,
+        "CgroupParent": "",
+        "BlkioWeight": 0,
+        "BlkioWeightDevice": [],
+        "BlkioDeviceReadBps": [],
+        "BlkioDeviceWriteBps": [],
+        "BlkioDeviceReadIOps": [],
+        "BlkioDeviceWriteIOps": [],
+        "CpuPeriod": 0,
+        "CpuQuota": 0,
+        "CpuRealtimePeriod": 0,
+        "CpuRealtimeRuntime": 0,
+        "CpusetCpus": "",
+        "CpusetMems": "",
+        "Devices": [],
+        "DeviceCgroupRules": null,
+        "DeviceRequests": null,
+        "MemoryReservation": 0,
+        "MemorySwap": 536870912,
+        "MemorySwappiness": null,
+        "OomKillDisable": false,
+        "PidsLimit": null,
+        "Ulimits": [],
+        "CpuCount": 0,
+        "CpuPercent": 0,
+        "IOMaximumIOps": 0,
+        "IOMaximumBandwidth": 0,
+        "Mounts": [
+          {
+            "Type": "bind",
+            "Source": "C:\\Users\\nhenr\\.codex\\worktrees\\8007\\OpenTransit",
+            "Target": "/workspace",
+            "ReadOnly": true
+          },
+          {
+            "Type": "bind",
+            "Source": "C:\\Users\\nhenr\\.codex\\worktrees\\8007\\OpenTransit\\services\\api\\results",
+            "Target": "/workspace/services/api/results"
+          }
+        ],
+        "MaskedPaths": [
+          "/proc/asound",
+          "/proc/acpi",
+          "/proc/kcore",
+          "/proc/keys",
+          "/proc/latency_stats",
+          "/proc/timer_list",
+          "/proc/timer_stats",
+          "/proc/sched_debug",
+          "/proc/scsi",
+          "/sys/firmware",
+          "/sys/devices/virtual/powercap"
+        ],
+        "ReadonlyPaths": [
+          "/proc/bus",
+          "/proc/fs",
+          "/proc/irq",
+          "/proc/sys",
+          "/proc/sysrq-trigger"
+        ]
+      },
+      "Mounts": [
+        {
+          "Type": "bind",
+          "Source": "C:\\Users\\nhenr\\.codex\\worktrees\\8007\\OpenTransit",
+          "Destination": "/workspace",
+          "Mode": "",
+          "RW": false,
+          "Propagation": "rprivate"
+        },
+        {
+          "Type": "bind",
+          "Source": "C:\\Users\\nhenr\\.codex\\worktrees\\8007\\OpenTransit\\services\\api\\results",
+          "Destination": "/workspace/services/api/results",
+          "Mode": "",
+          "RW": true,
+          "Propagation": "rprivate"
+        }
+      ],
+      "NetworkSettings": {
+        "Bridge": "",
+        "SandboxID": "",
+        "SandboxKey": "",
+        "Ports": {},
+        "HairpinMode": false,
+        "LinkLocalIPv6Address": "",
+        "LinkLocalIPv6PrefixLen": 0,
+        "SecondaryIPAddresses": null,
+        "SecondaryIPv6Addresses": null,
+        "EndpointID": "",
+        "Gateway": "",
+        "GlobalIPv6Address": "",
+        "GlobalIPv6PrefixLen": 0,
+        "IPAddress": "",
+        "IPPrefixLen": 0,
+        "IPv6Gateway": "",
+        "MacAddress": "",
+        "Networks": {
+          "none": {
+            "IPAMConfig": null,
+            "Links": null,
+            "Aliases": null,
+            "MacAddress": "",
+            "DriverOpts": null,
+            "NetworkID": "eaaf555aca82d80cae04047579ad94161835ae769733b9018cebba040739b3a3",
+            "EndpointID": "",
+            "Gateway": "",
+            "IPAddress": "",
+            "IPPrefixLen": 0,
+            "IPv6Gateway": "",
+            "GlobalIPv6Address": "",
+            "GlobalIPv6PrefixLen": 0,
+            "DNSNames": null
+          }
+        }
+      }
+    },
+    "opentransit-api-repaired-20260930-02": {
+      "Id": "8573d2bd67d99651396f872d2f7a0f0f9442be8408f10c6e5c67c4e633ff9111",
+      "Created": "2026-09-30T22:57:22.957620515Z",
+      "Image": "sha256:1b15d2e1f72e1fb10cdaae8b0a6662816171706a4f261922b7cbd4754ddc4841",
+      "State": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 58238,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-09-30T22:57:23.006078156Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "Config": {
+        "Hostname": "54feb2d8e2bf",
+        "Domainname": "",
+        "User": "10001",
+        "AttachStdin": false,
+        "AttachStdout": false,
+        "AttachStderr": false,
+        "Tty": false,
+        "OpenStdin": false,
+        "StdinOnce": false,
+        "Env": [
+          "PYTHONPATH=/workspace/.runtime/m4-functional-evidence-20260930/api-source-for-http-02",
+          "PYTHONDONTWRITEBYTECODE=1",
+          "OPENTRANSIT_MANIFEST=/generation/manifest.json",
+          "OPENTRANSIT_MOTIS_URL=http://127.0.0.1:59081",
+          "OPENTRANSIT_PROBE=/workspace/.runtime/m4-functional-evidence-20260930/probe-01.json",
+          "PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "PYTHON_VERSION=3.14.6",
+          "PYTHON_SHA256=143b1dddefaec3bd2e21e3b839b34a2b7fb9842272883c576420d605e9f30c63",
+          "UV_PYTHON_DOWNLOADS=0"
+        ],
+        "Cmd": [
+          "/app/.venv/bin/uvicorn",
+          "opentransit.api.app:create_app",
+          "--factory",
+          "--host",
+          "0.0.0.0",
+          "--port",
+          "8001",
+          "--no-access-log",
+          "--log-level",
+          "info"
+        ],
+        "Image": "opentransit-m2-tests:20260930",
+        "Volumes": null,
+        "WorkingDir": "/workspace",
+        "Entrypoint": null,
+        "OnBuild": null,
+        "Labels": {
+          "com.docker.compose.project": "opentransit",
+          "com.docker.compose.service": "api",
+          "com.docker.compose.version": "2.31.0"
+        }
+      },
+      "HostConfig": {
+        "Binds": null,
+        "ContainerIDFile": "",
+        "LogConfig": {
+          "Type": "json-file",
+          "Config": {}
+        },
+        "NetworkMode": "container:54feb2d8e2bfe271a1c5cfafa24a79038a036f9c995d845160f7d670d6ca4dfa",
+        "PortBindings": {},
+        "RestartPolicy": {
+          "Name": "no",
+          "MaximumRetryCount": 0
+        },
+        "AutoRemove": false,
+        "VolumeDriver": "",
+        "VolumesFrom": null,
+        "ConsoleSize": [
+          0,
+          0
+        ],
+        "CapAdd": null,
+        "CapDrop": null,
+        "CgroupnsMode": "host",
+        "Dns": [],
+        "DnsOptions": [],
+        "DnsSearch": [],
+        "ExtraHosts": null,
+        "GroupAdd": null,
+        "IpcMode": "private",
+        "Cgroup": "",
+        "Links": null,
+        "OomScoreAdj": 0,
+        "PidMode": "",
+        "Privileged": false,
+        "PublishAllPorts": false,
+        "ReadonlyRootfs": false,
+        "SecurityOpt": null,
+        "UTSMode": "",
+        "UsernsMode": "",
+        "ShmSize": 67108864,
+        "Runtime": "runc",
+        "Isolation": "",
+        "CpuShares": 0,
+        "Memory": 536870912,
+        "NanoCpus": 0,
+        "CgroupParent": "",
+        "BlkioWeight": 0,
+        "BlkioWeightDevice": [],
+        "BlkioDeviceReadBps": [],
+        "BlkioDeviceWriteBps": [],
+        "BlkioDeviceReadIOps": [],
+        "BlkioDeviceWriteIOps": [],
+        "CpuPeriod": 0,
+        "CpuQuota": 0,
+        "CpuRealtimePeriod": 0,
+        "CpuRealtimeRuntime": 0,
+        "CpusetCpus": "",
+        "CpusetMems": "",
+        "Devices": [],
+        "DeviceCgroupRules": null,
+        "DeviceRequests": null,
+        "MemoryReservation": 0,
+        "MemorySwap": 1073741824,
+        "MemorySwappiness": null,
+        "OomKillDisable": false,
+        "PidsLimit": null,
+        "Ulimits": [],
+        "CpuCount": 0,
+        "CpuPercent": 0,
+        "IOMaximumIOps": 0,
+        "IOMaximumBandwidth": 0,
+        "Mounts": [
+          {
+            "Type": "bind",
+            "Source": "C:\\Users\\nhenr\\.codex\\worktrees\\8007\\OpenTransit",
+            "Target": "/workspace",
+            "ReadOnly": true
+          },
+          {
+            "Type": "volume",
+            "Source": "opentransit-generation-m4-c7b66eee-20260930",
+            "Target": "/generation",
+            "ReadOnly": true
+          }
+        ],
+        "MaskedPaths": [
+          "/proc/asound",
+          "/proc/acpi",
+          "/proc/kcore",
+          "/proc/keys",
+          "/proc/latency_stats",
+          "/proc/timer_list",
+          "/proc/timer_stats",
+          "/proc/sched_debug",
+          "/proc/scsi",
+          "/sys/firmware",
+          "/sys/devices/virtual/powercap"
+        ],
+        "ReadonlyPaths": [
+          "/proc/bus",
+          "/proc/fs",
+          "/proc/irq",
+          "/proc/sys",
+          "/proc/sysrq-trigger"
+        ]
+      },
+      "Mounts": [
+        {
+          "Type": "volume",
+          "Name": "opentransit-generation-m4-c7b66eee-20260930",
+          "Source": "/var/lib/docker/volumes/opentransit-generation-m4-c7b66eee-20260930/_data",
+          "Destination": "/generation",
+          "Driver": "local",
+          "Mode": "z",
+          "RW": false,
+          "Propagation": ""
+        },
+        {
+          "Type": "bind",
+          "Source": "C:\\Users\\nhenr\\.codex\\worktrees\\8007\\OpenTransit",
+          "Destination": "/workspace",
+          "Mode": "",
+          "RW": false,
+          "Propagation": "rprivate"
+        }
+      ],
+      "NetworkSettings": {
+        "Bridge": "",
+        "SandboxID": "",
+        "SandboxKey": "",
+        "Ports": {},
+        "HairpinMode": false,
+        "LinkLocalIPv6Address": "",
+        "LinkLocalIPv6PrefixLen": 0,
+        "SecondaryIPAddresses": null,
+        "SecondaryIPv6Addresses": null,
+        "EndpointID": "",
+        "Gateway": "",
+        "GlobalIPv6Address": "",
+        "GlobalIPv6PrefixLen": 0,
+        "IPAddress": "",
+        "IPPrefixLen": 0,
+        "IPv6Gateway": "",
+        "MacAddress": "",
+        "Networks": {}
+      }
+    },
+    "opentransit-m4-evaluator-frozen-ruff-20261001": {
+      "Id": "edfe5214abf1701a2330362a72acff2a152cd346ca26fd068bf1bc49c552c944",
+      "Created": "2026-09-30T23:17:41.985696516Z",
+      "Image": "sha256:1b15d2e1f72e1fb10cdaae8b0a6662816171706a4f261922b7cbd4754ddc4841",
+      "State": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-09-30T23:17:42.084876801Z",
+        "FinishedAt": "2026-09-30T23:17:42.311130889Z"
+      },
+      "Config": {
+        "Hostname": "edfe5214abf1",
+        "Domainname": "",
+        "User": "10001",
+        "AttachStdin": false,
+        "AttachStdout": true,
+        "AttachStderr": true,
+        "Tty": false,
+        "OpenStdin": false,
+        "StdinOnce": false,
+        "Env": [
+          "RUFF_CACHE_DIR=/tmp/ruff-cache",
+          "PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "PYTHON_VERSION=3.14.6",
+          "PYTHON_SHA256=143b1dddefaec3bd2e21e3b839b34a2b7fb9842272883c576420d605e9f30c63",
+          "UV_PYTHON_DOWNLOADS=0",
+          "PYTHONPATH=/workspace/services/api/src"
+        ],
+        "Cmd": [
+          "check",
+          "tools/evaluate_search.py",
+          "tests/test_evaluate_search.py"
+        ],
+        "Image": "opentransit-m2-tests:20260930",
+        "Volumes": null,
+        "WorkingDir": "/workspace/services/api",
+        "Entrypoint": [
+          "/app/.venv/bin/ruff"
+        ],
+        "OnBuild": null,
+        "Labels": {
+          "com.docker.compose.project": "opentransit",
+          "com.docker.compose.service": "api",
+          "com.docker.compose.version": "2.31.0"
+        }
+      },
+      "HostConfig": {
+        "Binds": null,
+        "ContainerIDFile": "",
+        "LogConfig": {
+          "Type": "json-file",
+          "Config": {}
+        },
+        "NetworkMode": "bridge",
+        "PortBindings": {},
+        "RestartPolicy": {
+          "Name": "no",
+          "MaximumRetryCount": 0
+        },
+        "AutoRemove": false,
+        "VolumeDriver": "",
+        "VolumesFrom": null,
+        "ConsoleSize": [
+          0,
+          0
+        ],
+        "CapAdd": null,
+        "CapDrop": null,
+        "CgroupnsMode": "host",
+        "Dns": [],
+        "DnsOptions": [],
+        "DnsSearch": [],
+        "ExtraHosts": null,
+        "GroupAdd": null,
+        "IpcMode": "private",
+        "Cgroup": "",
+        "Links": null,
+        "OomScoreAdj": 0,
+        "PidMode": "",
+        "Privileged": false,
+        "PublishAllPorts": false,
+        "ReadonlyRootfs": false,
+        "SecurityOpt": null,
+        "UTSMode": "",
+        "UsernsMode": "",
+        "ShmSize": 67108864,
+        "Runtime": "runc",
+        "Isolation": "",
+        "CpuShares": 0,
+        "Memory": 536870912,
+        "NanoCpus": 0,
+        "CgroupParent": "",
+        "BlkioWeight": 0,
+        "BlkioWeightDevice": [],
+        "BlkioDeviceReadBps": [],
+        "BlkioDeviceWriteBps": [],
+        "BlkioDeviceReadIOps": [],
+        "BlkioDeviceWriteIOps": [],
+        "CpuPeriod": 0,
+        "CpuQuota": 0,
+        "CpuRealtimePeriod": 0,
+        "CpuRealtimeRuntime": 0,
+        "CpusetCpus": "",
+        "CpusetMems": "",
+        "Devices": [],
+        "DeviceCgroupRules": null,
+        "DeviceRequests": null,
+        "MemoryReservation": 0,
+        "MemorySwap": 1073741824,
+        "MemorySwappiness": null,
+        "OomKillDisable": false,
+        "PidsLimit": null,
+        "Ulimits": [],
+        "CpuCount": 0,
+        "CpuPercent": 0,
+        "IOMaximumIOps": 0,
+        "IOMaximumBandwidth": 0,
+        "Mounts": [
+          {
+            "Type": "bind",
+            "Source": "C:\\Users\\nhenr\\.codex\\worktrees\\8007\\OpenTransit",
+            "Target": "/workspace",
+            "ReadOnly": true
+          }
+        ],
+        "MaskedPaths": [
+          "/proc/asound",
+          "/proc/acpi",
+          "/proc/kcore",
+          "/proc/keys",
+          "/proc/latency_stats",
+          "/proc/timer_list",
+          "/proc/timer_stats",
+          "/proc/sched_debug",
+          "/proc/scsi",
+          "/sys/firmware",
+          "/sys/devices/virtual/powercap"
+        ],
+        "ReadonlyPaths": [
+          "/proc/bus",
+          "/proc/fs",
+          "/proc/irq",
+          "/proc/sys",
+          "/proc/sysrq-trigger"
+        ]
+      },
+      "Mounts": [
+        {
+          "Type": "bind",
+          "Source": "C:\\Users\\nhenr\\.codex\\worktrees\\8007\\OpenTransit",
+          "Destination": "/workspace",
+          "Mode": "",
+          "RW": false,
+          "Propagation": "rprivate"
+        }
+      ],
+      "NetworkSettings": {
+        "Bridge": "",
+        "SandboxID": "",
+        "SandboxKey": "",
+        "Ports": {},
+        "HairpinMode": false,
+        "LinkLocalIPv6Address": "",
+        "LinkLocalIPv6PrefixLen": 0,
+        "SecondaryIPAddresses": null,
+        "SecondaryIPv6Addresses": null,
+        "EndpointID": "",
+        "Gateway": "",
+        "GlobalIPv6Address": "",
+        "GlobalIPv6PrefixLen": 0,
+        "IPAddress": "",
+        "IPPrefixLen": 0,
+        "IPv6Gateway": "",
+        "MacAddress": "",
+        "Networks": {
+          "bridge": {
+            "IPAMConfig": null,
+            "Links": null,
+            "Aliases": null,
+            "MacAddress": "",
+            "DriverOpts": null,
+            "NetworkID": "203603b2e7bbb4400c4fa5a3fbe3ead0624173f93267871ccc9268193bdbf4ff",
+            "EndpointID": "",
+            "Gateway": "",
+            "IPAddress": "",
+            "IPPrefixLen": 0,
+            "IPv6Gateway": "",
+            "GlobalIPv6Address": "",
+            "GlobalIPv6PrefixLen": 0,
+            "DNSNames": null
+          }
+        }
+      }
+    },
+    "opentransit-m4-evaluator-frozen-format-20261001": {
+      "Id": "dbca48adfcbd60ef0c26c4553f71aa05a2ece38613ba644062e36d32b579ea01",
+      "Created": "2026-09-30T23:17:40.786460432Z",
+      "Image": "sha256:1b15d2e1f72e1fb10cdaae8b0a6662816171706a4f261922b7cbd4754ddc4841",
+      "State": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-09-30T23:17:40.872646881Z",
+        "FinishedAt": "2026-09-30T23:17:41.122317427Z"
+      },
+      "Config": {
+        "Hostname": "dbca48adfcbd",
+        "Domainname": "",
+        "User": "10001",
+        "AttachStdin": false,
+        "AttachStdout": true,
+        "AttachStderr": true,
+        "Tty": false,
+        "OpenStdin": false,
+        "StdinOnce": false,
+        "Env": [
+          "RUFF_CACHE_DIR=/tmp/ruff-cache",
+          "PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "PYTHON_VERSION=3.14.6",
+          "PYTHON_SHA256=143b1dddefaec3bd2e21e3b839b34a2b7fb9842272883c576420d605e9f30c63",
+          "UV_PYTHON_DOWNLOADS=0",
+          "PYTHONPATH=/workspace/services/api/src"
+        ],
+        "Cmd": [
+          "format",
+          "--check",
+          "tools/evaluate_search.py",
+          "tests/test_evaluate_search.py"
+        ],
+        "Image": "opentransit-m2-tests:20260930",
+        "Volumes": null,
+        "WorkingDir": "/workspace/services/api",
+        "Entrypoint": [
+          "/app/.venv/bin/ruff"
+        ],
+        "OnBuild": null,
+        "Labels": {
+          "com.docker.compose.project": "opentransit",
+          "com.docker.compose.service": "api",
+          "com.docker.compose.version": "2.31.0"
+        }
+      },
+      "HostConfig": {
+        "Binds": null,
+        "ContainerIDFile": "",
+        "LogConfig": {
+          "Type": "json-file",
+          "Config": {}
+        },
+        "NetworkMode": "bridge",
+        "PortBindings": {},
+        "RestartPolicy": {
+          "Name": "no",
+          "MaximumRetryCount": 0
+        },
+        "AutoRemove": false,
+        "VolumeDriver": "",
+        "VolumesFrom": null,
+        "ConsoleSize": [
+          0,
+          0
+        ],
+        "CapAdd": null,
+        "CapDrop": null,
+        "CgroupnsMode": "host",
+        "Dns": [],
+        "DnsOptions": [],
+        "DnsSearch": [],
+        "ExtraHosts": null,
+        "GroupAdd": null,
+        "IpcMode": "private",
+        "Cgroup": "",
+        "Links": null,
+        "OomScoreAdj": 0,
+        "PidMode": "",
+        "Privileged": false,
+        "PublishAllPorts": false,
+        "ReadonlyRootfs": false,
+        "SecurityOpt": null,
+        "UTSMode": "",
+        "UsernsMode": "",
+        "ShmSize": 67108864,
+        "Runtime": "runc",
+        "Isolation": "",
+        "CpuShares": 0,
+        "Memory": 536870912,
+        "NanoCpus": 0,
+        "CgroupParent": "",
+        "BlkioWeight": 0,
+        "BlkioWeightDevice": [],
+        "BlkioDeviceReadBps": [],
+        "BlkioDeviceWriteBps": [],
+        "BlkioDeviceReadIOps": [],
+        "BlkioDeviceWriteIOps": [],
+        "CpuPeriod": 0,
+        "CpuQuota": 0,
+        "CpuRealtimePeriod": 0,
+        "CpuRealtimeRuntime": 0,
+        "CpusetCpus": "",
+        "CpusetMems": "",
+        "Devices": [],
+        "DeviceCgroupRules": null,
+        "DeviceRequests": null,
+        "MemoryReservation": 0,
+        "MemorySwap": 1073741824,
+        "MemorySwappiness": null,
+        "OomKillDisable": false,
+        "PidsLimit": null,
+        "Ulimits": [],
+        "CpuCount": 0,
+        "CpuPercent": 0,
+        "IOMaximumIOps": 0,
+        "IOMaximumBandwidth": 0,
+        "Mounts": [
+          {
+            "Type": "bind",
+            "Source": "C:\\Users\\nhenr\\.codex\\worktrees\\8007\\OpenTransit",
+            "Target": "/workspace",
+            "ReadOnly": true
+          }
+        ],
+        "MaskedPaths": [
+          "/proc/asound",
+          "/proc/acpi",
+          "/proc/kcore",
+          "/proc/keys",
+          "/proc/latency_stats",
+          "/proc/timer_list",
+          "/proc/timer_stats",
+          "/proc/sched_debug",
+          "/proc/scsi",
+          "/sys/firmware",
+          "/sys/devices/virtual/powercap"
+        ],
+        "ReadonlyPaths": [
+          "/proc/bus",
+          "/proc/fs",
+          "/proc/irq",
+          "/proc/sys",
+          "/proc/sysrq-trigger"
+        ]
+      },
+      "Mounts": [
+        {
+          "Type": "bind",
+          "Source": "C:\\Users\\nhenr\\.codex\\worktrees\\8007\\OpenTransit",
+          "Destination": "/workspace",
+          "Mode": "",
+          "RW": false,
+          "Propagation": "rprivate"
+        }
+      ],
+      "NetworkSettings": {
+        "Bridge": "",
+        "SandboxID": "",
+        "SandboxKey": "",
+        "Ports": {},
+        "HairpinMode": false,
+        "LinkLocalIPv6Address": "",
+        "LinkLocalIPv6PrefixLen": 0,
+        "SecondaryIPAddresses": null,
+        "SecondaryIPv6Addresses": null,
+        "EndpointID": "",
+        "Gateway": "",
+        "GlobalIPv6Address": "",
+        "GlobalIPv6PrefixLen": 0,
+        "IPAddress": "",
+        "IPPrefixLen": 0,
+        "IPv6Gateway": "",
+        "MacAddress": "",
+        "Networks": {
+          "bridge": {
+            "IPAMConfig": null,
+            "Links": null,
+            "Aliases": null,
+            "MacAddress": "",
+            "DriverOpts": null,
+            "NetworkID": "203603b2e7bbb4400c4fa5a3fbe3ead0624173f93267871ccc9268193bdbf4ff",
+            "EndpointID": "",
+            "Gateway": "",
+            "IPAddress": "",
+            "IPPrefixLen": 0,
+            "IPv6Gateway": "",
+            "GlobalIPv6Address": "",
+            "GlobalIPv6PrefixLen": 0,
+            "DNSNames": null
+          }
+        }
+      }
+    },
+    "opentransit-m4-linkage-format-20260930": {
+      "Id": "921099977d7cf7010ab889099fa2f418dd957c4a889538ae1a7c6a7f6336b53b",
+      "Created": "2026-09-30T23:17:01.844146762Z",
+      "Image": "sha256:1b15d2e1f72e1fb10cdaae8b0a6662816171706a4f261922b7cbd4754ddc4841",
+      "State": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-09-30T23:17:01.919232985Z",
+        "FinishedAt": "2026-09-30T23:17:02.18108968Z"
+      },
+      "Config": {
+        "Hostname": "921099977d7c",
+        "Domainname": "",
+        "User": "10001",
+        "AttachStdin": false,
+        "AttachStdout": true,
+        "AttachStderr": true,
+        "Tty": false,
+        "OpenStdin": false,
+        "StdinOnce": false,
+        "Env": [
+          "RUFF_CACHE_DIR=/tmp/ruff-cache",
+          "PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "PYTHON_VERSION=3.14.6",
+          "PYTHON_SHA256=143b1dddefaec3bd2e21e3b839b34a2b7fb9842272883c576420d605e9f30c63",
+          "UV_PYTHON_DOWNLOADS=0",
+          "PYTHONPATH=/workspace/services/api/src"
+        ],
+        "Cmd": [
+          "/app/.venv/bin/ruff",
+          "format",
+          "--check",
+          "src/opentransit/reference.py",
+          "tests/test_reference_search_linkage.py"
+        ],
+        "Image": "opentransit-m2-tests:20260930",
+        "Volumes": null,
+        "WorkingDir": "/workspace/services/api",
+        "Entrypoint": null,
+        "OnBuild": null,
+        "Labels": {
+          "com.docker.compose.project": "opentransit",
+          "com.docker.compose.service": "api",
+          "com.docker.compose.version": "2.31.0"
+        }
+      },
+      "HostConfig": {
+        "Binds": null,
+        "ContainerIDFile": "",
+        "LogConfig": {
+          "Type": "json-file",
+          "Config": {}
+        },
+        "NetworkMode": "bridge",
+        "PortBindings": {},
+        "RestartPolicy": {
+          "Name": "no",
+          "MaximumRetryCount": 0
+        },
+        "AutoRemove": false,
+        "VolumeDriver": "",
+        "VolumesFrom": null,
+        "ConsoleSize": [
+          0,
+          0
+        ],
+        "CapAdd": null,
+        "CapDrop": null,
+        "CgroupnsMode": "host",
+        "Dns": [],
+        "DnsOptions": [],
+        "DnsSearch": [],
+        "ExtraHosts": null,
+        "GroupAdd": null,
+        "IpcMode": "private",
+        "Cgroup": "",
+        "Links": null,
+        "OomScoreAdj": 0,
+        "PidMode": "",
+        "Privileged": false,
+        "PublishAllPorts": false,
+        "ReadonlyRootfs": false,
+        "SecurityOpt": null,
+        "UTSMode": "",
+        "UsernsMode": "",
+        "ShmSize": 67108864,
+        "Runtime": "runc",
+        "Isolation": "",
+        "CpuShares": 0,
+        "Memory": 134217728,
+        "NanoCpus": 0,
+        "CgroupParent": "",
+        "BlkioWeight": 0,
+        "BlkioWeightDevice": [],
+        "BlkioDeviceReadBps": [],
+        "BlkioDeviceWriteBps": [],
+        "BlkioDeviceReadIOps": [],
+        "BlkioDeviceWriteIOps": [],
+        "CpuPeriod": 0,
+        "CpuQuota": 0,
+        "CpuRealtimePeriod": 0,
+        "CpuRealtimeRuntime": 0,
+        "CpusetCpus": "",
+        "CpusetMems": "",
+        "Devices": [],
+        "DeviceCgroupRules": null,
+        "DeviceRequests": null,
+        "MemoryReservation": 0,
+        "MemorySwap": 268435456,
+        "MemorySwappiness": null,
+        "OomKillDisable": false,
+        "PidsLimit": null,
+        "Ulimits": [],
+        "CpuCount": 0,
+        "CpuPercent": 0,
+        "IOMaximumIOps": 0,
+        "IOMaximumBandwidth": 0,
+        "Mounts": [
+          {
+            "Type": "bind",
+            "Source": "C:\\Users\\nhenr\\.codex\\worktrees\\8007\\OpenTransit",
+            "Target": "/workspace",
+            "ReadOnly": true
+          }
+        ],
+        "MaskedPaths": [
+          "/proc/asound",
+          "/proc/acpi",
+          "/proc/kcore",
+          "/proc/keys",
+          "/proc/latency_stats",
+          "/proc/timer_list",
+          "/proc/timer_stats",
+          "/proc/sched_debug",
+          "/proc/scsi",
+          "/sys/firmware",
+          "/sys/devices/virtual/powercap"
+        ],
+        "ReadonlyPaths": [
+          "/proc/bus",
+          "/proc/fs",
+          "/proc/irq",
+          "/proc/sys",
+          "/proc/sysrq-trigger"
+        ]
+      },
+      "Mounts": [
+        {
+          "Type": "bind",
+          "Source": "C:\\Users\\nhenr\\.codex\\worktrees\\8007\\OpenTransit",
+          "Destination": "/workspace",
+          "Mode": "",
+          "RW": false,
+          "Propagation": "rprivate"
+        }
+      ],
+      "NetworkSettings": {
+        "Bridge": "",
+        "SandboxID": "",
+        "SandboxKey": "",
+        "Ports": {},
+        "HairpinMode": false,
+        "LinkLocalIPv6Address": "",
+        "LinkLocalIPv6PrefixLen": 0,
+        "SecondaryIPAddresses": null,
+        "SecondaryIPv6Addresses": null,
+        "EndpointID": "",
+        "Gateway": "",
+        "GlobalIPv6Address": "",
+        "GlobalIPv6PrefixLen": 0,
+        "IPAddress": "",
+        "IPPrefixLen": 0,
+        "IPv6Gateway": "",
+        "MacAddress": "",
+        "Networks": {
+          "bridge": {
+            "IPAMConfig": null,
+            "Links": null,
+            "Aliases": null,
+            "MacAddress": "",
+            "DriverOpts": null,
+            "NetworkID": "203603b2e7bbb4400c4fa5a3fbe3ead0624173f93267871ccc9268193bdbf4ff",
+            "EndpointID": "",
+            "Gateway": "",
+            "IPAddress": "",
+            "IPPrefixLen": 0,
+            "IPv6Gateway": "",
+            "GlobalIPv6Address": "",
+            "GlobalIPv6PrefixLen": 0,
+            "DNSNames": null
+          }
+        }
+      }
+    }
+  },
+  "logs": {
+    "opentransit-m4-search-evaluation-20260930-01": "captured 183 variants / 732 requests\n",
+    "opentransit-m4-search-timing-finalize-20260930-01": "finalized timing for 732 saved requests\n",
+    "opentransit-api-repaired-20260930-02": "INFO:     Started server process [1]\nINFO:     Waiting for application startup.\nINFO:     Application startup complete.\nINFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)\nrequest_id=1ed1831e60c24f7a83a35aacfad3456d route=/readyz status=503 duration_ms=149.4\nrequest_id=b97ee851c93e4aa2925fc562b9e803ef route=/readyz status=200 duration_ms=84.7\nrequest_id=11fde2e8885c4746855bcb4ccbdb75bd route=/readyz status=503 duration_ms=10.1\nrequest_id=a5724ab0d7994d5abcbbba92d6888d9d route=/v1/status status=200 duration_ms=17.3\nrequest_id=f295b33361f646b781fa4de44092bf0f route=/readyz status=503 duration_ms=9.7\nrequest_id=088631fe629f48fea1ad78e7a468bf9d route=/v1/places status=200 duration_ms=2680.5\nrequest_id=3bdd75603c744d618a1dd890990d46fb route=/v1/stops/{stop_id} status=200 duration_ms=50.9\nrequest_id=350ee9eafb6c475ab75990112237b0d4 route=/v1/journeys status=200 duration_ms=511.6\nrequest_id=1d60c369b77d4d8f97c37246df065638 route=/v1/trips/{trip_ref} status=200 duration_ms=29.5\nrequest_id=d16120c8f66a4e2987af072989d987a0 route=/v1/stops/{stop_id}/departures status=422 duration_ms=29.3\nrequest_id=4e8d90e14b484959a8d5ab0cedc6e741 route=/v1/journeys status=422 duration_ms=0.7\nrequest_id=e00c0e2f5f7840c2b60f933dd5017831 route=/v1/places status=200 duration_ms=0.6\nrequest_id=1cf3cc0ec6a54131a90462f2a65b733a route=/v1/places status=200 duration_ms=6.8\nrequest_id=a8a6078e753840cf872da1f8c9186985 route=/v1/places status=200 duration_ms=1268.9\nrequest_id=60540d0a6c8e46798fa8f8d7d646a98c route=/v1/places status=200 duration_ms=4.2\nrequest_id=143b7e788be94dd8b207fae2c9cd0beb route=/v1/places status=200 duration_ms=2.0\nrequest_id=930917e950e042a2adb9948281e31309 route=/v1/places status=200 duration_ms=2.4\nrequest_id=791c4c392ad64af294532e433116c507 route=/v1/places status=200 duration_ms=3.8\nrequest_id=0a7d1745676b4cc1bc392a8ad7f5a592 route=/v1/places status=200 duration_ms=3.7\nrequest_id=1c35f8b8425346178a7eb3155d204054 route=/v1/places status=200 duration_ms=7.1\nrequest_id=dd27925854dd4f9e873c33bfa001f81f route=/v1/places status=200 duration_ms=3.9\nrequest_id=4b8dac2b9af04be8b6fdc126eac499a1 route=/v1/places status=200 duration_ms=11.8\nrequest_id=222535776c254b869c85b0b946f11cb8 route=/v1/places status=200 duration_ms=2.8\nrequest_id=45255dbf6737422ab397dd8a376965a9 route=/v1/places status=200 duration_ms=1274.1\nrequest_id=3b56dabff63a4291b02ad69e4d1c63c1 route=/v1/places status=200 duration_ms=2.6\nrequest_id=a5f3afa459ee48c9bac88ff2c687ab24 route=/v1/places status=200 duration_ms=2.5\nrequest_id=92eac930fb5143b8afb76a7c6bfd1ee5 route=/v1/places status=200 duration_ms=2.4\nrequest_id=3312312c2bde480e950c240c5033a675 route=/v1/places status=200 duration_ms=1271.0\nrequest_id=57d648c124de435e8ad2a210dbef3f07 route=/v1/places status=200 duration_ms=1.7\nrequest_id=f859c45a89984f3a9291d9bd481c6009 route=/v1/places status=200 duration_ms=6.3\nrequest_id=6ce95203e82c4901b7d40689fcf3c903 route=/v1/places status=200 duration_ms=6.6\nrequest_id=a37f1decfad84917bb8fca02bb0eed86 route=/v1/places status=200 duration_ms=1.2\nrequest_id=2cb5178abe2d4e738fa584afb49c77ca route=/v1/places status=200 duration_ms=57.7\nrequest_id=862052eb6ab14c95813d6031d87d1935 route=/v1/places status=200 duration_ms=98.4\nrequest_id=ec75133d9b5645eab5e532d23cf135f9 route=/v1/places status=200 duration_ms=33.4\nrequest_id=62308167284640d2be9c2b9182d1b3ca route=/v1/places status=200 duration_ms=90.0\nrequest_id=0210c517f62a49bab9a30dbf74d8ab80 route=/v1/places status=200 duration_ms=20.4\nrequest_id=86674e5763b047b8838015c8328fe49b route=/v1/places status=200 duration_ms=22.3\nrequest_id=2bb16bf1336e486098ecece400c2b023 route=/v1/places status=200 duration_ms=14.6\nrequest_id=ed04d08f495b42c288612c7f41f8283b route=/v1/places status=200 duration_ms=15.8\nrequest_id=b95fc42984104c4596e1f41be6ebfe66 route=/v1/places status=200 duration_ms=17.1\nrequest_id=0e4ecb5117544f7a8befd78ee12d26f4 route=/v1/places status=200 duration_ms=11.5\nrequest_id=f25aec2c96b94691a7dcbb33070c5fa1 route=/v1/places status=200 duration_ms=23.6\nrequest_id=e0572a4c8dc34a3caa65a4292fd6c624 route=/v1/places status=200 duration_ms=16.5\nrequest_id=b73a23cf902947008f6c917d58759130 route=/v1/places status=200 duration_ms=23.7\nrequest_id=af5eeedf7ee8405bb4a52404f4aab2cf route=/v1/places status=200 duration_ms=17.6\nrequest_id=818e0863d431441c8724509d8a170cfe route=/v1/places status=200 duration_ms=13.9\nrequest_id=f8a549192c4b48729372fa3cbd1577a0 route=/v1/places status=200 duration_ms=35.7\nrequest_id=1994a6705c584a3189d3ae1d0641ee4a route=/v1/places status=200 duration_ms=16.0\nrequest_id=170c1d86d4ad4a24bb409f8b097d12e5 route=/v1/places status=200 duration_ms=9.7\nrequest_id=a0d6470b8a984c51a3848fba84290e79 route=/v1/places status=200 duration_ms=14.1\nrequest_id=6225e9277b0547b39423c54703294698 route=/v1/places status=200 duration_ms=10.8\nrequest_id=3570b62a7c96488bb8c6bf598a6f0ff3 route=/v1/places status=200 duration_ms=43.6\nrequest_id=04161db7bf5a46559c7abba50eb2c090 route=/v1/places status=200 duration_ms=11.4\nrequest_id=cb28a5d38a554f9cb24fe52f5e3b537c route=/v1/places status=200 duration_ms=74.0\nrequest_id=0284ce4f06f14130acdf179384282bdc route=/v1/places status=200 duration_ms=10.0\nrequest_id=fdafc1a20495428da16f09022a4788c4 route=/v1/places status=200 duration_ms=10.0\nrequest_id=31744ae88a0747b699219932ad6ca0db route=/v1/places status=200 duration_ms=14.6\nrequest_id=4fce890918e04a1097dc3b377fde0e9a route=/v1/places status=200 duration_ms=15.9\nrequest_id=4826041d66054e739ddf8f102455132e route=/v1/places status=200 duration_ms=11.6\nrequest_id=0bf5c4ad8be74e448b599afee0d18d5e route=/v1/places status=200 duration_ms=9.4\nrequest_id=22f30b4881614684bcbc60d3609a6dbe route=/v1/places status=200 duration_ms=10.1\nrequest_id=ca168d6bbcb8411bb6af865008364fb3 route=/v1/places status=200 duration_ms=10.8\nrequest_id=6e833b25ad4c40a88dd4f708e6ec73e2 route=/v1/places status=200 duration_ms=80.3\nrequest_id=7e3ecb730acc4e3ca9ec179d9cdea765 route=/v1/places status=200 duration_ms=13.4\nrequest_id=1e75e33592bc4f3ab05dc8a588873bea route=/v1/places status=200 duration_ms=130.1\nrequest_id=6cd9187f148341b2a9647e1ffebada83 route=/v1/places status=200 duration_ms=10.8\nrequest_id=383cfba6dedd461db47920dd65fbc70c route=/v1/places status=200 duration_ms=12.4\nrequest_id=9740ac94c6214d6fbc60784d8338df95 route=/v1/places status=200 duration_ms=46.6\nrequest_id=63ef9f002c7a40b6863f5071c3a5840b route=/v1/places status=200 duration_ms=12.4\nrequest_id=092453f35b4746c7b018fe7bcc286743 route=/v1/places status=200 duration_ms=11.1\nrequest_id=52711500407540ccac6b6781b459bee9 route=/v1/places status=200 duration_ms=9.9\nrequest_id=84a01fbe4a24456981dfc390bf3f73ce route=/v1/places status=200 duration_ms=11.3\nrequest_id=7c58435ba1eb4ef0a7cdf5940a031222 route=/v1/places status=200 duration_ms=13.0\nrequest_id=ce9c2f007bd941868afda1f44f40407e route=/v1/places status=200 duration_ms=18.9\nrequest_id=a65bf5d721414e239888319969663e53 route=/v1/places status=200 duration_ms=15.0\nrequest_id=ef409a8000664a8597aba70062801c98 route=/v1/places status=200 duration_ms=62.7\nrequest_id=fa4dd2c035a7488fa495bdad42edddf0 route=/v1/places status=200 duration_ms=13.0\nrequest_id=725bf0e6ec7d4de5b0e172cff1c34b8d route=/v1/places status=200 duration_ms=20.9\nrequest_id=3c0c3efc64474856ab83bd5dcc9b029a route=/v1/places status=200 duration_ms=9.6\nrequest_id=0455218079c34e61b5f5c2e4468e005e route=/v1/places status=200 duration_ms=11.0\nrequest_id=7c484b7e7d6840af9f037c0e5bb61ee0 route=/v1/places status=200 duration_ms=10.0\nrequest_id=7d40efaa190e48339bdec5af6db92531 route=/v1/places status=200 duration_ms=10.5\nrequest_id=92eb9a43628e408b97f740e99179d5f3 route=/v1/places status=200 duration_ms=12.2\nrequest_id=9b94e1f902bf489fa497d5aca92ed227 route=/v1/places status=200 duration_ms=9.2\nrequest_id=12f58c7221db4850bba6921c6bc4c047 route=/v1/places status=200 duration_ms=11.4\nrequest_id=0d6b60f9673648c3a103adc41136c9f0 route=/v1/places status=200 duration_ms=63.8\nrequest_id=7d1e932504c540ccae3dc71b2350529c route=/v1/places status=200 duration_ms=14.0\nrequest_id=ae81a55bf70e48d8adf1410989796e34 route=/v1/places status=200 duration_ms=10.6\nrequest_id=e1442463962a4a9fa61a0ce3443a82b1 route=/v1/places status=200 duration_ms=11.9\nrequest_id=b6e6462a20d94a27a1baa34984d2c537 route=/v1/places status=200 duration_ms=12.8\nrequest_id=72f623f02c124aabacbed724bfc4f4ab route=/v1/places status=200 duration_ms=10.7\nrequest_id=66f299ec8ad04984a96d7d1b75235b39 route=/v1/places status=200 duration_ms=9.6\nrequest_id=b2da2635eae44e6db4b140799f08205d route=/v1/places status=200 duration_ms=15.0\nrequest_id=7f5a84f5e5e24154be4613731c996f6c route=/v1/places status=200 duration_ms=10.4\nrequest_id=24349cdf30c948788b4383379b66a9b2 route=/v1/places status=200 duration_ms=12.5\nrequest_id=c9a0de1024e84c4fad28c20de5355d4b route=/v1/places status=200 duration_ms=11.1\nrequest_id=e972616e0c854bf1bd1b3f65ffaba85f route=/v1/places status=200 duration_ms=11.9\nrequest_id=b17cd31c432a4797b73ff4189d0396bc route=/v1/places status=200 duration_ms=9.8\nrequest_id=028f4b75248e4bcc838f5b2b2f3d04a4 route=/v1/places status=200 duration_ms=10.3\nrequest_id=ce9106494e34444e9e7f27c76e400a58 route=/v1/places status=200 duration_ms=11.3\nrequest_id=a0a4096c2a554a108dcb9beab013cab9 route=/v1/places status=200 duration_ms=9.7\nrequest_id=8982be090e8c4f2ea0138cdbc5c9e409 route=/v1/places status=200 duration_ms=12.4\nrequest_id=642e20c275164aefb6ec05ad4fc13e44 route=/v1/places status=200 duration_ms=9.8\nrequest_id=f31a5c8718a141bab294a3f7a1d89098 route=/v1/places status=200 duration_ms=12.2\nrequest_id=6734e672736d45af8141af8b3ae375de route=/v1/places status=200 duration_ms=12.0\nrequest_id=2941939177d040379621af3679d76c01 route=/v1/places status=200 duration_ms=43.1\nrequest_id=fe6c532d46cc466db5b4c4d700f40d10 route=/v1/places status=200 duration_ms=40.6\nrequest_id=e2b265a9574f4ec8924f0cefbfc17dc7 route=/v1/places status=200 duration_ms=29.3\nrequest_id=190e09ac66b747b8bee6c124fc636847 route=/v1/places status=200 duration_ms=24.7\nrequest_id=5041758a76e04521a54a9f21515bb23e route=/v1/places status=200 duration_ms=9.3\nrequest_id=7fbd83c9f624427aaaf6cbcfbfe666aa route=/v1/places status=200 duration_ms=13.9\nrequest_id=2d9c1132c6c24eb395a371b492109cb9 route=/v1/places status=200 duration_ms=20.5\nrequest_id=26f40dde917c4a71b1c4159dce4b8a06 route=/v1/places status=200 duration_ms=27.5\nrequest_id=33c3e737ceab4180b984cff83b82e458 route=/v1/places status=200 duration_ms=18.2\nrequest_id=fc8cbd30490549afa2b0aee28c0368e0 route=/v1/places status=200 duration_ms=17.0\nrequest_id=55567a5824334a0fbd58b9ec1e7e6a3d route=/v1/places status=200 duration_ms=8.9\nrequest_id=c4d44de670804f329c13a0ebdbaf6787 route=/v1/places status=200 duration_ms=9.0\nrequest_id=e48f6a807b18486da7e8af06be655f37 route=/v1/places status=200 duration_ms=8.2\nrequest_id=015d8212c17c494d85a37131bf30059b route=/v1/places status=200 duration_ms=8.8\nrequest_id=bd2dbca802ec4037b42edc58b4587539 route=/v1/places status=200 duration_ms=17.7\nrequest_id=d33196fca0a340d5b121d98f6ad3a65c route=/v1/places status=200 duration_ms=67.2\nrequest_id=e1c5bcd290cb43079488369e2b10ed54 route=/v1/places status=200 duration_ms=12.3\nrequest_id=483878dacd8945a2802aef0dc2515134 route=/v1/places status=200 duration_ms=17.7\nrequest_id=82246941b8b34883b8cfce6c81807660 route=/v1/places status=200 duration_ms=18.1\nrequest_id=269affcb1a8c46a8bdf243cd6512cf16 route=/v1/places status=200 duration_ms=11.6\nrequest_id=c3aff1727f3c430fa80ba77e4e98c24f route=/v1/places status=200 duration_ms=14.7\nrequest_id=20241603c21a4755974bbd1d43d0e879 route=/v1/places status=200 duration_ms=12.1\nrequest_id=7abbe65530c24090941dfa92cd2521f5 route=/v1/places status=200 duration_ms=9.9\nrequest_id=966b0fde16964c2eb65da6913816fdf2 route=/v1/places status=200 duration_ms=9.9\nrequest_id=cd208a8326c149859e840727838e3b69 route=/v1/places status=200 duration_ms=20.0\nrequest_id=f9a49e5dbc4f43ef9fa07dfcf48f4909 route=/v1/places status=200 duration_ms=47.7\nrequest_id=53786f501f5545a8b467b827f9b26ee5 route=/v1/places status=200 duration_ms=53.8\nrequest_id=22c1a6f893ed49fe86530ce84328e189 route=/v1/places status=200 duration_ms=9.4\nrequest_id=2f029d8a2bfe4b6b9dd56057903117f0 route=/v1/places status=200 duration_ms=10.5\nrequest_id=3a3fc233f40e44759423a898f49c2de3 route=/v1/places status=200 duration_ms=10.4\nrequest_id=ead052d32bf3454db7a5abeb0fadcac2 route=/v1/places status=200 duration_ms=11.4\nrequest_id=c2c49e669bcb4dc18b9f2fee8084d441 route=/v1/places status=200 duration_ms=9.5\nrequest_id=fecbb3f3c1fe41d0b7ec1916b5adde6b route=/v1/places status=200 duration_ms=31.6\nrequest_id=e59b1402cbef4fef941c65320d0cb8b7 route=/v1/places status=200 duration_ms=20.4\nrequest_id=6e63bda0ab224583a16b5178254f0e3b route=/v1/places status=200 duration_ms=9.2\nrequest_id=425c08878cdd47ce9b932d2f0b62d894 route=/v1/places status=200 duration_ms=42.3\nrequest_id=958a273cae1149e3b69476ab26fa04ee route=/v1/places status=200 duration_ms=10.7\nrequest_id=b98c3eb695af406ba5651ea4559d56fc route=/v1/places status=200 duration_ms=16.1\nrequest_id=1a409beed02d45e5a823335a333df719 route=/v1/places status=200 duration_ms=14.5\nrequest_id=fb2301eb415d49ff91e285bea8968a28 route=/v1/places status=200 duration_ms=16.7\nrequest_id=cb8485d2d8e04c788eced087f28a1989 route=/v1/places status=200 duration_ms=10.7\nrequest_id=c5babe5f9d114f199878373687c85548 route=/v1/places status=200 duration_ms=22.8\nrequest_id=187c255e2ad04dcabd35d0dd83fe3d86 route=/v1/places status=200 duration_ms=79.0\nrequest_id=c0ee4311bdb2428c91622012e0e1c8dc route=/v1/places status=200 duration_ms=22.6\nrequest_id=2f9e16a794db4a6bb353f7eaed739569 route=/v1/places status=200 duration_ms=15.3\nrequest_id=9b1f1bf8b18c4e65bdbc6172b6c69dc6 route=/v1/places status=200 duration_ms=22.9\nrequest_id=6bb047aea5404ccbbed9df7795835510 route=/v1/places status=200 duration_ms=66.1\nrequest_id=304db54bb4374f148f3ca85787b39fbf route=/v1/places status=200 duration_ms=34.4\nrequest_id=12626c158b6d47e58f879bae273e0ec9 route=/v1/places status=200 duration_ms=8.8\nrequest_id=cafc1a79e7814343aa6899436ebdb607 route=/v1/places status=200 duration_ms=11.2\nrequest_id=e40e668b98dd440184531ffd25fbf655 route=/v1/places status=200 duration_ms=9.3\nrequest_id=d1525390b08d4fd7901291d26dc98b7d route=/v1/places status=200 duration_ms=13.9\nrequest_id=7ee3706c60744b26ad37c2f4d705abad route=/v1/places status=200 duration_ms=15.0\nrequest_id=6671b3d74d134ea499c6e716923e108b route=/v1/places status=200 duration_ms=18.6\nrequest_id=32bc894b5b884abcb1751774a3a8ce74 route=/v1/places status=200 duration_ms=13.3\nrequest_id=9cb539344e544bedb81613f16cd85969 route=/v1/places status=200 duration_ms=15.9\nrequest_id=8ad636a079ff4dfbb8421ce0ab46a024 route=/v1/places status=200 duration_ms=10.6\nrequest_id=50bdb344d737477db45ed4bb4851607c route=/v1/places status=200 duration_ms=8.5\nrequest_id=c404d7e7d7974c24a2315cb639f10c47 route=/v1/places status=200 duration_ms=13.6\nrequest_id=cc14b44daf58447e9dd7bf46d55c33d6 route=/v1/places status=200 duration_ms=12.3\nrequest_id=81234c68d27d4e1eb3090cf752298e0b route=/v1/places status=200 duration_ms=11.4\nrequest_id=69f4dfb8ae2246ce88433c1f3268316a route=/v1/places status=200 duration_ms=13.3\nrequest_id=ae1d319ec2d740a2b838bd5a11b8140a route=/v1/places status=200 duration_ms=14.0\nrequest_id=85921e3d25ec48ecb588bb5c6a3118de route=/v1/places status=200 duration_ms=12.9\nrequest_id=60bd1c576f0244e1bd5ce4a6cb10cbfb route=/v1/places status=200 duration_ms=28.0\nrequest_id=e6033613cb1d4619b13783999a2aece7 route=/v1/places status=200 duration_ms=41.9\nrequest_id=5e276748e17245fb86468557daeacda6 route=/v1/places status=200 duration_ms=12.8\nrequest_id=aa81664d642b497f8df2e40075897965 route=/v1/places status=200 duration_ms=9.1\nrequest_id=e77bf0ec4c4147e8a87099b08a8565de route=/v1/places status=200 duration_ms=9.1\nrequest_id=ba0c4301d850458e8650f15390ea235a route=/v1/places status=200 duration_ms=9.0\nrequest_id=93d9b8403d6b42f7ac5229fcdbb058bc route=/v1/places status=200 duration_ms=8.9\nrequest_id=2cd16babfa154a689cbdd3cbbb165408 route=/v1/places status=200 duration_ms=8.6\nrequest_id=4dd778bde7bc42499fca5dc74dde9bdd route=/v1/places status=200 duration_ms=11.7\nrequest_id=0c4e9992e34e461f916fa8d38388e122 route=/v1/places status=200 duration_ms=9.4\nrequest_id=1d11804d1e004a09b4b60d80b4ad9924 route=/v1/places status=200 duration_ms=16.1\nrequest_id=fa851e79d2754a9ea968970050b3e16c route=/v1/places status=200 duration_ms=8.2\nrequest_id=732ec99cace44980ab2283a738174db9 route=/v1/places status=200 duration_ms=10.8\nrequest_id=9d1146714fc145609048b2b32b2dd922 route=/v1/places status=200 duration_ms=13.6\nrequest_id=6a2433eb8f574f4e9d7b0dbc85855e1d route=/v1/places status=200 duration_ms=15.6\nrequest_id=e3872d95753f4dd8b2cee3ca47831f92 route=/v1/places status=200 duration_ms=8.4\nrequest_id=b7aee744468a4f35a2f44acfd6a4b04e route=/v1/places status=200 duration_ms=2.3\nrequest_id=e453dca190444a268541e0a3e2d973a5 route=/v1/places status=200 duration_ms=2.5\nrequest_id=99f411d0881f49a280fb932b721b6636 route=/v1/places status=200 duration_ms=94.3\nrequest_id=cc2c609eaef54b6288aeb08856a55d6e route=/v1/places status=200 duration_ms=9.4\nrequest_id=f9238c95d1174ac79a259b5991e72e92 route=/v1/places status=200 duration_ms=7.5\nrequest_id=7368382908af44498ffedaf092d4c557 route=/v1/places status=200 duration_ms=8.5\nrequest_id=33531a660043480988a45fa4bc585a2f route=/v1/places status=200 duration_ms=7.5\nrequest_id=9aa47200d7cd4c07a4db93a89f2c85bd route=/v1/places status=200 duration_ms=8.1\nrequest_id=bc3588649628401faf2105da602a3731 route=/v1/places status=200 duration_ms=8.7\nrequest_id=18c3f12eb22e4a96aedf9043b994921a route=/v1/places status=200 duration_ms=11.2\nrequest_id=e5a0708c287a40f2bcc301287bf69bde route=/v1/places status=200 duration_ms=8.1\nrequest_id=a29aeff0e2e9482ab51d3dd1bd75325a route=/v1/places status=200 duration_ms=8.6\nrequest_id=c409b614c5cf4f6da86e6a9f5010c272 route=/v1/places status=200 duration_ms=106.8\nrequest_id=2340f9d0804349cba8b3eb0df8947464 route=/v1/places status=200 duration_ms=8.8\nrequest_id=99502e1ec2c0478598653cd77b0c87f6 route=/v1/places status=200 duration_ms=1236.3\nrequest_id=be9a7a688cd84bc188914ec4bbe9d301 route=/v1/places status=200 duration_ms=26.2\nrequest_id=966bf288b1354dc38db94e6fb665f0d8 route=/v1/places status=200 duration_ms=10.4\nrequest_id=e7597bb376564ee4b470d3956a230bec route=/v1/places status=200 duration_ms=9.6\nrequest_id=8fe27431cf0d44e082d6bc6ecd67116a route=/v1/places status=200 duration_ms=8.4\nrequest_id=2510ab1243a64bcb9c7d738b81a8ffe4 route=/v1/places status=200 duration_ms=9.3\nrequest_id=ccf041d0150942978e5d57dda67259b1 route=/v1/places status=200 duration_ms=2.7\nrequest_id=a8f1a8dfd583480cb617f09375490e0d route=/v1/places status=200 duration_ms=11.7\nrequest_id=b1c305e7e34a4720b980d5588faa9b78 route=/v1/places status=200 duration_ms=10.4\nrequest_id=67654844dc874e869a25c9e8d09c8e99 route=/v1/places status=200 duration_ms=39.7\nrequest_id=08661c707f52409388ba5042b762a445 route=/v1/places status=200 duration_ms=9.1\nrequest_id=8a320d69519d4188988c1d0e1d44387c route=/v1/places status=200 duration_ms=12.2\nrequest_id=6dd940b4dabe474891f75f875f26a9da route=/v1/places status=200 duration_ms=9.8\nrequest_id=47ac1e5139d849dda6da87f46103979a route=/v1/places status=200 duration_ms=8.5\nrequest_id=f77cdfd07c7443f2baf5e8f69290b7f3 route=/v1/places status=200 duration_ms=8.5\nrequest_id=faf23f0481e540d295751fefe79a06ae route=/v1/places status=200 duration_ms=3.0\nrequest_id=32999540808b4d9a998958693b1c4514 route=/v1/places status=200 duration_ms=8.3\nrequest_id=24f5ae324f1a482d921d860beec03e9a route=/v1/places status=200 duration_ms=7.6\nrequest_id=ebea191b2ef64a63bb7487c929737240 route=/v1/places status=200 duration_ms=11.4\nrequest_id=57bbc901c140433d87a203be0ad563ad route=/v1/places status=200 duration_ms=10.4\nrequest_id=2733eb34a261412199ede47b9ffba8f1 route=/v1/places status=200 duration_ms=14.5\nrequest_id=630ffda5776b46d980de007816b2cf15 route=/v1/places status=200 duration_ms=12.3\nrequest_id=eaff5f45e40747a8a28730dbc9d187f0 route=/v1/places status=200 duration_ms=20.3\nrequest_id=dce24a09211d4d4a843272ac1576a1d1 route=/v1/places status=200 duration_ms=11.4\nrequest_id=c14b76e753624084aef24303f6f532d3 route=/v1/places status=200 duration_ms=9.7\nrequest_id=a9b60efd5a5349f0a032248869dcb500 route=/v1/places status=200 duration_ms=11.1\nrequest_id=dd284a33f8b048ba9a5419b0b63d659c route=/v1/places status=200 duration_ms=45.3\nrequest_id=8d4f4b94766f46308b79313e4669879a route=/v1/places status=200 duration_ms=10.9\nrequest_id=1901aa5c707f4e0c98f7473bc05658de route=/v1/places status=200 duration_ms=10.0\nrequest_id=edb7fe507600467eac5877f1523b29ef route=/v1/places status=200 duration_ms=62.7\nrequest_id=33a89925cc404441a51127dbd5ac06ed route=/v1/places status=200 duration_ms=94.0\nrequest_id=2e02fda630194b9a94f6b0b1761846a6 route=/v1/places status=200 duration_ms=10.2\nrequest_id=f8519566c8334c0393e9e2aa9d7de077 route=/v1/places status=200 duration_ms=8.8\nrequest_id=8cdbbe1c348f47938cc6b4e8b0504873 route=/v1/places status=200 duration_ms=9.6\nrequest_id=c4bcc79479e648d9a6e0f3b543b79d9c route=/v1/places status=200 duration_ms=10.1\nrequest_id=29fbd6cda5454046b11dd0a551b0cdfe route=/v1/places status=200 duration_ms=61.1\nrequest_id=f1d254b6b2b84f4ca75fb66e51c4b373 route=/v1/places status=200 duration_ms=26.3\nrequest_id=7383a20b4a6a491283b446b689212e13 route=/v1/places status=200 duration_ms=9.9\nrequest_id=2adce2735caf430fa5b7167350512d5f route=/v1/places status=200 duration_ms=14.9\nrequest_id=a3616ec9a3ee42d89effbe3a8fd9cebb route=/v1/places status=200 duration_ms=7.5\nrequest_id=8f5418b7f9e14077b634b4eb6b123e7a route=/v1/places status=200 duration_ms=16.7\nrequest_id=4065de9bdd7946dd987ca0a987d91dcd route=/v1/places status=200 duration_ms=13.6\nrequest_id=212318c4257041a5915de92ab9046607 route=/v1/places status=200 duration_ms=7.0\nrequest_id=d44afdffc28045ee8f950a6c7e822307 route=/v1/places status=200 duration_ms=12.9\nrequest_id=cf000bbfa4864d578e0a1b3a6e761aaf route=/v1/places status=200 duration_ms=10.0\nrequest_id=70fcd8b41fe5424c81397517b0b435ac route=/v1/places status=200 duration_ms=15.3\nrequest_id=8e4478466fcd46fe944d866e3bfeba4e route=/v1/places status=200 duration_ms=16.8\nrequest_id=216045685ac346d8ba33a0d5c94b3566 route=/v1/places status=200 duration_ms=10.5\nrequest_id=fe98fcae651b41ef8c64cb752223b666 route=/v1/places status=200 duration_ms=8.9\nrequest_id=bb83e8a22d5f4c359aef6a7af53039f4 route=/v1/places status=200 duration_ms=10.0\nrequest_id=dd21348eec03419596052fb9d6360455 route=/v1/places status=200 duration_ms=10.8\nrequest_id=7b8a799eceeb47709631487fef0f82c9 route=/v1/places status=200 duration_ms=18.7\nrequest_id=fe216dcb50ec43a084ec8b2c4099373f route=/v1/places status=200 duration_ms=14.7\nrequest_id=7f8e227788fa486d8ecfc68c45f77171 route=/v1/places status=200 duration_ms=17.9\nrequest_id=8916954732ef4763a7a4265276e6730a route=/v1/places status=200 duration_ms=10.2\nrequest_id=b59e455d92944d05a6f64e14767fb0a4 route=/v1/places status=200 duration_ms=10.1\nrequest_id=ba84349c8baa4c229cfad10cf12472b5 route=/v1/places status=200 duration_ms=13.8\nrequest_id=0e10b8e2febe4844a2d15511afcc75b5 route=/v1/places status=200 duration_ms=10.0\nrequest_id=07cbbb335bc24ca09cd8d0ad1e8c018e route=/v1/places status=200 duration_ms=2.8\nrequest_id=8fb26cf54cc94230a1b73cbec7f66b50 route=/v1/places status=200 duration_ms=3.2\nrequest_id=fa794793239843399562a76d1ed75e9d route=/v1/places status=200 duration_ms=10.7\nrequest_id=b77ce03b4d394a8f9061bd6586b645cd route=/v1/places status=200 duration_ms=9.2\nrequest_id=9e66530252794246825030998aed4421 route=/v1/places status=200 duration_ms=11.4\nrequest_id=8151c8a1a6fd4618a48befca54c37232 route=/v1/places status=200 duration_ms=10.7\nrequest_id=9206118dd4034809adbec9f0ac69d344 route=/v1/places status=200 duration_ms=52.6\nrequest_id=dff2229e01ca4724b8d53aae4121d445 route=/v1/places status=200 duration_ms=19.9\nrequest_id=298353846ccb4a9a8e87b6f2ac899959 route=/v1/places status=200 duration_ms=10.0\nrequest_id=71e284e42ccf4192a09d1fd92b44dd4a route=/v1/places status=200 duration_ms=10.6\nrequest_id=00ada49217a74dad90b3b6973112e30e route=/v1/places status=200 duration_ms=9.5\nrequest_id=38276c18003b46a782f0e3b46759108c route=/v1/places status=200 duration_ms=13.6\nrequest_id=3892299fbed64167a87c594aa5988f22 route=/v1/places status=200 duration_ms=9.4\nrequest_id=47c85ba32b9b447b80864a42e6b83cc0 route=/v1/places status=200 duration_ms=9.6\nrequest_id=fb9012000c184cefbc2dbd4f07d6655f route=/v1/places status=200 duration_ms=8.7\nrequest_id=190251c67799418f8de0ec336ae25689 route=/v1/places status=200 duration_ms=10.1\nrequest_id=bdee1621da5f4a5d9ded31e11a6143e0 route=/v1/places status=200 duration_ms=9.4\nrequest_id=1be70229524040528d3893118433b810 route=/v1/places status=200 duration_ms=9.9\nrequest_id=1ca47fba4adb425b987ca58dac8465c7 route=/v1/places status=200 duration_ms=9.7\nrequest_id=7660f013f035442e8f28f0aae0772a18 route=/v1/places status=200 duration_ms=8.2\nrequest_id=57751e86b1a445679c69a4308365160a route=/v1/places status=200 duration_ms=29.7\nrequest_id=45ecee4136454a4e8ebbb11de1c0f018 route=/v1/places status=200 duration_ms=13.1\nrequest_id=228772828f6344b0b142bfe81e4a8221 route=/v1/places status=200 duration_ms=13.1\nrequest_id=48cef140536a4ca19a09c448a830f4f5 route=/v1/places status=200 duration_ms=15.3\nrequest_id=8eb896fe2b234e3d92461b349ddeb5f3 route=/v1/places status=200 duration_ms=46.0\nrequest_id=b58ccb5fb3b3496aac00fa9ec6b9c84e route=/v1/places status=200 duration_ms=2.6\nrequest_id=48ad1f91b0904e91b2032f44f2e5488f route=/v1/places status=200 duration_ms=11.4\nrequest_id=66777f6868de4c288fcf6c1726113ea0 route=/v1/places status=200 duration_ms=9.3\nrequest_id=3b43f5e876714dbfb8260bfd614b1c89 route=/v1/places status=200 duration_ms=9.9\nrequest_id=3f4256663abd479fb045bc30d71549d8 route=/v1/places status=200 duration_ms=9.9\nrequest_id=b43380987f18437ea18106a84c127324 route=/v1/places status=200 duration_ms=10.2\nrequest_id=436a77890e1b4b468fe2e03486cb1aeb route=/v1/places status=200 duration_ms=12.3\nrequest_id=ff9e29df7b1c42178ccb665e3ca8fcf4 route=/v1/places status=200 duration_ms=17.3\nrequest_id=a4bf2dda42ba41c2aa387e38a63698fb route=/v1/places status=200 duration_ms=14.7\nrequest_id=d3de9a31234b4120ba6bd98e6c9b6c3e route=/v1/places status=200 duration_ms=11.7\nrequest_id=3c60df771acf4fef9d5dd97490eba1a5 route=/v1/places status=200 duration_ms=11.0\nrequest_id=491ff37b4cc54cddad4752e929fc0b9d route=/v1/places status=200 duration_ms=15.7\nrequest_id=58a532884999428091bffe717dea7223 route=/v1/places status=200 duration_ms=12.6\nrequest_id=45e16b278dc14ff1b5527250fd3b13d8 route=/v1/places status=200 duration_ms=11.1\nrequest_id=fdc9d4df99e54e598a54185ad4d2a267 route=/v1/places status=200 duration_ms=11.6\nrequest_id=689fcfdf93564f12a5ce26ca4b280f9a route=/v1/places status=200 duration_ms=11.1\nrequest_id=683cc0b15cc948bab04eb80f2757c976 route=/v1/places status=200 duration_ms=9.7\nrequest_id=868d9fabd9144c9a9b6a9c6e6fe8b913 route=/v1/places status=200 duration_ms=37.8\nrequest_id=67f7c6df559c4a0bb0a6037313f9e42f route=/v1/places status=200 duration_ms=30.8\nrequest_id=d7fb64363e2141569059588ab4009ce0 route=/v1/places status=200 duration_ms=9.5\nrequest_id=79728f05a40e4e8581e180867134017b route=/v1/places status=200 duration_ms=7.9\nrequest_id=f3ce98a80bdb45c4990ffe97557c1323 route=/v1/places status=200 duration_ms=9.6\nrequest_id=f608ff54b66745248a9b1ed84e06c709 route=/v1/places status=200 duration_ms=11.5\nrequest_id=57798d91fd31466aa413b94580a5bfeb route=/v1/places status=200 duration_ms=14.4\nrequest_id=13fe330700d0491f80b5e1eb10b1266e route=/v1/places status=200 duration_ms=8.5\nrequest_id=86fe616a293143cdb867bdeb06c385a3 route=/v1/places status=200 duration_ms=58.4\nrequest_id=e42a785fa4644c1d9a06118d5137afde route=/v1/places status=200 duration_ms=9.9\nrequest_id=069c694aa3c5439aad2b8ccebf0571f9 route=/v1/places status=200 duration_ms=5.8\nrequest_id=3190dcbbef9e40c9b0ce74d1c17ba153 route=/v1/places status=200 duration_ms=16.9\nrequest_id=d3e55efaf17d46c58e7db88b31a88c6a route=/v1/places status=200 duration_ms=53.5\nrequest_id=f01e4d62270c454398703752d3f8a3fd route=/v1/places status=200 duration_ms=10.3\nrequest_id=82fdcfc2d8c74725af048db31d063ea8 route=/v1/places status=200 duration_ms=10.1\nrequest_id=b0e4589cfeb84ec2b9015cc614687c82 route=/v1/places status=200 duration_ms=10.8\nrequest_id=04fd39dee0e64b5e968e988280dc7728 route=/v1/places status=200 duration_ms=8.4\nrequest_id=0bc1366998c6415f8af942565ef37803 route=/v1/places status=200 duration_ms=10.5\nrequest_id=25e35aca8cd140f58bcfe8738edc0686 route=/v1/places status=200 duration_ms=8.6\nrequest_id=9dc2f4b885a54a3d9ce8e5a03f7932ed route=/v1/places status=200 duration_ms=18.2\nrequest_id=35fedcec5e744fd7b032a34d9a41e214 route=/v1/places status=200 duration_ms=8.9\nrequest_id=c08c1ecfa6f2482d8953b2f4d20d24dc route=/v1/places status=200 duration_ms=2.8\nrequest_id=c9c2f91b4c634c09a1aecb6197962d67 route=/v1/places status=200 duration_ms=1.6\nrequest_id=c4b5ea16a58f477486a6ffdcbf9d3404 route=/v1/places status=200 duration_ms=8.0\nrequest_id=38cd9ac7211b4001a227fd77cbee9779 route=/v1/places status=200 duration_ms=9.2\nrequest_id=c1ac35c07a2748ab8f976ed158bf65ef route=/v1/places status=200 duration_ms=30.1\nrequest_id=1bf7aaf2fe4b47bf84912b1ed3d27412 route=/v1/places status=200 duration_ms=2.7\nrequest_id=7662a75e77434bf2954bbba582de7aee route=/v1/places status=200 duration_ms=19.0\nrequest_id=e31d52c98ba045c2b221e6fb9be99439 route=/v1/places status=200 duration_ms=3.0\nrequest_id=b8849a86456f4548be4d62e130f072dc route=/v1/places status=200 duration_ms=9.1\nrequest_id=4e336353785b4b24bd7f7759d140eed3 route=/v1/places status=200 duration_ms=10.1\nrequest_id=b3f8b566a91540bb8d17d0021a27ffdb route=/v1/places status=200 duration_ms=9.4\nrequest_id=2e4a099298b74e849e95e2a8936dcb99 route=/v1/places status=200 duration_ms=16.6\nrequest_id=ef366de90ed44169be18974cbac322d1 route=/v1/places status=200 duration_ms=9.2\nrequest_id=66b14e1ff40a4df58aaf1759e122b1e5 route=/v1/places status=200 duration_ms=20.7\nrequest_id=8f1f975a41a54bf2a0c5f4507ac3a94a route=/v1/places status=200 duration_ms=10.0\nrequest_id=edb43d3ec3124871a4e12b67f69e3e3e route=/v1/places status=200 duration_ms=66.6\nrequest_id=d1c71f66d93d41f6991db2ac27877732 route=/v1/places status=200 duration_ms=32.0\nrequest_id=05f96fecf8b2460f99c30ca326e62ae8 route=/v1/places status=200 duration_ms=76.5\nrequest_id=1a0ebeac64754a76990a31d34794524a route=/v1/places status=200 duration_ms=14.0\nrequest_id=8a2dba8ebd3e4d5a9e4269bfc889d48c route=/v1/places status=200 duration_ms=22.3\nrequest_id=c012b39675844e6fa90ed5f275656040 route=/v1/places status=200 duration_ms=16.7\nrequest_id=bc975fd89074408c96b3bd78b4d56ca9 route=/v1/places status=200 duration_ms=9.4\nrequest_id=7fba6514552a46c4a284414079b4d9af route=/v1/places status=200 duration_ms=10.2\nrequest_id=de0ee3fc425b413d8e1ce7154a79044f route=/v1/places status=200 duration_ms=37.8\nrequest_id=6c93083f38974226b805767ae97befff route=/v1/places status=200 duration_ms=1311.6\nrequest_id=8b64554f9b20474380fa7536fe0b676e route=/v1/places status=200 duration_ms=12.5\nrequest_id=c59c834a335e49f18cff960fe51d54c7 route=/v1/places status=200 duration_ms=1297.9\nrequest_id=108769b5c8b048d48e28d547aa744a83 route=/v1/places status=200 duration_ms=9.6\nrequest_id=e03517a51b9c479690422a589c5fce4c route=/v1/places status=200 duration_ms=1.5\nrequest_id=b8a12ed7b6c74e0e8946d3f66a2215dd route=/v1/places status=200 duration_ms=9.5\nrequest_id=bcd73a249f874f1694f42936068785c9 route=/v1/places status=200 duration_ms=24.8\nrequest_id=589e3d47fe9a459ba92f3c33d554e0dd route=/v1/places status=200 duration_ms=1.3\nrequest_id=6ce23127ecd647b790a0cf87b6fb44e5 route=/v1/places status=200 duration_ms=10.5\nrequest_id=c41d4ee3991a4f6098a34d650197e320 route=/v1/places status=200 duration_ms=76.6\nrequest_id=eac0fcf1a47d4dd689a49b66689b6eaa route=/v1/places status=200 duration_ms=16.2\nrequest_id=e0a81a035b504c3baf96e48a8ccf1a5f route=/v1/places status=200 duration_ms=11.1\nrequest_id=37bc57ab9c624a65b454db1b6dfb8216 route=/v1/places status=200 duration_ms=15.6\nrequest_id=0cabb1c189f241e9850831e667ab58f8 route=/v1/places status=200 duration_ms=18.7\nrequest_id=a0860820481e4342bdf5b37d071361b8 route=/v1/places status=200 duration_ms=3.3\nrequest_id=feb0a6753c6a4431884c76a47457bcbd route=/v1/places status=200 duration_ms=3.6\nrequest_id=fdb58c4266174ec6b530e6ca3e03680a route=/v1/places status=200 duration_ms=10.5\nrequest_id=91a02f47f3bc4608914f5443e86b8551 route=/v1/places status=200 duration_ms=9.4\nrequest_id=3fb6c0e0b9ed46f3adf52475c8a5a0c5 route=/v1/places status=200 duration_ms=47.4\nrequest_id=598bc97aad4f44538b679c8cd536efb6 route=/v1/places status=200 duration_ms=9.3\nrequest_id=130d677f865c4a03967d1cb69865be54 route=/v1/places status=200 duration_ms=8.6\nrequest_id=72fb605d05a54845b4284203cd4a2202 route=/v1/places status=200 duration_ms=2.6\nrequest_id=b1fd1989917d4bf29168205f22f62aeb route=/v1/places status=200 duration_ms=2.9\nrequest_id=50081530ea7c49cf80772c8a016e3ecf route=/v1/places status=200 duration_ms=10.4\nrequest_id=ff89a9b72e77487785fffcb79d717fba route=/v1/places status=200 duration_ms=10.4\nrequest_id=6d2e73d5f0d84690acb641f6e51fc5f8 route=/v1/places status=200 duration_ms=12.2\nrequest_id=6efab5fbe09d4d7b95563e69ba368f44 route=/v1/places status=200 duration_ms=9.9\nrequest_id=8086532d40284add95a1879ac9327125 route=/v1/places status=200 duration_ms=12.5\nrequest_id=3644ff2ac29740caa310da641b368999 route=/v1/places status=200 duration_ms=16.7\nrequest_id=a279be1706644dc29105083ba6ce02e2 route=/v1/places status=200 duration_ms=45.4\nrequest_id=b4acd600bdd044018cd4a217bec8179c route=/v1/places status=200 duration_ms=9.3\nrequest_id=c66afea795544cf690e0b37a00b5e995 route=/v1/places status=200 duration_ms=17.0\nrequest_id=b2dec2b104d2437f81bbadf8d4404f82 route=/v1/places status=200 duration_ms=17.1\nrequest_id=380d714e73f84dcb8f7261efcb5e58fc route=/v1/places status=200 duration_ms=12.3\nrequest_id=28826178d8644911b619dc12101aa7a0 route=/v1/places status=200 duration_ms=8.0\nrequest_id=e309041abac148729541ba14f518cf1d route=/v1/places status=200 duration_ms=8.9\nrequest_id=1e5b8d0cdfde48b191cb5e9a26905fa7 route=/v1/places status=200 duration_ms=110.1\nrequest_id=5488977037b446649c00b5764d910967 route=/v1/places status=200 duration_ms=8.2\nrequest_id=b9df2fca66244e579dd7a0afb55eec3a route=/v1/places status=200 duration_ms=1285.9\nrequest_id=51f5d5fb36a24c72a785d0799409c6f2 route=/v1/places status=200 duration_ms=24.5\nrequest_id=8e31fb6391fc42c29d35cfde086f83d3 route=/v1/places status=200 duration_ms=9.0\nrequest_id=511c9f0c564a4f0baa3a920afbe9bbf0 route=/v1/places status=200 duration_ms=9.1\nrequest_id=3ce0bb4d06b74d1791b99c5525837cf7 route=/v1/places status=200 duration_ms=8.4\nrequest_id=957e0ca8cfe7488087d00cb07e9126e3 route=/v1/places status=200 duration_ms=9.2\nrequest_id=65caecd52f014bcabed04981c374a4b3 route=/v1/places status=200 duration_ms=2.3\nrequest_id=4466613d37b14c5abf7f01212b8435bc route=/v1/places status=200 duration_ms=9.8\nrequest_id=01dbcb900afe4275826ce7c2e08c184d route=/v1/places status=200 duration_ms=9.5\nrequest_id=bca94630d55b457e950e2e6454fcefbe route=/v1/places status=200 duration_ms=41.3\nrequest_id=87f7dbef608548318101e1c15c5096e3 route=/v1/places status=200 duration_ms=8.5\nrequest_id=abf9d5c811104de394dff9841c7921df route=/v1/places status=200 duration_ms=11.5\nrequest_id=d91103f47f0242f2bd2ceaec0afff967 route=/v1/places status=200 duration_ms=10.1\nrequest_id=d63aa8ab21694f169d7078f5ca62ceeb route=/v1/places status=200 duration_ms=9.7\nrequest_id=86cf832f1b9540ab89323f4bd3fed05a route=/v1/places status=200 duration_ms=9.4\nrequest_id=9368515cd3564a1887de21ecf24b4f53 route=/v1/places status=200 duration_ms=3.1\nrequest_id=93da67c24118410a838e523fc085dcf5 route=/v1/places status=200 duration_ms=8.5\nrequest_id=3c6c3e0feeb64b6f8aefd69f089632f4 route=/v1/places status=200 duration_ms=8.7\nrequest_id=d638e9b2fb5142dc9037c24993021b53 route=/v1/places status=200 duration_ms=9.2\nrequest_id=24caa3d9f47a422c8f6a98c062eea712 route=/v1/places status=200 duration_ms=6.3\nrequest_id=e36ef3965c304393b2f76d870514f871 route=/v1/places status=200 duration_ms=8.8\nrequest_id=51edb3f0d6ec4a9eaad20824adcc7dcc route=/v1/places status=200 duration_ms=9.0\nrequest_id=1069aa37e5c24da395865a3ca5b307ed route=/v1/places status=200 duration_ms=16.1\nrequest_id=9b6f9570559f4cf9882068da2018b113 route=/v1/places status=200 duration_ms=10.3\nrequest_id=6f5a8187e7d54e6ca6ba51b7fd0709f1 route=/v1/places status=200 duration_ms=10.8\nrequest_id=75a7c91e994b48f6aa4f591cda4bad2e route=/v1/places status=200 duration_ms=11.7\nrequest_id=ef1fb96aef754c6c849acd9b5de1958b route=/v1/places status=200 duration_ms=45.2\nrequest_id=edcd2b6c96d9479da735068b00308ed9 route=/v1/places status=200 duration_ms=14.5\nrequest_id=570dec22ff67451fb3f9c93b8034dcf6 route=/v1/places status=200 duration_ms=10.6\nrequest_id=eacef69607a9462ea2ec7185eb733602 route=/v1/places status=200 duration_ms=63.2\nrequest_id=eab2fbe7a57546c7a2ff4631a4ec31fd route=/v1/places status=200 duration_ms=98.5\nrequest_id=f5fbd4a19db74399b6f9b07427234855 route=/v1/places status=200 duration_ms=10.4\nrequest_id=ca2a74e91d164b6da1a4cf5804d76139 route=/v1/places status=200 duration_ms=9.6\nrequest_id=41c4c752870d4d73a7ab00de91fc868f route=/v1/places status=200 duration_ms=9.4\nrequest_id=785737d4faec477dab8947780f9ef500 route=/v1/places status=200 duration_ms=9.1\nrequest_id=92baabf5187d454f80b46814ef735b04 route=/v1/places status=200 duration_ms=61.5\nrequest_id=ad23bda04f244fd0a1f7093c65fcebf3 route=/v1/places status=200 duration_ms=28.3\nrequest_id=db6496d5e3174d86aa6e98de73f488ce route=/v1/places status=200 duration_ms=10.9\nrequest_id=abe5082c11c945c6b99afa91b370b82f route=/v1/places status=200 duration_ms=15.2\nrequest_id=663a45caf1ec4ff086d69e97558192bb route=/v1/places status=200 duration_ms=8.4\nrequest_id=37874bc71b0446dcb4d3ffa2888a69b0 route=/v1/places status=200 duration_ms=17.3\nrequest_id=4ebc1dd071b14d6fb1fd468ef256ffcc route=/v1/places status=200 duration_ms=12.7\nrequest_id=f57915cdc2f844e0b36623bfa66ca7fd route=/v1/places status=200 duration_ms=5.9\nrequest_id=4319a874942b49fda2960c4b52d57c41 route=/v1/places status=200 duration_ms=11.9\nrequest_id=483c219e6fe44ca287168eda02e89e8b route=/v1/places status=200 duration_ms=9.2\nrequest_id=1ac571f25e70496e8270c56896fd2361 route=/v1/places status=200 duration_ms=14.1\nrequest_id=3bda4b2e261d4ddbb381d74a6a56bae9 route=/v1/places status=200 duration_ms=16.3\nrequest_id=ddf169bcd9b0413da2eae1f5aa08f108 route=/v1/places status=200 duration_ms=10.8\nrequest_id=fcdd9d386664445eaf0de3124e5cc11a route=/v1/places status=200 duration_ms=8.6\nrequest_id=8e95b62cdccc4a85827db18b1b36b900 route=/v1/places status=200 duration_ms=8.7\nrequest_id=733fbb3dc3824c4195900d4b089e72a5 route=/v1/places status=200 duration_ms=9.2\nrequest_id=83cd1a2cba88403ca5371384c9849c9b route=/v1/places status=200 duration_ms=11.0\nrequest_id=caab48bf10df4554b84d9850d2b4943c route=/v1/places status=200 duration_ms=17.2\nrequest_id=dde44ddd808540aead55b887f0a72d5a route=/v1/places status=200 duration_ms=17.1\nrequest_id=828d104e226c422080bb64e680e84910 route=/v1/places status=200 duration_ms=8.3\nrequest_id=445c50e85c2e42b291c4253370916f41 route=/v1/places status=200 duration_ms=8.8\nrequest_id=b3e47ccebcbe4da0899a99d2317ae705 route=/v1/places status=200 duration_ms=9.8\nrequest_id=9d185a4d8a344684b32c48b171492de3 route=/v1/places status=200 duration_ms=10.6\nrequest_id=039dd6cd886f48bebd8c09327373eb2d route=/v1/places status=200 duration_ms=2.6\nrequest_id=b675217ce25e420fb50e78b8c9ccf337 route=/v1/places status=200 duration_ms=2.8\nrequest_id=474705ba4a2e483f911113f7614bdd5d route=/v1/places status=200 duration_ms=9.1\nrequest_id=6a19f29634ca4418be0f683579e620d6 route=/v1/places status=200 duration_ms=8.6\nrequest_id=848240ffee6d4b48b573d587c59d3a90 route=/v1/places status=200 duration_ms=9.6\nrequest_id=8e46002abc7248e09552afdb7c5ef164 route=/v1/places status=200 duration_ms=7.5\nrequest_id=85f338f7665d45dc8ca0a1450c5e33fb route=/v1/places status=200 duration_ms=50.5\nrequest_id=b96fdcf02ae94fc5b4899ad7180c8e02 route=/v1/places status=200 duration_ms=19.9\nrequest_id=bebb3817dc874582ae11e6c0da384756 route=/v1/places status=200 duration_ms=12.2\nrequest_id=e2d2e015b2704a74aa69f8f832397984 route=/v1/places status=200 duration_ms=12.2\nrequest_id=23a4158efe06466f814f046c049c27ea route=/v1/places status=200 duration_ms=8.7\nrequest_id=783ac229dfa64df5b1be090b8765c9af route=/v1/places status=200 duration_ms=12.3\nrequest_id=9588bf43fa5d400aa8fda983802c2fd3 route=/v1/places status=200 duration_ms=9.1\nrequest_id=584d4a1f23fd42d6ae987afeecafa75d route=/v1/places status=200 duration_ms=10.2\nrequest_id=6c3354ef540f4e5697a972d29bf51293 route=/v1/places status=200 duration_ms=9.7\nrequest_id=bdcf85cfca9043f18df6258f36189241 route=/v1/places status=200 duration_ms=8.7\nrequest_id=7a9bdda8df064afcab67b2b98ce721e7 route=/v1/places status=200 duration_ms=10.4\nrequest_id=f32c242530ea499c9d4253402f0c9403 route=/v1/places status=200 duration_ms=10.0\nrequest_id=2ed43edce7b24cdfb59e025d5ab11787 route=/v1/places status=200 duration_ms=9.2\nrequest_id=6be350b70ddc49d18d9533adac01c1ae route=/v1/places status=200 duration_ms=9.2\nrequest_id=5a344c75cd124a6fb06a58889ae47f2c route=/v1/places status=200 duration_ms=31.6\nrequest_id=570c36d4ba4440a2af1b690166b00c46 route=/v1/places status=200 duration_ms=11.4\nrequest_id=d2ebb0cd48ff48eb8e4292459f001dff route=/v1/places status=200 duration_ms=12.2\nrequest_id=5ee5acf176774d708cff9f6e0a78d7f5 route=/v1/places status=200 duration_ms=17.3\nrequest_id=e51062f6fce14dc48b3fa67dd24077db route=/v1/places status=200 duration_ms=43.7\nrequest_id=f7f070050a5f407e8b143044e10b736d route=/v1/places status=200 duration_ms=2.1\nrequest_id=e0af1668cada4fc7b942b1a74be6d668 route=/v1/places status=200 duration_ms=12.9\nrequest_id=180020d3907e4771841c4c5101f63b33 route=/v1/places status=200 duration_ms=11.9\nrequest_id=eeb55bcd3f8a4250b37a68664a3ab844 route=/v1/places status=200 duration_ms=9.2\nrequest_id=368e7e2461ae46b287d971dde90336c2 route=/v1/places status=200 duration_ms=10.3\nrequest_id=688844dd4b2a4584a0ab31e57bb0a613 route=/v1/places status=200 duration_ms=10.6\nrequest_id=f617f5c49bec42e1adee86865341f405 route=/v1/places status=200 duration_ms=13.1\nrequest_id=e9db62bbda744566bd836a18874f9234 route=/v1/places status=200 duration_ms=19.2\nrequest_id=f995dd6e810a4442b78dcdb9ac0ffbca route=/v1/places status=200 duration_ms=12.5\nrequest_id=c48bff733929428dba55ff7747a88924 route=/v1/places status=200 duration_ms=9.9\nrequest_id=b6f5ce86fcf241cdb56a6fb69a7c2d85 route=/v1/places status=200 duration_ms=10.2\nrequest_id=3c89ba200fc94af8a8f679fb7e5f70c6 route=/v1/places status=200 duration_ms=15.8\nrequest_id=081900bd6f4f487b9ce6505d1f9d4b91 route=/v1/places status=200 duration_ms=11.0\nrequest_id=540d36afa37b422bb48dc9fe014a0d16 route=/v1/places status=200 duration_ms=7.8\nrequest_id=757601ce441b466887a91edd4426072d route=/v1/places status=200 duration_ms=8.2\nrequest_id=c797aa092c5245a68fe04dd6bb22226a route=/v1/places status=200 duration_ms=9.6\nrequest_id=b07ebb91e0ec4d0494884efe8b05582c route=/v1/places status=200 duration_ms=9.3\nrequest_id=858db2f7391f435083659748a11078f9 route=/v1/places status=200 duration_ms=35.0\nrequest_id=e6cfbd44f6d2464183c9fbdc40a7e5a9 route=/v1/places status=200 duration_ms=31.1\nrequest_id=11f4ae4f60504848a9a412e7ca79a1a5 route=/v1/places status=200 duration_ms=9.6\nrequest_id=05445c6109e0447f92b2d179cbe28a01 route=/v1/places status=200 duration_ms=10.1\nrequest_id=33f4c1f432964a8391def54c62e3db34 route=/v1/places status=200 duration_ms=9.0\nrequest_id=cc967e43ad32421981edb459aeb9cfc8 route=/v1/places status=200 duration_ms=10.1\nrequest_id=d17ee242ed7f44a8b270e8bd33838b05 route=/v1/places status=200 duration_ms=14.0\nrequest_id=401e4eba5e784c9a8c361ec780c453ae route=/v1/places status=200 duration_ms=10.7\nrequest_id=42615a7a7c5c48c2a76d85498113ceca route=/v1/places status=200 duration_ms=58.4\nrequest_id=8ac70966c3264592a938807dd1588b11 route=/v1/places status=200 duration_ms=11.0\nrequest_id=49416cca9c5a4f59b307e656d85e84ba route=/v1/places status=200 duration_ms=5.5\nrequest_id=92495eb206804f2489edd73d62d57c7e route=/v1/places status=200 duration_ms=15.2\nrequest_id=d57af9a72b6141e09c767d61768a2819 route=/v1/places status=200 duration_ms=54.5\nrequest_id=451a62a75e87492f8b8ae7fef93403ec route=/v1/places status=200 duration_ms=9.1\nrequest_id=749dcfc819a54d0ca8e884358b582303 route=/v1/places status=200 duration_ms=8.7\nrequest_id=f72f3e7b10da4dc298be7161e12cbc42 route=/v1/places status=200 duration_ms=11.6\nrequest_id=7bf37c90fda34b3ca685949ed6cc4734 route=/v1/places status=200 duration_ms=8.2\nrequest_id=44986106e7c54b468251346517733720 route=/v1/places status=200 duration_ms=11.9\nrequest_id=aa806684ecc94eaca156ab4a35382bab route=/v1/places status=200 duration_ms=10.6\nrequest_id=7155035457a94413af10043ed8ec3e75 route=/v1/places status=200 duration_ms=15.5\nrequest_id=c81c979fb03242cf8c86af06b41c677e route=/v1/places status=200 duration_ms=9.5\nrequest_id=7fe06b6758c94d21af65415bdc6d7611 route=/v1/places status=200 duration_ms=2.9\nrequest_id=34efad2719174e4196ce417e5d39f8a9 route=/v1/places status=200 duration_ms=1.6\nrequest_id=f9c16f5f1c994e6b8937395d374d3fa3 route=/v1/places status=200 duration_ms=10.5\nrequest_id=199e99c48ddf4fcba42a22516561a2c0 route=/v1/places status=200 duration_ms=11.6\nrequest_id=c227ab65440649529382c4228eb7913e route=/v1/places status=200 duration_ms=29.1\nrequest_id=74597c6bcdbb406885c6d95c49ee70cb route=/v1/places status=200 duration_ms=2.8\nrequest_id=10a5e7534ae44888adc6913f39a6d5ac route=/v1/places status=200 duration_ms=20.6\nrequest_id=3ae04112f5c84d8aa30fe910b73f6268 route=/v1/places status=200 duration_ms=3.3\nrequest_id=f2aa3656559846c7a4e81c6ced79196b route=/v1/places status=200 duration_ms=9.3\nrequest_id=ddc69f9e76a5436e82e56aa5b0e2f42b route=/v1/places status=200 duration_ms=8.8\nrequest_id=499b0c77c4114f6ab693cdbc227e1588 route=/v1/places status=200 duration_ms=8.9\nrequest_id=13b73b61f7c24b458ca6a0c4cf7bebb8 route=/v1/places status=200 duration_ms=15.5\nrequest_id=e3596002d71d4c63947b07a6af367814 route=/v1/places status=200 duration_ms=8.6\nrequest_id=d10069a907f5467f92979c694e7bb0fb route=/v1/places status=200 duration_ms=23.4\nrequest_id=10a8ab14a26c4ebaa31021a64b397129 route=/v1/places status=200 duration_ms=10.4\nrequest_id=0e0079d189534763a4a1ec9a2e0f8865 route=/v1/places status=200 duration_ms=66.0\nrequest_id=ba6aa6f469ff400c9ed505f26b9f3328 route=/v1/places status=200 duration_ms=32.6\nrequest_id=cfe96be9d4ab4e1da380c11122484b88 route=/v1/places status=200 duration_ms=76.7\nrequest_id=23d63639bac643df9aadb49823653c6d route=/v1/places status=200 duration_ms=13.5\nrequest_id=d29967099e29498e92b7488673611dd5 route=/v1/places status=200 duration_ms=25.1\nrequest_id=33da2dbd3cfc42078248d7ac261e3d91 route=/v1/places status=200 duration_ms=26.2\nrequest_id=71f0f0a802034f26bad94d27eabf48e1 route=/v1/places status=200 duration_ms=14.1\nrequest_id=bd99456f624c4de1a3714cc659079ce3 route=/v1/places status=200 duration_ms=14.2\nrequest_id=4be8968ac3094a7885805dcfb754096e route=/v1/places status=200 duration_ms=41.8\nrequest_id=3f3426f4321f440f88c3d26e16879d4d route=/v1/places status=200 duration_ms=1274.4\nrequest_id=4fb84bb38f0e455e829c29b14b28a59a route=/v1/places status=200 duration_ms=9.3\nrequest_id=d90ef3b35fe04fe3b76e1df9cb666f84 route=/v1/places status=200 duration_ms=1268.4\nrequest_id=77d4376d819544b1858b0f5db5b7d4bf route=/v1/places status=200 duration_ms=9.9\nrequest_id=339a9b767e4b4538b17a2ca7755aecdc route=/v1/places status=200 duration_ms=1.4\nrequest_id=f6e84888b6c34811b9ca0bfb8157429e route=/v1/places status=200 duration_ms=11.9\nrequest_id=bb193c2e14014a9c9534e9893a1018c0 route=/v1/places status=200 duration_ms=28.8\nrequest_id=0a32336f57d8405aa62f633e78865360 route=/v1/places status=200 duration_ms=1.2\nrequest_id=59567a2db06d4f8c9b46b7251895ad96 route=/v1/places status=200 duration_ms=11.7\nrequest_id=4a702e4c660b401389cbcf16f8d751f5 route=/v1/places status=200 duration_ms=77.9\nrequest_id=48a305f731c94bbf8a5bc926ff6c329d route=/v1/places status=200 duration_ms=10.3\nrequest_id=1be02261674448d98416bc2a0281696d route=/v1/places status=200 duration_ms=11.9\nrequest_id=07120ed91a00444c8ce66d55a7090f51 route=/v1/places status=200 duration_ms=16.3\nrequest_id=4e7e62b194d5403d88c63afd3671ec91 route=/v1/places status=200 duration_ms=18.1\nrequest_id=42a8ad415daa4b04a13aeb41ed28e6cb route=/v1/places status=200 duration_ms=3.5\nrequest_id=7691e0a2b3f1404cad2ee78a46ec99d5 route=/v1/places status=200 duration_ms=4.2\nrequest_id=52937829f67e48468ea35fb45c5ae9e0 route=/v1/places status=200 duration_ms=10.4\nrequest_id=37081d2a34a54079bd4483b41b33dd3e route=/v1/places status=200 duration_ms=9.7\nrequest_id=5650905c4be1416ba5eb1bf354f698c1 route=/v1/places status=200 duration_ms=46.7\nrequest_id=31c6b9c5a35149d2b7678270c1010fda route=/v1/places status=200 duration_ms=9.4\nrequest_id=461fc3b6f7044a81b1c9a10b5075ace0 route=/v1/places status=200 duration_ms=9.1\nrequest_id=353601f1084b4faa82ede13fd998fa09 route=/v1/places status=200 duration_ms=2.7\nrequest_id=bf89788bd24040c8b30a71509d4cbc96 route=/v1/places status=200 duration_ms=2.8\nrequest_id=a6a94cd9baff477883a9b985515d8fef route=/v1/places status=200 duration_ms=9.2\nrequest_id=88f7152000e54a6ab10d6e48e15eaa41 route=/v1/places status=200 duration_ms=8.9\nrequest_id=2a4f7a8a3b0d43ff835eb1321f9a0ce6 route=/v1/places status=200 duration_ms=11.0\nrequest_id=cd455d6b58b5408e93a2ca320e66e22c route=/v1/places status=200 duration_ms=12.7\nrequest_id=030fecf6852a42a08128a1f502b6ac37 route=/v1/places status=200 duration_ms=11.9\nrequest_id=acd4b52b9d0f42ba9bca63a18fa031e1 route=/v1/places status=200 duration_ms=16.1\nrequest_id=b138df1da1384ed988652c814182abd1 route=/v1/places status=200 duration_ms=44.3\nrequest_id=99a997f62e9445d6a4ab849146330240 route=/v1/places status=200 duration_ms=9.0\nrequest_id=222c850691fe4339850e2d45b7571084 route=/v1/places status=200 duration_ms=16.4\nrequest_id=85d9d9c5ebdf458b8b5e38cbe56e2f3a route=/v1/places status=200 duration_ms=17.4\nrequest_id=167a9e33a14348678203eb159219ad81 route=/v1/places status=200 duration_ms=12.4\nrequest_id=08eb44915eff4415b5f98237a2b14b22 route=/v1/places status=200 duration_ms=7.9\nrequest_id=619426c191464dde9faa068cbb547ca5 route=/v1/places status=200 duration_ms=7.6\nrequest_id=4a979e1ef3a34a20b8ac20e701d9b992 route=/v1/places status=200 duration_ms=110.0\nrequest_id=0cd89a0437194dc29002f6b7c7eab783 route=/v1/places status=200 duration_ms=9.1\nrequest_id=4c9e07c1e2804403a782671a4c9018b1 route=/v1/places status=200 duration_ms=1282.0\nrequest_id=8b36ba725e384f048a4f0ed227193648 route=/v1/places status=200 duration_ms=26.7\nrequest_id=f932407aeb8742dc9b7c6f9859da8c96 route=/v1/places status=200 duration_ms=10.4\nrequest_id=4984b86f64db4748848f34f6e207afb8 route=/v1/places status=200 duration_ms=8.5\nrequest_id=80960a4f271741bfbf278681803a9c77 route=/v1/places status=200 duration_ms=7.9\nrequest_id=df518a272ca24df4b58fecea7b497974 route=/v1/places status=200 duration_ms=8.5\nrequest_id=01dbf130af2147c686b428c07a94a30f route=/v1/places status=200 duration_ms=2.3\nrequest_id=a676706a10c349ea813d801634c871c8 route=/v1/places status=200 duration_ms=9.2\nrequest_id=d0484ad085e84583a4366af7b5113910 route=/v1/places status=200 duration_ms=9.6\nrequest_id=fab06c8a0b4f4962b1eda0a0b62eed13 route=/v1/places status=200 duration_ms=40.2\nrequest_id=02ef46c3b4e74eaf9b7774394b122714 route=/v1/places status=200 duration_ms=8.3\nrequest_id=9b300a996d1d430891286fc4d6b7ba1c route=/v1/places status=200 duration_ms=13.4\nrequest_id=937e8a4e6cf0483683b8a11d54b756d5 route=/v1/places status=200 duration_ms=9.5\nrequest_id=0999e6eb7af249ce947a0d831d4a4c59 route=/v1/places status=200 duration_ms=9.6\nrequest_id=daff4cd47120465d947132fbf7f6fe38 route=/v1/places status=200 duration_ms=9.6\nrequest_id=f4ea1121349f4c5e8e8e7f91c7dfc287 route=/v1/places status=200 duration_ms=3.0\nrequest_id=c6c40889d0a049578549bfe5ed833578 route=/v1/places status=200 duration_ms=8.0\nrequest_id=9cd3a5366e9744c1bbdbbd49a8fa0ca9 route=/v1/places status=200 duration_ms=7.6\nrequest_id=6fe6b791a827417697d51dd9ff5a45db route=/v1/places status=200 duration_ms=9.7\nrequest_id=753cdfacd37b485d909e724c54960177 route=/v1/places status=200 duration_ms=7.0\nrequest_id=871ce10030954bf7ab155b223b96ea34 route=/v1/places status=200 duration_ms=9.8\nrequest_id=f568212166394027b2041815486cfeb3 route=/v1/places status=200 duration_ms=8.7\nrequest_id=8c9953ab7e2d4ab4b3663aba07f171e5 route=/v1/places status=200 duration_ms=16.6\nrequest_id=31a5ffe8d66b4b25b48745259731e4fd route=/v1/places status=200 duration_ms=8.2\nrequest_id=5995e99265884ac2bff33dfcd76ff103 route=/v1/places status=200 duration_ms=9.9\nrequest_id=11c52876356142e3b47c60616fd57e31 route=/v1/places status=200 duration_ms=16.1\nrequest_id=dade85dd483744d7ae1fea0ee391da3f route=/v1/places status=200 duration_ms=44.3\nrequest_id=277aa500a0354be991a5577d74bb5160 route=/v1/places status=200 duration_ms=10.9\nrequest_id=945ee6966f7447b4b198c3781b844533 route=/v1/places status=200 duration_ms=10.7\nrequest_id=19a4b6ff645141418c7e2fd91665ac72 route=/v1/places status=200 duration_ms=61.3\nrequest_id=731617aae4d749fd91ebba4fe5f6a969 route=/v1/places status=200 duration_ms=96.4\nrequest_id=120f5da3cdf946d89c62eaa009cca8ef route=/v1/places status=200 duration_ms=8.7\nrequest_id=43cb76fa246d4b139e8b4fed1498fe5d route=/v1/places status=200 duration_ms=10.3\nrequest_id=b8f12628ea6c4e789be83d1ffbad5bfe route=/v1/places status=200 duration_ms=11.4\nrequest_id=59cad9ac3bbc437bb003e7348701b018 route=/v1/places status=200 duration_ms=10.6\nrequest_id=6d192ac09d8a4890bf27c9ab8d571fde route=/v1/places status=200 duration_ms=63.5\nrequest_id=95e681a2aede45608dbc55dbfee5ec08 route=/v1/places status=200 duration_ms=28.7\nrequest_id=d4866a6c2816458290c7b3592ce1f920 route=/v1/places status=200 duration_ms=9.5\nrequest_id=3f3adaba019d4d849d255e845fc8d851 route=/v1/places status=200 duration_ms=15.9\nrequest_id=afcdc26f9a414f738bf1b7156e087c44 route=/v1/places status=200 duration_ms=8.5\nrequest_id=00cf7b7fcb414d4a87245833bd0e291f route=/v1/places status=200 duration_ms=15.9\nrequest_id=601e8b636a5d4ae591437ce44e7f5d8e route=/v1/places status=200 duration_ms=11.5\nrequest_id=9b4a05e0298645bcbbe25d78538e9747 route=/v1/places status=200 duration_ms=7.0\nrequest_id=1fe2e14552aa4c819ff6d3048715688f route=/v1/places status=200 duration_ms=12.5\nrequest_id=2a854b6592244d55806332af44078375 route=/v1/places status=200 duration_ms=8.0\nrequest_id=f0d69a553cd24b7f93624e9ca3eae1ae route=/v1/places status=200 duration_ms=13.0\nrequest_id=eb2d500aa09547cfbbd06f3e10847a96 route=/v1/places status=200 duration_ms=14.4\nrequest_id=3178e86d9769420f93c70e2dec1f73ad route=/v1/places status=200 duration_ms=10.6\nrequest_id=8697bbfb52b4455fbeda53a13dfcf82e route=/v1/places status=200 duration_ms=8.6\nrequest_id=2c7bf495fa134894ad4e9fe6870e0990 route=/v1/places status=200 duration_ms=8.3\nrequest_id=8148aa095654484a90530e93eea64c13 route=/v1/places status=200 duration_ms=8.1\nrequest_id=fca39255b486449aa00d984a56e4ae7f route=/v1/places status=200 duration_ms=9.7\nrequest_id=a319a98f688b416a9e73974214e3b60a route=/v1/places status=200 duration_ms=11.8\nrequest_id=4d4c35506c8f42dc81e7e0f19d93c110 route=/v1/places status=200 duration_ms=16.7\nrequest_id=6e1dfb3c11d64e5987459a7386129998 route=/v1/places status=200 duration_ms=10.2\nrequest_id=9337c183fda74733b7459c88f52b8050 route=/v1/places status=200 duration_ms=8.6\nrequest_id=9af0c0d11f544fb681a2eb7afce520e9 route=/v1/places status=200 duration_ms=9.2\nrequest_id=b988b8c2c10540bda51116b00898fd5a route=/v1/places status=200 duration_ms=8.6\nrequest_id=516e931386044944948b44a7e494687c route=/v1/places status=200 duration_ms=2.4\nrequest_id=8fc84afcf13e42eba5196f441f94f9f5 route=/v1/places status=200 duration_ms=2.8\nrequest_id=a7bfa3d5a982401abddfe279ce118a5b route=/v1/places status=200 duration_ms=9.3\nrequest_id=98d2fb40da9f41a8be879e369b709eae route=/v1/places status=200 duration_ms=10.1\nrequest_id=0eb000a23a044f33813e4272a39320f4 route=/v1/places status=200 duration_ms=11.1\nrequest_id=d5b8ce193a74428fbf81697ab2d3257f route=/v1/places status=200 duration_ms=8.6\nrequest_id=9ae9b426094c4885a8612a6ab24c7715 route=/v1/places status=200 duration_ms=53.6\nrequest_id=5673614a57184b38bea4586a8f0604a3 route=/v1/places status=200 duration_ms=19.9\nrequest_id=587db8edcfc34754a989422459f79848 route=/v1/places status=200 duration_ms=10.4\nrequest_id=b770db7dd02f4b1d82e81b69adecc5fe route=/v1/places status=200 duration_ms=11.6\nrequest_id=3126e6f2619d4d589b5818415bc4fb6e route=/v1/places status=200 duration_ms=10.2\nrequest_id=3dff65c2bfb0492d9e109791468e2509 route=/v1/places status=200 duration_ms=13.2\nrequest_id=38fd1848238746a5ab80f8b08ac90e63 route=/v1/places status=200 duration_ms=9.1\nrequest_id=e80631363edc41569e659dc3ba1b7a1d route=/v1/places status=200 duration_ms=10.1\nrequest_id=431afd94f257413489acc7cfc254fb6e route=/v1/places status=200 duration_ms=9.7\nrequest_id=f04bf71f1b2d4d5693278997612ccd64 route=/v1/places status=200 duration_ms=9.2\nrequest_id=4d5e098d48e84ed0ac049bd478622674 route=/v1/places status=200 duration_ms=9.7\nrequest_id=448e671a1a1e483b8fc21f8f62b1eeed route=/v1/places status=200 duration_ms=9.8\nrequest_id=7bc2a587a62c40ddbc8c29af06b6fa35 route=/v1/places status=200 duration_ms=9.6\nrequest_id=eed9f2cbc2294efaab311d23958f8a5b route=/v1/places status=200 duration_ms=8.6\nrequest_id=292e2f7f1f114a80bc3d8860052b3de6 route=/v1/places status=200 duration_ms=30.1\nrequest_id=fffb081b322341cc898379a4cca334cd route=/v1/places status=200 duration_ms=10.0\nrequest_id=43cb6e062ec64960be8595267cd2fcab route=/v1/places status=200 duration_ms=11.4\nrequest_id=a84e9824ffc14ba785742c74c5de3f3e route=/v1/places status=200 duration_ms=15.4\nrequest_id=8ba24706058448e7895bd8f0c997f23a route=/v1/places status=200 duration_ms=40.4\nrequest_id=6007f9f3a4fb4480b63faf48dfe708fb route=/v1/places status=200 duration_ms=2.7\nrequest_id=72e9aae43fca41daa03ecd0f77abe70d route=/v1/places status=200 duration_ms=11.7\nrequest_id=3a1186c8e80a48f7ac67d1893ae60a1c route=/v1/places status=200 duration_ms=8.1\nrequest_id=ccdb206df8d842cea9fb529c730be10b route=/v1/places status=200 duration_ms=8.0\nrequest_id=b66cb9ac9b7e48c792368deb38ec6af6 route=/v1/places status=200 duration_ms=10.5\nrequest_id=ddaaee4bc38f426280dcf63ffe4a5e1c route=/v1/places status=200 duration_ms=8.7\nrequest_id=4d1620c72cf94ad6aae76b9af0760184 route=/v1/places status=200 duration_ms=10.9\nrequest_id=80328f066cdb4d7f8800b342a64b2f83 route=/v1/places status=200 duration_ms=13.9\nrequest_id=56f8c787e34c45b58704c75597305cff route=/v1/places status=200 duration_ms=10.9\nrequest_id=60572eb7d9a84459b26a261ab352c505 route=/v1/places status=200 duration_ms=8.0\nrequest_id=1a7f93cc94324b5185d99b19434d183c route=/v1/places status=200 duration_ms=10.5\nrequest_id=9f3a66f640d148ee89cb1b2414f5950d route=/v1/places status=200 duration_ms=15.1\nrequest_id=de63d86b595b458c9cafbae3b9ee0caf route=/v1/places status=200 duration_ms=9.9\nrequest_id=cbff4678bf2145e48b38d55aba26e55a route=/v1/places status=200 duration_ms=7.6\nrequest_id=6d2d4719bd544016a44951730077d910 route=/v1/places status=200 duration_ms=9.1\nrequest_id=7ddd91e2a42e4df48295d1b9342b7bad route=/v1/places status=200 duration_ms=10.2\nrequest_id=63272ae4539540cd9e0d3626bdc163da route=/v1/places status=200 duration_ms=10.7\nrequest_id=ca18b45ea85a4b9791db9abf17e01ecf route=/v1/places status=200 duration_ms=34.2\nrequest_id=cb444323424e4257ad9978aa83935fb7 route=/v1/places status=200 duration_ms=31.2\nrequest_id=860c6ccba5e4489e8cd044d866c34506 route=/v1/places status=200 duration_ms=8.8\nrequest_id=a987d2a02d5d4beca6abc59a194f1023 route=/v1/places status=200 duration_ms=7.9\nrequest_id=4b6e95551bca48eb836809c90a4cd6bf route=/v1/places status=200 duration_ms=8.8\nrequest_id=07daab7e0e7f457a86163808dfc5c23e route=/v1/places status=200 duration_ms=10.4\nrequest_id=1c984a5508e8420f81d660059f2fbc3a route=/v1/places status=200 duration_ms=15.7\nrequest_id=0b93dc40e2ea4b1f95e483670fda3af4 route=/v1/places status=200 duration_ms=8.8\nrequest_id=c74ed687747845149feb8692adcfd5ac route=/v1/places status=200 duration_ms=58.7\nrequest_id=cb310cf9d95c418b881552bb32cdbd26 route=/v1/places status=200 duration_ms=9.4\nrequest_id=d4e282148557406ea370b972ea6f0ade route=/v1/places status=200 duration_ms=5.6\nrequest_id=4dab122c2ea948d9a66edbc89047e69a route=/v1/places status=200 duration_ms=15.1\nrequest_id=8aa9b17accde45e385adf47ce6fedacf route=/v1/places status=200 duration_ms=51.8\nrequest_id=8a212486a9884a31a964d9d0232b66e2 route=/v1/places status=200 duration_ms=8.5\nrequest_id=855346c76bbc4580974d8d6324b63485 route=/v1/places status=200 duration_ms=9.6\nrequest_id=75bf25904fc44b45812413bbfb445b1e route=/v1/places status=200 duration_ms=10.6\nrequest_id=bc6fe260a27245cf8036e2f58ceba245 route=/v1/places status=200 duration_ms=8.1\nrequest_id=2ab19972dac4486aa1bb4d0599984967 route=/v1/places status=200 duration_ms=11.7\nrequest_id=fb8f678d660346f39ab05ffe7d500b23 route=/v1/places status=200 duration_ms=8.7\nrequest_id=aad40778cfcc4e559021ff223652a726 route=/v1/places status=200 duration_ms=14.6\nrequest_id=046a153feadd4ce19bbac47302520a76 route=/v1/places status=200 duration_ms=8.2\nrequest_id=22fae4351ffc450fb4f02b2518a01902 route=/v1/places status=200 duration_ms=3.5\nrequest_id=a867bc6f123f4f00867af983fc5c0c21 route=/v1/places status=200 duration_ms=1.5\nrequest_id=533fc7b5d87d4dd793a9e36916771193 route=/v1/places status=200 duration_ms=7.6\nrequest_id=a46417e7157a4e8cadc33bf4513dd271 route=/v1/places status=200 duration_ms=10.3\nrequest_id=91c6eff841c7406a81ebd8b7eda152eb route=/v1/places status=200 duration_ms=27.0\nrequest_id=93e81d8493344004bc13b8ae7660f814 route=/v1/places status=200 duration_ms=2.3\nrequest_id=866b309ebce7444e833b3fdc2e6e12c6 route=/v1/places status=200 duration_ms=16.9\nrequest_id=804ab74bf2134f1cac9308c2b04e3dfc route=/v1/places status=200 duration_ms=2.8\nrequest_id=67e9b35989a645d69404a76e09731f70 route=/v1/places status=200 duration_ms=12.9\nrequest_id=6394bc4cabf0465f9f217a4d926dbd41 route=/v1/places status=200 duration_ms=8.6\nrequest_id=722d6855e8b240b0b3ef861303fac39d route=/v1/places status=200 duration_ms=8.1\nrequest_id=ec252fd84cdd4cb4b80bc75e477800b1 route=/v1/places status=200 duration_ms=14.6\nrequest_id=ac63d33beb4746eaacc89a5ac200e064 route=/v1/places status=200 duration_ms=8.0\nrequest_id=01ab5faf1cce4f0db2942913dd94f6d9 route=/v1/places status=200 duration_ms=24.2\nrequest_id=e3007d14b82641ee943034c9235c3fd1 route=/v1/places status=200 duration_ms=10.6\nrequest_id=437e8a8a3d2341458f6a69b78b02f84c route=/v1/places status=200 duration_ms=61.2\nrequest_id=53792264f9dc45e59c9abdfb83a71c7b route=/v1/places status=200 duration_ms=28.9\nrequest_id=db84e27e9f644368b76d993547dd0f41 route=/v1/places status=200 duration_ms=67.4\nrequest_id=d074b89370584231bee65164b04ce0cd route=/v1/places status=200 duration_ms=11.7\nrequest_id=9d2a2f16f35b47b2b545788007b6d02a route=/v1/places status=200 duration_ms=20.6\nrequest_id=dba8e6b1420b45b49a1123a9d24f0b38 route=/v1/places status=200 duration_ms=15.7\nrequest_id=ab3dc0b6095446678075658d6bd4cadc route=/v1/places status=200 duration_ms=9.1\nrequest_id=7a0f0fcc98b149b798d8fd4a5ab8f142 route=/v1/places status=200 duration_ms=8.4\nrequest_id=171ef922404e4911972fee5eac9758be route=/v1/places status=200 duration_ms=34.2\nrequest_id=92b2714ed6d340a8beaf7f7a609c51a7 route=/v1/places status=200 duration_ms=1289.6\nrequest_id=e20776216088495eb536560e392cb4a4 route=/v1/places status=200 duration_ms=8.6\nrequest_id=261f1e5f4f884713a8253cbbf4897f80 route=/v1/places status=200 duration_ms=1251.9\nrequest_id=ea9ca914b52c41258c07725bf9d3cba1 route=/v1/places status=200 duration_ms=8.2\nrequest_id=20fb16465d374c5ab101a069e07051c1 route=/v1/places status=200 duration_ms=1.3\nrequest_id=bb754190813a4d84986c5e5306aa316e route=/v1/places status=200 duration_ms=9.6\nrequest_id=5fe2d04686b8451f9412acbd0d169f18 route=/v1/places status=200 duration_ms=25.3\nrequest_id=b2bbcfdd1e4d404cbc6264eaefa2beab route=/v1/places status=200 duration_ms=1.2\nrequest_id=1dfbc19e7c204872a3b9996e02c08d4a route=/v1/places status=200 duration_ms=8.8\nrequest_id=df5eaec0807e4a3c9def881065042755 route=/v1/places status=200 duration_ms=72.4\nrequest_id=0b98dfbe7b98439b86b6c08066f841e5 route=/v1/places status=200 duration_ms=8.5\nrequest_id=f3f6c809bce24ba2992e3d98ff447708 route=/v1/places status=200 duration_ms=11.0\nrequest_id=0127ad248e1e4edca8dd2abd0ed01f33 route=/v1/places status=200 duration_ms=16.2\nrequest_id=a1d3f44046784ace922ce1b697f6efba route=/v1/places status=200 duration_ms=15.0\nrequest_id=020d4be283c2446da7d72cf9b3ae5dca route=/v1/places status=200 duration_ms=2.7\nrequest_id=1f66246a1f3e4ad6bd418a49e00d88af route=/v1/places status=200 duration_ms=2.8\nrequest_id=a57d1a2082294265afb27ae2b7766de0 route=/v1/places status=200 duration_ms=8.8\nrequest_id=52c0f85f23ac44ecbdb1e77f5fa81f77 route=/v1/places status=200 duration_ms=9.5\nrequest_id=17c59e437a5247b29a88fb7ac82592db route=/v1/places status=200 duration_ms=43.8\nrequest_id=6442d4d56c0643c6832bbe3f56bfcb54 route=/v1/places status=200 duration_ms=8.1\nrequest_id=75aa6c36b85444d4bfde21a641d16209 route=/v1/places status=200 duration_ms=8.9\nrequest_id=841c6c692a49484293894d8f48efa444 route=/v1/places status=200 duration_ms=2.3\nrequest_id=ff7f04de9ab24123b754aac15e0dc162 route=/v1/places status=200 duration_ms=2.8\nrequest_id=567868f843eb46b5b1127730292ae2e0 route=/v1/places status=200 duration_ms=8.4\nrequest_id=dbe36ce7bc5d410189c47e46945518e9 route=/v1/places status=200 duration_ms=8.3\nrequest_id=522d6877882e4805a6df8f1ce827766c route=/v1/places status=200 duration_ms=7.9\nrequest_id=b4b9c696149148dca15d443c939a8bb9 route=/v1/places status=200 duration_ms=8.1\nrequest_id=1fe2a0aa0ba549cfa5a4565debf8ce33 route=/v1/places status=200 duration_ms=10.4\nrequest_id=0c21cdc57e044c7cb189ee1ac19133b7 route=/v1/places status=200 duration_ms=14.3\nrequest_id=014edf286ee6426687e3fecf59a92956 route=/v1/places status=200 duration_ms=42.7\nrequest_id=e62d06655a8645ca82160fbc5fbcac02 route=/v1/places status=200 duration_ms=8.0\nrequest_id=3a0c1d74c84d40db8f608174067ceb1e route=/v1/places status=200 duration_ms=15.2\nrequest_id=3204d7077c3345459721dc9bfcc92c7b route=/v1/places status=200 duration_ms=15.5\n",
+    "opentransit-m4-evaluator-frozen-ruff-20261001": "All checks passed!\n",
+    "opentransit-m4-evaluator-frozen-format-20261001": "2 files already formatted\n",
+    "opentransit-m4-linkage-format-20260930": "2 files already formatted\n"
+  },
+  "acceptanceGaps": [
+    "address mechanical top1 6/22; five new cases are near-assisted and must be reported separately",
+    "warm API-process p95 61.3ms, not below40ms; all732 request correlations match",
+    "two exact GTFS stop cases have a source/public namespace scoring bug; preserve raw baseline and derive correction offline",
+    "readiness remains intermittently unavailable; must resolve before API completion",
+    "H4 remains human and blank; geometry does not establish exact house identity"
+  ],
+  "addressBiasBreakdown": [
+    {
+      "corpus": "places-100",
+      "nearAssisted": false,
+      "cases": 15,
+      "top1": 5,
+      "top5": 5
+    },
+    {
+      "corpus": "places-100",
+      "nearAssisted": true,
+      "cases": 0,
+      "top1": 0,
+      "top5": 0
+    },
+    {
+      "corpus": "accepted-osm-addresses",
+      "nearAssisted": false,
+      "cases": 2,
+      "top1": 1,
+      "top5": 1
+    },
+    {
+      "corpus": "accepted-osm-addresses",
+      "nearAssisted": true,
+      "cases": 5,
+      "top1": 0,
+      "top5": 0
+    }
+  ]
+}

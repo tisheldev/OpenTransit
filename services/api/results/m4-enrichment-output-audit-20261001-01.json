@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-10-01T05:36:20.767554+00:00",
+  "status": "enrichment_output_audit_pass_provider_integration_pending",
+  "scope": "Output-only independent full house identity/source tags and street-ID/tag/count audit; no PBF scan",
+  "houseRecords": 125857,
+  "streetRecords": 111350,
+  "totalPhotonDocuments": 237207,
+  "contextStreetRecords": 111519,
+  "excludedContextStreetRecords": 169,
+  "streetSelectionAudit": {
+    "path": "services\\api\\results\\m4-enrichment-street-selection-audit-20261001-01.json",
+    "sha256": "847d9955284a1304525951cfd8339dde1f0ff1c1f007506c70c92eb067aa9966"
+  },
+  "streetSelectionLimit": "Primary name/name:he/name:en filter excludes169 ways;19 have explicit supported-language alternative names. All source tags retained in separate audit/context. This trial does not prove complete alias coverage or waive M4 criteria.",
+  "dumpSha256": "b93cb6f60cb6b475ae904acef72b73ea1ae3e152f72dee88f8635502c8c6d1e1",
+  "provenancePath": ".runtime\\m4-photon-enrichment-20261001\\israel-addresses-enriched-photon-0.1.0.provenance.json",
+  "provenanceSha256": "b257f71101f8d40acdabd95c195e898af70f9ba633b5e2e5aeb31f591fe29c47",
+  "sourceHashes": {
+    "sourcePbfSha256": "8a34b30f91a63ef9239961ba0e4d660ae22deda2f6da4b85ba4772a6b7c4c74f",
+    "houseDumpSha256": "6ddee9f640e11b7ec696690663da7d9d571e15a10f5b8836aac14ec73fc6faca",
+    "contextJsonlSha256": "69cd607560dafbf0717771589e20ad58aabff186fb5fae806841aa30c1095a06",
+    "enricherSha256": "a7ec1f15b4b8835e7d4a73d54e43b8524938542ddf10fe2d694cd02a04142ca8"
+  },
+  "counts": {
+    "addedAliases": 556519,
+    "conflictingAliases": 5151,
+    "houseRecords": 125857,
+    "housesWithSourceContext": 124803,
+    "housesWithStreetWay": 107186,
+    "locality:ambiguous_multiple_localities": 5,
+    "locality:no_containing_locality": 1049,
+    "locality:unique_containing_locality": 124803,
+    "sourceStreetWays": 111350,
+    "streetDocumentsAdded": 111350
+  },
+  "ambiguityCounts": {
+    "explicit_or_source_name_conflict": 5047,
+    "street_document:ambiguous_multiple_localities": 134
+  },
+  "method": {
+    "gridCellDegrees": 0.01,
+    "streetAssociationMaximumMeters": 180.0,
+    "localityContainment": "Strict Polygon/MultiPolygon containment; holes excluded; boundaries unresolved.",
+    "streetMatch": "Exact whitespace-normalized raw addr:street label matched to highway name tags, within source locality and distance bound.",
+    "translationPolicy": "Copy only explicit unique source name:he/name:en values; conflicts remain unresolved.",
+    "corpusUse": false,
+    "targetCorpusRead": false,
+    "expectedCorpusCoordinatesUsed": false,
+    "countryCodeAdded": false,
+    "houseIdentityCoordinatesNumbersAndOriginalTagsChanged": false,
+    "streetDocumentPrecision": "street",
+    "streetDocumentHasHouseNumber": false
+  },
+  "transform": {
+    "state": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 0,
+      "Error": "",
+      "StartedAt": "2026-10-01T04:56:53.228628685Z",
+      "FinishedAt": "2026-10-01T05:31:01.337527298Z"
+    },
+    "image": "sha256:1b15d2e1f72e1fb10cdaae8b0a6662816171706a4f261922b7cbd4754ddc4841",
+    "command": [
+      "/app/.venv/bin/python",
+      "services/api/tools/enrich_photon_addresses.py"
+    ],
+    "memoryLimitBytes": 2147483648,
+    "memorySwapLimitBytes": 2147483648
+  },
+  "observedLiveBuildHighWaterBytes": 561270784,
+  "buildPeakMeasuredAtExit": false,
+  "apiAcceptance": false,
+  "h4Acceptance": false,
+  "fullStackCapacityAcceptance": false
+}

@@ -1,0 +1,134 @@
+{
+  "capturedAtUtc": "2026-09-30T17:53:35.433084+00:00",
+  "scope": "Actual preserved M1 engine responses around overnight and repeated local hour; source reconciliation and API acceptance remain to be tested",
+  "generationId": "fac861c2b4fb058b944302a26f7275d48bf17358dac7a62ee40871f1805f62a7",
+  "engineDigest": "sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330",
+  "configSha256": "0c96fa24bb83b9a5853225fcf6924952098b32ed00b6444135060445c1987943",
+  "inputs": {
+    "israel-public-transportation.zip": {
+      "url": "https://gtfs.mot.gov.il/gtfsfiles/israel-public-transportation.zip",
+      "sha256": "8629a73c3f6ff024a78e9b8c83602c09180e13e597b82b98a4377a78f3dd2fd9",
+      "bytes": 171085310,
+      "acquiredAt": "2026-09-30T09:33:07.260277+00:00",
+      "lastModified": "Tue, 29 Sep 2026 16:59:05 GMT"
+    },
+    "TripIdToDate.zip": {
+      "url": "https://gtfs.mot.gov.il/gtfsfiles/TripIdToDate.zip",
+      "sha256": "7775623cae79f80040d5bcfe5058fa489736d58da6919b65579424c417561da5",
+      "bytes": 8179075,
+      "acquiredAt": "2026-09-30T09:33:11.146493+00:00",
+      "lastModified": "Tue, 29 Sep 2026 16:59:18 GMT"
+    },
+    "israel-and-palestine-latest.osm.pbf": {
+      "sha256": "8a34b30f91a63ef9239961ba0e4d660ae22deda2f6da4b85ba4772a6b7c4c74f",
+      "bytes": 119241930,
+      "reusedLocalPath": "C:\\Projects\\OpenTransit\\poc\\data\\israel-and-palestine-latest.osm.pbf",
+      "acquiredAt": null,
+      "note": "Existing OSM snapshot copied explicitly; not a fresh OSM download"
+    }
+  },
+  "cases": [
+    {
+      "name": "real-stop-overnight-20261001",
+      "endpoint": "/api/v6/stoptimes",
+      "params": {
+        "stopId": "mot60day_13583",
+        "time": "2026-10-01T00:10:00+03:00",
+        "n": "1",
+        "window": "3600",
+        "arriveBy": "false",
+        "direction": "LATER",
+        "exactRadius": "true",
+        "radius": "0",
+        "withScheduledSkippedStops": "true",
+        "realtimeMode": "OFF",
+        "withAlerts": "false"
+      },
+      "httpStatus": 200,
+      "wireSha256": "47bfa3a3a8bd433d6f2bc130780d213d5d0c3e2926533874c510bb1e9b46baec",
+      "fixtureSha256": "26c7178bdcae880b6467230160f00e1abeff01eb4fa5f1c828362b084c9c5e4a",
+      "eventCount": 13
+    },
+    {
+      "name": "real-stop-overnight-20261001-trip",
+      "endpoint": "/api/v6/trip",
+      "params": {
+        "tripId": "20260930_23:50_mot60day_584668860_300926",
+        "withScheduledSkippedStops": "true",
+        "joinInterlinedLegs": "false",
+        "detailedLegs": "true"
+      },
+      "httpStatus": 200,
+      "wireSha256": "55051cb7b666e151dbd152831b070eba6bc970903ec9536c45f5769bf6d23a16",
+      "fixtureSha256": "7b9d4a1a59d6ff93d7412a849a414d2eccbb0278018cd3312b04826ac500f5b1"
+    },
+    {
+      "name": "real-stop-fold-first-20261025",
+      "endpoint": "/api/v6/stoptimes",
+      "params": {
+        "stopId": "mot60day_13583",
+        "time": "2026-10-25T01:10:00+03:00",
+        "n": "1",
+        "window": "3600",
+        "arriveBy": "false",
+        "direction": "LATER",
+        "exactRadius": "true",
+        "radius": "0",
+        "withScheduledSkippedStops": "true",
+        "realtimeMode": "OFF",
+        "withAlerts": "false"
+      },
+      "httpStatus": 200,
+      "wireSha256": "3d3dcd6ea9796123cc3fd5b1c4d0f227473de275c7014158912aa151d61b9f3c",
+      "fixtureSha256": "acd0db9970508eb9f5a51249127c46a4de55f536dce4726307a77f0aa836ee34",
+      "eventCount": 7
+    },
+    {
+      "name": "real-stop-fold-first-20261025-trip",
+      "endpoint": "/api/v6/trip",
+      "params": {
+        "tripId": "20261025_00:00_mot60day_463093_081026",
+        "withScheduledSkippedStops": "true",
+        "joinInterlinedLegs": "false",
+        "detailedLegs": "true"
+      },
+      "httpStatus": 200,
+      "wireSha256": "b4b63902cbc361ba5d4747569892e6823991f0521d1424d44f07674146f8b568",
+      "fixtureSha256": "ac11182597bdcc0932ddf810be34d600cc4f1c07792b31546bd2b1f9f225e8ba"
+    },
+    {
+      "name": "real-stop-fold-second-20261025",
+      "endpoint": "/api/v6/stoptimes",
+      "params": {
+        "stopId": "mot60day_13583",
+        "time": "2026-10-25T01:10:00+02:00",
+        "n": "1",
+        "window": "3600",
+        "arriveBy": "false",
+        "direction": "LATER",
+        "exactRadius": "true",
+        "radius": "0",
+        "withScheduledSkippedStops": "true",
+        "realtimeMode": "OFF",
+        "withAlerts": "false"
+      },
+      "httpStatus": 200,
+      "wireSha256": "c44b14c0e61c5b968b726d345de885564986948659fca371b58014b01a0b4316",
+      "fixtureSha256": "29234445682c5d56c0f7e21ebbab5c6f6c8ff75013486dcbd8acab8e4cdedabb",
+      "eventCount": 2
+    },
+    {
+      "name": "real-stop-fold-second-20261025-trip",
+      "endpoint": "/api/v6/trip",
+      "params": {
+        "tripId": "20261025_01:00_mot60day_24467154_081026",
+        "withScheduledSkippedStops": "true",
+        "joinInterlinedLegs": "false",
+        "detailedLegs": "true"
+      },
+      "httpStatus": 200,
+      "wireSha256": "e3e3e0e26d8ad9b6dcf18fae737a78477ee7b7e6b9b79cccfccda0dea4829763",
+      "fixtureSha256": "cbe9b7984e09b3a851efb94f9f5ee6f8e2480f5be7882fe2cbde80791144d58c"
+    }
+  ]
+}

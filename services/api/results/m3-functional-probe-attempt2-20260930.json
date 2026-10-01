@@ -1,0 +1,329 @@
+{
+  "generationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
+  "engineOrigin": "http://127.0.0.1:59081",
+  "status": "passed",
+  "checkedAt": "2026-09-30T18:48:37.371961+00:00",
+  "journeys": [
+    {
+      "id": "J01",
+      "status": "passed",
+      "departureTime": "2026-10-05T08:00:00+03:00",
+      "sourceDepartureTime": "2026-10-05T08:00:00+03:00",
+      "expectedOutcome": "route",
+      "httpStatus": 200,
+      "responseSha256": "ecebcacfa861e02b23b08b57cf1d39e6cd56e3b1a4a653a0abff897ed862ba58",
+      "structure": {
+        "outcome": "route",
+        "itineraryCount": 2,
+        "directCount": 0,
+        "itineraries": [
+          {
+            "legCount": 3,
+            "transfers": 0,
+            "scheduledStartTime": "2026-10-05T05:06:00Z",
+            "scheduledEndTime": "2026-10-05T05:24:00Z"
+          },
+          {
+            "legCount": 3,
+            "transfers": 0,
+            "scheduledStartTime": "2026-10-05T05:14:00Z",
+            "scheduledEndTime": "2026-10-05T05:33:00Z"
+          }
+        ]
+      }
+    },
+    {
+      "id": "J04",
+      "status": "passed",
+      "departureTime": "2026-09-30T18:30:00+03:00",
+      "sourceDepartureTime": "2026-09-30T18:30:00+03:00",
+      "expectedOutcome": "route",
+      "httpStatus": 200,
+      "responseSha256": "4f5d578eb0adb24af2dd293def1b4303f911b5e5318f985bba07f22810e6004d",
+      "structure": {
+        "outcome": "route",
+        "itineraryCount": 4,
+        "directCount": 0,
+        "itineraries": [
+          {
+            "legCount": 3,
+            "transfers": 0,
+            "scheduledStartTime": "2026-09-30T15:36:00Z",
+            "scheduledEndTime": "2026-09-30T16:11:00Z"
+          },
+          {
+            "legCount": 5,
+            "transfers": 1,
+            "scheduledStartTime": "2026-09-30T15:39:00Z",
+            "scheduledEndTime": "2026-09-30T16:17:00Z"
+          },
+          {
+            "legCount": 3,
+            "transfers": 0,
+            "scheduledStartTime": "2026-09-30T15:40:00Z",
+            "scheduledEndTime": "2026-09-30T16:24:00Z"
+          },
+          {
+            "legCount": 5,
+            "transfers": 1,
+            "scheduledStartTime": "2026-09-30T15:46:00Z",
+            "scheduledEndTime": "2026-09-30T16:22:00Z"
+          }
+        ]
+      }
+    },
+    {
+      "id": "J11",
+      "status": "passed",
+      "departureTime": "2026-10-05T08:00:00+03:00",
+      "sourceDepartureTime": "2026-10-05T08:00:00+03:00",
+      "expectedOutcome": "route",
+      "httpStatus": 200,
+      "responseSha256": "032754c2b2f0adb71e66b3eda49d3727c941661b461ca576f5f233c013b6b61e",
+      "structure": {
+        "outcome": "route",
+        "itineraryCount": 1,
+        "directCount": 0,
+        "itineraries": [
+          {
+            "legCount": 5,
+            "transfers": 1,
+            "scheduledStartTime": "2026-10-05T05:14:00Z",
+            "scheduledEndTime": "2026-10-05T06:38:00Z"
+          }
+        ]
+      }
+    },
+    {
+      "id": "J12",
+      "status": "passed",
+      "departureTime": "2026-10-05T08:00:00+03:00",
+      "sourceDepartureTime": "2026-10-05T08:00:00+03:00",
+      "expectedOutcome": "route",
+      "httpStatus": 200,
+      "responseSha256": "6047af55bf7fb8d40b5e5f4729eeb20100ba214da6be62a8cdb042e06aa5c73c",
+      "structure": {
+        "outcome": "route",
+        "itineraryCount": 2,
+        "directCount": 0,
+        "itineraries": [
+          {
+            "legCount": 3,
+            "transfers": 0,
+            "scheduledStartTime": "2026-10-05T05:04:00Z",
+            "scheduledEndTime": "2026-10-05T05:55:00Z"
+          },
+          {
+            "legCount": 3,
+            "transfers": 0,
+            "scheduledStartTime": "2026-10-05T05:14:00Z",
+            "scheduledEndTime": "2026-10-05T06:09:00Z"
+          }
+        ]
+      }
+    },
+    {
+      "id": "J15",
+      "status": "passed",
+      "departureTime": "2026-10-05T08:00:00+03:00",
+      "sourceDepartureTime": "2026-10-05T08:00:00+03:00",
+      "expectedOutcome": "route",
+      "httpStatus": 200,
+      "responseSha256": "84e59f7267e408f508b726ebdc1a6b2090024e71c0d1b27e6822f3b8a3711264",
+      "structure": {
+        "outcome": "route",
+        "itineraryCount": 2,
+        "directCount": 0,
+        "itineraries": [
+          {
+            "legCount": 7,
+            "transfers": 2,
+            "scheduledStartTime": "2026-10-05T05:00:00Z",
+            "scheduledEndTime": "2026-10-05T07:16:00Z"
+          },
+          {
+            "legCount": 7,
+            "transfers": 2,
+            "scheduledStartTime": "2026-10-05T05:21:00Z",
+            "scheduledEndTime": "2026-10-05T07:40:00Z"
+          }
+        ]
+      }
+    },
+    {
+      "id": "J16",
+      "status": "passed",
+      "departureTime": "2026-10-05T08:00:00+03:00",
+      "sourceDepartureTime": "2026-10-05T08:00:00+03:00",
+      "expectedOutcome": "route",
+      "httpStatus": 200,
+      "responseSha256": "b183108d597857c2ad069a59f430fc79576a184250cb8680f669a72278b8ec99",
+      "structure": {
+        "outcome": "route",
+        "itineraryCount": 1,
+        "directCount": 0,
+        "itineraries": [
+          {
+            "legCount": 5,
+            "transfers": 1,
+            "scheduledStartTime": "2026-10-05T05:25:00Z",
+            "scheduledEndTime": "2026-10-05T06:52:00Z"
+          }
+        ]
+      }
+    },
+    {
+      "id": "J19",
+      "status": "passed",
+      "departureTime": "2026-10-05T08:00:00+03:00",
+      "sourceDepartureTime": "2026-10-05T08:00:00+03:00",
+      "expectedOutcome": "route",
+      "httpStatus": 200,
+      "responseSha256": "cafbd6444e75d45dad773bd46d23161724af6426c0e4cc9d73b810ef9acff000",
+      "structure": {
+        "outcome": "route",
+        "itineraryCount": 5,
+        "directCount": 0,
+        "itineraries": [
+          {
+            "legCount": 5,
+            "transfers": 1,
+            "scheduledStartTime": "2026-10-05T05:03:00Z",
+            "scheduledEndTime": "2026-10-05T06:14:00Z"
+          },
+          {
+            "legCount": 7,
+            "transfers": 2,
+            "scheduledStartTime": "2026-10-05T05:03:00Z",
+            "scheduledEndTime": "2026-10-05T05:57:00Z"
+          },
+          {
+            "legCount": 9,
+            "transfers": 3,
+            "scheduledStartTime": "2026-10-05T05:06:00Z",
+            "scheduledEndTime": "2026-10-05T06:01:00Z"
+          },
+          {
+            "legCount": 7,
+            "transfers": 2,
+            "scheduledStartTime": "2026-10-05T05:08:00Z",
+            "scheduledEndTime": "2026-10-05T06:08:00Z"
+          },
+          {
+            "legCount": 9,
+            "transfers": 3,
+            "scheduledStartTime": "2026-10-05T05:16:00Z",
+            "scheduledEndTime": "2026-10-05T06:11:00Z"
+          }
+        ]
+      }
+    },
+    {
+      "id": "J21",
+      "status": "passed",
+      "departureTime": "2026-10-06T23:40:00+03:00",
+      "sourceDepartureTime": "2026-10-06T23:40:00+03:00",
+      "expectedOutcome": "route",
+      "httpStatus": 200,
+      "responseSha256": "3d4fbcac99fe33d3fe340351e158b2c61edf1b58f48247c04ffc40ef0dc8d813",
+      "structure": {
+        "outcome": "route",
+        "itineraryCount": 2,
+        "directCount": 0,
+        "itineraries": [
+          {
+            "legCount": 3,
+            "transfers": 0,
+            "scheduledStartTime": "2026-10-06T20:40:00Z",
+            "scheduledEndTime": "2026-10-06T21:04:00Z"
+          },
+          {
+            "legCount": 3,
+            "transfers": 0,
+            "scheduledStartTime": "2026-10-06T21:36:00Z",
+            "scheduledEndTime": "2026-10-06T21:56:00Z"
+          }
+        ]
+      }
+    },
+    {
+      "id": "J22",
+      "status": "passed",
+      "departureTime": "2026-09-30T02:30:00+03:00",
+      "sourceDepartureTime": "2026-09-30T02:30:00+03:00",
+      "expectedOutcome": "either",
+      "httpStatus": 200,
+      "responseSha256": "e48a836144a0d40cb1b41c2fcccdecc09ca404fb6767c1c659044bc8be45b1d1",
+      "structure": {
+        "outcome": "route",
+        "itineraryCount": 2,
+        "directCount": 0,
+        "itineraries": [
+          {
+            "legCount": 3,
+            "transfers": 0,
+            "scheduledStartTime": "2026-09-29T23:42:00Z",
+            "scheduledEndTime": "2026-09-30T00:20:00Z"
+          },
+          {
+            "legCount": 3,
+            "transfers": 0,
+            "scheduledStartTime": "2026-09-30T00:12:00Z",
+            "scheduledEndTime": "2026-09-30T00:50:00Z"
+          }
+        ]
+      }
+    },
+    {
+      "id": "J23",
+      "status": "passed",
+      "departureTime": "2026-09-30T02:30:00+03:00",
+      "sourceDepartureTime": "2026-09-30T02:30:00+03:00",
+      "expectedOutcome": "no_route",
+      "httpStatus": 200,
+      "responseSha256": "fdd1163b1bd3949f7ac6a652dcc219e86ef15fcfaa059dff87588f80d316419b",
+      "structure": {
+        "outcome": "no_route",
+        "itineraryCount": 0,
+        "directCount": 0,
+        "itineraries": []
+      }
+    }
+  ],
+  "journeyIds": [
+    "J01",
+    "J04",
+    "J11",
+    "J12",
+    "J15",
+    "J16",
+    "J19",
+    "J21",
+    "J22",
+    "J23"
+  ],
+  "caseCount": 10,
+  "corpusSha256": "ef06291bb02b60992e0825ab866916c1b0032805bbbb0b59c12806d98429f26a",
+  "warnings": [],
+  "structuralOnly": true,
+  "humanH3Approval": false,
+  "engineDigest": "sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330",
+  "graphTreeSha256": "96c8fb237576a50544a2c03ad1e840c2f12d2b96b9072250c1e66a61c8f7d263",
+  "configSha256": "2f75d87301d97b36461bd5826f0c46a1eb375f0da3434f39ee59563f21b6e998",
+  "referenceSha256": "fb7c677e43157a5431e4c1f51534c0008a93ac42341f9338a0ac1d8e4fbb43f2",
+  "referenceCounts": {
+    "agencies": 36,
+    "calendar_exceptions": 0,
+    "calendar_rules": 41536,
+    "clock_profile_calls": 8188812,
+    "clock_profiles": 220263,
+    "pattern_stops": 245843,
+    "patterns": 7998,
+    "route_stops": 240992,
+    "routes": 7884,
+    "stops": 35321,
+    "translations": 102603,
+    "trip_profiles": 425160
+  },
+  "probeClass": "real"
+}

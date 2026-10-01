@@ -1,0 +1,556 @@
+{
+  "recordedAt": "2026-09-30T23:35:07.032267+00:00",
+  "scope": "One targeted real HTTP batch for long-token prefilter: compare unchanged ranked identities/labels against preserved P002/P012/P016. Three timings are not p95, full-corpus quality, H4 or API completion. Required readiness remains separate.",
+  "generationId": "c7b66eee1ad04dddba13f4c5dade5ef2023963a1ac0384857aaf173b9d164aa1",
+  "baselinePath": "services/api/results/m4-api-search-20260930-01.json",
+  "baselineSha256": "6353250c80a63ef60488fa1ee4eccf71b2a7ae658c826bdffcd2213612de7c2b",
+  "frozenSourceSha256": {
+    "opentransit/__init__.py": "f953c5f7653ce55912ac1aa8c8fbd40594f4c47fa8702587d04af34ad49e5ef8",
+    "opentransit/activation.py": "08bcb2bd68dcef7ae1c69305ae650212bb320b2d57400d12543ded271861672f",
+    "opentransit/api/__init__.py": "6596a31fd9c14ba08c000f7f8e01d3e7dd6323f28d435228abbb7b8ffd3aea2f",
+    "opentransit/api/app.py": "c977ddefebd86ba68f1e7576ac69efdb3745ac8f0c5d3b57d348bb7058bbebe4",
+    "opentransit/api/places.py": "1435f27508ca0259957104561f7600107ad4aa69f9f39c0e1a02dff4533eab64",
+    "opentransit/api/playground/app.mjs": "283f12bc254cd14e78177a0f797d8435046f0c7606dc49c43ab0d1e4e56815a9",
+    "opentransit/api/playground/index.html": "3c5c4fc1b66d370590f2dba6f8e58a0c86e703750714ba51f238b533a0b3ea42",
+    "opentransit/api/playground/style.css": "1278cf9951dd2a47a3275b99f91c2f15be3d6be740be41439081515b2cdab8ff",
+    "opentransit/api/playground/time.mjs": "322477ffe13ae4e70736285f80c444946eab45368d3c4db66565b06578bb1ec0",
+    "opentransit/api/playground/vendor/images/layers-2x.png": "066daca850d8ffbef007af00b06eac0015728dee279c51f3cb6c716df7c42edf",
+    "opentransit/api/playground/vendor/images/layers.png": "1dbbe9d028e292f36fcba8f8b3a28d5e8932754fc2215b9ac69e4cdecf5107c6",
+    "opentransit/api/playground/vendor/images/marker-icon-2x.png": "00179c4c1ee830d3a108412ae0d294f55776cfeb085c60129a39aa6fc4ae2528",
+    "opentransit/api/playground/vendor/images/marker-icon.png": "574c3a5cca85f4114085b6841596d62f00d7c892c7b03f28cbfa301deb1dc437",
+    "opentransit/api/playground/vendor/images/marker-shadow.png": "264f5c640339f042dd729062cfc04c17f8ea0f29882b538e3848ed8f10edb4da",
+    "opentransit/api/playground/vendor/leaflet.css": "a7837102824184820dfa198d1ebcd109ff6d0ff9a2672a074b9a1b4d147d04c6",
+    "opentransit/api/playground/vendor/leaflet.js": "3104b526504d0d61fd3099a4521e87f732ccc3174dec54e08de6ba8bde3e15ff",
+    "opentransit/api/playground/vendor/LICENSE": "53e8dc25862014e4324741ca18fbe3611e11d42ef69f59f86ea8c5389647d4cb",
+    "opentransit/api/playground/vendor/NOTICE.md": "3584ebd211c8839612484c56950531880467ce4320d8f6dadbfd1e52d85ea9e8",
+    "opentransit/api/reference.py": "583f84396d8b65310e06477cca3c517630099a8185b589c4d470bde6adf070f7",
+    "opentransit/api/schemas.py": "c2e7a9eb80b3b58c7f536e8943cb22c0586c7a17dfcd6953cf252c65ee558b20",
+    "opentransit/api/timetable.py": "4053f1dbe401b69364727813b71c8a943196e771c79820c0c6d591a8adadd94b",
+    "opentransit/build/__init__.py": "381e101e4f61d7d4ab26963b32c9ae4ca622056561429e227760804df7c55331",
+    "opentransit/build/activation.py": "34592fab79ffdc446d7a16a0527c1c498f9cf42985002c9ffe03169328317635",
+    "opentransit/build/cli.py": "ac191c7d6c2c0c2d54f928513d9dd67159e9fa052dcbda64dcb8149b21dd3032",
+    "opentransit/build/fetch.py": "b967877a3aeff520ce0b18884b90532dc8b99d9322aaebd3a7903d1a8ca4a936",
+    "opentransit/build/generations.py": "51a2c689d9110f8716277df00fc22d025a26424a9482df3e48441ca62a86991a",
+    "opentransit/build/identity.py": "a6bda445cf759bdbb4f16159c7e5e709d111a61a84a54b493c05c1ff4abb9494",
+    "opentransit/build/prepare.py": "b418b698b2ff84b34240e4a70bdeadc43bfdfb2343675abc4cfb084572654454",
+    "opentransit/build/probe.py": "246e51144fe9f30c417878e8f7b915c4ea08455c78831598fd01cca41774278c",
+    "opentransit/build/reference_repair.py": "a1511777eaf34d11849532a22818517e618c2b55b7271bfb3bf83a338e128ebb",
+    "opentransit/build/retention.py": "b0b81b2599672a18db9253da62d2521e7b925726b4956b0974e3ae7805728635",
+    "opentransit/build/validation.py": "d28e8ed04673cca8489c01d64d25de20cec40edfd9da0c08538d7e1be41ea8fb",
+    "opentransit/config.py": "9e1ab38e52b627316bfb5803dfeaf635e6cf42f3de62c01c5b3c6e3ce411decb",
+    "opentransit/core/__init__.py": "f56abd88840946ed290c0330ddfdce595012b1aa7dbc5426c581a98802b56d83",
+    "opentransit/core/artifacts.py": "3e6f0c417eedbaca1685fba7d56a684f1711edabaaa0f7b36ef500b73659b389",
+    "opentransit/core/generation.py": "cdfd342ef917c76bb0b1a0be407680ffca89667ea3d5168bb407b4f4a782bc8b",
+    "opentransit/core/place_ref.py": "f1f8bd64c021cb0896a787adee24118bf9f401e308c35c671bb95c640e9e0ef4",
+    "opentransit/core/time.py": "d1cf682613497c9cba19041f29dc59f0213742f75e50b7c669c6d69a1645e278",
+    "opentransit/core/trip_calls.py": "8e8ae52c94d4103d5535c97eae88ca9728a6bf6253e32abd5477e6718c63994b",
+    "opentransit/motis.py": "c0f786ab453054b8503d6b5469346232b4821dec0d4f4030bc73389ed8b9dd5a",
+    "opentransit/motis_geocoder.py": "19e56513466c339dd7ed6a9759f8bd6239dbf8d331982ccc61d76de3acc72c1a",
+    "opentransit/motis_timetable.py": "7da44ff1d22ab89163b71e9dfc4f2a530102c95a38430fc650e0ff6c41a78e4d",
+    "opentransit/reference.py": "f321035e1a604a9af87c3f619769db93002ef48ca38807271fd4a579e62a4eaf",
+    "opentransit/runtime.py": "18ae6c17a55e023dc48546383ba55e6f66ba01e6da86e7539c7a71a60e0ac4da",
+    "opentransit/stop_search.py": "746b84f79d51f0a86a3d5bd4d02acca36245bc8083a4119933e355af36be703d"
+  },
+  "cases": [
+    {
+      "id": "P002",
+      "params": [
+        [
+          "q",
+          "תחנת רכבת תל אביב סבידור מרכז"
+        ],
+        [
+          "lang",
+          "he"
+        ],
+        [
+          "limit",
+          "10"
+        ],
+        [
+          "type",
+          "stop"
+        ],
+        [
+          "type",
+          "station"
+        ]
+      ],
+      "httpStatus": 200,
+      "clientRoundTripMs": 2539.64056300174,
+      "requestId": "72093c22468c4aa782f48e1cdd9449d6",
+      "responseSha256": "4ab606f7af3e9c832d390167613bdc1b0feca9a60f24eb9fe59f333624f479ad",
+      "response": {
+        "data": [],
+        "meta": {
+          "requestId": "72093c22468c4aa782f48e1cdd9449d6",
+          "generationId": "c7b66eee1ad04dddba13f4c5dade5ef2023963a1ac0384857aaf173b9d164aa1",
+          "generatedAt": "2026-09-30T23:37:52.548932Z",
+          "dataBuiltAt": "2026-09-30T19:28:59.565385Z",
+          "mode": "real",
+          "coverage": {
+            "from": "2026-09-30T00:00:00+03:00",
+            "until": "2026-10-31T00:00:00+02:00"
+          },
+          "freshness": "current",
+          "capabilities": {
+            "realtime": "not_enabled",
+            "alerts": "not_enabled"
+          },
+          "attribution": [
+            "Israel Ministry of Transport",
+            "© OpenStreetMap contributors"
+          ],
+          "rankingPolicy": "motis-v2.11.2-feasible-engine-order-v1",
+          "appliedConstraints": {},
+          "warnings": []
+        },
+        "matchedTypes": [
+          "stop",
+          "station"
+        ],
+        "unavailableTypes": [],
+        "partial": false,
+        "rankingPolicy": "alternating-stop-and-geocoder-order-v1"
+      },
+      "rankedIdentityAndLabelsUnchanged": true,
+      "baselineWarmProcessMs": [
+        1311.6,
+        1274.4,
+        1289.6
+      ]
+    },
+    {
+      "id": "P012",
+      "params": [
+        [
+          "q",
+          "נמל תעופה בן גוריון"
+        ],
+        [
+          "lang",
+          "he"
+        ],
+        [
+          "limit",
+          "10"
+        ],
+        [
+          "type",
+          "stop"
+        ],
+        [
+          "type",
+          "station"
+        ]
+      ],
+      "httpStatus": 200,
+      "clientRoundTripMs": 3.835595001874026,
+      "requestId": "005564f64acc4398ae2df4ff43a12240",
+      "responseSha256": "dd36fb66e703f6058bc85ae46fa3f9f15467289453b43775f40015c95a6331d0",
+      "response": {
+        "data": [
+          {
+            "kind": "stop",
+            "id": "mot:stop:15373",
+            "displayName": "האירוסים/רקפת",
+            "languageUsed": "he",
+            "locality": "רחוב: רקפת עיר: נמל תעופה בן גוריון רציף:  קומה: ",
+            "coordinates": {
+              "latitude": 31.993841,
+              "longitude": 34.903142
+            },
+            "stopCode": "31032",
+            "parentId": null,
+            "platformIds": [],
+            "matchedTypes": [
+              "stop"
+            ],
+            "locationRef": {
+              "kind": "stop",
+              "stopId": "mot:stop:15373"
+            }
+          },
+          {
+            "kind": "stop",
+            "id": "mot:stop:24691",
+            "displayName": "כנף",
+            "languageUsed": "he",
+            "locality": "רחוב: כנף עיר: נמל תעופה בן גוריון רציף:  קומה: ",
+            "coordinates": {
+              "latitude": 31.998829,
+              "longitude": 34.880043
+            },
+            "stopCode": "37540",
+            "parentId": null,
+            "platformIds": [],
+            "matchedTypes": [
+              "stop"
+            ],
+            "locationRef": {
+              "kind": "stop",
+              "stopId": "mot:stop:24691"
+            }
+          },
+          {
+            "kind": "stop",
+            "id": "mot:stop:36",
+            "displayName": "כנף/ברוש",
+            "languageUsed": "he",
+            "locality": "רחוב: כנף עיר: נמל תעופה בן גוריון רציף:  קומה: ",
+            "coordinates": {
+              "latitude": 31.998767,
+              "longitude": 34.879725
+            },
+            "stopCode": "38866",
+            "parentId": null,
+            "platformIds": [],
+            "matchedTypes": [
+              "stop"
+            ],
+            "locationRef": {
+              "kind": "stop",
+              "stopId": "mot:stop:36"
+            }
+          },
+          {
+            "kind": "stop",
+            "id": "mot:stop:15374",
+            "displayName": "נשר",
+            "languageUsed": "he",
+            "locality": "רחוב: מבצע דני עיר: נמל תעופה בן גוריון רציף:  קומה: ",
+            "coordinates": {
+              "latitude": 31.99475,
+              "longitude": 34.896127
+            },
+            "stopCode": "31033",
+            "parentId": null,
+            "platformIds": [],
+            "matchedTypes": [
+              "stop"
+            ],
+            "locationRef": {
+              "kind": "stop",
+              "stopId": "mot:stop:15374"
+            }
+          },
+          {
+            "kind": "stop",
+            "id": "mot:stop:24720",
+            "displayName": "נתב''ג/טרמינל 2",
+            "languageUsed": "he",
+            "locality": "רחוב: שדרות רשות שדות התעופה עיר: נמל תעופה בן גוריון רציף:  קומה: ",
+            "coordinates": {
+              "latitude": 31.990097,
+              "longitude": 34.901666
+            },
+            "stopCode": "37569",
+            "parentId": null,
+            "platformIds": [],
+            "matchedTypes": [
+              "stop"
+            ],
+            "locationRef": {
+              "kind": "stop",
+              "stopId": "mot:stop:24720"
+            }
+          },
+          {
+            "kind": "stop",
+            "id": "mot:stop:24785",
+            "displayName": "נתב''ג/טרמינל 2",
+            "languageUsed": "he",
+            "locality": "רחוב: שדרות רשות שדות התעופה עיר: נמל תעופה בן גוריון רציף:  קומה: ",
+            "coordinates": {
+              "latitude": 31.989992,
+              "longitude": 34.902181
+            },
+            "stopCode": "37661",
+            "parentId": null,
+            "platformIds": [],
+            "matchedTypes": [
+              "stop"
+            ],
+            "locationRef": {
+              "kind": "stop",
+              "stopId": "mot:stop:24785"
+            }
+          },
+          {
+            "kind": "stop",
+            "id": "mot:stop:43296",
+            "displayName": "נתב''ג טרמינל 3/קומת המראות",
+            "languageUsed": "he",
+            "locality": "רחוב: דרך הממריאים עיר: נמל תעופה בן גוריון רציף:  קומה: ",
+            "coordinates": {
+              "latitude": 32.000723,
+              "longitude": 34.869484
+            },
+            "stopCode": "33577",
+            "parentId": null,
+            "platformIds": [],
+            "matchedTypes": [
+              "stop"
+            ],
+            "locationRef": {
+              "kind": "stop",
+              "stopId": "mot:stop:43296"
+            }
+          },
+          {
+            "kind": "stop",
+            "id": "mot:stop:43295",
+            "displayName": "נתב''ג טרמינל 3/קומת נחיתות",
+            "languageUsed": "he",
+            "locality": "רחוב: דרך הממריאים עיר: נמל תעופה בן גוריון רציף:  קומה: ",
+            "coordinates": {
+              "latitude": 32.000561,
+              "longitude": 34.869396
+            },
+            "stopCode": "33578",
+            "parentId": null,
+            "platformIds": [],
+            "matchedTypes": [
+              "stop"
+            ],
+            "locationRef": {
+              "kind": "stop",
+              "stopId": "mot:stop:43295"
+            }
+          },
+          {
+            "kind": "stop",
+            "id": "mot:stop:23220",
+            "displayName": "נתב''ג טרמינל 3/קומת תח''צ",
+            "languageUsed": "he",
+            "locality": "רחוב: דרך תחבורה ציבורית עיר: נמל תעופה בן גוריון רציף:  קומה: ",
+            "coordinates": {
+              "latitude": 32.000091,
+              "longitude": 34.870545
+            },
+            "stopCode": "35275",
+            "parentId": null,
+            "platformIds": [],
+            "matchedTypes": [
+              "stop"
+            ],
+            "locationRef": {
+              "kind": "stop",
+              "stopId": "mot:stop:23220"
+            }
+          },
+          {
+            "kind": "stop",
+            "id": "mot:stop:24680",
+            "displayName": "נתב''ג טרמינל 3/קומת תח''צ",
+            "languageUsed": "he",
+            "locality": "רחוב: דרך תחבורה ציבורית עיר: נמל תעופה בן גוריון רציף:  קומה: ",
+            "coordinates": {
+              "latitude": 31.999818,
+              "longitude": 34.871064
+            },
+            "stopCode": "37528",
+            "parentId": null,
+            "platformIds": [],
+            "matchedTypes": [
+              "stop"
+            ],
+            "locationRef": {
+              "kind": "stop",
+              "stopId": "mot:stop:24680"
+            }
+          }
+        ],
+        "meta": {
+          "requestId": "005564f64acc4398ae2df4ff43a12240",
+          "generationId": "c7b66eee1ad04dddba13f4c5dade5ef2023963a1ac0384857aaf173b9d164aa1",
+          "generatedAt": "2026-09-30T23:37:55.079625Z",
+          "dataBuiltAt": "2026-09-30T19:28:59.565385Z",
+          "mode": "real",
+          "coverage": {
+            "from": "2026-09-30T00:00:00+03:00",
+            "until": "2026-10-31T00:00:00+02:00"
+          },
+          "freshness": "current",
+          "capabilities": {
+            "realtime": "not_enabled",
+            "alerts": "not_enabled"
+          },
+          "attribution": [
+            "Israel Ministry of Transport",
+            "© OpenStreetMap contributors"
+          ],
+          "rankingPolicy": "motis-v2.11.2-feasible-engine-order-v1",
+          "appliedConstraints": {},
+          "warnings": []
+        },
+        "matchedTypes": [
+          "stop",
+          "station"
+        ],
+        "unavailableTypes": [],
+        "partial": false,
+        "rankingPolicy": "alternating-stop-and-geocoder-order-v1"
+      },
+      "rankedIdentityAndLabelsUnchanged": true,
+      "baselineWarmProcessMs": [
+        1297.9,
+        1268.4,
+        1251.9
+      ]
+    },
+    {
+      "id": "P016",
+      "params": [
+        [
+          "q",
+          "Ashdod Ad Halom"
+        ],
+        [
+          "lang",
+          "en"
+        ],
+        [
+          "limit",
+          "10"
+        ],
+        [
+          "type",
+          "stop"
+        ],
+        [
+          "type",
+          "station"
+        ]
+      ],
+      "httpStatus": 200,
+      "clientRoundTripMs": 2.475232002325356,
+      "requestId": "73eed82dca8843bd8be6befe6d92f24b",
+      "responseSha256": "bcfe9cfb751024692f0eaedab4d43967b3b7fe2fd5d8d5dd22ecc8dd7f7a389c",
+      "response": {
+        "data": [
+          {
+            "kind": "station",
+            "id": "mot:stop:41925",
+            "displayName": "Ashdod Ad Halom East Rail Station/Alight",
+            "languageUsed": "en",
+            "locality": "רחוב:   עיר: אשדוד רציף:  קומה: ",
+            "coordinates": {
+              "latitude": 31.773937,
+              "longitude": 34.666846
+            },
+            "stopCode": "11905",
+            "parentId": null,
+            "platformIds": [
+              "mot:stop:47661",
+              "mot:stop:47742",
+              "mot:stop:47756"
+            ],
+            "matchedTypes": [
+              "station"
+            ],
+            "locationRef": {
+              "kind": "stop",
+              "stopId": "mot:stop:41925"
+            }
+          },
+          {
+            "kind": "station",
+            "id": "mot:stop:41872",
+            "displayName": "Ashdod Ad Halom East Rail Station/Boarding",
+            "languageUsed": "en",
+            "locality": "רחוב:   עיר: אשדוד רציף:  קומה: ",
+            "coordinates": {
+              "latitude": 31.773949,
+              "longitude": 34.666455
+            },
+            "stopCode": "11864",
+            "parentId": null,
+            "platformIds": [
+              "mot:stop:47660",
+              "mot:stop:47741",
+              "mot:stop:47755"
+            ],
+            "matchedTypes": [
+              "station"
+            ],
+            "locationRef": {
+              "kind": "stop",
+              "stopId": "mot:stop:41872"
+            }
+          },
+          {
+            "kind": "stop",
+            "id": "mot:stop:37326",
+            "displayName": "Ashdod Ad Halom – Metropolin",
+            "languageUsed": "en",
+            "locality": null,
+            "coordinates": {
+              "latitude": 31.774059,
+              "longitude": 34.666058
+            },
+            "stopCode": "17070",
+            "parentId": null,
+            "platformIds": [],
+            "matchedTypes": [
+              "stop"
+            ],
+            "locationRef": {
+              "kind": "stop",
+              "stopId": "mot:stop:37326"
+            }
+          }
+        ],
+        "meta": {
+          "requestId": "73eed82dca8843bd8be6befe6d92f24b",
+          "generationId": "c7b66eee1ad04dddba13f4c5dade5ef2023963a1ac0384857aaf173b9d164aa1",
+          "generatedAt": "2026-09-30T23:37:55.083356Z",
+          "dataBuiltAt": "2026-09-30T19:28:59.565385Z",
+          "mode": "real",
+          "coverage": {
+            "from": "2026-09-30T00:00:00+03:00",
+            "until": "2026-10-31T00:00:00+02:00"
+          },
+          "freshness": "current",
+          "capabilities": {
+            "realtime": "not_enabled",
+            "alerts": "not_enabled"
+          },
+          "attribution": [
+            "Israel Ministry of Transport",
+            "© OpenStreetMap contributors"
+          ],
+          "rankingPolicy": "motis-v2.11.2-feasible-engine-order-v1",
+          "appliedConstraints": {},
+          "warnings": []
+        },
+        "matchedTypes": [
+          "stop",
+          "station"
+        ],
+        "unavailableTypes": [],
+        "partial": false,
+        "rankingPolicy": "alternating-stop-and-geocoder-order-v1"
+      },
+      "rankedIdentityAndLabelsUnchanged": true,
+      "baselineWarmProcessMs": [
+        1236.3,
+        1285.9,
+        1282.0
+      ]
+    }
+  ],
+  "failures": [],
+  "readinessObservation": {
+    "httpStatus": 503,
+    "body": {
+      "type": "urn:opentransit:problem:not-ready",
+      "title": "Not ready",
+      "status": 503,
+      "code": "NOT_READY",
+      "detail": "A complete usable generation is required.",
+      "requestId": "4cc98ae7c13a4aab896c56e7370eb4d0"
+    }
+  },
+  "status": "passed"
+}

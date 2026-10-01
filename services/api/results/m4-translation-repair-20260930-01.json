@@ -1,0 +1,79 @@
+{
+  "freshness": {
+    "renewed": false,
+    "sourceCheckedAtOutput": "2026-09-30T09:33:07.260277+00:00",
+    "sourceCheckedAtParent": "2026-09-30T09:33:07.260277+00:00",
+    "unchanged": true
+  },
+  "identityChangedFields": {
+    "parserVersion": {
+      "output": 2,
+      "parent": 1
+    }
+  },
+  "outputGenerationId": "c7b66eee1ad04dddba13f4c5dade5ef2023963a1ac0384857aaf173b9d164aa1",
+  "outputGenerationPath": "C:\\Users\\nhenr\\.codex\\worktrees\\8007\\OpenTransit\\.runtime\\generations\\m4-translations-blue-20260930",
+  "parentGenerationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
+  "parentGenerationPath": "C:\\Users\\nhenr\\.codex\\worktrees\\8007\\OpenTransit\\.runtime\\generations\\m3-functional-blue-20260930-attempt3",
+  "recordedAtUtc": "2026-09-30T19:30:44.028712+00:00",
+  "reference": {
+    "outputContentSha256": "ba26bdb8858532f89e5fb0ae8844b4cd045522bae2ff3f97c5a5c804fe175a74",
+    "outputCounts": {
+      "agencies": 36,
+      "calendar_exceptions": 0,
+      "calendar_rules": 41536,
+      "clock_profile_calls": 8188812,
+      "clock_profiles": 220263,
+      "pattern_stops": 245843,
+      "patterns": 7998,
+      "route_stops": 240992,
+      "routes": 7884,
+      "stops": 35321,
+      "translations": 102603,
+      "trip_profiles": 425160
+    },
+    "outputFileSha256": "8f81298d87dbe84478bfd22652b87bd5b7db1e61979a9d00187558fea64605b6",
+    "parentFileSha256": "fb7c677e43157a5431e4c1f51534c0008a93ac42341f9338a0ac1d8e4fbb43f2",
+    "previousCounts": {
+      "agencies": 36,
+      "calendar_exceptions": 0,
+      "calendar_rules": 41536,
+      "clock_profile_calls": 8188812,
+      "clock_profiles": 220263,
+      "pattern_stops": 245843,
+      "patterns": 7998,
+      "route_stops": 240992,
+      "routes": 7884,
+      "stops": 35321,
+      "translations": 102603,
+      "trip_profiles": 425160
+    }
+  },
+  "repairProvenancePath": "C:\\Users\\nhenr\\.codex\\worktrees\\8007\\OpenTransit\\.runtime\\generations\\m4-translations-blue-20260930\\translation-repair.json",
+  "representativeExactLinkage": {
+    "englishTranslation": "Dizengoff Center/Dizengoff",
+    "sourceName": "דיזנגוף סנטר/דיזנגוף",
+    "sourceStopId": "13583"
+  },
+  "scope": "One immutable translation-only reference repair from the verified M1 GTFS ZIP. No source freshness renewal, graph/config rebuild, MOTIS/API start, activation, or probe.",
+  "source": {
+    "conflicts": 0,
+    "normalizedRows": 102603,
+    "path": "C:\\Projects\\OpenTransit\\.runtime\\m1-20260930\\inputs\\israel-public-transportation.zip",
+    "sha256": "8629a73c3f6ff024a78e9b8c83602c09180e13e597b82b98a4377a78f3dd2fd9",
+    "translationsMember": "translations.txt",
+    "translationsMemberSha256": "eb429af432dea6d7184fe05d5c45c8449860a3d810b0fc262c7f89b78eeeb1d1"
+  },
+  "timing": {
+    "elapsedSeconds": 202.66,
+    "finishedAtUtc": "2026-09-30T19:29:02.586076+00:00",
+    "startedAtUtc": "2026-09-30T19:25:39.927318+00:00"
+  },
+  "unchangedArtifacts": {
+    "configMatchesParent": true,
+    "configSha256": "2f75d87301d97b36461bd5826f0c46a1eb375f0da3434f39ee59563f21b6e998",
+    "motisTreeMatchesParent": true,
+    "motisTreeSha256": "96c8fb237576a50544a2c03ad1e840c2f12d2b96b9072250c1e66a61c8f7d263"
+  },
+  "verification": "repair_reference_generation completed and returned a ready generation after parent and output artifact verification plus output ReferenceStore validation."
+}

@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "measuredAt": "2026-09-30",
+  "source": {
+    "generationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
+    "referencePath": ".runtime\\generations\\m3-functional-blue-20260930\\reference.sqlite",
+    "referenceSha256": "fb7c677e43157a5431e4c1f51534c0008a93ac42341f9338a0ac1d8e4fbb43f2",
+    "sourceFeedSha256": "8629a73c3f6ff024a78e9b8c83602c09180e13e597b82b98a4377a78f3dd2fd9",
+    "referenceSchemaVersion": 2,
+    "stopCount": 35321,
+    "translationCount": 0
+  },
+  "methods": {
+    "inProcessNormalizedCorpus": {
+      "indexedLabels": 105887,
+      "loadSeconds": 2.313,
+      "tracemallocPeakBytesIncludingCorpus": 36627152,
+      "tracemallocAfterCorpusBytes": 26475466
+    },
+    "fts5TrigramScratch": {
+      "scratchPath": ".runtime\\m4-stop-search-benchmark-20260930-02\\fts.sqlite",
+      "buildSeconds": 0.434,
+      "fileBytes": 12472320,
+      "sourceDatabaseModified": false
+    }
+  },
+  "queries": {
+    "central": {
+      "matchCounts": {
+        "inProcess": 0,
+        "fts5": 0
+      },
+      "latency": {
+        "inProcess": {
+          "p50Ms": 9.862,
+          "meanMs": 9.889
+        },
+        "fts5": {
+          "p50Ms": 0.04,
+          "meanMs": 0.048
+        }
+      }
+    },
+    "תחנה מרכזית": {
+      "matchCounts": {
+        "inProcess": 118,
+        "fts5": 118
+      },
+      "latency": {
+        "inProcess": {
+          "p50Ms": 2.798,
+          "meanMs": 2.83
+        },
+        "fts5": {
+          "p50Ms": 0.258,
+          "meanMs": 0.285
+        }
+      }
+    },
+    "harbor": {
+      "matchCounts": {
+        "inProcess": 0,
+        "fts5": 0
+      },
+      "latency": {
+        "inProcess": {
+          "p50Ms": 10.046,
+          "meanMs": 10.156
+        },
+        "fts5": {
+          "p50Ms": 0.041,
+          "meanMs": 0.053
+        }
+      }
+    },
+    "תחנה": {
+      "matchCounts": {
+        "inProcess": 172,
+        "fts5": 172
+      },
+      "latency": {
+        "inProcess": {
+          "p50Ms": 3.281,
+          "meanMs": 3.365
+        },
+        "fts5": {
+          "p50Ms": 0.071,
+          "meanMs": 0.09
+        }
+      }
+    },
+    "central a": {
+      "matchCounts": {
+        "inProcess": 0,
+        "fts5": 0
+      },
+      "latency": {
+        "inProcess": {
+          "p50Ms": 10.05,
+          "meanMs": 10.103
+        },
+        "fts5": {
+          "p50Ms": 0.04,
+          "meanMs": 0.05
+        }
+      }
+    },
+    "7": {
+      "matchCounts": {
+        "inProcess": 14216,
+        "fts5": 14216
+      },
+      "latency": {
+        "inProcess": {
+          "p50Ms": 2.577,
+          "meanMs": 2.642
+        },
+        "fts5": {
+          "p50Ms": 14.713,
+          "meanMs": 14.854
+        }
+      }
+    }
+  },
+  "selection": "use generation-scoped in-process normalized corpus cache; benchmark is a bounded search-strategy comparison, not H4 accuracy, API p95, or POI/address evidence."
+}

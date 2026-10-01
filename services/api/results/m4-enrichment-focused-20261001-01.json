@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-10-01T05:06:22.928706+00:00",
+  "scope": "Focused enrichment tests and final lint/format, captured from retained completed containers; no rerun",
+  "status": "focused_pass_build_and_integration_pending",
+  "checks": [
+    {
+      "container": "opentransit-m4-enrichment-focused-20261001-02",
+      "state": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-01T04:54:33.787486388Z",
+        "FinishedAt": "2026-10-01T04:54:36.305911249Z"
+      },
+      "command": [
+        "/app/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/test_enrich_photon_addresses.py",
+        "-q",
+        "-p",
+        "no:cacheprovider",
+        "--basetemp=/tmp/enrichment-tests-final"
+      ],
+      "image": "sha256:1b15d2e1f72e1fb10cdaae8b0a6662816171706a4f261922b7cbd4754ddc4841",
+      "rawLogs": "..........                                                               [100%]\n=============================== warnings summary ===============================\n../../../app/.venv/lib/python3.14/site-packages/fastapi/testclient.py:1\n  /app/.venv/lib/python3.14/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.\n    from starlette.testclient import TestClient as TestClient  # noqa\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n10 passed, 1 warning in 0.21s\n"
+    },
+    {
+      "container": "opentransit-m4-enrichment-quality-20261001-04",
+      "state": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-01T04:55:43.03652718Z",
+        "FinishedAt": "2026-10-01T04:55:43.486769485Z"
+      },
+      "command": [
+        "/app/.venv/bin/python",
+        "-c",
+        "import subprocess; files=['tools/enrich_photon_addresses.py','tests/test_enrich_photon_addresses.py','/workspace/.runtime/m4-photon-evaluation-20261001/evaluate_photon_addresses.py']; subprocess.run(['/app/.venv/bin/ruff','check','--no-cache',*files],check=True); subprocess.run(['/app/.venv/bin/ruff','format','--check','--no-cache',*files],check=True)"
+      ],
+      "image": "sha256:1b15d2e1f72e1fb10cdaae8b0a6662816171706a4f261922b7cbd4754ddc4841",
+      "rawLogs": "All checks passed!\n3 files already formatted\n"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "services/api/tools/enrich_photon_addresses.py",
+      "sha256": "a7ec1f15b4b8835e7d4a73d54e43b8524938542ddf10fe2d694cd02a04142ca8"
+    },
+    {
+      "path": "services/api/tests/test_enrich_photon_addresses.py",
+      "sha256": "f97916eb384a7c3050679ef069bf023f77c832a44e2651559a30d09d6a1a9008"
+    },
+    {
+      "path": ".runtime/m4-photon-evaluation-20261001/evaluate_photon_addresses.py",
+      "sha256": "717d6abb28b63ff79db1950c5031bc143d0f4bf6d7cd7674ae2e7e003a900491"
+    }
+  ],
+  "sourceTiming": "Final metadata literal line wrap followed the focused tests; final lint/format inspected this final source. No functional change followed the tests.",
+  "preservedFailures": [
+    "opentransit-m4-enrichment-ruff-20261001-01",
+    "opentransit-m4-enrichment-ruff-20261001-02",
+    "opentransit-m4-enrichment-quality-20261001-03"
+  ],
+  "apiAcceptance": false,
+  "h4Acceptance": false,
+  "fullStackCapacityAcceptance": false
+}

@@ -86,7 +86,7 @@ Release A needs only coordinate inputs, an explicit depart-at time, one schedule
 - Support depart-at and arrive-by planning, exactly one of which must be specified. A client selecting “now” sends an explicit timestamp.
 - Return up to three alternatives by default, with a maximum of five; fewer results are legitimate. Deduplicate equivalent transit sequences and clearly identify walk-only alternatives.
 - Return departure/arrival, elapsed duration, walking duration/distance, transfers and ordered walk/transit legs. Transit legs include operator, route, mode, headsign, boarding/alighting stops, full trip reference and service date. Supply usable geometry for each leg or an explicit geometry-unavailable reason.
-- Proposed constraints: selectable bus/rail/light-rail modes; walking remains necessary access/transfer movement. `maxWalkMinutesPerLeg` defaults to 15, allowed 1–30. Return total walking separately; the setting is not a total-walk cap. Preserve the existing 15/30-minute comparisons for H3 review.
+- M3 constraint contract: selectable bus/rail/light-rail modes; walking remains necessary access/transfer movement. The pinned engine exposes separate access, egress and direct-walk time limits, not a transfer-walk limit. Implement `maxAccessWalkMinutes`, `maxEgressWalkMinutes` and `maxDirectWalkMinutes` (integers 1–30; defaults 15, 15 and 30). Explicitly disclose `transferWalkLimit: not_enforced` and total walking separately. Reject the earlier proposed `maxWalkMinutesPerLeg`; do not approximate it by filtering a limited candidate set. Actual limit conformance and the existing 15/30-minute H3 comparisons remain required before acceptance.
 - Never quietly relax a constraint. Unsupported modes/preferences produce a typed validation error. Only advertise arrive-by and limits once the pinned engine adapter proves their semantics.
 - Preserve the engine's feasible ordering initially, with a documented deterministic tie-break. Do not claim realtime-optimal, cheapest or objectively “best.” Record ranking policy/version in metadata.
 - An exhausted valid search returns `200` with no journeys and `outcome: no_route`. Dependency failure, expired coverage and invalid input are distinct errors. Do not invent an exact no-route cause from an empty engine result.
@@ -214,10 +214,10 @@ Common data envelope: `data`, `meta` (request ID, generatedAt, generationId, mod
 | HTTP | Stable application code / meaning |
 | --- | --- |
 | 200 | Successful result, including valid empty search/departures or `outcome: no_route` |
-| 400 | Invalid/modified cursor or malformed request syntax |
+| 400 | Malformed request syntax |
 | 404 | Unknown active-generation resource |
 | 413 | Request exceeds size limit |
-| 422 | Invalid field, out of service area, outside service window, unsupported constraint |
+| 422 | Invalid field, out of service area, outside service window, unsupported constraint, or `INVALID_CURSOR` (invalid encoding/query/generation/sort position) |
 | 429 | Caller rate limit exceeded, with Retry-After |
 | 503 | Required data/engine unavailable, feed expired, or server overloaded |
 | 504 | Routing dependency exceeded the request deadline |

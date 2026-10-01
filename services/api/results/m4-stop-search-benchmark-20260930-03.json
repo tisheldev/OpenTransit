@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 1,
+  "measuredAt": "2026-09-30",
+  "source": {
+    "generationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
+    "referencePath": ".runtime\\generations\\m3-functional-blue-20260930\\reference.sqlite",
+    "referenceSha256": "fb7c677e43157a5431e4c1f51534c0008a93ac42341f9338a0ac1d8e4fbb43f2",
+    "feedSha256": "8629a73c3f6ff024a78e9b8c83602c09180e13e597b82b98a4377a78f3dd2fd9",
+    "referenceSchemaVersion": 2,
+    "stopCount": 35321,
+    "translationRows": 102603,
+    "linkedStopNameTranslations": 0
+  },
+  "methods": {
+    "inProcessNormalizedCorpus": {
+      "candidateRows": 35321,
+      "indexLoadSeconds": 2.804,
+      "normalizedRecordCount": 70566,
+      "tracemallocPeakBytes": 54621334
+    },
+    "fts5TrigramScratch": {
+      "scratchPath": ".runtime\\m4-stop-search-benchmark-20260930-03\\fts.sqlite",
+      "indexBuildSeconds": 0.407,
+      "databaseBytes": 12472320,
+      "sourceReferenceModified": false
+    }
+  },
+  "queries": {
+    "בי''ס בר לב/בן יהודה": {
+      "normalizedQuery": "בי ס בר לב בן יהודה",
+      "counts": {
+        "inProcessCandidateRows": 1,
+        "ftsMatchingLabelRows": 1
+      },
+      "latency": {
+        "inProcess": {
+          "p50Ms": 23.392,
+          "meanMs": 23.57
+        },
+        "fts5": {
+          "p50Ms": 0.362,
+          "meanMs": 0.382
+        }
+      }
+    },
+    "בי ס ": {
+      "normalizedQuery": "בי ס",
+      "counts": {
+        "inProcessCandidateRows": 421,
+        "ftsMatchingLabelRows": 424
+      },
+      "latency": {
+        "inProcess": {
+          "p50Ms": 24.121,
+          "meanMs": 24.33
+        },
+        "fts5": {
+          "p50Ms": 0.096,
+          "meanMs": 0.103
+        }
+      }
+    },
+    "38831": {
+      "normalizedQuery": "38831",
+      "counts": {
+        "inProcessCandidateRows": 1,
+        "ftsMatchingLabelRows": 1
+      },
+      "latency": {
+        "inProcess": {
+          "p50Ms": 31.413,
+          "meanMs": 31.739
+        },
+        "fts5": {
+          "p50Ms": 0.054,
+          "meanMs": 0.063
+        }
+      }
+    },
+    "בי''ס בר לב": {
+      "normalizedQuery": "בי ס בר לב",
+      "counts": {
+        "inProcessCandidateRows": 2,
+        "ftsMatchingLabelRows": 2
+      },
+      "latency": {
+        "inProcess": {
+          "p50Ms": 23.698,
+          "meanMs": 23.767
+        },
+        "fts5": {
+          "p50Ms": 0.169,
+          "meanMs": 0.219
+        }
+      }
+    },
+    "הודה": {
+      "normalizedQuery": "הודה",
+      "counts": {
+        "inProcessCandidateRows": 793,
+        "ftsMatchingLabelRows": 1082
+      },
+      "latency": {
+        "inProcess": {
+          "p50Ms": 23.834,
+          "meanMs": 23.953
+        },
+        "fts5": {
+          "p50Ms": 0.121,
+          "meanMs": 0.136
+        }
+      }
+    }
+  },
+  "selection": "Use the generation-scoped in-process normalized corpus. It meets the proposed <40 ms per-query target in this bounded local measurement without adding an FTS index to the immutable reference artifact; FTS5 is faster per lookup but requires a separate per-generation index build. The current feed has no linked stop-name translations (its translation rows have empty GTFS table/field/record keys), so this run measures retained stop names/codes, not English translation coverage. This is not H4 accuracy, API p95, address/POI, or live-generation acceptance evidence."
+}

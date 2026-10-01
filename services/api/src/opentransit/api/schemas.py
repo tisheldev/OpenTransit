@@ -1,8 +1,15 @@
 import re
 from datetime import date, datetime
-from typing import Literal
+from typing import Annotated, Literal
 
-from pydantic import AwareDatetime, BaseModel, ConfigDict, Field, field_validator
+from pydantic import (
+    AwareDatetime,
+    BaseModel,
+    ConfigDict,
+    Field,
+    field_validator,
+    model_validator,
+)
 
 
 class Model(BaseModel):
@@ -15,19 +22,77 @@ class Coordinate(Model):
     longitude: float = Field(ge=34.0, le=36.0, strict=True, allow_inf_nan=False)
 
 
-class JourneyRequest(Model):
-    origin: Coordinate = Field(alias="from")
-    destination: Coordinate = Field(alias="to")
-    depart_at: AwareDatetime = Field(alias="departAt")
+class StopLocation(Model):
+    kind: Literal["stop"]
+    stopId: str = Field(min_length=10, max_length=250)
 
-    @field_validator("depart_at", mode="before")
+    @field_validator("stopId")
+    @classmethod
+    def public_stop_reference(cls, value: str) -> str:
+        if not value.startswith("mot:stop:") or len(value.removeprefix("mot:stop:")) == 0:
+            raise ValueError("Use a namespaced stop reference")
+        return value
+
+
+class PlaceLocation(Model):
+    kind: Literal["place"]
+    placeRef: str = Field(min_length=1, max_length=768)
+
+
+LocationInput = Annotated[Coordinate | StopLocation | PlaceLocation, Field(discriminator="kind")]
+
+
+class JourneyRequest(Model):
+    origin: LocationInput = Field(alias="from")
+    destination: LocationInput = Field(alias="to")
+    depart_at: AwareDatetime | None = Field(default=None, alias="departAt")
+    arrive_by: AwareDatetime | None = Field(default=None, alias="arriveBy")
+    modes: list[Literal["bus", "rail", "light_rail"]] = Field(
+        default_factory=lambda: ["bus", "rail", "light_rail"], min_length=1
+    )
+    results: int = Field(default=3, ge=1, le=5, strict=True)
+    lang: Literal["he", "en"] = "he"
+    max_access_walk_minutes: int = Field(
+        default=15, alias="maxAccessWalkMinutes", ge=1, le=30, strict=True
+    )
+    max_egress_walk_minutes: int = Field(
+        default=15, alias="maxEgressWalkMinutes", ge=1, le=30, strict=True
+    )
+    max_direct_walk_minutes: int = Field(
+        default=30, alias="maxDirectWalkMinutes", ge=1, le=30, strict=True
+    )
+
+    @field_validator("depart_at", "arrive_by", mode="before")
     @classmethod
     def explicit_offset(cls, value: object) -> object:
+        if value is None:
+            raise ValueError("Use an ISO timestamp with an explicit offset")
         if not isinstance(value, str) or not re.fullmatch(
             r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})", value
         ):
             raise ValueError("Use an ISO timestamp with an explicit offset")
         return value
+
+    @field_validator("modes")
+    @classmethod
+    def unique_modes(cls, value: list[str]) -> list[str]:
+        if len(value) != len(set(value)):
+            raise ValueError("Modes must be unique")
+        return value
+
+    @model_validator(mode="after")
+    def exactly_one_time_anchor(self):
+        if (self.depart_at is None) == (self.arrive_by is None):
+            raise ValueError("Provide exactly one of departAt or arriveBy")
+        return self
+
+    @property
+    def time_anchor(self) -> datetime:
+        return self.depart_at if self.depart_at is not None else self.arrive_by
+
+    @property
+    def is_arrive_by(self) -> bool:
+        return self.arrive_by is not None
 
 
 class Problem(Model):
@@ -126,7 +191,8 @@ class Metadata(Model):
     attribution: list[str] = Field(
         default_factory=lambda: ["Israel Ministry of Transport", "© OpenStreetMap contributors"]
     )
-    rankingPolicy: str = "motis-v2.11.2-order-first-itinerary"
+    rankingPolicy: str = "motis-v2.11.2-feasible-engine-order-v1"
+    appliedConstraints: dict[str, object] = Field(default_factory=dict)
     warnings: list[str] = Field(default_factory=list)
 
 

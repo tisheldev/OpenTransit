@@ -1,0 +1,2 @@
+table_name,field_name,language,translation,record_id
+routes,route_long_name,he,קו לדוגמה,r1

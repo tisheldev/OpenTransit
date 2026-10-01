@@ -1,0 +1,18 @@
+{
+  "auditType": "real-preserved-M1-input-validation-with-bounded-minute-policy",
+  "startedAtUtc": "2026-09-30T13:25:23.635989+00:00",
+  "createdAtUtc": "2026-09-30T13:25:26.026468+00:00",
+  "validatorSha256": "d28e8ed04673cca8489c01d64d25de20cec40edfd9da0c08538d7e1be41ea8fb",
+  "policyCodeSha256": "8e8ae52c94d4103d5535c97eae88ca9728a6bf6253e32abd5477e6718c63994b",
+  "policyId": "motis-minute-bracket-v1",
+  "validatorVersion": "d28e8ed04673cca8",
+  "inputSha256": {
+    "gtfs": "8629a73c3f6ff024a78e9b8c83602c09180e13e597b82b98a4377a78f3dd2fd9",
+    "tripIdToDate": "7775623cae79f80040d5bcfe5058fa489736d58da6919b65579424c417561da5"
+  },
+  "elapsedSeconds": 2.39,
+  "peakWorkingSetBytes": null,
+  "peakWorkingSetCapture": "not_observed",
+  "error": "OperationalError: unable to open database file",
+  "report": null
+}

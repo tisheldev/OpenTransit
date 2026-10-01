@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-10-01T00:37:04.958398+00:00",
+  "scope": "One source-context extraction and output-only hash/count audit; no address provider/API acceptance",
+  "status": "context_extracted_enrichment_pending",
+  "extraction": {
+    "schemaVersion": 1,
+    "status": "extraction_complete",
+    "source": {
+      "path": "C:\\Projects\\OpenTransit\\.runtime\\m1-20260930\\inputs\\israel-and-palestine-latest.osm.pbf",
+      "sha256": "8a34b30f91a63ef9239961ba0e4d660ae22deda2f6da4b85ba4772a6b7c4c74f",
+      "bytes": 119241930,
+      "sha256VerificationSeconds": 0.089247
+    },
+    "output": {
+      "path": "C:\\Users\\nhenr\\.codex\\worktrees\\8007\\OpenTransit\\.runtime\\m4-photon-context-20261001\\context-v1.jsonl",
+      "format": "UTF-8 JSONL; one ContextHeader followed by source Street/Locality records",
+      "sha256": "69cd607560dafbf0717771589e20ad58aabff186fb5fae806841aa30c1095a06",
+      "bytes": 55937346
+    },
+    "reader": {
+      "library": "pyosmium",
+      "version": "4.3.1",
+      "internalPbfPasses": 2,
+      "passDescription": "relation/area-manager first pass; location-aware object and assembled-area second pass",
+      "index": "flex_mem",
+      "geometrySource": "pyosmium locations and AreaManager; no bounding-box approximation"
+    },
+    "counts": {
+      "sourceNodesSeen": 13645479,
+      "sourceWaysSeen": 1719303,
+      "sourceRelationsSeen": 22939,
+      "areasProducedByOsmium": 1148685,
+      "eligibleNamedHighwayWays": 111519,
+      "streetRecordsWritten": 111519,
+      "eligibleNamedAdmin8Areas": 281,
+      "localityRecordsWritten": 281,
+      "omittedInvalidStreetGeometry": 0,
+      "omittedInsufficientStreetGeometry": 0,
+      "omittedInvalidAreaGeometry": 0,
+      "omittedUnsupportedAreaGeometry": 0,
+      "omittedEmptyAreaGeometry": 0
+    },
+    "timingsSeconds": {
+      "sourceHash": 0.089247,
+      "pyosmiumExtraction": 102.897363
+    },
+    "peakWorkingSetBytes": 435687424,
+    "peakWorkingSetMeasurement": "Windows GetProcessMemoryInfo PeakWorkingSetSize; null if unavailable",
+    "startedAtUtc": "2026-10-01T00:30:28.764104+00:00",
+    "finishedAtUtc": "2026-10-01T00:32:11.819959+00:00",
+    "scopeLimits": [
+      "Only named highway ways with valid source node coordinates are emitted as Street records.",
+      "Only named boundary=administrative/admin_level=8 areas produced by pyosmium are emitted as Locality records.",
+      "This does not extract all OSM hierarchy levels, infer parent/child relationships, or claim searchable hierarchy support.",
+      "All available source tags are preserved; no expected corpus, house-derived city, guessed translation, or bbox geometry is used."
+    ],
+    "error": null
+  },
+  "outputAudit": {
+    "sourceReread": false,
+    "outputSha256": "69cd607560dafbf0717771589e20ad58aabff186fb5fae806841aa30c1095a06",
+    "recordCounts": {
+      "ContextHeader": 1,
+      "Street": 111519,
+      "Locality": 281
+    },
+    "explicitNameLanguageRecordCounts": {
+      "Street:en": 100235,
+      "Street:he": 101221,
+      "Locality:en": 280,
+      "Locality:he": 278
+    }
+  },
+  "artifacts": [
+    {
+      "path": ".runtime\\m4-photon-context-20261001\\extract_photon_context.py",
+      "sha256": "aa1fd2e15c819442a5703cacb88432484283be2f3b969feb5f8d2018e2347de5"
+    },
+    {
+      "path": ".runtime\\m4-photon-context-20261001\\test_extract_photon_context.py",
+      "sha256": "130218fbf2b29a86d8b2bfdfdec706c13c6607a451a34129ae6353ea953b634e"
+    },
+    {
+      "path": ".runtime\\m4-photon-context-20261001\\preparation-manifest.json",
+      "sha256": "f2f4b93d35595cac332782382d368199221407209dac3d26b32a5b7eafe6da94"
+    },
+    {
+      "path": ".runtime\\m4-photon-context-20261001\\extraction-manifest.json",
+      "sha256": "d850c487c06889acd4b29f84c23e9c6ab432603e0a009c39aa3f88aeb1a65d3a"
+    }
+  ],
+  "validation": "Five focused mocked extractor checks and compile check passed before the actual run; source was scanned by pyosmium two-pass area assembly exactly once",
+  "provenanceLimits": "Preserved M1 OSM input reused; extraction timestamps do not imply new download or renewed upstream freshness. Build peak is one Windows process, not serving-stack capacity.",
+  "acceptanceClaim": false
+}

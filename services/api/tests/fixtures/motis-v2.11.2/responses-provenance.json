@@ -1,0 +1,78 @@
+{
+  "recordedAt": "2026-09-30T12:25:01.203645+00:00",
+  "source": "Actual responses from preserved M1 local engine; labelled scheduled conformance samples, not validated M2 or human H3 approval",
+  "generationId": "fac861c2b4fb058b944302a26f7275d48bf17358dac7a62ee40871f1805f62a7",
+  "engineDigest": "sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330",
+  "inputs": {
+    "israel-public-transportation.zip": {
+      "url": "https://gtfs.mot.gov.il/gtfsfiles/israel-public-transportation.zip",
+      "sha256": "8629a73c3f6ff024a78e9b8c83602c09180e13e597b82b98a4377a78f3dd2fd9",
+      "bytes": 171085310,
+      "acquiredAt": "2026-09-30T09:33:07.260277+00:00",
+      "lastModified": "Tue, 29 Sep 2026 16:59:05 GMT"
+    },
+    "TripIdToDate.zip": {
+      "url": "https://gtfs.mot.gov.il/gtfsfiles/TripIdToDate.zip",
+      "sha256": "7775623cae79f80040d5bcfe5058fa489736d58da6919b65579424c417561da5",
+      "bytes": 8179075,
+      "acquiredAt": "2026-09-30T09:33:11.146493+00:00",
+      "lastModified": "Tue, 29 Sep 2026 16:59:18 GMT"
+    },
+    "israel-and-palestine-latest.osm.pbf": {
+      "sha256": "8a34b30f91a63ef9239961ba0e4d660ae22deda2f6da4b85ba4772a6b7c4c74f",
+      "bytes": 119241930,
+      "reusedLocalPath": "C:\\Projects\\OpenTransit\\poc\\data\\israel-and-palestine-latest.osm.pbf",
+      "acquiredAt": null,
+      "note": "Existing OSM snapshot copied explicitly; not a fresh OSM download"
+    }
+  },
+  "cases": [
+    {
+      "name": "real-plan-depart-at",
+      "endpoint": "/api/v6/plan",
+      "params": {
+        "fromPlace": "32.0757,34.7748",
+        "toPlace": "32.7775,35.0219",
+        "time": "2026-10-01T08:00:00+03:00",
+        "numItineraries": "3",
+        "arriveBy": "false"
+      },
+      "httpStatus": 200,
+      "responseSha256": null,
+      "fixtureSha256": "5dbe37ac5df449ebbf8a012e742b254ee35d5cd524378a37a9de521b807d9d4f",
+      "note": "Preserved from first capture; wire hash was not persisted when subsequent invalid realtime enum request failed. Fixture hash is measured."
+    },
+    {
+      "name": "real-stop-departures",
+      "endpoint": "/api/v6/stoptimes",
+      "params": {
+        "stopId": "mot60day_13583",
+        "time": "2026-10-01T08:00:00+03:00",
+        "n": "10",
+        "arriveBy": "false",
+        "direction": "LATER",
+        "exactRadius": "true",
+        "radius": "0",
+        "withScheduledSkippedStops": "true",
+        "realtimeMode": "OFF",
+        "withAlerts": "false"
+      },
+      "httpStatus": 200,
+      "responseSha256": "906f093caf6945b3252cc726c82f8fa5a14de948c2ac2768cb795c4ef155a6d2",
+      "fixtureSha256": "0e8c35d072ed684976559bcaf32711bc8f02bfe0930f0ee8db3d40bf41c2ef7f"
+    },
+    {
+      "name": "real-trip",
+      "endpoint": "/api/v6/trip",
+      "params": {
+        "tripId": "20261001_07:47_mot60day_585619721_300926",
+        "withScheduledSkippedStops": "true",
+        "joinInterlinedLegs": "false",
+        "detailedLegs": "true"
+      },
+      "httpStatus": 200,
+      "responseSha256": "540e992f23535e45bab510d466b69bb7bb63c77396b1989ae93036f0d3da1025",
+      "fixtureSha256": "6ac5cef3897b6aa8f3dcc093e6643f2b01ad38cb6cec601dcd86540660ff01d4"
+    }
+  ]
+}

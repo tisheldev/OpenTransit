@@ -1,0 +1,57 @@
+{
+  "capturedAt": "2026-09-30T18:58:46.088706+00:00",
+  "scope": "Exact real generation structural probe, not human usability, API end-to-end, serving capacity or deployment acceptance",
+  "container": "opentransit-m3-candidate-probe-20260930-1848",
+  "containerId": "31336cc59bdd372c0010fa44955d5e05d90f10e130113682e3e38e87bc8aec6f",
+  "imageId": "sha256:1b15d2e1f72e1fb10cdaae8b0a6662816171706a4f261922b7cbd4754ddc4841",
+  "command": [
+    "/app/.venv/bin/python",
+    "/evidence/run-probe-02.py"
+  ],
+  "state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-09-30T18:48:36.712160692Z",
+    "FinishedAt": "2026-09-30T18:55:43.798270743Z"
+  },
+  "memoryLimitBytes": 536870912,
+  "networkMode": "container:54feb2d8e2bfe271a1c5cfafa24a79038a036f9c995d845160f7d670d6ca4dfa",
+  "mounts": [
+    {
+      "Type": "bind",
+      "Source": "C:\\Users\\nhenr\\.codex\\worktrees\\8007\\OpenTransit",
+      "Destination": "/workspace",
+      "Mode": "",
+      "RW": false,
+      "Propagation": "rprivate"
+    },
+    {
+      "Type": "bind",
+      "Source": "C:\\Users\\nhenr\\.codex\\worktrees\\8007\\OpenTransit\\.runtime\\m3-functional-evidence-20260930",
+      "Destination": "/evidence",
+      "Mode": "",
+      "RW": true,
+      "Propagation": "rprivate"
+    }
+  ],
+  "stdout": "{\"status\": \"passed\", \"caseCount\": 10, \"failure\": null, \"journeys\": [{\"id\": \"J01\", \"status\": \"passed\", \"httpStatus\": 200}, {\"id\": \"J04\", \"status\": \"passed\", \"httpStatus\": 200}, {\"id\": \"J11\", \"status\": \"passed\", \"httpStatus\": 200}, {\"id\": \"J12\", \"status\": \"passed\", \"httpStatus\": 200}, {\"id\": \"J15\", \"status\": \"passed\", \"httpStatus\": 200}, {\"id\": \"J16\", \"status\": \"passed\", \"httpStatus\": 200}, {\"id\": \"J19\", \"status\": \"passed\", \"httpStatus\": 200}, {\"id\": \"J21\", \"status\": \"passed\", \"httpStatus\": 200}, {\"id\": \"J22\", \"status\": \"passed\", \"httpStatus\": 200}, {\"id\": \"J23\", \"status\": \"passed\", \"httpStatus\": 200}]}\n",
+  "stderr": "",
+  "sourceSha256AfterRun": {
+    "services/api/src/opentransit/build/probe.py": "246e51144fe9f30c417878e8f7b915c4ea08455c78831598fd01cca41774278c",
+    "services/api/src/opentransit/core/artifacts.py": "3e6f0c417eedbaca1685fba7d56a684f1711edabaaa0f7b36ef500b73659b389",
+    "services/api/src/opentransit/core/generation.py": "cdfd342ef917c76bb0b1a0be407680ffca89667ea3d5168bb407b4f4a782bc8b",
+    "services/api/src/opentransit/reference.py": "713e2b288b49f96beace3da37c611c75ad249487c2b3d74c88f8bf6b32d31bbc",
+    ".runtime/m3-functional-evidence-20260930/run-probe-02.py": "27b42edbcbc9dd1ded4bb3849a45535594bfed53b41aacba3ccd31277634689f",
+    ".runtime/m3-functional-evidence-20260930/probe-corpus-02.json": "ef06291bb02b60992e0825ab866916c1b0032805bbbb0b59c12806d98429f26a"
+  },
+  "probeReport": "services/api/results/m3-functional-probe-attempt2-20260930.json",
+  "probeReportSha256": "660a256fec8511e29894511984b70e3053992c82f868e76a26db627658f2e9b8",
+  "note": "Artifact and full reference checks run before ten actual required journeys; source files hashed after run. Windows-backed database validation startup duration is included in container wall time, not request latency."
+}

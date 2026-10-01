@@ -1,0 +1,979 @@
+{
+  "schemaVersion": 1,
+  "frozenAt": "2026-10-01",
+  "purpose": "Supplemental explicit-language variants for API-backed M4 search evaluation; not search-response-derived.",
+  "sourceCorpora": {
+    "places": {
+      "path": "poc/corpora/places.json",
+      "sha256": "ffddc758d03f5acc8dc5e97d697b31400e4bbb8d4d8c44b9c3d1280356530cf8"
+    },
+    "venues": {
+      "path": "poc/corpora/places-venues.json",
+      "sha256": "e9356230c11145f5c954b04356d454eae43857e3984e407b837f931c1c81c58b"
+    }
+  },
+  "venueVariants": [
+    {
+      "id": "V001:alt_query_en",
+      "sourceCaseId": "V001",
+      "query": "Otto Holon",
+      "lang": "en",
+      "queryScript": "latin_or_source_label",
+      "languageAssignment": "explicit corpus alternate",
+      "category": "venue",
+      "apiTypes": [
+        "poi"
+      ],
+      "expect": {
+        "lat": 32.007943,
+        "lon": 34.799619,
+        "tol_m": 300.0
+      },
+      "sourceField": "alt_query_en",
+      "osm": {
+        "type": "node",
+        "id": 3952194259
+      }
+    },
+    {
+      "id": "V002:alt_query_en",
+      "sourceCaseId": "V002",
+      "query": "Wine Bakerem",
+      "lang": "en",
+      "queryScript": "latin_or_source_label",
+      "languageAssignment": "explicit corpus alternate",
+      "category": "venue",
+      "apiTypes": [
+        "poi"
+      ],
+      "expect": {
+        "lat": 32.066365,
+        "lon": 34.770533,
+        "tol_m": 300.0
+      },
+      "sourceField": "alt_query_en",
+      "osm": {
+        "type": "node",
+        "id": 12114440012
+      }
+    },
+    {
+      "id": "V003:alt_query_en",
+      "sourceCaseId": "V003",
+      "query": "Armadillo Kitchen Bar",
+      "lang": "en",
+      "queryScript": "latin_or_source_label",
+      "languageAssignment": "explicit corpus alternate",
+      "category": "venue",
+      "apiTypes": [
+        "poi"
+      ],
+      "expect": {
+        "lat": 32.066353,
+        "lon": 34.776424,
+        "tol_m": 300.0
+      },
+      "sourceField": "alt_query_en",
+      "osm": {
+        "type": "node",
+        "id": 2639708153
+      }
+    },
+    {
+      "id": "V004:alt_query_en",
+      "sourceCaseId": "V004",
+      "query": "Teatrobar",
+      "lang": "en",
+      "queryScript": "latin_or_source_label",
+      "languageAssignment": "explicit corpus alternate",
+      "category": "venue",
+      "apiTypes": [
+        "poi"
+      ],
+      "expect": {
+        "lat": 31.995198,
+        "lon": 34.767068,
+        "tol_m": 300.0
+      },
+      "sourceField": "alt_query_en",
+      "osm": {
+        "type": "node",
+        "id": 1743698941
+      }
+    },
+    {
+      "id": "V007:alt_query_he",
+      "sourceCaseId": "V007",
+      "query": "סאצ'מו",
+      "lang": "he",
+      "queryScript": "hebrew",
+      "languageAssignment": "explicit corpus alternate",
+      "category": "venue",
+      "apiTypes": [
+        "poi"
+      ],
+      "expect": {
+        "lat": 32.056809,
+        "lon": 34.767788,
+        "tol_m": 300.0
+      },
+      "sourceField": "alt_query_he",
+      "osm": {
+        "type": "node",
+        "id": 12090743890
+      }
+    },
+    {
+      "id": "V009:alt_query_en",
+      "sourceCaseId": "V009",
+      "query": "Aroma",
+      "lang": "en",
+      "queryScript": "latin_or_source_label",
+      "languageAssignment": "explicit corpus alternate",
+      "category": "venue",
+      "apiTypes": [
+        "poi"
+      ],
+      "expect": {
+        "lat": 31.922365,
+        "lon": 34.791184,
+        "tol_m": 300.0
+      },
+      "sourceField": "alt_query_en",
+      "osm": {
+        "type": "node",
+        "id": 700455987
+      }
+    },
+    {
+      "id": "V011:alt_query_en",
+      "sourceCaseId": "V011",
+      "query": "Dede",
+      "lang": "en",
+      "queryScript": "latin_or_source_label",
+      "languageAssignment": "explicit corpus alternate",
+      "category": "venue",
+      "apiTypes": [
+        "poi"
+      ],
+      "expect": {
+        "lat": 32.057545,
+        "lon": 34.769593,
+        "tol_m": 300.0
+      },
+      "sourceField": "alt_query_en",
+      "osm": {
+        "type": "node",
+        "id": 12568199183
+      }
+    },
+    {
+      "id": "V012:alt_query_en",
+      "sourceCaseId": "V012",
+      "query": "de la Paix",
+      "lang": "en",
+      "queryScript": "latin_or_source_label",
+      "languageAssignment": "explicit corpus alternate",
+      "category": "venue",
+      "apiTypes": [
+        "poi"
+      ],
+      "expect": {
+        "lat": 31.896034,
+        "lon": 34.813063,
+        "tol_m": 300.0
+      },
+      "sourceField": "alt_query_en",
+      "osm": {
+        "type": "node",
+        "id": 6195004555
+      }
+    },
+    {
+      "id": "V013:alt_query_en",
+      "sourceCaseId": "V013",
+      "query": "Roladin",
+      "lang": "en",
+      "queryScript": "latin_or_source_label",
+      "languageAssignment": "explicit corpus alternate",
+      "category": "venue",
+      "apiTypes": [
+        "poi"
+      ],
+      "expect": {
+        "lat": 32.094906,
+        "lon": 34.822149,
+        "tol_m": 300.0
+      },
+      "sourceField": "alt_query_en",
+      "osm": {
+        "type": "node",
+        "id": 10103704022
+      }
+    },
+    {
+      "id": "V022:alt_query_en",
+      "sourceCaseId": "V022",
+      "query": "Red Meat",
+      "lang": "en",
+      "queryScript": "latin_or_source_label",
+      "languageAssignment": "explicit corpus alternate",
+      "category": "venue",
+      "apiTypes": [
+        "poi"
+      ],
+      "expect": {
+        "lat": 32.062007,
+        "lon": 34.772312,
+        "tol_m": 300.0
+      },
+      "sourceField": "alt_query_en",
+      "osm": {
+        "type": "node",
+        "id": 12668725563
+      }
+    },
+    {
+      "id": "V022:alt_query_he",
+      "sourceCaseId": "V022",
+      "query": "רד מיט",
+      "lang": "he",
+      "queryScript": "hebrew",
+      "languageAssignment": "explicit corpus alternate",
+      "category": "venue",
+      "apiTypes": [
+        "poi"
+      ],
+      "expect": {
+        "lat": 32.062007,
+        "lon": 34.772312,
+        "tol_m": 300.0
+      },
+      "sourceField": "alt_query_he",
+      "osm": {
+        "type": "node",
+        "id": 12668725563
+      }
+    },
+    {
+      "id": "V025:alt_query_he",
+      "sourceCaseId": "V025",
+      "query": "פלאפל הזקנים",
+      "lang": "he",
+      "queryScript": "hebrew",
+      "languageAssignment": "explicit corpus alternate",
+      "category": "venue",
+      "apiTypes": [
+        "poi"
+      ],
+      "expect": {
+        "lat": 32.817066,
+        "lon": 34.993687,
+        "tol_m": 300.0
+      },
+      "sourceField": "alt_query_he",
+      "osm": {
+        "type": "node",
+        "id": 4513280290
+      }
+    },
+    {
+      "id": "V027:alt_query_en",
+      "sourceCaseId": "V027",
+      "query": "Deli Cream",
+      "lang": "en",
+      "queryScript": "latin_or_source_label",
+      "languageAssignment": "explicit corpus alternate",
+      "category": "venue",
+      "apiTypes": [
+        "poi"
+      ],
+      "expect": {
+        "lat": 32.022723,
+        "lon": 34.773147,
+        "tol_m": 300.0
+      },
+      "sourceField": "alt_query_en",
+      "osm": {
+        "type": "node",
+        "id": 1305211076
+      }
+    },
+    {
+      "id": "V028:alt_query_en",
+      "sourceCaseId": "V028",
+      "query": "Mousseline",
+      "lang": "en",
+      "queryScript": "latin_or_source_label",
+      "languageAssignment": "explicit corpus alternate",
+      "category": "venue",
+      "apiTypes": [
+        "poi"
+      ],
+      "expect": {
+        "lat": 31.769642,
+        "lon": 35.21323,
+        "tol_m": 300.0
+      },
+      "sourceField": "alt_query_en",
+      "osm": {
+        "type": "node",
+        "id": 4580755057
+      }
+    },
+    {
+      "id": "V030:alt_query_en",
+      "sourceCaseId": "V030",
+      "query": "Barby Club",
+      "lang": "en",
+      "queryScript": "latin_or_source_label",
+      "languageAssignment": "explicit corpus alternate",
+      "category": "venue",
+      "apiTypes": [
+        "poi"
+      ],
+      "expect": {
+        "lat": 32.051302,
+        "lon": 34.769717,
+        "tol_m": 300.0
+      },
+      "sourceField": "alt_query_en",
+      "osm": {
+        "type": "node",
+        "id": 6185651655
+      }
+    },
+    {
+      "id": "V032:alt_query_en",
+      "sourceCaseId": "V032",
+      "query": "HaArbaa",
+      "lang": "en",
+      "queryScript": "latin_or_source_label",
+      "languageAssignment": "explicit corpus alternate",
+      "category": "venue",
+      "apiTypes": [
+        "poi"
+      ],
+      "expect": {
+        "lat": 32.070317,
+        "lon": 34.782934,
+        "tol_m": 300.0
+      },
+      "sourceField": "alt_query_en",
+      "osm": {
+        "type": "node",
+        "id": 608522161
+      }
+    },
+    {
+      "id": "V033:alt_query_en",
+      "sourceCaseId": "V033",
+      "query": "MASH",
+      "lang": "en",
+      "queryScript": "latin_or_source_label",
+      "languageAssignment": "explicit corpus alternate",
+      "category": "venue",
+      "apiTypes": [
+        "poi"
+      ],
+      "expect": {
+        "lat": 32.09567,
+        "lon": 34.776065,
+        "tol_m": 300.0
+      },
+      "sourceField": "alt_query_en",
+      "osm": {
+        "type": "node",
+        "id": 746735307
+      }
+    },
+    {
+      "id": "V034:alt_query_en",
+      "sourceCaseId": "V034",
+      "query": "Rodeo",
+      "lang": "en",
+      "queryScript": "latin_or_source_label",
+      "languageAssignment": "explicit corpus alternate",
+      "category": "venue",
+      "apiTypes": [
+        "poi"
+      ],
+      "expect": {
+        "lat": 32.808165,
+        "lon": 34.995534,
+        "tol_m": 300.0
+      },
+      "sourceField": "alt_query_en",
+      "osm": {
+        "type": "node",
+        "id": 14107936588
+      }
+    },
+    {
+      "id": "V038:alt_query_en",
+      "sourceCaseId": "V038",
+      "query": "Halev harahav",
+      "lang": "en",
+      "queryScript": "latin_or_source_label",
+      "languageAssignment": "explicit corpus alternate",
+      "category": "venue",
+      "apiTypes": [
+        "poi"
+      ],
+      "expect": {
+        "lat": 29.548368,
+        "lon": 34.95175,
+        "tol_m": 300.0
+      },
+      "sourceField": "alt_query_en",
+      "osm": {
+        "type": "node",
+        "id": 7280478085
+      }
+    },
+    {
+      "id": "V039:alt_query_en",
+      "sourceCaseId": "V039",
+      "query": "Landwer",
+      "lang": "en",
+      "queryScript": "latin_or_source_label",
+      "languageAssignment": "explicit corpus alternate",
+      "category": "venue",
+      "apiTypes": [
+        "poi"
+      ],
+      "expect": {
+        "lat": 32.82422,
+        "lon": 35.079193,
+        "tol_m": 300.0
+      },
+      "sourceField": "alt_query_en",
+      "osm": {
+        "type": "node",
+        "id": 1113117585
+      }
+    },
+    {
+      "id": "V039:alt_query_he",
+      "sourceCaseId": "V039",
+      "query": "סמיראמיס",
+      "lang": "he",
+      "queryScript": "hebrew",
+      "languageAssignment": "explicit corpus alternate",
+      "category": "venue",
+      "apiTypes": [
+        "poi"
+      ],
+      "expect": {
+        "lat": 32.82422,
+        "lon": 35.079193,
+        "tol_m": 300.0
+      },
+      "sourceField": "alt_query_he",
+      "osm": {
+        "type": "node",
+        "id": 1113117585
+      }
+    },
+    {
+      "id": "V040:alt_query_en",
+      "sourceCaseId": "V040",
+      "query": "Ima",
+      "lang": "en",
+      "queryScript": "latin_or_source_label",
+      "languageAssignment": "explicit corpus alternate",
+      "category": "venue",
+      "apiTypes": [
+        "poi"
+      ],
+      "expect": {
+        "lat": 31.78621,
+        "lon": 35.207542,
+        "tol_m": 300.0
+      },
+      "sourceField": "alt_query_en",
+      "osm": {
+        "type": "node",
+        "id": 560354901
+      }
+    },
+    {
+      "id": "V040:alt_query_he",
+      "sourceCaseId": "V040",
+      "query": "אמא",
+      "lang": "he",
+      "queryScript": "hebrew",
+      "languageAssignment": "explicit corpus alternate",
+      "category": "venue",
+      "apiTypes": [
+        "poi"
+      ],
+      "expect": {
+        "lat": 31.78621,
+        "lon": 35.207542,
+        "tol_m": 300.0
+      },
+      "sourceField": "alt_query_he",
+      "osm": {
+        "type": "node",
+        "id": 560354901
+      }
+    },
+    {
+      "id": "V041:alt_query_en",
+      "sourceCaseId": "V041",
+      "query": "Americana Hotel Restaurant",
+      "lang": "en",
+      "queryScript": "latin_or_source_label",
+      "languageAssignment": "explicit corpus alternate",
+      "category": "venue",
+      "apiTypes": [
+        "poi"
+      ],
+      "expect": {
+        "lat": 29.554625,
+        "lon": 34.962538,
+        "tol_m": 300.0
+      },
+      "sourceField": "alt_query_en",
+      "osm": {
+        "type": "node",
+        "id": 4588912395
+      }
+    },
+    {
+      "id": "V046:alt_query_he",
+      "sourceCaseId": "V046",
+      "query": "אואזיס",
+      "lang": "he",
+      "queryScript": "hebrew",
+      "languageAssignment": "explicit corpus alternate",
+      "category": "venue",
+      "apiTypes": [
+        "poi"
+      ],
+      "expect": {
+        "lat": 32.065122,
+        "lon": 34.771241,
+        "tol_m": 300.0
+      },
+      "sourceField": "alt_query_he",
+      "osm": {
+        "type": "node",
+        "id": 5961333787
+      }
+    },
+    {
+      "id": "V048:alt_query_en",
+      "sourceCaseId": "V048",
+      "query": "Al Reda",
+      "lang": "en",
+      "queryScript": "latin_or_source_label",
+      "languageAssignment": "explicit corpus alternate",
+      "category": "venue",
+      "apiTypes": [
+        "poi"
+      ],
+      "expect": {
+        "lat": 32.703156,
+        "lon": 35.298098,
+        "tol_m": 300.0
+      },
+      "sourceField": "alt_query_en",
+      "osm": {
+        "type": "node",
+        "id": 5247597963
+      }
+    }
+  ],
+  "acceptedGtfsStopVariants": [
+    {
+      "id": "GTFS-TRANS-13583-en",
+      "sourceCaseId": null,
+      "query": "Dizengoff Center/Dizengoff",
+      "lang": "en",
+      "queryScript": "latin",
+      "languageAssignment": "explicit EN translation row",
+      "category": "translated_stop",
+      "apiTypes": [
+        "stop"
+      ],
+      "expect": {
+        "place": "Dizengoff Center/Dizengoff",
+        "lat": 32.075566,
+        "lon": 34.77512
+      },
+      "stopId": "13583",
+      "expectedStopId": "13583",
+      "translationLanguage": "EN"
+    },
+    {
+      "id": "GTFS-TRANS-42658-en",
+      "sourceCaseId": null,
+      "query": "Naomi Shemer Blvd/Hatane Pras Israel",
+      "lang": "en",
+      "queryScript": "latin",
+      "languageAssignment": "explicit EN translation row",
+      "category": "translated_stop",
+      "apiTypes": [
+        "stop"
+      ],
+      "expect": {
+        "place": "Naomi Shemer Blvd/Hatane Pras Israel",
+        "lat": 31.940499,
+        "lon": 34.841406
+      },
+      "stopId": "42658",
+      "expectedStopId": "42658",
+      "translationLanguage": "EN"
+    }
+  ],
+  "acceptedGtfsProvenance": {
+    "feedSha256": "8629a73c3f6ff024a78e9b8c83602c09180e13e597b82b98a4377a78f3dd2fd9",
+    "generationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
+    "referenceSha256": "fb7c677e43157a5431e4c1f51534c0008a93ac42341f9338a0ac1d8e4fbb43f2",
+    "translationEvidencePath": "services/api/results/m4-legacy-translation-diagnostic-20260930-01.json",
+    "translationEvidenceSha256": "b04070226a364b7ccf92a0dc399d0e8a4c9eb5d18b4b64f3d47f94575d00b5bb",
+    "translationField": "translations.txt.trans_id exact original-text key joined to stops.stop_name; translationLanguage=EN",
+    "coordinates": "Exact stops.latitude/longitude rows for referenced source stop IDs in the immutable reference built from the feed above. These cases score exact stop-reference identity and introduce no distance tolerance.",
+    "stopVariants": [
+      {
+        "id": "GTFS-TRANS-13583-en",
+        "sourceCaseId": null,
+        "query": "Dizengoff Center/Dizengoff",
+        "lang": "en",
+        "queryScript": "latin",
+        "languageAssignment": "explicit EN translation row",
+        "category": "translated_stop",
+        "apiTypes": [
+          "stop"
+        ],
+        "expect": {
+          "place": "Dizengoff Center/Dizengoff",
+          "lat": 32.075566,
+          "lon": 34.77512
+        },
+        "stopId": "13583",
+        "translationLanguage": "EN"
+      },
+      {
+        "id": "GTFS-TRANS-42658-en",
+        "sourceCaseId": null,
+        "query": "Naomi Shemer Blvd/Hatane Pras Israel",
+        "lang": "en",
+        "queryScript": "latin",
+        "languageAssignment": "explicit EN translation row",
+        "category": "translated_stop",
+        "apiTypes": [
+          "stop"
+        ],
+        "expect": {
+          "place": "Naomi Shemer Blvd/Hatane Pras Israel",
+          "lat": 31.940499,
+          "lon": 34.841406
+        },
+        "stopId": "42658",
+        "translationLanguage": "EN"
+      }
+    ]
+  },
+  "addressLanguagePairsAlreadyPresent": [
+    [
+      "P051",
+      "P052"
+    ],
+    [
+      "P053",
+      "P054"
+    ],
+    [
+      "P056",
+      "P057"
+    ],
+    [
+      "P059",
+      "P065"
+    ]
+  ],
+  "addressExpansionNote": "The original corpus already includes four same-target Hebrew/English address pairs. No additional address queries were synthesized because the available checked-in source does not provide attributable alternate street-address labels for the remaining targets.",
+  "venueAlternateVariantCount": 26,
+  "totalVariants": 35,
+  "acceptedOsmAddressProvenance": {
+    "addedAtUtcDate": "2026-09-30",
+    "pbfPath": "C:\\Projects\\OpenTransit\\.runtime\\m1-20260930\\inputs\\israel-and-palestine-latest.osm.pbf",
+    "pbfSha256": "8a34b30f91a63ef9239961ba0e4d660ae22deda2f6da4b85ba4772a6b7c4c74f",
+    "pbfBytes": 119241930,
+    "reader": {
+      "name": "pyosmium",
+      "version": "4.3.1",
+      "pythonVersion": "3.14.6 (main, Jun 23 2026, 15:20:04) [MSC v.1944 64 bit (AMD64)]",
+      "packages": {
+        "osmium": "4.3.1",
+        "requests": "2.34.2",
+        "certifi": "2026.7.22",
+        "charset-normalizer": "3.5.2",
+        "idna": "3.20",
+        "urllib3": "2.8.0"
+      }
+    },
+    "scannerPath": ".runtime/m4-address-corpus-20260930/scan_addresses.py",
+    "scannerSha256": "bb19a4be92223fbfd2a87c6aff00cb6e93f3c4ff7244ffccce89368076b8b632",
+    "rawFindingsPath": ".runtime/m4-address-corpus-20260930/selected-raw-findings.json",
+    "rawFindingsSha256": "2f55b6b4c43af44ba13f723961fc62110305e40154cb78fc54c0dc58a0b04584",
+    "derivationMethod": "Single read-only node pass; require addr:housenumber and addr:street; accept only addr:street:he/en or addr:full:he/en, with equivalent full_address/fulladdress spellings; retain best explicit-label candidate per 0.25-degree cell, then select up to six geographically spread nodes per language. Coordinates come from each source node.",
+    "addressNodeFilter": "node with non-empty addr:housenumber and addr:street",
+    "acceptedLabels": "explicit addr:street:he/en or explicit language-tagged full-address fields; no language inferred from script",
+    "coordinates": "source node latitude and longitude; no API-derived targets",
+    "eligibleAddressNodes": 125857,
+    "explicitLanguageVariants": {
+      "en": 45,
+      "he": 2
+    },
+    "selectedVariantCounts": {
+      "he": 1,
+      "en": 6
+    },
+    "toleranceMeters": 300,
+    "scannerHashScope": "Final scanner source after stdout UTF-8-only repair; the PBF scan was not rerun",
+    "scanElapsedSecondsApprox": 146,
+    "scanElapsedTimingMethod": "Approximate elapsed time from the host command and polling wall-time reports",
+    "scanCommandExitCode": 1,
+    "scanCommandExitExplanation": "Selected findings were written successfully; the post-write console print hit Windows cp1252 on a Hebrew label, then scanner stdout was repaired without rerunning the scan"
+  },
+  "acceptedOsmAddressVariants": [
+    {
+      "id": "OSM-ADDR-HE-001",
+      "query": "י.ל. גורדון 24 תל אביב",
+      "lang": "he",
+      "languageAssignment": "explicit addr:street:he OSM tag",
+      "queryScript": "hebrew",
+      "category": "address",
+      "apiTypes": [
+        "address"
+      ],
+      "variant": "explicit-osm-language-tag",
+      "expect": {
+        "place": "י.ל. גורדון",
+        "lat": 32.0821494,
+        "lon": 34.7713123,
+        "tol_m": 300
+      },
+      "source": {
+        "osmType": "node",
+        "osmId": "13683588481",
+        "pbfSha256": "8a34b30f91a63ef9239961ba0e4d660ae22deda2f6da4b85ba4772a6b7c4c74f",
+        "sourceField": "addr:street:he",
+        "rawTags": {
+          "addr:city": "Tel Aviv",
+          "addr:city:en": "Tel Aviv",
+          "addr:city:he": "תל אביב",
+          "addr:housenumber": "24",
+          "addr:street": "י. ל. גורדון",
+          "addr:street:en": "J.L. Gerdon",
+          "addr:street:he": "י.ל. גורדון"
+        }
+      }
+    },
+    {
+      "id": "OSM-ADDR-EN-001",
+      "query": "113 Ben Yehuda, Tel Aviv",
+      "lang": "en",
+      "languageAssignment": "explicit addr:street:en OSM tag",
+      "queryScript": "latin",
+      "category": "address",
+      "apiTypes": [
+        "address"
+      ],
+      "variant": "explicit-osm-language-tag",
+      "expect": {
+        "place": "Ben Yehuda",
+        "lat": 32.0853649,
+        "lon": 34.7724242,
+        "tol_m": 300
+      },
+      "source": {
+        "osmType": "node",
+        "osmId": "13683565368",
+        "pbfSha256": "8a34b30f91a63ef9239961ba0e4d660ae22deda2f6da4b85ba4772a6b7c4c74f",
+        "sourceField": "addr:street:en",
+        "rawTags": {
+          "addr:city": "תל אביב-יפו",
+          "addr:city:en": "Tel Aviv",
+          "addr:city:he": "תל אביב-יפו",
+          "addr:housenumber": "113",
+          "addr:street": "בן יהודה",
+          "addr:street:en": "Ben Yehuda",
+          "addr:street:he": "בן יהודה"
+        }
+      }
+    },
+    {
+      "id": "OSM-ADDR-EN-002",
+      "query": "3 Arlosoroff",
+      "lang": "en",
+      "languageAssignment": "explicit addr:street:en OSM tag",
+      "queryScript": "latin",
+      "category": "address",
+      "apiTypes": [
+        "address"
+      ],
+      "variant": "explicit-osm-language-tag",
+      "expect": {
+        "place": "Arlosoroff",
+        "lat": 33.2092675,
+        "lon": 35.5691219,
+        "tol_m": 300
+      },
+      "source": {
+        "osmType": "node",
+        "osmId": "5498984564",
+        "pbfSha256": "8a34b30f91a63ef9239961ba0e4d660ae22deda2f6da4b85ba4772a6b7c4c74f",
+        "sourceField": "addr:street:en",
+        "rawTags": {
+          "addr:city": "קרית שמונה",
+          "addr:housenumber": "3",
+          "addr:street": "ארלוזורוב",
+          "addr:street:en": "Arlosoroff"
+        }
+      },
+      "near": {
+        "lat": 33.2092675,
+        "lon": 35.5691219
+      }
+    },
+    {
+      "id": "OSM-ADDR-EN-003",
+      "query": "3 Azar",
+      "lang": "en",
+      "languageAssignment": "explicit addr:street:en OSM tag",
+      "queryScript": "latin",
+      "category": "address",
+      "apiTypes": [
+        "address"
+      ],
+      "variant": "explicit-osm-language-tag",
+      "expect": {
+        "place": "Azar",
+        "lat": 32.786425,
+        "lon": 35.0146194,
+        "tol_m": 300
+      },
+      "source": {
+        "osmType": "node",
+        "osmId": "2190040778",
+        "pbfSha256": "8a34b30f91a63ef9239961ba0e4d660ae22deda2f6da4b85ba4772a6b7c4c74f",
+        "sourceField": "addr:street:en",
+        "rawTags": {
+          "addr:housenumber": "3",
+          "addr:street": "אז\"ר",
+          "addr:street:en": "Azar"
+        }
+      },
+      "near": {
+        "lat": 32.786425,
+        "lon": 35.0146194
+      }
+    },
+    {
+      "id": "OSM-ADDR-EN-004",
+      "query": "2 Technology Park Malha",
+      "lang": "en",
+      "languageAssignment": "explicit addr:street:en OSM tag",
+      "queryScript": "latin",
+      "category": "address",
+      "apiTypes": [
+        "address"
+      ],
+      "variant": "explicit-osm-language-tag",
+      "expect": {
+        "place": "Technology Park Malha",
+        "lat": 31.7500572,
+        "lon": 35.1866384,
+        "tol_m": 300
+      },
+      "source": {
+        "osmType": "node",
+        "osmId": "5621420935",
+        "pbfSha256": "8a34b30f91a63ef9239961ba0e4d660ae22deda2f6da4b85ba4772a6b7c4c74f",
+        "sourceField": "addr:street:en",
+        "rawTags": {
+          "addr:city": "ירושלים",
+          "addr:housenumber": "2",
+          "addr:street": "אגודת ספורט מכבי",
+          "addr:street:en": "Technology Park Malha"
+        }
+      },
+      "near": {
+        "lat": 31.7500572,
+        "lon": 35.1866384
+      }
+    },
+    {
+      "id": "OSM-ADDR-EN-005",
+      "query": "3 HaMelacha",
+      "lang": "en",
+      "languageAssignment": "explicit addr:street:en OSM tag",
+      "queryScript": "latin",
+      "category": "address",
+      "apiTypes": [
+        "address"
+      ],
+      "variant": "explicit-osm-language-tag",
+      "expect": {
+        "place": "HaMelacha",
+        "lat": 32.2766657,
+        "lon": 34.8581818,
+        "tol_m": 300
+      },
+      "source": {
+        "osmType": "node",
+        "osmId": "13823305022",
+        "pbfSha256": "8a34b30f91a63ef9239961ba0e4d660ae22deda2f6da4b85ba4772a6b7c4c74f",
+        "sourceField": "addr:street:en",
+        "rawTags": {
+          "addr:housenumber": "3",
+          "addr:street": "המלאכה",
+          "addr:street:en": "HaMelacha"
+        }
+      },
+      "near": {
+        "lat": 32.2766657,
+        "lon": 34.8581818
+      }
+    },
+    {
+      "id": "OSM-ADDR-EN-006",
+      "query": "5 Nahal Gila",
+      "lang": "en",
+      "languageAssignment": "explicit addr:street:en OSM tag",
+      "queryScript": "latin",
+      "category": "address",
+      "apiTypes": [
+        "address"
+      ],
+      "variant": "explicit-osm-language-tag",
+      "expect": {
+        "place": "Nahal Gila",
+        "lat": 31.7108495,
+        "lon": 34.9930789,
+        "tol_m": 300
+      },
+      "source": {
+        "osmType": "node",
+        "osmId": "11018839480",
+        "pbfSha256": "8a34b30f91a63ef9239961ba0e4d660ae22deda2f6da4b85ba4772a6b7c4c74f",
+        "sourceField": "addr:street:en",
+        "rawTags": {
+          "addr:city": "בית שמש",
+          "addr:housenumber": "5",
+          "addr:street": "נחל גילה",
+          "addr:street:en": "Nahal Gila"
+        }
+      },
+      "near": {
+        "lat": 31.7108495,
+        "lon": 34.9930789
+      }
+    }
+  ]
+}

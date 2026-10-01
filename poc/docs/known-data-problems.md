@@ -675,3 +675,23 @@ multi-result case in the UI. Neither is a Phase 0 blocker.
 
 Corpus: `poc/corpora/places-venues.json`. Runner: `poc/geocoding/venues.py`.
 Results: `poc/results/poc-5-venues.json`, `poc/results/venues-h4-review.md`.
+
+---
+
+## KDP-017 — September 30 feed has decreasing adjacent scheduled times
+
+**Found:** M2 real-input validation, 30 Sep 2026.
+
+**Source:** accepted 60-day ZIP SHA-256 `8629a73c3f6ff024a78e9b8c83602c09180e13e597b82b98a4377a78f3dd2fd9`.
+
+**Severity:** raw source-quality defect retained; bounded interpretation passes full-feed validation, with managed candidate acceptance still pending.
+
+Sorting the original 16,079,349 stop-time rows by full `trip_id` and numeric `stop_sequence` yields 832 cases where the next arrival precedes the previous departure. All decreases are 2–40 seconds and both times are below 24:00. There are no duplicate trip/sequence pairs or same-stop departure-before-arrival cases. CSV line order is not the GTFS trip ordering; the diagnostics preserve both.
+
+111 affected trip definitions have active service in the proposed September 30–October 30 window (551 regressions); 57 definitions have no active dates in that window (281 regressions). Agency 15 / route 957 accounts for 830 events, and agency 3 / route 19142 for two. Full trip suffixes cannot substitute for the actual service calendar. [Raw diagnosis](../../services/api/results/chronology-diagnostic-20260930-02.json) preserves all 168 affected IDs, date eligibility, distributions and bounded original adjacent-row samples. [Validation attempt 3](../../services/api/results/m2-validation-attempt3-20260930.json) remains unchanged.
+
+The [GTFS reference](https://gtfs.org/documentation/schedule/reference/) defines increasing `stop_sequence` and after-midnight times above 24:00; its current field table does not explicitly state a monotonic-time sentence. [MobilityData's rule catalog](https://gtfs-validator.mobilitydata.org/rules.html) describes this pattern as backwards time travel but marks the historical rule deprecated. These distinctions do not erase the measured decreasing times.
+
+### Action
+
+Preserve original inputs and validation failures. Do not fix this by adding a day, sorting calls by time, deleting calls or filtering trip suffix dates. [ADR 0008](adr/0008-bounded-minute-schedule-interpretation.md) records the bounded minute interpretation selected after source inspection, measured projection and actual image parity. [Full-feed audit 5](../../services/api/results/m2-validation-attempt5-20260930.json) passes all 425,160 profiles and 31,308,378 effective events with zero policy errors; raw chronology stays `diagnostic_fail`. Managed build/probe and departure/trip parity remain required before candidate acceptance; a successful graph import alone is insufficient. Human H3 usability and static release requirements remain separate. Existing M1 and historical PoC artifacts are retained; this finding does not retroactively overwrite their recorded results.

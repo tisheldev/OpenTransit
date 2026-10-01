@@ -1,0 +1,43 @@
+{
+  "checkedAt": "2026-09-30T19:19:48.173581+00:00",
+  "scope": "Additional assertions on preserved successful real HTTP response bodies; no new network run, H3 or performance acceptance",
+  "httpReport": "services/api/results/m3-m4-functional-http-20260930-01.json",
+  "httpReportSha256": "bc4b7528112cf3ea74749228103d5717325141b89901814ff68b2ca1bc00eba1",
+  "status": "passed",
+  "checks": [
+    "nonempty GeoJSON LineString shapes with geographic coordinate order",
+    "scheduled/null-live truth and alerts disabled",
+    "timezone-aware clocks",
+    "previous-date service crossing Jerusalem midnight",
+    "distinct actual DST-fold offset occurrences"
+  ],
+  "trips": [
+    {
+      "id": "real-stop-overnight-20261001-trip",
+      "tripRef": "20260930_23:50_mot60day_584668860_300926",
+      "serviceDate": "2026-09-30",
+      "callCount": 40,
+      "shapePointCount": 420,
+      "firstClockJerusalem": "2026-09-30T23:50:00+03:00",
+      "lastClockJerusalem": "2026-10-01T00:42:00+03:00"
+    },
+    {
+      "id": "real-stop-fold-first-20261025-trip",
+      "tripRef": "20261025_00:00_mot60day_463093_081026",
+      "serviceDate": "2026-10-25",
+      "callCount": 37,
+      "shapePointCount": 492,
+      "firstClockJerusalem": "2026-10-25T01:00:00+03:00",
+      "lastClockJerusalem": "2026-10-25T01:42:00+03:00"
+    },
+    {
+      "id": "real-stop-fold-second-20261025-trip",
+      "tripRef": "20261025_01:00_mot60day_24467154_081026",
+      "serviceDate": "2026-10-25",
+      "callCount": 37,
+      "shapePointCount": 492,
+      "firstClockJerusalem": "2026-10-25T01:00:00+02:00",
+      "lastClockJerusalem": "2026-10-25T01:42:00+02:00"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "generationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
+  "engineOrigin": "http://127.0.0.1:59081",
+  "status": "failed",
+  "checkedAt": "2026-09-30T18:36:52.490086+00:00",
+  "journeys": [],
+  "journeyIds": [],
+  "caseCount": 0,
+  "corpusSha256": null,
+  "warnings": [],
+  "structuralOnly": true,
+  "humanH3Approval": false,
+  "engineDigest": "sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330",
+  "graphTreeSha256": "96c8fb237576a50544a2c03ad1e840c2f12d2b96b9072250c1e66a61c8f7d263",
+  "configSha256": "2f75d87301d97b36461bd5826f0c46a1eb375f0da3434f39ee59563f21b6e998",
+  "referenceSha256": "fb7c677e43157a5431e4c1f51534c0008a93ac42341f9338a0ac1d8e4fbb43f2",
+  "referenceCounts": {
+    "agencies": 36,
+    "calendar_exceptions": 0,
+    "calendar_rules": 41536,
+    "clock_profile_calls": 8188812,
+    "clock_profiles": 220263,
+    "pattern_stops": 245843,
+    "patterns": 7998,
+    "route_stops": 240992,
+    "routes": 7884,
+    "stops": 35321,
+    "translations": 102603,
+    "trip_profiles": 425160
+  },
+  "failure": "ValueError: Journey expected outcome must be route or no_route"
+}

@@ -254,13 +254,17 @@ See the [complete endpoint inventory](api-prd.md#5-proposed-http-surface). Examp
   "to": {"kind": "coordinate", "latitude": 32.7775, "longitude": 35.0219},
   "departAt": "2026-09-24T08:00:00+03:00",
   "modes": ["bus", "rail", "light_rail"],
-  "maxWalkMinutesPerLeg": 15,
+  "maxAccessWalkMinutes": 15,
+  "maxEgressWalkMinutes": 15,
+  "maxDirectWalkMinutes": 30,
   "results": 3,
   "lang": "he"
 }
 ```
 
 `arriveBy` replaces `departAt`; neither is silently filled. Reject incompatible location fields, invalid/nonfinite coordinates, unsupported constraints and dates outside coverage before planning. Coverage is the actual graph/timetable intersection, not the nominal “60-day” filename.
+
+M3's pinned-contract inspection replaces the proposed per-leg walking cap with explicit access/egress/direct limits. Transfer walks have no advertised limit; disclose `transferWalkLimit: not_enforced`. Engine parameter inspection is not actual limit conformance: test the boundary behavior before accepting these constraints. Unsupported `maxWalkMinutesPerLeg` remains a validation error. A cancelled walking leg from this engine can indicate a missing detailed street path; reject that complete alternative, retain feasible alternatives with a warning and return a dependency/data error if every nonempty candidate is unusable.
 
 Success is `data: {outcome: routes_found, journeys: [...]}` or `data: {outcome: no_route, journeys: []}`. Each alternative has ordered legs, geometry state, totals and applied constraints. Reject malformed engine alternatives; if none can be trusted, return a dependency/data error. Only a successfully executed empty search becomes no-route.
 

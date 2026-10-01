@@ -1,0 +1,3543 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-10-01T00:12:20.450956+00:00",
+  "scope": "One-pass Photon address-node provider trial; no production API or full-stack capacity acceptance",
+  "status": "trial_complete_address_acceptance_incomplete",
+  "rawTrial": {
+    "path": ".runtime\\m4-photon-evaluation-20260930\\photon-addresses-20261001-01.json",
+    "sha256": "faf027719d6f02d0e2a13567c66c34659b3271bc6829fbbf831b062f3c0fd60b",
+    "bytes": 89978
+  },
+  "providerTrial": {
+    "schemaVersion": 1,
+    "capturedAt": "2026-10-01T00:10:13.352598+00:00",
+    "trialScope": "One-pass Photon /api provider-address-node comparison over 22 frozen API address cases. Descriptive trial only; not API p95, API H4, or M4 acceptance evidence.",
+    "photon": {
+      "baseUrl": "http://127.0.0.1:2322",
+      "runtimeVersionLabel": "Photon 1.3.0 git523a59b4 JAR-a89707c0045e",
+      "versionProbePerformed": false,
+      "apiDocs": "https://github.com/komoot/photon/blob/1.3.0/docs/api-v1.md",
+      "usageDocs": "https://github.com/komoot/photon/blob/1.3.0/docs/usage.md",
+      "languageHandling": "Saved language passed as lang. Returned language is reported only when an explicit response property exposes it; no script-based language inference.",
+      "addressFilter": "layer=house (Photon 1.3 documented layer filter)",
+      "nearHandling": "Photon has no near parameter; saved near coordinates are passed as its documented lat/lon location bias. No bias is added where the frozen case has no near.",
+      "resultLimit": 10,
+      "maxRetries": 0,
+      "callsPlanned": 22
+    },
+    "baseline": {
+      "path": "services/api/results/m4-api-search-20260930-02-corrected.json",
+      "sha256": "f4e4a05e73aef2bd69b069d05cc34e3c639f39ba748fc6cdf16dcbcb08b4870d",
+      "evaluatorSha256": "23b4833ad10af84591eb41f6a69e31c383111062747fc8e600ecf3f4ebcaaaa3",
+      "corpusHashes": {
+        "/workspace/.runtime/m4-search-evidence-20260930/frozen/poc/corpora/places.json": "ffddc758d03f5acc8dc5e97d697b31400e4bbb8d4d8c44b9c3d1280356530cf8",
+        "/workspace/.runtime/m4-search-evidence-20260930/frozen/poc/corpora/places-venues.json": "e9356230c11145f5c954b04356d454eae43857e3984e407b837f931c1c81c58b",
+        "/workspace/.runtime/m4-search-evidence-20260930/frozen/services/api/tests/fixtures/m4-api-search-language-variants-20260930.json": "f4e8f6f66276a56a2ec1b31d64c228a96f9e0f0a396898f2beff59db47f3b233"
+      },
+      "capturedAt": "2026-09-30T23:19:32.905635+00:00",
+      "addressCaseCount": 22,
+      "correctedStopScoring": {
+        "scope": "Two frozen GTFS exact-stop cases only; candidates replayed from saved responses.",
+        "sourceResultSha256": "6353250c80a63ef60488fa1ee4eccf71b2a7ae658c826bdffcd2213612de7c2b",
+        "helperSha256": "fd7debb126187c68c4499acaf6f89dac35343fcfed14b5d783dfd785fa930827",
+        "correctedAt": "2026-09-30T23:33:17.990719+00:00",
+        "originalSummary": {
+          "overall": {
+            "top1": 121,
+            "top5": 145,
+            "denominator": 183,
+            "top1Rate": 0.6612021857923497,
+            "top5Rate": 0.7923497267759563
+          },
+          "byCategory": {
+            "address": {
+              "top1": 6,
+              "top5": 6,
+              "total": 22,
+              "unavailable": 0
+            },
+            "misspelling": {
+              "top1": 4,
+              "top5": 8,
+              "total": 10,
+              "unavailable": 0
+            },
+            "near_dependent": {
+              "top1": 4,
+              "top5": 5,
+              "total": 6,
+              "unavailable": 0
+            },
+            "neighborhood": {
+              "top1": 7,
+              "top5": 10,
+              "total": 10,
+              "unavailable": 0
+            },
+            "poi_hospital": {
+              "top1": 4,
+              "top5": 4,
+              "total": 5,
+              "unavailable": 0
+            },
+            "poi_landmark": {
+              "top1": 9,
+              "top5": 11,
+              "total": 12,
+              "unavailable": 0
+            },
+            "poi_mall": {
+              "top1": 4,
+              "top5": 4,
+              "total": 4,
+              "unavailable": 0
+            },
+            "poi_university": {
+              "top1": 7,
+              "top5": 8,
+              "total": 9,
+              "unavailable": 0
+            },
+            "station": {
+              "top1": 10,
+              "top5": 11,
+              "total": 20,
+              "unavailable": 0
+            },
+            "translated_stop": {
+              "top1": 0,
+              "top5": 0,
+              "total": 2,
+              "unavailable": 0
+            },
+            "translit": {
+              "top1": 4,
+              "top5": 9,
+              "total": 9,
+              "unavailable": 0
+            },
+            "venue": {
+              "top1": 62,
+              "top5": 69,
+              "total": 74,
+              "unavailable": 0
+            }
+          },
+          "byLanguage": {
+            "en": {
+              "top1": 61,
+              "top5": 78,
+              "total": 109,
+              "unavailable": 0
+            },
+            "he": {
+              "top1": 60,
+              "top5": 67,
+              "total": 74,
+              "unavailable": 0
+            }
+          },
+          "byCorpus": {
+            "accepted-gtfs-translations": {
+              "top1": 0,
+              "top5": 0,
+              "total": 2,
+              "unavailable": 0
+            },
+            "accepted-osm-addresses": {
+              "top1": 1,
+              "top5": 1,
+              "total": 7,
+              "unavailable": 0
+            },
+            "places-100": {
+              "top1": 58,
+              "top5": 75,
+              "total": 100,
+              "unavailable": 0
+            },
+            "venues-48": {
+              "top1": 41,
+              "top5": 45,
+              "total": 48,
+              "unavailable": 0
+            },
+            "venues-language-variants": {
+              "top1": 21,
+              "top5": 24,
+              "total": 26,
+              "unavailable": 0
+            }
+          },
+          "firstPassOutcomes": {
+            "success": 168,
+            "valid_empty": 15
+          }
+        },
+        "cases": {
+          "GTFS-TRANS-13583-en": {
+            "sourceStopId": "13583",
+            "expectedPublicReference": "mot:stop:13583"
+          },
+          "GTFS-TRANS-42658-en": {
+            "sourceStopId": "42658",
+            "expectedPublicReference": "mot:stop:42658"
+          }
+        }
+      }
+    },
+    "trialHelperSha256": "b882108ebc329a60c9167214f172ace757373cc58c774c32ac7424d7332d422f",
+    "metricsScope": {
+      "providerRoundTripIsNotApiProcessTime": true,
+      "apiP95Measured": false,
+      "h4Acceptance": false,
+      "geometryExpectations": "Frozen baseline coordinates, original tolerances and per-case scoring radius."
+    },
+    "summary": {
+      "baselineApi": {
+        "allAddressCases": {
+          "cases": 22,
+          "top1GeometryHits": 6,
+          "top5GeometryHits": 6
+        },
+        "nearBreakdown": {
+          "near_supplied": {
+            "cases": 5,
+            "top1GeometryHits": 0,
+            "top5GeometryHits": 0
+          },
+          "near_not_supplied": {
+            "cases": 17,
+            "top1GeometryHits": 6,
+            "top5GeometryHits": 6
+          }
+        },
+        "exactSourceOsmObject": {
+          "expectedCases": 7,
+          "comparableCases": 0,
+          "top1Hits": null,
+          "top5Hits": null,
+          "notComparableCases": 7,
+          "notComparableReason": "Frozen OpenTransit API responses expose place references rather than raw Photon OSM object IDs."
+        },
+        "providerOutcomes": {
+          "success": 14,
+          "valid_empty": 8
+        }
+      },
+      "photon": {
+        "allAddressCases": {
+          "cases": 22,
+          "top1GeometryHits": 10,
+          "top5GeometryHits": 10
+        },
+        "nearBreakdown": {
+          "near_supplied": {
+            "cases": 5,
+            "top1GeometryHits": 5,
+            "top5GeometryHits": 5
+          },
+          "near_not_supplied": {
+            "cases": 17,
+            "top1GeometryHits": 5,
+            "top5GeometryHits": 5
+          }
+        },
+        "exactSourceOsmObject": {
+          "expectedCases": 7,
+          "comparableCases": 7,
+          "top1Hits": 7,
+          "top5Hits": 7,
+          "notComparableCases": 0,
+          "notComparableReason": null
+        },
+        "providerOutcomes": {
+          "success": 12,
+          "valid_empty": 10
+        }
+      }
+    },
+    "records": [
+      {
+        "caseId": "P051",
+        "query": "Dizengoff 100 Tel Aviv",
+        "language": "en",
+        "expected": {
+          "place": "Dizengoff St",
+          "latitude": 32.0793,
+          "longitude": 34.774,
+          "toleranceMeters": 700.0,
+          "expectedStopId": null
+        },
+        "sourceReference": null,
+        "scoringEarthRadiusMeters": 6371008.8,
+        "nearAssisted": false,
+        "hasExpectedSourceOsmObject": false,
+        "savedNear": null,
+        "photonRequest": {
+          "endpoint": "/api",
+          "parameters": [
+            [
+              "q",
+              "Dizengoff 100 Tel Aviv"
+            ],
+            [
+              "lang",
+              "en"
+            ],
+            [
+              "limit",
+              "10"
+            ],
+            [
+              "layer",
+              "house"
+            ]
+          ]
+        },
+        "httpStatus": 200,
+        "clientRoundTripMs": 409.94203900481807,
+        "transportError": null,
+        "rawResponse": {
+          "type": "FeatureCollection",
+          "features": []
+        },
+        "rawResponseText": null,
+        "baselineApi": {
+          "outcome": "valid_empty",
+          "geometryOnly": {
+            "top1Hit": false,
+            "top5Hit": false,
+            "top5HitRank": null,
+            "top1DistanceMeters": null
+          },
+          "exactSourceOsmObject": null,
+          "topResult": null
+        },
+        "baselineApiOutcome": "valid_empty",
+        "photonOutcome": "valid_empty",
+        "photon": {
+          "candidateCount": 0,
+          "candidates": [],
+          "geometryOnly": {
+            "top1Hit": false,
+            "top5Hit": false,
+            "top5HitRank": null,
+            "top5DistinctRank": null,
+            "top1DistanceMeters": null,
+            "originalToleranceMeters": 700.0,
+            "scoringEarthRadiusMeters": 6371008.8
+          },
+          "exactSourceOsmObject": null,
+          "scoringNote": "Geometry-only scores use the frozen original expected coordinate, corpus radius, and tolerance. OSM identity is an additional exact-object score where the source case supplies a node ID; no address precision is inferred."
+        }
+      },
+      {
+        "caseId": "P052",
+        "query": "דיזנגוף 100 תל אביב",
+        "language": "he",
+        "expected": {
+          "place": "Dizengoff St",
+          "latitude": 32.0793,
+          "longitude": 34.774,
+          "toleranceMeters": 700.0,
+          "expectedStopId": null
+        },
+        "sourceReference": null,
+        "scoringEarthRadiusMeters": 6371008.8,
+        "nearAssisted": false,
+        "hasExpectedSourceOsmObject": false,
+        "savedNear": null,
+        "photonRequest": {
+          "endpoint": "/api",
+          "parameters": [
+            [
+              "q",
+              "דיזנגוף 100 תל אביב"
+            ],
+            [
+              "lang",
+              "he"
+            ],
+            [
+              "limit",
+              "10"
+            ],
+            [
+              "layer",
+              "house"
+            ]
+          ]
+        },
+        "httpStatus": 200,
+        "clientRoundTripMs": 50.37913400155958,
+        "transportError": null,
+        "rawResponse": {
+          "type": "FeatureCollection",
+          "features": []
+        },
+        "rawResponseText": null,
+        "baselineApi": {
+          "outcome": "success",
+          "geometryOnly": {
+            "top1Hit": true,
+            "top5Hit": true,
+            "top5HitRank": 1,
+            "top1DistanceMeters": 12.145925376679035
+          },
+          "exactSourceOsmObject": null,
+          "topResult": {
+            "rank": 1,
+            "distinctRank": 1,
+            "duplicateOfDistinctRank": null,
+            "kind": "address",
+            "displayName": "דיזנגוף 100",
+            "coordinates": {
+              "latitude": 32.079249,
+              "longitude": 34.774114
+            },
+            "precision": "numbered_label",
+            "languageUsed": "he",
+            "locationRef": {
+              "kind": "place",
+              "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiJjNzA1YTgzNmI1ZDI5YmU0MWI0ZGE0MjM3N2EzNmU5OWQzN2RlZTIwYTNmOTk1YzdmZDhlMTdiMjkwN2FkNWU5IiwiY29vcmRpbmF0ZXMiOlszMi4wNzkyNDksMzQuNzc0MTE0XSwiZ2VuZXJhdGlvbklkIjoiYzdiNjZlZWUxYWQwNGRkZGJhMTNmNGM1ZGFkZTVlZjIwMjM5NjNhMWFjMDM4NDg1N2FhZjE3M2I5ZDE2NGFhMSIsImtpbmQiOiJhZGRyZXNzIn0"
+            },
+            "distanceMeters": 12.145925376679035
+          }
+        },
+        "baselineApiOutcome": "success",
+        "photonOutcome": "valid_empty",
+        "photon": {
+          "candidateCount": 0,
+          "candidates": [],
+          "geometryOnly": {
+            "top1Hit": false,
+            "top5Hit": false,
+            "top5HitRank": null,
+            "top5DistinctRank": null,
+            "top1DistanceMeters": null,
+            "originalToleranceMeters": 700.0,
+            "scoringEarthRadiusMeters": 6371008.8
+          },
+          "exactSourceOsmObject": null,
+          "scoringNote": "Geometry-only scores use the frozen original expected coordinate, corpus radius, and tolerance. OSM identity is an additional exact-object score where the source case supplies a node ID; no address precision is inferred."
+        }
+      },
+      {
+        "caseId": "P053",
+        "query": "Rothschild Boulevard 1 Tel Aviv",
+        "language": "en",
+        "expected": {
+          "place": "Rothschild",
+          "latitude": 32.0637,
+          "longitude": 34.7699,
+          "toleranceMeters": 700.0,
+          "expectedStopId": null
+        },
+        "sourceReference": null,
+        "scoringEarthRadiusMeters": 6371008.8,
+        "nearAssisted": false,
+        "hasExpectedSourceOsmObject": false,
+        "savedNear": null,
+        "photonRequest": {
+          "endpoint": "/api",
+          "parameters": [
+            [
+              "q",
+              "Rothschild Boulevard 1 Tel Aviv"
+            ],
+            [
+              "lang",
+              "en"
+            ],
+            [
+              "limit",
+              "10"
+            ],
+            [
+              "layer",
+              "house"
+            ]
+          ]
+        },
+        "httpStatus": 200,
+        "clientRoundTripMs": 32.35886699985713,
+        "transportError": null,
+        "rawResponse": {
+          "type": "FeatureCollection",
+          "features": []
+        },
+        "rawResponseText": null,
+        "baselineApi": {
+          "outcome": "success",
+          "geometryOnly": {
+            "top1Hit": true,
+            "top5Hit": true,
+            "top5HitRank": 1,
+            "top1DistanceMeters": 106.00213897787519
+          },
+          "exactSourceOsmObject": null,
+          "topResult": {
+            "rank": 1,
+            "distinctRank": 1,
+            "duplicateOfDistinctRank": null,
+            "kind": "address",
+            "displayName": "Rothchild 15",
+            "coordinates": {
+              "latitude": 32.0631747,
+              "longitude": 34.7708387
+            },
+            "precision": "numbered_label",
+            "languageUsed": "en",
+            "locationRef": {
+              "kind": "place",
+              "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiJhODZkYzA2ZjdhOGM0NGVlMzc5ODExYTU0YzBmOTZkMDZjZjFjMGFkM2ZiMWFlNTdmNzYzZjcwOTg1Y2Q4ODVmIiwiY29vcmRpbmF0ZXMiOlszMi4wNjMxNzQ3LDM0Ljc3MDgzODddLCJnZW5lcmF0aW9uSWQiOiJjN2I2NmVlZTFhZDA0ZGRkYmExM2Y0YzVkYWRlNWVmMjAyMzk2M2ExYWMwMzg0ODU3YWFmMTczYjlkMTY0YWExIiwia2luZCI6ImFkZHJlc3MifQ"
+            },
+            "distanceMeters": 106.00213897787519
+          }
+        },
+        "baselineApiOutcome": "success",
+        "photonOutcome": "valid_empty",
+        "photon": {
+          "candidateCount": 0,
+          "candidates": [],
+          "geometryOnly": {
+            "top1Hit": false,
+            "top5Hit": false,
+            "top5HitRank": null,
+            "top5DistinctRank": null,
+            "top1DistanceMeters": null,
+            "originalToleranceMeters": 700.0,
+            "scoringEarthRadiusMeters": 6371008.8
+          },
+          "exactSourceOsmObject": null,
+          "scoringNote": "Geometry-only scores use the frozen original expected coordinate, corpus radius, and tolerance. OSM identity is an additional exact-object score where the source case supplies a node ID; no address precision is inferred."
+        }
+      },
+      {
+        "caseId": "P054",
+        "query": "שדרות רוטשילד 1 תל אביב",
+        "language": "he",
+        "expected": {
+          "place": "Rothschild",
+          "latitude": 32.0637,
+          "longitude": 34.7699,
+          "toleranceMeters": 700.0,
+          "expectedStopId": null
+        },
+        "sourceReference": null,
+        "scoringEarthRadiusMeters": 6371008.8,
+        "nearAssisted": false,
+        "hasExpectedSourceOsmObject": false,
+        "savedNear": null,
+        "photonRequest": {
+          "endpoint": "/api",
+          "parameters": [
+            [
+              "q",
+              "שדרות רוטשילד 1 תל אביב"
+            ],
+            [
+              "lang",
+              "he"
+            ],
+            [
+              "limit",
+              "10"
+            ],
+            [
+              "layer",
+              "house"
+            ]
+          ]
+        },
+        "httpStatus": 200,
+        "clientRoundTripMs": 58.508829002676066,
+        "transportError": null,
+        "rawResponse": {
+          "type": "FeatureCollection",
+          "features": [
+            {
+              "type": "Feature",
+              "properties": {
+                "osm_type": "N",
+                "osm_id": 12148141169,
+                "osm_key": "addr:housenumber",
+                "osm_value": "1",
+                "type": "house",
+                "housenumber": "1",
+                "street": "שדרות רוטשילד",
+                "city": "תל אביב-יפו",
+                "extra": {
+                  "addr:city": "תל אביב-יפו",
+                  "addr:housenumber": "1",
+                  "addr:street": "שדרות רוטשילד"
+                }
+              },
+              "geometry": {
+                "type": "Point",
+                "coordinates": [
+                  34.7687786,
+                  32.0631874
+                ]
+              }
+            },
+            {
+              "type": "Feature",
+              "properties": {
+                "osm_type": "N",
+                "osm_id": 12148128253,
+                "osm_key": "addr:housenumber",
+                "osm_value": "1",
+                "type": "house",
+                "housenumber": "1",
+                "street": "שדרות רוטשילד",
+                "city": "תל אביב-יפו",
+                "extra": {
+                  "addr:city": "תל אביב-יפו",
+                  "addr:housenumber": "1",
+                  "addr:street": "שדרות רוטשילד"
+                }
+              },
+              "geometry": {
+                "type": "Point",
+                "coordinates": [
+                  34.7687508,
+                  32.0632669
+                ]
+              }
+            }
+          ]
+        },
+        "rawResponseText": null,
+        "baselineApi": {
+          "outcome": "success",
+          "geometryOnly": {
+            "top1Hit": true,
+            "top5Hit": true,
+            "top5HitRank": 1,
+            "top1DistanceMeters": 118.518505472693
+          },
+          "exactSourceOsmObject": null,
+          "topResult": {
+            "rank": 1,
+            "distinctRank": 1,
+            "duplicateOfDistinctRank": null,
+            "kind": "address",
+            "displayName": "שדרות רוטשילד 1",
+            "coordinates": {
+              "latitude": 32.0632669,
+              "longitude": 34.7687508
+            },
+            "precision": "numbered_label",
+            "languageUsed": "he",
+            "locationRef": {
+              "kind": "place",
+              "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiJkZDMyYzZhMDc5N2FhYjU0ZGU1YzhlYWQ1YThkMzgyZWNkNmQ3ZDc3YzZkOGNmYmZjNGUyNDJjZmU5Mzg0YmMyIiwiY29vcmRpbmF0ZXMiOlszMi4wNjMyNjY5LDM0Ljc2ODc1MDhdLCJnZW5lcmF0aW9uSWQiOiJjN2I2NmVlZTFhZDA0ZGRkYmExM2Y0YzVkYWRlNWVmMjAyMzk2M2ExYWMwMzg0ODU3YWFmMTczYjlkMTY0YWExIiwia2luZCI6ImFkZHJlc3MifQ"
+            },
+            "distanceMeters": 118.518505472693
+          }
+        },
+        "baselineApiOutcome": "success",
+        "photonOutcome": "success",
+        "photon": {
+          "candidateCount": 2,
+          "candidates": [
+            {
+              "rank": 1,
+              "distinctRank": 1,
+              "osmType": "N",
+              "osmId": "12148141169",
+              "displayName": null,
+              "displayLanguage": null,
+              "displayLanguageEvidence": "not reported by Photon",
+              "addressType": "house",
+              "addressPrecision": null,
+              "street": "שדרות רוטשילד",
+              "houseNumber": "1",
+              "osmKey": "addr:housenumber",
+              "osmValue": "1",
+              "coordinatesLonLat": [
+                34.7687786,
+                32.0631874
+              ],
+              "distanceMeters": 120.06544358717505,
+              "withinOriginalTolerance": true,
+              "exactExpectedOsmObject": false
+            },
+            {
+              "rank": 2,
+              "distinctRank": 2,
+              "osmType": "N",
+              "osmId": "12148128253",
+              "displayName": null,
+              "displayLanguage": null,
+              "displayLanguageEvidence": "not reported by Photon",
+              "addressType": "house",
+              "addressPrecision": null,
+              "street": "שדרות רוטשילד",
+              "houseNumber": "1",
+              "osmKey": "addr:housenumber",
+              "osmValue": "1",
+              "coordinatesLonLat": [
+                34.7687508,
+                32.0632669
+              ],
+              "distanceMeters": 118.518505472693,
+              "withinOriginalTolerance": true,
+              "exactExpectedOsmObject": false
+            }
+          ],
+          "geometryOnly": {
+            "top1Hit": true,
+            "top5Hit": true,
+            "top5HitRank": 1,
+            "top5DistinctRank": 1,
+            "top1DistanceMeters": 120.06544358717505,
+            "originalToleranceMeters": 700.0,
+            "scoringEarthRadiusMeters": 6371008.8
+          },
+          "exactSourceOsmObject": null,
+          "scoringNote": "Geometry-only scores use the frozen original expected coordinate, corpus radius, and tolerance. OSM identity is an additional exact-object score where the source case supplies a node ID; no address precision is inferred."
+        }
+      },
+      {
+        "caseId": "P055",
+        "query": "Ibn Gabirol 30 Tel Aviv",
+        "language": "en",
+        "expected": {
+          "place": "Ibn Gabirol",
+          "latitude": 32.0805,
+          "longitude": 34.781,
+          "toleranceMeters": 700.0,
+          "expectedStopId": null
+        },
+        "sourceReference": null,
+        "scoringEarthRadiusMeters": 6371008.8,
+        "nearAssisted": false,
+        "hasExpectedSourceOsmObject": false,
+        "savedNear": null,
+        "photonRequest": {
+          "endpoint": "/api",
+          "parameters": [
+            [
+              "q",
+              "Ibn Gabirol 30 Tel Aviv"
+            ],
+            [
+              "lang",
+              "en"
+            ],
+            [
+              "limit",
+              "10"
+            ],
+            [
+              "layer",
+              "house"
+            ]
+          ]
+        },
+        "httpStatus": 200,
+        "clientRoundTripMs": 12.638453998079058,
+        "transportError": null,
+        "rawResponse": {
+          "type": "FeatureCollection",
+          "features": [
+            {
+              "type": "Feature",
+              "properties": {
+                "osm_type": "N",
+                "osm_id": 12101869647,
+                "osm_key": "addr:housenumber",
+                "osm_value": "30",
+                "type": "house",
+                "housenumber": "30",
+                "street": "Ibn Gabirol",
+                "city": "Tel Aviv-Yafo",
+                "extra": {
+                  "addr:city": "Tel Aviv-Yafo",
+                  "addr:housenumber": "30",
+                  "addr:postcode": "64078",
+                  "addr:street": "Ibn Gabirol"
+                }
+              },
+              "geometry": {
+                "type": "Point",
+                "coordinates": [
+                  34.7822687,
+                  32.0752405
+                ]
+              }
+            }
+          ]
+        },
+        "rawResponseText": null,
+        "baselineApi": {
+          "outcome": "success",
+          "geometryOnly": {
+            "top1Hit": true,
+            "top5Hit": true,
+            "top5HitRank": 1,
+            "top1DistanceMeters": 596.9215971433623
+          },
+          "exactSourceOsmObject": null,
+          "topResult": {
+            "rank": 1,
+            "distinctRank": 1,
+            "duplicateOfDistinctRank": null,
+            "kind": "address",
+            "displayName": "Ibn Gabirol 30",
+            "coordinates": {
+              "latitude": 32.0752405,
+              "longitude": 34.7822687
+            },
+            "precision": "numbered_label",
+            "languageUsed": "en",
+            "locationRef": {
+              "kind": "place",
+              "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiIwNzRlMTAwMDU5N2QwZmY3NmQyNmZmZjI1NDdkMmU3OGVjNzgxNDUwMzFlZmZkYTBjNzFhMDQwNTQ4YmUzZjA2IiwiY29vcmRpbmF0ZXMiOlszMi4wNzUyNDA1LDM0Ljc4MjI2ODddLCJnZW5lcmF0aW9uSWQiOiJjN2I2NmVlZTFhZDA0ZGRkYmExM2Y0YzVkYWRlNWVmMjAyMzk2M2ExYWMwMzg0ODU3YWFmMTczYjlkMTY0YWExIiwia2luZCI6ImFkZHJlc3MifQ"
+            },
+            "distanceMeters": 596.9215971433623
+          }
+        },
+        "baselineApiOutcome": "success",
+        "photonOutcome": "success",
+        "photon": {
+          "candidateCount": 1,
+          "candidates": [
+            {
+              "rank": 1,
+              "distinctRank": 1,
+              "osmType": "N",
+              "osmId": "12101869647",
+              "displayName": null,
+              "displayLanguage": null,
+              "displayLanguageEvidence": "not reported by Photon",
+              "addressType": "house",
+              "addressPrecision": null,
+              "street": "Ibn Gabirol",
+              "houseNumber": "30",
+              "osmKey": "addr:housenumber",
+              "osmValue": "30",
+              "coordinatesLonLat": [
+                34.7822687,
+                32.0752405
+              ],
+              "distanceMeters": 596.9215971433623,
+              "withinOriginalTolerance": true,
+              "exactExpectedOsmObject": false
+            }
+          ],
+          "geometryOnly": {
+            "top1Hit": true,
+            "top5Hit": true,
+            "top5HitRank": 1,
+            "top5DistinctRank": 1,
+            "top1DistanceMeters": 596.9215971433623,
+            "originalToleranceMeters": 700.0,
+            "scoringEarthRadiusMeters": 6371008.8
+          },
+          "exactSourceOsmObject": null,
+          "scoringNote": "Geometry-only scores use the frozen original expected coordinate, corpus radius, and tolerance. OSM identity is an additional exact-object score where the source case supplies a node ID; no address precision is inferred."
+        }
+      },
+      {
+        "caseId": "P056",
+        "query": "Jaffa Street 97 Jerusalem",
+        "language": "en",
+        "expected": {
+          "place": "Jaffa St JLM",
+          "latitude": 31.7857,
+          "longitude": 35.211,
+          "toleranceMeters": 700.0,
+          "expectedStopId": null
+        },
+        "sourceReference": null,
+        "scoringEarthRadiusMeters": 6371008.8,
+        "nearAssisted": false,
+        "hasExpectedSourceOsmObject": false,
+        "savedNear": null,
+        "photonRequest": {
+          "endpoint": "/api",
+          "parameters": [
+            [
+              "q",
+              "Jaffa Street 97 Jerusalem"
+            ],
+            [
+              "lang",
+              "en"
+            ],
+            [
+              "limit",
+              "10"
+            ],
+            [
+              "layer",
+              "house"
+            ]
+          ]
+        },
+        "httpStatus": 200,
+        "clientRoundTripMs": 22.881556003994774,
+        "transportError": null,
+        "rawResponse": {
+          "type": "FeatureCollection",
+          "features": []
+        },
+        "rawResponseText": null,
+        "baselineApi": {
+          "outcome": "success",
+          "geometryOnly": {
+            "top1Hit": false,
+            "top5Hit": false,
+            "top5HitRank": null,
+            "top1DistanceMeters": 46788.49574808984
+          },
+          "exactSourceOsmObject": null,
+          "topResult": {
+            "rank": 1,
+            "distinctRank": 1,
+            "duplicateOfDistinctRank": null,
+            "kind": "address",
+            "displayName": "Jaffa Street",
+            "coordinates": {
+              "latitude": 32.1795855,
+              "longitude": 35.036495
+            },
+            "precision": "street",
+            "languageUsed": "en",
+            "locationRef": {
+              "kind": "place",
+              "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiIxOTQ4ZDc3Y2M5ZGM1MWRhNjE5ODEwNmMyNWFhMmY5YzhlNTBhMDFlODAxNzc3MGY3ZGU0Nzc3YmEwNjEyYzlhIiwiY29vcmRpbmF0ZXMiOlszMi4xNzk1ODU1LDM1LjAzNjQ5NV0sImdlbmVyYXRpb25JZCI6ImM3YjY2ZWVlMWFkMDRkZGRiYTEzZjRjNWRhZGU1ZWYyMDIzOTYzYTFhYzAzODQ4NTdhYWYxNzNiOWQxNjRhYTEiLCJraW5kIjoiYWRkcmVzcyJ9"
+            },
+            "distanceMeters": 46788.49574808984
+          }
+        },
+        "baselineApiOutcome": "success",
+        "photonOutcome": "valid_empty",
+        "photon": {
+          "candidateCount": 0,
+          "candidates": [],
+          "geometryOnly": {
+            "top1Hit": false,
+            "top5Hit": false,
+            "top5HitRank": null,
+            "top5DistinctRank": null,
+            "top1DistanceMeters": null,
+            "originalToleranceMeters": 700.0,
+            "scoringEarthRadiusMeters": 6371008.8
+          },
+          "exactSourceOsmObject": null,
+          "scoringNote": "Geometry-only scores use the frozen original expected coordinate, corpus radius, and tolerance. OSM identity is an additional exact-object score where the source case supplies a node ID; no address precision is inferred."
+        }
+      },
+      {
+        "caseId": "P057",
+        "query": "יפו 97 ירושלים",
+        "language": "he",
+        "expected": {
+          "place": "Jaffa St JLM",
+          "latitude": 31.7857,
+          "longitude": 35.211,
+          "toleranceMeters": 700.0,
+          "expectedStopId": null
+        },
+        "sourceReference": null,
+        "scoringEarthRadiusMeters": 6371008.8,
+        "nearAssisted": false,
+        "hasExpectedSourceOsmObject": false,
+        "savedNear": null,
+        "photonRequest": {
+          "endpoint": "/api",
+          "parameters": [
+            [
+              "q",
+              "יפו 97 ירושלים"
+            ],
+            [
+              "lang",
+              "he"
+            ],
+            [
+              "limit",
+              "10"
+            ],
+            [
+              "layer",
+              "house"
+            ]
+          ]
+        },
+        "httpStatus": 200,
+        "clientRoundTripMs": 14.897117005602922,
+        "transportError": null,
+        "rawResponse": {
+          "type": "FeatureCollection",
+          "features": [
+            {
+              "type": "Feature",
+              "properties": {
+                "osm_type": "N",
+                "osm_id": 9726126698,
+                "osm_key": "addr:housenumber",
+                "osm_value": "97",
+                "type": "house",
+                "housenumber": "97",
+                "street": "יפו",
+                "city": "ירושלים",
+                "extra": {
+                  "addr:city": "ירושלים",
+                  "addr:housenumber": "97",
+                  "addr:street": "יפו"
+                }
+              },
+              "geometry": {
+                "type": "Point",
+                "coordinates": [
+                  35.2146831,
+                  31.7842086
+                ]
+              }
+            }
+          ]
+        },
+        "rawResponseText": null,
+        "baselineApi": {
+          "outcome": "success",
+          "geometryOnly": {
+            "top1Hit": true,
+            "top5Hit": true,
+            "top5HitRank": 1,
+            "top1DistanceMeters": 403.31976443040253
+          },
+          "exactSourceOsmObject": null,
+          "topResult": {
+            "rank": 1,
+            "distinctRank": 1,
+            "duplicateOfDistinctRank": null,
+            "kind": "address",
+            "displayName": "יפו 97",
+            "coordinates": {
+              "latitude": 31.7843805,
+              "longitude": 35.2149747
+            },
+            "precision": "numbered_label",
+            "languageUsed": "he",
+            "locationRef": {
+              "kind": "place",
+              "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiI2YjUzZjQ0OTg2YjFjOGI2ZWQ2YWQ2Mjc1OWYzY2JhMWQ5NzY4YjIyNDRhN2UwY2Y1NDQxNGU2ZmUyODQ3ZDNiIiwiY29vcmRpbmF0ZXMiOlszMS43ODQzODA1LDM1LjIxNDk3NDddLCJnZW5lcmF0aW9uSWQiOiJjN2I2NmVlZTFhZDA0ZGRkYmExM2Y0YzVkYWRlNWVmMjAyMzk2M2ExYWMwMzg0ODU3YWFmMTczYjlkMTY0YWExIiwia2luZCI6ImFkZHJlc3MifQ"
+            },
+            "distanceMeters": 403.31976443040253
+          }
+        },
+        "baselineApiOutcome": "success",
+        "photonOutcome": "success",
+        "photon": {
+          "candidateCount": 1,
+          "candidates": [
+            {
+              "rank": 1,
+              "distinctRank": 1,
+              "osmType": "N",
+              "osmId": "9726126698",
+              "displayName": null,
+              "displayLanguage": null,
+              "displayLanguageEvidence": "not reported by Photon",
+              "addressType": "house",
+              "addressPrecision": null,
+              "street": "יפו",
+              "houseNumber": "97",
+              "osmKey": "addr:housenumber",
+              "osmValue": "97",
+              "coordinatesLonLat": [
+                35.2146831,
+                31.7842086
+              ],
+              "distanceMeters": 385.6059620045407,
+              "withinOriginalTolerance": true,
+              "exactExpectedOsmObject": false
+            }
+          ],
+          "geometryOnly": {
+            "top1Hit": true,
+            "top5Hit": true,
+            "top5HitRank": 1,
+            "top5DistinctRank": 1,
+            "top1DistanceMeters": 385.6059620045407,
+            "originalToleranceMeters": 700.0,
+            "scoringEarthRadiusMeters": 6371008.8
+          },
+          "exactSourceOsmObject": null,
+          "scoringNote": "Geometry-only scores use the frozen original expected coordinate, corpus radius, and tolerance. OSM identity is an additional exact-object score where the source case supplies a node ID; no address precision is inferred."
+        }
+      },
+      {
+        "caseId": "P058",
+        "query": "King George 15 Jerusalem",
+        "language": "en",
+        "expected": {
+          "place": "King George",
+          "latitude": 31.78,
+          "longitude": 35.2178,
+          "toleranceMeters": 700.0,
+          "expectedStopId": null
+        },
+        "sourceReference": null,
+        "scoringEarthRadiusMeters": 6371008.8,
+        "nearAssisted": false,
+        "hasExpectedSourceOsmObject": false,
+        "savedNear": null,
+        "photonRequest": {
+          "endpoint": "/api",
+          "parameters": [
+            [
+              "q",
+              "King George 15 Jerusalem"
+            ],
+            [
+              "lang",
+              "en"
+            ],
+            [
+              "limit",
+              "10"
+            ],
+            [
+              "layer",
+              "house"
+            ]
+          ]
+        },
+        "httpStatus": 200,
+        "clientRoundTripMs": 20.578039999236353,
+        "transportError": null,
+        "rawResponse": {
+          "type": "FeatureCollection",
+          "features": []
+        },
+        "rawResponseText": null,
+        "baselineApi": {
+          "outcome": "success",
+          "geometryOnly": {
+            "top1Hit": false,
+            "top5Hit": false,
+            "top5HitRank": null,
+            "top1DistanceMeters": 8073.349896319882
+          },
+          "exactSourceOsmObject": null,
+          "topResult": {
+            "rank": 1,
+            "distinctRank": 1,
+            "duplicateOfDistinctRank": null,
+            "kind": "address",
+            "displayName": "Jerusalem-Tqo'",
+            "coordinates": {
+              "latitude": 31.7119787,
+              "longitude": 35.2476564
+            },
+            "precision": "street",
+            "languageUsed": "en",
+            "locationRef": {
+              "kind": "place",
+              "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiIxN2VhYjYyYzEyZGQxOWQ2YjQxYzkwZDUxY2QxMzkxYWU1Y2I0MDk2NmUxYzE3M2RiZmE3YmNlNTkzOWJmOWRhIiwiY29vcmRpbmF0ZXMiOlszMS43MTE5Nzg3LDM1LjI0NzY1NjRdLCJnZW5lcmF0aW9uSWQiOiJjN2I2NmVlZTFhZDA0ZGRkYmExM2Y0YzVkYWRlNWVmMjAyMzk2M2ExYWMwMzg0ODU3YWFmMTczYjlkMTY0YWExIiwia2luZCI6ImFkZHJlc3MifQ"
+            },
+            "distanceMeters": 8073.349896319882
+          }
+        },
+        "baselineApiOutcome": "success",
+        "photonOutcome": "valid_empty",
+        "photon": {
+          "candidateCount": 0,
+          "candidates": [],
+          "geometryOnly": {
+            "top1Hit": false,
+            "top5Hit": false,
+            "top5HitRank": null,
+            "top5DistinctRank": null,
+            "top1DistanceMeters": null,
+            "originalToleranceMeters": 700.0,
+            "scoringEarthRadiusMeters": 6371008.8
+          },
+          "exactSourceOsmObject": null,
+          "scoringNote": "Geometry-only scores use the frozen original expected coordinate, corpus radius, and tolerance. OSM identity is an additional exact-object score where the source case supplies a node ID; no address precision is inferred."
+        }
+      },
+      {
+        "caseId": "P059",
+        "query": "Herzl 50 Haifa",
+        "language": "en",
+        "expected": {
+          "place": "Herzl Haifa",
+          "latitude": 32.8156,
+          "longitude": 34.9942,
+          "toleranceMeters": 800.0,
+          "expectedStopId": null
+        },
+        "sourceReference": null,
+        "scoringEarthRadiusMeters": 6371008.8,
+        "nearAssisted": false,
+        "hasExpectedSourceOsmObject": false,
+        "savedNear": null,
+        "photonRequest": {
+          "endpoint": "/api",
+          "parameters": [
+            [
+              "q",
+              "Herzl 50 Haifa"
+            ],
+            [
+              "lang",
+              "en"
+            ],
+            [
+              "limit",
+              "10"
+            ],
+            [
+              "layer",
+              "house"
+            ]
+          ]
+        },
+        "httpStatus": 200,
+        "clientRoundTripMs": 14.822137003648095,
+        "transportError": null,
+        "rawResponse": {
+          "type": "FeatureCollection",
+          "features": []
+        },
+        "rawResponseText": null,
+        "baselineApi": {
+          "outcome": "success",
+          "geometryOnly": {
+            "top1Hit": false,
+            "top5Hit": false,
+            "top5HitRank": null,
+            "top1DistanceMeters": 71708.12442577684
+          },
+          "exactSourceOsmObject": null,
+          "topResult": {
+            "rank": 1,
+            "distinctRank": 1,
+            "duplicateOfDistinctRank": null,
+            "kind": "address",
+            "displayName": "Haifa",
+            "coordinates": {
+              "latitude": 32.1732103,
+              "longitude": 35.0614067
+            },
+            "precision": "street",
+            "languageUsed": "en",
+            "locationRef": {
+              "kind": "place",
+              "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiJmODJkMjIyYTk5NzRjMTE0OGNjNDI2MGJmMjE2NWRjMmRhMTcxYWI5ZjI0NmMzODY3YWFlODc5OGQ4YTNhZWY0IiwiY29vcmRpbmF0ZXMiOlszMi4xNzMyMTAzLDM1LjA2MTQwNjddLCJnZW5lcmF0aW9uSWQiOiJjN2I2NmVlZTFhZDA0ZGRkYmExM2Y0YzVkYWRlNWVmMjAyMzk2M2ExYWMwMzg0ODU3YWFmMTczYjlkMTY0YWExIiwia2luZCI6ImFkZHJlc3MifQ"
+            },
+            "distanceMeters": 71708.12442577684
+          }
+        },
+        "baselineApiOutcome": "success",
+        "photonOutcome": "valid_empty",
+        "photon": {
+          "candidateCount": 0,
+          "candidates": [],
+          "geometryOnly": {
+            "top1Hit": false,
+            "top5Hit": false,
+            "top5HitRank": null,
+            "top5DistinctRank": null,
+            "top1DistanceMeters": null,
+            "originalToleranceMeters": 800.0,
+            "scoringEarthRadiusMeters": 6371008.8
+          },
+          "exactSourceOsmObject": null,
+          "scoringNote": "Geometry-only scores use the frozen original expected coordinate, corpus radius, and tolerance. OSM identity is an additional exact-object score where the source case supplies a node ID; no address precision is inferred."
+        }
+      },
+      {
+        "caseId": "P060",
+        "query": "Ben Yehuda 20 Tel Aviv",
+        "language": "en",
+        "expected": {
+          "place": "Ben Yehuda TA",
+          "latitude": 32.079,
+          "longitude": 34.7686,
+          "toleranceMeters": 700.0,
+          "expectedStopId": null
+        },
+        "sourceReference": null,
+        "scoringEarthRadiusMeters": 6371008.8,
+        "nearAssisted": false,
+        "hasExpectedSourceOsmObject": false,
+        "savedNear": null,
+        "photonRequest": {
+          "endpoint": "/api",
+          "parameters": [
+            [
+              "q",
+              "Ben Yehuda 20 Tel Aviv"
+            ],
+            [
+              "lang",
+              "en"
+            ],
+            [
+              "limit",
+              "10"
+            ],
+            [
+              "layer",
+              "house"
+            ]
+          ]
+        },
+        "httpStatus": 200,
+        "clientRoundTripMs": 17.445894998672884,
+        "transportError": null,
+        "rawResponse": {
+          "type": "FeatureCollection",
+          "features": []
+        },
+        "rawResponseText": null,
+        "baselineApi": {
+          "outcome": "valid_empty",
+          "geometryOnly": {
+            "top1Hit": false,
+            "top5Hit": false,
+            "top5HitRank": null,
+            "top1DistanceMeters": null
+          },
+          "exactSourceOsmObject": null,
+          "topResult": null
+        },
+        "baselineApiOutcome": "valid_empty",
+        "photonOutcome": "valid_empty",
+        "photon": {
+          "candidateCount": 0,
+          "candidates": [],
+          "geometryOnly": {
+            "top1Hit": false,
+            "top5Hit": false,
+            "top5HitRank": null,
+            "top5DistinctRank": null,
+            "top1DistanceMeters": null,
+            "originalToleranceMeters": 700.0,
+            "scoringEarthRadiusMeters": 6371008.8
+          },
+          "exactSourceOsmObject": null,
+          "scoringNote": "Geometry-only scores use the frozen original expected coordinate, corpus radius, and tolerance. OSM identity is an additional exact-object score where the source case supplies a node ID; no address precision is inferred."
+        }
+      },
+      {
+        "caseId": "P061",
+        "query": "Allenby 40 Tel Aviv",
+        "language": "en",
+        "expected": {
+          "place": "Allenby",
+          "latitude": 32.0654,
+          "longitude": 34.7702,
+          "toleranceMeters": 700.0,
+          "expectedStopId": null
+        },
+        "sourceReference": null,
+        "scoringEarthRadiusMeters": 6371008.8,
+        "nearAssisted": false,
+        "hasExpectedSourceOsmObject": false,
+        "savedNear": null,
+        "photonRequest": {
+          "endpoint": "/api",
+          "parameters": [
+            [
+              "q",
+              "Allenby 40 Tel Aviv"
+            ],
+            [
+              "lang",
+              "en"
+            ],
+            [
+              "limit",
+              "10"
+            ],
+            [
+              "layer",
+              "house"
+            ]
+          ]
+        },
+        "httpStatus": 200,
+        "clientRoundTripMs": 21.85100100177806,
+        "transportError": null,
+        "rawResponse": {
+          "type": "FeatureCollection",
+          "features": [
+            {
+              "type": "Feature",
+              "properties": {
+                "osm_type": "N",
+                "osm_id": 1750784331,
+                "osm_key": "addr:housenumber",
+                "osm_value": "40",
+                "type": "house",
+                "housenumber": "40",
+                "street": "Basel, Tel Aviv",
+                "extra": {
+                  "addr:housename": "La bonne Patisserie",
+                  "addr:housenumber": "40",
+                  "addr:postcode": "60000",
+                  "addr:street": "Basel, Tel Aviv"
+                }
+              },
+              "geometry": {
+                "type": "Point",
+                "coordinates": [
+                  34.7795378,
+                  32.0898978
+                ]
+              }
+            }
+          ]
+        },
+        "rawResponseText": null,
+        "baselineApi": {
+          "outcome": "valid_empty",
+          "geometryOnly": {
+            "top1Hit": false,
+            "top5Hit": false,
+            "top5HitRank": null,
+            "top1DistanceMeters": null
+          },
+          "exactSourceOsmObject": null,
+          "topResult": null
+        },
+        "baselineApiOutcome": "valid_empty",
+        "photonOutcome": "success",
+        "photon": {
+          "candidateCount": 1,
+          "candidates": [
+            {
+              "rank": 1,
+              "distinctRank": 1,
+              "osmType": "N",
+              "osmId": "1750784331",
+              "displayName": null,
+              "displayLanguage": null,
+              "displayLanguageEvidence": "not reported by Photon",
+              "addressType": "house",
+              "addressPrecision": null,
+              "street": "Basel, Tel Aviv",
+              "houseNumber": "40",
+              "osmKey": "addr:housenumber",
+              "osmValue": "40",
+              "coordinatesLonLat": [
+                34.7795378,
+                32.0898978
+              ],
+              "distanceMeters": 2862.587616533072,
+              "withinOriginalTolerance": false,
+              "exactExpectedOsmObject": false
+            }
+          ],
+          "geometryOnly": {
+            "top1Hit": false,
+            "top5Hit": false,
+            "top5HitRank": null,
+            "top5DistinctRank": null,
+            "top1DistanceMeters": 2862.587616533072,
+            "originalToleranceMeters": 700.0,
+            "scoringEarthRadiusMeters": 6371008.8
+          },
+          "exactSourceOsmObject": null,
+          "scoringNote": "Geometry-only scores use the frozen original expected coordinate, corpus radius, and tolerance. OSM identity is an additional exact-object score where the source case supplies a node ID; no address precision is inferred."
+        }
+      },
+      {
+        "caseId": "P062",
+        "query": "HaNevi'im 20 Jerusalem",
+        "language": "en",
+        "expected": {
+          "place": "HaNeviim",
+          "latitude": 31.7828,
+          "longitude": 35.22,
+          "toleranceMeters": 700.0,
+          "expectedStopId": null
+        },
+        "sourceReference": null,
+        "scoringEarthRadiusMeters": 6371008.8,
+        "nearAssisted": false,
+        "hasExpectedSourceOsmObject": false,
+        "savedNear": null,
+        "photonRequest": {
+          "endpoint": "/api",
+          "parameters": [
+            [
+              "q",
+              "HaNevi'im 20 Jerusalem"
+            ],
+            [
+              "lang",
+              "en"
+            ],
+            [
+              "limit",
+              "10"
+            ],
+            [
+              "layer",
+              "house"
+            ]
+          ]
+        },
+        "httpStatus": 200,
+        "clientRoundTripMs": 19.239937006204855,
+        "transportError": null,
+        "rawResponse": {
+          "type": "FeatureCollection",
+          "features": []
+        },
+        "rawResponseText": null,
+        "baselineApi": {
+          "outcome": "success",
+          "geometryOnly": {
+            "top1Hit": false,
+            "top5Hit": false,
+            "top5HitRank": null,
+            "top1DistanceMeters": 8297.842174260535
+          },
+          "exactSourceOsmObject": null,
+          "topResult": {
+            "rank": 1,
+            "distinctRank": 1,
+            "duplicateOfDistinctRank": null,
+            "kind": "address",
+            "displayName": "Jerusalem-Tqo'",
+            "coordinates": {
+              "latitude": 31.7119787,
+              "longitude": 35.2476564
+            },
+            "precision": "street",
+            "languageUsed": "en",
+            "locationRef": {
+              "kind": "place",
+              "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiIxN2VhYjYyYzEyZGQxOWQ2YjQxYzkwZDUxY2QxMzkxYWU1Y2I0MDk2NmUxYzE3M2RiZmE3YmNlNTkzOWJmOWRhIiwiY29vcmRpbmF0ZXMiOlszMS43MTE5Nzg3LDM1LjI0NzY1NjRdLCJnZW5lcmF0aW9uSWQiOiJjN2I2NmVlZTFhZDA0ZGRkYmExM2Y0YzVkYWRlNWVmMjAyMzk2M2ExYWMwMzg0ODU3YWFmMTczYjlkMTY0YWExIiwia2luZCI6ImFkZHJlc3MifQ"
+            },
+            "distanceMeters": 8297.842174260535
+          }
+        },
+        "baselineApiOutcome": "success",
+        "photonOutcome": "valid_empty",
+        "photon": {
+          "candidateCount": 0,
+          "candidates": [],
+          "geometryOnly": {
+            "top1Hit": false,
+            "top5Hit": false,
+            "top5HitRank": null,
+            "top5DistinctRank": null,
+            "top1DistanceMeters": null,
+            "originalToleranceMeters": 700.0,
+            "scoringEarthRadiusMeters": 6371008.8
+          },
+          "exactSourceOsmObject": null,
+          "scoringNote": "Geometry-only scores use the frozen original expected coordinate, corpus radius, and tolerance. OSM identity is an additional exact-object score where the source case supplies a node ID; no address precision is inferred."
+        }
+      },
+      {
+        "caseId": "P063",
+        "query": "Sokolov 30 Ramat Gan",
+        "language": "en",
+        "expected": {
+          "place": "Sokolov RG",
+          "latitude": 32.0836,
+          "longitude": 34.811,
+          "toleranceMeters": 800.0,
+          "expectedStopId": null
+        },
+        "sourceReference": null,
+        "scoringEarthRadiusMeters": 6371008.8,
+        "nearAssisted": false,
+        "hasExpectedSourceOsmObject": false,
+        "savedNear": null,
+        "photonRequest": {
+          "endpoint": "/api",
+          "parameters": [
+            [
+              "q",
+              "Sokolov 30 Ramat Gan"
+            ],
+            [
+              "lang",
+              "en"
+            ],
+            [
+              "limit",
+              "10"
+            ],
+            [
+              "layer",
+              "house"
+            ]
+          ]
+        },
+        "httpStatus": 200,
+        "clientRoundTripMs": 15.662906000216026,
+        "transportError": null,
+        "rawResponse": {
+          "type": "FeatureCollection",
+          "features": []
+        },
+        "rawResponseText": null,
+        "baselineApi": {
+          "outcome": "success",
+          "geometryOnly": {
+            "top1Hit": false,
+            "top5Hit": false,
+            "top5HitRank": null,
+            "top1DistanceMeters": 105169.17250014275
+          },
+          "exactSourceOsmObject": null,
+          "topResult": {
+            "rank": 1,
+            "distinctRank": 1,
+            "duplicateOfDistinctRank": null,
+            "kind": "address",
+            "displayName": "Sokolov",
+            "coordinates": {
+              "latitude": 33.0001406,
+              "longitude": 35.087952
+            },
+            "precision": "street",
+            "languageUsed": "en",
+            "locationRef": {
+              "kind": "place",
+              "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiIwNjFjOGJmNDczOTcwZTU0YjhiZTU1MjFkNGY3YmIwYzlhNWFjNmVmOTg5NmEwMjExMmViMDQyMzU0MTExNzVjIiwiY29vcmRpbmF0ZXMiOlszMy4wMDAxNDA2LDM1LjA4Nzk1Ml0sImdlbmVyYXRpb25JZCI6ImM3YjY2ZWVlMWFkMDRkZGRiYTEzZjRjNWRhZGU1ZWYyMDIzOTYzYTFhYzAzODQ4NTdhYWYxNzNiOWQxNjRhYTEiLCJraW5kIjoiYWRkcmVzcyJ9"
+            },
+            "distanceMeters": 105169.17250014275
+          }
+        },
+        "baselineApiOutcome": "success",
+        "photonOutcome": "valid_empty",
+        "photon": {
+          "candidateCount": 0,
+          "candidates": [],
+          "geometryOnly": {
+            "top1Hit": false,
+            "top5Hit": false,
+            "top5HitRank": null,
+            "top5DistinctRank": null,
+            "top1DistanceMeters": null,
+            "originalToleranceMeters": 800.0,
+            "scoringEarthRadiusMeters": 6371008.8
+          },
+          "exactSourceOsmObject": null,
+          "scoringNote": "Geometry-only scores use the frozen original expected coordinate, corpus radius, and tolerance. OSM identity is an additional exact-object score where the source case supplies a node ID; no address precision is inferred."
+        }
+      },
+      {
+        "caseId": "P064",
+        "query": "Rager Boulevard Beersheba",
+        "language": "en",
+        "expected": {
+          "place": "Rager Blvd",
+          "latitude": 31.253,
+          "longitude": 34.795,
+          "toleranceMeters": 900.0,
+          "expectedStopId": null
+        },
+        "sourceReference": null,
+        "scoringEarthRadiusMeters": 6371008.8,
+        "nearAssisted": false,
+        "hasExpectedSourceOsmObject": false,
+        "savedNear": null,
+        "photonRequest": {
+          "endpoint": "/api",
+          "parameters": [
+            [
+              "q",
+              "Rager Boulevard Beersheba"
+            ],
+            [
+              "lang",
+              "en"
+            ],
+            [
+              "limit",
+              "10"
+            ],
+            [
+              "layer",
+              "house"
+            ]
+          ]
+        },
+        "httpStatus": 200,
+        "clientRoundTripMs": 20.630917999369558,
+        "transportError": null,
+        "rawResponse": {
+          "type": "FeatureCollection",
+          "features": []
+        },
+        "rawResponseText": null,
+        "baselineApi": {
+          "outcome": "valid_empty",
+          "geometryOnly": {
+            "top1Hit": false,
+            "top5Hit": false,
+            "top5HitRank": null,
+            "top1DistanceMeters": null
+          },
+          "exactSourceOsmObject": null,
+          "topResult": null
+        },
+        "baselineApiOutcome": "valid_empty",
+        "photonOutcome": "valid_empty",
+        "photon": {
+          "candidateCount": 0,
+          "candidates": [],
+          "geometryOnly": {
+            "top1Hit": false,
+            "top5Hit": false,
+            "top5HitRank": null,
+            "top5DistinctRank": null,
+            "top1DistanceMeters": null,
+            "originalToleranceMeters": 900.0,
+            "scoringEarthRadiusMeters": 6371008.8
+          },
+          "exactSourceOsmObject": null,
+          "scoringNote": "Geometry-only scores use the frozen original expected coordinate, corpus radius, and tolerance. OSM identity is an additional exact-object score where the source case supplies a node ID; no address precision is inferred."
+        }
+      },
+      {
+        "caseId": "P065",
+        "query": "הרצל 50 חיפה",
+        "language": "he",
+        "expected": {
+          "place": "Herzl Haifa",
+          "latitude": 32.8156,
+          "longitude": 34.9942,
+          "toleranceMeters": 800.0,
+          "expectedStopId": null
+        },
+        "sourceReference": null,
+        "scoringEarthRadiusMeters": 6371008.8,
+        "nearAssisted": false,
+        "hasExpectedSourceOsmObject": false,
+        "savedNear": null,
+        "photonRequest": {
+          "endpoint": "/api",
+          "parameters": [
+            [
+              "q",
+              "הרצל 50 חיפה"
+            ],
+            [
+              "lang",
+              "he"
+            ],
+            [
+              "limit",
+              "10"
+            ],
+            [
+              "layer",
+              "house"
+            ]
+          ]
+        },
+        "httpStatus": 200,
+        "clientRoundTripMs": 17.330990005575586,
+        "transportError": null,
+        "rawResponse": {
+          "type": "FeatureCollection",
+          "features": [
+            {
+              "type": "Feature",
+              "properties": {
+                "osm_type": "N",
+                "osm_id": 13196140834,
+                "osm_key": "addr:housenumber",
+                "osm_value": "50",
+                "type": "house",
+                "housenumber": "50",
+                "street": "הרצל",
+                "city": "חיפה",
+                "extra": {
+                  "addr:city": "חיפה",
+                  "addr:housenumber": "50",
+                  "addr:street": "הרצל"
+                }
+              },
+              "geometry": {
+                "type": "Point",
+                "coordinates": [
+                  35.0007915,
+                  32.8075269
+                ]
+              }
+            }
+          ]
+        },
+        "rawResponseText": null,
+        "baselineApi": {
+          "outcome": "success",
+          "geometryOnly": {
+            "top1Hit": false,
+            "top5Hit": false,
+            "top5HitRank": null,
+            "top1DistanceMeters": 1088.7193588079695
+          },
+          "exactSourceOsmObject": null,
+          "topResult": {
+            "rank": 1,
+            "distinctRank": 1,
+            "duplicateOfDistinctRank": null,
+            "kind": "address",
+            "displayName": "הרצל 50",
+            "coordinates": {
+              "latitude": 32.8075269,
+              "longitude": 35.0007915
+            },
+            "precision": "numbered_label",
+            "languageUsed": "he",
+            "locationRef": {
+              "kind": "place",
+              "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiI2MjY1MmYzZGI4ZGEwMGYzNDM2MGUwNzNiM2M4YTJkY2NiYzljOTY2OTg5N2FjZTIyZjUwYjQwNDg3ODgzYjA5IiwiY29vcmRpbmF0ZXMiOlszMi44MDc1MjY5LDM1LjAwMDc5MTVdLCJnZW5lcmF0aW9uSWQiOiJjN2I2NmVlZTFhZDA0ZGRkYmExM2Y0YzVkYWRlNWVmMjAyMzk2M2ExYWMwMzg0ODU3YWFmMTczYjlkMTY0YWExIiwia2luZCI6ImFkZHJlc3MifQ"
+            },
+            "distanceMeters": 1088.7193588079695
+          }
+        },
+        "baselineApiOutcome": "success",
+        "photonOutcome": "success",
+        "photon": {
+          "candidateCount": 1,
+          "candidates": [
+            {
+              "rank": 1,
+              "distinctRank": 1,
+              "osmType": "N",
+              "osmId": "13196140834",
+              "displayName": null,
+              "displayLanguage": null,
+              "displayLanguageEvidence": "not reported by Photon",
+              "addressType": "house",
+              "addressPrecision": null,
+              "street": "הרצל",
+              "houseNumber": "50",
+              "osmKey": "addr:housenumber",
+              "osmValue": "50",
+              "coordinatesLonLat": [
+                35.0007915,
+                32.8075269
+              ],
+              "distanceMeters": 1088.7193588079695,
+              "withinOriginalTolerance": false,
+              "exactExpectedOsmObject": false
+            }
+          ],
+          "geometryOnly": {
+            "top1Hit": false,
+            "top5Hit": false,
+            "top5HitRank": null,
+            "top5DistinctRank": null,
+            "top1DistanceMeters": 1088.7193588079695,
+            "originalToleranceMeters": 800.0,
+            "scoringEarthRadiusMeters": 6371008.8
+          },
+          "exactSourceOsmObject": null,
+          "scoringNote": "Geometry-only scores use the frozen original expected coordinate, corpus radius, and tolerance. OSM identity is an additional exact-object score where the source case supplies a node ID; no address precision is inferred."
+        }
+      },
+      {
+        "caseId": "OSM-ADDR-HE-001",
+        "query": "י.ל. גורדון 24 תל אביב",
+        "language": "he",
+        "expected": {
+          "place": "י.ל. גורדון",
+          "latitude": 32.0821494,
+          "longitude": 34.7713123,
+          "toleranceMeters": 300.0,
+          "expectedStopId": null
+        },
+        "sourceReference": {
+          "osmType": "node",
+          "osmId": "13683588481",
+          "pbfSha256": "8a34b30f91a63ef9239961ba0e4d660ae22deda2f6da4b85ba4772a6b7c4c74f",
+          "sourceField": "addr:street:he",
+          "rawTags": {
+            "addr:city": "Tel Aviv",
+            "addr:city:en": "Tel Aviv",
+            "addr:city:he": "תל אביב",
+            "addr:housenumber": "24",
+            "addr:street": "י. ל. גורדון",
+            "addr:street:en": "J.L. Gerdon",
+            "addr:street:he": "י.ל. גורדון"
+          }
+        },
+        "scoringEarthRadiusMeters": 6371008.8,
+        "nearAssisted": false,
+        "hasExpectedSourceOsmObject": true,
+        "savedNear": null,
+        "photonRequest": {
+          "endpoint": "/api",
+          "parameters": [
+            [
+              "q",
+              "י.ל. גורדון 24 תל אביב"
+            ],
+            [
+              "lang",
+              "he"
+            ],
+            [
+              "limit",
+              "10"
+            ],
+            [
+              "layer",
+              "house"
+            ]
+          ]
+        },
+        "httpStatus": 200,
+        "clientRoundTripMs": 10.19649700174341,
+        "transportError": null,
+        "rawResponse": {
+          "type": "FeatureCollection",
+          "features": [
+            {
+              "type": "Feature",
+              "properties": {
+                "osm_type": "N",
+                "osm_id": 13683588481,
+                "osm_key": "addr:housenumber",
+                "osm_value": "24",
+                "type": "house",
+                "housenumber": "24",
+                "street": "י.ל. גורדון",
+                "city": "תל אביב",
+                "extra": {
+                  "addr:city": "Tel Aviv",
+                  "addr:city:en": "Tel Aviv",
+                  "addr:city:he": "תל אביב",
+                  "addr:housenumber": "24",
+                  "addr:postcode": "6343804",
+                  "addr:street": "י. ל. גורדון",
+                  "addr:street:en": "J.L. Gerdon",
+                  "addr:street:he": "י.ל. גורדון"
+                }
+              },
+              "geometry": {
+                "type": "Point",
+                "coordinates": [
+                  34.7713123,
+                  32.0821494
+                ]
+              }
+            }
+          ]
+        },
+        "rawResponseText": null,
+        "baselineApi": {
+          "outcome": "success",
+          "geometryOnly": {
+            "top1Hit": true,
+            "top5Hit": true,
+            "top5HitRank": 1,
+            "top1DistanceMeters": 0.0
+          },
+          "exactSourceOsmObject": null,
+          "topResult": {
+            "rank": 1,
+            "distinctRank": 1,
+            "duplicateOfDistinctRank": null,
+            "kind": "address",
+            "displayName": "י. ל. גורדון 24",
+            "coordinates": {
+              "latitude": 32.0821494,
+              "longitude": 34.7713123
+            },
+            "precision": "numbered_label",
+            "languageUsed": "he",
+            "locationRef": {
+              "kind": "place",
+              "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiIyYzhhOWJkNmQ4NGU3YzRjZDdjNDY3Y2RlMWNmM2I1MzA0M2JhM2ZhZmYyODRlZWRlZjdmNWI1YWFjNDU5NDBjIiwiY29vcmRpbmF0ZXMiOlszMi4wODIxNDk0LDM0Ljc3MTMxMjNdLCJnZW5lcmF0aW9uSWQiOiJjN2I2NmVlZTFhZDA0ZGRkYmExM2Y0YzVkYWRlNWVmMjAyMzk2M2ExYWMwMzg0ODU3YWFmMTczYjlkMTY0YWExIiwia2luZCI6ImFkZHJlc3MifQ"
+            },
+            "distanceMeters": 0.0
+          }
+        },
+        "baselineApiOutcome": "success",
+        "photonOutcome": "success",
+        "photon": {
+          "candidateCount": 1,
+          "candidates": [
+            {
+              "rank": 1,
+              "distinctRank": 1,
+              "osmType": "N",
+              "osmId": "13683588481",
+              "displayName": null,
+              "displayLanguage": null,
+              "displayLanguageEvidence": "not reported by Photon",
+              "addressType": "house",
+              "addressPrecision": null,
+              "street": "י.ל. גורדון",
+              "houseNumber": "24",
+              "osmKey": "addr:housenumber",
+              "osmValue": "24",
+              "coordinatesLonLat": [
+                34.7713123,
+                32.0821494
+              ],
+              "distanceMeters": 0.0,
+              "withinOriginalTolerance": true,
+              "exactExpectedOsmObject": true
+            }
+          ],
+          "geometryOnly": {
+            "top1Hit": true,
+            "top5Hit": true,
+            "top5HitRank": 1,
+            "top5DistinctRank": 1,
+            "top1DistanceMeters": 0.0,
+            "originalToleranceMeters": 300.0,
+            "scoringEarthRadiusMeters": 6371008.8
+          },
+          "exactSourceOsmObject": {
+            "expectedOsmType": "node",
+            "expectedOsmId": "13683588481",
+            "top1Hit": true,
+            "top5Hit": true,
+            "top5HitRank": 1
+          },
+          "scoringNote": "Geometry-only scores use the frozen original expected coordinate, corpus radius, and tolerance. OSM identity is an additional exact-object score where the source case supplies a node ID; no address precision is inferred."
+        }
+      },
+      {
+        "caseId": "OSM-ADDR-EN-001",
+        "query": "113 Ben Yehuda, Tel Aviv",
+        "language": "en",
+        "expected": {
+          "place": "Ben Yehuda",
+          "latitude": 32.0853649,
+          "longitude": 34.7724242,
+          "toleranceMeters": 300.0,
+          "expectedStopId": null
+        },
+        "sourceReference": {
+          "osmType": "node",
+          "osmId": "13683565368",
+          "pbfSha256": "8a34b30f91a63ef9239961ba0e4d660ae22deda2f6da4b85ba4772a6b7c4c74f",
+          "sourceField": "addr:street:en",
+          "rawTags": {
+            "addr:city": "תל אביב-יפו",
+            "addr:city:en": "Tel Aviv",
+            "addr:city:he": "תל אביב-יפו",
+            "addr:housenumber": "113",
+            "addr:street": "בן יהודה",
+            "addr:street:en": "Ben Yehuda",
+            "addr:street:he": "בן יהודה"
+          }
+        },
+        "scoringEarthRadiusMeters": 6371008.8,
+        "nearAssisted": false,
+        "hasExpectedSourceOsmObject": true,
+        "savedNear": null,
+        "photonRequest": {
+          "endpoint": "/api",
+          "parameters": [
+            [
+              "q",
+              "113 Ben Yehuda, Tel Aviv"
+            ],
+            [
+              "lang",
+              "en"
+            ],
+            [
+              "limit",
+              "10"
+            ],
+            [
+              "layer",
+              "house"
+            ]
+          ]
+        },
+        "httpStatus": 200,
+        "clientRoundTripMs": 12.067120005667675,
+        "transportError": null,
+        "rawResponse": {
+          "type": "FeatureCollection",
+          "features": [
+            {
+              "type": "Feature",
+              "properties": {
+                "osm_type": "N",
+                "osm_id": 13683565368,
+                "osm_key": "addr:housenumber",
+                "osm_value": "113",
+                "type": "house",
+                "housenumber": "113",
+                "street": "Ben Yehuda",
+                "city": "Tel Aviv",
+                "extra": {
+                  "addr:city": "תל אביב-יפו",
+                  "addr:city:en": "Tel Aviv",
+                  "addr:city:he": "תל אביב-יפו",
+                  "addr:housenumber": "113",
+                  "addr:postcode": "6340201",
+                  "addr:street": "בן יהודה",
+                  "addr:street:en": "Ben Yehuda",
+                  "addr:street:he": "בן יהודה"
+                }
+              },
+              "geometry": {
+                "type": "Point",
+                "coordinates": [
+                  34.7724242,
+                  32.0853649
+                ]
+              }
+            }
+          ]
+        },
+        "rawResponseText": null,
+        "baselineApi": {
+          "outcome": "valid_empty",
+          "geometryOnly": {
+            "top1Hit": false,
+            "top5Hit": false,
+            "top5HitRank": null,
+            "top1DistanceMeters": null
+          },
+          "exactSourceOsmObject": null,
+          "topResult": null
+        },
+        "baselineApiOutcome": "valid_empty",
+        "photonOutcome": "success",
+        "photon": {
+          "candidateCount": 1,
+          "candidates": [
+            {
+              "rank": 1,
+              "distinctRank": 1,
+              "osmType": "N",
+              "osmId": "13683565368",
+              "displayName": null,
+              "displayLanguage": null,
+              "displayLanguageEvidence": "not reported by Photon",
+              "addressType": "house",
+              "addressPrecision": null,
+              "street": "Ben Yehuda",
+              "houseNumber": "113",
+              "osmKey": "addr:housenumber",
+              "osmValue": "113",
+              "coordinatesLonLat": [
+                34.7724242,
+                32.0853649
+              ],
+              "distanceMeters": 0.0,
+              "withinOriginalTolerance": true,
+              "exactExpectedOsmObject": true
+            }
+          ],
+          "geometryOnly": {
+            "top1Hit": true,
+            "top5Hit": true,
+            "top5HitRank": 1,
+            "top5DistinctRank": 1,
+            "top1DistanceMeters": 0.0,
+            "originalToleranceMeters": 300.0,
+            "scoringEarthRadiusMeters": 6371008.8
+          },
+          "exactSourceOsmObject": {
+            "expectedOsmType": "node",
+            "expectedOsmId": "13683565368",
+            "top1Hit": true,
+            "top5Hit": true,
+            "top5HitRank": 1
+          },
+          "scoringNote": "Geometry-only scores use the frozen original expected coordinate, corpus radius, and tolerance. OSM identity is an additional exact-object score where the source case supplies a node ID; no address precision is inferred."
+        }
+      },
+      {
+        "caseId": "OSM-ADDR-EN-002",
+        "query": "3 Arlosoroff",
+        "language": "en",
+        "expected": {
+          "place": "Arlosoroff",
+          "latitude": 33.2092675,
+          "longitude": 35.5691219,
+          "toleranceMeters": 300.0,
+          "expectedStopId": null
+        },
+        "sourceReference": {
+          "osmType": "node",
+          "osmId": "5498984564",
+          "pbfSha256": "8a34b30f91a63ef9239961ba0e4d660ae22deda2f6da4b85ba4772a6b7c4c74f",
+          "sourceField": "addr:street:en",
+          "rawTags": {
+            "addr:city": "קרית שמונה",
+            "addr:housenumber": "3",
+            "addr:street": "ארלוזורוב",
+            "addr:street:en": "Arlosoroff"
+          }
+        },
+        "scoringEarthRadiusMeters": 6371008.8,
+        "nearAssisted": true,
+        "hasExpectedSourceOsmObject": true,
+        "savedNear": {
+          "latitude": 33.2092675,
+          "longitude": 35.5691219
+        },
+        "photonRequest": {
+          "endpoint": "/api",
+          "parameters": [
+            [
+              "q",
+              "3 Arlosoroff"
+            ],
+            [
+              "lang",
+              "en"
+            ],
+            [
+              "limit",
+              "10"
+            ],
+            [
+              "layer",
+              "house"
+            ],
+            [
+              "lat",
+              "33.2092675"
+            ],
+            [
+              "lon",
+              "35.5691219"
+            ]
+          ]
+        },
+        "httpStatus": 200,
+        "clientRoundTripMs": 50.40240399830509,
+        "transportError": null,
+        "rawResponse": {
+          "type": "FeatureCollection",
+          "features": [
+            {
+              "type": "Feature",
+              "properties": {
+                "osm_type": "N",
+                "osm_id": 5498984564,
+                "osm_key": "addr:housenumber",
+                "osm_value": "3",
+                "type": "house",
+                "housenumber": "3",
+                "street": "Arlosoroff",
+                "city": "קרית שמונה",
+                "extra": {
+                  "addr:city": "קרית שמונה",
+                  "addr:housenumber": "3",
+                  "addr:street": "ארלוזורוב",
+                  "addr:street:en": "Arlosoroff"
+                }
+              },
+              "geometry": {
+                "type": "Point",
+                "coordinates": [
+                  35.5691219,
+                  33.2092675
+                ]
+              }
+            }
+          ]
+        },
+        "rawResponseText": null,
+        "baselineApi": {
+          "outcome": "valid_empty",
+          "geometryOnly": {
+            "top1Hit": false,
+            "top5Hit": false,
+            "top5HitRank": null,
+            "top1DistanceMeters": null
+          },
+          "exactSourceOsmObject": null,
+          "topResult": null
+        },
+        "baselineApiOutcome": "valid_empty",
+        "photonOutcome": "success",
+        "photon": {
+          "candidateCount": 1,
+          "candidates": [
+            {
+              "rank": 1,
+              "distinctRank": 1,
+              "osmType": "N",
+              "osmId": "5498984564",
+              "displayName": null,
+              "displayLanguage": null,
+              "displayLanguageEvidence": "not reported by Photon",
+              "addressType": "house",
+              "addressPrecision": null,
+              "street": "Arlosoroff",
+              "houseNumber": "3",
+              "osmKey": "addr:housenumber",
+              "osmValue": "3",
+              "coordinatesLonLat": [
+                35.5691219,
+                33.2092675
+              ],
+              "distanceMeters": 0.0,
+              "withinOriginalTolerance": true,
+              "exactExpectedOsmObject": true
+            }
+          ],
+          "geometryOnly": {
+            "top1Hit": true,
+            "top5Hit": true,
+            "top5HitRank": 1,
+            "top5DistinctRank": 1,
+            "top1DistanceMeters": 0.0,
+            "originalToleranceMeters": 300.0,
+            "scoringEarthRadiusMeters": 6371008.8
+          },
+          "exactSourceOsmObject": {
+            "expectedOsmType": "node",
+            "expectedOsmId": "5498984564",
+            "top1Hit": true,
+            "top5Hit": true,
+            "top5HitRank": 1
+          },
+          "scoringNote": "Geometry-only scores use the frozen original expected coordinate, corpus radius, and tolerance. OSM identity is an additional exact-object score where the source case supplies a node ID; no address precision is inferred."
+        }
+      },
+      {
+        "caseId": "OSM-ADDR-EN-003",
+        "query": "3 Azar",
+        "language": "en",
+        "expected": {
+          "place": "Azar",
+          "latitude": 32.786425,
+          "longitude": 35.0146194,
+          "toleranceMeters": 300.0,
+          "expectedStopId": null
+        },
+        "sourceReference": {
+          "osmType": "node",
+          "osmId": "2190040778",
+          "pbfSha256": "8a34b30f91a63ef9239961ba0e4d660ae22deda2f6da4b85ba4772a6b7c4c74f",
+          "sourceField": "addr:street:en",
+          "rawTags": {
+            "addr:housenumber": "3",
+            "addr:street": "אז\"ר",
+            "addr:street:en": "Azar"
+          }
+        },
+        "scoringEarthRadiusMeters": 6371008.8,
+        "nearAssisted": true,
+        "hasExpectedSourceOsmObject": true,
+        "savedNear": {
+          "latitude": 32.786425,
+          "longitude": 35.0146194
+        },
+        "photonRequest": {
+          "endpoint": "/api",
+          "parameters": [
+            [
+              "q",
+              "3 Azar"
+            ],
+            [
+              "lang",
+              "en"
+            ],
+            [
+              "limit",
+              "10"
+            ],
+            [
+              "layer",
+              "house"
+            ],
+            [
+              "lat",
+              "32.786425"
+            ],
+            [
+              "lon",
+              "35.0146194"
+            ]
+          ]
+        },
+        "httpStatus": 200,
+        "clientRoundTripMs": 9.686222998425364,
+        "transportError": null,
+        "rawResponse": {
+          "type": "FeatureCollection",
+          "features": [
+            {
+              "type": "Feature",
+              "properties": {
+                "osm_type": "N",
+                "osm_id": 2190040778,
+                "osm_key": "addr:housenumber",
+                "osm_value": "3",
+                "type": "house",
+                "housenumber": "3",
+                "street": "Azar",
+                "extra": {
+                  "addr:housenumber": "3",
+                  "addr:street": "אז\"ר",
+                  "addr:street:en": "Azar"
+                }
+              },
+              "geometry": {
+                "type": "Point",
+                "coordinates": [
+                  35.0146194,
+                  32.786425
+                ]
+              }
+            }
+          ]
+        },
+        "rawResponseText": null,
+        "baselineApi": {
+          "outcome": "success",
+          "geometryOnly": {
+            "top1Hit": false,
+            "top5Hit": false,
+            "top5HitRank": null,
+            "top1DistanceMeters": 100584.2014455061
+          },
+          "exactSourceOsmObject": null,
+          "topResult": {
+            "rank": 1,
+            "distinctRank": 1,
+            "duplicateOfDistinctRank": null,
+            "kind": "address",
+            "displayName": "Adele Azar",
+            "coordinates": {
+              "latitude": 31.8948962,
+              "longitude": 35.1957984
+            },
+            "precision": "street",
+            "languageUsed": "en",
+            "locationRef": {
+              "kind": "place",
+              "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiIyMGZmMmVmNjY1N2E5MzYzOGFiNTg4ZDdlMGFkMjNlOTI1YjFjMmFlY2JlZjJmZjU2NDczOTVlMmJkZGEwN2YyIiwiY29vcmRpbmF0ZXMiOlszMS44OTQ4OTYyLDM1LjE5NTc5ODRdLCJnZW5lcmF0aW9uSWQiOiJjN2I2NmVlZTFhZDA0ZGRkYmExM2Y0YzVkYWRlNWVmMjAyMzk2M2ExYWMwMzg0ODU3YWFmMTczYjlkMTY0YWExIiwia2luZCI6ImFkZHJlc3MifQ"
+            },
+            "distanceMeters": 100584.2014455061
+          }
+        },
+        "baselineApiOutcome": "success",
+        "photonOutcome": "success",
+        "photon": {
+          "candidateCount": 1,
+          "candidates": [
+            {
+              "rank": 1,
+              "distinctRank": 1,
+              "osmType": "N",
+              "osmId": "2190040778",
+              "displayName": null,
+              "displayLanguage": null,
+              "displayLanguageEvidence": "not reported by Photon",
+              "addressType": "house",
+              "addressPrecision": null,
+              "street": "Azar",
+              "houseNumber": "3",
+              "osmKey": "addr:housenumber",
+              "osmValue": "3",
+              "coordinatesLonLat": [
+                35.0146194,
+                32.786425
+              ],
+              "distanceMeters": 0.0,
+              "withinOriginalTolerance": true,
+              "exactExpectedOsmObject": true
+            }
+          ],
+          "geometryOnly": {
+            "top1Hit": true,
+            "top5Hit": true,
+            "top5HitRank": 1,
+            "top5DistinctRank": 1,
+            "top1DistanceMeters": 0.0,
+            "originalToleranceMeters": 300.0,
+            "scoringEarthRadiusMeters": 6371008.8
+          },
+          "exactSourceOsmObject": {
+            "expectedOsmType": "node",
+            "expectedOsmId": "2190040778",
+            "top1Hit": true,
+            "top5Hit": true,
+            "top5HitRank": 1
+          },
+          "scoringNote": "Geometry-only scores use the frozen original expected coordinate, corpus radius, and tolerance. OSM identity is an additional exact-object score where the source case supplies a node ID; no address precision is inferred."
+        }
+      },
+      {
+        "caseId": "OSM-ADDR-EN-004",
+        "query": "2 Technology Park Malha",
+        "language": "en",
+        "expected": {
+          "place": "Technology Park Malha",
+          "latitude": 31.7500572,
+          "longitude": 35.1866384,
+          "toleranceMeters": 300.0,
+          "expectedStopId": null
+        },
+        "sourceReference": {
+          "osmType": "node",
+          "osmId": "5621420935",
+          "pbfSha256": "8a34b30f91a63ef9239961ba0e4d660ae22deda2f6da4b85ba4772a6b7c4c74f",
+          "sourceField": "addr:street:en",
+          "rawTags": {
+            "addr:city": "ירושלים",
+            "addr:housenumber": "2",
+            "addr:street": "אגודת ספורט מכבי",
+            "addr:street:en": "Technology Park Malha"
+          }
+        },
+        "scoringEarthRadiusMeters": 6371008.8,
+        "nearAssisted": true,
+        "hasExpectedSourceOsmObject": true,
+        "savedNear": {
+          "latitude": 31.7500572,
+          "longitude": 35.1866384
+        },
+        "photonRequest": {
+          "endpoint": "/api",
+          "parameters": [
+            [
+              "q",
+              "2 Technology Park Malha"
+            ],
+            [
+              "lang",
+              "en"
+            ],
+            [
+              "limit",
+              "10"
+            ],
+            [
+              "layer",
+              "house"
+            ],
+            [
+              "lat",
+              "31.7500572"
+            ],
+            [
+              "lon",
+              "35.1866384"
+            ]
+          ]
+        },
+        "httpStatus": 200,
+        "clientRoundTripMs": 9.848359994066413,
+        "transportError": null,
+        "rawResponse": {
+          "type": "FeatureCollection",
+          "features": [
+            {
+              "type": "Feature",
+              "properties": {
+                "osm_type": "N",
+                "osm_id": 5621420935,
+                "osm_key": "addr:housenumber",
+                "osm_value": "2",
+                "type": "house",
+                "housenumber": "2",
+                "street": "Technology Park Malha",
+                "city": "ירושלים",
+                "extra": {
+                  "addr:city": "ירושלים",
+                  "addr:housename": "Tower Building",
+                  "addr:housenumber": "2",
+                  "addr:postcode": "9695102",
+                  "addr:street": "אגודת ספורט מכבי",
+                  "addr:street:en": "Technology Park Malha"
+                }
+              },
+              "geometry": {
+                "type": "Point",
+                "coordinates": [
+                  35.1866384,
+                  31.7500572
+                ]
+              }
+            }
+          ]
+        },
+        "rawResponseText": null,
+        "baselineApi": {
+          "outcome": "valid_empty",
+          "geometryOnly": {
+            "top1Hit": false,
+            "top5Hit": false,
+            "top5HitRank": null,
+            "top1DistanceMeters": null
+          },
+          "exactSourceOsmObject": null,
+          "topResult": null
+        },
+        "baselineApiOutcome": "valid_empty",
+        "photonOutcome": "success",
+        "photon": {
+          "candidateCount": 1,
+          "candidates": [
+            {
+              "rank": 1,
+              "distinctRank": 1,
+              "osmType": "N",
+              "osmId": "5621420935",
+              "displayName": null,
+              "displayLanguage": null,
+              "displayLanguageEvidence": "not reported by Photon",
+              "addressType": "house",
+              "addressPrecision": null,
+              "street": "Technology Park Malha",
+              "houseNumber": "2",
+              "osmKey": "addr:housenumber",
+              "osmValue": "2",
+              "coordinatesLonLat": [
+                35.1866384,
+                31.7500572
+              ],
+              "distanceMeters": 0.0,
+              "withinOriginalTolerance": true,
+              "exactExpectedOsmObject": true
+            }
+          ],
+          "geometryOnly": {
+            "top1Hit": true,
+            "top5Hit": true,
+            "top5HitRank": 1,
+            "top5DistinctRank": 1,
+            "top1DistanceMeters": 0.0,
+            "originalToleranceMeters": 300.0,
+            "scoringEarthRadiusMeters": 6371008.8
+          },
+          "exactSourceOsmObject": {
+            "expectedOsmType": "node",
+            "expectedOsmId": "5621420935",
+            "top1Hit": true,
+            "top5Hit": true,
+            "top5HitRank": 1
+          },
+          "scoringNote": "Geometry-only scores use the frozen original expected coordinate, corpus radius, and tolerance. OSM identity is an additional exact-object score where the source case supplies a node ID; no address precision is inferred."
+        }
+      },
+      {
+        "caseId": "OSM-ADDR-EN-005",
+        "query": "3 HaMelacha",
+        "language": "en",
+        "expected": {
+          "place": "HaMelacha",
+          "latitude": 32.2766657,
+          "longitude": 34.8581818,
+          "toleranceMeters": 300.0,
+          "expectedStopId": null
+        },
+        "sourceReference": {
+          "osmType": "node",
+          "osmId": "13823305022",
+          "pbfSha256": "8a34b30f91a63ef9239961ba0e4d660ae22deda2f6da4b85ba4772a6b7c4c74f",
+          "sourceField": "addr:street:en",
+          "rawTags": {
+            "addr:housenumber": "3",
+            "addr:street": "המלאכה",
+            "addr:street:en": "HaMelacha"
+          }
+        },
+        "scoringEarthRadiusMeters": 6371008.8,
+        "nearAssisted": true,
+        "hasExpectedSourceOsmObject": true,
+        "savedNear": {
+          "latitude": 32.2766657,
+          "longitude": 34.8581818
+        },
+        "photonRequest": {
+          "endpoint": "/api",
+          "parameters": [
+            [
+              "q",
+              "3 HaMelacha"
+            ],
+            [
+              "lang",
+              "en"
+            ],
+            [
+              "limit",
+              "10"
+            ],
+            [
+              "layer",
+              "house"
+            ],
+            [
+              "lat",
+              "32.2766657"
+            ],
+            [
+              "lon",
+              "34.8581818"
+            ]
+          ]
+        },
+        "httpStatus": 200,
+        "clientRoundTripMs": 10.038016996986698,
+        "transportError": null,
+        "rawResponse": {
+          "type": "FeatureCollection",
+          "features": [
+            {
+              "type": "Feature",
+              "properties": {
+                "osm_type": "N",
+                "osm_id": 13823305022,
+                "osm_key": "addr:housenumber",
+                "osm_value": "3",
+                "type": "house",
+                "housenumber": "3",
+                "street": "HaMelacha",
+                "extra": {
+                  "addr:housenumber": "3",
+                  "addr:street": "המלאכה",
+                  "addr:street:en": "HaMelacha"
+                }
+              },
+              "geometry": {
+                "type": "Point",
+                "coordinates": [
+                  34.8581818,
+                  32.2766657
+                ]
+              }
+            }
+          ]
+        },
+        "rawResponseText": null,
+        "baselineApi": {
+          "outcome": "valid_empty",
+          "geometryOnly": {
+            "top1Hit": false,
+            "top5Hit": false,
+            "top5HitRank": null,
+            "top1DistanceMeters": null
+          },
+          "exactSourceOsmObject": null,
+          "topResult": null
+        },
+        "baselineApiOutcome": "valid_empty",
+        "photonOutcome": "success",
+        "photon": {
+          "candidateCount": 1,
+          "candidates": [
+            {
+              "rank": 1,
+              "distinctRank": 1,
+              "osmType": "N",
+              "osmId": "13823305022",
+              "displayName": null,
+              "displayLanguage": null,
+              "displayLanguageEvidence": "not reported by Photon",
+              "addressType": "house",
+              "addressPrecision": null,
+              "street": "HaMelacha",
+              "houseNumber": "3",
+              "osmKey": "addr:housenumber",
+              "osmValue": "3",
+              "coordinatesLonLat": [
+                34.8581818,
+                32.2766657
+              ],
+              "distanceMeters": 0.0,
+              "withinOriginalTolerance": true,
+              "exactExpectedOsmObject": true
+            }
+          ],
+          "geometryOnly": {
+            "top1Hit": true,
+            "top5Hit": true,
+            "top5HitRank": 1,
+            "top5DistinctRank": 1,
+            "top1DistanceMeters": 0.0,
+            "originalToleranceMeters": 300.0,
+            "scoringEarthRadiusMeters": 6371008.8
+          },
+          "exactSourceOsmObject": {
+            "expectedOsmType": "node",
+            "expectedOsmId": "13823305022",
+            "top1Hit": true,
+            "top5Hit": true,
+            "top5HitRank": 1
+          },
+          "scoringNote": "Geometry-only scores use the frozen original expected coordinate, corpus radius, and tolerance. OSM identity is an additional exact-object score where the source case supplies a node ID; no address precision is inferred."
+        }
+      },
+      {
+        "caseId": "OSM-ADDR-EN-006",
+        "query": "5 Nahal Gila",
+        "language": "en",
+        "expected": {
+          "place": "Nahal Gila",
+          "latitude": 31.7108495,
+          "longitude": 34.9930789,
+          "toleranceMeters": 300.0,
+          "expectedStopId": null
+        },
+        "sourceReference": {
+          "osmType": "node",
+          "osmId": "11018839480",
+          "pbfSha256": "8a34b30f91a63ef9239961ba0e4d660ae22deda2f6da4b85ba4772a6b7c4c74f",
+          "sourceField": "addr:street:en",
+          "rawTags": {
+            "addr:city": "בית שמש",
+            "addr:housenumber": "5",
+            "addr:street": "נחל גילה",
+            "addr:street:en": "Nahal Gila"
+          }
+        },
+        "scoringEarthRadiusMeters": 6371008.8,
+        "nearAssisted": true,
+        "hasExpectedSourceOsmObject": true,
+        "savedNear": {
+          "latitude": 31.7108495,
+          "longitude": 34.9930789
+        },
+        "photonRequest": {
+          "endpoint": "/api",
+          "parameters": [
+            [
+              "q",
+              "5 Nahal Gila"
+            ],
+            [
+              "lang",
+              "en"
+            ],
+            [
+              "limit",
+              "10"
+            ],
+            [
+              "layer",
+              "house"
+            ],
+            [
+              "lat",
+              "31.7108495"
+            ],
+            [
+              "lon",
+              "34.9930789"
+            ]
+          ]
+        },
+        "httpStatus": 200,
+        "clientRoundTripMs": 12.286513003346045,
+        "transportError": null,
+        "rawResponse": {
+          "type": "FeatureCollection",
+          "features": [
+            {
+              "type": "Feature",
+              "properties": {
+                "osm_type": "N",
+                "osm_id": 11018839480,
+                "osm_key": "addr:housenumber",
+                "osm_value": "5",
+                "type": "house",
+                "housenumber": "5",
+                "street": "Nahal Gila",
+                "city": "בית שמש",
+                "extra": {
+                  "addr:city": "בית שמש",
+                  "addr:housenumber": "5",
+                  "addr:street": "נחל גילה",
+                  "addr:street:en": "Nahal Gila",
+                  "addr:suburb": "רמת בית שמש א"
+                }
+              },
+              "geometry": {
+                "type": "Point",
+                "coordinates": [
+                  34.9930789,
+                  31.7108495
+                ]
+              }
+            }
+          ]
+        },
+        "rawResponseText": null,
+        "baselineApi": {
+          "outcome": "success",
+          "geometryOnly": {
+            "top1Hit": false,
+            "top5Hit": false,
+            "top5HitRank": null,
+            "top1DistanceMeters": 28106.065515179223
+          },
+          "exactSourceOsmObject": null,
+          "topResult": {
+            "rank": 1,
+            "distinctRank": 1,
+            "duplicateOfDistinctRank": null,
+            "kind": "address",
+            "displayName": "Nahal Dan",
+            "coordinates": {
+              "latitude": 31.9600648,
+              "longitude": 35.0427558
+            },
+            "precision": "street",
+            "languageUsed": "en",
+            "locationRef": {
+              "kind": "place",
+              "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiJhOTRmY2IwYmM0ZWVjNzdlMTg2Mzc0YjkyOTE0MmJiOTQxZDk2NGJjOTRmMDg5MDExYjEyNmUyM2Y1YjMwNDljIiwiY29vcmRpbmF0ZXMiOlszMS45NjAwNjQ4LDM1LjA0Mjc1NThdLCJnZW5lcmF0aW9uSWQiOiJjN2I2NmVlZTFhZDA0ZGRkYmExM2Y0YzVkYWRlNWVmMjAyMzk2M2ExYWMwMzg0ODU3YWFmMTczYjlkMTY0YWExIiwia2luZCI6ImFkZHJlc3MifQ"
+            },
+            "distanceMeters": 28106.065515179223
+          }
+        },
+        "baselineApiOutcome": "success",
+        "photonOutcome": "success",
+        "photon": {
+          "candidateCount": 1,
+          "candidates": [
+            {
+              "rank": 1,
+              "distinctRank": 1,
+              "osmType": "N",
+              "osmId": "11018839480",
+              "displayName": null,
+              "displayLanguage": null,
+              "displayLanguageEvidence": "not reported by Photon",
+              "addressType": "house",
+              "addressPrecision": null,
+              "street": "Nahal Gila",
+              "houseNumber": "5",
+              "osmKey": "addr:housenumber",
+              "osmValue": "5",
+              "coordinatesLonLat": [
+                34.9930789,
+                31.7108495
+              ],
+              "distanceMeters": 0.0,
+              "withinOriginalTolerance": true,
+              "exactExpectedOsmObject": true
+            }
+          ],
+          "geometryOnly": {
+            "top1Hit": true,
+            "top5Hit": true,
+            "top5HitRank": 1,
+            "top5DistinctRank": 1,
+            "top1DistanceMeters": 0.0,
+            "originalToleranceMeters": 300.0,
+            "scoringEarthRadiusMeters": 6371008.8
+          },
+          "exactSourceOsmObject": {
+            "expectedOsmType": "node",
+            "expectedOsmId": "11018839480",
+            "top1Hit": true,
+            "top5Hit": true,
+            "top5HitRank": 1
+          },
+          "scoringNote": "Geometry-only scores use the frozen original expected coordinate, corpus radius, and tolerance. OSM identity is an additional exact-object score where the source case supplies a node ID; no address precision is inferred."
+        }
+      }
+    ]
+  },
+  "containers": [
+    {
+      "name": "/opentransit-photon-serve-m4-attempt2-20260930",
+      "id": "61368705e470751c74bba4a28230efab3450c5519e31269eab21708c131fe3d7",
+      "image": "sha256:a357909fafe361a99d858524d3730be9686b8045d2a8edd7bc1a8eb74db69294",
+      "state": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 2641,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-01T00:08:45.41914659Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "memoryBytes": 1073741824,
+      "memorySwapBytes": 1073741824,
+      "networkMode": "container:54feb2d8e2bfe271a1c5cfafa24a79038a036f9c995d845160f7d670d6ca4dfa",
+      "user": "10001:10001",
+      "command": [
+        "java",
+        "-Xms256m",
+        "-Xmx512m",
+        "-jar",
+        "/opt/photon/photon-1.3.0.jar",
+        "-data-dir",
+        "/photon_data",
+        "serve",
+        "-listen-ip",
+        "0.0.0.0",
+        "-listen-port",
+        "2322"
+      ],
+      "mounts": [
+        {
+          "Type": "volume",
+          "Name": "opentransit-photon-addressnodes-m4-attempt2-20260930",
+          "Source": "/var/lib/docker/volumes/opentransit-photon-addressnodes-m4-attempt2-20260930/_data",
+          "Destination": "/photon_data",
+          "Driver": "local",
+          "Mode": "z",
+          "RW": true,
+          "Propagation": ""
+        },
+        {
+          "Type": "bind",
+          "Source": "/run/desktop/mnt/host/c/Users/nhenr/.codex/worktrees/8007/OpenTransit/.runtime/m4-photon-spike-20260930/photon-1.3.0.jar",
+          "Destination": "/opt/photon/photon-1.3.0.jar",
+          "Mode": "",
+          "RW": false,
+          "Propagation": "rprivate"
+        }
+      ]
+    },
+    {
+      "name": "/opentransit-motis-blue-m3-attempt3",
+      "id": "0ed186ad9d330a5cf102d316d926df069cef4f863837dab16bc80c4a9dc3ddb0",
+      "image": "sha256:76a15c76bcff11c6f0595fed9a170284e49c2d9017c47bf4da6879a0e7452598",
+      "state": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 9079,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-09-30T18:34:07.352836846Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "memoryBytes": 2147483648,
+      "memorySwapBytes": 4294967296,
+      "networkMode": "container:54feb2d8e2bfe271a1c5cfafa24a79038a036f9c995d845160f7d670d6ca4dfa",
+      "user": "motis",
+      "command": [
+        "/motis",
+        "server",
+        "-d",
+        "/data"
+      ],
+      "mounts": [
+        {
+          "Type": "volume",
+          "Name": "opentransit-graph-d5a097a105eb4d739e683ae2e9910c8f",
+          "Source": "/var/lib/docker/volumes/opentransit-graph-d5a097a105eb4d739e683ae2e9910c8f/_data",
+          "Destination": "/data",
+          "Driver": "local",
+          "Mode": "z",
+          "RW": false,
+          "Propagation": ""
+        }
+      ]
+    },
+    {
+      "name": "/opentransit-api-repaired-20260930-03",
+      "id": "90c7b3a506f751b3e7ec065c1fa73bf18a148d74e66e7009c9a327a34fb82c3d",
+      "image": "sha256:1b15d2e1f72e1fb10cdaae8b0a6662816171706a4f261922b7cbd4754ddc4841",
+      "state": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 81664,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-09-30T23:34:21.45603032Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "memoryBytes": 536870912,
+      "memorySwapBytes": 1073741824,
+      "networkMode": "container:54feb2d8e2bfe271a1c5cfafa24a79038a036f9c995d845160f7d670d6ca4dfa",
+      "user": "10001",
+      "command": [
+        "/app/.venv/bin/uvicorn",
+        "opentransit.api.app:create_app",
+        "--factory",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8001",
+        "--no-access-log",
+        "--log-level",
+        "info"
+      ],
+      "mounts": [
+        {
+          "Type": "volume",
+          "Name": "opentransit-generation-m4-c7b66eee-20260930",
+          "Source": "/var/lib/docker/volumes/opentransit-generation-m4-c7b66eee-20260930/_data",
+          "Destination": "/generation",
+          "Driver": "local",
+          "Mode": "z",
+          "RW": false,
+          "Propagation": ""
+        },
+        {
+          "Type": "bind",
+          "Source": "C:\\Users\\nhenr\\.codex\\worktrees\\8007\\OpenTransit",
+          "Destination": "/workspace",
+          "Mode": "",
+          "RW": false,
+          "Propagation": "rprivate"
+        }
+      ]
+    },
+    {
+      "name": "/opentransit-api-functional-20260930",
+      "id": "6f938a66a70bf5f28c01ac8bd21a08369a702cf7e2fd76a07c20d9d6034fb93b",
+      "image": "sha256:1b15d2e1f72e1fb10cdaae8b0a6662816171706a4f261922b7cbd4754ddc4841",
+      "state": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 28135,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-09-30T19:07:50.949355897Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "memoryBytes": 536870912,
+      "memorySwapBytes": 1073741824,
+      "networkMode": "container:54feb2d8e2bfe271a1c5cfafa24a79038a036f9c995d845160f7d670d6ca4dfa",
+      "user": "10001",
+      "command": [
+        "/app/.venv/bin/uvicorn",
+        "opentransit.api.app:create_app",
+        "--factory",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8000",
+        "--no-access-log",
+        "--log-level",
+        "info"
+      ],
+      "mounts": [
+        {
+          "Type": "bind",
+          "Source": "C:\\Users\\nhenr\\.codex\\worktrees\\8007\\OpenTransit",
+          "Destination": "/workspace",
+          "Mode": "",
+          "RW": false,
+          "Propagation": "rprivate"
+        }
+      ]
+    },
+    {
+      "name": "/opentransit-local-net-m3-attempt3",
+      "id": "54feb2d8e2bfe271a1c5cfafa24a79038a036f9c995d845160f7d670d6ca4dfa",
+      "image": "sha256:bf8527eb54c3680e728d5b4b383a8ba730d72dae7236fbc8dff97ed6b224a731",
+      "state": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 9027,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-09-30T18:34:06.927071385Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "memoryBytes": 67108864,
+      "memorySwapBytes": 134217728,
+      "networkMode": "bridge",
+      "user": "",
+      "command": [
+        "sleep",
+        "infinity"
+      ],
+      "mounts": []
+    },
+    {
+      "name": "/opentransit-photon-import-m4-attempt2-20260930",
+      "id": "eafd5d077eca1a2d6a090162009d6b0f516ab395b2237f65f4d5a5e430f2952d",
+      "image": "sha256:a357909fafe361a99d858524d3730be9686b8045d2a8edd7bc1a8eb74db69294",
+      "state": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-01T00:07:56.482118759Z",
+        "FinishedAt": "2026-10-01T00:08:09.232920035Z"
+      },
+      "memoryBytes": 2147483648,
+      "memorySwapBytes": 2147483648,
+      "networkMode": "none",
+      "user": "10001:10001",
+      "command": [
+        "java",
+        "-Xms256m",
+        "-Xmx1g",
+        "-jar",
+        "/opt/photon/photon-1.3.0.jar",
+        "-data-dir",
+        "/photon_data",
+        "import",
+        "-j",
+        "1",
+        "-import-file",
+        "/input/address-nodes.jsonl",
+        "-languages",
+        "he,en",
+        "-extra-tags",
+        "ALL"
+      ],
+      "mounts": [
+        {
+          "Type": "volume",
+          "Name": "opentransit-photon-addressnodes-m4-attempt2-20260930",
+          "Source": "/var/lib/docker/volumes/opentransit-photon-addressnodes-m4-attempt2-20260930/_data",
+          "Destination": "/photon_data",
+          "Driver": "local",
+          "Mode": "z",
+          "RW": true,
+          "Propagation": ""
+        },
+        {
+          "Type": "bind",
+          "Source": "/run/desktop/mnt/host/c/Users/nhenr/.codex/worktrees/8007/OpenTransit/.runtime/m4-photon-spike-20260930/photon-1.3.0.jar",
+          "Destination": "/opt/photon/photon-1.3.0.jar",
+          "Mode": "",
+          "RW": false,
+          "Propagation": "rprivate"
+        },
+        {
+          "Type": "bind",
+          "Source": "/run/desktop/mnt/host/c/Users/nhenr/.codex/worktrees/8007/OpenTransit/.runtime/m4-photon-spike-20260930/israel-address-nodes-photon-0.1.0.jsonl",
+          "Destination": "/input/address-nodes.jsonl",
+          "Mode": "",
+          "RW": false,
+          "Propagation": "rprivate"
+        }
+      ]
+    },
+    {
+      "name": "/opentransit-photon-address-evaluation-20261001-01",
+      "id": "b1ae2491c779cc3b5bdadb0d590762b5b9f6f8363f4918fafd050c0b1833f092",
+      "image": "sha256:1b15d2e1f72e1fb10cdaae8b0a6662816171706a4f261922b7cbd4754ddc4841",
+      "state": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-01T00:10:11.904112494Z",
+        "FinishedAt": "2026-10-01T00:10:13.411407735Z"
+      },
+      "memoryBytes": 536870912,
+      "memorySwapBytes": 1073741824,
+      "networkMode": "container:54feb2d8e2bfe271a1c5cfafa24a79038a036f9c995d845160f7d670d6ca4dfa",
+      "user": "10001",
+      "command": [
+        "/app/.venv/bin/python",
+        ".runtime/m4-photon-evaluation-20260930/evaluate_photon_addresses.py",
+        "--baseline",
+        "services/api/results/m4-api-search-20260930-02-corrected.json",
+        "--base-url",
+        "http://127.0.0.1:2322",
+        "--timeout-seconds",
+        "8",
+        "--runtime-version-label",
+        "Photon 1.3.0 git523a59b4 JAR-a89707c0045e",
+        "--output",
+        ".runtime/m4-photon-evaluation-20260930/photon-addresses-20261001-01.json"
+      ],
+      "mounts": [
+        {
+          "Type": "bind",
+          "Source": "C:\\Users\\nhenr\\.codex\\worktrees\\8007\\OpenTransit",
+          "Destination": "/workspace",
+          "Mode": "",
+          "RW": false,
+          "Propagation": "rprivate"
+        },
+        {
+          "Type": "bind",
+          "Source": "C:\\Users\\nhenr\\.codex\\worktrees\\8007\\OpenTransit\\.runtime\\m4-photon-evaluation-20260930",
+          "Destination": "/workspace/.runtime/m4-photon-evaluation-20260930",
+          "Mode": "",
+          "RW": true,
+          "Propagation": "rprivate"
+        }
+      ]
+    }
+  ],
+  "cgroupMemoryAfterTrial": {
+    "opentransit-photon-serve-m4-attempt2-20260930": {
+      "command": [
+        "docker",
+        "exec",
+        "opentransit-photon-serve-m4-attempt2-20260930",
+        "sh",
+        "-c",
+        "cat /sys/fs/cgroup/memory/memory.usage_in_bytes /sys/fs/cgroup/memory/memory.max_usage_in_bytes /sys/fs/cgroup/memory/memory.limit_in_bytes"
+      ],
+      "exitCode": 0,
+      "stdout": "440598528\n448282624\n1073741824\n",
+      "stderr": ""
+    },
+    "opentransit-motis-blue-m3-attempt3": {
+      "command": [
+        "docker",
+        "exec",
+        "opentransit-motis-blue-m3-attempt3",
+        "sh",
+        "-c",
+        "cat /sys/fs/cgroup/memory/memory.usage_in_bytes /sys/fs/cgroup/memory/memory.max_usage_in_bytes /sys/fs/cgroup/memory/memory.limit_in_bytes"
+      ],
+      "exitCode": 0,
+      "stdout": "746012672\n772849664\n2147483648\n",
+      "stderr": ""
+    },
+    "opentransit-api-repaired-20260930-03": {
+      "command": [
+        "docker",
+        "exec",
+        "opentransit-api-repaired-20260930-03",
+        "sh",
+        "-c",
+        "cat /sys/fs/cgroup/memory/memory.usage_in_bytes /sys/fs/cgroup/memory/memory.max_usage_in_bytes /sys/fs/cgroup/memory/memory.limit_in_bytes"
+      ],
+      "exitCode": 0,
+      "stdout": "146886656\n536875008\n536870912\n",
+      "stderr": ""
+    },
+    "opentransit-api-functional-20260930": {
+      "command": [
+        "docker",
+        "exec",
+        "opentransit-api-functional-20260930",
+        "sh",
+        "-c",
+        "cat /sys/fs/cgroup/memory/memory.usage_in_bytes /sys/fs/cgroup/memory/memory.max_usage_in_bytes /sys/fs/cgroup/memory/memory.limit_in_bytes"
+      ],
+      "exitCode": 0,
+      "stdout": "122523648\n135585792\n536870912\n",
+      "stderr": ""
+    },
+    "opentransit-local-net-m3-attempt3": {
+      "command": [
+        "docker",
+        "exec",
+        "opentransit-local-net-m3-attempt3",
+        "sh",
+        "-c",
+        "cat /sys/fs/cgroup/memory/memory.usage_in_bytes /sys/fs/cgroup/memory/memory.max_usage_in_bytes /sys/fs/cgroup/memory/memory.limit_in_bytes"
+      ],
+      "exitCode": 0,
+      "stdout": "1191936\n5988352\n67108864\n",
+      "stderr": ""
+    }
+  },
+  "indexedDocumentCountProbe": {
+    "command": [
+      "docker",
+      "exec",
+      "opentransit-local-net-m3-attempt3",
+      "wget",
+      "-q",
+      "-O",
+      "-",
+      "http://127.0.0.1:9201/photon/_count"
+    ],
+    "exitCode": 0,
+    "stdout": "{\"count\":125857,\"_shards\":{\"total\":5,\"successful\":5,\"skipped\":0,\"failed\":0}}",
+    "stderr": ""
+  },
+  "databaseBytesProbe": {
+    "command": [
+      "docker",
+      "exec",
+      "opentransit-photon-serve-m4-attempt2-20260930",
+      "du",
+      "-s",
+      "-B1",
+      "/photon_data"
+    ],
+    "exitCode": 0,
+    "stdout": "19820544\t/photon_data\n",
+    "stderr": ""
+  },
+  "budget": {
+    "import": {
+      "phase": "import",
+      "verifiedAtUtc": "2026-10-01T00:07:55.0531444Z",
+      "memoryLimitBytes": 8589934592,
+      "verifiedExistingMemoryCapsBytes": {
+        "networkAnchor": 67108864,
+        "motis": 2147483648,
+        "preservedParentApi": 536870912,
+        "candidateApi": 536870912
+      },
+      "observedExistingMemorySwapCapsBytes": {
+        "networkAnchor": 134217728,
+        "motis": 4294967296,
+        "preservedParentApi": 1073741824,
+        "candidateApi": 1073741824
+      },
+      "existingSwapCapacityMeasured": false,
+      "photonContainerMemoryBytes": 2147483648,
+      "photonJavaHeapBytes": 1073741824,
+      "currentTrialAggregateBytes": 5435817984,
+      "twoServingCandidatesBytes": 7650410496,
+      "twoServingCandidatesGiB": 7.125,
+      "twoServingCandidateOverlapPlusParentBytes": 8187281408,
+      "twoServingCandidateOverlapPlusParentGiB": 7.625,
+      "currentTrialAggregateGiB": 5.0625,
+      "networkAnchor": "opentransit-local-net-m3-attempt3",
+      "sharedNetworkNamespaceContainerId": "54feb2d8e2bfe271a1c5cfafa24a79038a036f9c995d845160f7d670d6ca4dfa",
+      "capBasis": "Docker memory ceilings summed; this is a guardrail, not a measured capacity result.",
+      "excludedBaselines": [
+        "original M1 MOTIS baseline",
+        "opentransit-api-1 on opentransit_default",
+        "unrelated desktop containers"
+      ]
+    },
+    "serve": {
+      "phase": "serve",
+      "verifiedAtUtc": "2026-10-01T00:08:44.4857986Z",
+      "memoryLimitBytes": 8589934592,
+      "verifiedExistingMemoryCapsBytes": {
+        "candidateApi": 536870912,
+        "networkAnchor": 67108864,
+        "motis": 2147483648,
+        "preservedParentApi": 536870912
+      },
+      "observedExistingMemorySwapCapsBytes": {
+        "candidateApi": 1073741824,
+        "networkAnchor": 134217728,
+        "motis": 4294967296,
+        "preservedParentApi": 1073741824
+      },
+      "existingSwapCapacityMeasured": false,
+      "photonContainerMemoryBytes": 1073741824,
+      "photonJavaHeapBytes": 536870912,
+      "currentTrialAggregateBytes": 4362076160,
+      "twoServingCandidatesBytes": 7650410496,
+      "twoServingCandidatesGiB": 7.125,
+      "twoServingCandidateOverlapPlusParentBytes": 8187281408,
+      "twoServingCandidateOverlapPlusParentGiB": 7.625,
+      "currentTrialAggregateGiB": 4.0625,
+      "networkAnchor": "opentransit-local-net-m3-attempt3",
+      "sharedNetworkNamespaceContainerId": "54feb2d8e2bfe271a1c5cfafa24a79038a036f9c995d845160f7d670d6ca4dfa",
+      "capBasis": "Docker memory ceilings summed; this is a guardrail, not a measured capacity result.",
+      "excludedBaselines": [
+        "original M1 MOTIS baseline",
+        "opentransit-api-1 on opentransit_default",
+        "unrelated desktop containers"
+      ]
+    }
+  },
+  "servingVerification": {
+    "verifiedAtUtc": "2026-10-01T00:08:53.7772233Z",
+    "photonStatusHttpProbe": "success",
+    "photonStatusBody": "{\"status\":\"Ok\",\"import_date\":\"\",\"version\":\"1.3.0\",\"git_commit\":\"523a59b4\"}",
+    "importedDocumentCountFromPinnedCompletionLog": 125857,
+    "serverContainer": "opentransit-photon-serve-m4-attempt2-20260930",
+    "serverRunningAfterStatus": true,
+    "serverOomKilled": false,
+    "serverMemoryBytes": 1073741824,
+    "serverMemorySwapBytes": 1073741824,
+    "javaInitialHeapBytes": 268435456,
+    "javaMaximumHeapBytes": 536870912,
+    "networkMode": "container:opentransit-local-net-m3-attempt3",
+    "hostPortPublished": false,
+    "rawServerLogPath": "C:\\Users\\nhenr\\.codex\\worktrees\\8007\\OpenTransit\\.runtime\\m4-photon-spike-20260930\\photon-serve-attempt2.log",
+    "processExitAloneAcceptedAsSuccess": false,
+    "h4OrD4Acceptance": false,
+    "fullStackCapacityAcceptance": false
+  },
+  "artifacts": [
+    {
+      "path": ".runtime\\m4-photon-spike-20260930\\import_photon_attempt2.ps1",
+      "sha256": "afd8cd595fc340b1bed7416a37ddffe38f84905ccb8aced9e4ac9081358a0717",
+      "bytes": 6275
+    },
+    {
+      "path": ".runtime\\m4-photon-spike-20260930\\serve_photon_attempt2.ps1",
+      "sha256": "c11eff713ea307cb265c21c49fd284ae46058ef6640879e584375a291bae1b63",
+      "bytes": 6171
+    },
+    {
+      "path": ".runtime\\m4-photon-spike-20260930\\photon_budget_guard_attempt2.ps1",
+      "sha256": "29b5e6994c28b8889ee2b4eac85fbba1ab253adc8b86e6c2c2f461fb0849060f",
+      "bytes": 6096
+    },
+    {
+      "path": ".runtime\\m4-photon-spike-20260930\\photon-import-attempt2.log",
+      "sha256": "1033a794676d7661e04ce16a3b6cd08574a75bf02de953054f0a765ef705e87f",
+      "bytes": 17158
+    },
+    {
+      "path": ".runtime\\m4-photon-spike-20260930\\photon-serve-attempt2.log",
+      "sha256": "ecf4a4e0c484057f771c14a7828244e17badf514fb2e548e463bdf3731387903",
+      "bytes": 8543
+    },
+    {
+      "path": ".runtime\\m4-photon-spike-20260930\\photon-serve-post-trial-20261001-01.log",
+      "sha256": "6d9ad19f0d35f2dc3f26118a8dab71b77901f6dc753bc710c64077b6ded26578",
+      "bytes": 8619
+    }
+  ],
+  "trialHelper": {
+    "path": ".runtime\\m4-photon-evaluation-20260930\\evaluate_photon_addresses.py",
+    "sha256": "b882108ebc329a60c9167214f172ace757373cc58c774c32ac7424d7332d422f",
+    "bytes": 21858
+  },
+  "validation": {
+    "offlineRegressionContainer": "opentransit-photon-offline-mock-verified-20261001",
+    "ruffContainer": "opentransit-photon-eval-final-ruff-20261001",
+    "formatContainer": "opentransit-photon-eval-final-format-20261001",
+    "liveQueries": 22,
+    "retries": 0
+  },
+  "interpretation": {
+    "photonIsReplacementApproved": false,
+    "addressAcceptance": false,
+    "apiP95": false,
+    "h4": false,
+    "fullStackCapacity": false,
+    "replacementOverlapMeasured": false,
+    "buildPeakMeasured": false,
+    "peakNotes": "Cgroup high-water values include startup through the trial. Separate component maxima are not a simultaneous aggregate peak. MOTIS/API components were idle during provider-only queries; no representative full-stack workload.",
+    "excluded": "Separate original M1 and unrelated desktop containers; no overall host-capacity claim",
+    "remaining": "Original address quality worsens 5/15 to 3/15, while 7 explicit source-node cases pass (5 near-assisted). Diagnose source languages/hierarchy and indexing; preserve address requirement and all acceptance gates."
+  }
+}

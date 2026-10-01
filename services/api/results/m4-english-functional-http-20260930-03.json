@@ -1,0 +1,4817 @@
+{
+  "recordedAt": "2026-09-30T23:10:08.656155+00:00",
+  "scope": "Actual English functional integration and generation isolation. Required readiness is recorded separately; a failing readiness result prevents API completion. Not H4, p95, activation or deployment acceptance",
+  "apiOrigin": "http://127.0.0.1:8001",
+  "networkScope": "Shared existing local-net Docker namespace; original host port8002 API preserved",
+  "generationId": "c7b66eee1ad04dddba13f4c5dade5ef2023963a1ac0384857aaf173b9d164aa1",
+  "artifactHashes": {
+    "reference": "8f81298d87dbe84478bfd22652b87bd5b7db1e61979a9d00187558fea64605b6",
+    "motis": "96c8fb237576a50544a2c03ad1e840c2f12d2b96b9072250c1e66a61c8f7d263",
+    "config": "2f75d87301d97b36461bd5826f0c46a1eb375f0da3434f39ee59563f21b6e998"
+  },
+  "engineDigest": "sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330",
+  "sourceCheckedAt": "2026-09-30T09:33:07.260277+00:00",
+  "frozenSourceRoot": ".runtime/m4-functional-evidence-20260930/api-source-for-http-02",
+  "cases": [
+    {
+      "id": "readiness-observation",
+      "path": "/readyz",
+      "method": "GET",
+      "params": null,
+      "body": null,
+      "httpStatus": 503,
+      "elapsedMs": 18.004,
+      "responseSha256": "75cb9fbfff15bc3a5bc6185bb3ef0385b001accea769dbf843cbff91c5365656",
+      "response": {
+        "type": "urn:opentransit:problem:not-ready",
+        "title": "Not ready",
+        "status": 503,
+        "code": "NOT_READY",
+        "detail": "A complete usable generation is required.",
+        "requestId": "f295b33361f646b781fa4de44092bf0f"
+      }
+    },
+    {
+      "id": "english-stop-search",
+      "path": "/v1/places",
+      "method": "GET",
+      "params": {
+        "q": "Dizengoff Center",
+        "lang": "en",
+        "near": "32.0757,34.7748",
+        "type": "stop",
+        "limit": 5
+      },
+      "body": null,
+      "httpStatus": 200,
+      "elapsedMs": 2681.99,
+      "responseSha256": "692c078efb243bf4863533fb2cd6f238d608b8cd57acbdf2aa0091f500d79bcf",
+      "response": {
+        "data": [
+          {
+            "kind": "stop",
+            "id": "mot:stop:13583",
+            "displayName": "Dizengoff Center/Dizengoff",
+            "languageUsed": "en",
+            "locality": "רחוב: דיזנגוף 50 עיר: תל אביב יפו רציף:  קומה: ",
+            "coordinates": {
+              "latitude": 32.075566,
+              "longitude": 34.77512
+            },
+            "stopCode": "25609",
+            "parentId": null,
+            "platformIds": [],
+            "matchedTypes": [
+              "stop"
+            ],
+            "distance": 33.63150896399701,
+            "locationRef": {
+              "kind": "stop",
+              "stopId": "mot:stop:13583"
+            }
+          },
+          {
+            "kind": "stop",
+            "id": "mot:stop:13561",
+            "displayName": "Dizengoff Center/Dizengoff",
+            "languageUsed": "en",
+            "locality": "רחוב: דיזנגוף 53 עיר: תל אביב יפו רציף:  קומה: ",
+            "coordinates": {
+              "latitude": 32.075129,
+              "longitude": 34.77537
+            },
+            "stopCode": "25565",
+            "parentId": null,
+            "platformIds": [],
+            "matchedTypes": [
+              "stop"
+            ],
+            "distance": 83.16022635831483,
+            "locationRef": {
+              "kind": "stop",
+              "stopId": "mot:stop:13561"
+            }
+          },
+          {
+            "kind": "stop",
+            "id": "mot:stop:13560",
+            "displayName": "Dizengoff Center/Tchernichovsky",
+            "languageUsed": "en",
+            "locality": "רחוב: טשרניחובסקי 53 עיר: תל אביב יפו רציף:  קומה: ",
+            "coordinates": {
+              "latitude": 32.075585,
+              "longitude": 34.773887
+            },
+            "stopCode": "25564",
+            "parentId": null,
+            "platformIds": [],
+            "matchedTypes": [
+              "stop"
+            ],
+            "distance": 86.96891680757814,
+            "locationRef": {
+              "kind": "stop",
+              "stopId": "mot:stop:13560"
+            }
+          }
+        ],
+        "meta": {
+          "requestId": "088631fe629f48fea1ad78e7a468bf9d",
+          "generationId": "c7b66eee1ad04dddba13f4c5dade5ef2023963a1ac0384857aaf173b9d164aa1",
+          "generatedAt": "2026-09-30T23:10:08.788692Z",
+          "dataBuiltAt": "2026-09-30T19:28:59.565385Z",
+          "mode": "real",
+          "coverage": {
+            "from": "2026-09-30T00:00:00+03:00",
+            "until": "2026-10-31T00:00:00+02:00"
+          },
+          "freshness": "current",
+          "capabilities": {
+            "realtime": "not_enabled",
+            "alerts": "not_enabled"
+          },
+          "attribution": [
+            "Israel Ministry of Transport",
+            "© OpenStreetMap contributors"
+          ],
+          "rankingPolicy": "motis-v2.11.2-feasible-engine-order-v1",
+          "appliedConstraints": {},
+          "warnings": []
+        },
+        "matchedTypes": [
+          "stop"
+        ],
+        "unavailableTypes": [],
+        "partial": false,
+        "rankingPolicy": "alternating-stop-and-geocoder-order-v1"
+      }
+    },
+    {
+      "id": "english-stop-reference",
+      "path": "/v1/stops/mot:stop:13583",
+      "method": "GET",
+      "params": null,
+      "body": null,
+      "httpStatus": 200,
+      "elapsedMs": 52.053,
+      "responseSha256": "5e91883128ea3c45a46da48f1602bf2e35607f91d84b2c5f3febc86577a6b35a",
+      "response": {
+        "data": {
+          "stopId": "mot:stop:13583",
+          "sourceId": "13583",
+          "code": "25609",
+          "name": "דיזנגוף סנטר/דיזנגוף",
+          "description": "רחוב: דיזנגוף 50 עיר: תל אביב יפו רציף:  קומה: ",
+          "latitude": 32.075566,
+          "longitude": 34.77512,
+          "locationType": 0,
+          "parentStationId": null,
+          "wheelchairBoarding": null,
+          "platformCode": null,
+          "translations": {
+            "ar": "ديزنچوف سنتر/ديزنچوف",
+            "en": "Dizengoff Center/Dizengoff",
+            "he": "דיזנגוף סנטר/דיזנגוף"
+          },
+          "children": [],
+          "routes": [
+            {
+              "routeId": "mot:route:16077",
+              "sourceId": "16077",
+              "operatorId": "5",
+              "routeShortName": "8",
+              "routeLongName": "מסוף הטייסים-תל אביב יפו<->מסוף אוניברסיטת ת''א/הורדה-תל אביב יפו-20",
+              "description": "55008-2-0",
+              "routeType": 3,
+              "url": null,
+              "color": null,
+              "textColor": null
+            },
+            {
+              "routeId": "mot:route:2261",
+              "sourceId": "2261",
+              "operatorId": "5",
+              "routeShortName": "5",
+              "routeLongName": "משרד הרישוי/הלוחמים-חולון<->ת. רכבת תל אביב - סבידור/הורדה-תל אביב יפו-20",
+              "description": "25005-2-0",
+              "routeType": 3,
+              "url": null,
+              "color": null,
+              "textColor": null
+            },
+            {
+              "routeId": "mot:route:23919",
+              "sourceId": "23919",
+              "operatorId": "5",
+              "routeShortName": "62",
+              "routeLongName": "בי''ח שיב''א/שדרות אהרון קציר-רמת גן<->מסוף רדינג/הורדה-תל אביב יפו-20",
+              "description": "33062-2-0",
+              "routeType": 3,
+              "url": null,
+              "color": null,
+              "textColor": null
+            },
+            {
+              "routeId": "mot:route:24041",
+              "sourceId": "24041",
+              "operatorId": "5",
+              "routeShortName": "62א",
+              "routeLongName": "מסוף רדינג/רציפים-תל אביב יפו<->מסוף רדינג/הורדה-תל אביב יפו-11",
+              "description": "33062-1-1",
+              "routeType": 3,
+              "url": null,
+              "color": "3399FF",
+              "textColor": null
+            },
+            {
+              "routeId": "mot:route:27082",
+              "sourceId": "27082",
+              "operatorId": "5",
+              "routeShortName": "2",
+              "routeLongName": "פרופ' ישעיהו ליבוביץ'/הרב יעקב טראב-תל אביב יפו<->משמר הירדן/טורקוב-תל אביב יפו-20",
+              "description": "99002-2-0",
+              "routeType": 3,
+              "url": null,
+              "color": null,
+              "textColor": null
+            },
+            {
+              "routeId": "mot:route:27901",
+              "sourceId": "27901",
+              "operatorId": "15",
+              "routeShortName": "115",
+              "routeLongName": "מסוף קרית אונו-קרית אונו<->מסוף רדינג/הורדה-תל אביב יפו-10",
+              "description": "16115-1-0",
+              "routeType": 3,
+              "url": null,
+              "color": null,
+              "textColor": null
+            },
+            {
+              "routeId": "mot:route:9780",
+              "sourceId": "9780",
+              "operatorId": "5",
+              "routeShortName": "39",
+              "routeLongName": "מסוף עמידר-רמת גן<->מסוף רדינג/הורדה-תל אביב יפו-20",
+              "description": "13039-2-0",
+              "routeType": 3,
+              "url": null,
+              "color": null,
+              "textColor": null
+            },
+            {
+              "routeId": "mot:route:9809",
+              "sourceId": "9809",
+              "operatorId": "5",
+              "routeShortName": "172",
+              "routeLongName": "חניון תמנע-חולון<->מסוף רדינג/הורדה-תל אביב יפו-20",
+              "description": "12172-2-0",
+              "routeType": 3,
+              "url": null,
+              "color": null,
+              "textColor": null
+            }
+          ]
+        },
+        "meta": {
+          "requestId": "3bdd75603c744d618a1dd890990d46fb",
+          "generationId": "c7b66eee1ad04dddba13f4c5dade5ef2023963a1ac0384857aaf173b9d164aa1",
+          "generatedAt": "2026-09-30T23:10:11.469390Z",
+          "dataBuiltAt": "2026-09-30T19:28:59.565385Z",
+          "mode": "real",
+          "coverage": {
+            "from": "2026-09-30T00:00:00+03:00",
+            "until": "2026-10-31T00:00:00+02:00"
+          },
+          "freshness": "current",
+          "capabilities": {
+            "realtime": "not_enabled",
+            "alerts": "not_enabled"
+          },
+          "attribution": [
+            "Israel Ministry of Transport",
+            "© OpenStreetMap contributors"
+          ],
+          "rankingPolicy": "motis-v2.11.2-feasible-engine-order-v1",
+          "appliedConstraints": {},
+          "warnings": []
+        }
+      }
+    },
+    {
+      "id": "english-search-to-journey",
+      "path": "/v1/journeys",
+      "method": "POST",
+      "params": null,
+      "body": {
+        "from": {
+          "kind": "stop",
+          "stopId": "mot:stop:13583"
+        },
+        "to": {
+          "kind": "coordinate",
+          "latitude": 32.7775,
+          "longitude": 35.0219
+        },
+        "departAt": "2026-10-01T08:00:00+03:00",
+        "results": 1
+      },
+      "httpStatus": 200,
+      "elapsedMs": 512.815,
+      "responseSha256": "4f42fec8ddd2db4599fe3ee64519294a5802e12d5af9db01e2286d5c29bbf73f",
+      "response": {
+        "data": {
+          "outcome": "routes_found",
+          "journeys": [
+            {
+              "id": "journey-e2992ac71389488c718a",
+              "timing": {
+                "scheduledDeparture": "2026-10-01T08:07:00+03:00",
+                "scheduledArrival": "2026-10-01T09:52:00+03:00",
+                "timingState": "scheduled",
+                "expectedDeparture": null,
+                "expectedArrival": null,
+                "delaySeconds": null,
+                "observedAt": null
+              },
+              "durationSeconds": 6300,
+              "walkingSeconds": 540,
+              "walkingDistanceMeters": 748.0,
+              "transfers": 2,
+              "legs": [
+                {
+                  "kind": "transit",
+                  "mode": "bus",
+                  "from": {
+                    "name": "דיזנגוף סנטר/דיזנגוף",
+                    "latitude": 32.075129000000004,
+                    "longitude": 34.77537000000001,
+                    "stopId": "mot:stop:13561",
+                    "stopCode": "25565"
+                  },
+                  "to": {
+                    "name": "ת. רכבת השלום",
+                    "latitude": 32.072666,
+                    "longitude": 34.79339000000001,
+                    "stopId": "mot:stop:12824",
+                    "stopCode": "21023"
+                  },
+                  "timing": {
+                    "scheduledDeparture": "2026-10-01T08:07:00+03:00",
+                    "scheduledArrival": "2026-10-01T08:14:00+03:00",
+                    "timingState": "scheduled",
+                    "expectedDeparture": null,
+                    "expectedArrival": null,
+                    "delaySeconds": null,
+                    "observedAt": null
+                  },
+                  "durationSeconds": 420,
+                  "distanceMeters": null,
+                  "geometry": {
+                    "type": "LineString",
+                    "coordinates": [
+                      [
+                        34.77537,
+                        32.075129
+                      ],
+                      [
+                        34.775405,
+                        32.075163
+                      ],
+                      [
+                        34.775494,
+                        32.075085
+                      ],
+                      [
+                        34.775498,
+                        32.075079
+                      ],
+                      [
+                        34.77552,
+                        32.075055
+                      ],
+                      [
+                        34.775547,
+                        32.075026
+                      ],
+                      [
+                        34.775612,
+                        32.074982
+                      ],
+                      [
+                        34.775863,
+                        32.074795
+                      ],
+                      [
+                        34.77643,
+                        32.074671
+                      ],
+                      [
+                        34.77671,
+                        32.074626
+                      ],
+                      [
+                        34.779003,
+                        32.074153
+                      ],
+                      [
+                        34.779079,
+                        32.074055
+                      ],
+                      [
+                        34.779312,
+                        32.074015
+                      ],
+                      [
+                        34.779721,
+                        32.073947
+                      ],
+                      [
+                        34.779833,
+                        32.073927
+                      ],
+                      [
+                        34.780141,
+                        32.073871
+                      ],
+                      [
+                        34.780296,
+                        32.073847
+                      ],
+                      [
+                        34.780457,
+                        32.073826
+                      ],
+                      [
+                        34.780648,
+                        32.073808
+                      ],
+                      [
+                        34.781125,
+                        32.073737
+                      ],
+                      [
+                        34.781337,
+                        32.073698
+                      ],
+                      [
+                        34.781482,
+                        32.073663
+                      ],
+                      [
+                        34.781616,
+                        32.073624
+                      ],
+                      [
+                        34.781701,
+                        32.073599
+                      ],
+                      [
+                        34.781757,
+                        32.07355
+                      ],
+                      [
+                        34.781836,
+                        32.073489
+                      ],
+                      [
+                        34.781897,
+                        32.073457
+                      ],
+                      [
+                        34.781929,
+                        32.07345
+                      ],
+                      [
+                        34.782093,
+                        32.073418
+                      ],
+                      [
+                        34.782566,
+                        32.073426
+                      ],
+                      [
+                        34.78316,
+                        32.07342
+                      ],
+                      [
+                        34.783255,
+                        32.073413
+                      ],
+                      [
+                        34.783603,
+                        32.073412
+                      ],
+                      [
+                        34.783638,
+                        32.073412
+                      ],
+                      [
+                        34.783674,
+                        32.073412
+                      ],
+                      [
+                        34.784153,
+                        32.073403
+                      ],
+                      [
+                        34.78475,
+                        32.073393
+                      ],
+                      [
+                        34.784804,
+                        32.073386
+                      ],
+                      [
+                        34.785509,
+                        32.073331
+                      ],
+                      [
+                        34.786215,
+                        32.073307
+                      ],
+                      [
+                        34.787073,
+                        32.073294
+                      ],
+                      [
+                        34.787404,
+                        32.073288
+                      ],
+                      [
+                        34.7875,
+                        32.073284
+                      ],
+                      [
+                        34.787615,
+                        32.073279
+                      ],
+                      [
+                        34.788076,
+                        32.073278
+                      ],
+                      [
+                        34.788435,
+                        32.07328
+                      ],
+                      [
+                        34.789077,
+                        32.073284
+                      ],
+                      [
+                        34.789443,
+                        32.073286
+                      ],
+                      [
+                        34.790123,
+                        32.073284
+                      ],
+                      [
+                        34.790275,
+                        32.073285
+                      ],
+                      [
+                        34.79038,
+                        32.073282
+                      ],
+                      [
+                        34.790544,
+                        32.073278
+                      ],
+                      [
+                        34.790873,
+                        32.073289
+                      ],
+                      [
+                        34.790997,
+                        32.073284
+                      ],
+                      [
+                        34.79114,
+                        32.073285
+                      ],
+                      [
+                        34.791331,
+                        32.073279
+                      ],
+                      [
+                        34.791484,
+                        32.073268
+                      ],
+                      [
+                        34.791614,
+                        32.073255
+                      ],
+                      [
+                        34.791726,
+                        32.073237
+                      ],
+                      [
+                        34.791853,
+                        32.073206
+                      ],
+                      [
+                        34.79194,
+                        32.073181
+                      ],
+                      [
+                        34.792164,
+                        32.073121
+                      ],
+                      [
+                        34.792592,
+                        32.072978
+                      ],
+                      [
+                        34.792656,
+                        32.072957
+                      ],
+                      [
+                        34.79288,
+                        32.072883
+                      ],
+                      [
+                        34.793557,
+                        32.072659
+                      ],
+                      [
+                        34.79339,
+                        32.072666
+                      ]
+                    ]
+                  },
+                  "geometryUnavailableReason": null,
+                  "transit": {
+                    "operatorId": "5",
+                    "operatorName": "דן",
+                    "routeId": "mot:route:16076",
+                    "routeShortName": "8",
+                    "headsign": "מסוף הטייסים",
+                    "engineTripId": "20261001_07:42_mot60day_585046861_300926",
+                    "sourceTripId": "585046861_300926",
+                    "serviceDate": "2026-10-01",
+                    "startTime": "07:42"
+                  }
+                },
+                {
+                  "kind": "walk",
+                  "mode": "walk",
+                  "from": {
+                    "name": "ת. רכבת השלום",
+                    "latitude": 32.072666,
+                    "longitude": 34.79339000000001,
+                    "stopId": "mot:stop:12824",
+                    "stopCode": "21023"
+                  },
+                  "to": {
+                    "name": "השלום",
+                    "latitude": 32.073346,
+                    "longitude": 34.79325600000001,
+                    "stopId": "mot:stop:37350",
+                    "stopCode": "17046"
+                  },
+                  "timing": {
+                    "scheduledDeparture": "2026-10-01T08:19:00+03:00",
+                    "scheduledArrival": "2026-10-01T08:21:00+03:00",
+                    "timingState": "scheduled",
+                    "expectedDeparture": null,
+                    "expectedArrival": null,
+                    "delaySeconds": null,
+                    "observedAt": null
+                  },
+                  "durationSeconds": 120,
+                  "distanceMeters": 226.0,
+                  "geometry": {
+                    "type": "LineString",
+                    "coordinates": [
+                      [
+                        34.793402,
+                        32.072696
+                      ],
+                      [
+                        34.79328,
+                        32.072732
+                      ],
+                      [
+                        34.79328,
+                        32.072732
+                      ],
+                      [
+                        34.793278,
+                        32.072616
+                      ],
+                      [
+                        34.793194,
+                        32.07262
+                      ],
+                      [
+                        34.793194,
+                        32.07262
+                      ],
+                      [
+                        34.793168,
+                        32.072162
+                      ],
+                      [
+                        34.793168,
+                        32.072162
+                      ],
+                      [
+                        34.793183,
+                        32.072161
+                      ],
+                      [
+                        34.793183,
+                        32.072161
+                      ],
+                      [
+                        34.79319,
+                        32.072324
+                      ],
+                      [
+                        34.79319,
+                        32.072324
+                      ],
+                      [
+                        34.7932,
+                        32.072324
+                      ],
+                      [
+                        34.7932,
+                        32.072324
+                      ],
+                      [
+                        34.793231,
+                        32.072323
+                      ],
+                      [
+                        34.793231,
+                        32.072323
+                      ],
+                      [
+                        34.793291,
+                        32.073345
+                      ]
+                    ]
+                  },
+                  "geometryUnavailableReason": null,
+                  "transit": null
+                },
+                {
+                  "kind": "transit",
+                  "mode": "rail",
+                  "from": {
+                    "name": "השלום",
+                    "latitude": 32.073346,
+                    "longitude": 34.79325600000001,
+                    "stopId": "mot:stop:37350",
+                    "stopCode": "17046"
+                  },
+                  "to": {
+                    "name": "חוף הכרמל",
+                    "latitude": 32.793600000000005,
+                    "longitude": 34.95740399999999,
+                    "stopId": "mot:stop:37376",
+                    "stopCode": "17020"
+                  },
+                  "timing": {
+                    "scheduledDeparture": "2026-10-01T08:21:00+03:00",
+                    "scheduledArrival": "2026-10-01T09:24:00+03:00",
+                    "timingState": "scheduled",
+                    "expectedDeparture": null,
+                    "expectedArrival": null,
+                    "delaySeconds": null,
+                    "observedAt": null
+                  },
+                  "durationSeconds": 3780,
+                  "distanceMeters": null,
+                  "geometry": {
+                    "type": "LineString",
+                    "coordinates": [
+                      [
+                        34.793256,
+                        32.073346
+                      ],
+                      [
+                        34.798247,
+                        32.083715
+                      ],
+                      [
+                        34.804499,
+                        32.103515
+                      ],
+                      [
+                        34.949573,
+                        32.514386
+                      ],
+                      [
+                        34.940314,
+                        32.692924
+                      ],
+                      [
+                        34.957404,
+                        32.7936
+                      ]
+                    ]
+                  },
+                  "geometryUnavailableReason": null,
+                  "transit": {
+                    "operatorId": "2",
+                    "operatorName": "רכבת ישראל",
+                    "routeId": "mot:route:29990",
+                    "routeShortName": "",
+                    "headsign": "156",
+                    "engineTripId": "20261001_07:48_mot60day_1_521247",
+                    "sourceTripId": "1_521247",
+                    "serviceDate": "2026-10-01",
+                    "startTime": "07:48"
+                  }
+                },
+                {
+                  "kind": "walk",
+                  "mode": "walk",
+                  "from": {
+                    "name": "חוף הכרמל",
+                    "latitude": 32.793600000000005,
+                    "longitude": 34.95740399999999,
+                    "stopId": "mot:stop:37376",
+                    "stopCode": "17020"
+                  },
+                  "to": {
+                    "name": "ת. רכבת חוף הכרמל",
+                    "latitude": 32.793065000000006,
+                    "longitude": 34.95764699999999,
+                    "stopId": "mot:stop:16977",
+                    "stopCode": "46216"
+                  },
+                  "timing": {
+                    "scheduledDeparture": "2026-10-01T09:24:00+03:00",
+                    "scheduledArrival": "2026-10-01T09:26:00+03:00",
+                    "timingState": "scheduled",
+                    "expectedDeparture": null,
+                    "expectedArrival": null,
+                    "delaySeconds": null,
+                    "observedAt": null
+                  },
+                  "durationSeconds": 120,
+                  "distanceMeters": 189.0,
+                  "geometry": {
+                    "type": "LineString",
+                    "coordinates": [
+                      [
+                        34.957407,
+                        32.7936
+                      ],
+                      [
+                        34.957396,
+                        32.793317
+                      ],
+                      [
+                        34.957396,
+                        32.793317
+                      ],
+                      [
+                        34.957354,
+                        32.793319
+                      ],
+                      [
+                        34.957353,
+                        32.79327
+                      ],
+                      [
+                        34.957353,
+                        32.79327
+                      ],
+                      [
+                        34.957367,
+                        32.79327
+                      ],
+                      [
+                        34.957541,
+                        32.793266
+                      ],
+                      [
+                        34.957541,
+                        32.793266
+                      ],
+                      [
+                        34.957557,
+                        32.793332
+                      ],
+                      [
+                        34.957557,
+                        32.793332
+                      ],
+                      [
+                        34.957637,
+                        32.793632
+                      ],
+                      [
+                        34.957637,
+                        32.793632
+                      ],
+                      [
+                        34.957644,
+                        32.793667
+                      ],
+                      [
+                        34.957644,
+                        32.793667
+                      ],
+                      [
+                        34.957792,
+                        32.793659
+                      ],
+                      [
+                        34.957792,
+                        32.793659
+                      ],
+                      [
+                        34.957822,
+                        32.793657
+                      ],
+                      [
+                        34.957822,
+                        32.793657
+                      ],
+                      [
+                        34.957669,
+                        32.793183
+                      ],
+                      [
+                        34.957648,
+                        32.793083
+                      ],
+                      [
+                        34.957645,
+                        32.793065
+                      ]
+                    ]
+                  },
+                  "geometryUnavailableReason": null,
+                  "transit": null
+                },
+                {
+                  "kind": "transit",
+                  "mode": "bus",
+                  "from": {
+                    "name": "ת. רכבת חוף הכרמל",
+                    "latitude": 32.793065000000006,
+                    "longitude": 34.95764699999999,
+                    "stopId": "mot:stop:16977",
+                    "stopCode": "46216"
+                  },
+                  "to": {
+                    "name": "טכניון/מעונות העמים",
+                    "latitude": 32.77673600000001,
+                    "longitude": 35.020041,
+                    "stopId": "mot:stop:2083",
+                    "stopCode": "41200"
+                  },
+                  "timing": {
+                    "scheduledDeparture": "2026-10-01T09:33:00+03:00",
+                    "scheduledArrival": "2026-10-01T09:47:00+03:00",
+                    "timingState": "scheduled",
+                    "expectedDeparture": null,
+                    "expectedArrival": null,
+                    "delaySeconds": null,
+                    "observedAt": null
+                  },
+                  "durationSeconds": 840,
+                  "distanceMeters": null,
+                  "geometry": {
+                    "type": "LineString",
+                    "coordinates": [
+                      [
+                        34.957647,
+                        32.793065
+                      ],
+                      [
+                        34.957708,
+                        32.793091
+                      ],
+                      [
+                        34.957684,
+                        32.792995
+                      ],
+                      [
+                        34.957616,
+                        32.792742
+                      ],
+                      [
+                        34.957598,
+                        32.79261
+                      ],
+                      [
+                        34.957584,
+                        32.792364
+                      ],
+                      [
+                        34.957582,
+                        32.792275
+                      ],
+                      [
+                        34.95759,
+                        32.792173
+                      ],
+                      [
+                        34.957609,
+                        32.792098
+                      ],
+                      [
+                        34.957624,
+                        32.792045
+                      ],
+                      [
+                        34.957685,
+                        32.791891
+                      ],
+                      [
+                        34.957722,
+                        32.791824
+                      ],
+                      [
+                        34.957774,
+                        32.791756
+                      ],
+                      [
+                        34.957845,
+                        32.791692
+                      ],
+                      [
+                        34.957895,
+                        32.791652
+                      ],
+                      [
+                        34.957966,
+                        32.791599
+                      ],
+                      [
+                        34.958026,
+                        32.791547
+                      ],
+                      [
+                        34.958102,
+                        32.791469
+                      ],
+                      [
+                        34.958194,
+                        32.791366
+                      ],
+                      [
+                        34.958276,
+                        32.79128
+                      ],
+                      [
+                        34.958339,
+                        32.791189
+                      ],
+                      [
+                        34.958399,
+                        32.791096
+                      ],
+                      [
+                        34.958444,
+                        32.791006
+                      ],
+                      [
+                        34.958517,
+                        32.790743
+                      ],
+                      [
+                        34.958547,
+                        32.790659
+                      ],
+                      [
+                        34.958573,
+                        32.790564
+                      ],
+                      [
+                        34.958591,
+                        32.790479
+                      ],
+                      [
+                        34.958586,
+                        32.790473
+                      ],
+                      [
+                        34.958579,
+                        32.790461
+                      ],
+                      [
+                        34.958574,
+                        32.790449
+                      ],
+                      [
+                        34.958571,
+                        32.790436
+                      ],
+                      [
+                        34.958569,
+                        32.790422
+                      ],
+                      [
+                        34.95857,
+                        32.790409
+                      ],
+                      [
+                        34.958572,
+                        32.790396
+                      ],
+                      [
+                        34.958575,
+                        32.790389
+                      ],
+                      [
+                        34.95858,
+                        32.790377
+                      ],
+                      [
+                        34.958587,
+                        32.790365
+                      ],
+                      [
+                        34.958601,
+                        32.790349
+                      ],
+                      [
+                        34.958618,
+                        32.790335
+                      ],
+                      [
+                        34.958628,
+                        32.79033
+                      ],
+                      [
+                        34.958637,
+                        32.790325
+                      ],
+                      [
+                        34.958659,
+                        32.790317
+                      ],
+                      [
+                        34.958675,
+                        32.790314
+                      ],
+                      [
+                        34.958682,
+                        32.790313
+                      ],
+                      [
+                        34.958773,
+                        32.790266
+                      ],
+                      [
+                        34.958873,
+                        32.790212
+                      ],
+                      [
+                        34.95896,
+                        32.79017
+                      ],
+                      [
+                        34.959034,
+                        32.790143
+                      ],
+                      [
+                        34.959101,
+                        32.790122
+                      ],
+                      [
+                        34.959198,
+                        32.79011
+                      ],
+                      [
+                        34.95933,
+                        32.790103
+                      ],
+                      [
+                        34.959521,
+                        32.790112
+                      ],
+                      [
+                        34.959942,
+                        32.79014
+                      ],
+                      [
+                        34.960106,
+                        32.790151
+                      ],
+                      [
+                        34.960292,
+                        32.790164
+                      ],
+                      [
+                        34.960428,
+                        32.790174
+                      ],
+                      [
+                        34.961451,
+                        32.790244
+                      ],
+                      [
+                        34.962122,
+                        32.790268
+                      ],
+                      [
+                        34.962194,
+                        32.790268
+                      ],
+                      [
+                        34.962283,
+                        32.790268
+                      ],
+                      [
+                        34.962671,
+                        32.790261
+                      ],
+                      [
+                        34.96318,
+                        32.790257
+                      ],
+                      [
+                        34.963331,
+                        32.790255
+                      ],
+                      [
+                        34.963638,
+                        32.790255
+                      ],
+                      [
+                        34.964081,
+                        32.790263
+                      ],
+                      [
+                        34.964454,
+                        32.790268
+                      ],
+                      [
+                        34.964612,
+                        32.790267
+                      ],
+                      [
+                        34.964879,
+                        32.790264
+                      ],
+                      [
+                        34.96528,
+                        32.790253
+                      ],
+                      [
+                        34.965375,
+                        32.790259
+                      ],
+                      [
+                        34.965705,
+                        32.790266
+                      ],
+                      [
+                        34.96631,
+                        32.790282
+                      ],
+                      [
+                        34.966662,
+                        32.790262
+                      ],
+                      [
+                        34.966856,
+                        32.790224
+                      ],
+                      [
+                        34.967074,
+                        32.790156
+                      ],
+                      [
+                        34.967177,
+                        32.790229
+                      ],
+                      [
+                        34.967197,
+                        32.790253
+                      ],
+                      [
+                        34.967262,
+                        32.790352
+                      ],
+                      [
+                        34.967318,
+                        32.790452
+                      ],
+                      [
+                        34.967354,
+                        32.790551
+                      ],
+                      [
+                        34.967381,
+                        32.790649
+                      ],
+                      [
+                        34.967416,
+                        32.790839
+                      ],
+                      [
+                        34.967392,
+                        32.791192
+                      ],
+                      [
+                        34.967366,
+                        32.791554
+                      ],
+                      [
+                        34.967354,
+                        32.791802
+                      ],
+                      [
+                        34.967348,
+                        32.791898
+                      ],
+                      [
+                        34.967402,
+                        32.792097
+                      ],
+                      [
+                        34.967421,
+                        32.792134
+                      ],
+                      [
+                        34.967459,
+                        32.792179
+                      ],
+                      [
+                        34.967484,
+                        32.792207
+                      ],
+                      [
+                        34.967522,
+                        32.792241
+                      ],
+                      [
+                        34.967564,
+                        32.792266
+                      ],
+                      [
+                        34.967599,
+                        32.792284
+                      ],
+                      [
+                        34.967637,
+                        32.792298
+                      ],
+                      [
+                        34.967692,
+                        32.792309
+                      ],
+                      [
+                        34.967732,
+                        32.792313
+                      ],
+                      [
+                        34.967782,
+                        32.792315
+                      ],
+                      [
+                        34.96786,
+                        32.792308
+                      ],
+                      [
+                        34.967942,
+                        32.792302
+                      ],
+                      [
+                        34.968045,
+                        32.79229
+                      ],
+                      [
+                        34.968396,
+                        32.792255
+                      ],
+                      [
+                        34.968497,
+                        32.792254
+                      ],
+                      [
+                        34.968682,
+                        32.792274
+                      ],
+                      [
+                        34.968941,
+                        32.792267
+                      ],
+                      [
+                        34.969115,
+                        32.792264
+                      ],
+                      [
+                        34.969311,
+                        32.792268
+                      ],
+                      [
+                        34.970788,
+                        32.792273
+                      ],
+                      [
+                        34.971216,
+                        32.792304
+                      ],
+                      [
+                        34.972112,
+                        32.792371
+                      ],
+                      [
+                        34.973103,
+                        32.792433
+                      ],
+                      [
+                        34.973857,
+                        32.792453
+                      ],
+                      [
+                        34.974292,
+                        32.792426
+                      ],
+                      [
+                        34.974995,
+                        32.792432
+                      ],
+                      [
+                        34.975865,
+                        32.792366
+                      ],
+                      [
+                        34.976462,
+                        32.79232
+                      ],
+                      [
+                        34.976834,
+                        32.792289
+                      ],
+                      [
+                        34.977419,
+                        32.792239
+                      ],
+                      [
+                        34.982754,
+                        32.791809
+                      ],
+                      [
+                        34.982812,
+                        32.791803
+                      ],
+                      [
+                        34.98401,
+                        32.791694
+                      ],
+                      [
+                        34.984128,
+                        32.791683
+                      ],
+                      [
+                        34.984725,
+                        32.791634
+                      ],
+                      [
+                        34.985503,
+                        32.79157
+                      ],
+                      [
+                        34.985578,
+                        32.791564
+                      ],
+                      [
+                        34.985663,
+                        32.791557
+                      ],
+                      [
+                        34.986374,
+                        32.791499
+                      ],
+                      [
+                        34.986468,
+                        32.791491
+                      ],
+                      [
+                        34.987426,
+                        32.791413
+                      ],
+                      [
+                        34.987484,
+                        32.791408
+                      ],
+                      [
+                        34.988235,
+                        32.791346
+                      ],
+                      [
+                        34.990636,
+                        32.79114
+                      ],
+                      [
+                        34.993095,
+                        32.790933
+                      ],
+                      [
+                        34.99323,
+                        32.790922
+                      ],
+                      [
+                        34.993308,
+                        32.790916
+                      ],
+                      [
+                        34.994218,
+                        32.790839
+                      ],
+                      [
+                        34.995878,
+                        32.790708
+                      ],
+                      [
+                        34.996563,
+                        32.790652
+                      ],
+                      [
+                        34.99807,
+                        32.790527
+                      ],
+                      [
+                        34.999336,
+                        32.790473
+                      ],
+                      [
+                        35.000354,
+                        32.790516
+                      ],
+                      [
+                        35.001028,
+                        32.790572
+                      ],
+                      [
+                        35.001988,
+                        32.790646
+                      ],
+                      [
+                        35.002839,
+                        32.790714
+                      ],
+                      [
+                        35.00307,
+                        32.790734
+                      ],
+                      [
+                        35.003194,
+                        32.790729
+                      ],
+                      [
+                        35.003454,
+                        32.790728
+                      ],
+                      [
+                        35.003829,
+                        32.790773
+                      ],
+                      [
+                        35.004155,
+                        32.790788
+                      ],
+                      [
+                        35.004365,
+                        32.790776
+                      ],
+                      [
+                        35.00458,
+                        32.790774
+                      ],
+                      [
+                        35.005003,
+                        32.790784
+                      ],
+                      [
+                        35.005286,
+                        32.790772
+                      ],
+                      [
+                        35.005392,
+                        32.790767
+                      ],
+                      [
+                        35.005522,
+                        32.790764
+                      ],
+                      [
+                        35.005734,
+                        32.790728
+                      ],
+                      [
+                        35.006053,
+                        32.790674
+                      ],
+                      [
+                        35.00639,
+                        32.790638
+                      ],
+                      [
+                        35.006644,
+                        32.790599
+                      ],
+                      [
+                        35.006823,
+                        32.790566
+                      ],
+                      [
+                        35.006979,
+                        32.790533
+                      ],
+                      [
+                        35.007347,
+                        32.790461
+                      ],
+                      [
+                        35.007484,
+                        32.79044
+                      ],
+                      [
+                        35.0081,
+                        32.790344
+                      ],
+                      [
+                        35.008616,
+                        32.790269
+                      ],
+                      [
+                        35.008832,
+                        32.790213
+                      ],
+                      [
+                        35.008944,
+                        32.790176
+                      ],
+                      [
+                        35.009048,
+                        32.790126
+                      ],
+                      [
+                        35.009133,
+                        32.790072
+                      ],
+                      [
+                        35.009208,
+                        32.79001
+                      ],
+                      [
+                        35.009305,
+                        32.789925
+                      ],
+                      [
+                        35.009357,
+                        32.789859
+                      ],
+                      [
+                        35.009401,
+                        32.7898
+                      ],
+                      [
+                        35.009416,
+                        32.789768
+                      ],
+                      [
+                        35.009454,
+                        32.789699
+                      ],
+                      [
+                        35.009482,
+                        32.789631
+                      ],
+                      [
+                        35.009499,
+                        32.789568
+                      ],
+                      [
+                        35.009513,
+                        32.789475
+                      ],
+                      [
+                        35.009526,
+                        32.789316
+                      ],
+                      [
+                        35.009529,
+                        32.789197
+                      ],
+                      [
+                        35.009532,
+                        32.789178
+                      ],
+                      [
+                        35.009538,
+                        32.789129
+                      ],
+                      [
+                        35.009573,
+                        32.789072
+                      ],
+                      [
+                        35.009791,
+                        32.788991
+                      ],
+                      [
+                        35.0106,
+                        32.788551
+                      ],
+                      [
+                        35.010799,
+                        32.788436
+                      ],
+                      [
+                        35.010967,
+                        32.788379
+                      ],
+                      [
+                        35.010983,
+                        32.788373
+                      ],
+                      [
+                        35.011151,
+                        32.788334
+                      ],
+                      [
+                        35.01134,
+                        32.788294
+                      ],
+                      [
+                        35.011629,
+                        32.788263
+                      ],
+                      [
+                        35.012012,
+                        32.788251
+                      ],
+                      [
+                        35.012563,
+                        32.788185
+                      ],
+                      [
+                        35.01291,
+                        32.788119
+                      ],
+                      [
+                        35.012978,
+                        32.788106
+                      ],
+                      [
+                        35.013351,
+                        32.788031
+                      ],
+                      [
+                        35.013839,
+                        32.787908
+                      ],
+                      [
+                        35.014228,
+                        32.787797
+                      ],
+                      [
+                        35.014617,
+                        32.787652
+                      ],
+                      [
+                        35.015101,
+                        32.787427
+                      ],
+                      [
+                        35.015536,
+                        32.787245
+                      ],
+                      [
+                        35.015982,
+                        32.787031
+                      ],
+                      [
+                        35.016161,
+                        32.786945
+                      ],
+                      [
+                        35.016323,
+                        32.78687
+                      ],
+                      [
+                        35.01648,
+                        32.786801
+                      ],
+                      [
+                        35.016818,
+                        32.786715
+                      ],
+                      [
+                        35.016922,
+                        32.786685
+                      ],
+                      [
+                        35.017007,
+                        32.786656
+                      ],
+                      [
+                        35.017109,
+                        32.786625
+                      ],
+                      [
+                        35.01715,
+                        32.786599
+                      ],
+                      [
+                        35.017201,
+                        32.786512
+                      ],
+                      [
+                        35.017345,
+                        32.786245
+                      ],
+                      [
+                        35.017492,
+                        32.785945
+                      ],
+                      [
+                        35.017687,
+                        32.78549
+                      ],
+                      [
+                        35.01768,
+                        32.785386
+                      ],
+                      [
+                        35.017661,
+                        32.785246
+                      ],
+                      [
+                        35.017589,
+                        32.785149
+                      ],
+                      [
+                        35.017135,
+                        32.784856
+                      ],
+                      [
+                        35.016887,
+                        32.784701
+                      ],
+                      [
+                        35.016038,
+                        32.78415
+                      ],
+                      [
+                        35.015958,
+                        32.784101
+                      ],
+                      [
+                        35.015771,
+                        32.783984
+                      ],
+                      [
+                        35.015723,
+                        32.783955
+                      ],
+                      [
+                        35.015472,
+                        32.783803
+                      ],
+                      [
+                        35.014932,
+                        32.783482
+                      ],
+                      [
+                        35.01474,
+                        32.783348
+                      ],
+                      [
+                        35.014498,
+                        32.783136
+                      ],
+                      [
+                        35.014478,
+                        32.783109
+                      ],
+                      [
+                        35.014457,
+                        32.78308
+                      ],
+                      [
+                        35.014398,
+                        32.783012
+                      ],
+                      [
+                        35.014342,
+                        32.782938
+                      ],
+                      [
+                        35.014248,
+                        32.782769
+                      ],
+                      [
+                        35.014187,
+                        32.782623
+                      ],
+                      [
+                        35.014134,
+                        32.782528
+                      ],
+                      [
+                        35.014056,
+                        32.782441
+                      ],
+                      [
+                        35.013953,
+                        32.782379
+                      ],
+                      [
+                        35.013837,
+                        32.782336
+                      ],
+                      [
+                        35.013769,
+                        32.782311
+                      ],
+                      [
+                        35.013842,
+                        32.782238
+                      ],
+                      [
+                        35.01387,
+                        32.782191
+                      ],
+                      [
+                        35.013897,
+                        32.782139
+                      ],
+                      [
+                        35.013913,
+                        32.782074
+                      ],
+                      [
+                        35.013921,
+                        32.782011
+                      ],
+                      [
+                        35.013919,
+                        32.781932
+                      ],
+                      [
+                        35.01389,
+                        32.781855
+                      ],
+                      [
+                        35.013719,
+                        32.781469
+                      ],
+                      [
+                        35.013661,
+                        32.781303
+                      ],
+                      [
+                        35.013635,
+                        32.781228
+                      ],
+                      [
+                        35.013608,
+                        32.781167
+                      ],
+                      [
+                        35.013549,
+                        32.78107
+                      ],
+                      [
+                        35.013324,
+                        32.780667
+                      ],
+                      [
+                        35.013223,
+                        32.780448
+                      ],
+                      [
+                        35.0132,
+                        32.780387
+                      ],
+                      [
+                        35.013186,
+                        32.780338
+                      ],
+                      [
+                        35.013178,
+                        32.780295
+                      ],
+                      [
+                        35.013176,
+                        32.780247
+                      ],
+                      [
+                        35.013188,
+                        32.780191
+                      ],
+                      [
+                        35.013202,
+                        32.780148
+                      ],
+                      [
+                        35.013218,
+                        32.780115
+                      ],
+                      [
+                        35.01324,
+                        32.780074
+                      ],
+                      [
+                        35.013268,
+                        32.780029
+                      ],
+                      [
+                        35.013322,
+                        32.77997
+                      ],
+                      [
+                        35.013373,
+                        32.779933
+                      ],
+                      [
+                        35.013418,
+                        32.779904
+                      ],
+                      [
+                        35.01369,
+                        32.77978
+                      ],
+                      [
+                        35.014682,
+                        32.779361
+                      ],
+                      [
+                        35.014928,
+                        32.779191
+                      ],
+                      [
+                        35.015034,
+                        32.779096
+                      ],
+                      [
+                        35.015044,
+                        32.779088
+                      ],
+                      [
+                        35.015352,
+                        32.778774
+                      ],
+                      [
+                        35.015516,
+                        32.778643
+                      ],
+                      [
+                        35.015648,
+                        32.778537
+                      ],
+                      [
+                        35.01568,
+                        32.778513
+                      ],
+                      [
+                        35.015747,
+                        32.778468
+                      ],
+                      [
+                        35.015816,
+                        32.778423
+                      ],
+                      [
+                        35.01584,
+                        32.77841
+                      ],
+                      [
+                        35.015901,
+                        32.778374
+                      ],
+                      [
+                        35.016016,
+                        32.778318
+                      ],
+                      [
+                        35.016114,
+                        32.778284
+                      ],
+                      [
+                        35.016288,
+                        32.778238
+                      ],
+                      [
+                        35.016439,
+                        32.778189
+                      ],
+                      [
+                        35.016715,
+                        32.778108
+                      ],
+                      [
+                        35.016812,
+                        32.778088
+                      ],
+                      [
+                        35.016981,
+                        32.778057
+                      ],
+                      [
+                        35.017181,
+                        32.778029
+                      ],
+                      [
+                        35.017383,
+                        32.777986
+                      ],
+                      [
+                        35.017548,
+                        32.777945
+                      ],
+                      [
+                        35.017703,
+                        32.777896
+                      ],
+                      [
+                        35.017834,
+                        32.777846
+                      ],
+                      [
+                        35.018137,
+                        32.777702
+                      ],
+                      [
+                        35.018764,
+                        32.777449
+                      ],
+                      [
+                        35.018865,
+                        32.777412
+                      ],
+                      [
+                        35.018934,
+                        32.77739
+                      ],
+                      [
+                        35.019032,
+                        32.777355
+                      ],
+                      [
+                        35.019145,
+                        32.777304
+                      ],
+                      [
+                        35.019375,
+                        32.777192
+                      ],
+                      [
+                        35.019541,
+                        32.777113
+                      ],
+                      [
+                        35.019622,
+                        32.777055
+                      ],
+                      [
+                        35.019613,
+                        32.777039
+                      ],
+                      [
+                        35.019608,
+                        32.777021
+                      ],
+                      [
+                        35.019606,
+                        32.777001
+                      ],
+                      [
+                        35.019609,
+                        32.776982
+                      ],
+                      [
+                        35.019616,
+                        32.776963
+                      ],
+                      [
+                        35.019623,
+                        32.776952
+                      ],
+                      [
+                        35.019637,
+                        32.776936
+                      ],
+                      [
+                        35.019653,
+                        32.776923
+                      ],
+                      [
+                        35.019673,
+                        32.776912
+                      ],
+                      [
+                        35.019694,
+                        32.776905
+                      ],
+                      [
+                        35.019709,
+                        32.776902
+                      ],
+                      [
+                        35.019732,
+                        32.7769
+                      ],
+                      [
+                        35.019747,
+                        32.776901
+                      ],
+                      [
+                        35.01977,
+                        32.776906
+                      ],
+                      [
+                        35.019791,
+                        32.776914
+                      ],
+                      [
+                        35.019808,
+                        32.776924
+                      ],
+                      [
+                        35.019853,
+                        32.776899
+                      ],
+                      [
+                        35.019905,
+                        32.776861
+                      ],
+                      [
+                        35.020145,
+                        32.776734
+                      ],
+                      [
+                        35.020041,
+                        32.776736
+                      ]
+                    ]
+                  },
+                  "geometryUnavailableReason": null,
+                  "transit": {
+                    "operatorId": "3",
+                    "operatorName": "אגד",
+                    "routeId": "mot:route:15030",
+                    "routeShortName": "1",
+                    "headsign": "טכניון",
+                    "engineTripId": "20261001_09:31_mot60day_585633629_300926",
+                    "sourceTripId": "585633629_300926",
+                    "serviceDate": "2026-10-01",
+                    "startTime": "09:31"
+                  }
+                },
+                {
+                  "kind": "walk",
+                  "mode": "walk",
+                  "from": {
+                    "name": "טכניון/מעונות העמים",
+                    "latitude": 32.77673600000001,
+                    "longitude": 35.020041,
+                    "stopId": "mot:stop:2083",
+                    "stopCode": "41200"
+                  },
+                  "to": {
+                    "name": "END",
+                    "latitude": 32.7775,
+                    "longitude": 35.0219,
+                    "stopId": null,
+                    "stopCode": null
+                  },
+                  "timing": {
+                    "scheduledDeparture": "2026-10-01T09:47:00+03:00",
+                    "scheduledArrival": "2026-10-01T09:52:00+03:00",
+                    "timingState": "scheduled",
+                    "expectedDeparture": null,
+                    "expectedArrival": null,
+                    "delaySeconds": null,
+                    "observedAt": null
+                  },
+                  "durationSeconds": 300,
+                  "distanceMeters": 333.0,
+                  "geometry": {
+                    "type": "LineString",
+                    "coordinates": [
+                      [
+                        35.020047,
+                        32.776743
+                      ],
+                      [
+                        35.020046,
+                        32.776744
+                      ],
+                      [
+                        35.020046,
+                        32.776744
+                      ],
+                      [
+                        35.019945,
+                        32.776802
+                      ],
+                      [
+                        35.019945,
+                        32.776802
+                      ],
+                      [
+                        35.019861,
+                        32.776914
+                      ],
+                      [
+                        35.019861,
+                        32.776914
+                      ],
+                      [
+                        35.019884,
+                        32.776928
+                      ],
+                      [
+                        35.019884,
+                        32.776928
+                      ],
+                      [
+                        35.019862,
+                        32.776979
+                      ],
+                      [
+                        35.019862,
+                        32.776979
+                      ],
+                      [
+                        35.019944,
+                        32.776992
+                      ],
+                      [
+                        35.019944,
+                        32.776992
+                      ],
+                      [
+                        35.020023,
+                        32.777058
+                      ],
+                      [
+                        35.020023,
+                        32.777058
+                      ],
+                      [
+                        35.020088,
+                        32.777142
+                      ],
+                      [
+                        35.020285,
+                        32.777241
+                      ],
+                      [
+                        35.020285,
+                        32.777241
+                      ],
+                      [
+                        35.020384,
+                        32.777287
+                      ],
+                      [
+                        35.020384,
+                        32.777287
+                      ],
+                      [
+                        35.020395,
+                        32.777318
+                      ],
+                      [
+                        35.020395,
+                        32.777318
+                      ],
+                      [
+                        35.02042,
+                        32.777312
+                      ],
+                      [
+                        35.020506,
+                        32.777298
+                      ],
+                      [
+                        35.020584,
+                        32.777262
+                      ],
+                      [
+                        35.020671,
+                        32.777196
+                      ],
+                      [
+                        35.020671,
+                        32.777196
+                      ],
+                      [
+                        35.020722,
+                        32.777293
+                      ],
+                      [
+                        35.020722,
+                        32.777293
+                      ],
+                      [
+                        35.020973,
+                        32.777191
+                      ],
+                      [
+                        35.020973,
+                        32.777191
+                      ],
+                      [
+                        35.021269,
+                        32.777102
+                      ],
+                      [
+                        35.021356,
+                        32.777071
+                      ],
+                      [
+                        35.021356,
+                        32.777071
+                      ],
+                      [
+                        35.02145,
+                        32.77708
+                      ],
+                      [
+                        35.02145,
+                        32.77708
+                      ],
+                      [
+                        35.02155,
+                        32.777107
+                      ],
+                      [
+                        35.02155,
+                        32.777107
+                      ],
+                      [
+                        35.021603,
+                        32.777217
+                      ],
+                      [
+                        35.021603,
+                        32.777217
+                      ],
+                      [
+                        35.021649,
+                        32.777248
+                      ],
+                      [
+                        35.021649,
+                        32.777248
+                      ],
+                      [
+                        35.021593,
+                        32.777301
+                      ],
+                      [
+                        35.021593,
+                        32.777301
+                      ],
+                      [
+                        35.021615,
+                        32.777316
+                      ],
+                      [
+                        35.021615,
+                        32.777316
+                      ],
+                      [
+                        35.021662,
+                        32.777347
+                      ],
+                      [
+                        35.021753,
+                        32.777261
+                      ],
+                      [
+                        35.021753,
+                        32.777261
+                      ],
+                      [
+                        35.021809,
+                        32.7773
+                      ],
+                      [
+                        35.021809,
+                        32.7773
+                      ],
+                      [
+                        35.021888,
+                        32.777219
+                      ],
+                      [
+                        35.021888,
+                        32.777219
+                      ],
+                      [
+                        35.022027,
+                        32.777378
+                      ],
+                      [
+                        35.022027,
+                        32.777378
+                      ],
+                      [
+                        35.021896,
+                        32.777497
+                      ]
+                    ]
+                  },
+                  "geometryUnavailableReason": null,
+                  "transit": null
+                }
+              ]
+            }
+          ],
+          "alerts": null
+        },
+        "meta": {
+          "requestId": "350ee9eafb6c475ab75990112237b0d4",
+          "generationId": "c7b66eee1ad04dddba13f4c5dade5ef2023963a1ac0384857aaf173b9d164aa1",
+          "generatedAt": "2026-09-30T23:10:11.516286Z",
+          "dataBuiltAt": "2026-09-30T19:28:59.565385Z",
+          "mode": "real",
+          "coverage": {
+            "from": "2026-09-30T00:00:00+03:00",
+            "until": "2026-10-31T00:00:00+02:00"
+          },
+          "freshness": "current",
+          "capabilities": {
+            "realtime": "not_enabled",
+            "alerts": "not_enabled"
+          },
+          "attribution": [
+            "Israel Ministry of Transport",
+            "© OpenStreetMap contributors"
+          ],
+          "rankingPolicy": "motis-v2.11.2-feasible-engine-order-v1",
+          "appliedConstraints": {
+            "timeMode": "departAt",
+            "modes": [
+              "bus",
+              "rail",
+              "light_rail"
+            ],
+            "maxAccessWalkMinutes": 15,
+            "maxEgressWalkMinutes": 15,
+            "maxDirectWalkMinutes": 30,
+            "engineWalkCapConformance": "unverified",
+            "transferWalkLimit": "not_enforced"
+          },
+          "warnings": []
+        }
+      }
+    },
+    {
+      "id": "unchanged-scheduled-trip",
+      "path": "/v1/trips/20260930_23:50_mot60day_584668860_300926",
+      "method": "GET",
+      "params": null,
+      "body": null,
+      "httpStatus": 200,
+      "elapsedMs": 30.732,
+      "responseSha256": "1a43abc4697c6020b035e572cd5c87609732484a11aa971cbfeac13452d078db",
+      "response": {
+        "data": {
+          "tripRef": "20260930_23:50_mot60day_584668860_300926",
+          "sourceTripId": "584668860_300926",
+          "serviceDate": "2026-09-30",
+          "startTime": "23:50",
+          "routeId": "mot:route:16077",
+          "routeShortName": "8",
+          "headsign": "אוניברסיטת ת\"א",
+          "shape": {
+            "type": "LineString",
+            "coordinates": [
+              [
+                34.813778,
+                32.047685
+              ],
+              [
+                34.813835,
+                32.049623
+              ],
+              [
+                34.81384,
+                32.049415
+              ],
+              [
+                34.813867,
+                32.048231
+              ],
+              [
+                34.813855,
+                32.048068
+              ],
+              [
+                34.813838,
+                32.047835
+              ],
+              [
+                34.813822,
+                32.047489
+              ],
+              [
+                34.813793,
+                32.047223
+              ],
+              [
+                34.813747,
+                32.047012
+              ],
+              [
+                34.813666,
+                32.046637
+              ],
+              [
+                34.813615,
+                32.046401
+              ],
+              [
+                34.813521,
+                32.045885
+              ],
+              [
+                34.813335,
+                32.045098
+              ],
+              [
+                34.813284,
+                32.044899
+              ],
+              [
+                34.813215,
+                32.044756
+              ],
+              [
+                34.813166,
+                32.044711
+              ],
+              [
+                34.813154,
+                32.0447
+              ],
+              [
+                34.813059,
+                32.044662
+              ],
+              [
+                34.81294,
+                32.044638
+              ],
+              [
+                34.812468,
+                32.044712
+              ],
+              [
+                34.811377,
+                32.044916
+              ],
+              [
+                34.811306,
+                32.044929
+              ],
+              [
+                34.811166,
+                32.044949
+              ],
+              [
+                34.811012,
+                32.044971
+              ],
+              [
+                34.810388,
+                32.045036
+              ],
+              [
+                34.809895,
+                32.045084
+              ],
+              [
+                34.80979,
+                32.045095
+              ],
+              [
+                34.809613,
+                32.045114
+              ],
+              [
+                34.809495,
+                32.045127
+              ],
+              [
+                34.809317,
+                32.045135
+              ],
+              [
+                34.809162,
+                32.045142
+              ],
+              [
+                34.809114,
+                32.045145
+              ],
+              [
+                34.808331,
+                32.045229
+              ],
+              [
+                34.808271,
+                32.04524
+              ],
+              [
+                34.807545,
+                32.045364
+              ],
+              [
+                34.807506,
+                32.04537
+              ],
+              [
+                34.807386,
+                32.045394
+              ],
+              [
+                34.807087,
+                32.045455
+              ],
+              [
+                34.806281,
+                32.045634
+              ],
+              [
+                34.805612,
+                32.045759
+              ],
+              [
+                34.804764,
+                32.045871
+              ],
+              [
+                34.804702,
+                32.045884
+              ],
+              [
+                34.804591,
+                32.045905
+              ],
+              [
+                34.80435,
+                32.045952
+              ],
+              [
+                34.803758,
+                32.046068
+              ],
+              [
+                34.803561,
+                32.046106
+              ],
+              [
+                34.803436,
+                32.046135
+              ],
+              [
+                34.803265,
+                32.046171
+              ],
+              [
+                34.8031,
+                32.046205
+              ],
+              [
+                34.801957,
+                32.046446
+              ],
+              [
+                34.801702,
+                32.046494
+              ],
+              [
+                34.801121,
+                32.046598
+              ],
+              [
+                34.801026,
+                32.046615
+              ],
+              [
+                34.799978,
+                32.046803
+              ],
+              [
+                34.799283,
+                32.046928
+              ],
+              [
+                34.799218,
+                32.047003
+              ],
+              [
+                34.799211,
+                32.047011
+              ],
+              [
+                34.799176,
+                32.047057
+              ],
+              [
+                34.799147,
+                32.047126
+              ],
+              [
+                34.799123,
+                32.047208
+              ],
+              [
+                34.799152,
+                32.047381
+              ],
+              [
+                34.799182,
+                32.047538
+              ],
+              [
+                34.799232,
+                32.047798
+              ],
+              [
+                34.799349,
+                32.048388
+              ],
+              [
+                34.79946,
+                32.049029
+              ],
+              [
+                34.799547,
+                32.049534
+              ],
+              [
+                34.799572,
+                32.049652
+              ],
+              [
+                34.799611,
+                32.049829
+              ],
+              [
+                34.79962,
+                32.049872
+              ],
+              [
+                34.799642,
+                32.049976
+              ],
+              [
+                34.799788,
+                32.050655
+              ],
+              [
+                34.799909,
+                32.051213
+              ],
+              [
+                34.799981,
+                32.051603
+              ],
+              [
+                34.800068,
+                32.052067
+              ],
+              [
+                34.80012,
+                32.052607
+              ],
+              [
+                34.800187,
+                32.05327
+              ],
+              [
+                34.800198,
+                32.053383
+              ],
+              [
+                34.800261,
+                32.054294
+              ],
+              [
+                34.800278,
+                32.054528
+              ],
+              [
+                34.800404,
+                32.056144
+              ],
+              [
+                34.800489,
+                32.057666
+              ],
+              [
+                34.800477,
+                32.058217
+              ],
+              [
+                34.80046,
+                32.058989
+              ],
+              [
+                34.800455,
+                32.059179
+              ],
+              [
+                34.80026,
+                32.059176
+              ],
+              [
+                34.799404,
+                32.059156
+              ],
+              [
+                34.798023,
+                32.05912
+              ],
+              [
+                34.797896,
+                32.059138
+              ],
+              [
+                34.797865,
+                32.05914
+              ],
+              [
+                34.797451,
+                32.059142
+              ],
+              [
+                34.797312,
+                32.059143
+              ],
+              [
+                34.797212,
+                32.059143
+              ],
+              [
+                34.79664,
+                32.059139
+              ],
+              [
+                34.796493,
+                32.059138
+              ],
+              [
+                34.795785,
+                32.05912
+              ],
+              [
+                34.794606,
+                32.059146
+              ],
+              [
+                34.793881,
+                32.059166
+              ],
+              [
+                34.793457,
+                32.059177
+              ],
+              [
+                34.792972,
+                32.059194
+              ],
+              [
+                34.792469,
+                32.059212
+              ],
+              [
+                34.79226,
+                32.059221
+              ],
+              [
+                34.792126,
+                32.059313
+              ],
+              [
+                34.79209,
+                32.059348
+              ],
+              [
+                34.792007,
+                32.05942
+              ],
+              [
+                34.792023,
+                32.059906
+              ],
+              [
+                34.79203,
+                32.060014
+              ],
+              [
+                34.792042,
+                32.060234
+              ],
+              [
+                34.792055,
+                32.060534
+              ],
+              [
+                34.792055,
+                32.060883
+              ],
+              [
+                34.792057,
+                32.060952
+              ],
+              [
+                34.792061,
+                32.06106
+              ],
+              [
+                34.79208,
+                32.0616
+              ],
+              [
+                34.792087,
+                32.061685
+              ],
+              [
+                34.792095,
+                32.061898
+              ],
+              [
+                34.792098,
+                32.061967
+              ],
+              [
+                34.792135,
+                32.062484
+              ],
+              [
+                34.792139,
+                32.062531
+              ],
+              [
+                34.792143,
+                32.062567
+              ],
+              [
+                34.792152,
+                32.062673
+              ],
+              [
+                34.792183,
+                32.06294
+              ],
+              [
+                34.792242,
+                32.063448
+              ],
+              [
+                34.792323,
+                32.06415
+              ],
+              [
+                34.79233,
+                32.064208
+              ],
+              [
+                34.792343,
+                32.064317
+              ],
+              [
+                34.792354,
+                32.064445
+              ],
+              [
+                34.792356,
+                32.064463
+              ],
+              [
+                34.792404,
+                32.06474
+              ],
+              [
+                34.792483,
+                32.065062
+              ],
+              [
+                34.792534,
+                32.065275
+              ],
+              [
+                34.792647,
+                32.065841
+              ],
+              [
+                34.792707,
+                32.066086
+              ],
+              [
+                34.792931,
+                32.067028
+              ],
+              [
+                34.79294,
+                32.067066
+              ],
+              [
+                34.793004,
+                32.067336
+              ],
+              [
+                34.793217,
+                32.068138
+              ],
+              [
+                34.793234,
+                32.068201
+              ],
+              [
+                34.793304,
+                32.068388
+              ],
+              [
+                34.793536,
+                32.069063
+              ],
+              [
+                34.793575,
+                32.069179
+              ],
+              [
+                34.793594,
+                32.069235
+              ],
+              [
+                34.793613,
+                32.069319
+              ],
+              [
+                34.793742,
+                32.069791
+              ],
+              [
+                34.793851,
+                32.070292
+              ],
+              [
+                34.79386,
+                32.070318
+              ],
+              [
+                34.793899,
+                32.070426
+              ],
+              [
+                34.794195,
+                32.071269
+              ],
+              [
+                34.79421,
+                32.07131
+              ],
+              [
+                34.794359,
+                32.071636
+              ],
+              [
+                34.794395,
+                32.071716
+              ],
+              [
+                34.794635,
+                32.072341
+              ],
+              [
+                34.794648,
+                32.072497
+              ],
+              [
+                34.7946,
+                32.072515
+              ],
+              [
+                34.794327,
+                32.072607
+              ],
+              [
+                34.793971,
+                32.07273
+              ],
+              [
+                34.793829,
+                32.072777
+              ],
+              [
+                34.793568,
+                32.072865
+              ],
+              [
+                34.793153,
+                32.073004
+              ],
+              [
+                34.792896,
+                32.07309
+              ],
+              [
+                34.792613,
+                32.073184
+              ],
+              [
+                34.7923,
+                32.073279
+              ],
+              [
+                34.792223,
+                32.0733
+              ],
+              [
+                34.79201,
+                32.073356
+              ],
+              [
+                34.791867,
+                32.073392
+              ],
+              [
+                34.791761,
+                32.073416
+              ],
+              [
+                34.791738,
+                32.073421
+              ],
+              [
+                34.791673,
+                32.073434
+              ],
+              [
+                34.791578,
+                32.073447
+              ],
+              [
+                34.791478,
+                32.073459
+              ],
+              [
+                34.791426,
+                32.073464
+              ],
+              [
+                34.791303,
+                32.073468
+              ],
+              [
+                34.791116,
+                32.073473
+              ],
+              [
+                34.791004,
+                32.07347
+              ],
+              [
+                34.790614,
+                32.073458
+              ],
+              [
+                34.790444,
+                32.073453
+              ],
+              [
+                34.790365,
+                32.073446
+              ],
+              [
+                34.790189,
+                32.073446
+              ],
+              [
+                34.789431,
+                32.073427
+              ],
+              [
+                34.788893,
+                32.073421
+              ],
+              [
+                34.788077,
+                32.073414
+              ],
+              [
+                34.78762,
+                32.073431
+              ],
+              [
+                34.787406,
+                32.073431
+              ],
+              [
+                34.787197,
+                32.07344
+              ],
+              [
+                34.786673,
+                32.073456
+              ],
+              [
+                34.786076,
+                32.073475
+              ],
+              [
+                34.785619,
+                32.073479
+              ],
+              [
+                34.785546,
+                32.073476
+              ],
+              [
+                34.78536,
+                32.073486
+              ],
+              [
+                34.784741,
+                32.073516
+              ],
+              [
+                34.784177,
+                32.073515
+              ],
+              [
+                34.78367,
+                32.073515
+              ],
+              [
+                34.783599,
+                32.073515
+              ],
+              [
+                34.782848,
+                32.073515
+              ],
+              [
+                34.782533,
+                32.073508
+              ],
+              [
+                34.782148,
+                32.073511
+              ],
+              [
+                34.782038,
+                32.07352
+              ],
+              [
+                34.78195,
+                32.073532
+              ],
+              [
+                34.781926,
+                32.073538
+              ],
+              [
+                34.781837,
+                32.073561
+              ],
+              [
+                34.781701,
+                32.073599
+              ],
+              [
+                34.781616,
+                32.073624
+              ],
+              [
+                34.781482,
+                32.073663
+              ],
+              [
+                34.781337,
+                32.073698
+              ],
+              [
+                34.781125,
+                32.073737
+              ],
+              [
+                34.780648,
+                32.073808
+              ],
+              [
+                34.78051,
+                32.073858
+              ],
+              [
+                34.780281,
+                32.073922
+              ],
+              [
+                34.779977,
+                32.07399
+              ],
+              [
+                34.779751,
+                32.074038
+              ],
+              [
+                34.779107,
+                32.074137
+              ],
+              [
+                34.779003,
+                32.074153
+              ],
+              [
+                34.77671,
+                32.074626
+              ],
+              [
+                34.77643,
+                32.074671
+              ],
+              [
+                34.775863,
+                32.074795
+              ],
+              [
+                34.775612,
+                32.074982
+              ],
+              [
+                34.775547,
+                32.075026
+              ],
+              [
+                34.77552,
+                32.075055
+              ],
+              [
+                34.775498,
+                32.075079
+              ],
+              [
+                34.775494,
+                32.075085
+              ],
+              [
+                34.775405,
+                32.075163
+              ],
+              [
+                34.775271,
+                32.075297
+              ],
+              [
+                34.775118,
+                32.075476
+              ],
+              [
+                34.775036,
+                32.075603
+              ],
+              [
+                34.775015,
+                32.075627
+              ],
+              [
+                34.774991,
+                32.075654
+              ],
+              [
+                34.774897,
+                32.075787
+              ],
+              [
+                34.774814,
+                32.075952
+              ],
+              [
+                34.77479,
+                32.076005
+              ],
+              [
+                34.774509,
+                32.076796
+              ],
+              [
+                34.774478,
+                32.076884
+              ],
+              [
+                34.774336,
+                32.077371
+              ],
+              [
+                34.774299,
+                32.077475
+              ],
+              [
+                34.774298,
+                32.077577
+              ],
+              [
+                34.774307,
+                32.077614
+              ],
+              [
+                34.774329,
+                32.077651
+              ],
+              [
+                34.774362,
+                32.077689
+              ],
+              [
+                34.774478,
+                32.077777
+              ],
+              [
+                34.774519,
+                32.077818
+              ],
+              [
+                34.774551,
+                32.077863
+              ],
+              [
+                34.774569,
+                32.077901
+              ],
+              [
+                34.774575,
+                32.077944
+              ],
+              [
+                34.774579,
+                32.077976
+              ],
+              [
+                34.774575,
+                32.07801
+              ],
+              [
+                34.774555,
+                32.078084
+              ],
+              [
+                34.774514,
+                32.078185
+              ],
+              [
+                34.774531,
+                32.078239
+              ],
+              [
+                34.774542,
+                32.078264
+              ],
+              [
+                34.77456,
+                32.078283
+              ],
+              [
+                34.77475,
+                32.078567
+              ],
+              [
+                34.774945,
+                32.079084
+              ],
+              [
+                34.775057,
+                32.079548
+              ],
+              [
+                34.775094,
+                32.079698
+              ],
+              [
+                34.775656,
+                32.081464
+              ],
+              [
+                34.776223,
+                32.083444
+              ],
+              [
+                34.776274,
+                32.083522
+              ],
+              [
+                34.776308,
+                32.083574
+              ],
+              [
+                34.775358,
+                32.084079
+              ],
+              [
+                34.774872,
+                32.084281
+              ],
+              [
+                34.774436,
+                32.084431
+              ],
+              [
+                34.774313,
+                32.084466
+              ],
+              [
+                34.774422,
+                32.084882
+              ],
+              [
+                34.774667,
+                32.085814
+              ],
+              [
+                34.774727,
+                32.086098
+              ],
+              [
+                34.774798,
+                32.086379
+              ],
+              [
+                34.774929,
+                32.086899
+              ],
+              [
+                34.775158,
+                32.087794
+              ],
+              [
+                34.775247,
+                32.088128
+              ],
+              [
+                34.77531,
+                32.088396
+              ],
+              [
+                34.775517,
+                32.089277
+              ],
+              [
+                34.775667,
+                32.089878
+              ],
+              [
+                34.775715,
+                32.090074
+              ],
+              [
+                34.775798,
+                32.090342
+              ],
+              [
+                34.775919,
+                32.090834
+              ],
+              [
+                34.776109,
+                32.091608
+              ],
+              [
+                34.776144,
+                32.091786
+              ],
+              [
+                34.77627,
+                32.092314
+              ],
+              [
+                34.776292,
+                32.092407
+              ],
+              [
+                34.776309,
+                32.092478
+              ],
+              [
+                34.776461,
+                32.09307
+              ],
+              [
+                34.776734,
+                32.094117
+              ],
+              [
+                34.776735,
+                32.094185
+              ],
+              [
+                34.776722,
+                32.094243
+              ],
+              [
+                34.776459,
+                32.094818
+              ],
+              [
+                34.776262,
+                32.095416
+              ],
+              [
+                34.776182,
+                32.095659
+              ],
+              [
+                34.776057,
+                32.09601
+              ],
+              [
+                34.775987,
+                32.096523
+              ],
+              [
+                34.77597,
+                32.096653
+              ],
+              [
+                34.775929,
+                32.096966
+              ],
+              [
+                34.775915,
+                32.097092
+              ],
+              [
+                34.775909,
+                32.09724
+              ],
+              [
+                34.775949,
+                32.097253
+              ],
+              [
+                34.7765,
+                32.097434
+              ],
+              [
+                34.776905,
+                32.097564
+              ],
+              [
+                34.776984,
+                32.097589
+              ],
+              [
+                34.777115,
+                32.09764
+              ],
+              [
+                34.777676,
+                32.097844
+              ],
+              [
+                34.777829,
+                32.097895
+              ],
+              [
+                34.778095,
+                32.097983
+              ],
+              [
+                34.778664,
+                32.098164
+              ],
+              [
+                34.778848,
+                32.098203
+              ],
+              [
+                34.779068,
+                32.098242
+              ],
+              [
+                34.779422,
+                32.098307
+              ],
+              [
+                34.779962,
+                32.098378
+              ],
+              [
+                34.780282,
+                32.098401
+              ],
+              [
+                34.781224,
+                32.098452
+              ],
+              [
+                34.782101,
+                32.098496
+              ],
+              [
+                34.782765,
+                32.09854
+              ],
+              [
+                34.783128,
+                32.098555
+              ],
+              [
+                34.783239,
+                32.098563
+              ],
+              [
+                34.783317,
+                32.098568
+              ],
+              [
+                34.783442,
+                32.098577
+              ],
+              [
+                34.783378,
+                32.09872
+              ],
+              [
+                34.783326,
+                32.098837
+              ],
+              [
+                34.78316,
+                32.099139
+              ],
+              [
+                34.783,
+                32.099428
+              ],
+              [
+                34.78289,
+                32.099628
+              ],
+              [
+                34.782334,
+                32.100583
+              ],
+              [
+                34.781987,
+                32.101179
+              ],
+              [
+                34.781896,
+                32.101416
+              ],
+              [
+                34.781876,
+                32.101522
+              ],
+              [
+                34.78188,
+                32.101674
+              ],
+              [
+                34.781901,
+                32.101724
+              ],
+              [
+                34.781954,
+                32.101789
+              ],
+              [
+                34.78196,
+                32.101794
+              ],
+              [
+                34.782044,
+                32.10187
+              ],
+              [
+                34.782121,
+                32.101914
+              ],
+              [
+                34.782195,
+                32.101942
+              ],
+              [
+                34.784137,
+                32.102173
+              ],
+              [
+                34.784714,
+                32.102258
+              ],
+              [
+                34.784795,
+                32.102269
+              ],
+              [
+                34.785236,
+                32.102334
+              ],
+              [
+                34.786069,
+                32.102452
+              ],
+              [
+                34.786216,
+                32.102476
+              ],
+              [
+                34.787138,
+                32.102612
+              ],
+              [
+                34.787395,
+                32.102645
+              ],
+              [
+                34.787646,
+                32.102682
+              ],
+              [
+                34.787852,
+                32.102707
+              ],
+              [
+                34.788454,
+                32.102745
+              ],
+              [
+                34.788718,
+                32.102771
+              ],
+              [
+                34.788829,
+                32.102789
+              ],
+              [
+                34.788906,
+                32.102802
+              ],
+              [
+                34.788947,
+                32.102804
+              ],
+              [
+                34.789068,
+                32.102851
+              ],
+              [
+                34.789055,
+                32.10293
+              ],
+              [
+                34.789032,
+                32.103136
+              ],
+              [
+                34.788919,
+                32.103814
+              ],
+              [
+                34.788762,
+                32.104424
+              ],
+              [
+                34.78867,
+                32.104787
+              ],
+              [
+                34.788601,
+                32.105051
+              ],
+              [
+                34.788546,
+                32.105331
+              ],
+              [
+                34.788516,
+                32.105547
+              ],
+              [
+                34.788498,
+                32.105774
+              ],
+              [
+                34.788511,
+                32.106589
+              ],
+              [
+                34.788562,
+                32.106946
+              ],
+              [
+                34.788944,
+                32.108921
+              ],
+              [
+                34.788962,
+                32.10901
+              ],
+              [
+                34.789217,
+                32.110256
+              ],
+              [
+                34.789232,
+                32.110328
+              ],
+              [
+                34.78926,
+                32.110475
+              ],
+              [
+                34.78945,
+                32.111576
+              ],
+              [
+                34.789498,
+                32.111855
+              ],
+              [
+                34.789644,
+                32.112124
+              ],
+              [
+                34.789669,
+                32.112138
+              ],
+              [
+                34.789749,
+                32.112186
+              ],
+              [
+                34.789992,
+                32.112263
+              ],
+              [
+                34.790472,
+                32.1123
+              ],
+              [
+                34.790795,
+                32.112324
+              ],
+              [
+                34.791138,
+                32.112361
+              ],
+              [
+                34.791358,
+                32.112377
+              ],
+              [
+                34.791658,
+                32.112417
+              ],
+              [
+                34.791874,
+                32.112457
+              ],
+              [
+                34.792278,
+                32.112503
+              ],
+              [
+                34.792425,
+                32.112518
+              ],
+              [
+                34.792589,
+                32.112534
+              ],
+              [
+                34.792979,
+                32.112575
+              ],
+              [
+                34.793441,
+                32.112608
+              ],
+              [
+                34.793754,
+                32.11263
+              ],
+              [
+                34.794089,
+                32.112663
+              ],
+              [
+                34.794169,
+                32.112671
+              ],
+              [
+                34.794419,
+                32.112695
+              ],
+              [
+                34.794851,
+                32.112727
+              ],
+              [
+                34.795617,
+                32.112788
+              ],
+              [
+                34.795754,
+                32.112798
+              ],
+              [
+                34.795787,
+                32.112801
+              ],
+              [
+                34.79585,
+                32.11281
+              ],
+              [
+                34.796294,
+                32.112857
+              ],
+              [
+                34.79682,
+                32.112911
+              ],
+              [
+                34.797205,
+                32.11294
+              ],
+              [
+                34.797635,
+                32.112974
+              ],
+              [
+                34.797734,
+                32.112982
+              ],
+              [
+                34.798056,
+                32.113012
+              ],
+              [
+                34.799104,
+                32.113113
+              ],
+              [
+                34.800481,
+                32.113233
+              ],
+              [
+                34.800732,
+                32.113254
+              ],
+              [
+                34.801129,
+                32.113299
+              ],
+              [
+                34.801371,
+                32.113317
+              ],
+              [
+                34.801538,
+                32.113325
+              ],
+              [
+                34.801529,
+                32.113421
+              ],
+              [
+                34.801529,
+                32.113454
+              ],
+              [
+                34.801429,
+                32.114697
+              ],
+              [
+                34.801375,
+                32.115211
+              ],
+              [
+                34.801361,
+                32.115847
+              ],
+              [
+                34.801419,
+                32.116581
+              ],
+              [
+                34.801477,
+                32.117306
+              ],
+              [
+                34.801505,
+                32.117486
+              ],
+              [
+                34.801512,
+                32.117519
+              ],
+              [
+                34.801612,
+                32.117987
+              ],
+              [
+                34.801682,
+                32.118073
+              ],
+              [
+                34.801724,
+                32.118096
+              ],
+              [
+                34.801857,
+                32.118097
+              ],
+              [
+                34.802383,
+                32.118016
+              ],
+              [
+                34.803516,
+                32.117804
+              ],
+              [
+                34.803676,
+                32.117791
+              ],
+              [
+                34.804066,
+                32.117729
+              ],
+              [
+                34.804062,
+                32.117528
+              ],
+              [
+                34.804064,
+                32.117233
+              ],
+              [
+                34.80406,
+                32.117157
+              ],
+              [
+                34.804039,
+                32.117113
+              ],
+              [
+                34.804014,
+                32.117079
+              ],
+              [
+                34.804011,
+                32.117233
+              ]
+            ]
+          },
+          "calls": [
+            {
+              "callSequence": 1,
+              "ordinal": 0,
+              "stopId": "mot:stop:13112",
+              "scheduledArrival": null,
+              "scheduledDeparture": "2026-09-30T20:50:00Z",
+              "pickupType": 0,
+              "dropOffType": 1
+            },
+            {
+              "callSequence": 2,
+              "ordinal": 1,
+              "stopId": "mot:stop:12981",
+              "scheduledArrival": "2026-09-30T20:50:00Z",
+              "scheduledDeparture": "2026-09-30T20:50:00Z",
+              "pickupType": 0,
+              "dropOffType": 0
+            },
+            {
+              "callSequence": 3,
+              "ordinal": 2,
+              "stopId": "mot:stop:12969",
+              "scheduledArrival": "2026-09-30T20:51:00Z",
+              "scheduledDeparture": "2026-09-30T20:51:00Z",
+              "pickupType": 0,
+              "dropOffType": 0
+            },
+            {
+              "callSequence": 4,
+              "ordinal": 3,
+              "stopId": "mot:stop:13082",
+              "scheduledArrival": "2026-09-30T20:52:00Z",
+              "scheduledDeparture": "2026-09-30T20:52:00Z",
+              "pickupType": 0,
+              "dropOffType": 0
+            },
+            {
+              "callSequence": 5,
+              "ordinal": 4,
+              "stopId": "mot:stop:13161",
+              "scheduledArrival": "2026-09-30T20:53:00Z",
+              "scheduledDeparture": "2026-09-30T20:53:00Z",
+              "pickupType": 0,
+              "dropOffType": 0
+            },
+            {
+              "callSequence": 6,
+              "ordinal": 5,
+              "stopId": "mot:stop:13081",
+              "scheduledArrival": "2026-09-30T20:53:00Z",
+              "scheduledDeparture": "2026-09-30T20:53:00Z",
+              "pickupType": 0,
+              "dropOffType": 0
+            },
+            {
+              "callSequence": 7,
+              "ordinal": 6,
+              "stopId": "mot:stop:13162",
+              "scheduledArrival": "2026-09-30T20:54:00Z",
+              "scheduledDeparture": "2026-09-30T20:54:00Z",
+              "pickupType": 0,
+              "dropOffType": 0
+            },
+            {
+              "callSequence": 8,
+              "ordinal": 7,
+              "stopId": "mot:stop:13267",
+              "scheduledArrival": "2026-09-30T20:54:00Z",
+              "scheduledDeparture": "2026-09-30T20:54:00Z",
+              "pickupType": 0,
+              "dropOffType": 0
+            },
+            {
+              "callSequence": 9,
+              "ordinal": 8,
+              "stopId": "mot:stop:12978",
+              "scheduledArrival": "2026-09-30T20:55:00Z",
+              "scheduledDeparture": "2026-09-30T20:55:00Z",
+              "pickupType": 0,
+              "dropOffType": 0
+            },
+            {
+              "callSequence": 10,
+              "ordinal": 9,
+              "stopId": "mot:stop:13773",
+              "scheduledArrival": "2026-09-30T20:56:00Z",
+              "scheduledDeparture": "2026-09-30T20:56:00Z",
+              "pickupType": 0,
+              "dropOffType": 0
+            },
+            {
+              "callSequence": 11,
+              "ordinal": 10,
+              "stopId": "mot:stop:13785",
+              "scheduledArrival": "2026-09-30T20:57:00Z",
+              "scheduledDeparture": "2026-09-30T20:57:00Z",
+              "pickupType": 0,
+              "dropOffType": 0
+            },
+            {
+              "callSequence": 12,
+              "ordinal": 11,
+              "stopId": "mot:stop:12988",
+              "scheduledArrival": "2026-09-30T20:58:00Z",
+              "scheduledDeparture": "2026-09-30T20:58:00Z",
+              "pickupType": 0,
+              "dropOffType": 0
+            },
+            {
+              "callSequence": 13,
+              "ordinal": 12,
+              "stopId": "mot:stop:13083",
+              "scheduledArrival": "2026-09-30T21:00:00Z",
+              "scheduledDeparture": "2026-09-30T21:00:00Z",
+              "pickupType": 0,
+              "dropOffType": 0
+            },
+            {
+              "callSequence": 14,
+              "ordinal": 13,
+              "stopId": "mot:stop:12999",
+              "scheduledArrival": "2026-09-30T21:00:00Z",
+              "scheduledDeparture": "2026-09-30T21:00:00Z",
+              "pickupType": 0,
+              "dropOffType": 0
+            },
+            {
+              "callSequence": 15,
+              "ordinal": 14,
+              "stopId": "mot:stop:13095",
+              "scheduledArrival": "2026-09-30T21:02:00Z",
+              "scheduledDeparture": "2026-09-30T21:02:00Z",
+              "pickupType": 0,
+              "dropOffType": 0
+            },
+            {
+              "callSequence": 16,
+              "ordinal": 15,
+              "stopId": "mot:stop:13130",
+              "scheduledArrival": "2026-09-30T21:03:00Z",
+              "scheduledDeparture": "2026-09-30T21:03:00Z",
+              "pickupType": 0,
+              "dropOffType": 0
+            },
+            {
+              "callSequence": 17,
+              "ordinal": 16,
+              "stopId": "mot:stop:12987",
+              "scheduledArrival": "2026-09-30T21:05:00Z",
+              "scheduledDeparture": "2026-09-30T21:05:00Z",
+              "pickupType": 0,
+              "dropOffType": 0
+            },
+            {
+              "callSequence": 18,
+              "ordinal": 17,
+              "stopId": "mot:stop:12823",
+              "scheduledArrival": "2026-09-30T21:07:00Z",
+              "scheduledDeparture": "2026-09-30T21:07:00Z",
+              "pickupType": 0,
+              "dropOffType": 0
+            },
+            {
+              "callSequence": 19,
+              "ordinal": 18,
+              "stopId": "mot:stop:14549",
+              "scheduledArrival": "2026-09-30T21:10:00Z",
+              "scheduledDeparture": "2026-09-30T21:10:00Z",
+              "pickupType": 0,
+              "dropOffType": 0
+            },
+            {
+              "callSequence": 20,
+              "ordinal": 19,
+              "stopId": "mot:stop:42859",
+              "scheduledArrival": "2026-09-30T21:11:00Z",
+              "scheduledDeparture": "2026-09-30T21:11:00Z",
+              "pickupType": 0,
+              "dropOffType": 0
+            },
+            {
+              "callSequence": 21,
+              "ordinal": 20,
+              "stopId": "mot:stop:13585",
+              "scheduledArrival": "2026-09-30T21:13:00Z",
+              "scheduledDeparture": "2026-09-30T21:13:00Z",
+              "pickupType": 0,
+              "dropOffType": 0
+            },
+            {
+              "callSequence": 22,
+              "ordinal": 21,
+              "stopId": "mot:stop:13583",
+              "scheduledArrival": "2026-09-30T21:14:00Z",
+              "scheduledDeparture": "2026-09-30T21:14:00Z",
+              "pickupType": 0,
+              "dropOffType": 0
+            },
+            {
+              "callSequence": 23,
+              "ordinal": 22,
+              "stopId": "mot:stop:13565",
+              "scheduledArrival": "2026-09-30T21:16:00Z",
+              "scheduledDeparture": "2026-09-30T21:16:00Z",
+              "pickupType": 0,
+              "dropOffType": 0
+            },
+            {
+              "callSequence": 24,
+              "ordinal": 23,
+              "stopId": "mot:stop:13664",
+              "scheduledArrival": "2026-09-30T21:17:00Z",
+              "scheduledDeparture": "2026-09-30T21:17:00Z",
+              "pickupType": 0,
+              "dropOffType": 0
+            },
+            {
+              "callSequence": 25,
+              "ordinal": 24,
+              "stopId": "mot:stop:29490",
+              "scheduledArrival": "2026-09-30T21:19:00Z",
+              "scheduledDeparture": "2026-09-30T21:19:00Z",
+              "pickupType": 0,
+              "dropOffType": 0
+            },
+            {
+              "callSequence": 26,
+              "ordinal": 25,
+              "stopId": "mot:stop:13670",
+              "scheduledArrival": "2026-09-30T21:20:00Z",
+              "scheduledDeparture": "2026-09-30T21:20:00Z",
+              "pickupType": 0,
+              "dropOffType": 0
+            },
+            {
+              "callSequence": 27,
+              "ordinal": 26,
+              "stopId": "mot:stop:13683",
+              "scheduledArrival": "2026-09-30T21:20:00Z",
+              "scheduledDeparture": "2026-09-30T21:20:00Z",
+              "pickupType": 0,
+              "dropOffType": 0
+            },
+            {
+              "callSequence": 28,
+              "ordinal": 27,
+              "stopId": "mot:stop:13688",
+              "scheduledArrival": "2026-09-30T21:22:00Z",
+              "scheduledDeparture": "2026-09-30T21:22:00Z",
+              "pickupType": 0,
+              "dropOffType": 0
+            },
+            {
+              "callSequence": 29,
+              "ordinal": 28,
+              "stopId": "mot:stop:14472",
+              "scheduledArrival": "2026-09-30T21:23:00Z",
+              "scheduledDeparture": "2026-09-30T21:23:00Z",
+              "pickupType": 0,
+              "dropOffType": 0
+            },
+            {
+              "callSequence": 30,
+              "ordinal": 29,
+              "stopId": "mot:stop:13701",
+              "scheduledArrival": "2026-09-30T21:27:00Z",
+              "scheduledDeparture": "2026-09-30T21:27:00Z",
+              "pickupType": 0,
+              "dropOffType": 0
+            },
+            {
+              "callSequence": 31,
+              "ordinal": 30,
+              "stopId": "mot:stop:13703",
+              "scheduledArrival": "2026-09-30T21:27:00Z",
+              "scheduledDeparture": "2026-09-30T21:27:00Z",
+              "pickupType": 0,
+              "dropOffType": 0
+            },
+            {
+              "callSequence": 32,
+              "ordinal": 31,
+              "stopId": "mot:stop:13739",
+              "scheduledArrival": "2026-09-30T21:29:00Z",
+              "scheduledDeparture": "2026-09-30T21:29:00Z",
+              "pickupType": 0,
+              "dropOffType": 0
+            },
+            {
+              "callSequence": 33,
+              "ordinal": 32,
+              "stopId": "mot:stop:13743",
+              "scheduledArrival": "2026-09-30T21:30:00Z",
+              "scheduledDeparture": "2026-09-30T21:30:00Z",
+              "pickupType": 0,
+              "dropOffType": 0
+            },
+            {
+              "callSequence": 34,
+              "ordinal": 33,
+              "stopId": "mot:stop:13744",
+              "scheduledArrival": "2026-09-30T21:31:00Z",
+              "scheduledDeparture": "2026-09-30T21:31:00Z",
+              "pickupType": 0,
+              "dropOffType": 0
+            },
+            {
+              "callSequence": 35,
+              "ordinal": 34,
+              "stopId": "mot:stop:13747",
+              "scheduledArrival": "2026-09-30T21:31:00Z",
+              "scheduledDeparture": "2026-09-30T21:31:00Z",
+              "pickupType": 0,
+              "dropOffType": 0
+            },
+            {
+              "callSequence": 36,
+              "ordinal": 35,
+              "stopId": "mot:stop:13750",
+              "scheduledArrival": "2026-09-30T21:34:00Z",
+              "scheduledDeparture": "2026-09-30T21:34:00Z",
+              "pickupType": 0,
+              "dropOffType": 0
+            },
+            {
+              "callSequence": 37,
+              "ordinal": 36,
+              "stopId": "mot:stop:14100",
+              "scheduledArrival": "2026-09-30T21:39:00Z",
+              "scheduledDeparture": "2026-09-30T21:39:00Z",
+              "pickupType": 0,
+              "dropOffType": 0
+            },
+            {
+              "callSequence": 38,
+              "ordinal": 37,
+              "stopId": "mot:stop:14349",
+              "scheduledArrival": "2026-09-30T21:41:00Z",
+              "scheduledDeparture": "2026-09-30T21:41:00Z",
+              "pickupType": 0,
+              "dropOffType": 0
+            },
+            {
+              "callSequence": 39,
+              "ordinal": 38,
+              "stopId": "mot:stop:13145",
+              "scheduledArrival": "2026-09-30T21:42:00Z",
+              "scheduledDeparture": "2026-09-30T21:42:00Z",
+              "pickupType": 0,
+              "dropOffType": 0
+            },
+            {
+              "callSequence": 40,
+              "ordinal": 39,
+              "stopId": "mot:stop:14126",
+              "scheduledArrival": "2026-09-30T21:42:00Z",
+              "scheduledDeparture": null,
+              "pickupType": 1,
+              "dropOffType": 0
+            }
+          ],
+          "timingState": "scheduled",
+          "expectedArrival": null,
+          "expectedDeparture": null,
+          "delaySeconds": null,
+          "alerts": "not_enabled"
+        },
+        "meta": {
+          "requestId": "1d60c369b77d4d8f97c37246df065638",
+          "generationId": "c7b66eee1ad04dddba13f4c5dade5ef2023963a1ac0384857aaf173b9d164aa1",
+          "generatedAt": "2026-09-30T23:10:12.032290Z",
+          "dataBuiltAt": "2026-09-30T19:28:59.565385Z",
+          "mode": "real",
+          "coverage": {
+            "from": "2026-09-30T00:00:00+03:00",
+            "until": "2026-10-31T00:00:00+02:00"
+          },
+          "freshness": "current",
+          "capabilities": {
+            "realtime": "not_enabled",
+            "alerts": "not_enabled"
+          },
+          "attribution": [
+            "Israel Ministry of Transport",
+            "© OpenStreetMap contributors"
+          ],
+          "rankingPolicy": "motis-v2.11.2-feasible-engine-order-v1",
+          "appliedConstraints": {},
+          "warnings": []
+        }
+      }
+    },
+    {
+      "id": "old-generation-cursor-rejected",
+      "path": "/v1/stops/mot:stop:13583/departures",
+      "method": "GET",
+      "params": {
+        "from": "2026-10-01T00:10:00+03:00",
+        "horizonMinutes": 60,
+        "limit": 2,
+        "cursor": "eyJ2IjoxLCJnIjoiODU2OTFjZDI3YjUzNmFjZGFiNWNjYWIyM2Q5NDAxOWFkODZkMTVjNWZlZGY0Y2YyNWM1NjM1ZmQwN2Y5MmMxYSIsInEiOiJjNjc2ZjdjMDQ1MjMyNWI1ZTVkM2UwMjM4MzMzNmM2NWVjNGQxYTViOWE2OTRlYzcwYWQzNTI4ZTU2OTI4NGYzIiwicCI6WyIyMDI2LTA5LTMwVDIxOjE1OjAwKzAwOjAwIiwiMjAyNjA5MzBfMjM6NTVfbW90NjBkYXlfNTg0Nzg0NzE3XzMwMDkyNiIsIjEzNTgzIiwyMF19"
+      },
+      "body": null,
+      "httpStatus": 422,
+      "elapsedMs": 30.648,
+      "responseSha256": "2f4b8853e05537ab68bd8f377390cbe4796c6286a19268390d39d497df5e2009",
+      "response": {
+        "type": "urn:opentransit:problem:invalid-cursor",
+        "title": "Invalid cursor",
+        "status": 422,
+        "code": "INVALID_CURSOR",
+        "detail": "Restart pagination from the first page.",
+        "requestId": "d16120c8f66a4e2987af072989d987a0"
+      }
+    },
+    {
+      "id": "old-generation-place-rejected",
+      "path": "/v1/journeys",
+      "method": "POST",
+      "params": null,
+      "body": {
+        "from": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiIzZmNhNmExZmUxMjYyMjA2Y2YwYmY3OWZmYWU0NmI2NjRhZjAxNzI2MTIzOTE4ZjE2YzI0YTIzMGNiZmU2MDcyIiwiY29vcmRpbmF0ZXMiOlszMi4wNjI5NzExLDM0Ljc3MDkzNjZdLCJnZW5lcmF0aW9uSWQiOiI4NTY5MWNkMjdiNTM2YWNkYWI1Y2NhYjIzZDk0MDE5YWQ4NmQxNWM1ZmVkZjRjZjI1YzU2MzVmZDA3ZjkyYzFhIiwia2luZCI6InBsYWNlIn0"
+        },
+        "to": {
+          "kind": "coordinate",
+          "latitude": 32.7775,
+          "longitude": 35.0219
+        },
+        "departAt": "2026-10-01T08:00:00+03:00",
+        "results": 1
+      },
+      "httpStatus": 422,
+      "elapsedMs": 1.769,
+      "responseSha256": "a27fce43acb2fe94f3bdc18ca103745f33771cf9453e34add534c5d408b0efe0",
+      "response": {
+        "type": "urn:opentransit:problem:invalid-place-ref",
+        "title": "Invalid place ref",
+        "status": 422,
+        "code": "INVALID_PLACE_REF",
+        "detail": "The place reference is invalid or belongs to another generation.",
+        "requestId": "4e8d90e14b484959a8d5ab0cedc6e741"
+      }
+    },
+    {
+      "id": "valid-empty-stop-search",
+      "path": "/v1/places",
+      "method": "GET",
+      "params": {
+        "q": "zzzznotarealstop",
+        "type": "stop",
+        "lang": "en"
+      },
+      "body": null,
+      "httpStatus": 200,
+      "elapsedMs": 1.454,
+      "responseSha256": "e7108b15de1bc2e7e233329cab05cbd7db756c97bdb401408551c931b718c050",
+      "response": {
+        "data": [],
+        "meta": {
+          "requestId": "e00c0e2f5f7840c2b60f933dd5017831",
+          "generationId": "c7b66eee1ad04dddba13f4c5dade5ef2023963a1ac0384857aaf173b9d164aa1",
+          "generatedAt": "2026-09-30T23:10:12.088774Z",
+          "dataBuiltAt": "2026-09-30T19:28:59.565385Z",
+          "mode": "real",
+          "coverage": {
+            "from": "2026-09-30T00:00:00+03:00",
+            "until": "2026-10-31T00:00:00+02:00"
+          },
+          "freshness": "current",
+          "capabilities": {
+            "realtime": "not_enabled",
+            "alerts": "not_enabled"
+          },
+          "attribution": [
+            "Israel Ministry of Transport",
+            "© OpenStreetMap contributors"
+          ],
+          "rankingPolicy": "motis-v2.11.2-feasible-engine-order-v1",
+          "appliedConstraints": {},
+          "warnings": []
+        },
+        "matchedTypes": [
+          "stop"
+        ],
+        "unavailableTypes": [],
+        "partial": false,
+        "rankingPolicy": "alternating-stop-and-geocoder-order-v1"
+      }
+    }
+  ],
+  "failures": [],
+  "readinessStatus": "unavailable",
+  "functionalStatus": "passed",
+  "status": "partial",
+  "frozenSourceSha256": {
+    "opentransit/__init__.py": "f953c5f7653ce55912ac1aa8c8fbd40594f4c47fa8702587d04af34ad49e5ef8",
+    "opentransit/activation.py": "08bcb2bd68dcef7ae1c69305ae650212bb320b2d57400d12543ded271861672f",
+    "opentransit/api/__init__.py": "6596a31fd9c14ba08c000f7f8e01d3e7dd6323f28d435228abbb7b8ffd3aea2f",
+    "opentransit/api/app.py": "c977ddefebd86ba68f1e7576ac69efdb3745ac8f0c5d3b57d348bb7058bbebe4",
+    "opentransit/api/places.py": "1435f27508ca0259957104561f7600107ad4aa69f9f39c0e1a02dff4533eab64",
+    "opentransit/api/playground/app.mjs": "283f12bc254cd14e78177a0f797d8435046f0c7606dc49c43ab0d1e4e56815a9",
+    "opentransit/api/playground/index.html": "3c5c4fc1b66d370590f2dba6f8e58a0c86e703750714ba51f238b533a0b3ea42",
+    "opentransit/api/playground/style.css": "1278cf9951dd2a47a3275b99f91c2f15be3d6be740be41439081515b2cdab8ff",
+    "opentransit/api/playground/time.mjs": "322477ffe13ae4e70736285f80c444946eab45368d3c4db66565b06578bb1ec0",
+    "opentransit/api/playground/vendor/images/layers-2x.png": "066daca850d8ffbef007af00b06eac0015728dee279c51f3cb6c716df7c42edf",
+    "opentransit/api/playground/vendor/images/layers.png": "1dbbe9d028e292f36fcba8f8b3a28d5e8932754fc2215b9ac69e4cdecf5107c6",
+    "opentransit/api/playground/vendor/images/marker-icon-2x.png": "00179c4c1ee830d3a108412ae0d294f55776cfeb085c60129a39aa6fc4ae2528",
+    "opentransit/api/playground/vendor/images/marker-icon.png": "574c3a5cca85f4114085b6841596d62f00d7c892c7b03f28cbfa301deb1dc437",
+    "opentransit/api/playground/vendor/images/marker-shadow.png": "264f5c640339f042dd729062cfc04c17f8ea0f29882b538e3848ed8f10edb4da",
+    "opentransit/api/playground/vendor/leaflet.css": "a7837102824184820dfa198d1ebcd109ff6d0ff9a2672a074b9a1b4d147d04c6",
+    "opentransit/api/playground/vendor/leaflet.js": "3104b526504d0d61fd3099a4521e87f732ccc3174dec54e08de6ba8bde3e15ff",
+    "opentransit/api/playground/vendor/LICENSE": "53e8dc25862014e4324741ca18fbe3611e11d42ef69f59f86ea8c5389647d4cb",
+    "opentransit/api/playground/vendor/NOTICE.md": "3584ebd211c8839612484c56950531880467ce4320d8f6dadbfd1e52d85ea9e8",
+    "opentransit/api/reference.py": "583f84396d8b65310e06477cca3c517630099a8185b589c4d470bde6adf070f7",
+    "opentransit/api/schemas.py": "c2e7a9eb80b3b58c7f536e8943cb22c0586c7a17dfcd6953cf252c65ee558b20",
+    "opentransit/api/timetable.py": "4053f1dbe401b69364727813b71c8a943196e771c79820c0c6d591a8adadd94b",
+    "opentransit/build/__init__.py": "381e101e4f61d7d4ab26963b32c9ae4ca622056561429e227760804df7c55331",
+    "opentransit/build/activation.py": "34592fab79ffdc446d7a16a0527c1c498f9cf42985002c9ffe03169328317635",
+    "opentransit/build/cli.py": "ac191c7d6c2c0c2d54f928513d9dd67159e9fa052dcbda64dcb8149b21dd3032",
+    "opentransit/build/fetch.py": "b967877a3aeff520ce0b18884b90532dc8b99d9322aaebd3a7903d1a8ca4a936",
+    "opentransit/build/generations.py": "51a2c689d9110f8716277df00fc22d025a26424a9482df3e48441ca62a86991a",
+    "opentransit/build/identity.py": "a6bda445cf759bdbb4f16159c7e5e709d111a61a84a54b493c05c1ff4abb9494",
+    "opentransit/build/prepare.py": "b418b698b2ff84b34240e4a70bdeadc43bfdfb2343675abc4cfb084572654454",
+    "opentransit/build/probe.py": "246e51144fe9f30c417878e8f7b915c4ea08455c78831598fd01cca41774278c",
+    "opentransit/build/reference_repair.py": "a1511777eaf34d11849532a22818517e618c2b55b7271bfb3bf83a338e128ebb",
+    "opentransit/build/retention.py": "b0b81b2599672a18db9253da62d2521e7b925726b4956b0974e3ae7805728635",
+    "opentransit/build/validation.py": "d28e8ed04673cca8489c01d64d25de20cec40edfd9da0c08538d7e1be41ea8fb",
+    "opentransit/config.py": "9e1ab38e52b627316bfb5803dfeaf635e6cf42f3de62c01c5b3c6e3ce411decb",
+    "opentransit/core/__init__.py": "f56abd88840946ed290c0330ddfdce595012b1aa7dbc5426c581a98802b56d83",
+    "opentransit/core/artifacts.py": "3e6f0c417eedbaca1685fba7d56a684f1711edabaaa0f7b36ef500b73659b389",
+    "opentransit/core/generation.py": "cdfd342ef917c76bb0b1a0be407680ffca89667ea3d5168bb407b4f4a782bc8b",
+    "opentransit/core/place_ref.py": "f1f8bd64c021cb0896a787adee24118bf9f401e308c35c671bb95c640e9e0ef4",
+    "opentransit/core/time.py": "d1cf682613497c9cba19041f29dc59f0213742f75e50b7c669c6d69a1645e278",
+    "opentransit/core/trip_calls.py": "8e8ae52c94d4103d5535c97eae88ca9728a6bf6253e32abd5477e6718c63994b",
+    "opentransit/motis.py": "c0f786ab453054b8503d6b5469346232b4821dec0d4f4030bc73389ed8b9dd5a",
+    "opentransit/motis_geocoder.py": "19e56513466c339dd7ed6a9759f8bd6239dbf8d331982ccc61d76de3acc72c1a",
+    "opentransit/motis_timetable.py": "7da44ff1d22ab89163b71e9dfc4f2a530102c95a38430fc650e0ff6c41a78e4d",
+    "opentransit/reference.py": "f321035e1a604a9af87c3f619769db93002ef48ca38807271fd4a579e62a4eaf",
+    "opentransit/runtime.py": "18ae6c17a55e023dc48546383ba55e6f66ba01e6da86e7539c7a71a60e0ac4da",
+    "opentransit/stop_search.py": "c57589e86fb4dbe66ead3fbdc8beae3abb05b770e4a91e5e47851c843c290605"
+  }
+}

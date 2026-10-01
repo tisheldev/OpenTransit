@@ -1,0 +1,11 @@
+stop_id,stop_name,stop_lat,stop_lon,location_type,parent_station
+parent,Fixture station,32.0000,34.0000,1,
+s1,Platform 1,32.0001,34.0001,0,parent
+s2,Stop 2,32.0010,34.0010,0,
+s3,Stop 3,32.0020,34.0020,0,
+s4,Stop 4,32.0030,34.0030,0,
+s5,Stop 5,32.0040,34.0040,0,
+s6,Stop 6,32.0050,34.0050,0,
+s7,Stop 7,32.0060,34.0060,0,
+s8,Stop 8,32.0070,34.0070,0,
+s9,Stop 9,32.0080,34.0080,0,

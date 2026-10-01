@@ -9,10 +9,12 @@ def test_playground_is_opt_in_and_not_part_of_api_contract(manifest):
         with TestClient(create_app(Settings(manifest, playground_enabled=enabled))) as client:
             page = client.get("/playground/")
             assert page.status_code == (200 if enabled else 404)
-            assert set(client.get("/openapi.json").json()["paths"]) == {
+            paths = client.get("/openapi.json").json()["paths"]
+            assert {
                 "/healthz",
                 "/v1/journeys",
-            }
+            } <= set(paths)
+            assert all(not path.startswith("/playground") for path in paths)
             if enabled:
                 assert "Journey playground" in page.text
                 for asset in ("app.mjs", "time.mjs", "style.css", "vendor/leaflet.js"):

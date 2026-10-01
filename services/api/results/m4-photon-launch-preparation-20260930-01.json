@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-10-01T00:00:00Z",
+  "scope": "Supplementary executable launcher preparation; no Docker import or serving experiment",
+  "status": "guarded_attempt2_launchers_prepared_runtime_unproven",
+  "priorPreparationResult": "services/api/results/m4-photon-spike-preparation-20260930-01.json",
+  "smartStartupReview": "services/api/results/m4-photon-startup-review-20261001-01.json",
+  "pins": {
+    "photonVersion": "1.3.0",
+    "photonJarSha256": "a89707c0045e4807b2a1180e132e68e108d998709f48b6c94b98a6e281f571a5",
+    "javaImage": "eclipse-temurin:21.0.12.1_1-jre",
+    "javaImageDigest": "sha256:628467024d428251da635661936d6180717b1ac1119d41c76d28a03b7293c43c",
+    "dumpSha256": "6ddee9f640e11b7ec696690663da7d9d571e15a10f5b8836aac14ec73fc6faca",
+    "dumpPlaceCount": 125857
+  },
+  "launchers": {
+    "budgetGuard": {
+      "path": ".runtime/m4-photon-spike-20260930/photon_budget_guard_attempt2.ps1",
+      "bytes": 6096,
+      "sha256": "29b5e6994c28b8889ee2b4eac85fbba1ab253adc8b86e6c2c2f461fb0849060f"
+    },
+    "import": {
+      "path": ".runtime/m4-photon-spike-20260930/import_photon_attempt2.ps1",
+      "bytes": 6275,
+      "sha256": "afd8cd595fc340b1bed7416a37ddffe38f84905ccb8aced9e4ac9081358a0717",
+      "containerMemoryBytes": 2147483648,
+      "swapTotalBytes": 2147483648,
+      "javaHeapBytes": 1073741824,
+      "parallelism": 1,
+      "network": "none",
+      "retainsContainerAndRawLogs": true,
+      "requiresSetupSuccessAndExactCount": 125857,
+      "zeroExitAloneAccepted": false,
+      "volumePolicy": "Create only if absent, dedicated to this attempt; never reuse/reset an existing volume"
+    },
+    "serve": {
+      "path": ".runtime/m4-photon-spike-20260930/serve_photon_attempt2.ps1",
+      "bytes": 6171,
+      "sha256": "c11eff713ea307cb265c21c49fd284ae46058ef6640879e584375a291bae1b63",
+      "containerMemoryBytes": 1073741824,
+      "swapTotalBytes": 1073741824,
+      "javaInitialHeapBytes": 268435456,
+      "javaMaximumHeapBytes": 536870912,
+      "networkMode": "container:opentransit-local-net-m3-attempt3",
+      "internalPort": 2322,
+      "hostPortPublished": false,
+      "readinessEvidence": "Successful /status plus server running and not OOM-killed under the cap; preserve raw status body and server logs",
+      "addressQualityGate": "Deferred to bounded 22-case evaluator; launcher makes no address hit/quality claim"
+    }
+  },
+  "budgetGuard": {
+    "aggregateCeilingBytes": 8589934592,
+    "verifiedBeforeLaunch": {
+      "motisBytes": 2147483648,
+      "candidateApiBytes": 536870912,
+      "networkAnchorBytes": 67108864,
+      "preservedParentApiBytes": 536870912
+    },
+    "oneCandidateBytes": 3825205248,
+    "currentServingTrialPlusParentBytes": 4362076160,
+    "twoServingCandidatesBytes": 7650410496,
+    "twoServingCandidatesPlusParentBytes": 8187281408,
+    "configuredSwapCapsAreCapacityMeasurements": false,
+    "excludedSeparateBaselines": [
+      "original M1 MOTIS baseline",
+      "opentransit-api-1 on opentransit_default",
+      "unrelated desktop containers"
+    ],
+    "acceptanceClaim": false
+  },
+  "validation": {
+    "method": "PowerShell Language.Parser ParseFile AST syntax check",
+    "filesChecked": [
+      ".runtime/m4-photon-spike-20260930/photon_budget_guard_attempt2.ps1",
+      ".runtime/m4-photon-spike-20260930/import_photon_attempt2.ps1",
+      ".runtime/m4-photon-spike-20260930/serve_photon_attempt2.ps1"
+    ],
+    "parseErrors": 0,
+    "dockerImportRun": false,
+    "dockerServerRun": false,
+    "existingContainerOrVolumeMutated": false,
+    "existingOriginalPreparationArtifactsModified": false
+  },
+  "commandsForRootAfterReview": {
+    "import": "./.runtime/m4-photon-spike-20260930/import_photon_attempt2.ps1",
+    "serveAfterVerifiedImport": "./.runtime/m4-photon-spike-20260930/serve_photon_attempt2.ps1"
+  },
+  "remainingAcceptance": "Execute only after the root budget guard passes; then require bounded 22-case evaluation and separately review serving/OOM/peak behavior. This is a subset spike, not M4 acceptance, H4 approval, D4 architecture acceptance, or a full-stack capacity result."
+}

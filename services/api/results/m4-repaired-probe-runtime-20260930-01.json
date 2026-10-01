@@ -1,0 +1,975 @@
+{
+  "recordedAt": "2026-09-30T22:44:56.986512+00:00",
+  "scope": "Exact repaired-generation ten-case structural probe and verified immutable Linux volume; not H3/H4, API integration, activation, capacity or deployment acceptance",
+  "probe": {
+    "generationId": "c7b66eee1ad04dddba13f4c5dade5ef2023963a1ac0384857aaf173b9d164aa1",
+    "engineOrigin": "http://127.0.0.1:59081",
+    "status": "passed",
+    "checkedAt": "2026-09-30T19:33:04.299013+00:00",
+    "journeys": [
+      {
+        "id": "J01",
+        "status": "passed",
+        "departureTime": "2026-10-05T08:00:00+03:00",
+        "sourceDepartureTime": "2026-10-05T08:00:00+03:00",
+        "expectedOutcome": "route",
+        "httpStatus": 200,
+        "responseSha256": "e8139ed7c87154fc2743107a0b151070c5ac03a87212fc48ae58c548b5781203",
+        "structure": {
+          "outcome": "route",
+          "itineraryCount": 2,
+          "directCount": 0,
+          "itineraries": [
+            {
+              "legCount": 3,
+              "transfers": 0,
+              "scheduledStartTime": "2026-10-05T05:06:00Z",
+              "scheduledEndTime": "2026-10-05T05:24:00Z"
+            },
+            {
+              "legCount": 3,
+              "transfers": 0,
+              "scheduledStartTime": "2026-10-05T05:14:00Z",
+              "scheduledEndTime": "2026-10-05T05:33:00Z"
+            }
+          ]
+        }
+      },
+      {
+        "id": "J04",
+        "status": "passed",
+        "departureTime": "2026-09-30T18:30:00+03:00",
+        "sourceDepartureTime": "2026-09-30T18:30:00+03:00",
+        "expectedOutcome": "route",
+        "httpStatus": 200,
+        "responseSha256": "b91b3cc74f0207eed4c56299e5292c6ba9b8560fbc6515c249d97e43fe0adce8",
+        "structure": {
+          "outcome": "route",
+          "itineraryCount": 4,
+          "directCount": 0,
+          "itineraries": [
+            {
+              "legCount": 3,
+              "transfers": 0,
+              "scheduledStartTime": "2026-09-30T15:36:00Z",
+              "scheduledEndTime": "2026-09-30T16:11:00Z"
+            },
+            {
+              "legCount": 5,
+              "transfers": 1,
+              "scheduledStartTime": "2026-09-30T15:39:00Z",
+              "scheduledEndTime": "2026-09-30T16:17:00Z"
+            },
+            {
+              "legCount": 3,
+              "transfers": 0,
+              "scheduledStartTime": "2026-09-30T15:40:00Z",
+              "scheduledEndTime": "2026-09-30T16:24:00Z"
+            },
+            {
+              "legCount": 5,
+              "transfers": 1,
+              "scheduledStartTime": "2026-09-30T15:46:00Z",
+              "scheduledEndTime": "2026-09-30T16:22:00Z"
+            }
+          ]
+        }
+      },
+      {
+        "id": "J11",
+        "status": "passed",
+        "departureTime": "2026-10-05T08:00:00+03:00",
+        "sourceDepartureTime": "2026-10-05T08:00:00+03:00",
+        "expectedOutcome": "route",
+        "httpStatus": 200,
+        "responseSha256": "653a624eec75c999e0389265d2d321ab6ce0cac81ecdd5706cdbbce1bda75bd5",
+        "structure": {
+          "outcome": "route",
+          "itineraryCount": 1,
+          "directCount": 0,
+          "itineraries": [
+            {
+              "legCount": 5,
+              "transfers": 1,
+              "scheduledStartTime": "2026-10-05T05:14:00Z",
+              "scheduledEndTime": "2026-10-05T06:38:00Z"
+            }
+          ]
+        }
+      },
+      {
+        "id": "J12",
+        "status": "passed",
+        "departureTime": "2026-10-05T08:00:00+03:00",
+        "sourceDepartureTime": "2026-10-05T08:00:00+03:00",
+        "expectedOutcome": "route",
+        "httpStatus": 200,
+        "responseSha256": "d3e56c360c0894cea1c85e10ad6e9458aa2079fa30df41784e25a3a24b2447bd",
+        "structure": {
+          "outcome": "route",
+          "itineraryCount": 2,
+          "directCount": 0,
+          "itineraries": [
+            {
+              "legCount": 3,
+              "transfers": 0,
+              "scheduledStartTime": "2026-10-05T05:04:00Z",
+              "scheduledEndTime": "2026-10-05T05:55:00Z"
+            },
+            {
+              "legCount": 3,
+              "transfers": 0,
+              "scheduledStartTime": "2026-10-05T05:14:00Z",
+              "scheduledEndTime": "2026-10-05T06:09:00Z"
+            }
+          ]
+        }
+      },
+      {
+        "id": "J15",
+        "status": "passed",
+        "departureTime": "2026-10-05T08:00:00+03:00",
+        "sourceDepartureTime": "2026-10-05T08:00:00+03:00",
+        "expectedOutcome": "route",
+        "httpStatus": 200,
+        "responseSha256": "47803808c3b1e06746c1654b865627b276098a08c0652e4381d0c8b016221cef",
+        "structure": {
+          "outcome": "route",
+          "itineraryCount": 2,
+          "directCount": 0,
+          "itineraries": [
+            {
+              "legCount": 7,
+              "transfers": 2,
+              "scheduledStartTime": "2026-10-05T05:00:00Z",
+              "scheduledEndTime": "2026-10-05T07:16:00Z"
+            },
+            {
+              "legCount": 7,
+              "transfers": 2,
+              "scheduledStartTime": "2026-10-05T05:21:00Z",
+              "scheduledEndTime": "2026-10-05T07:40:00Z"
+            }
+          ]
+        }
+      },
+      {
+        "id": "J16",
+        "status": "passed",
+        "departureTime": "2026-10-05T08:00:00+03:00",
+        "sourceDepartureTime": "2026-10-05T08:00:00+03:00",
+        "expectedOutcome": "route",
+        "httpStatus": 200,
+        "responseSha256": "1315057d2e4376d1f0e20dcdf42b1470beb816a94957f40ed5327b8b83a5c5ee",
+        "structure": {
+          "outcome": "route",
+          "itineraryCount": 1,
+          "directCount": 0,
+          "itineraries": [
+            {
+              "legCount": 5,
+              "transfers": 1,
+              "scheduledStartTime": "2026-10-05T05:25:00Z",
+              "scheduledEndTime": "2026-10-05T06:52:00Z"
+            }
+          ]
+        }
+      },
+      {
+        "id": "J19",
+        "status": "passed",
+        "departureTime": "2026-10-05T08:00:00+03:00",
+        "sourceDepartureTime": "2026-10-05T08:00:00+03:00",
+        "expectedOutcome": "route",
+        "httpStatus": 200,
+        "responseSha256": "e5c9257d2cd44250137908705c43694b8f0a5ef4b8c4fdbae57583ee0479f7e7",
+        "structure": {
+          "outcome": "route",
+          "itineraryCount": 5,
+          "directCount": 0,
+          "itineraries": [
+            {
+              "legCount": 5,
+              "transfers": 1,
+              "scheduledStartTime": "2026-10-05T05:03:00Z",
+              "scheduledEndTime": "2026-10-05T06:14:00Z"
+            },
+            {
+              "legCount": 7,
+              "transfers": 2,
+              "scheduledStartTime": "2026-10-05T05:03:00Z",
+              "scheduledEndTime": "2026-10-05T05:57:00Z"
+            },
+            {
+              "legCount": 9,
+              "transfers": 3,
+              "scheduledStartTime": "2026-10-05T05:06:00Z",
+              "scheduledEndTime": "2026-10-05T06:01:00Z"
+            },
+            {
+              "legCount": 7,
+              "transfers": 2,
+              "scheduledStartTime": "2026-10-05T05:08:00Z",
+              "scheduledEndTime": "2026-10-05T06:08:00Z"
+            },
+            {
+              "legCount": 9,
+              "transfers": 3,
+              "scheduledStartTime": "2026-10-05T05:16:00Z",
+              "scheduledEndTime": "2026-10-05T06:11:00Z"
+            }
+          ]
+        }
+      },
+      {
+        "id": "J21",
+        "status": "passed",
+        "departureTime": "2026-10-06T23:40:00+03:00",
+        "sourceDepartureTime": "2026-10-06T23:40:00+03:00",
+        "expectedOutcome": "route",
+        "httpStatus": 200,
+        "responseSha256": "497a95799481cd474ca08fb3f9c2d29642f01d9a861fc90f4a75766e1f6c9aac",
+        "structure": {
+          "outcome": "route",
+          "itineraryCount": 2,
+          "directCount": 0,
+          "itineraries": [
+            {
+              "legCount": 3,
+              "transfers": 0,
+              "scheduledStartTime": "2026-10-06T20:40:00Z",
+              "scheduledEndTime": "2026-10-06T21:04:00Z"
+            },
+            {
+              "legCount": 3,
+              "transfers": 0,
+              "scheduledStartTime": "2026-10-06T21:36:00Z",
+              "scheduledEndTime": "2026-10-06T21:56:00Z"
+            }
+          ]
+        }
+      },
+      {
+        "id": "J22",
+        "status": "passed",
+        "departureTime": "2026-09-30T02:30:00+03:00",
+        "sourceDepartureTime": "2026-09-30T02:30:00+03:00",
+        "expectedOutcome": "either",
+        "httpStatus": 200,
+        "responseSha256": "bd993bbd77631487bf7bfb550104464285c7d3c3765acebb38bf2e1f056043c9",
+        "structure": {
+          "outcome": "route",
+          "itineraryCount": 2,
+          "directCount": 0,
+          "itineraries": [
+            {
+              "legCount": 3,
+              "transfers": 0,
+              "scheduledStartTime": "2026-09-29T23:42:00Z",
+              "scheduledEndTime": "2026-09-30T00:20:00Z"
+            },
+            {
+              "legCount": 3,
+              "transfers": 0,
+              "scheduledStartTime": "2026-09-30T00:12:00Z",
+              "scheduledEndTime": "2026-09-30T00:50:00Z"
+            }
+          ]
+        }
+      },
+      {
+        "id": "J23",
+        "status": "passed",
+        "departureTime": "2026-09-30T02:30:00+03:00",
+        "sourceDepartureTime": "2026-09-30T02:30:00+03:00",
+        "expectedOutcome": "no_route",
+        "httpStatus": 200,
+        "responseSha256": "7c9fc55c548181b4fdb746a6573d9322edeb837b39286a96b3452caf3d63744c",
+        "structure": {
+          "outcome": "no_route",
+          "itineraryCount": 0,
+          "directCount": 0,
+          "itineraries": []
+        }
+      }
+    ],
+    "journeyIds": [
+      "J01",
+      "J04",
+      "J11",
+      "J12",
+      "J15",
+      "J16",
+      "J19",
+      "J21",
+      "J22",
+      "J23"
+    ],
+    "caseCount": 10,
+    "corpusSha256": "ef06291bb02b60992e0825ab866916c1b0032805bbbb0b59c12806d98429f26a",
+    "warnings": [],
+    "structuralOnly": true,
+    "humanH3Approval": false,
+    "engineDigest": "sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330",
+    "graphTreeSha256": "96c8fb237576a50544a2c03ad1e840c2f12d2b96b9072250c1e66a61c8f7d263",
+    "configSha256": "2f75d87301d97b36461bd5826f0c46a1eb375f0da3434f39ee59563f21b6e998",
+    "referenceSha256": "8f81298d87dbe84478bfd22652b87bd5b7db1e61979a9d00187558fea64605b6",
+    "referenceCounts": {
+      "agencies": 36,
+      "calendar_exceptions": 0,
+      "calendar_rules": 41536,
+      "clock_profile_calls": 8188812,
+      "clock_profiles": 220263,
+      "pattern_stops": 245843,
+      "patterns": 7998,
+      "route_stops": 240992,
+      "routes": 7884,
+      "stops": 35321,
+      "translations": 102603,
+      "trip_profiles": 425160
+    },
+    "probeClass": "real"
+  },
+  "probeSha256": "e72e02044cd9352bf5003b58f0319f57a1544bafef5cd9d232cb42e796feaa88",
+  "corpus": ".runtime\\m4-functional-evidence-20260930\\probe-corpus.json",
+  "corpusSha256": "ef06291bb02b60992e0825ab866916c1b0032805bbbb0b59c12806d98429f26a",
+  "containers": {
+    "opentransit-m4-repaired-probe-20260930-1932": {
+      "Id": "2a62ebb84d21531591fddd7f4a82476b779e98145db9529736f874ed405be8c2",
+      "Created": "2026-09-30T19:33:03.387221955Z",
+      "Image": "sha256:1b15d2e1f72e1fb10cdaae8b0a6662816171706a4f261922b7cbd4754ddc4841",
+      "State": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-09-30T19:33:03.493809862Z",
+        "FinishedAt": "2026-09-30T19:40:18.550955488Z"
+      },
+      "Config": {
+        "Hostname": "54feb2d8e2bf",
+        "Domainname": "",
+        "User": "10001",
+        "AttachStdin": false,
+        "AttachStdout": true,
+        "AttachStderr": true,
+        "Tty": false,
+        "OpenStdin": false,
+        "StdinOnce": false,
+        "Env": [
+          "PYTHONDONTWRITEBYTECODE=1",
+          "PYTHONPATH=/workspace/services/api/src",
+          "PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "PYTHON_VERSION=3.14.6",
+          "PYTHON_SHA256=143b1dddefaec3bd2e21e3b839b34a2b7fb9842272883c576420d605e9f30c63",
+          "UV_PYTHON_DOWNLOADS=0"
+        ],
+        "Cmd": [
+          "/app/.venv/bin/python",
+          "/evidence/run-probe.py"
+        ],
+        "Image": "opentransit-m2-tests:20260930",
+        "Volumes": null,
+        "WorkingDir": "/workspace",
+        "Entrypoint": null,
+        "OnBuild": null,
+        "Labels": {
+          "com.docker.compose.project": "opentransit",
+          "com.docker.compose.service": "api",
+          "com.docker.compose.version": "2.31.0"
+        }
+      },
+      "HostConfig": {
+        "Binds": null,
+        "ContainerIDFile": "",
+        "LogConfig": {
+          "Type": "json-file",
+          "Config": {}
+        },
+        "NetworkMode": "container:54feb2d8e2bfe271a1c5cfafa24a79038a036f9c995d845160f7d670d6ca4dfa",
+        "PortBindings": {},
+        "RestartPolicy": {
+          "Name": "no",
+          "MaximumRetryCount": 0
+        },
+        "AutoRemove": false,
+        "VolumeDriver": "",
+        "VolumesFrom": null,
+        "ConsoleSize": [
+          0,
+          0
+        ],
+        "CapAdd": null,
+        "CapDrop": null,
+        "CgroupnsMode": "host",
+        "Dns": [],
+        "DnsOptions": [],
+        "DnsSearch": [],
+        "ExtraHosts": null,
+        "GroupAdd": null,
+        "IpcMode": "private",
+        "Cgroup": "",
+        "Links": null,
+        "OomScoreAdj": 0,
+        "PidMode": "",
+        "Privileged": false,
+        "PublishAllPorts": false,
+        "ReadonlyRootfs": false,
+        "SecurityOpt": null,
+        "UTSMode": "",
+        "UsernsMode": "",
+        "ShmSize": 67108864,
+        "Runtime": "runc",
+        "Isolation": "",
+        "CpuShares": 0,
+        "Memory": 536870912,
+        "NanoCpus": 0,
+        "CgroupParent": "",
+        "BlkioWeight": 0,
+        "BlkioWeightDevice": [],
+        "BlkioDeviceReadBps": [],
+        "BlkioDeviceWriteBps": [],
+        "BlkioDeviceReadIOps": [],
+        "BlkioDeviceWriteIOps": [],
+        "CpuPeriod": 0,
+        "CpuQuota": 0,
+        "CpuRealtimePeriod": 0,
+        "CpuRealtimeRuntime": 0,
+        "CpusetCpus": "",
+        "CpusetMems": "",
+        "Devices": [],
+        "DeviceCgroupRules": null,
+        "DeviceRequests": null,
+        "MemoryReservation": 0,
+        "MemorySwap": 1073741824,
+        "MemorySwappiness": null,
+        "OomKillDisable": false,
+        "PidsLimit": null,
+        "Ulimits": [],
+        "CpuCount": 0,
+        "CpuPercent": 0,
+        "IOMaximumIOps": 0,
+        "IOMaximumBandwidth": 0,
+        "Mounts": [
+          {
+            "Type": "bind",
+            "Source": "C:\\Users\\nhenr\\.codex\\worktrees\\8007\\OpenTransit",
+            "Target": "/workspace",
+            "ReadOnly": true
+          },
+          {
+            "Type": "bind",
+            "Source": "C:\\Users\\nhenr\\.codex\\worktrees\\8007\\OpenTransit\\.runtime\\m4-functional-evidence-20260930",
+            "Target": "/evidence"
+          }
+        ],
+        "MaskedPaths": [
+          "/proc/asound",
+          "/proc/acpi",
+          "/proc/kcore",
+          "/proc/keys",
+          "/proc/latency_stats",
+          "/proc/timer_list",
+          "/proc/timer_stats",
+          "/proc/sched_debug",
+          "/proc/scsi",
+          "/sys/firmware",
+          "/sys/devices/virtual/powercap"
+        ],
+        "ReadonlyPaths": [
+          "/proc/bus",
+          "/proc/fs",
+          "/proc/irq",
+          "/proc/sys",
+          "/proc/sysrq-trigger"
+        ]
+      },
+      "Mounts": [
+        {
+          "Type": "bind",
+          "Source": "C:\\Users\\nhenr\\.codex\\worktrees\\8007\\OpenTransit",
+          "Destination": "/workspace",
+          "Mode": "",
+          "RW": false,
+          "Propagation": "rprivate"
+        },
+        {
+          "Type": "bind",
+          "Source": "C:\\Users\\nhenr\\.codex\\worktrees\\8007\\OpenTransit\\.runtime\\m4-functional-evidence-20260930",
+          "Destination": "/evidence",
+          "Mode": "",
+          "RW": true,
+          "Propagation": "rprivate"
+        }
+      ],
+      "NetworkSettings": {
+        "Bridge": "",
+        "SandboxID": "",
+        "SandboxKey": "",
+        "Ports": {},
+        "HairpinMode": false,
+        "LinkLocalIPv6Address": "",
+        "LinkLocalIPv6PrefixLen": 0,
+        "SecondaryIPAddresses": null,
+        "SecondaryIPv6Addresses": null,
+        "EndpointID": "",
+        "Gateway": "",
+        "GlobalIPv6Address": "",
+        "GlobalIPv6PrefixLen": 0,
+        "IPAddress": "",
+        "IPPrefixLen": 0,
+        "IPv6Gateway": "",
+        "MacAddress": "",
+        "Networks": {}
+      }
+    },
+    "opentransit-m4-volume-stage-c7b66eee-20260930": {
+      "Id": "08526c7aed8916a8dcdbf9f3c9b38c504d5667372d6e9bcad74e0d59fe26a5a1",
+      "Created": "2026-09-30T19:37:05.054910169Z",
+      "Image": "sha256:1b15d2e1f72e1fb10cdaae8b0a6662816171706a4f261922b7cbd4754ddc4841",
+      "State": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 1,
+        "Error": "",
+        "StartedAt": "2026-09-30T19:37:05.159030657Z",
+        "FinishedAt": "2026-09-30T19:37:23.694328451Z"
+      },
+      "Config": {
+        "Hostname": "08526c7aed89",
+        "Domainname": "",
+        "User": "0:0",
+        "AttachStdin": false,
+        "AttachStdout": true,
+        "AttachStderr": true,
+        "Tty": false,
+        "OpenStdin": false,
+        "StdinOnce": false,
+        "Env": [
+          "PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "PYTHON_VERSION=3.14.6",
+          "PYTHON_SHA256=143b1dddefaec3bd2e21e3b839b34a2b7fb9842272883c576420d605e9f30c63",
+          "UV_PYTHON_DOWNLOADS=0",
+          "PYTHONPATH=/workspace/services/api/src"
+        ],
+        "Cmd": [
+          "-ec",
+          "set -eu\ncp -a /source/. /generation/\nfind /generation -type d -exec chmod a+rx {} +\nfind /generation -type f -exec chmod a+r {} +\npython - <<'PY'\nimport hashlib, json, os, stat, sys\nfrom pathlib import Path\nfrom opentransit.core.artifacts import verify_artifacts\nsource=Path('/source'); generation=Path('/generation')\ndef inventory(root):\n    values={}\n    for base, dirs, files in os.walk(root, followlinks=False):\n        for name in dirs+files:\n            path=Path(base)/name\n            if path.is_symlink():\n                raise RuntimeError(f'symlink is forbidden: {path.relative_to(root)}')\n        for name in files:\n            path=Path(base)/name\n            digest=hashlib.sha256()\n            with path.open('rb') as stream:\n                for block in iter(lambda:stream.read(1024*1024),b''):\n                    digest.update(block)\n            values[path.relative_to(root).as_posix()]={'bytes':path.stat().st_size,'sha256':digest.hexdigest()}\n    return values\nsrc_inventory=inventory(source); dst_inventory=inventory(generation)\nif src_inventory != dst_inventory:\n    raise RuntimeError('copied file inventory or byte hashes differ from source')\nmanifest=json.loads((generation/'manifest.json').read_text(encoding='utf-8'))\nif manifest.get('state')!='ready' or manifest.get('generationId')!='c7b66eee1ad04dddba13f4c5dade5ef2023963a1ac0384857aaf173b9d164aa1':\n    raise RuntimeError('copied manifest is not the expected ready generation')\nverified=verify_artifacts(generation, manifest)\nif verified.get('generationId')!=manifest['generationId'] or verified.get('referenceSha256')!=manifest['artifacts']['reference']['sha256']:\n    raise RuntimeError('native-volume artifact verification differs from sealed manifest')\nfor base, dirs, files in os.walk(generation, followlinks=False):\n    for name in dirs:\n        if stat.S_IMODE((Path(base)/name).stat().st_mode)&0o005 != 0o005:\n            raise RuntimeError(f'directory not traversable by uid 10001: {Path(base)/name}')\n    for name in files:\n        if stat.S_IMODE((Path(base)/name).stat().st_mode)&0o004 != 0o004:\n            raise RuntimeError(f'file not readable by uid 10001: {Path(base)/name}')\nprint(json.dumps({'state':'verified','generationId':manifest['generationId'],'referenceSha256':verified['referenceSha256'],'contentSha256':manifest['artifacts']['reference']['contentSha256'],'configSha256':verified['configSha256'],'graphTreeSha256':verified['graphTreeSha256'],'fileCount':len(dst_inventory),'totalBytes':sum(item['bytes'] for item in dst_inventory.values()),'copiedByteHashesMatch':True,'uid10001Readable':True,'mountPath':'/generation'},sort_keys=True))\nPY"
+        ],
+        "Image": "opentransit-m2-tests:20260930",
+        "Volumes": null,
+        "WorkingDir": "/workspace",
+        "Entrypoint": [
+          "/bin/sh"
+        ],
+        "OnBuild": null,
+        "Labels": {
+          "com.docker.compose.project": "opentransit",
+          "com.docker.compose.service": "api",
+          "com.docker.compose.version": "2.31.0"
+        }
+      },
+      "HostConfig": {
+        "Binds": null,
+        "ContainerIDFile": "",
+        "LogConfig": {
+          "Type": "json-file",
+          "Config": {}
+        },
+        "NetworkMode": "none",
+        "PortBindings": {},
+        "RestartPolicy": {
+          "Name": "no",
+          "MaximumRetryCount": 0
+        },
+        "AutoRemove": false,
+        "VolumeDriver": "",
+        "VolumesFrom": null,
+        "ConsoleSize": [
+          0,
+          0
+        ],
+        "CapAdd": null,
+        "CapDrop": null,
+        "CgroupnsMode": "host",
+        "Dns": [],
+        "DnsOptions": [],
+        "DnsSearch": [],
+        "ExtraHosts": null,
+        "GroupAdd": null,
+        "IpcMode": "private",
+        "Cgroup": "",
+        "Links": null,
+        "OomScoreAdj": 0,
+        "PidMode": "",
+        "Privileged": false,
+        "PublishAllPorts": false,
+        "ReadonlyRootfs": false,
+        "SecurityOpt": null,
+        "UTSMode": "",
+        "UsernsMode": "",
+        "ShmSize": 67108864,
+        "Runtime": "runc",
+        "Isolation": "",
+        "CpuShares": 0,
+        "Memory": 536870912,
+        "NanoCpus": 0,
+        "CgroupParent": "",
+        "BlkioWeight": 0,
+        "BlkioWeightDevice": [],
+        "BlkioDeviceReadBps": [],
+        "BlkioDeviceWriteBps": [],
+        "BlkioDeviceReadIOps": [],
+        "BlkioDeviceWriteIOps": [],
+        "CpuPeriod": 0,
+        "CpuQuota": 0,
+        "CpuRealtimePeriod": 0,
+        "CpuRealtimeRuntime": 0,
+        "CpusetCpus": "",
+        "CpusetMems": "",
+        "Devices": [],
+        "DeviceCgroupRules": null,
+        "DeviceRequests": null,
+        "MemoryReservation": 0,
+        "MemorySwap": 1073741824,
+        "MemorySwappiness": null,
+        "OomKillDisable": false,
+        "PidsLimit": null,
+        "Ulimits": [],
+        "CpuCount": 0,
+        "CpuPercent": 0,
+        "IOMaximumIOps": 0,
+        "IOMaximumBandwidth": 0,
+        "Mounts": [
+          {
+            "Type": "bind",
+            "Source": "C:\\Users\\nhenr\\.codex\\worktrees\\8007\\OpenTransit\\.runtime\\generations\\m4-translations-blue-20260930",
+            "Target": "/source",
+            "ReadOnly": true
+          },
+          {
+            "Type": "volume",
+            "Source": "opentransit-generation-m4-c7b66eee-20260930",
+            "Target": "/generation"
+          }
+        ],
+        "MaskedPaths": [
+          "/proc/asound",
+          "/proc/acpi",
+          "/proc/kcore",
+          "/proc/keys",
+          "/proc/latency_stats",
+          "/proc/timer_list",
+          "/proc/timer_stats",
+          "/proc/sched_debug",
+          "/proc/scsi",
+          "/sys/firmware",
+          "/sys/devices/virtual/powercap"
+        ],
+        "ReadonlyPaths": [
+          "/proc/bus",
+          "/proc/fs",
+          "/proc/irq",
+          "/proc/sys",
+          "/proc/sysrq-trigger"
+        ]
+      },
+      "Mounts": [
+        {
+          "Type": "bind",
+          "Source": "C:\\Users\\nhenr\\.codex\\worktrees\\8007\\OpenTransit\\.runtime\\generations\\m4-translations-blue-20260930",
+          "Destination": "/source",
+          "Mode": "",
+          "RW": false,
+          "Propagation": "rprivate"
+        },
+        {
+          "Type": "volume",
+          "Name": "opentransit-generation-m4-c7b66eee-20260930",
+          "Source": "/var/lib/docker/volumes/opentransit-generation-m4-c7b66eee-20260930/_data",
+          "Destination": "/generation",
+          "Driver": "local",
+          "Mode": "z",
+          "RW": true,
+          "Propagation": ""
+        }
+      ],
+      "NetworkSettings": {
+        "Bridge": "",
+        "SandboxID": "",
+        "SandboxKey": "",
+        "Ports": {},
+        "HairpinMode": false,
+        "LinkLocalIPv6Address": "",
+        "LinkLocalIPv6PrefixLen": 0,
+        "SecondaryIPAddresses": null,
+        "SecondaryIPv6Addresses": null,
+        "EndpointID": "",
+        "Gateway": "",
+        "GlobalIPv6Address": "",
+        "GlobalIPv6PrefixLen": 0,
+        "IPAddress": "",
+        "IPPrefixLen": 0,
+        "IPv6Gateway": "",
+        "MacAddress": "",
+        "Networks": {
+          "none": {
+            "IPAMConfig": null,
+            "Links": null,
+            "Aliases": null,
+            "MacAddress": "",
+            "DriverOpts": null,
+            "NetworkID": "eaaf555aca82d80cae04047579ad94161835ae769733b9018cebba040739b3a3",
+            "EndpointID": "",
+            "Gateway": "",
+            "IPAddress": "",
+            "IPPrefixLen": 0,
+            "IPv6Gateway": "",
+            "GlobalIPv6Address": "",
+            "GlobalIPv6PrefixLen": 0,
+            "DNSNames": null
+          }
+        }
+      }
+    },
+    "opentransit-m4-volume-verify-c7b66eee-20260930": {
+      "Id": "d5d718444425d9d5d89cb1a7556e8787c9a21eeb2645cb5e874671cc98f49967",
+      "Created": "2026-09-30T19:38:17.235783218Z",
+      "Image": "sha256:1b15d2e1f72e1fb10cdaae8b0a6662816171706a4f261922b7cbd4754ddc4841",
+      "State": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-09-30T19:38:17.317332866Z",
+        "FinishedAt": "2026-09-30T19:38:40.157484893Z"
+      },
+      "Config": {
+        "Hostname": "d5d718444425",
+        "Domainname": "",
+        "User": "10001",
+        "AttachStdin": false,
+        "AttachStdout": true,
+        "AttachStderr": true,
+        "Tty": false,
+        "OpenStdin": false,
+        "StdinOnce": false,
+        "Env": [
+          "PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "PYTHON_VERSION=3.14.6",
+          "PYTHON_SHA256=143b1dddefaec3bd2e21e3b839b34a2b7fb9842272883c576420d605e9f30c63",
+          "UV_PYTHON_DOWNLOADS=0",
+          "PYTHONPATH=/workspace/services/api/src"
+        ],
+        "Cmd": [
+          "-ec",
+          "set -eu\npython - <<'PY'\nimport hashlib, json, os, stat\nfrom pathlib import Path\nsrc=Path('/source'); generation=Path('/generation')\ndef sha(path):\n    digest=hashlib.sha256()\n    with path.open('rb') as stream:\n        for block in iter(lambda:stream.read(1024*1024),b''):\n            digest.update(block)\n    return digest.hexdigest()\ndef inventory(root):\n    items={}\n    for base, dirs, files in os.walk(root, followlinks=False):\n        for name in dirs+files:\n            path=Path(base)/name\n            if path.is_symlink(): raise RuntimeError(f'symlink forbidden: {path.relative_to(root)}')\n        for name in files:\n            path=Path(base)/name\n            items[path.relative_to(root).as_posix()]={'bytes':path.stat().st_size,'sha256':sha(path)}\n    return items\nsource_inventory=inventory(src); staged_inventory=inventory(generation)\nif source_inventory != staged_inventory: raise RuntimeError('source and staged file inventories/hashes differ')\nmanifest=json.loads((generation/'manifest.json').read_text(encoding='utf-8'))\nif manifest.get('state')!='ready' or manifest.get('generationId')!='c7b66eee1ad04dddba13f4c5dade5ef2023963a1ac0384857aaf173b9d164aa1': raise RuntimeError('unexpected or unready generation')\nartifacts=manifest['artifacts']; ref=generation/'reference.sqlite'; config=generation/'config.yml'; graph=generation/'motis'\nref_hash=sha(ref); config_hash=sha(config)\nif ref_hash!=artifacts['reference']['sha256']: raise RuntimeError('reference hash differs from sealed manifest')\nif config_hash!=artifacts['config']['sha256']: raise RuntimeError('config hash differs from sealed manifest')\nexpected=artifacts['motis']['files']; actual=[]\nfor path in sorted(graph.rglob('*')):\n    if path.is_symlink(): raise RuntimeError('graph symlink forbidden')\n    if path.is_file() and path.stat().st_size:\n        actual.append({'path':path.relative_to(graph).as_posix(),'bytes':path.stat().st_size,'sha256':sha(path)})\nif actual!=expected: raise RuntimeError('graph artifact inventory differs from sealed manifest')\ntree=hashlib.sha256()\nfor item in actual: tree.update(f\"{item['path']}\\0{item['bytes']}\\0{item['sha256']}\\n\".encode())\nif tree.hexdigest()!=artifacts['motis']['sha256']: raise RuntimeError('graph tree hash differs from manifest')\nfor base, dirs, files in os.walk(generation, followlinks=False):\n    for name in dirs:\n        if stat.S_IMODE((Path(base)/name).stat().st_mode)&0o005 != 0o005: raise RuntimeError(f'directory unreadable by uid 10001: {name}')\n    for name in files:\n        if stat.S_IMODE((Path(base)/name).stat().st_mode)&0o004 != 0o004: raise RuntimeError(f'file unreadable by uid 10001: {name}')\nprint(json.dumps({'state':'verified','generationId':manifest['generationId'],'referenceSha256':ref_hash,'contentSha256':artifacts['reference']['contentSha256'],'configSha256':config_hash,'graphTreeSha256':tree.hexdigest(),'fileCount':len(staged_inventory),'totalBytes':sum(row['bytes'] for row in staged_inventory.values()),'copiedByteHashesMatch':True,'uid10001Readable':True,'mountPath':'/generation'},sort_keys=True))\nPY"
+        ],
+        "Image": "opentransit-m2-tests:20260930",
+        "Volumes": null,
+        "WorkingDir": "/workspace",
+        "Entrypoint": [
+          "/bin/sh"
+        ],
+        "OnBuild": null,
+        "Labels": {
+          "com.docker.compose.project": "opentransit",
+          "com.docker.compose.service": "api",
+          "com.docker.compose.version": "2.31.0"
+        }
+      },
+      "HostConfig": {
+        "Binds": null,
+        "ContainerIDFile": "",
+        "LogConfig": {
+          "Type": "json-file",
+          "Config": {}
+        },
+        "NetworkMode": "none",
+        "PortBindings": {},
+        "RestartPolicy": {
+          "Name": "no",
+          "MaximumRetryCount": 0
+        },
+        "AutoRemove": false,
+        "VolumeDriver": "",
+        "VolumesFrom": null,
+        "ConsoleSize": [
+          0,
+          0
+        ],
+        "CapAdd": null,
+        "CapDrop": null,
+        "CgroupnsMode": "host",
+        "Dns": [],
+        "DnsOptions": [],
+        "DnsSearch": [],
+        "ExtraHosts": null,
+        "GroupAdd": null,
+        "IpcMode": "private",
+        "Cgroup": "",
+        "Links": null,
+        "OomScoreAdj": 0,
+        "PidMode": "",
+        "Privileged": false,
+        "PublishAllPorts": false,
+        "ReadonlyRootfs": false,
+        "SecurityOpt": null,
+        "UTSMode": "",
+        "UsernsMode": "",
+        "ShmSize": 67108864,
+        "Runtime": "runc",
+        "Isolation": "",
+        "CpuShares": 0,
+        "Memory": 536870912,
+        "NanoCpus": 0,
+        "CgroupParent": "",
+        "BlkioWeight": 0,
+        "BlkioWeightDevice": [],
+        "BlkioDeviceReadBps": [],
+        "BlkioDeviceWriteBps": [],
+        "BlkioDeviceReadIOps": [],
+        "BlkioDeviceWriteIOps": [],
+        "CpuPeriod": 0,
+        "CpuQuota": 0,
+        "CpuRealtimePeriod": 0,
+        "CpuRealtimeRuntime": 0,
+        "CpusetCpus": "",
+        "CpusetMems": "",
+        "Devices": [],
+        "DeviceCgroupRules": null,
+        "DeviceRequests": null,
+        "MemoryReservation": 0,
+        "MemorySwap": 1073741824,
+        "MemorySwappiness": null,
+        "OomKillDisable": false,
+        "PidsLimit": null,
+        "Ulimits": [],
+        "CpuCount": 0,
+        "CpuPercent": 0,
+        "IOMaximumIOps": 0,
+        "IOMaximumBandwidth": 0,
+        "Mounts": [
+          {
+            "Type": "bind",
+            "Source": "C:\\Users\\nhenr\\.codex\\worktrees\\8007\\OpenTransit\\.runtime\\generations\\m4-translations-blue-20260930",
+            "Target": "/source",
+            "ReadOnly": true
+          },
+          {
+            "Type": "volume",
+            "Source": "opentransit-generation-m4-c7b66eee-20260930",
+            "Target": "/generation",
+            "ReadOnly": true
+          }
+        ],
+        "MaskedPaths": [
+          "/proc/asound",
+          "/proc/acpi",
+          "/proc/kcore",
+          "/proc/keys",
+          "/proc/latency_stats",
+          "/proc/timer_list",
+          "/proc/timer_stats",
+          "/proc/sched_debug",
+          "/proc/scsi",
+          "/sys/firmware",
+          "/sys/devices/virtual/powercap"
+        ],
+        "ReadonlyPaths": [
+          "/proc/bus",
+          "/proc/fs",
+          "/proc/irq",
+          "/proc/sys",
+          "/proc/sysrq-trigger"
+        ]
+      },
+      "Mounts": [
+        {
+          "Type": "bind",
+          "Source": "C:\\Users\\nhenr\\.codex\\worktrees\\8007\\OpenTransit\\.runtime\\generations\\m4-translations-blue-20260930",
+          "Destination": "/source",
+          "Mode": "",
+          "RW": false,
+          "Propagation": "rprivate"
+        },
+        {
+          "Type": "volume",
+          "Name": "opentransit-generation-m4-c7b66eee-20260930",
+          "Source": "/var/lib/docker/volumes/opentransit-generation-m4-c7b66eee-20260930/_data",
+          "Destination": "/generation",
+          "Driver": "local",
+          "Mode": "z",
+          "RW": false,
+          "Propagation": ""
+        }
+      ],
+      "NetworkSettings": {
+        "Bridge": "",
+        "SandboxID": "",
+        "SandboxKey": "",
+        "Ports": {},
+        "HairpinMode": false,
+        "LinkLocalIPv6Address": "",
+        "LinkLocalIPv6PrefixLen": 0,
+        "SecondaryIPAddresses": null,
+        "SecondaryIPv6Addresses": null,
+        "EndpointID": "",
+        "Gateway": "",
+        "GlobalIPv6Address": "",
+        "GlobalIPv6PrefixLen": 0,
+        "IPAddress": "",
+        "IPPrefixLen": 0,
+        "IPv6Gateway": "",
+        "MacAddress": "",
+        "Networks": {
+          "none": {
+            "IPAMConfig": null,
+            "Links": null,
+            "Aliases": null,
+            "MacAddress": "",
+            "DriverOpts": null,
+            "NetworkID": "eaaf555aca82d80cae04047579ad94161835ae769733b9018cebba040739b3a3",
+            "EndpointID": "",
+            "Gateway": "",
+            "IPAddress": "",
+            "IPPrefixLen": 0,
+            "IPv6Gateway": "",
+            "GlobalIPv6Address": "",
+            "GlobalIPv6PrefixLen": 0,
+            "DNSNames": null
+          }
+        }
+      }
+    }
+  },
+  "volumeVerification": {
+    "configSha256": "2f75d87301d97b36461bd5826f0c46a1eb375f0da3434f39ee59563f21b6e998",
+    "contentSha256": "ba26bdb8858532f89e5fb0ae8844b4cd045522bae2ff3f97c5a5c804fe175a74",
+    "copiedByteHashesMatch": true,
+    "fileCount": 75,
+    "generationId": "c7b66eee1ad04dddba13f4c5dade5ef2023963a1ac0384857aaf173b9d164aa1",
+    "graphTreeSha256": "96c8fb237576a50544a2c03ad1e840c2f12d2b96b9072250c1e66a61c8f7d263",
+    "mountPath": "/generation",
+    "referenceSha256": "8f81298d87dbe84478bfd22652b87bd5b7db1e61979a9d00187558fea64605b6",
+    "state": "verified",
+    "totalBytes": 3726648427,
+    "uid10001Readable": true
+  },
+  "failedStageLogs": ""
+}

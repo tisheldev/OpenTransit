@@ -1,0 +1,696 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-01T05:45:36.847Z",
+  "scope": "Bounded saved-response/source diagnosis after one enriched Photon trial; no HTTP, PBF scan, transform/import rerun, corpus revision, runtime or API changes.",
+  "status": "D4 and address acceptance remain open; no provider adoption or final H4 verdict.",
+  "inputSha256": {
+    ".runtime/m4-photon-evaluation-20261001/photon-enriched-addresses-20261001-01.json": "c586a75d59882ebecd8626a5d782801b3d39b76798efc97301e921cd5c3f9f91",
+    ".runtime/m4-photon-enrichment-20261001/israel-addresses-enriched-photon-0.1.0.provenance.json": "b257f71101f8d40acdabd95c195e898af70f9ba633b5e2e5aeb31f591fe29c47",
+    "services/api/results/m4-api-search-20260930-02-corrected.json": "f4e4a05e73aef2bd69b069d05cc34e3c639f39ba748fc6cdf16dcbcb08b4870d",
+    "services/api/results/m4-photon-enriched-trial-20261001-01.json": "13529bcbfff539ef4cbbcbdf7dd4f119c9291d914b252e020701a6381f57d840",
+    ".runtime/m4-photon-context-20261001/context-v1.jsonl": "69cd607560dafbf0717771589e20ad58aabff186fb5fae806841aa30c1095a06",
+    ".runtime/m4-photon-spike-20260930/israel-address-nodes-photon-0.1.0.jsonl": "6ddee9f640e11b7ec696690663da7d9d571e15a10f5b8836aac14ec73fc6faca",
+    ".runtime/m4-photon-enrichment-20261001/israel-addresses-enriched-photon-0.1.0.jsonl": "b93cb6f60cb6b475ae904acef72b73ea1ae3e152f72dee88f8635502c8c6d1e1"
+  },
+  "sourcePbfSha256RecordedByRetainedArtifacts": "8a34b30f91a63ef9239961ba0e4d660ae22deda2f6da4b85ba4772a6b7c4c74f",
+  "sourcePbfReread": false,
+  "frozenCaseContract": {
+    "queryLanguageExpectedCoordinatesToleranceEarthRadiusAndNearUnchanged": true,
+    "limit": 10,
+    "requests": 22,
+    "requestsHttp200": true,
+    "oldTrialLayer": "house",
+    "newTrialLayer": [
+      "house",
+      "street"
+    ],
+    "layerMethodChangeDeclared": true,
+    "retries": 0,
+    "nearAddedWhereAbsent": false
+  },
+  "scores": {
+    "allAddressCases": {
+      "count": 22,
+      "geometryTop1": 16,
+      "geometryTop5": 16,
+      "rate": 0.7272727272727273,
+      "requiredRate": 0.8,
+      "minimumHitsFor22": 18,
+      "passesRequiredRate": false
+    },
+    "original15": {
+      "count": 15,
+      "geometryTop1": 9,
+      "geometryTop5": 9
+    },
+    "newSourceNodeCases": {
+      "count": 7,
+      "geometryTop1": 7,
+      "geometryTop5": 7,
+      "exactSourceTop1": 6,
+      "exactSourceTop5": 7
+    },
+    "nearBreakdown": {
+      "near_supplied": {
+        "cases": 5,
+        "top1GeometryHits": 5,
+        "top5GeometryHits": 5
+      },
+      "near_not_supplied": {
+        "cases": 17,
+        "top1GeometryHits": 11,
+        "top5GeometryHits": 11
+      }
+    }
+  },
+  "complementarySavedHitFlags": {
+    "apiOnlyTop5SuccessIds": [],
+    "offlineUnionTop5UpperBound": 16,
+    "denominator": 22,
+    "isMergedRankingMeasurement": false,
+    "interpretation": "Every saved API success is already a Photon success; integration alone adds no demonstrated successful case to this frozen address cell."
+  },
+  "failures": [
+    {
+      "caseId": "P059",
+      "query": "Herzl 50 Haifa",
+      "language": "en",
+      "expected": {
+        "place": "Herzl Haifa",
+        "latitude": 32.8156,
+        "longitude": 34.9942,
+        "toleranceMeters": 800,
+        "expectedStopId": null
+      },
+      "scoringEarthRadiusMeters": 6371008.8,
+      "savedNear": null,
+      "httpStatus": 200,
+      "providerOutcome": "success",
+      "candidateCount": 1,
+      "topCandidate": {
+        "rank": 1,
+        "distinctRank": 1,
+        "osmType": "N",
+        "osmId": "13196140834",
+        "displayName": null,
+        "displayLanguage": null,
+        "displayLanguageEvidence": "not reported by Photon",
+        "addressType": "house",
+        "addressPrecision": null,
+        "street": "Herzl",
+        "houseNumber": "50",
+        "osmKey": "addr:housenumber",
+        "osmValue": "50",
+        "coordinatesLonLat": [
+          35.0007915,
+          32.8075269
+        ],
+        "distanceMeters": 1088.7193588079695,
+        "withinOriginalTolerance": false,
+        "exactExpectedOsmObject": false
+      },
+      "top1ExcessOverToleranceMeters": 288.719,
+      "sourceHouseRecord": {
+        "place_id": "N13196140834",
+        "object_type": "N",
+        "object_id": 13196140834,
+        "osm_key": "addr:housenumber",
+        "osm_value": "50",
+        "address_type": "house",
+        "housenumber": "50",
+        "address": {
+          "street": "הרצל",
+          "city": "חיפה"
+        },
+        "extra": {
+          "addr:city": "חיפה",
+          "addr:housenumber": "50",
+          "addr:street": "הרצל"
+        },
+        "centroid": [
+          35.0007915,
+          32.8075269
+        ]
+      },
+      "sourceHouseCoordinatesPreserved": true,
+      "houseSourceContributions": {
+        "sourceHouseNodeId": "13196140834",
+        "localitySourceIds": [
+          {
+            "osmType": "R",
+            "osmId": "1387888"
+          }
+        ],
+        "streetWayIds": [
+          "53441117",
+          "995957808",
+          "995957809",
+          "1053096531",
+          "1053256442"
+        ],
+        "addedAddressAliases": [
+          "city:en",
+          "city:he",
+          "street:en",
+          "street:he"
+        ],
+        "conflicts": [],
+        "localityStatus": "unique_containing_locality",
+        "streetStatus": "matched_with_aliases"
+      },
+      "streetSourceRecord": null,
+      "streetSourceLocalityContributions": null,
+      "finding": "Requested number/street/locality are represented by retained source tags and explicit source-backed aliases. The returned source node point lies outside the frozen reference radius. This is source consistency, not an independent geographic-truth verdict.",
+      "humanVerdict": null
+    },
+    {
+      "caseId": "P061",
+      "query": "Allenby 40 Tel Aviv",
+      "language": "en",
+      "expected": {
+        "place": "Allenby",
+        "latitude": 32.0654,
+        "longitude": 34.7702,
+        "toleranceMeters": 700,
+        "expectedStopId": null
+      },
+      "scoringEarthRadiusMeters": 6371008.8,
+      "savedNear": null,
+      "httpStatus": 200,
+      "providerOutcome": "success",
+      "candidateCount": 1,
+      "topCandidate": {
+        "rank": 1,
+        "distinctRank": 1,
+        "osmType": "N",
+        "osmId": "2079179445",
+        "displayName": null,
+        "displayLanguage": null,
+        "displayLanguageEvidence": "not reported by Photon",
+        "addressType": "house",
+        "addressPrecision": null,
+        "street": "Allenby",
+        "houseNumber": "40",
+        "osmKey": "addr:housenumber",
+        "osmValue": "40",
+        "coordinatesLonLat": [
+          34.768784,
+          32.072365
+        ],
+        "distanceMeters": 785.8830943788963,
+        "withinOriginalTolerance": false,
+        "exactExpectedOsmObject": false
+      },
+      "top1ExcessOverToleranceMeters": 85.883,
+      "sourceHouseRecord": {
+        "place_id": "N2079179445",
+        "object_type": "N",
+        "object_id": 2079179445,
+        "osm_key": "addr:housenumber",
+        "osm_value": "40",
+        "address_type": "house",
+        "housenumber": "40",
+        "address": {
+          "street": "אלנבי"
+        },
+        "extra": {
+          "addr:housenumber": "40",
+          "addr:street": "אלנבי"
+        },
+        "centroid": [
+          34.768784,
+          32.072365
+        ]
+      },
+      "sourceHouseCoordinatesPreserved": true,
+      "houseSourceContributions": {
+        "sourceHouseNodeId": "2079179445",
+        "localitySourceIds": [
+          {
+            "osmType": "R",
+            "osmId": "1382494"
+          }
+        ],
+        "streetWayIds": [
+          "239173014",
+          "762618951",
+          "1134725825",
+          "1197653096"
+        ],
+        "addedAddressAliases": [
+          "city",
+          "city:en",
+          "city:he",
+          "street:en",
+          "street:he"
+        ],
+        "conflicts": [],
+        "localityStatus": "unique_containing_locality",
+        "streetStatus": "matched_with_aliases"
+      },
+      "streetSourceRecord": null,
+      "streetSourceLocalityContributions": null,
+      "finding": "Requested number/street/locality are represented by retained source tags and explicit source-backed aliases. The returned source node point lies outside the frozen reference radius. This is source consistency, not an independent geographic-truth verdict.",
+      "humanVerdict": null
+    },
+    {
+      "caseId": "P062",
+      "query": "HaNevi'im 20 Jerusalem",
+      "language": "en",
+      "expected": {
+        "place": "HaNeviim",
+        "latitude": 31.7828,
+        "longitude": 35.22,
+        "toleranceMeters": 700,
+        "expectedStopId": null
+      },
+      "scoringEarthRadiusMeters": 6371008.8,
+      "savedNear": null,
+      "httpStatus": 200,
+      "providerOutcome": "success",
+      "candidateCount": 8,
+      "topCandidate": {
+        "rank": 1,
+        "distinctRank": 1,
+        "osmType": "N",
+        "osmId": "2270796176",
+        "displayName": null,
+        "displayLanguage": null,
+        "displayLanguageEvidence": "not reported by Photon",
+        "addressType": "house",
+        "addressPrecision": null,
+        "street": "HaNeviim",
+        "houseNumber": "20",
+        "osmKey": "addr:housenumber",
+        "osmValue": "20",
+        "coordinatesLonLat": [
+          35.2275288,
+          31.7835314
+        ],
+        "distanceMeters": 716.2626226750721,
+        "withinOriginalTolerance": false,
+        "exactExpectedOsmObject": false
+      },
+      "top1ExcessOverToleranceMeters": 16.263,
+      "sourceHouseRecord": {
+        "place_id": "N2270796176",
+        "object_type": "N",
+        "object_id": 2270796176,
+        "osm_key": "addr:housenumber",
+        "osm_value": "20",
+        "address_type": "house",
+        "housenumber": "20",
+        "address": {
+          "street": "הנביאים"
+        },
+        "extra": {
+          "addr:housenumber": "20",
+          "addr:street": "הנביאים"
+        },
+        "centroid": [
+          35.2275288,
+          31.7835314
+        ]
+      },
+      "sourceHouseCoordinatesPreserved": true,
+      "houseSourceContributions": {
+        "sourceHouseNodeId": "2270796176",
+        "localitySourceIds": [
+          {
+            "osmType": "R",
+            "osmId": "1381350"
+          }
+        ],
+        "streetWayIds": [
+          "184893897",
+          "184893908",
+          "771909608",
+          "774633464",
+          "774633466",
+          "774633471",
+          "823928167",
+          "998148853",
+          "1001532397",
+          "1001532400",
+          "1001532402",
+          "1079809992",
+          "1182516715",
+          "1182516716"
+        ],
+        "addedAddressAliases": [
+          "city",
+          "city:en",
+          "city:he",
+          "street:en",
+          "street:he"
+        ],
+        "conflicts": [],
+        "localityStatus": "unique_containing_locality",
+        "streetStatus": "matched_with_aliases"
+      },
+      "streetSourceRecord": null,
+      "streetSourceLocalityContributions": null,
+      "finding": "Requested number/street/locality are represented by retained source tags and explicit source-backed aliases. The returned source node point lies outside the frozen reference radius. This is source consistency, not an independent geographic-truth verdict.",
+      "humanVerdict": null
+    },
+    {
+      "caseId": "P063",
+      "query": "Sokolov 30 Ramat Gan",
+      "language": "en",
+      "expected": {
+        "place": "Sokolov RG",
+        "latitude": 32.0836,
+        "longitude": 34.811,
+        "toleranceMeters": 800,
+        "expectedStopId": null
+      },
+      "scoringEarthRadiusMeters": 6371008.8,
+      "savedNear": null,
+      "httpStatus": 200,
+      "providerOutcome": "success",
+      "candidateCount": 1,
+      "topCandidate": {
+        "rank": 1,
+        "distinctRank": 1,
+        "osmType": "N",
+        "osmId": "2323944512",
+        "displayName": null,
+        "displayLanguage": null,
+        "displayLanguageEvidence": "not reported by Photon",
+        "addressType": "house",
+        "addressPrecision": null,
+        "street": "Sokolov",
+        "houseNumber": "30",
+        "osmKey": "addr:housenumber",
+        "osmValue": "30",
+        "coordinatesLonLat": [
+          34.8192454,
+          32.093282
+        ],
+        "distanceMeters": 1327.5674073237374,
+        "withinOriginalTolerance": false,
+        "exactExpectedOsmObject": false
+      },
+      "top1ExcessOverToleranceMeters": 527.567,
+      "sourceHouseRecord": {
+        "place_id": "N2323944512",
+        "object_type": "N",
+        "object_id": 2323944512,
+        "osm_key": "addr:housenumber",
+        "osm_value": "30",
+        "address_type": "house",
+        "housenumber": "30",
+        "address": {
+          "street": "סוקולוב"
+        },
+        "extra": {
+          "addr:housenumber": "30",
+          "addr:street": "סוקולוב"
+        },
+        "centroid": [
+          34.8192454,
+          32.093282
+        ]
+      },
+      "sourceHouseCoordinatesPreserved": true,
+      "houseSourceContributions": {
+        "sourceHouseNodeId": "2323944512",
+        "localitySourceIds": [
+          {
+            "osmType": "R",
+            "osmId": "1382493"
+          }
+        ],
+        "streetWayIds": [
+          "156722185",
+          "157436191"
+        ],
+        "addedAddressAliases": [
+          "city",
+          "city:en",
+          "city:he",
+          "street:en",
+          "street:he"
+        ],
+        "conflicts": [],
+        "localityStatus": "unique_containing_locality",
+        "streetStatus": "matched_with_aliases"
+      },
+      "streetSourceRecord": null,
+      "streetSourceLocalityContributions": null,
+      "finding": "Requested number/street/locality are represented by retained source tags and explicit source-backed aliases. The returned source node point lies outside the frozen reference radius. This is source consistency, not an independent geographic-truth verdict.",
+      "humanVerdict": null
+    },
+    {
+      "caseId": "P064",
+      "query": "Rager Boulevard Beersheba",
+      "language": "en",
+      "expected": {
+        "place": "Rager Blvd",
+        "latitude": 31.253,
+        "longitude": 34.795,
+        "toleranceMeters": 900,
+        "expectedStopId": null
+      },
+      "scoringEarthRadiusMeters": 6371008.8,
+      "savedNear": null,
+      "httpStatus": 200,
+      "providerOutcome": "success",
+      "candidateCount": 1,
+      "topCandidate": {
+        "rank": 1,
+        "distinctRank": 1,
+        "osmType": "W",
+        "osmId": "5005029",
+        "displayName": "Yitzhack Rager Avenue",
+        "displayLanguage": null,
+        "displayLanguageEvidence": "not reported by Photon",
+        "addressType": "street",
+        "addressPrecision": null,
+        "street": null,
+        "houseNumber": null,
+        "osmKey": "highway",
+        "osmValue": "primary",
+        "coordinatesLonLat": [
+          34.79357708190895,
+          31.24372605841935
+        ],
+        "distanceMeters": 1040.050579759611,
+        "withinOriginalTolerance": false,
+        "exactExpectedOsmObject": false
+      },
+      "top1ExcessOverToleranceMeters": 140.051,
+      "sourceHouseRecord": null,
+      "sourceHouseCoordinatesPreserved": null,
+      "houseSourceContributions": null,
+      "streetSourceRecord": {
+        "osmId": "5005029",
+        "tags": {
+          "highway": "primary",
+          "lanes": "3",
+          "maxspeed": "60",
+          "name": "שדרות יצחק רגר",
+          "name:en": "Yitzhack Rager Avenue",
+          "name:he": "שדרות יצחק רגר",
+          "oneway": "yes",
+          "surface": "asphalt"
+        },
+        "coordinateCount": 3,
+        "coordinates": [
+          [
+            34.7935335,
+            31.2436567
+          ],
+          [
+            34.7935661,
+            31.2437086
+          ],
+          [
+            34.7936207,
+            31.2437954
+          ]
+        ]
+      },
+      "streetSourceLocalityContributions": [
+        {
+          "streetWayId": "5005029",
+          "localitySourceId": {
+            "osmType": "R",
+            "osmId": "1377264"
+          }
+        }
+      ],
+      "finding": "Returned named highway way is a street segment represented by its geometry-derived midpoint, with no house precision. The midpoint lies outside the frozen reference radius. The provider returned one segment despite 46 matching named source ways present and emitted; selection cause is not established by saved responses.",
+      "humanVerdict": null
+    },
+    {
+      "caseId": "P065",
+      "query": "הרצל 50 חיפה",
+      "language": "he",
+      "expected": {
+        "place": "Herzl Haifa",
+        "latitude": 32.8156,
+        "longitude": 34.9942,
+        "toleranceMeters": 800,
+        "expectedStopId": null
+      },
+      "scoringEarthRadiusMeters": 6371008.8,
+      "savedNear": null,
+      "httpStatus": 200,
+      "providerOutcome": "success",
+      "candidateCount": 1,
+      "topCandidate": {
+        "rank": 1,
+        "distinctRank": 1,
+        "osmType": "N",
+        "osmId": "13196140834",
+        "displayName": null,
+        "displayLanguage": null,
+        "displayLanguageEvidence": "not reported by Photon",
+        "addressType": "house",
+        "addressPrecision": null,
+        "street": "הרצל",
+        "houseNumber": "50",
+        "osmKey": "addr:housenumber",
+        "osmValue": "50",
+        "coordinatesLonLat": [
+          35.0007915,
+          32.8075269
+        ],
+        "distanceMeters": 1088.7193588079695,
+        "withinOriginalTolerance": false,
+        "exactExpectedOsmObject": false
+      },
+      "top1ExcessOverToleranceMeters": 288.719,
+      "sourceHouseRecord": {
+        "place_id": "N13196140834",
+        "object_type": "N",
+        "object_id": 13196140834,
+        "osm_key": "addr:housenumber",
+        "osm_value": "50",
+        "address_type": "house",
+        "housenumber": "50",
+        "address": {
+          "street": "הרצל",
+          "city": "חיפה"
+        },
+        "extra": {
+          "addr:city": "חיפה",
+          "addr:housenumber": "50",
+          "addr:street": "הרצל"
+        },
+        "centroid": [
+          35.0007915,
+          32.8075269
+        ]
+      },
+      "sourceHouseCoordinatesPreserved": true,
+      "houseSourceContributions": {
+        "sourceHouseNodeId": "13196140834",
+        "localitySourceIds": [
+          {
+            "osmType": "R",
+            "osmId": "1387888"
+          }
+        ],
+        "streetWayIds": [
+          "53441117",
+          "995957808",
+          "995957809",
+          "1053096531",
+          "1053256442"
+        ],
+        "addedAddressAliases": [
+          "city:en",
+          "city:he",
+          "street:en",
+          "street:he"
+        ],
+        "conflicts": [],
+        "localityStatus": "unique_containing_locality",
+        "streetStatus": "matched_with_aliases"
+      },
+      "streetSourceRecord": null,
+      "streetSourceLocalityContributions": null,
+      "finding": "Requested number/street/locality are represented by retained source tags and explicit source-backed aliases. The returned source node point lies outside the frozen reference radius. This is source consistency, not an independent geographic-truth verdict.",
+      "humanVerdict": null
+    }
+  ],
+  "streetRepresentationObservation": {
+    "caseId": "P064",
+    "returnedWayId": "5005029",
+    "sourceNamedRagerWayCount": 46,
+    "matchingWaysEmittedCount": 46,
+    "sourceWayIds": [
+      "5005029",
+      "85146376",
+      "625256351",
+      "625256353",
+      "785839942",
+      "785870373",
+      "785870374",
+      "785870376",
+      "785870377",
+      "785870378",
+      "785870380",
+      "785870381",
+      "785870844",
+      "785870846",
+      "785887081",
+      "785893368",
+      "785893370",
+      "785893371",
+      "785893375",
+      "785896639",
+      "785896641",
+      "785904533",
+      "785904539",
+      "956960392",
+      "956960394",
+      "956960396",
+      "956960397",
+      "956960398",
+      "956960399",
+      "956960400",
+      "956960401",
+      "965944613",
+      "965944614",
+      "965944659",
+      "967508425",
+      "969824414",
+      "969824415",
+      "971622224",
+      "972043712",
+      "1305692061",
+      "1305692070",
+      "1305692075",
+      "1366683872",
+      "1366683873",
+      "1366683874",
+      "1366683875"
+    ],
+    "returnedWayCoordinateCount": 3,
+    "limits": "Named-road segmentation and representative point semantics remain distinct from house precision. Saved responses provide no provider scoring/dedup trace explaining why this segment was chosen. Do not choose a segment using the expected coordinate."
+  },
+  "precisionAndLanguageLimits": [
+    "House outputs preserve source address-node identity, coordinates and raw house numbers; they do not establish rooftop or entrance accuracy.",
+    "Original 15 cases have no independently recorded expected source OSM object ID; geometry tolerance alone does not establish correct house identity.",
+    "OSM-ADDR-EN-001 has geometry top1 success but exact source object only at rank2; the rank1 source node is approximately1.018m away. Source IDs must not be collapsed merely by proximity.",
+    "Photon responses do not expose explicit display-language provenance; source-backed aliases do not justify inventing a returned language field.",
+    "The 169 primary-name exclusions, including19ways with explicit alternative Hebrew/English names, remain disclosed in the street-selection audit; this review does not expand coverage."
+  ],
+  "nextStep": {
+    "action": "Complete independent human/source-groundtruth review of the six-case packet before proposing any expectation revision or geographic correction.",
+    "reviewPacketPath": "services/api/results/m4-photon-enriched-h4-review-20261001-01.md",
+    "missingObservation": "An independent verdict establishing the requested address/street location and the validity of the frozen expected coordinate/radius, rather than copying a provider result into the expectation.",
+    "implementationJustifiedNow": false,
+    "runtimeNeeded": false,
+    "rule": "Keep all six frozen failures and the >=80% criterion unchanged. Source-label consistency is not approval to move expected points, shift house points, widen radii or treat a street match as house precision."
+  },
+  "humanGroundtruthVerdicts": null,
+  "acceptanceLimits": [
+    "16/22 is below80%.",
+    "Original9/15 and unassisted11/17 remain separate from five near-assisted successes.",
+    "No API integration, complete search quality, API p95, full-stack capacity or final H4 acceptance is established."
+  ]
+}
