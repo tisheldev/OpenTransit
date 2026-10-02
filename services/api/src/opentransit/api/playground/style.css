@@ -11,6 +11,8 @@ button:disabled { cursor: wait; opacity: .65; }
 a { color: #146b73; }
 .topbar { display: flex; align-items: center; gap: 16px; padding: 18px 32px; background: white; border-bottom: 1px solid #dfe8e9; }
 .topbar > a:last-child { margin-left: auto; font-size: 14px; text-decoration: none; }
+.topbar > .explorer-link { margin-left: auto; font-size: 14px; text-decoration: none; }
+.topbar > .explorer-link + a { margin-left: 0; }
 .brand { display: flex; align-items: center; gap: 9px; font-size: 20px; font-weight: 750; color: #173b43; text-decoration: none; }
 .brand-mark { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 8px; background: #137c78; color: white; }
 .preview, .scheduled-badge { background: #eef3f4; font-size: 12px; padding: 6px 10px; border-radius: 20px; color: #46616a; white-space: nowrap; }
