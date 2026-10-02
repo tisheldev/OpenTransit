@@ -21,7 +21,12 @@ from opentransit.core.artifacts import verify_artifacts as _verify_artifacts
 from opentransit.core.trip_calls import PINNED_PROJECTION_POLICY, POLICY_ID
 from opentransit.localities import LocalityDataset
 from opentransit.reference import SCHEMA_VERSION as REFERENCE_SCHEMA_VERSION
-from opentransit.reference import ReferenceStore, build_reference
+from opentransit.reference import (
+    ReferenceStore,
+    build_reference,
+    check_reference_integrity,
+    integrity_attestation,
+)
 
 PARSER_VERSION = 2
 MAX_BUILD_MEMORY_GIB = 6
@@ -237,6 +242,7 @@ def _reuse_reference_artifact(
     source_sha256 = _sha256(source_path)
     if source_sha256 != source_entry.get("sha256"):
         raise ValueError("Reference reuse file checksum differs from its manifest")
+    # Opened without an attestation, so SQLite's full integrity check runs on these bytes.
     store = ReferenceStore(source_path, generation_id)
     metadata = store.metadata
     if metadata.source_sha256 != expected_source_sha256:
@@ -259,6 +265,7 @@ def _reuse_reference_artifact(
         **source_entry,
         "reusedFrom": str(source_generation),
         "sha256": source_sha256,
+        "integrityCheck": integrity_attestation(source_sha256),
     }
 
 
@@ -650,9 +657,14 @@ def build_generation(
             reference_metadata = build_reference(
                 artifacts["gtfs"].path, reference_path, generation_id, localities=localities
             )
+            # Check the finished (read-only) file once here, before its digest is sealed, so
+            # serving can rely on the digest instead of repeating this multi-minute pass.
+            check_reference_integrity(reference_path)
+            reference_sha256 = _sha256(reference_path)
             manifest["artifacts"]["reference"] = {
                 "path": reference_path.name,
-                "sha256": _sha256(reference_path),
+                "sha256": reference_sha256,
+                "integrityCheck": integrity_attestation(reference_sha256),
                 "contentSha256": reference_metadata.content_sha256,
                 "counts": reference_metadata.counts,
                 "timingPolicy": reference_metadata.timing_policy,
