@@ -111,6 +111,35 @@ def test_attested_open_skips_integrity_check_but_keeps_content_verification(
         ReferenceStore(built_reference, "other", integrity_attested_sha256=_sha256(built_reference))
 
 
+def test_tuple_row_content_hash_equals_the_row_factory_digest(built_reference, monkeypatch):
+    """Hashing on plain tuples (for speed) yields the digest the Row-factory scan produced."""
+    uri = built_reference.resolve().as_uri() + "?mode=ro&immutable=1"
+
+    def digest(row_factory):
+        connection = sqlite3.connect(uri, uri=True)
+        try:
+            connection.row_factory = row_factory
+            return reference_module._content_hash(connection)
+        finally:
+            connection.close()
+
+    row_digest = digest(sqlite3.Row)  # the previous ReferenceStore computation
+    assert digest(None) == row_digest
+
+    factories = []
+    original = reference_module._content_hash
+
+    def spy(connection, schema_version=None):
+        factories.append(connection.row_factory)
+        return original(connection, schema_version)
+
+    monkeypatch.setattr(reference_module, "_content_hash", spy)
+    store = ReferenceStore(built_reference, "fixture-generation")
+    assert factories == [None]
+    assert store.metadata.content_sha256 == row_digest
+    assert store.stop("station")  # query connections still use sqlite3.Row
+
+
 def test_attested_open_reuses_the_startup_digest(built_reference, monkeypatch):
     digests = ArtifactDigests()
     sha = digests.sha256(built_reference)

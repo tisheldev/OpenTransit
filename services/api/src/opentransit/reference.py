@@ -979,6 +979,10 @@ class ReferenceStore:
                 and values.get("generationId") != expected_generation_id
             ):
                 raise ValueError("Reference database belongs to a different generation")
+            # Hash on plain tuple rows: the digest is identical (it serializes tuple(row)),
+            # but building sqlite3.Row objects for every row of the full ordered scan made
+            # this pass take about 40 s longer on the 3 GB reference.
+            connection.row_factory = None
             if _content_hash(connection, schema_version) != values.get("contentSha256"):
                 raise ValueError("Reference database content verification failed")
         # A composed public generation can reuse these immutable bytes. Verify
