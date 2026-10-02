@@ -150,7 +150,7 @@ init (SUCCESS) -> photon (HEALTHY) ---------------------------^
   Since October 2 the build runs `integrity_check` once before sealing the reference digest and
   records an `integrityCheck` attestation bound to it; verifier and API skip the repeated check
   when the digest they verified carries that attestation. Natively this cut verification from
-  206-251 s to 114-115 s ([measurement](../../services/api/results/api-startup-integrity-20261002-01.json));
+  206-251 s to about 101-120 s ([measurement](../../services/api/results/api-startup-integrity-20261002-01.json));
   container readiness was not re-measured. `oct1b` predates attestations and keeps both full
   checks until it is rebuilt.
 * **G5 (disk).** Measured: unique uncompressed image layers 4.72 GB (data 4.08, Photon 0.42, API

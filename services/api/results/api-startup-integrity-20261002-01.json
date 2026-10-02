@@ -164,9 +164,149 @@
   "For an attested generation, native Python-level startup verification fell from 251.2/205.8 s to 115.3/114.2 s (ReferenceStore open 243.0/197.5 s to 106.7/106.2 s): the full integrity_check (85.7 s alone in the components run) is no longer repeated at serve time. The probe/verifier takes the same skip (covered by tests, not timed here).",
   "oct1b itself is unattested and keeps the full check (after-unattested 207.9 s, in line with before); the saving applies to generations built by the new build code. oct1b was not rebuilt or re-sealed.",
   "PRAGMA quick_check (59.1 s) is not cheap enough to substitute and adds nothing for bytes whose attested digest matched, so it is not used.",
-  "The remaining cost is the logical content hash: 53.4 s on a plain connection but about 93-106 s inside ReferenceStore, whose sqlite3.Row row factory slows the full ordered table scan. It also binds the reference to the running code's timing policy and table set, so it was left unchanged; hashing on a tuple-row connection, or for attested bytes comparing the recorded timing policy and schema instead, are follow-up options.",
+  "The remaining cost is the logical content hash: 53.4 s on a plain connection but about 93-106 s inside ReferenceStore in these runs. The gap was first attributed to ReferenceStore's sqlite3.Row row factory; the follow-up below (tupleRowContentHashFollowUp) does not confirm that. The content hash also binds the reference to the running code's timing policy and table set and was left unchanged in what it covers.",
   "In the H-0 one-core emulation integrity_check took about 212 s and ran in both verifier and API (h0-local-images-20261001-01.json); for an attested generation both repeats are now skipped. Full Docker readiness, the H-0 lane and Fargate startup were not re-measured."
  ],
  "notMeasured": "Docker compose readiness (/readyz 200), the H-0 one-core lane, Fargate startup, probe timing, and the build-time cost of the added integrity_check on a full-size fresh build (expected to be about one integrity_check, 86 s natively here)",
- "tests": "uv run pytest (services/api): 790 passed, 21 skipped, 0 failed (origin/main baseline 780 passed, 21 skipped); new tests in tests/test_reference_integrity_attestation.py"
+ "tests": "uv run pytest (services/api): 790 passed, 21 skipped, 0 failed (origin/main baseline 780 passed, 21 skipped); new tests in tests/test_reference_integrity_attestation.py",
+ "tupleRowContentHashFollowUp": {
+  "recordedAt": "2026-10-02",
+  "source": "71d0f78 (branch perf/api-startup-integrity-check)",
+  "change": "ReferenceStore computes the content hash on its init connection with row_factory=None (plain tuple rows) instead of sqlite3.Row. The hash serializes tuple(row), so the digest is byte-for-byte identical (test_tuple_row_content_hash_equals_the_row_factory_digest; on oct1b the tuple-row ReferenceStore open accepted the embedded contentSha256 e639ab51f81ab6c3022b9362991bf2335d6f38f7e2ed3925aee915c2f775b2ce). Coverage unchanged.",
+  "method": "Same tool, generation and host as above (read-only). Sources: git archive of c553df0 (Row-factory hash) and 71d0f78 (tuple-row hash). Order: components-2, tuple-attested x2, tuple-unattested, then interleaved row/tuple/row/tuple attested runs, then components-3. Host had about 1 GB free RAM during these runs, so the 3.0 GB reference was only partly cached; times are noisy (integrity_check alone ranged 85.7-124.4 s across runs).",
+  "runs": [
+   {
+    "label": "tuple-attested-1",
+    "startedAt": "2026-10-02T12:37:24Z",
+    "source": "71d0f78",
+    "contentHashRows": "tuple",
+    "simulatedIntegrityAttestation": true,
+    "referenceIntegrityVerification": "build-attested-sha256",
+    "totalSeconds": 100.8,
+    "referenceStoreOpenSeconds": 93.3,
+    "otherSeconds": 7.5,
+    "binaryReadBytes": 3874391668
+   },
+   {
+    "label": "tuple-attested-2",
+    "startedAt": "2026-10-02T12:39:06Z",
+    "source": "71d0f78",
+    "contentHashRows": "tuple",
+    "simulatedIntegrityAttestation": true,
+    "referenceIntegrityVerification": "build-attested-sha256",
+    "totalSeconds": 118.5,
+    "referenceStoreOpenSeconds": 110.3,
+    "otherSeconds": 8.2,
+    "binaryReadBytes": 3874391668
+   },
+   {
+    "label": "tuple-unattested-1",
+    "startedAt": "2026-10-02T12:41:06Z",
+    "source": "71d0f78",
+    "contentHashRows": "tuple",
+    "simulatedIntegrityAttestation": false,
+    "referenceIntegrityVerification": "sqlite-integrity-check",
+    "totalSeconds": 190.1,
+    "referenceStoreOpenSeconds": 181.7,
+    "otherSeconds": 8.4,
+    "binaryReadBytes": 3874391668
+   },
+   {
+    "label": "row-attested-i1",
+    "startedAt": "2026-10-02T12:44:41Z",
+    "source": "c553df0",
+    "contentHashRows": "sqlite3.Row",
+    "simulatedIntegrityAttestation": true,
+    "referenceIntegrityVerification": "build-attested-sha256",
+    "totalSeconds": 117.8,
+    "referenceStoreOpenSeconds": 109.3,
+    "otherSeconds": 8.5,
+    "binaryReadBytes": 3874391668
+   },
+   {
+    "label": "tuple-attested-i1",
+    "startedAt": "2026-10-02T12:46:40Z",
+    "source": "71d0f78",
+    "contentHashRows": "tuple",
+    "simulatedIntegrityAttestation": true,
+    "referenceIntegrityVerification": "build-attested-sha256",
+    "totalSeconds": 119.9,
+    "referenceStoreOpenSeconds": 110.0,
+    "otherSeconds": 9.9,
+    "binaryReadBytes": 3874391668
+   },
+   {
+    "label": "row-attested-i2",
+    "startedAt": "2026-10-02T12:48:41Z",
+    "source": "c553df0",
+    "contentHashRows": "sqlite3.Row",
+    "simulatedIntegrityAttestation": true,
+    "referenceIntegrityVerification": "build-attested-sha256",
+    "totalSeconds": 118.5,
+    "referenceStoreOpenSeconds": 110.2,
+    "otherSeconds": 8.3,
+    "binaryReadBytes": 3874391668
+   },
+   {
+    "label": "tuple-attested-i2",
+    "startedAt": "2026-10-02T12:50:40Z",
+    "source": "71d0f78",
+    "contentHashRows": "tuple",
+    "simulatedIntegrityAttestation": true,
+    "referenceIntegrityVerification": "build-attested-sha256",
+    "totalSeconds": 115.2,
+    "referenceStoreOpenSeconds": 106.9,
+    "otherSeconds": 8.3,
+    "binaryReadBytes": 3874391668
+   }
+  ],
+  "components": [
+   {
+    "label": "components-2",
+    "startedAt": "2026-10-02T12:31:55Z",
+    "source": "71d0f78",
+    "referenceBytes": 3035238400,
+    "referenceSha256": "0c63b84c1fc82aa3146c86a7c95d4efbf6e112cff395e0a262188696665aa88a",
+    "integrityCheck": "ok",
+    "quickCheck": "ok",
+    "contentSha256Matches": true,
+    "sha256Seconds": 6.2,
+    "integrityCheckSeconds": 123.0,
+    "quickCheckSeconds": 84.7,
+    "contentHashSeconds": 61.8,
+    "attestedReferenceStoreOpenSeconds": 51.6
+   },
+   {
+    "label": "components-3",
+    "startedAt": "2026-10-02T12:52:37Z",
+    "source": "71d0f78",
+    "referenceBytes": 3035238400,
+    "referenceSha256": "0c63b84c1fc82aa3146c86a7c95d4efbf6e112cff395e0a262188696665aa88a",
+    "integrityCheck": "ok",
+    "quickCheck": "ok",
+    "contentSha256Matches": true,
+    "sha256Seconds": 6.3,
+    "integrityCheckSeconds": 124.4,
+    "quickCheckSeconds": 87.9,
+    "contentHashSeconds": 67.1,
+    "attestedReferenceStoreOpenSeconds": 106.3
+   }
+  ],
+  "interleavedComparison": {
+   "rowFactoryReferenceStoreOpenSeconds": [
+    109.3,
+    110.2
+   ],
+   "tupleRowReferenceStoreOpenSeconds": [
+    110.0,
+    106.9
+   ]
+  },
+  "conclusion": [
+   "No measurable gain: interleaved attested startup runs gave ReferenceStore open 109.3/110.2 s with sqlite3.Row and 110.0/106.9 s with tuple rows (totals 117.8/118.5 s vs 119.9/115.2 s).",
+   "The components runs disagree with each other (tuple-row attested open 51.6 s in components-2, 106.3 s in components-3, against 61.8/67.1 s for the plain-connection hash), so the earlier 93.1 vs 53.4 s gap was not caused by the row factory; its cause (run order, page cache or sorter temp files under memory pressure) is unidentified.",
+   "The change is kept because it is digest-identical and removes per-row object creation, but it should not be counted as a startup saving. Attested startup remains about 107-119 s natively on this host; unattested about 190-208 s."
+  ],
+  "tests": "uv run pytest (services/api): 791 passed, 21 skipped, 0 failed; uv run ruff check . and uv run ruff format --check . clean"
+ }
 }
