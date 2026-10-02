@@ -79,19 +79,22 @@ and [`poc/results/`](poc/results/).
 ## How it works
 
 ```mermaid
-flowchart LR
-  subgraph build["Offline builder (opentransit CLI)"]
-    feeds["MOT GTFS + TripIdToDate<br/>OpenStreetMap"] --> validate["fetch & validate"]
-    validate --> gen["Immutable generation<br/>MOTIS graph · reference SQLite<br/>Photon address index · manifest"]
+flowchart TB
+  feeds["MOT GTFS + TripIdToDate · OpenStreetMap"]
+  subgraph build["Offline builder — opentransit CLI"]
+    direction LR
+    validate["fetch & validate"] --> gen["Immutable generation<br/>MOTIS graph · stop index · addresses · manifest"]
+    gen --> probe["probe & activate"]
   end
-  gen --> probe["probe & activate"]
-  subgraph serve["Serving host (no outbound calls per request)"]
-    api["FastAPI"] --> motis["MOTIS<br/>routing · timetable"]
-    api --> sqlite["Stop & route index<br/>(SQLite FTS5)"]
+  subgraph serve["Serving host — no outbound calls per request"]
+    direction LR
+    api["FastAPI"] --> motis["MOTIS<br/>routing & timetable"]
+    api --> sqlite["SQLite FTS5<br/>stops & routes"]
     api --> photon["Photon<br/>addresses"]
   end
+  feeds --> validate
   probe --> serve
-  client["Client / curl / playground"] --> api
+  client["Client · curl · playground"] --> api
 ```
 
 - **Builder.** `opentransit build-generation` turns one validated feed snapshot into a
