@@ -101,7 +101,8 @@ def test_saturated_semaphore_rejects_fast_without_queueing_and_is_shared(manifes
             await release.wait()
             return httpx.Response(200, json=EMPTY)
 
-        async with running(manifest, engine) as (app, client):
+        # One synthetic client exceeds the M7 per-client burst; this tests capacity only.
+        async with running(manifest, engine, rate_limit_enabled=False) as (app, client):
             held = [
                 asyncio.create_task(client.post("/v1/journeys", json=query))
                 for _ in range(PLANNING_CONCURRENCY)

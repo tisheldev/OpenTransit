@@ -1,0 +1,109 @@
+# Offline checks only: no secrets, no Docker, no feed downloads, no generations.
+# Tests that need a running API (`integration`) or Linux-only facilities skip themselves.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  api:
+    name: API lint and tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      UV_LOCKED: "1"
+      # Pinned in services/api/.python-version and the API Dockerfile.
+      UV_PYTHON: "3.14.6"
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install uv and CPython
+        uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        with:
+          version: "0.11.26"
+          python-version: "3.14.6"
+          enable-cache: true
+          cache-dependency-glob: services/api/uv.lock
+
+      - name: Sync the locked environment
+        run: uv sync --project services/api --locked
+
+      - name: Ruff lint
+        run: uv run --project services/api --locked ruff check services/api/src services/api/tests
+
+      - name: Ruff format
+        run: >-
+          uv run --project services/api --locked
+          ruff format --check services/api/src services/api/tests
+
+      - name: Pytest (offline; integration deselected)
+        run: >-
+          uv run --project services/api --locked
+          pytest services/api/tests -m "not integration" -q -p no:cacheprovider -rs
+
+      - name: Recorded PoC status (reads results only)
+        run: uv run --project services/api --locked python poc/poc_status.py > /dev/null
+
+  playground:
+    name: Playground time helpers
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "22"
+
+      - name: Node tests
+        run: node --test services/api/tests/playground.test.mjs
+
+  whitespace:
+    name: Whitespace (changed lines)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      # Recorded evidence, generated reports and fixtures stay byte-for-byte as captured,
+      # so only lines this change introduces are checked, outside those directories.
+      - name: git diff --check
+        env:
+          EVENT: ${{ github.event_name }}
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+          PUSH_BEFORE: ${{ github.event.before }}
+        run: |
+          if [ "$EVENT" = "pull_request" ]; then
+            base="$PR_BASE"
+          else
+            base="$PUSH_BEFORE"
+          fi
+          if [ -z "$base" ] || ! git cat-file -e "$base^{commit}" 2>/dev/null; then
+            base="$(git rev-parse HEAD~1)"
+          fi
+          git diff --check "$base" HEAD -- . \
+            ':(exclude)services/api/results/**' \
+            ':(exclude)services/api/tests/fixtures/**' \
+            ':(exclude)poc/results/**' \
+            ':(exclude)poc/comparisons/**' \
+            ':(exclude)poc/README.md'

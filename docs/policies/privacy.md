@@ -19,8 +19,10 @@ metrics and synthetic test evidence contain no passenger payloads. Access is res
 to maintainers operating the service. Do not submit personal information in bug reports.
 
 HTTPS ingress necessarily processes your IP address to deliver responses. Any M7
-rate-limit identifiers must be bounded, held only in memory and expire; their identifier
-method and expiry still need approval. Uvicorn and ALB access logs are disabled in the
+rate-limit identifiers must be bounded, held only in memory and expire. The implemented
+method (October 2, pending approval) keys buckets by a per-process keyed digest of the
+address (IPv6 by /64), drops a bucket once it would be full again (at most 30 seconds
+idle at the defaults), bounds the table and keeps nothing across restarts. Uvicorn and ALB access logs are disabled in the
 release design. AWS is the proposed hosting/log processor; region, processor terms and
 cross-border transfers remain to be reviewed. We do not sell request information or
 use it for advertising. Legally required disclosure must be assessed by the operator.

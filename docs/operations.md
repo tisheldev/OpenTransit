@@ -23,6 +23,56 @@ are unhealthy: request-side rejection must remain effective. Inspect ECS service
 stopped-task reasons, init/verifier output, MOTIS/Photon health and resource peaks.
 Startup dependencies do not monitor ongoing health.
 
+## Rate limiting
+
+**Implemented October 2 (M7 groundwork, October 2 gate revision); not yet load-measured
+or approved for publication.** The API keeps in-process token buckets per client and
+request class (`opentransit.api.rate_limit`):
+
+| Class | Requests | Default sustained / burst | Settings |
+| --- | --- | --- | --- |
+| Expensive | `POST /v1/journeys` and `GET /v1/places`, one shared bucket | 30 per minute / 15 | `OPENTRANSIT_RATE_LIMIT_EXPENSIVE_PER_MINUTE`, `_EXPENSIVE_BURST` |
+| Standard | Every other path: reference, departures, trips, `/v1/status`, docs, unmatched | 60 per minute / 20 | `OPENTRANSIT_RATE_LIMIT_STANDARD_PER_MINUTE`, `_STANDARD_BURST` |
+| Exempt | `/healthz`, `/readyz` (ALB and ECS health checks) | none | — |
+
+The standard values are the [system design](system-design.md)'s starting quota; the
+expensive class is the user's October 2 direction and replaces the design's deferred
+journey subquota. Classes are independent. An over-limit request is rejected before its
+body is read with `429 RATE_LIMITED` (`application/problem+json`, `Retry-After` in whole
+seconds, `X-Request-ID`, `Cache-Control: no-store`) and logged as
+`route=rate_limit:<class>` without any client address. Planning-capacity saturation stays
+`503 SERVER_OVERLOADED`; the two are reported separately. Invalid limit settings stop
+startup. `OPENTRANSIT_RATE_LIMIT_ENABLED=0` disables the limiter.
+
+**Client identity.** By default the bucket key is the direct TCP peer and
+`X-Forwarded-For` is ignored. Behind the ALB, set `OPENTRANSIT_TRUSTED_PROXIES` to the
+comma-separated CIDRs the ALB connects from (the task VPC/subnet ranges, such as
+`10.0.0.0/16`); otherwise every passenger shares the ALB node addresses' buckets. Only a
+trusted peer's header is read, from the right, skipping trusted hops: the first untrusted
+address is the client the ALB saw; client-supplied entries to its left are never used,
+and a malformed entry falls back to the nearest valid hop. A catch-all range is
+rejected. The task's security group must admit the API port only from the ALB. Keep
+Uvicorn's own proxy-header trust at its loopback default (do not set
+`FORWARDED_ALLOW_IPS=*`), or clients could choose their own identity. IPv6 clients share
+one bucket per /64. Shared carrier NAT puts many passengers behind one IPv4 address, so
+tune the limits from aggregate evidence before publishing them in the
+[fair-use policy](policies/fair-use.md).
+
+**Store and privacy.** Buckets live in the single API worker's memory, keyed by a
+per-process keyed BLAKE2 digest rather than the address. A bucket is dropped once it
+would be full again (at most 30 seconds idle at the defaults), the table holds at most
+`OPENTRANSIT_RATE_LIMIT_MAX_CLIENTS` buckets (default 10,000; least recently used are
+evicted first) and everything is lost on restart. This suits one worker in one task;
+during rollout overlap or with several tasks/workers each keeps its own buckets, so the
+effective limit multiplies. Add a shared store or edge rule before scaling out.
+
+**Operator measurements.** Load, capacity and acceptance runs from one generator would
+measure the quota instead of the stack: run their target with
+`OPENTRANSIT_RATE_LIMIT_ENABLED=0` (the acceptance runner and M2.5 activation harness set
+it) and test the public 429 path in a separate run with limits on. Never disable the
+limiter on public serving. Root `compose.yaml` keeps the defaults, so corpus tools such as
+`evaluate_search.py` pointed at it will see 429s.
+
 ## Candidate recovery commands
 
 Templates below run from the repository root in an operator-owned workspace, **only
