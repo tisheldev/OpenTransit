@@ -66,6 +66,24 @@ MIN_API_HEALTH_TOLERANCE_SECONDS = 600
 MIN_START_GRACE_SECONDS = 1200
 HEAP = re.compile(r"^-Xmx(\d+)([mMgG])$")
 
+# Rendered release candidates (deploy/aws/tools/publish_generation.py): every image pinned by a
+# concrete digest, account-specific values either still placeholders or well-formed, and the
+# release identity carried as task-definition tags.
+CANDIDATE_PLACEHOLDERS = {"ECR_REGISTRY", "EXECUTION_ROLE_ARN"}
+CONCRETE_DIGEST = re.compile(r"@sha256:[a-f0-9]{64}$")
+ROLE_ARN = re.compile(r"arn:aws:iam::[0-9]{12}:role/[A-Za-z0-9+=,.@_/-]{1,512}")
+ECR_REGISTRY = re.compile(r"[0-9]{12}\.dkr\.ecr\.[a-z0-9-]+\.amazonaws\.com")
+RELEASE_TAGS = {
+    "generation-id": re.compile(r"[a-f0-9]{64}"),
+    "probe-corpus-sha256": re.compile(r"[a-f0-9]{64}"),
+    "verifier-config-sha256": re.compile(r"[a-f0-9]{64}"),
+    "source-checked-at": re.compile(r"\d{4}-\d{2}-\d{2}T[0-9:.]+(Z|[+-]\d{2}:\d{2})"),
+    "coverage-until": re.compile(r"\d{4}-\d{2}-\d{2}T[0-9:.]+(Z|[+-]\d{2}:\d{2})"),
+    "digest-kind": re.compile(r"local-image-id|registry-manifest"),
+}
+# ECS tag limits: at most 50 tags, key <= 128 and value <= 256 characters from this set.
+ECS_TAG_VALUE = re.compile(r"[\w\s+\-=.:/@]{0,256}")
+
 REQUIRED_EDGES = {
     # container -> {dependency: condition}
     "motis": {"init": "SUCCESS"},
@@ -118,8 +136,14 @@ def budget(task: dict) -> dict:
     }
 
 
-def validate_task_definition(task: dict, label: str, motis_digest: str | None = None):
-    """Return (errors, warnings) for one task-definition draft."""
+def validate_task_definition(
+    task: dict, label: str, motis_digest: str | None = None, *, candidate: bool = False
+):
+    """Return (errors, warnings) for one task-definition draft.
+
+    ``candidate=True`` is used by :func:`validate_candidate` for a rendered release revision,
+    which may carry a concrete execution-role ARN instead of the draft placeholder.
+    """
     errors: list[str] = []
     warnings: list[str] = []
 
@@ -139,7 +163,11 @@ def validate_task_definition(task: dict, label: str, motis_digest: str | None = 
         fail("ephemeralStorage must be at least the 20 GiB Fargate default")
     if "taskRoleArn" in task:
         fail("the serving task has no task role (no AWS permissions)")
-    if not str(task.get("executionRoleArn", "")).startswith("{{"):
+    role = str(task.get("executionRoleArn", ""))
+    if candidate:
+        if role != "{{EXECUTION_ROLE_ARN}}" and not ROLE_ARN.fullmatch(role):
+            fail("executionRoleArn must be the placeholder or an IAM role ARN")
+    elif not role.startswith("{{"):
         fail("executionRoleArn must be a placeholder in the draft")
     for key in ("pidMode", "ipcMode", "proxyConfiguration", "placementConstraints"):
         if key in task:
@@ -392,6 +420,55 @@ def validate_task_definition(task: dict, label: str, motis_digest: str | None = 
             fail(f"{name}: engine/provider ports must not be published")
         if "0.0.0.0" in text and name != "api":
             fail(f"{name}: only the API may bind 0.0.0.0")
+    return errors, warnings
+
+
+def validate_candidate(task: dict, label: str, motis_digest: str | None = None):
+    """Return (errors, warnings) for a rendered release candidate task definition.
+
+    Applies every draft rule, then requires concrete image digests (no ``*_DIGEST``
+    placeholders), the verifier on the API image, only account-specific placeholders left, and
+    the release identity tags. Structural only: it says nothing about Fargate behavior.
+    """
+    errors, warnings = validate_task_definition(task, label, motis_digest, candidate=True)
+
+    def fail(message: str) -> None:
+        errors.append(f"{label}: {message}")
+
+    containers = {c.get("name"): c for c in task.get("containerDefinitions", [])}
+    for name, container in containers.items():
+        if not CONCRETE_DIGEST.search(container.get("image", "")):
+            fail(f"{name}: a release candidate pins a concrete sha256 digest")
+    if "verifier" in containers and "api" in containers:
+        if containers["verifier"].get("image") != containers["api"].get("image"):
+            fail("verifier: must run the API image digest")
+    text = json.dumps(task)
+    leftover = set(PLACEHOLDER.findall(text)) - CANDIDATE_PLACEHOLDERS
+    if leftover:
+        fail(f"unresolved placeholders {sorted(leftover)}")
+    for image in (c.get("image", "") for c in containers.values()):
+        registry = image.split("/", 1)[0]
+        if registry != "{{ECR_REGISTRY}}" and not ECR_REGISTRY.fullmatch(registry):
+            fail(f"image registry {registry} must be the placeholder or a private ECR registry")
+    for pattern in SECRET_PATTERNS[:-1]:  # account IDs are legitimate in a concrete candidate
+        if pattern.search(text):
+            fail(f"matches secret-like pattern {pattern.pattern[:30]}")
+    tags = task.get("tags", [])
+    if len(tags) > 50:
+        fail("ECS allows at most 50 tags")
+    values = {}
+    for tag in tags:
+        key, value = str(tag.get("key", "")), str(tag.get("value", ""))
+        if not 1 <= len(key) <= 128 or not ECS_TAG_VALUE.fullmatch(value):
+            fail(f"tag {key!r} violates the ECS tag limits")
+        values[key] = value
+    if values.get("purpose") != "h1-candidate":
+        fail("tag purpose must be h1-candidate")
+    for key, pattern in RELEASE_TAGS.items():
+        if key not in values:
+            fail(f"release tag {key} is required")
+        elif not pattern.fullmatch(values[key]):
+            fail(f"release tag {key} is malformed")
     return errors, warnings
 
 
