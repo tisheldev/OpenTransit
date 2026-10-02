@@ -19,8 +19,21 @@ def test_playground_is_opt_in_and_not_part_of_api_contract(manifest):
             assert all(not path.startswith("/playground") for path in paths)
             if enabled:
                 assert "Journey playground" in page.text
-                for asset in ("app.mjs", "time.mjs", "style.css", "vendor/leaflet.js"):
+                for asset in (
+                    "app.mjs",
+                    "time.mjs",
+                    "style.css",
+                    "vendor/leaflet.js",
+                    "explorer.mjs",
+                    "explorer-request.mjs",
+                    "explorer.css",
+                ):
                     assert client.get("/playground/" + asset).status_code == 200
+                explorer = client.get("/playground/explorer.html")
+                assert explorer.status_code == 200
+                assert "API explorer" in explorer.text
+            else:
+                assert client.get("/playground/explorer.html").status_code == 404
 
 
 def test_playground_enable_environment_is_explicit(monkeypatch):

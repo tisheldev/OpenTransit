@@ -57,6 +57,13 @@ SECRET_PATTERNS = (
 )
 SECRET_NAME = re.compile(r"(?i)(secret|token|password|passwd|credential|api[_-]?key)")
 IMAGE_DIGEST = re.compile(r"@(sha256:[a-f0-9]{64}|\{\{[A-Z_]+_DIGEST\}\})$")
+# ECS container health-check bounds (HealthCheck API reference).
+ECS_HEALTH_LIMITS = {"interval": (5, 300), "timeout": (2, 120), "retries": (1, 10)}
+ECS_MAX_START_PERIOD = 300
+# Local one-core emulation (services/api/results/h0-local-images-20261001-01.json): API
+# lifespan 338 s, task start to /readyz 200 717 s. Both bounds keep roughly 1.7x headroom.
+MIN_API_HEALTH_TOLERANCE_SECONDS = 600
+MIN_START_GRACE_SECONDS = 1200
 HEAP = re.compile(r"^-Xmx(\d+)([mMgG])$")
 
 REQUIRED_EDGES = {
@@ -344,6 +351,24 @@ def validate_task_definition(task: dict, label: str, motis_digest: str | None = 
     motis_check = " ".join(by_name["motis"].get("healthCheck", {}).get("command", []))
     if "127.0.0.1:8080" not in motis_check:
         fail("motis: health check must probe the local engine on 8080")
+    for name, c in by_name.items():
+        check = c.get("healthCheck")
+        if check is None:
+            continue
+        for field, (low, high) in ECS_HEALTH_LIMITS.items():
+            if not low <= check.get(field, 0) <= high:
+                fail(f"{name}: health check {field} must be within ECS limits {low}-{high}")
+        if not 0 <= check.get("startPeriod", 0) <= ECS_MAX_START_PERIOD:
+            fail(f"{name}: health check startPeriod must be at most {ECS_MAX_START_PERIOD}")
+    api_check = by_name["api"].get("healthCheck", {})
+    tolerance = api_check.get("startPeriod", 0) + api_check.get("interval", 0) * api_check.get(
+        "retries", 0
+    )
+    if tolerance < MIN_API_HEALTH_TOLERANCE_SECONDS:
+        fail(
+            f"api: health check tolerates {tolerance} s of startup; the measured lifespan "
+            f"needs at least {MIN_API_HEALTH_TOLERANCE_SECONDS} s"
+        )
     if addresses:
         command = by_name["photon"].get("command", [])
         photon_check = " ".join(by_name["photon"].get("healthCheck", {}).get("command", []))
@@ -385,10 +410,9 @@ def validate_service(service: dict) -> list[str]:
         "ECS rolling controller is required": service.get("deploymentController")
         == {"type": "ECS"},
         "exec must be disabled": service.get("enableExecuteCommand") is False,
-        "health-check grace period is required": isinstance(
-            service.get("healthCheckGracePeriodSeconds"), int
-        )
-        and service["healthCheckGracePeriodSeconds"] > 0,
+        f"health-check grace period must be at least {MIN_START_GRACE_SECONDS} s "
+        "(measured cold start 717 s)": isinstance(service.get("healthCheckGracePeriodSeconds"), int)
+        and service["healthCheckGracePeriodSeconds"] >= MIN_START_GRACE_SECONDS,
         "the only load balancer target is api:8000": [
             (b.get("containerName"), b.get("containerPort"))
             for b in service.get("loadBalancers", [])

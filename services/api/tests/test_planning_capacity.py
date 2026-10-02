@@ -22,7 +22,8 @@ def test_capacity_rejects_seventeenth_request_and_recovers(manifest, query):
             return httpx.Response(200, json={"itineraries": [], "direct": []})
 
         app = create_app(
-            Settings(manifest),
+            # One synthetic client exceeds the M7 per-client burst; this tests capacity only.
+            Settings(manifest, rate_limit_enabled=False),
             transport=httpx.MockTransport(engine),
             clock=lambda: NOW,
         )
@@ -66,7 +67,8 @@ def test_cancelled_request_releases_capacity(manifest, query):
             return httpx.Response(200, json={"itineraries": [], "direct": []})
 
         app = create_app(
-            Settings(manifest),
+            # One synthetic client exceeds the M7 per-client burst; this tests capacity only.
+            Settings(manifest, rate_limit_enabled=False),
             transport=httpx.MockTransport(engine),
             clock=lambda: NOW,
         )

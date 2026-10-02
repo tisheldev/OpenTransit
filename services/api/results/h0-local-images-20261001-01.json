@@ -1,0 +1,471 @@
+{
+  "schemaVersion": 1,
+  "kind": "h0-local-images",
+  "label": "LOCAL DOCKER EMULATION of the recommended Fargate task (1 vCPU / 3 GiB). Not a Fargate, ECR, ALB or cloud result. No AWS access, credentials, resources or spending.",
+  "capturedAt": "2026-10-01T23:55:00Z",
+  "task": "H0-PREP",
+  "branch": "feat/h0-local-images",
+  "host": {
+    "dockerDesktop": "4.37.1",
+    "engine": "27.4.0",
+    "kernel": "5.15.167.4-microsoft-standard-WSL2",
+    "cgroup": "v1 (cgroupfs)",
+    "hostCpus": 16,
+    "oneVcpuEmulation": "every container pinned to cpuset 0 (Compose cannot enforce a task-wide CPU quota)",
+    "storage": "Docker named volumes on the WSL2 ext4 disk (not a Windows bind mount)"
+  },
+  "inputs": {
+    "generationDir": "D:/ot/generations/oct1b",
+    "generationId": "5eb4e43d9456b96a68ee44ffb7a58fe9137ed16bf40a670cf513c34564e44249",
+    "scheduleComponentGenerationId": "8f94fea34cf4a2fa63d45264158d77f3d7012d78385af8fbd42de4d67f5fcaf1",
+    "coverage": "2026-10-01..2026-10-31",
+    "sourceCheckedAt": "2026-10-01T09:19:50.083325+00:00",
+    "graphTreeSha256": "de66244793b1e886fbe0b171e472e7389fd8c353d75f337bd58487c29513fa44",
+    "referenceSha256": "0c63b84c1fc82aa3146c86a7c95d4efbf6e112cff395e0a262188696665aa88a",
+    "photonCheckpointTreeSha256": "b5249eef1013803bd7195b00382215193d7f58a17034f12d782967a29aaf498e",
+    "motisImage": "ghcr.io/motis-project/motis@sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330",
+    "photonJarSha256": "a89707c0045e4807b2a1180e132e68e108d998709f48b6c94b98a6e281f571a5",
+    "temurinImageDigest": "sha256:628467024d428251da635661936d6180717b1ac1119d41c76d28a03b7293c43c",
+    "probeCorpus": "services/api/results/acceptance-oct1b-20261001-02/acceptance-oct1b-20261001-02-probe-queries.json (sha256 05bb7b8ea63518da26789d438db1ae74ae9e2baf4f4bf2732968364e2561e540; per-generation probeTime)",
+    "apiSourceCommit": "6660fc9 (API image built before later main commits were merged)",
+    "draftsBeforeFixes": "6660fc9",
+    "rawRunFiles": "D:/ot/t5-h0 (operator workspace, not in Git)"
+  },
+  "buildSeconds": {
+    "stageBundle": 17.1,
+    "apiImage": 27.1,
+    "photonImage": 20.6,
+    "dataImageFirstBuild": 112,
+    "dataImageRebuild": 81,
+    "dataImageUnpackFromGzip": 30.2,
+    "note": "docker load of the gzip archive restored the identical image ID; an unpack time, not a registry pull"
+  },
+  "images": {
+    "data": {
+      "tag": "ot-t5-data:local",
+      "imageId": "sha256:b6b73bb92404a0d0f59a0a918e675b0e51779f7b3878bc32668dc2ab0c5f6b0f",
+      "uncompressedBytes": 4075244368,
+      "layers": 10,
+      "gzip6Bytes": 801029183
+    },
+    "api": {
+      "tag": "ot-t5-api:local",
+      "imageId": "sha256:e819f089a94f1b5305084f1b0fbcc5a447b0d3d6112124a2d70f234a0b52ae36",
+      "uncompressedBytes": 202147684,
+      "layers": 10,
+      "gzip6Bytes": 75528055
+    },
+    "photon": {
+      "tag": "ot-t5-photon:local",
+      "imageId": "sha256:96aadfab3ee73434d5f0d6e826355d95760588021b46b4152a95aa8b3bc93b93",
+      "uncompressedBytes": 416355954,
+      "layers": 8,
+      "gzip6Bytes": 201554559
+    },
+    "motis": {
+      "tag": "ghcr.io/motis-project/motis@sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330",
+      "imageId": "sha256:76a15c76bcff11c6f0595fed9a170284e49c2d9017c47bf4da6879a0e7452598",
+      "uncompressedBytes": 145646686,
+      "layers": 3,
+      "gzip6Bytes": 66489975
+    }
+  },
+  "imageTotals": {
+    "uncompressedUniqueBytes": 4717234656,
+    "sharedPythonBaseBytes": 122160036,
+    "gzip6SumBytes": 1144601772,
+    "gzipNote": "docker save | gzip -6 per image, before cross-image layer dedup; approximates the ECR compressed pull size"
+  },
+  "attempts": [
+    {
+      "run": "run-01",
+      "outcome": "FAIL",
+      "where": "motis exit 1 while loading the timetable",
+      "cause": "stage_bundle staged only manifest-listed graph files; the graph digest skips zero-byte files, but MOTIS opens routed_shapes_data.bin/routed_shapes_idx.bin (also present: adr/street_segments_*, logs/matches.txt)",
+      "fix": "stage_bundle stages zero-byte graph files from the tree as verified-empty entries"
+    },
+    {
+      "run": "run-02",
+      "outcome": "FAIL (kept as a genuine failed-probe case)",
+      "where": "verifier exit 1 after 396.2 s; api never started; compose up exit 1",
+      "cause": "operator error: staged the raw tools/acceptance-probe-corpus.json, which has no per-generation probeTime; J04/J22/J23 depart 30 September, outside coverage",
+      "fix": "staged the acceptance run -02 resolved corpus"
+    },
+    {
+      "run": "run-03",
+      "outcome": "PASS",
+      "note": "original draft health checks: the API container reported unhealthy during its 338 s lifespan (startPeriod 30 s + 3 x 10 s), then healthy once serving"
+    },
+    {
+      "run": "run-04",
+      "outcome": "PASS",
+      "note": "re-rendered drafts with the fixed health checks; the API was never unhealthy"
+    }
+  ],
+  "hashAndIntegrityCost": {
+    "referenceBytes": 3035238400,
+    "sha256OneCoreSeconds": 24.5,
+    "integrityCheckOneCoreSeconds": 212.2,
+    "attribution": "PRAGMA integrity_check runs in the verifier and again in the API (about 424 s of the 658-717 s cold start); init's double hash of all 3.95 GB took 15 s. Repeated SHA-256 is not the dominant cost on native disk; the earlier ~11 min per full hash came from the Windows share."
+  },
+  "traffic": {
+    "demo": "opentransit demo: 3 labelled scheduled journeys, exit 0, 2 s",
+    "h3Sheet": "h3_review 2026-10-04..18: 31 requests, 3 omitted, 0 errors, 0 mixed-generation",
+    "search": {
+      "variants": 183,
+      "requests": 732,
+      "successful": 732,
+      "top1": 148,
+      "top5": 165,
+      "addresses": "16/22",
+      "clientRoundTripP95MsAll": 102.9,
+      "clientRoundTripP95MsFirstPass": 120.4,
+      "note": "client round trip on one pinned shared core; not comparable to the accepted API-process p95 (42.5 ms)"
+    }
+  },
+  "logSentinels": {
+    "journeyCoordinate": "32.0817731,34.7817731",
+    "placesQuery": "Qzentinel7731 plus Hebrew text",
+    "hits": {
+      "init": 0,
+      "motis": 0,
+      "photon": 0,
+      "verifier": 0,
+      "api": 0
+    },
+    "apiLogShape": "one JSON metrics line per request (timings, outcome, request_id, genid); no coordinates or query text",
+    "scope": "U6 holds for these requests and log levels; not proof for every MOTIS/Photon code path"
+  },
+  "failureSimulations": [
+    {
+      "case": "failed init (one byte appended to the staged config.yml in a derived image)",
+      "expected": "init non-zero; nothing else starts",
+      "observed": "init exit 3 'source bytes differ from the payload manifest: config.yml'; motis/photon/verifier/api never started; compose up exit 1 after 46.5 s; no listener",
+      "pass": true
+    },
+    {
+      "case": "failed probe (run-02: probe journeys outside coverage)",
+      "expected": "verifier exit 1; api never starts",
+      "observed": "verifier exit 1 after 396.2 s; api stayed Created; compose up exit 1",
+      "pass": true
+    },
+    {
+      "case": "expired source check (verifier probe code with now = check + 7 d 1 h)",
+      "expected": "reject",
+      "observed": "status failed, freshness expired, 13.1 s (before the integrity check)",
+      "pass": true
+    },
+    {
+      "case": "future-dated source check (now = check - 1 h)",
+      "expected": "reject",
+      "observed": "status failed, freshness expired, 3.5 s",
+      "pass": true
+    },
+    {
+      "case": "aging source check (now = check + 40 h)",
+      "expected": "serve with warning",
+      "observed": "passed, 10/10 journeys, warning 'Source freshness is aging'",
+      "pass": true
+    },
+    {
+      "case": "engine hung (docker pause motis)",
+      "expected": "/readyz 503; no stale answers",
+      "observed": "first poll after the pause: /readyz 503 ENGINE_TIMEOUT (1.2 s) and journeys 504 ENGINE_TIMEOUT; recovered 0.6 s after unpause",
+      "pass": true
+    },
+    {
+      "case": "address provider down (docker stop photon for 43 s)",
+      "expected": "addresses reported unavailable, not empty",
+      "observed": "/readyz stayed 200 and journeys 200; /v1/places?type=address returned 503 CATEGORY_UNAVAILABLE; restored after restart. On ECS Photon is essential, so its exit stops the task",
+      "pass": true
+    },
+    {
+      "case": "engine process exit",
+      "expected": "ECS stops the task (essential container)",
+      "observed": "not emulated: in Compose the API shares MOTIS's network namespace, so stopping MOTIS removes the API listener; on Fargate the namespace belongs to the task",
+      "pass": null
+    }
+  ],
+  "assumptions": {
+    "U2": "CONFIRMED locally: MOTIS image default user uid 100; runs as 10001 with scratch chowned by init; wget and sh present. Temurin image has curl; Photon runs as 10001",
+    "U3": "CONFIRMED locally: MOTIS reads its listener from /generation/motis/config.yml (0.0.0.0:8080; n_threads=1 under the one-core pin). It listens on all task interfaces, so the task security group is what keeps 8080 private",
+    "U6": "see logSentinels",
+    "U1/U4/U5/U7": "Fargate-only; unverified"
+  },
+  "diskHighWater": {
+    "imagesUncompressedUniqueBytes": 4717234656,
+    "taskVolumesBytes": 3953668096,
+    "containerWritableLayersBytes": 0,
+    "sumBytes": 8670902752,
+    "sumGiB": 8.08,
+    "withCompressedLayersRetainedGiB": 9.14,
+    "fargateEphemeralGiB": 20,
+    "note": "Arithmetic from measured image and volume sizes; Fargate's own reservation and pull staging are unmeasured. Each task has its own 20 GiB, so rollout overlap adds no disk."
+  },
+  "budget": {
+    "limitsMiB": {
+      "motis": 1280,
+      "photon": 768,
+      "api": 512,
+      "init": 192,
+      "verifier": 192,
+      "task": 3072
+    },
+    "utilization": {
+      "motis": "high-water 819 MiB incl. page cache (64%); RSS 354 MiB",
+      "photon": "high-water 407 MiB (53%); RSS 353 MiB",
+      "api": "high-water 512 MiB (100%: reclaimable SQLite page cache, failcnt 0); RSS 218 MiB; docker-stats peak 348 MiB (68%)",
+      "verifier": "docker-stats peak 120 MiB (62%)",
+      "init": "docker-stats peak 24 MiB (13%)"
+    },
+    "perTaskServingMiB": {
+      "highWaterInclCache": 1727.8,
+      "rss": 924.9
+    },
+    "twoTaskOverlapGiB": {
+      "allocated": 6.0,
+      "measuredHighWater": 3.37,
+      "measuredRss": 1.81,
+      "ceiling": 8.0,
+      "note": "2 x one task's high-water, not two tasks run together; ALB memory is unmeasurable"
+    },
+    "oomKills": 0,
+    "verdict": "1 vCPU / 3 GiB holds locally: no container above 85% of its limit except the API's reclaimable page cache; no OOM; no 4 GiB step indicated.",
+    "fallbackRisk": "The no-addresses 0.5 vCPU / 2 GiB variant gives the verifier 128 MiB; it peaked at 120 MiB (94%) here with the composite generation. The integrity-check-bound startup would roughly double at 0.5 vCPU (estimate, not measured)."
+  },
+  "draftFixes": [
+    "stage_bundle: stage zero-byte graph files (run-01 failure)",
+    "service.json healthCheckGracePeriodSeconds 600 -> 1200 (measured 658-717 s to /readyz 200; ECS applies the grace to ALB and container health checks)",
+    "api health check startPeriod 30 -> 300 (ECS maximum), interval 10 -> 30, retries 3 -> 10 (tolerates 600 s; lifespan 274-338 s)",
+    "motis health check retries 12 -> 10 at 15 s and photon retries 18 -> 9 at 20 s (ECS allows at most 10 retries; windows 210 s and 300 s)",
+    "validate_drafts: enforce ECS health-check bounds, the API startup tolerance and the grace floor"
+  ],
+  "operatorNote": "The first data-image build grew Docker Desktop's non-sparse WSL2 disk (on C:) by 7.9 GB (about 4 GB of build context plus 4 GB of layers); freeing space inside Docker does not shrink it. Builders need at least ~10 GB free on the Docker disk.",
+  "stagedPayload": {
+    "files": 155,
+    "bytes": 3953035346,
+    "zeroByteGraphFiles": [
+      "motis/adr/street_segments_data.bin",
+      "motis/adr/street_segments_idx_0.bin",
+      "motis/adr/street_segments_idx_1.bin",
+      "motis/logs/matches.txt",
+      "motis/routed_shapes_data.bin",
+      "motis/routed_shapes_idx.bin"
+    ],
+    "probeQueriesSha256": "05bb7b8ea63518da26789d438db1ae74ae9e2baf4f4bf2732968364e2561e540"
+  },
+  "volumesAfterReadyBytes": {
+    "generation": 3874635776,
+    "photon-data": 78999552,
+    "probe": 16384,
+    "tmp-api": 4096,
+    "tmp-motis": 4096,
+    "tmp-photon": 8192
+  },
+  "coldStart": {
+    "run03": {
+      "composeUpToReadyz200Seconds": 716.7,
+      "initCopyAndVerifySeconds": 15.2,
+      "motisStartToVerifierStartSeconds": 5.8,
+      "verifierSeconds": 355.8,
+      "apiContainerStartToReadyz200Seconds": 338.1,
+      "containers": {
+        "init": {
+          "status": "exited",
+          "exit": "0",
+          "oom": "false",
+          "health": ""
+        },
+        "motis": {
+          "status": "running",
+          "exit": "0",
+          "oom": "false",
+          "health": "healthy"
+        },
+        "photon": {
+          "status": "running",
+          "exit": "0",
+          "oom": "false",
+          "health": "healthy"
+        },
+        "verifier": {
+          "status": "exited",
+          "exit": "0",
+          "oom": "false",
+          "health": ""
+        },
+        "api": {
+          "status": "running",
+          "exit": "0",
+          "oom": "false",
+          "health": "healthy"
+        }
+      }
+    },
+    "run04": {
+      "composeUpToReadyz200Seconds": 658.4,
+      "initCopyAndVerifySeconds": 15.3,
+      "motisStartToVerifierStartSeconds": 5.8,
+      "verifierSeconds": 361.1,
+      "apiContainerStartToReadyz200Seconds": 274.4,
+      "containers": {
+        "init": {
+          "status": "exited",
+          "exit": "0",
+          "oom": "false",
+          "health": ""
+        },
+        "motis": {
+          "status": "running",
+          "exit": "0",
+          "oom": "false",
+          "health": "healthy"
+        },
+        "photon": {
+          "status": "running",
+          "exit": "0",
+          "oom": "false",
+          "health": "healthy"
+        },
+        "verifier": {
+          "status": "exited",
+          "exit": "0",
+          "oom": "false",
+          "health": ""
+        },
+        "api": {
+          "status": "running",
+          "exit": "0",
+          "oom": "false",
+          "health": "healthy"
+        }
+      }
+    }
+  },
+  "memory": {
+    "dockerStatsPeaksRun03": {
+      "api": {
+        "limitMiB": 512.0,
+        "peakCpuPercent": 100.03,
+        "peakMemMiB": 333.8,
+        "samples": 93
+      },
+      "init": {
+        "limitMiB": 192.0,
+        "peakCpuPercent": 82.04,
+        "peakMemMiB": 24.2,
+        "samples": 3
+      },
+      "motis": {
+        "limitMiB": 1280.0,
+        "peakCpuPercent": 47.29,
+        "peakMemMiB": 661.2,
+        "samples": 191
+      },
+      "photon": {
+        "limitMiB": 768.0,
+        "peakCpuPercent": 89.2,
+        "peakMemMiB": 328.7,
+        "samples": 191
+      },
+      "verifier": {
+        "limitMiB": 192.0,
+        "peakCpuPercent": 98.92,
+        "peakMemMiB": 119.8,
+        "samples": 96
+      }
+    },
+    "dockerStatsPeaksRun04": {
+      "api": {
+        "limitMiB": 512.0,
+        "peakCpuPercent": 99.57,
+        "peakMemMiB": 347.8,
+        "samples": 75
+      },
+      "init": {
+        "limitMiB": 192.0,
+        "peakCpuPercent": 77.63,
+        "peakMemMiB": 24.2,
+        "samples": 4
+      },
+      "motis": {
+        "limitMiB": 1280.0,
+        "peakCpuPercent": 11.16,
+        "peakMemMiB": 660.2,
+        "samples": 172
+      },
+      "photon": {
+        "limitMiB": 768.0,
+        "peakCpuPercent": 91.95,
+        "peakMemMiB": 327.1,
+        "samples": 172
+      },
+      "verifier": {
+        "limitMiB": 192.0,
+        "peakCpuPercent": 93.18,
+        "peakMemMiB": 113.0,
+        "samples": 96
+      }
+    },
+    "cgroupAfterReadyRun03": {
+      "motis": {
+        "highWaterMiB": 752.8,
+        "rssMiB": 330.0,
+        "pageCacheMiB": 399.2,
+        "failcnt": 0
+      },
+      "photon": {
+        "highWaterMiB": 347.9,
+        "rssMiB": 327.1,
+        "pageCacheMiB": 15.3,
+        "failcnt": 0
+      },
+      "api": {
+        "highWaterMiB": 512.0,
+        "rssMiB": 217.1,
+        "pageCacheMiB": 278.3,
+        "failcnt": 0
+      }
+    },
+    "cgroupAfterTrafficRun03": {
+      "motis": {
+        "highWaterMiB": 808.7,
+        "rssMiB": 354.0,
+        "pageCacheMiB": 435.2,
+        "failcnt": 0
+      },
+      "photon": {
+        "highWaterMiB": 407.1,
+        "rssMiB": 352.5,
+        "pageCacheMiB": 50.1,
+        "failcnt": 0
+      },
+      "api": {
+        "highWaterMiB": 512.0,
+        "rssMiB": 218.4,
+        "pageCacheMiB": 276.9,
+        "failcnt": 0
+      }
+    },
+    "cgroupFinalRun03": {
+      "motis": {
+        "highWaterMiB": 819.3,
+        "rssMiB": 352.8,
+        "pageCacheMiB": 436.1,
+        "failcnt": 0
+      },
+      "photon": {
+        "highWaterMiB": 340.5,
+        "rssMiB": 333.4,
+        "pageCacheMiB": 1.3,
+        "failcnt": 0
+      },
+      "api": {
+        "highWaterMiB": 512.0,
+        "rssMiB": 218.4,
+        "pageCacheMiB": 11.1,
+        "failcnt": 0
+      }
+    }
+  }
+}

@@ -244,6 +244,12 @@ def _mutations():
     def init_caps(task):
         _container(task, "init")["linuxParameters"]["capabilities"]["drop"] = []
 
+    def ecs_retry_limit(task):
+        _container(task, "motis")["healthCheck"]["retries"] = 12
+
+    def api_check_shorter_than_startup(task):
+        api(task)["healthCheck"].update(interval=10, retries=3, startPeriod=30)
+
     return {
         "extra-engine-port": add_port,
         "second-api-port": second_api_port,
@@ -269,6 +275,8 @@ def _mutations():
         "host-volume": host_volume,
         "wrong-log-group": logs_group,
         "init-keeps-capabilities": init_caps,
+        "health-check-beyond-ecs-limits": ecs_retry_limit,
+        "api-check-shorter-than-measured-startup": api_check_shorter_than_startup,
     }
 
 
@@ -298,6 +306,8 @@ def test_service_target_group_and_edge_rules():
         lambda s: s.update(
             capacityProviderStrategy=[{"capacityProvider": "FARGATE_SPOT", "weight": 1}]
         ),
+        # Shorter than the measured local cold start (717 s to /readyz 200).
+        lambda s: s.update(healthCheckGracePeriodSeconds=600),
     ):
         broken = copy.deepcopy(service)
         mutate(broken)
@@ -555,6 +565,16 @@ def test_stage_bundle_lists_every_artifact_once(tmp_path):
     assert {"manifest.json", "reference.sqlite", "probe-queries.json", "motis/tt.bin"} <= set(
         destinations
     )
+
+
+def test_stage_keeps_zero_byte_graph_files_the_manifest_omits(tmp_path):
+    """The graph digest skips empty files, but MOTIS opens them (routed_shapes_* on oct1b)."""
+    generation = _generation(tmp_path)
+    (generation / "motis" / "routed_shapes_data.bin").write_bytes(b"")
+    result = stage.stage(generation, tmp_path / "staged", force_copy=True)
+    entry = next(f for f in result["files"] if f["dst"] == "motis/routed_shapes_data.bin")
+    assert entry["bytes"] == 0 and entry["sha256"] == hashlib.sha256(b"").hexdigest()
+    assert (tmp_path / "staged" / "payload" / "graph" / "routed_shapes_data.bin").is_file()
 
 
 def test_stage_layout_matches_the_dockerfile_copies(tmp_path):

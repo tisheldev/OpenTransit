@@ -196,6 +196,16 @@ def stage(
         ):
             if item["sha256"] != expected["sha256"]:
                 raise ValueError(f"Graph file changed while staging: {item['path']}")
+        # The graph digest skips zero-byte files, but MOTIS still opens them (for example
+        # routed_shapes_*.bin when no shapes were routed), so stage them as verified-empty.
+        listed = {item["path"] for item in manifest["artifacts"]["motis"]["files"]}
+        graph_dir = generation / "motis"
+        for path in sorted(graph_dir.rglob("*")):
+            relative = path.relative_to(graph_dir).as_posix()
+            if path.is_file() and relative not in listed:
+                if path.stat().st_size:
+                    raise ValueError(f"Graph file outside the manifest: {relative}")
+                add(path, f"graph/{relative}", "generation", f"motis/{relative}")
     except BaseException:
         shutil.rmtree(output, ignore_errors=True)
         raise

@@ -121,7 +121,8 @@ def _mount(volume: str, path: str, read_only: bool) -> dict:
     return {"sourceVolume": volume, "containerPath": path, "readOnly": read_only}
 
 
-def _healthcheck(command: str, *, interval=10, timeout=5, retries=12, start_period=60) -> dict:
+def _healthcheck(command: str, *, interval=15, timeout=5, retries=10, start_period=60) -> dict:
+    """ECS bounds: interval 5-300 s, retries 1-10, startPeriod 0-300 s."""
     return {
         "command": ["CMD-SHELL", command],
         "interval": interval,
@@ -233,7 +234,8 @@ def render_task_definition(variant: str) -> dict:
                 ],
                 healthCheck=_healthcheck(
                     f"curl -fsS http://127.0.0.1:{PHOTON_PORT}/status >/dev/null || exit 1",
-                    retries=18,
+                    interval=20,
+                    retries=9,
                     start_period=120,
                 ),
             )
@@ -326,8 +328,11 @@ def render_task_definition(variant: str) -> dict:
                 '/app/.venv/bin/python -c "import urllib.request;'
                 f"urllib.request.urlopen('http://127.0.0.1:{API_PORT}/healthz',timeout=2)\" "
                 "|| exit 1",
-                retries=3,
-                start_period=30,
+                # Lifespan (reference hash + integrity check) measured 338 s on one core;
+                # 300 s start period (ECS maximum) + 10 x 30 s tolerates 600 s.
+                interval=30,
+                retries=10,
+                start_period=300,
             ),
         )
     )

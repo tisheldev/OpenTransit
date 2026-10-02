@@ -638,6 +638,46 @@ def test_failed_client_close_is_retryable(generation_factory, tmp_path):
     asyncio.run(run())
 
 
+def test_initial_load_verifies_artifacts_once_and_hands_the_digests_to_the_factory(
+    generation_factory, tmp_path, monkeypatch
+):
+    """Startup used to verify the binding twice (initialize, then reload) before the factory."""
+    from collections import Counter
+
+    async def run():
+        directory = generation_factory("verify-once")
+        binding_path = make_binding(directory, "verify-once")
+        current = tmp_path / "current.json"
+        select_file(current, binding_path)
+        reference = (directory / "reference.sqlite").resolve()
+        expected = json.loads((directory / "manifest.json").read_text(encoding="utf-8"))
+        reads = Counter()
+        original_open = Path.open
+
+        def spy(self, mode="r", *args, **kwargs):
+            if "r" in mode and "b" in mode:
+                reads[Path(self).resolve()] += 1
+            return original_open(self, mode, *args, **kwargs)
+
+        monkeypatch.setattr(Path, "open", spy)
+        handed = []
+
+        async def factory(binding):
+            handed.append(binding.artifact_digests)
+            return lease_for(binding)
+
+        manager = SnapshotManager(current, factory, tmp_path / "acks", 0.001, managed_root=tmp_path)
+        await manager.initialize()
+        assert reads[reference] == 1
+        assert handed[0] is not None
+        # The factory reuses the digest the binding check computed instead of rereading.
+        assert handed[0].sha256(reference) == expected["artifacts"]["reference"]["sha256"]
+        assert reads[reference] == 1
+        await manager.aclose()
+
+    asyncio.run(run())
+
+
 @pytest.mark.skipif(os.name != "posix", reason="atomic symlink activation is Linux/POSIX-only")
 def test_rollback_cas_does_not_overwrite_later_selection(generation_factory, tmp_path):
     root = tmp_path
