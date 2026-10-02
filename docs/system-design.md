@@ -457,8 +457,8 @@ Initial proposal: one Uvicorn worker, asynchronous keepalive HTTP to MOTIS, boun
 | Search/departure deadlines | 300 ms dependency; 500 ms endpoint | Bounded failure; p95 target stays 40 ms |
 | Concurrent journeys | 16, no unbounded queue | Protect engine; overload returns 503 |
 | Request body | 16 KiB maximum | Small typed query, no uploads |
-| Client rate quota (M7) | Simple in-app per-IP limiter; starting 60/minute, burst 20 | Tune from evidence including carrier NAT |
-| Journey subquota | Deferred until traffic measurements justify it | Avoid premature policy machinery |
+| Client rate quota (M7) | Simple in-app per-client limiter; starting 60/minute, burst 20 (implemented October 2) | Tune from evidence including carrier NAT |
+| Journey/search subquota | Implemented October 2 at the user's direction: journeys and places share 30/minute, burst 15 ([operations](operations.md#rate-limiting)) | Tune from evidence; supersedes the earlier deferral |
 | Metrics labels | Route template, bounded code/mode | Avoid sensitive/high-cardinality labels |
 
 M7 quotas return 429 + Retry-After; capacity saturation returns 503. A shared bounded engine-client pool also limits combined search/departure load. Pool sizes are measured in M7. No automatic expensive retries near deadline. Operator load probes have a private explicit policy so quotas do not falsify capacity measurements; separately test the public quota path.

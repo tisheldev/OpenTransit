@@ -288,6 +288,7 @@ def test_docker_commands_use_named_capped_isolated_containers(tmp_path):
     )
     _assert_caps(with_photon, "1g")
     assert "OPENTRANSIT_PROBE=/run/opentransit/probe.json" in with_photon
+    assert "OPENTRANSIT_RATE_LIMIT_ENABLED=0" in with_photon
     assert "OPENTRANSIT_PHOTON_URL=http://127.0.0.1:2322" in with_photon
     assert "OPENTRANSIT_MOTIS_URL=http://127.0.0.1:8080" in with_photon
     without = acc.api_argv(

@@ -140,9 +140,10 @@ init (SUCCESS) -> photon (HEALTHY) ---------------------------^
   construction (the October 1 acceptance generation `oct1b` is one); staging it with `stage_bundle` has not been run yet.
   `init` and `stage_bundle` reject slot builds.
 * **G4 (startup cost).** The reference database (about 3.0 GB in the preserved generations) is
-  hashed by init twice, by the verifier once and by the API twice, and `ReferenceStore` runs
+  hashed by init twice, by the verifier once and by the API once (twice before October 2,
+  [measurement](../../services/api/results/api-startup-hash-20261002-01.json)), and `ReferenceStore` runs
   `PRAGMA integrity_check` plus a content hash in both verifier and API. **Measured locally on one
-  core:** compose up to `/readyz` 200 in 717 s and 658 s (init 15 s, verifier 356-361 s, API lifespan
+  core (before the October 2 hashing change):** compose up to `/readyz` 200 in 717 s and 658 s (init 15 s, verifier 356-361 s, API lifespan
   274-338 s). One SHA-256 of the reference takes 24.5 s; `integrity_check` takes 212 s and runs twice,
   so it dominates. `healthCheckGracePeriodSeconds` is now 1200 and the API health check tolerates
   600 s (startPeriod 300, the ECS maximum, + 10 x 30 s). Fargate startup remains unmeasured;

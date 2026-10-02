@@ -7,8 +7,7 @@ import re
 from dataclasses import dataclass, replace
 from pathlib import Path
 
-from opentransit.build.prepare import sha256
-from opentransit.core.artifacts import verify_artifacts
+from opentransit.core.artifacts import ArtifactDigests, verify_artifacts
 from opentransit.core.generation import Generation, instant
 from opentransit.motis import MotisClient
 from opentransit.reference import ReferenceStore
@@ -105,7 +104,11 @@ class RuntimeSnapshot:
         probe_path: Path | None = None,
         address_provider: AddressProviderBinding | None = None,
         address_provider_required: bool = False,
+        digests: ArtifactDigests | None = None,
     ) -> RuntimeSnapshot:
+        # One digest per artifact for this load; ``digests`` may carry those already computed
+        # by the address-provider or binding check of the same startup or activation.
+        digests = ArtifactDigests() if digests is None else digests
         generation = Generation.load(manifest_path)
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
         component_generation_id = manifest.get("scheduleComponentGenerationId", generation.id)
@@ -120,7 +123,7 @@ class RuntimeSnapshot:
             or manifest.get("addressSearch") is not None
         )
         if managed:
-            verified_artifacts = verify_artifacts(manifest_path.parent, manifest)
+            verified_artifacts = verify_artifacts(manifest_path.parent, manifest, digests)
             if manifest.get("addressSearch") is not None:
                 address_metadata = verified_artifacts
         if source_check_path is not None:
@@ -129,7 +132,7 @@ class RuntimeSnapshot:
         reference = None
         if reference_info is not None:
             path = manifest_path.parent / "reference.sqlite"
-            if sha256(path) != reference_info["sha256"]:
+            if digests.sha256(path) != reference_info["sha256"]:
                 raise ValueError("Reference artifact checksum differs from the manifest")
             reference = ReferenceStore(
                 path,

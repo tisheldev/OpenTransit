@@ -84,4 +84,7 @@ task digests, source freshness and generation(s). Compare server journey p95 <35
 and search/departures <40 ms separately from deployed client p95 <400 ms. Record
 full-stack CPU/RAM/disk and task overlap under 8 GiB externally; k6 cannot prove those
 limits, availability, rollback or generation consistency. Public quotas and any private
-quota exemption need separate runs. No acceptance evidence is claimed by this toolkit.
+quota exemption need separate runs: the API's per-client limiter (on by default; see
+[operations](../../docs/operations.md#rate-limiting)) answers one generator with `429`
+within seconds, so capacity runs need `OPENTRANSIT_RATE_LIMIT_ENABLED=0` on the target and
+the quota path is tested with limits on. No acceptance evidence is claimed by this toolkit.

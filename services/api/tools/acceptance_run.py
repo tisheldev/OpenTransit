@@ -533,6 +533,8 @@ def api_argv(
         "OPENTRANSIT_MANIFEST=/generation/manifest.json",
         "OPENTRANSIT_MOTIS_URL=http://127.0.0.1:8080",
         "OPENTRANSIT_PROBE=/run/opentransit/probe.json",
+        # Operator measurement from one client: quotas must not falsify the corpus runs.
+        "OPENTRANSIT_RATE_LIMIT_ENABLED=0",
     ]
     if photon:
         env += [
