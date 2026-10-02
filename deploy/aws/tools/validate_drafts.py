@@ -9,6 +9,7 @@ acceptance test: startup ordering, permissions, memory and draining are proven o
 from __future__ import annotations
 
 import argparse
+import ipaddress
 import json
 import re
 import sys
@@ -37,6 +38,7 @@ KNOWN_PLACEHOLDERS = {
     "VPC_ID",
     "CERTIFICATE_ARN",
     "REVIEWER_CIDR",
+    "VPC_CIDR",
     "TASK_DEFINITION_REVISION",
 }
 # Valid Fargate Linux vCPU units -> allowed memory (MiB).
@@ -74,6 +76,32 @@ REQUIRED_EDGES = {
     "api": {"verifier": "SUCCESS", "motis": "HEALTHY", "photon": "HEALTHY"},
 }
 ESSENTIAL = {"init": False, "verifier": False, "motis": True, "photon": True, "api": True}
+
+
+def trusted_proxies_error(value: str | None) -> str | None:
+    """Why an OPENTRANSIT_TRUSTED_PROXIES value is not an acceptable CIDR list, or None.
+
+    Mirrors the API's parser (comma-separated networks, no catch-all) but is stricter: every
+    entry must be a CIDR with a prefix length (never a bare address), or the ``{{VPC_CIDR}}``
+    token that the deployment step replaces with the task VPC range.
+    """
+    if value is None:
+        return "is missing"
+    entries = [item.strip() for item in value.split(",")]
+    if not value.strip() or any(not item for item in entries):
+        return "must be a non-empty comma-separated CIDR list"
+    for item in entries:
+        if item == "{{VPC_CIDR}}":
+            continue
+        if "/" not in item:
+            return f"entry {item!r} is not a CIDR"
+        try:
+            network = ipaddress.ip_network(item, strict=True)
+        except ValueError:
+            return f"entry {item!r} is not a valid CIDR"
+        if network.prefixlen == 0:
+            return f"entry {item!r} would trust every address"
+    return None
 
 
 def _walk(value):
@@ -318,6 +346,11 @@ def validate_task_definition(task: dict, label: str, motis_digest: str | None = 
         fail("api: OPENTRANSIT_PROBE must be the verifier's output")
     if api_env.get("OPENTRANSIT_PLAYGROUND", "0") != "0":
         fail("api: the playground must stay disabled")
+    if api_env.get("OPENTRANSIT_RATE_LIMIT_ENABLED") != "1":
+        fail("api: OPENTRANSIT_RATE_LIMIT_ENABLED must be explicitly 1")
+    proxies_problem = trusted_proxies_error(api_env.get("OPENTRANSIT_TRUSTED_PROXIES"))
+    if proxies_problem:
+        fail(f"api: OPENTRANSIT_TRUSTED_PROXIES {proxies_problem}")
     photon_vars = {k for k in api_env if k.startswith("OPENTRANSIT_PHOTON")}
     if addresses:
         if (

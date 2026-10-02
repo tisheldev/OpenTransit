@@ -47,7 +47,10 @@ startup. `OPENTRANSIT_RATE_LIMIT_ENABLED=0` disables the limiter.
 **Client identity.** By default the bucket key is the direct TCP peer and
 `X-Forwarded-For` is ignored. Behind the ALB, set `OPENTRANSIT_TRUSTED_PROXIES` to the
 comma-separated CIDRs the ALB connects from (the task VPC/subnet ranges, such as
-`10.0.0.0/16`); otherwise every passenger shares the ALB node addresses' buckets. Only a
+`10.0.0.0/16`); otherwise every passenger shares the ALB node addresses' buckets. The
+[H-0 task-definition drafts](../deploy/aws/README.md) set it to the `{{VPC_CIDR}}` token
+(substituted at deployment; unresolved, the API refuses to start) with the limiter explicitly
+enabled, and the drafts validator rejects a task definition without a CIDR list. Only a
 trusted peer's header is read, from the right, skipping trusted hops: the first untrusted
 address is the client the ALB saw; client-supplied entries to its left are never used,
 and a malformed entry falls back to the nearest valid hop. A catch-all range is
@@ -70,8 +73,10 @@ effective limit multiplies. Add a shared store or edge rule before scaling out.
 measure the quota instead of the stack: run their target with
 `OPENTRANSIT_RATE_LIMIT_ENABLED=0` (the acceptance runner and M2.5 activation harness set
 it) and test the public 429 path in a separate run with limits on. Never disable the
-limiter on public serving. Root `compose.yaml` keeps the defaults, so corpus tools such as
-`evaluate_search.py` pointed at it will see 429s.
+limiter on public serving. Root `compose.yaml` passes `OPENTRANSIT_RATE_LIMIT_ENABLED`
+(default 1) and `OPENTRANSIT_TRUSTED_PROXIES` (default empty) through from the environment, so
+its defaults equal the API's and corpus tools such as `evaluate_search.py` pointed at it will
+see 429s unless you start it with `OPENTRANSIT_RATE_LIMIT_ENABLED=0`.
 
 ## Candidate recovery commands
 
