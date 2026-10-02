@@ -146,8 +146,9 @@ class SnapshotManager:
             raise RuntimeError("Snapshot manager is closed")
         if self._active is not None:
             return self._active[0].snapshot
+        # Only the token is needed here: reload_current rereads and fully verifies the binding.
         binding = await asyncio.to_thread(
-            read_binding, self.current_binding_path, self.managed_root
+            read_binding, self.current_binding_path, self.managed_root, verify=False
         )
         return await self.reload_current(binding.activation_token)
 

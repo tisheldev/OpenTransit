@@ -16,8 +16,9 @@ Upstream data permissions still apply; this policy grants no redistribution lice
 
 When a response is `429`, follow `Retry-After` if supplied; otherwise back off with jitter.
 Back off on `503` overload/unavailability and `504` timeout, with bounded retries; do not
-retry invalid `4xx` requests unchanged. These instructions do not promise that rate-limit
-headers are already implemented. Rate limits may restrict access during overload.
+retry invalid `4xx` requests unchanged. The API sends `429 RATE_LIMITED` with `Retry-After`
+when a per-client limit is exceeded; its starting values are not yet approved for
+publication. Rate limits may restrict access during overload.
 
 Before publication, the operator must set sustained requests/second, burst allowance,
 concurrency, scope (including shared-IP users), counter expiry and exception/contact
