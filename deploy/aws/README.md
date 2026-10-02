@@ -1,17 +1,17 @@
 # AWS ECS Fargate H-0 preparation (drafts)
 
-> **NOT DEPLOYED. NO CLOUD RESOURCES. NO SPENDING.** Everything here is a local draft written
-> without AWS access, credentials, Docker builds or Docker runs. Nothing has been built, pushed,
-> pulled, started or measured. A passing validator means the files agree with each other and with
-> the plan; it is **not** a Fargate result. Region, ingress and spending remain user decisions
-> ([hosting plan](../../docs/next-steps.md#hosting-plan), task T5).
+> **NOT DEPLOYED. NO CLOUD RESOURCES. NO SPENDING.** The images were built and the task was run
+> locally on 1 October 2026 as a one-core Docker Compose emulation for generation `oct1b`
+> ([evidence](../../services/api/results/h0-local-images-20261001-01.json)); nothing was pushed or run in AWS. A passing validator or local run
+> is **not** a Fargate result. Region, ingress and spending remain user decisions
+> ([approval request](../../PROJECT_STATUS.md#h-0-approval-request), [hosting plan](../../docs/next-steps.md#hosting-plan)).
 
 ## What is here
 
 | Path | Purpose | Status |
 | --- | --- | --- |
-| `data-image/Dockerfile`, `data-image/init_generation.py` | Data-initialization image: one generation (+ Photon index) copied into task-local volumes, hashes verified, exit 0 only on success | Draft; init logic unit-tested, image not built |
-| `photon-image/Dockerfile` | Pinned Temurin 21 JRE + pinned Photon 1.3.0 JAR (no index inside) | Draft; not built |
+| `data-image/Dockerfile`, `data-image/init_generation.py` | Data-initialization image: one generation (+ Photon index) copied into task-local volumes, hashes verified, exit 0 only on success | Draft; built and run locally (4.08 GB, gzip 0.80 GB) |
+| `photon-image/Dockerfile` | Pinned Temurin 21 JRE + pinned Photon 1.3.0 JAR (no index inside) | Draft; built and run locally (0.42 GB) |
 | Verifier | **No separate image.** The API image runs `opentransit probe` (same digest as the API) | See "Known gaps" G1/G2 |
 | `ecs/task-definition.json` | Recommended draft (proposal): 1 vCPU / 3 GiB, API + MOTIS + Photon + init + verifier | Draft |
 | `ecs/variants/` | `1vcpu-4gib` (Photon, larger) and `no-addresses` (0.5 vCPU / 2 GiB, no Photon) | Draft |
@@ -20,22 +20,30 @@
 | `iam/` | Execution role (pull four repositories, write one log group) and task role (explicit deny-all) | Draft |
 | `network/security-groups.json` | ALB: 443 from reviewer range; task: 8000 from ALB group only | Draft |
 | `logs/log-group.json` | `/opentransit/h0`, 7-day retention, pre-created (no auto-create) | Draft |
-| `local/compose.yaml` | Generated Compose emulation of the recommended task (shared network namespace, same limits/mounts/ordering) | Draft; not run |
+| `local/compose.yaml` | Generated Compose emulation of the recommended task (shared network namespace, same limits/mounts/ordering) | Draft; run locally (runs 03/04 in the evidence) |
 | `tools/render_drafts.py` | Single source for the three task definitions and the Compose emulation | Tested |
-| `tools/stage_bundle.py` | Verifies a generation with `verify_artifacts` and stages the image build context | Tested on synthetic data |
+| `tools/stage_bundle.py` | Verifies a generation with `verify_artifacts` and stages the image build context | Tested; staged `oct1b` (155 files, 3.95 GB) |
 | `tools/validate_drafts.py` | Structural validator (see below) | Tested |
 
 `{{TOKENS}}` are deliberate placeholders; the validator rejects unknown tokens, literal
 12-digit account IDs and secret-like text. The MOTIS image digest is the one pinned in
 `compose.yaml`.
 
-## Memory and CPU budget (proposal; unmeasured)
+## Memory and CPU budget (proposal; measured locally on one core)
 
 Evidence: MOTIS engine-only load peak 941 MB (September; the preserved M4 serving trial read
 741 MB current / 773 MB peak); Photon provider peak 429-448 MB at `-Xmx512m` under a 1 GiB cap
 (index 78 MB on disk, 237,207 documents); API 122-148 MB RSS (its cgroup peak reads at its
 512 MiB cap because SQLite page cache counts). **No full-stack, CPU or startup measurement
 exists.** Fargate allows 0.5 vCPU with 1-4 GiB and 1 vCPU with 2-8 GiB, in 1 GiB steps.
+
+**Local measurement, 1 October** ([evidence](../../services/api/results/h0-local-images-20261001-01.json); all containers pinned to one core,
+cgroup v1 high-water including page cache, after demo, H3 sheet and 732 search requests): MOTIS
+819 MiB (64% of 1280; RSS 354), Photon 407 MiB (53% of 768; RSS 353), API 512 MiB (at its cap:
+reclaimable SQLite cache, `failcnt` 0; RSS 218), verifier 120 MiB (62% of 192), init 24 MiB. No OOM.
+One task serves at about 1.69 GiB high-water (0.90 GiB RSS); two tasks during overlap would be
+about 3.4 GiB against 6 GiB allocated. The 0.5 vCPU / 2 GiB variant's 128 MiB verifier would sit at
+about 94% and is unmeasured.
 
 Hard container limits (MiB); the sum must stay at or below the task size:
 
@@ -132,29 +140,37 @@ init (SUCCESS) -> photon (HEALTHY) ---------------------------^
   construction (the October 1 acceptance generation `oct1b` is one); staging it with `stage_bundle` has not been run yet.
   `init` and `stage_bundle` reject slot builds.
 * **G4 (startup cost).** The reference database (about 3.0 GB in the preserved generations) is
-  hashed by init twice, by the verifier once and by the API once (twice before October 2), and `ReferenceStore` runs
-  `PRAGMA integrity_check` plus a content hash in both verifier and API. The October 1 acceptance runner measured about 9 minutes (530 s) for the API to become ready on a Windows
-  bind mount (full probe step 576 s). One reference hash over that mount takes about 34 s; `ReferenceStore`'s
-  checks took 169-239 s even on native disk and dominate ([measurement](../../services/api/results/api-startup-hash-20261002-01.json)). Startup time on
-  0.5-1 vCPU Fargate remains unknown; measure before setting
-  `healthCheckGracePeriodSeconds` (draft 600) and `startTimeout` (draft 900).
-* **G5 (disk).** Uncompressed layers total about 4.1 GB (reference 3.0, graph 0.7, address
-  catalog 0.13, Photon tree 0.08, Python base) and `init` writes about 3.9 GB more, plus the
-  API, MOTIS and Photon images. Roughly 9-10 GB of the 20 GiB is expected, before compressed pull
-  staging. Measure; do not assume.
+  hashed by init twice, by the verifier once and by the API once (twice before October 2,
+  [measurement](../../services/api/results/api-startup-hash-20261002-01.json)), and `ReferenceStore` runs
+  `PRAGMA integrity_check` plus a content hash in both verifier and API. **Measured locally on one
+  core (before the October 2 hashing change):** compose up to `/readyz` 200 in 717 s and 658 s (init 15 s, verifier 356-361 s, API lifespan
+  274-338 s). One SHA-256 of the reference takes 24.5 s; `integrity_check` takes 212 s and runs twice,
+  so it dominates. `healthCheckGracePeriodSeconds` is now 1200 and the API health check tolerates
+  600 s (startPeriod 300, the ECS maximum, + 10 x 30 s). Fargate startup remains unmeasured;
+  skipping the API's repeat integrity check when the verifier's report binds the same reference
+  hash would save about 3.5 minutes (not implemented).
+* **G5 (disk).** Measured: unique uncompressed image layers 4.72 GB (data 4.08, Photon 0.42, API
+  0.20 sharing the Python base, MOTIS 0.15), task volumes 3.95 GB, writable layers 0: about
+  8.1 GiB, or 9.1 GiB if the 1.14 GB of compressed layers stay on disk, of 20 GiB. Fargate's own
+  reservation and pull staging remain unmeasured.
+* **G6 (fixed from measurement).** `stage_bundle` now stages zero-byte graph files (the manifest
+  digest skips them, but MOTIS opens `routed_shapes_*.bin`), and health checks respect ECS limits
+  (retries at most 10, startPeriod at most 300 s).
 
 ## Unverified assumptions (each is an H-0 check, not a fact)
 
 * U1 Fargate ephemeral volume ownership and modes (hence root `init`); `readonlyRootFilesystem` works
   for MOTIS (needs only `/tmp`?) and Photon.
-* U2 `curl` exists in the pinned Temurin image, `wget` and a `sh` in the pinned MOTIS image, and
-  MOTIS runs as uid 10001 (image default user unknown); `docker image inspect` commands below.
-* U3 MOTIS reads its listener from `<data dir>/config.yml` (observed layout, not run).
+* U2 **Confirmed locally:** `curl` in the Temurin image, `wget` and `sh` in the MOTIS image; MOTIS
+  defaults to uid 100 but runs as 10001 with init-owned scratch.
+* U3 **Confirmed locally:** MOTIS reads its listener from `<data dir>/config.yml` and listens on
+  `0.0.0.0:8080`, so the task security group is what keeps 8080 private.
 * U4 `startTimeout` of 900 s is accepted for dependent containers and `startPeriod` limits are
   honored as written.
 * U5 `capabilities.drop: ["ALL"]` and the explicit init drop list are accepted by Fargate.
-* U6 MOTIS/Photon logs contain no coordinates, queries or paths. Run coordinate/query sentinels
-  locally before shipping their logs; otherwise remove their `logConfiguration`.
+* U6 MOTIS/Photon logs contain no coordinates, queries or paths. **Local sentinels: 0 hits** in all
+  five containers for a unique coordinate and query (the API logs one metrics line per request);
+  recheck on Fargate with the shipped log levels.
 * U7 Public-subnet task pulling a private ECR image and logging works without NAT; mirror MOTIS
   and Temurin to private ECR with `docker buildx imagetools create` so the digest is preserved.
 
@@ -178,7 +194,7 @@ breaker/Fargate settings; target-group health check; load-balancer logs off; lea
 security-group ports; log group and retention. `tests/test_deploy_aws.py` is in the normal pytest
 invocation and also exercises `init_generation.py` and `stage_bundle.py` on synthetic data.
 
-## Local commands for root (heavy Docker lane; not run by the author)
+## Local commands (heavy Docker lane; run 1 October, see the evidence)
 
 Own prefix `ot-t5-`, API published on `127.0.0.1:58500`. Never touch other containers or volumes.
 Prerequisite: a candidate generation `GEN` that is slot-free (G3) and, for the Photon variant, a
@@ -193,7 +209,11 @@ docker run --rm --user 0 -v <checkpoint-volume>:/c:ro -v "$PWD/.runtime/t5-h0/ph
 ```sh
 WORK=.runtime/t5-h0; mkdir -p "$WORK/jar"
 cp "$RT/m4-photon-spike-20260930/photon-1.3.0.jar" "$WORK/jar/"   # RT = preserved Codex .runtime, read-only use
-PROBE="$RT/m3-functional-evidence-20260930/probe-corpus-02.json"   # >= 10 journeys with probeTime in coverage
+# A corpus whose probeTime values fall inside the generation's coverage (the raw
+# services/api/tools/acceptance-probe-corpus.json has none and fails J04/J22/J23 on oct1b):
+PROBE=services/api/results/acceptance-oct1b-20261001-02/acceptance-oct1b-20261001-02-probe-queries.json
+# Stage on the generation's own volume so hard links work. The data-image build sends about 4 GB
+# of context into Docker's disk and grew a non-sparse WSL2 disk by about 8 GB.
 
 # 1. Stage (hard links; verifies the generation and the Photon tree first)
 uv run --project services/api --locked python deploy/aws/tools/stage_bundle.py \
@@ -229,7 +249,7 @@ curl -s -o /dev/null -w '%{http_code} %{time_total}s\n' http://127.0.0.1:58500/r
 
 # 6. Memory/CPU/disk after warm-up and a few journeys (peak = high-water mark since start)
 for c in motis photon api; do
-  echo $c; docker exec ot-t5-$c sh -c 'cat /sys/fs/cgroup/memory.peak /sys/fs/cgroup/memory.current 2>/dev/null || cat /sys/fs/cgroup/memory/memory.max_usage_in_bytes'
+  echo $c; docker exec ot-t5-$c sh -c 'cat /sys/fs/cgroup/memory.peak 2>/dev/null || cat /sys/fs/cgroup/memory/memory.max_usage_in_bytes'   # cgroup v2 || v1 (Docker Desktop)
 done
 docker stats --no-stream --format '{{.Name}} cpu={{.CPUPerc}} mem={{.MemUsage}}'
 docker run --rm -v ot-t5-h0-recommended_generation:/g:ro alpine du -sm /g
@@ -277,8 +297,6 @@ before creating anything.
 
 ## Open questions for the user
 
-1. Is 1 vCPU / 3 GiB with Photon in the task acceptable as the first measured configuration, or should
-   H-0 start with option (c) (addresses off) while D4 is open?
-2. If 3 GiB fails, may the aggregate ceiling be read on measured usage (so two 4 GiB tasks are
-   allowed), or must it hold by allocation?
-3. G1/G2 are resolved in code (see above) and slot-free builds come from `build-generation` (G3); the staged bundle and images are still unbuilt.
+The consolidated questions (bounded test, region/ingress, first configuration, ceiling basis,
+access, reviewer range and DNS name) are in the dashboard's
+[H-0 approval request](../../PROJECT_STATUS.md#h-0-approval-request).
