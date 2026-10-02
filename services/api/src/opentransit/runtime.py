@@ -10,7 +10,7 @@ from pathlib import Path
 from opentransit.core.artifacts import ArtifactDigests, verify_artifacts
 from opentransit.core.generation import Generation, instant
 from opentransit.motis import MotisClient
-from opentransit.reference import ReferenceStore
+from opentransit.reference import ReferenceStore, attested_integrity_sha256
 
 
 @dataclass(frozen=True)
@@ -134,10 +134,15 @@ class RuntimeSnapshot:
             path = manifest_path.parent / "reference.sqlite"
             if digests.sha256(path) != reference_info["sha256"]:
                 raise ValueError("Reference artifact checksum differs from the manifest")
+            # The digest above was compared with the manifest in this load; when the manifest
+            # also attests a build-time integrity check of those bytes, the repeated check is
+            # skipped. Unattested (older) generations still get the full check.
             reference = ReferenceStore(
                 path,
                 component_generation_id,
                 cursor_generation_id=generation.id,
+                integrity_attested_sha256=attested_integrity_sha256(reference_info),
+                digests=digests,
             )
             if (
                 reference.metadata.source_sha256

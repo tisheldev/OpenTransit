@@ -15,6 +15,7 @@ import io
 import json
 import math
 import os
+import re
 import sqlite3
 import zipfile
 from contextlib import contextmanager
@@ -22,6 +23,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from opentransit.core.artifacts import ArtifactDigests
 from opentransit.core.trip_calls import (
     PINNED_PROJECTION_POLICY,
     SourceCall,
@@ -215,6 +217,43 @@ def _source_hash(path: Path) -> str:
         for block in iter(lambda: stream.read(1 << 20), b""):
             digest.update(block)
     return digest.hexdigest()
+
+
+def check_reference_integrity(path: Path) -> None:
+    """Run SQLite's full ``PRAGMA integrity_check`` on a finished reference file, read-only.
+
+    The build runs this before sealing the file's SHA-256 into the manifest, and records
+    the result with ``integrity_attestation`` so serving can rely on the hash instead.
+    """
+    connection = sqlite3.connect(Path(path).resolve().as_uri() + "?mode=ro", uri=True)
+    try:
+        result = connection.execute("PRAGMA integrity_check").fetchone()[0]
+    finally:
+        connection.close()
+    if result != "ok":
+        raise ValueError("Reference database failed SQLite integrity verification")
+
+
+def integrity_attestation(sha256: str) -> dict[str, str]:
+    """Manifest record that the bytes with ``sha256`` passed a full integrity check."""
+    return {"pragma": "integrity_check", "result": "ok", "sha256": sha256}
+
+
+def attested_integrity_sha256(entry: object) -> str | None:
+    """Return the sealed reference SHA-256 if the manifest attests its build-time check.
+
+    ``entry`` is a manifest's ``artifacts.reference``. Only an attestation bound to the
+    entry's own SHA-256 counts; generations sealed without one (all built before
+    2026-10-02) return None and keep the full integrity check when served.
+    """
+    if not isinstance(entry, dict):
+        return None
+    sha256 = entry.get("sha256")
+    if not isinstance(sha256, str) or not re.fullmatch(r"[a-f0-9]{64}", sha256):
+        return None
+    if entry.get("integrityCheck") != integrity_attestation(sha256):
+        return None
+    return sha256
 
 
 def _content_hash(connection: sqlite3.Connection, schema_version: int | None = None) -> str:
@@ -899,15 +938,35 @@ class ReferenceStore:
         expected_generation_id: str | None = None,
         *,
         cursor_generation_id: str | None = None,
+        integrity_attested_sha256: str | None = None,
+        digests: ArtifactDigests | None = None,
     ) -> None:
+        """Open and verify a reference database.
+
+        By default SQLite's full ``PRAGMA integrity_check`` runs (about 3.5 minutes on one
+        core for the 3 GB reference). ``integrity_attested_sha256`` replaces it with a
+        SHA-256 comparison: pass it only when the generation manifest seals that digest and
+        attests that those exact bytes passed the check at build time
+        (``attested_integrity_sha256``). Identical bytes cannot fail a check they passed,
+        so any corruption or tampering since then changes the digest and is refused here.
+        ``digests`` reuses a digest already computed during the same startup.
+        """
         self.path = Path(path)
         if not self.path.is_file():
             raise FileNotFoundError(self.path)
+        if integrity_attested_sha256 is not None:
+            digests = ArtifactDigests() if digests is None else digests
+            if digests.sha256(self.path) != integrity_attested_sha256:
+                raise ValueError("Reference artifact checksum differs from the manifest")
+            self.integrity_verification = "build-attested-sha256"
+        else:
+            self.integrity_verification = "sqlite-integrity-check"
         self._uri = self.path.resolve().as_uri() + "?mode=ro&immutable=1"
         with self._connect() as connection:
-            result = connection.execute("PRAGMA integrity_check").fetchone()[0]
-            if result != "ok":
-                raise ValueError("Reference database failed SQLite integrity verification")
+            if integrity_attested_sha256 is None:
+                result = connection.execute("PRAGMA integrity_check").fetchone()[0]
+                if result != "ok":
+                    raise ValueError("Reference database failed SQLite integrity verification")
             values = {
                 key: json.loads(value)
                 for key, value in connection.execute("SELECT key, value FROM metadata")
@@ -920,6 +979,10 @@ class ReferenceStore:
                 and values.get("generationId") != expected_generation_id
             ):
                 raise ValueError("Reference database belongs to a different generation")
+            # Hash on plain tuple rows: the digest is identical (it serializes tuple(row)) and
+            # no sqlite3.Row object is built per row of the full ordered scan. No startup
+            # saving was measurable on oct1b (api-startup-integrity-20261002-01.json).
+            connection.row_factory = None
             if _content_hash(connection, schema_version) != values.get("contentSha256"):
                 raise ValueError("Reference database content verification failed")
         # A composed public generation can reuse these immutable bytes. Verify

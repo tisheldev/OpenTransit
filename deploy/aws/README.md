@@ -146,9 +146,13 @@ init (SUCCESS) -> photon (HEALTHY) ---------------------------^
   core (before the October 2 hashing change):** compose up to `/readyz` 200 in 717 s and 658 s (init 15 s, verifier 356-361 s, API lifespan
   274-338 s). One SHA-256 of the reference takes 24.5 s; `integrity_check` takes 212 s and runs twice,
   so it dominates. `healthCheckGracePeriodSeconds` is now 1200 and the API health check tolerates
-  600 s (startPeriod 300, the ECS maximum, + 10 x 30 s). Fargate startup remains unmeasured;
-  skipping the API's repeat integrity check when the verifier's report binds the same reference
-  hash would save about 3.5 minutes (not implemented).
+  600 s (startPeriod 300, the ECS maximum, + 10 x 30 s). Fargate startup remains unmeasured.
+  Since October 2 the build runs `integrity_check` once before sealing the reference digest and
+  records an `integrityCheck` attestation bound to it; verifier and API skip the repeated check
+  when the digest they verified carries that attestation. Natively this cut verification from
+  206-251 s to about 101-120 s ([measurement](../../services/api/results/api-startup-integrity-20261002-01.json));
+  container readiness was not re-measured. `oct1b` predates attestations and keeps both full
+  checks until it is rebuilt.
 * **G5 (disk).** Measured: unique uncompressed image layers 4.72 GB (data 4.08, Photon 0.42, API
   0.20 sharing the Python base, MOTIS 0.15), task volumes 3.95 GB, writable layers 0: about
   8.1 GiB, or 9.1 GiB if the 1.14 GB of compressed layers stay on disk, of 20 GiB. Fargate's own
