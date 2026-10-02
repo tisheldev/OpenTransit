@@ -1,5 +1,6 @@
 """OB-01 month driver end to end on synthetic per-day files (no archive, no downloads)."""
 
+import hashlib
 import json
 import sys
 from datetime import date, timedelta
@@ -81,6 +82,7 @@ def test_aggregate_then_validate_pins_inputs_and_scores_held_out(tmp_path, monke
         )
         == 0
     )
+    assert b"\r" not in month.read_bytes()  # LF on every platform, as Git stores it
     report = json.loads(month.read_text(encoding="utf-8"))
     assert report["serviceDays"] == len(CALIBRATION)
     assert [pin["gtfsKey"][13:23] for pin in report["archivePins"]][0] == "2025/11/02"
@@ -102,6 +104,10 @@ def test_aggregate_then_validate_pins_inputs_and_scores_held_out(tmp_path, monke
             results / "other.json",
         )
 
+    # A Windows autocrlf working copy of the month report must still be pinned by the digest
+    # of the bytes Git commits (LF), or the chain cannot be verified on another checkout.
+    month_crlf = results / "month-crlf.json"
+    month_crlf.write_bytes(month.read_bytes().replace(b"\n", b"\r\n"))
     held_out = results / "held-out.json"
     assert (
         run(
@@ -115,13 +121,15 @@ def test_aggregate_then_validate_pins_inputs_and_scores_held_out(tmp_path, monke
             "--calibration",
             "202511",
             "--calibration-report",
-            month,
+            month_crlf,
             "--output",
             held_out,
         )
         == 0
     )
+    assert b"\r" not in held_out.read_bytes()
     check = json.loads(held_out.read_text(encoding="utf-8"))
+    assert check["calibration"]["reportSha256"] == hashlib.sha256(month.read_bytes()).hexdigest()
     assert check["heldOut"]["serviceDays"] == len(HELD_OUT)
     band = check["stopDelay"]["byStratum"]["publishable"]
     assert band["observations"] == 2 * 2 * len(HELD_OUT) * per_day

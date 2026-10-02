@@ -62,6 +62,7 @@ from opentransit.history.arrivals import (
 )
 from opentransit.history.distributions import day_type, local_hour, percentile
 from opentransit.history.distributions import summary as distribution_summary
+from opentransit.history.evidence import result_sha256, write_result_json
 from opentransit.history.month import (
     BUCKETS,
     MIN_COVERAGE,
@@ -127,10 +128,8 @@ def manifest_path(work: Path, day: date) -> Path:
 
 
 def write_new(path: Path, value: dict) -> None:
-    if path.exists():
-        raise SystemExit(f"refusing to overwrite {path}")
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(value, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    """Results and manifests: LF-only UTF-8 JSON (as Git stores it), never overwritten."""
+    write_result_json(path, value)
 
 
 def fetch(args) -> int:
@@ -303,9 +302,7 @@ def observe_one(args, day: date) -> dict:
             "peakWorkingSetMb": peak_memory_mb(),
         },
     }
-    (partial / "summary.json").write_text(
-        json.dumps(summary, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
-    )
+    write_result_json(partial / "summary.json", summary)
     partial.replace(final)
     return summary
 
@@ -710,7 +707,7 @@ def validate(args) -> int:
         "calibration": {
             "name": args.calibration,
             "report": args.calibration_report.as_posix(),
-            "reportSha256": file_sha256(args.calibration_report),
+            "reportSha256": result_sha256(args.calibration_report),
             "period": calibration_report["period"],
             "tablesDirectory": tables.as_posix(),
             "tableFiles": calibration_report["tables"]["files"],
@@ -892,7 +889,7 @@ def review(args) -> int:
         "task": "OB-01 outlier-segment review (historical replay; not live, not for display)",
         "generatedAt": datetime.now(UTC).isoformat(timespec="seconds"),
         "monthReport": args.report.as_posix(),
-        "monthReportSha256": file_sha256(args.report),
+        "monthReportSha256": result_sha256(args.report),
         "days": [day.isoformat() for day in args.day],
         "method": (
             "For each target route x stop pair, every matched trip on the review days is traced "

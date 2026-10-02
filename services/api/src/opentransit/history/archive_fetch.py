@@ -204,7 +204,7 @@ def extract_members(
             }
     meta["rangeRequests"] = remote.requests
     partial.replace(target)
-    meta_path.write_text(json.dumps(meta, indent=2) + "\n", encoding="utf-8")
+    meta_path.write_text(json.dumps(meta, indent=2) + "\n", encoding="utf-8", newline="\n")
     return meta
 
 

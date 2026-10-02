@@ -2,7 +2,12 @@
   "task": "OB-01 outlier-segment review (historical replay; not live, not for display)",
   "generatedAt": "2026-10-02T00:45:31+00:00",
   "monthReport": "services/api/results/ob01-month-202511-01.json",
-  "monthReportSha256": "91567c925913846657f0f87a13b6599216ba866d849033cf455fd455f302fd89",
+  "monthReportSha256": "550c466cb57882f0dfd42d6e95206efd57bad016ca516d22244133feb8f604b3",
+  "monthReportSha256Correction": {
+    "correctedOn": "2026-10-02",
+    "recordedValue": "91567c925913846657f0f87a13b6599216ba866d849033cf455fd455f302fd89",
+    "note": "The run recorded the SHA-256 of the Windows CRLF working copy of the month report (the writer used platform newlines). Git stores that file with LF (.gitattributes eol=lf), so the recorded value could not be verified on any other checkout. monthReportSha256 was recomputed on 2026-10-02 over the LF bytes of the unchanged content, which equal the committed blob. Only this digest and this note were edited; no finding was recomputed."
+  },
   "days": [
     "2025-11-12",
     "2025-11-15",

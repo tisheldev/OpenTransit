@@ -4,7 +4,12 @@
   "calibration": {
     "name": "202511",
     "report": "services/api/results/ob01-month-202511-01.json",
-    "reportSha256": "91567c925913846657f0f87a13b6599216ba866d849033cf455fd455f302fd89",
+    "reportSha256": "550c466cb57882f0dfd42d6e95206efd57bad016ca516d22244133feb8f604b3",
+    "reportSha256Correction": {
+      "correctedOn": "2026-10-02",
+      "recordedValue": "91567c925913846657f0f87a13b6599216ba866d849033cf455fd455f302fd89",
+      "note": "The run recorded the SHA-256 of the Windows CRLF working copy of the month report (the writer used platform newlines). Git stores that file with LF (.gitattributes eol=lf), so the recorded value could not be verified on any other checkout. reportSha256 was recomputed on 2026-10-02 over the LF bytes of the unchanged content, which equal the committed blob. Only this digest and this note were edited; no figure was recomputed."
+    },
     "period": {
       "start": "2025-11-01",
       "end": "2025-11-30"
