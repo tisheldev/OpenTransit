@@ -5,6 +5,27 @@ from dataclasses import dataclass
 from pathlib import Path
 from urllib.parse import urlsplit
 
+from opentransit.api.rate_limit import BucketPolicy, parse_trusted_proxies
+
+
+def _env_flag(name: str, default: bool) -> bool:
+    value = os.getenv(name)
+    if value is None or value == "":
+        return default
+    if value not in {"0", "1"}:
+        raise ValueError(f"{name} must be 0 or 1")
+    return value == "1"
+
+
+def _env_int(name: str, default: int) -> int:
+    value = os.getenv(name)
+    if value is None or value == "":
+        return default
+    try:
+        return int(value)
+    except ValueError:
+        raise ValueError(f"{name} must be an integer") from None
+
 
 @dataclass(frozen=True)
 class Settings:
@@ -24,8 +45,22 @@ class Settings:
     warmup_attempts: int = 5
     warmup_retry_seconds: float = 0.5
     warmup_recovery_seconds: float = 5.0
+    # M7 per-client limits (token buckets; see docs/operations.md#rate-limiting).
+    rate_limit_enabled: bool = True
+    rate_limit_standard_per_minute: int = 60
+    rate_limit_standard_burst: int = 20
+    rate_limit_expensive_per_minute: int = 30
+    rate_limit_expensive_burst: int = 15
+    rate_limit_max_clients: int = 10_000
+    # CIDRs of the load balancer; X-Forwarded-For is ignored unless the peer is inside one.
+    trusted_proxies: tuple[str, ...] = ()
 
     def __post_init__(self) -> None:
+        BucketPolicy(self.rate_limit_standard_per_minute, self.rate_limit_standard_burst)
+        BucketPolicy(self.rate_limit_expensive_per_minute, self.rate_limit_expensive_burst)
+        if not 100 <= self.rate_limit_max_clients <= 1_000_000:
+            raise ValueError("Rate-limit client table must hold 100-1000000 entries")
+        parse_trusted_proxies(self.trusted_proxies)
         if (
             not 1 <= self.warmup_attempts <= 20
             or not 0 <= self.warmup_retry_seconds <= 10
@@ -110,4 +145,19 @@ class Settings:
             else None,
             photon_url=os.getenv("OPENTRANSIT_PHOTON_URL"),
             photon_admin_url=os.getenv("OPENTRANSIT_PHOTON_ADMIN_URL"),
+            rate_limit_enabled=_env_flag("OPENTRANSIT_RATE_LIMIT_ENABLED", True),
+            rate_limit_standard_per_minute=_env_int(
+                "OPENTRANSIT_RATE_LIMIT_STANDARD_PER_MINUTE", 60
+            ),
+            rate_limit_standard_burst=_env_int("OPENTRANSIT_RATE_LIMIT_STANDARD_BURST", 20),
+            rate_limit_expensive_per_minute=_env_int(
+                "OPENTRANSIT_RATE_LIMIT_EXPENSIVE_PER_MINUTE", 30
+            ),
+            rate_limit_expensive_burst=_env_int("OPENTRANSIT_RATE_LIMIT_EXPENSIVE_BURST", 15),
+            rate_limit_max_clients=_env_int("OPENTRANSIT_RATE_LIMIT_MAX_CLIENTS", 10_000),
+            trusted_proxies=tuple(
+                item.strip()
+                for item in os.getenv("OPENTRANSIT_TRUSTED_PROXIES", "").split(",")
+                if item.strip()
+            ),
         )
