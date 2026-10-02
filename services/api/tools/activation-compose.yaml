@@ -1,9 +1,11 @@
 # Linux Compose harness for local activation/rollback (M2.5). Driven by
 # services/api/tools/activation_compose_harness.py, which supplies every OT_* variable.
-# All names are ot-t2-*; only 127.0.0.1:8300 is published. MOTIS blue/green engines and the
+# All names are <prefix>-* (OT_PREFIX, default ot-t2); only 127.0.0.1:8300 is published. MOTIS blue/green engines and the
 # delay proxy share the API's network namespace because managed bindings are loopback-only.
 # Generation artifacts are read-only mounts of existing data; the managed root volume holds
-# only the current pointer, bindings, evidence and acknowledgements.
+# only the current pointer, bindings, evidence and acknowledgements. The harness passes the
+# project name with -p; activation-compose-composite.yaml overlays complete composite
+# generations (own graph per generation and one sealed Photon each).
 name: ot-t2
 
 x-motis: &motis
@@ -16,7 +18,7 @@ x-motis: &motis
 services:
   api:
     image: ${OT_API_IMAGE:-opentransit-api:latest}
-    container_name: ot-t2-api
+    container_name: ${OT_PREFIX:-ot-t2}-api
     mem_limit: 1g
     memswap_limit: 1g
     ports: ["127.0.0.1:8300:8000"]
@@ -38,7 +40,7 @@ services:
 
   motis-a:
     <<: *motis
-    container_name: ot-t2-motis-a
+    container_name: ${OT_PREFIX:-ot-t2}-motis-a
     command: ["/motis", "server", "-d", "/data"]
     volumes:
       - graph:/data:ro
@@ -46,7 +48,7 @@ services:
 
   motis-b:
     <<: *motis
-    container_name: ot-t2-motis-b
+    container_name: ${OT_PREFIX:-ot-t2}-motis-b
     command: ["/motis", "server", "-d", "/data"]
     volumes:
       - graph:/data:ro
@@ -54,7 +56,7 @@ services:
 
   proxy:
     image: ${OT_API_IMAGE:-opentransit-api:latest}
-    container_name: ot-t2-proxy
+    container_name: ${OT_PREFIX:-ot-t2}-proxy
     network_mode: "service:api"
     mem_limit: 128m
     depends_on: [api]
@@ -70,7 +72,7 @@ services:
 
 volumes:
   root:
-    name: ot-t2-root
+    name: ${OT_PREFIX:-ot-t2}-root
     external: true
   graph:
     name: ${OT_GRAPH_VOLUME:?graph volume}
