@@ -23,7 +23,8 @@
 | `local/compose.yaml` | Generated Compose emulation of the recommended task (shared network namespace, same limits/mounts/ordering) | Draft; run locally (runs 03/04 in the evidence) |
 | `tools/render_drafts.py` | Single source for the three task definitions and the Compose emulation | Tested |
 | `tools/stage_bundle.py` | Verifies a generation with `verify_artifacts` and stages the image build context | Tested; staged `oct1b` (155 files, 3.95 GB) |
-| `tools/validate_drafts.py` | Structural validator (see below) | Tested |
+| `tools/validate_drafts.py` | Structural validator (see below); `validate_candidate` checks rendered release revisions | Tested |
+| `tools/publish_generation.py` | H-1 publisher, local part: verify, stage/build, render a digest-pinned revision, retention and rollback plans ([below](#h-1-generation-publisher-local-no-aws-calls)) | Tested; dry run on `oct1b` 2 October; push path never run |
 
 `{{TOKENS}}` are deliberate placeholders; the validator rejects unknown tokens, literal
 12-digit account IDs and secret-like text. The MOTIS image digest is the one pinned in
@@ -179,7 +180,7 @@ init (SUCCESS) -> photon (HEALTHY) ---------------------------^
 ```sh
 uv run --project services/api --locked python deploy/aws/tools/validate_drafts.py
 uv run --project services/api --locked python deploy/aws/tools/render_drafts.py   # exit 0 = no drift
-uv run --project services/api --locked pytest services/api/tests/test_deploy_aws.py -q
+uv run --project services/api --locked pytest services/api/tests/test_deploy_aws.py services/api/tests/test_deploy_aws_publisher.py -q
 uv run --project services/api --locked ruff check --config services/api/pyproject.toml deploy/aws
 uv run --project services/api --locked ruff format --check --config services/api/pyproject.toml deploy/aws
 ```
@@ -270,6 +271,65 @@ docker rmi ot-t5-data:local ot-t5-api:local ot-t5-photon:local
 Variants: `render_drafts.py --print-compose no-addresses` (also `1vcpu-4gib`) prints their emulation.
 Compose cannot enforce a task-wide CPU quota: 1 vCPU variants pin all containers to one core with
 `cpuset`; the 0.5 vCPU variant is uncapped, so its CPU numbers are not comparable.
+
+## H-1 generation publisher (local; no AWS calls)
+
+`tools/publish_generation.py` is the operator-run part of the H-1 builder/publisher
+([hosting plan](../../docs/next-steps.md#runtime-and-generation-releases)). It starts from a generation
+already built by `opentransit build-generation` and never fetches feeds. **Nothing has been pushed,
+registered or deployed; the AWS path has never been executed.**
+
+| Stage | What it does | Runs when |
+| --- | --- | --- |
+| verify | `verify_artifacts` (manifest, hashes, address composite), slot-free graph (`stage_bundle.check_serving_port`), coverage contains now and source freshness is **current** (the new-candidate rule, `local_operator.currency_reasons`), probe corpus parsed by `opentransit probe`'s own parser with every departure inside coverage, Photon tree equal to the sealed attestation checkpoint, Photon JAR hash | always |
+| stage | `stage_bundle.stage` into `<output>/stage` (hard links where possible, about 4 GB otherwise) | `--build` |
+| build | the H-0 `docker build` commands (API, data with a generation label, Photon), then `docker image inspect` records each local image ID; tags `ot-h1-<image>:gen-<id12>` | `--build` (heavy Docker lane) |
+| render | `render_drafts` task definition with every image pinned by digest; tags `generation-id`, `schedule-component-id`, `probe-corpus-sha256`, `verifier-config-sha256` (hash of the rendered verifier container), `source-checked-at`, `coverage-until`, `digest-kind`, `purpose=h1-candidate`; checked by `validate_drafts.validate_candidate` | when digests are known (`--image-id` or `--build`); never renders an unpinned candidate |
+| retention | protected digests: active, previous, MOTIS and `--pin` evidence digests; with an operator-supplied `aws ecr describe-images` listing, everything else is listed for human review only | always; **never deletes**, no lifecycle rule |
+| rollback | given `--previous-release`, whether rolling back to it would be allowed now (registry-pinned, registered revision, coverage contains now, freshness serviceable: current/aging/stale, never expired) | always with a previous release |
+| push | ECR login, MOTIS mirror (`imagetools create`, digest-preserving), tag/push, re-render with registry manifest digests, `register-task-definition`, `update-service` | separate `push` command; prints steps unless `--execute-aws` |
+
+```sh
+P="uv run --project services/api --locked python deploy/aws/tools/publish_generation.py"
+# Dry run (default): verify + plan; renders when digests are supplied. No Docker, no AWS.
+$P publish --generation "$GEN" --probe-queries "$PROBE" --photon-data "$PHOTON"   --photon-jar-dir "$WORK/jar" --output "$WORK/release-<id12>"   [--image-id api=sha256:... --image-id data=sha256:... --image-id photon=sha256:...]   [--previous-release <serving release-registered.json>] [--pin sha256:...=<evidence file>]   [--registry-images <aws ecr describe-images output>] [--variant no-addresses] [--now <iso>]
+# Local build: stage + docker build (one heavy Docker lane at a time; needs ~10 GB Docker disk).
+$P publish ... --build
+$P retention --current <release> [--previous <release>] [--pin ...] [--registry-images ...]
+$P rollback --previous <release> [--current <release>] [--now <iso>]   # exit 1 = refused
+$P push --plan <release-plan.json> --region il-central-1 --registry <acct>.dkr.ecr.<region>.amazonaws.com   --cluster <c> --service <s> --execution-role-arn <arn>               # prints steps only
+```
+
+Outputs in `--output` (refuses to overwrite an existing `release-plan.json`): `release-plan.json`
+(clock and whether it was overridden, every stage with its status and commands, the verified
+generation, the release record, retention and rollback plans; a refusal is written too) and
+`task-definition.candidate.json`. Exit 0 = ok, 1 = refused, 2 = usage/IO error. A dry-run or
+`--build` candidate pins **local image IDs** (`digest-kind=local-image-id`), which are not ECR
+manifest digests: it is reviewable and validator-clean but not deployable. Only `push` produces
+`task-definition.registered.json` and `release-registered.json` (registry digests and the
+revision ARN), which later retention and rollback runs take as `--current`/`--previous`.
+
+`push --execute-aws` is implemented as one small function that shells out to `aws` and `docker`
+and has **never been run** (no account, region, cluster, repositories or spending approved). It
+re-checks the local image IDs, never deregisters or deletes anything, and so leaves the current
+revision serving if any step fails; a failed deployment rolls back through the service's circuit
+breaker. It does not create repositories, enable tag immutability, wait for the deployment or
+probe the deployed task; rollback is planned, not executed.
+
+**Dry run, 2 October 2026 (read-only, no Docker):** `oct1b` (`D:/ot/generations/oct1b`, never-served
+Photon checkpoint `photon/`, the acceptance probe corpus, the H-0 local image IDs) verified in 11 s:
+freshness `current` (source check 1 October 09:19 UTC), coverage to 1 November, 10 probe cases inside
+coverage, Photon tree `b5249eef…` equal to the attestation; the candidate rendered with zero validator
+errors. The same run with `--now 2026-10-02T16:00Z` was refused `source_aging`. Plans stayed in the
+session scratchpad, not in Git.
+
+**Still open for H-1 (not done):** the scheduler and where builds run (an operator host, a
+scheduled Fargate/CodeBuild job or other) and its separate build limits; the durable source and
+evidence archive before unattended cloud builds (S3 optional); actual ECR repositories, pushes,
+registration and deployment, with the publisher's IAM permissions; post-deployment candidate
+probing and a recorded rollback drill on ECS; renewing an unchanged generation's freshness in a
+task (`OPENTRANSIT_SOURCE_CHECK` is not wired into the image or verifier, so every refresh
+publishes a newly built generation); and a week of unattended refreshes as the H-1 acceptance.
 
 ## Cleanup procedure for a future bounded H-0 test
 
