@@ -1,0 +1,172 @@
+{
+ "schemaVersion": 1,
+ "id": "api-startup-integrity-20261002-01",
+ "kind": "startup verification timing (Python-level, native Windows read of D:); not a Docker or Fargate API readiness measurement",
+ "recordedAt": "2026-10-02",
+ "agent": "Claude Code subagent (branch perf/api-startup-integrity-check)",
+ "beforeSource": "4690466 (origin/main)",
+ "afterSource": "c553df0 (branch perf/api-startup-integrity-check)",
+ "host": {
+  "name": "tisel-pc",
+  "os": "Windows 11 Home 10.0.26200",
+  "cpu": "13th Gen Intel Core i9-13900 (32 logical processors; verification is single-threaded)",
+  "memoryGiB": 15.8,
+  "generationDisk": "D: WDC WDS500G2B0A-00SM50 (SATA SSD)",
+  "python": "3.14.6 (uv venv, services/api)",
+  "sqlite": "3.53.1",
+  "concurrentLoad": "other sessions' Docker containers (ot-demo-api/motis/photon and others) were running; wall times are noisy"
+ },
+ "generation": {
+  "path": "D:/ot/generations/oct1b (read-only; not modified, moved or deleted)",
+  "generationId": "5eb4e43d9456b96a68ee44ffb7a58fe9137ed16bf40a670cf513c34564e44249",
+  "scheduleComponentGenerationId": "8f94fea34cf4a2fa63d45264158d77f3d7012d78385af8fbd42de4d67f5fcaf1",
+  "referenceBytes": 3035238400,
+  "referenceSha256": "0c63b84c1fc82aa3146c86a7c95d4efbf6e112cff395e0a262188696665aa88a",
+  "referenceIntegrityAttestation": "absent: oct1b was sealed before build-time attestations existed (fresh reference build, no reuse), so the after code still runs the full check for it until it is rebuilt"
+ },
+ "change": "The build runs PRAGMA integrity_check on a freshly built reference before sealing its SHA-256 and records artifacts.reference.integrityCheck = {pragma: integrity_check, result: ok, sha256: <sealed digest>}; reused and repaired references are attested after their own full check. API startup (RuntimeSnapshot.load) and the probe/verifier compare the digest with the manifest and, only when the attestation names that same digest, open ReferenceStore with a SHA-256 comparison instead of the full check. The logical content hash, generation-ID check and read-only immutable open are unchanged.",
+ "method": {
+  "tool": "services/api/tools/time_startup_verification.py",
+  "fullSequence": "verify_address_composite + AddressCatalog open, then RuntimeSnapshot.load with shared ArtifactDigests and a stub Photon binding (no network); the unmanaged lifespan order",
+  "sources": "git archive of each commit's services/api/src into a scratch directory; the tool asserts imports come from it",
+  "attestationSimulation": "after-attested runs pass --simulate-integrity-attestation, which treats oct1b's sealed reference digest as attested (the code path a newly built generation takes). It is a timing simulation, not evidence that oct1b was checked at build time.",
+  "components": "components mode times each whole-file pass over reference.sqlite separately on plain connections: SHA-256, PRAGMA integrity_check, PRAGMA quick_check, the logical content hash, then an attested ReferenceStore open (metadata + content hash through ReferenceStore's sqlite3.Row connection)",
+  "order": "before, after-attested, before, after-attested, after-unattested, components; one machine; file cache warm after the first run (3.0 GB fits in RAM), so SHA-256 times are cache-warm",
+  "readCounting": "binary Path.open calls per artifact; sqlite opens are not counted"
+ },
+ "runs": [
+  {
+   "label": "before-1",
+   "startedAt": "2026-10-02T12:06:03Z",
+   "source": "4690466",
+   "simulatedIntegrityAttestation": false,
+   "referenceIntegrityVerification": "sqlite-integrity-check (pre-change)",
+   "totalSeconds": 251.2,
+   "referenceStoreOpenSeconds": 243.0,
+   "otherSeconds": 8.2,
+   "binaryReadBytes": 3874391668,
+   "readsPerArtifact": {
+    "reference.sqlite": 1,
+    "address-catalog.sqlite": 1,
+    "photon-import-attestation.json": 1,
+    "schedule-component-manifest.json": 1,
+    "config.yml": 1
+   }
+  },
+  {
+   "label": "after-attested-1",
+   "startedAt": "2026-10-02T12:10:15Z",
+   "source": "c553df0",
+   "simulatedIntegrityAttestation": true,
+   "referenceIntegrityVerification": "build-attested-sha256",
+   "totalSeconds": 115.3,
+   "referenceStoreOpenSeconds": 106.7,
+   "otherSeconds": 8.6,
+   "binaryReadBytes": 3874391668,
+   "readsPerArtifact": {
+    "reference.sqlite": 1,
+    "address-catalog.sqlite": 1,
+    "photon-import-attestation.json": 1,
+    "schedule-component-manifest.json": 1,
+    "config.yml": 1
+   }
+  },
+  {
+   "label": "before-2",
+   "startedAt": "2026-10-02T12:12:12Z",
+   "source": "4690466",
+   "simulatedIntegrityAttestation": false,
+   "referenceIntegrityVerification": "sqlite-integrity-check (pre-change)",
+   "totalSeconds": 205.8,
+   "referenceStoreOpenSeconds": 197.5,
+   "otherSeconds": 8.3,
+   "binaryReadBytes": 3874391668,
+   "readsPerArtifact": {
+    "reference.sqlite": 1,
+    "address-catalog.sqlite": 1,
+    "photon-import-attestation.json": 1,
+    "schedule-component-manifest.json": 1,
+    "config.yml": 1
+   }
+  },
+  {
+   "label": "after-attested-2",
+   "startedAt": "2026-10-02T12:15:39Z",
+   "source": "c553df0",
+   "simulatedIntegrityAttestation": true,
+   "referenceIntegrityVerification": "build-attested-sha256",
+   "totalSeconds": 114.2,
+   "referenceStoreOpenSeconds": 106.2,
+   "otherSeconds": 8.0,
+   "binaryReadBytes": 3874391668,
+   "readsPerArtifact": {
+    "reference.sqlite": 1,
+    "address-catalog.sqlite": 1,
+    "photon-import-attestation.json": 1,
+    "schedule-component-manifest.json": 1,
+    "config.yml": 1
+   }
+  },
+  {
+   "label": "after-unattested-1",
+   "startedAt": "2026-10-02T12:17:35Z",
+   "source": "c553df0",
+   "simulatedIntegrityAttestation": false,
+   "referenceIntegrityVerification": "sqlite-integrity-check",
+   "totalSeconds": 207.9,
+   "referenceStoreOpenSeconds": 199.6,
+   "otherSeconds": 8.3,
+   "binaryReadBytes": 3874391668,
+   "readsPerArtifact": {
+    "reference.sqlite": 1,
+    "address-catalog.sqlite": 1,
+    "photon-import-attestation.json": 1,
+    "schedule-component-manifest.json": 1,
+    "config.yml": 1
+   }
+  }
+ ],
+ "components": {
+  "startedAt": "2026-10-02T12:21:04Z",
+  "referenceBytes": 3035238400,
+  "referenceSha256": "0c63b84c1fc82aa3146c86a7c95d4efbf6e112cff395e0a262188696665aa88a",
+  "integrityCheck": "ok",
+  "quickCheck": "ok",
+  "contentSha256Matches": true,
+  "sha256Seconds": 6.3,
+  "integrityCheckSeconds": 85.7,
+  "quickCheckSeconds": 59.1,
+  "contentHashSeconds": 53.4,
+  "attestedReferenceStoreOpenSeconds": 93.1
+ },
+ "summary": {
+  "beforeTotalSeconds": [
+   251.2,
+   205.8
+  ],
+  "afterAttestedTotalSeconds": [
+   115.3,
+   114.2
+  ],
+  "afterUnattestedTotalSeconds": [
+   207.9
+  ],
+  "beforeReferenceStoreOpenSeconds": [
+   243.0,
+   197.5
+  ],
+  "afterAttestedReferenceStoreOpenSeconds": [
+   106.7,
+   106.2
+  ]
+ },
+ "conclusion": [
+  "For an attested generation, native Python-level startup verification fell from 251.2/205.8 s to 115.3/114.2 s (ReferenceStore open 243.0/197.5 s to 106.7/106.2 s): the full integrity_check (85.7 s alone in the components run) is no longer repeated at serve time. The probe/verifier takes the same skip (covered by tests, not timed here).",
+  "oct1b itself is unattested and keeps the full check (after-unattested 207.9 s, in line with before); the saving applies to generations built by the new build code. oct1b was not rebuilt or re-sealed.",
+  "PRAGMA quick_check (59.1 s) is not cheap enough to substitute and adds nothing for bytes whose attested digest matched, so it is not used.",
+  "The remaining cost is the logical content hash: 53.4 s on a plain connection but about 93-106 s inside ReferenceStore, whose sqlite3.Row row factory slows the full ordered table scan. It also binds the reference to the running code's timing policy and table set, so it was left unchanged; hashing on a tuple-row connection, or for attested bytes comparing the recorded timing policy and schema instead, are follow-up options.",
+  "In the H-0 one-core emulation integrity_check took about 212 s and ran in both verifier and API (h0-local-images-20261001-01.json); for an attested generation both repeats are now skipped. Full Docker readiness, the H-0 lane and Fargate startup were not re-measured."
+ ],
+ "notMeasured": "Docker compose readiness (/readyz 200), the H-0 one-core lane, Fargate startup, probe timing, and the build-time cost of the added integrity_check on a full-size fresh build (expected to be about one integrity_check, 86 s natively here)",
+ "tests": "uv run pytest (services/api): 790 passed, 21 skipped, 0 failed (origin/main baseline 780 passed, 21 skipped); new tests in tests/test_reference_integrity_attestation.py"
+}
