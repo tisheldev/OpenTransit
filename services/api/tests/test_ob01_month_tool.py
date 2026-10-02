@@ -128,3 +128,36 @@ def test_aggregate_then_validate_pins_inputs_and_scores_held_out(tmp_path, monke
     assert 0.0 < band["belowP50"] < 1.0  # same distribution: roughly central
     segment = check["segmentRunTime"]["byStratum"]["publishable"]
     assert segment["medianAbsErrorSeconds"]["calibrationP50"] <= 30
+
+
+def test_review_targets_merge_pilot_pairs_and_slowest_rows_by_route_and_stops():
+    row = {
+        "routeId": "7",
+        "fromStopId": "A",
+        "toStopId": "B",
+        "hour": 8,
+        "dayType": "weekday",
+        "samples": 30,
+        "coverage": 0.9,
+        "serviceDays": 5,
+        "scheduledSecondsMedian": 120,
+        "runP10Seconds": 100,
+        "runP50Seconds": 900,
+        "runP90Seconds": 1500,
+        "publishable": True,
+        "ratioP50": 7.5,
+    }
+    report = {
+        "pilotOutlierStopPairs": [row],
+        "slowestPublishableSegmentsVsSchedule": [row | {"hour": 9}, row | {"routeId": "8"}],
+    }
+    targets = ob01_month.review_targets(report, top=10)
+    assert [(t["routeId"], [r["hour"] for r in t["monthRows"]]) for t in targets] == [
+        ("7", [8, 9]),
+        ("8", [8]),
+    ]
+    stops = {
+        "A": {"name": "a", "lat": 31.78, "lon": 35.23},
+        "B": {"name": "b", "lat": 32.0, "lon": 35.0},
+    }
+    assert ob01_month.nearest_stop(stops, (31.7801, 35.23))["stopId"] == "A"

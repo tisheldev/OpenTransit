@@ -1,0 +1,1640 @@
+{
+  "task": "OB-01 held-out validation (historical replay; not live, not for public display)",
+  "generatedAt": "2026-10-02T01:05:16+00:00",
+  "calibration": {
+    "name": "202511",
+    "report": "services/api/results/ob01-month-202511-01.json",
+    "reportSha256": "91567c925913846657f0f87a13b6599216ba866d849033cf455fd455f302fd89",
+    "period": {
+      "start": "2025-11-01",
+      "end": "2025-11-30"
+    },
+    "tablesDirectory": "D:/ot/open-bus-archive/ob01-month/tables/202511",
+    "tableFiles": [
+      {
+        "file": "delays-00.csv.gz",
+        "rows": 239896,
+        "sha256": "3c224e89c05cb56d0d7ef5c6069fee699c141bcf834281115f3830406c88ff75"
+      },
+      {
+        "file": "segments-00.csv.gz",
+        "rows": 234129,
+        "sha256": "cf40dca48a4a19124e7d19da8d472c3323bc4c05d15847b5df8aca7b7368e736"
+      },
+      {
+        "file": "delays-01.csv.gz",
+        "rows": 250659,
+        "sha256": "b4c23670bfda823b0915381015e7115947ff335ac73dc38d17001e41dcef3850"
+      },
+      {
+        "file": "segments-01.csv.gz",
+        "rows": 244706,
+        "sha256": "93043405e1a69f9f805e006b7376962255a83696d5abb4a9159099083d3c9282"
+      },
+      {
+        "file": "delays-02.csv.gz",
+        "rows": 201724,
+        "sha256": "c9b60f3042b0b78c2bf08a2ae982010f66b82cd82336eda14073c81754490a75"
+      },
+      {
+        "file": "segments-02.csv.gz",
+        "rows": 196953,
+        "sha256": "9f6a3ba75eb069fc34d1d9f04536b45b0e10760c68b5e63227ab91eab1906a7d"
+      },
+      {
+        "file": "delays-03.csv.gz",
+        "rows": 211955,
+        "sha256": "bdd27e3a53d5cc19013e34b44543ab94ee9afde7add05dc4f3315db6d86df8f4"
+      },
+      {
+        "file": "segments-03.csv.gz",
+        "rows": 206915,
+        "sha256": "23e46526c2aa7e312f73058709ad9859e116a19380ff15d63682b5abc69f23ff"
+      },
+      {
+        "file": "delays-04.csv.gz",
+        "rows": 204217,
+        "sha256": "8e62832bff1991dee3622a634f81a644516bb17e569f1e3e664f9d87cda39d89"
+      },
+      {
+        "file": "segments-04.csv.gz",
+        "rows": 199256,
+        "sha256": "4f079c60cc565cdc0a3859bf984baa3c44965d8c95ee936d70c3e920bf212c99"
+      },
+      {
+        "file": "delays-05.csv.gz",
+        "rows": 200295,
+        "sha256": "44fce6d5f9bc3dd85aa4eb1fb363c0a01e5dbf1392acd85dab42bcd3d8219824"
+      },
+      {
+        "file": "segments-05.csv.gz",
+        "rows": 195550,
+        "sha256": "ff127f246f4e2ad240cb466de878a714bc07a6aa5e1c5d93833c282e92e318fc"
+      },
+      {
+        "file": "delays-06.csv.gz",
+        "rows": 238832,
+        "sha256": "7b63f91fd283fa4f81988d16ab7e9e09ffd509d276d03ddb985b378e75334d70"
+      },
+      {
+        "file": "segments-06.csv.gz",
+        "rows": 233145,
+        "sha256": "5e3607d7659db8be133f211b3877e7143792c2d04df3c67de43bdf1ca109af30"
+      },
+      {
+        "file": "delays-07.csv.gz",
+        "rows": 263972,
+        "sha256": "edd6217c26c1cbcb2d9a514b25938ece92496b1b7b03c21e25d48a5e6a24a820"
+      },
+      {
+        "file": "segments-07.csv.gz",
+        "rows": 257590,
+        "sha256": "b8f8e8ff14856f53af07d0fdde3277809a0d79f1fa91a94f528f6c2a458e91ba"
+      },
+      {
+        "file": "delays-08.csv.gz",
+        "rows": 229367,
+        "sha256": "8dacf6d1553f4b227d318beb1fe0397bf5e8413dea29edf0bd81600c043a1ce7"
+      },
+      {
+        "file": "segments-08.csv.gz",
+        "rows": 223741,
+        "sha256": "f8a5d6bc52a5a3ceb7dabf46e02d03d562dc9504012685af8b9b0d06cdaf479e"
+      },
+      {
+        "file": "delays-09.csv.gz",
+        "rows": 209069,
+        "sha256": "52988d8c0bdc8ba20a2dd59d2099a61d38d94f5bb60234285adc717df6329dbb"
+      },
+      {
+        "file": "segments-09.csv.gz",
+        "rows": 204090,
+        "sha256": "5adf2b92cd2954857d7f50958048b713a7023fc77b1e9eeeaa5596073cbbdff2"
+      },
+      {
+        "file": "delays-10.csv.gz",
+        "rows": 186273,
+        "sha256": "42c5d53629e9daa26d719e5157f3684a3d5a1b7c20a3d4852c359203e3b406ba"
+      },
+      {
+        "file": "segments-10.csv.gz",
+        "rows": 182010,
+        "sha256": "de447d1fa58f66084c39e5df3ed9c31b81a83159215328983d4ed3a29211061d"
+      },
+      {
+        "file": "delays-11.csv.gz",
+        "rows": 223750,
+        "sha256": "9d6befa68cd8e11867c004fd84b6059f89a6feec1c128486d41a415980a6927a"
+      },
+      {
+        "file": "segments-11.csv.gz",
+        "rows": 218014,
+        "sha256": "8f650d238121f3f1ad2b129d738de11328912d9ab2ea9c75f763da36901f45ef"
+      },
+      {
+        "file": "delays-12.csv.gz",
+        "rows": 212944,
+        "sha256": "38b141fc5069968278352741b6ffbaa499eb027c4c3824560eb6eca9e9e3aeea"
+      },
+      {
+        "file": "segments-12.csv.gz",
+        "rows": 208195,
+        "sha256": "79de8c99f347f471e50e89d245344397a74a03481bf813bb41a2ab7a8076e314"
+      },
+      {
+        "file": "delays-13.csv.gz",
+        "rows": 255683,
+        "sha256": "83d993a85a4c2eb5238713da622b61d0dc5d6ac63b9116c7147bfb3eed4a51a4"
+      },
+      {
+        "file": "segments-13.csv.gz",
+        "rows": 249647,
+        "sha256": "2c97af1a97397db2700b9639dc8a3ff3a150679391db698469cc4920e685a16f"
+      },
+      {
+        "file": "delays-14.csv.gz",
+        "rows": 223457,
+        "sha256": "36a93c14bc13426afed3148dd1ddedab395ab6de6dff4d9b3690dccf0fcfded4"
+      },
+      {
+        "file": "segments-14.csv.gz",
+        "rows": 218005,
+        "sha256": "7f38779c6b61b2ef950b5c7935afb7952c44d89ae2da755a028d1b5c0022b8e8"
+      },
+      {
+        "file": "delays-15.csv.gz",
+        "rows": 210656,
+        "sha256": "daf56fc8b41044c99e06cfcef43dc819b01c7bb505cd9bc2d6918017ecdbf765"
+      },
+      {
+        "file": "segments-15.csv.gz",
+        "rows": 206169,
+        "sha256": "cd19d7ee31bbbc050d439b225960f8d3e13cf76225477c50775eb208fd4a5cc1"
+      }
+    ]
+  },
+  "heldOut": {
+    "period": {
+      "start": "2026-01-01",
+      "end": "2026-01-31"
+    },
+    "serviceDays": 31,
+    "dayTypes": {
+      "weekday": 21,
+      "friday": 5,
+      "saturday": 5
+    },
+    "daySelection": "Calibration November 2025 and held-out January 2026 were chosen as the most recent whole months with no Jewish public holiday or holiday eve (Sukkot/Simchat Torah ended 14 Oct 2025; Hanukkah 14-22 Dec 2025 and its school break fall between them; Tu BiShvat 2 Feb), no Ramadan/Eid (Ramadan 2026 began about 18 Feb), school in session and the same UTC+2 clock (winter time 26 Oct 2025 - 27 Mar 2026). September 2026 (pilot) is Tishrei holiday season.",
+    "archivePins": [
+      {
+        "serviceDate": "2026-01-01",
+        "dayType": "weekday",
+        "gtfsKey": "gtfs_archive/2026/01/01/israel-public-transportation.zip",
+        "gtfsEtag": "647d5f4f7f1f8a8ef03ec790aed2e342-17",
+        "gtfsStopTimesSha256": "1e04559f752798e3241fab44c23f53b0a042bb05f1eb596e5ddb584089ffebe2",
+        "gtfsTripsSha256": "885e96d19a70ba91c9b0ef99f19e4478f2e9e182b3f1f487cf467d94c555ae69",
+        "gtfsCalendarSha256": "f8a754f6b28ad13df3f3917e7c9a167c3d6c2a6a84e9b914602d9bf659f10465",
+        "gtfsRoutesSha256": "a713223f5a7e37a6c82599203f33605e4ed1ebe9b825121ca26d4ae7f3a01556",
+        "siriManifestSha256": "985fbeacf3fbc047a65d9ae092f86cdceb9454fdc626ce7fa508ae0cf062cd11",
+        "siriManifestFileSha256": "5fea1ae0baa0037374951e67464e5c8f8ef94d885dbc9d1bc12633fea8e0c6fd",
+        "siriMinutesReadOfExpected": [
+          1783,
+          1800
+        ],
+        "dayFilesSha256": "08d029be6389111997aa89576d92e34ac19f63aaec2ec0d75c95adf47d7e7c36"
+      },
+      {
+        "serviceDate": "2026-01-02",
+        "dayType": "friday",
+        "gtfsKey": "gtfs_archive/2026/01/02/israel-public-transportation.zip",
+        "gtfsEtag": "4d338312436547a4a67a33c2c7fa82d6-16",
+        "gtfsStopTimesSha256": "e7132186f88eecc5a8ef12da5eb3ab14eaa21a35a385440d039d825948bfc701",
+        "gtfsTripsSha256": "9bdb1b1c10820fcff31e12576c6fc3864841d1858020b0e2d2398d8d554ea48b",
+        "gtfsCalendarSha256": "15e5383848bea14b977064d7f93b340095f2e2e488c5cc646bbc097f2724d76a",
+        "gtfsRoutesSha256": "ac9f82eeabb57298fa5d5a74337b6a9b3c5e80c5159991612f55655fcb741d86",
+        "siriManifestSha256": "7ab8fc178ace19627de6cbb267adfee4c24518b85a7e0bf600617959d1d30800",
+        "siriManifestFileSha256": "f4680569dc925bd0c880a764c0a86524bcbbc8ab948ae11ed23bdcb6cfd1492a",
+        "siriMinutesReadOfExpected": [
+          1788,
+          1800
+        ],
+        "dayFilesSha256": "34614422ae2ddf08a34e0fded3d415083bca14b89f1521e85d8d688b704c36c4"
+      },
+      {
+        "serviceDate": "2026-01-03",
+        "dayType": "saturday",
+        "gtfsKey": "gtfs_archive/2026/01/03/israel-public-transportation.zip",
+        "gtfsEtag": "09d500bb3648cff0f6087ad4901b976d-16",
+        "gtfsStopTimesSha256": "7d3d11c59bd97c1071f062e2f14d7206a60c5a719d2a6c203f7b570d7865b3e6",
+        "gtfsTripsSha256": "b97949121df68753e6db71e8f0fd20b6b4ebddec0e1f07a35cfaa4e6da86a501",
+        "gtfsCalendarSha256": "9022f3dfa62c95ed9fd2c37a072199098025006c16d09d1c14f806daca882536",
+        "gtfsRoutesSha256": "ac9f82eeabb57298fa5d5a74337b6a9b3c5e80c5159991612f55655fcb741d86",
+        "siriManifestSha256": "7881f5e7ffb5abdc5aedc687167fe08f0225a38fe1f41b74e7449cbb2088e405",
+        "siriManifestFileSha256": "ffa368493b6e497e21b13ec0c5ed85d5fe509c48cbb10119576099001ad89c58",
+        "siriMinutesReadOfExpected": [
+          1789,
+          1800
+        ],
+        "dayFilesSha256": "c2b02897edd504c23ecb2ec95550cbb8955e807b66ae14a8c2ed80a48eb43b23"
+      },
+      {
+        "serviceDate": "2026-01-04",
+        "dayType": "weekday",
+        "gtfsKey": "gtfs_archive/2026/01/04/israel-public-transportation.zip",
+        "gtfsEtag": "4a5bb1648500b94706bd9d835ba4077a-16",
+        "gtfsStopTimesSha256": "b24337c0495a4120b8d6b3888536f3685b3febe10d82bd2af5d6b8bc7747c34e",
+        "gtfsTripsSha256": "3449930084c2a873757b4007974c40ecec4c2d2a26803bbb2f8b1f7bd67dc015",
+        "gtfsCalendarSha256": "0d4668dce93cfa43c482f403a71eb96bdf43ae2a502bddac1aee2617b7a09e50",
+        "gtfsRoutesSha256": "b49231e180c343972254ecb05fa0d16dcbaf8ca69c574a87491ebd5c9fa0b799",
+        "siriManifestSha256": "d5e504ec7e38c82860aa169626150a195c3836b6c2d11f6f45eff79890e1822f",
+        "siriManifestFileSha256": "91c41ed3a0da7d49701d02ac10ccfcf72cd632434d4bc52315a154ecd6968dfe",
+        "siriMinutesReadOfExpected": [
+          1787,
+          1800
+        ],
+        "dayFilesSha256": "4ae70ca36e1dda0a6a90e339469557d8f93e10a4358d53878232e268e0383b94"
+      },
+      {
+        "serviceDate": "2026-01-05",
+        "dayType": "weekday",
+        "gtfsKey": "gtfs_archive/2026/01/05/israel-public-transportation.zip",
+        "gtfsEtag": "18e793fabec70111d5907df622121269-16",
+        "gtfsStopTimesSha256": "80a74a9395e3ec80894bf14fb884a35cf56b364b6f924d5a2c8bce67c00412d2",
+        "gtfsTripsSha256": "fc2313dfc4d78a89d9a75d5e06056cce185b16a9aea317c1ec25346e81a9510f",
+        "gtfsCalendarSha256": "b6d304a536b0e09880cb354c9afc44dbace4cf6fccb8a168eaa303f86f5e0f32",
+        "gtfsRoutesSha256": "9283defd195e428b3ae6944adf69af6216fa78d93cdf7a5ccf56ff40bd113dc7",
+        "siriManifestSha256": "ef6f42265c19e5e9c6141d783f55e55f9d1f89e840599a72931c1e36fc2ce934",
+        "siriManifestFileSha256": "aff4c18749f571b7cb2a66536d75fb37caeddae7e2d73124756c361a6c9c4781",
+        "siriMinutesReadOfExpected": [
+          1787,
+          1800
+        ],
+        "dayFilesSha256": "6acf9988cac0634d613b00d9b7344b117c578399d6ec5e51cab6683f34238ee5"
+      },
+      {
+        "serviceDate": "2026-01-06",
+        "dayType": "weekday",
+        "gtfsKey": "gtfs_archive/2026/01/06/israel-public-transportation.zip",
+        "gtfsEtag": "e7fc80c5c582777cfc2c3a910b77d429-16",
+        "gtfsStopTimesSha256": "7d9833f9a4f3aeb3d0639d1a59668d09d34dc4254ec6536706d1fbf63a68ba25",
+        "gtfsTripsSha256": "d2c6bb3a79e9511a912ccc994a21b40f6ea846d43feab8a19420303b9c813974",
+        "gtfsCalendarSha256": "b4e383a19ffe766084b327a1fb3476abac2f001b2f382259780c0158204fb07c",
+        "gtfsRoutesSha256": "19aa53959859daab5e097d0c26a21b8fa4099601f785f328d36dc78902b99637",
+        "siriManifestSha256": "4c04cdf371f50ee6609fa9c8a96e51c3e6a0ef7cdf6b8c423aa9c22e84618dac",
+        "siriManifestFileSha256": "4fcba4c698975e37c7ced28760471e4120a79263380b19cd46aabd763030aad2",
+        "siriMinutesReadOfExpected": [
+          1786,
+          1800
+        ],
+        "dayFilesSha256": "aa67c0f028e3be242c979933a61290734af54d80ebd129109f04ad898ccad55a"
+      },
+      {
+        "serviceDate": "2026-01-07",
+        "dayType": "weekday",
+        "gtfsKey": "gtfs_archive/2026/01/07/israel-public-transportation.zip",
+        "gtfsEtag": "6eda09323cc4dff4bfcc5a2bc5ff86b2-16",
+        "gtfsStopTimesSha256": "fad6efd291b669b35ff7eba8a462465d52f3d17e127d9b3d10def17b33dcbb87",
+        "gtfsTripsSha256": "2e2768a356d4796753e6b6272440ed9c4e1e09956f6b7f73cb85dec73d3ebf9d",
+        "gtfsCalendarSha256": "139d15a6576457b69da3c46cc1676cf131f87748226d705addee25ea86cba47b",
+        "gtfsRoutesSha256": "c083095cd2e53233c7cd64447e9feb2e009e4927de786545257065365dd011b9",
+        "siriManifestSha256": "df94de5dc668e3c8062bf83dde29ce88c9e58f48e2c829556474ce3b1e9f70d7",
+        "siriManifestFileSha256": "618741599e32851d65f7443d866cad40f6a8ee648af812088a609f77801ff875",
+        "siriMinutesReadOfExpected": [
+          1785,
+          1800
+        ],
+        "dayFilesSha256": "0e2295a8d374098b946e5338600abf25ef0b6ef001736b87759e0d6503336b0b"
+      },
+      {
+        "serviceDate": "2026-01-08",
+        "dayType": "weekday",
+        "gtfsKey": "gtfs_archive/2026/01/08/israel-public-transportation.zip",
+        "gtfsEtag": "0c51a802ab69a7a35af011f10c78948c-16",
+        "gtfsStopTimesSha256": "d461dd4650dec9d5b89162d838a8d5f22b4f410d05ac4e97447a3d1bb2c46c48",
+        "gtfsTripsSha256": "f24222e9941794a7dba044795512add7dae0c8460c8a8b270d67ba0c8efa6e51",
+        "gtfsCalendarSha256": "047307176ad0b5a7d356f837ad9a190eb3f84fa04d2c4582a998d5aa0035b496",
+        "gtfsRoutesSha256": "c083095cd2e53233c7cd64447e9feb2e009e4927de786545257065365dd011b9",
+        "siriManifestSha256": "1fb5266630c18f69cb1930c7f938c0132b93db981f0ce0cc21555e1f0d48e731",
+        "siriManifestFileSha256": "0448e809851288f712ca17f03f1b8b7ea890da96cca688794928233349bed52c",
+        "siriMinutesReadOfExpected": [
+          1787,
+          1800
+        ],
+        "dayFilesSha256": "7466041c6fa5c299d1edd478df7baf21b096f0abce1e4865686f1c891d07cc91"
+      },
+      {
+        "serviceDate": "2026-01-09",
+        "dayType": "friday",
+        "gtfsKey": "gtfs_archive/2026/01/09/israel-public-transportation.zip",
+        "gtfsEtag": "7a6ad62ab58362b4b1232f3fb95c1144-16",
+        "gtfsStopTimesSha256": "15bf17bc2c9c9b3fa7fa0595661af3432c2ea71595e02069a3787e445e986a3f",
+        "gtfsTripsSha256": "3ee25639195b294a2015b7a3f3f3f5323eb024488f87cf89b3c8c21736f83acc",
+        "gtfsCalendarSha256": "d47e29fc1ad6d557f981e9ef17974b79e548df85f6e6dc92c7b4ee953ce4179e",
+        "gtfsRoutesSha256": "6717afef5dd86bd3f723fac62f1ccb1507854eecf31f0d87e5b5936d7a653b53",
+        "siriManifestSha256": "1bdb03519d06589503997a573438deea0c979f9531ef0bb1207d8efb0f1bb471",
+        "siriManifestFileSha256": "b7e2779e02461a8295a34dfddcfba89ce8524262f61e92e25e33cfb9ed8edafe",
+        "siriMinutesReadOfExpected": [
+          1788,
+          1800
+        ],
+        "dayFilesSha256": "fc43886740932dee04c8a892a17df0f66f7e76c680cf7728a30a4b3e79877a7b"
+      },
+      {
+        "serviceDate": "2026-01-10",
+        "dayType": "saturday",
+        "gtfsKey": "gtfs_archive/2026/01/10/israel-public-transportation.zip",
+        "gtfsEtag": "51c9771c0dff1fec2210aabdc53e7462-16",
+        "gtfsStopTimesSha256": "3c307c658daf38f86e099cbbca0154eec5ec09169d455d61dcc04f2fce705272",
+        "gtfsTripsSha256": "eb58c5073faed2bee3213f9e1ee8a408c0339514fa8f42bfcea2bc345647eaca",
+        "gtfsCalendarSha256": "33f0875dc039bfb33b6ca2a4ab9b8dce78957d535f77a923aa872e8cfe9f8431",
+        "gtfsRoutesSha256": "79fcc679ed6607edc0ba0dcc32c8fbfe54bb0cc0e1854d128b141567e9356abf",
+        "siriManifestSha256": "cf7614b65b113d960789e8dfa025d4aa96d26c2762854a50e0f066a0eaebaa8c",
+        "siriManifestFileSha256": "22b3842b7ecfae059bd07380ddedd29929e6a34f019f94434b025bbe9554a118",
+        "siriMinutesReadOfExpected": [
+          1787,
+          1800
+        ],
+        "dayFilesSha256": "f61c1607045710e156fd7e6ada2a14180c620a9f54e43d9bd80e382082951b68"
+      },
+      {
+        "serviceDate": "2026-01-11",
+        "dayType": "weekday",
+        "gtfsKey": "gtfs_archive/2026/01/11/israel-public-transportation.zip",
+        "gtfsEtag": "3f4b1d8e4f50efdcf3c11639b1412448-16",
+        "gtfsStopTimesSha256": "bc2f21ddaf09a0acb33d03e3b938a7a726a2e0299a237a534c63da86515af6ef",
+        "gtfsTripsSha256": "0e037db5557a11e5cf9c58ad28df2adc8c74769a18ad29f5f8a3dbd7a99bed51",
+        "gtfsCalendarSha256": "fd3ce3c179c46787698353afba7f875a837cf91dae93f61d50db5ef2295e50a6",
+        "gtfsRoutesSha256": "aad823f05464ebb564e7c21a56692824dac1805abd215be9306b022ae340cc4d",
+        "siriManifestSha256": "5b82812362468d61141af500026bb54aea9a3f8e7569371e48d8e78402037720",
+        "siriManifestFileSha256": "8a6a38ee7e3a0517bba05f501ae11b6a361057166bb7c54f098902b82e2b8df0",
+        "siriMinutesReadOfExpected": [
+          1781,
+          1800
+        ],
+        "dayFilesSha256": "9b5efb738e0863dcf181dd685457e9ab66b29bfe78a8912f232e02c394db3354"
+      },
+      {
+        "serviceDate": "2026-01-12",
+        "dayType": "weekday",
+        "gtfsKey": "gtfs_archive/2026/01/12/israel-public-transportation.zip",
+        "gtfsEtag": "a90209a0e7f4f695b672963d378e61a8-16",
+        "gtfsStopTimesSha256": "89cb40e9d81c9a60ea6bc7685663fd31e464c6429c0de427424cb34e57236140",
+        "gtfsTripsSha256": "d716d869c2c2917a00956adf9faedf73b7af630965efbb92745fccba22f8efec",
+        "gtfsCalendarSha256": "91c393e6cf7a6e31fdb2c69cecd82e0eaded979800a3cdb670e19e484945f96f",
+        "gtfsRoutesSha256": "aad823f05464ebb564e7c21a56692824dac1805abd215be9306b022ae340cc4d",
+        "siriManifestSha256": "ac9d059c3e42c271008cd6bc4a151e0d9b24bcb49f7c9f3033d473a86ec8c0a3",
+        "siriManifestFileSha256": "bbde3d5b66bc4e7ff562eb8184eeb70500c0e1ae862384f9f9cc3cb8ac892d3f",
+        "siriMinutesReadOfExpected": [
+          1787,
+          1800
+        ],
+        "dayFilesSha256": "081b339a05d60aa7fa40ebb2cdff628319e8e728c4099c1b5310ada0fb1a6bcc"
+      },
+      {
+        "serviceDate": "2026-01-13",
+        "dayType": "weekday",
+        "gtfsKey": "gtfs_archive/2026/01/13/israel-public-transportation.zip",
+        "gtfsEtag": "e7aeded3ce6b242de8e74501d3a59639-16",
+        "gtfsStopTimesSha256": "d9c8acb1f0c0597baf97f72d537877224c48305e70d425ce0882d7264d1040d8",
+        "gtfsTripsSha256": "e75cdfe1774752c1ee500a239ba4a58a6285477abef51ce11c459bd0d3a9eafa",
+        "gtfsCalendarSha256": "6b8c3086a69805ef190b61e26a0be9c24062d89e82b1f0c8e11b1cd2376e9b45",
+        "gtfsRoutesSha256": "0443337f9e93eac358c3f2ba5353396b70508871f59ececd68518f26c210d1fe",
+        "siriManifestSha256": "6dd8ecfca9eb7d3a4fcb151320a4bcd6a2d7cdb6783100eb220b7cc6bc4769e0",
+        "siriManifestFileSha256": "6173c4db2de912af97e5f096daca70a491ee7440ab37434e480ca9c0d15dcf91",
+        "siriMinutesReadOfExpected": [
+          1787,
+          1800
+        ],
+        "dayFilesSha256": "c565b3d5ba6ac57465e29408b8ccfbbfdc7a816ea20b585333ead0e230116f9e"
+      },
+      {
+        "serviceDate": "2026-01-14",
+        "dayType": "weekday",
+        "gtfsKey": "gtfs_archive/2026/01/14/israel-public-transportation.zip",
+        "gtfsEtag": "ba5162b3b56813c0fd8a50647eac7b4a-16",
+        "gtfsStopTimesSha256": "25078f7a032c1320e6f42b9a7b1c1d6315d3377b5b68254b8d03c5947df31011",
+        "gtfsTripsSha256": "dba83730fbba38b1e6e58993cb564ebbd7982d4553eb5df51cdac6ff7d9be02c",
+        "gtfsCalendarSha256": "0f0b01bdbb2c62c164a11e6efbd5d40d816d6544d5560068e3e8d7819515e990",
+        "gtfsRoutesSha256": "7cb32af654e67e08dee2ecc0cf42a25c0a47e2d59272847ccd36f41cd3fcc47d",
+        "siriManifestSha256": "afad06a7700a789279cc0b5ba395b6087a804dd8a9e2bbb57e72dd1214e11f56",
+        "siriManifestFileSha256": "d7c57140e21773f3413a8070731dde4556b3c75ad7e9f7ba515271ac04d1e2e0",
+        "siriMinutesReadOfExpected": [
+          1786,
+          1800
+        ],
+        "dayFilesSha256": "c732b9487e3018a1ab00aa163c3076b8868333965b882d2b5f1de3089612241f"
+      },
+      {
+        "serviceDate": "2026-01-15",
+        "dayType": "weekday",
+        "gtfsKey": "gtfs_archive/2026/01/15/israel-public-transportation.zip",
+        "gtfsEtag": "cf01da666693c4889ec05f1a43aac4e4-17",
+        "gtfsStopTimesSha256": "031ad23cc782a83af3aefeef0d51a271fa219c129f2880f831c215aca23430c3",
+        "gtfsTripsSha256": "8293964d09ad625115a74f2c8f35684f8390ae49a22f3e68fdbe7975c9e69649",
+        "gtfsCalendarSha256": "006c3ea0fbaa770b1851e49c07b04802b996b6a62084574686653abf3d4b1ce5",
+        "gtfsRoutesSha256": "ce53ba9dafdd050ecb271f7291e810f07bcff0eb9d1b3b5412d8dcb7e11b60d1",
+        "siriManifestSha256": "3d71653ee3359c3b2cafac189fa35d14a91eb606cb5694ce37dcd3720aec2cbd",
+        "siriManifestFileSha256": "89d8f983a0c1b65bbe8ffe82b42f209c3456d7ab808e67e72242d63d2116beab",
+        "siriMinutesReadOfExpected": [
+          1787,
+          1800
+        ],
+        "dayFilesSha256": "7d9bf06f84f80a5ce6c36f85798cc59ec9f9435c3ca90c760dc8fef26cff882e"
+      },
+      {
+        "serviceDate": "2026-01-16",
+        "dayType": "friday",
+        "gtfsKey": "gtfs_archive/2026/01/16/israel-public-transportation.zip",
+        "gtfsEtag": "3276e425cbc8f59364943d9f357c109a-17",
+        "gtfsStopTimesSha256": "6b5470c6021ae0fcd501986b19e306ba8bdd3c39c882d2286b27f705ab39d1a9",
+        "gtfsTripsSha256": "819b48d1b921580f5b97a7132b39c604d3bdb524836821010c42b5ff184f7cf7",
+        "gtfsCalendarSha256": "f6959a250063d5ef103d529b31ead64d0c25a4f6c02db35b7b49a7a9a05c0a1b",
+        "gtfsRoutesSha256": "7e90f40d493eb1abf8ddd2a08289e68d33c82b91ddebdc421f811991b1e27bc9",
+        "siriManifestSha256": "ca2078acbb82d53d8a77831beab8390ac7d0d2586698ecd6e3b352f751ed5ed2",
+        "siriManifestFileSha256": "daa61865bfcb8e35021ea18a0b205ca2f299c5a6edd26055a9debf907d622101",
+        "siriMinutesReadOfExpected": [
+          1788,
+          1800
+        ],
+        "dayFilesSha256": "bcd6a2aba4248e909f127b0c501533a59ae9c5edceb8b730bb8b4455bd81afb5"
+      },
+      {
+        "serviceDate": "2026-01-17",
+        "dayType": "saturday",
+        "gtfsKey": "gtfs_archive/2026/01/17/israel-public-transportation.zip",
+        "gtfsEtag": "b83fa5fd9a578412eab5e9f1e3c42dbc-17",
+        "gtfsStopTimesSha256": "a4f9515f3603f4e5afe1db8d23ea22b9b9a90965bfc59a9e980fef256d3788cc",
+        "gtfsTripsSha256": "cb48e0b74992054339ff403228bfbc7082eb3061f638f1aa1b405f1e70d9210f",
+        "gtfsCalendarSha256": "27f56c476cdb5cdc81b63383f5372cc7c329786a7e707d009a72c72641f88e3e",
+        "gtfsRoutesSha256": "5b6a59cf4b57792ed5f03d13a9915498c022af4f01c79ae2bdf0db22c07fff7b",
+        "siriManifestSha256": "9fb2c3b13241ec5591b7cc31ac54614222faef0a50a3cddd0d434bf81b565182",
+        "siriManifestFileSha256": "78a5fde164f9afe0e7b75fa2d7f6a737ad8f2b983521036b59fc560bf3e0e267",
+        "siriMinutesReadOfExpected": [
+          1789,
+          1800
+        ],
+        "dayFilesSha256": "bf0401891de924c21d7fc453ed965f610ae8d2817d8f878ea371a9782b662cf2"
+      },
+      {
+        "serviceDate": "2026-01-18",
+        "dayType": "weekday",
+        "gtfsKey": "gtfs_archive/2026/01/18/israel-public-transportation.zip",
+        "gtfsEtag": "c2d50e12ff0b1ae6ce24534bdae754ad-16",
+        "gtfsStopTimesSha256": "3a471346315df9d60cade407cbe9a3c59c218321d897d54a97ac2f94f1ec54e5",
+        "gtfsTripsSha256": "ab8391aa35a41231110e47a2dddad0ba4eff4b0bd037a56da71cb1507f76a835",
+        "gtfsCalendarSha256": "3372dd8422e4b6ff015aed1f31840e8ddd4e2cae0d91b64ef8f77c27ea5b1d9c",
+        "gtfsRoutesSha256": "9ad6ac07e879d8a9eb228bb3724941674cbccb1c074f63914d6b8821b059a42e",
+        "siriManifestSha256": "fcb2cf498617476df12f15670fd9ad0bcd6e1b9b63df1caeaab5c8b36674f17a",
+        "siriManifestFileSha256": "2c4e95432454244151acdc7e68b8d5a704c1a83c6be99bb011ace2db5c3008e6",
+        "siriMinutesReadOfExpected": [
+          1786,
+          1800
+        ],
+        "dayFilesSha256": "cb277c50e9efe82253fc8a8e7cbfa156b23e538516a188bf9f90848890a3b5fd"
+      },
+      {
+        "serviceDate": "2026-01-19",
+        "dayType": "weekday",
+        "gtfsKey": "gtfs_archive/2026/01/19/israel-public-transportation.zip",
+        "gtfsEtag": "71078cc7d38ea83f0124e3a1340ac825-17",
+        "gtfsStopTimesSha256": "3cb025f5ab88e3838a7d061687f30c23858c3b3f73c0cb11d8559c15205c097c",
+        "gtfsTripsSha256": "78cace24198de2d899dedd9815a6054b89d34b69e675748a225aa4c5c526944e",
+        "gtfsCalendarSha256": "8562d28625dc7ed1e22022bd63a08aa552aeca15cf3c90aedbf87f122a7c8c50",
+        "gtfsRoutesSha256": "726ff9080229e7adc2693fb8515c4e2dda6ba05b8906b273fbd86f39f25a4aee",
+        "siriManifestSha256": "17340043c9232b10dcfd7caca8812ce07886f2dea8f5cf80f0a8baf31d75c633",
+        "siriManifestFileSha256": "3befe351a3fc3e8efb0093f35059c2fb0d6a9951adc2d8505dadd0ce34c9f2da",
+        "siriMinutesReadOfExpected": [
+          1787,
+          1800
+        ],
+        "dayFilesSha256": "5912824d2309b04cab543b12711f777821b4e990a88b943603bb033c2273ba65"
+      },
+      {
+        "serviceDate": "2026-01-20",
+        "dayType": "weekday",
+        "gtfsKey": "gtfs_archive/2026/01/20/israel-public-transportation.zip",
+        "gtfsEtag": "c48cf48eac4e1be4662443ef2337fd37-17",
+        "gtfsStopTimesSha256": "a05a6c4934a03e8157ee9c89fbd2f0f2d57f76cce60762ef42e4b52e8a9592da",
+        "gtfsTripsSha256": "1dcb317a9a2e4c5046528c67f59e06a2619ee080de462f914cb3a90569f542d9",
+        "gtfsCalendarSha256": "b8509a52595e4d3d868dade91e1300b75b4efcd56a6a67159841f3a67cf7fe96",
+        "gtfsRoutesSha256": "109be2ddb314a412f23aac7863341fb60627fa701013046850e30fc70bd8c3bf",
+        "siriManifestSha256": "f30e122b7d9058f5df9f6e0d1fb7c228264e98a86b5b7d88904773bc18781f61",
+        "siriManifestFileSha256": "dc248f3ab5c2b68c3b0fd0155ef01d55b6f9f93f4b529326e2b79ef4acda2d62",
+        "siriMinutesReadOfExpected": [
+          1787,
+          1800
+        ],
+        "dayFilesSha256": "7584a7e85532fdc01731b06316b1b8f9d372e5ba57fab90da2b7de5e183aff69"
+      },
+      {
+        "serviceDate": "2026-01-21",
+        "dayType": "weekday",
+        "gtfsKey": "gtfs_archive/2026/01/21/israel-public-transportation.zip",
+        "gtfsEtag": "c2d40e9dfa2d00aaaa53f6e7d5d11186-17",
+        "gtfsStopTimesSha256": "b65e76a787bcb29f0e8c6254a8dd6d5dd15e494c0f4a78f4531e7c970831c832",
+        "gtfsTripsSha256": "db8791f8972e0b92113e9b58c4ec3412bba416678acd8d0a5fb0af5c0e8403d7",
+        "gtfsCalendarSha256": "7158457e128e66697e7099d0784032fc41720d5fceab871b9efe49401893a00f",
+        "gtfsRoutesSha256": "dd2561f8f9a271fb725922fbfac4757504aefedd15012dc55ae2c81d88b0efd9",
+        "siriManifestSha256": "f8003605d8e798907d1d310e09b3f864ada9a288933456beeb0a86de4d9c6ee7",
+        "siriManifestFileSha256": "d3db42012f376230fabb45ff487dacb6e12da70e95844e241e7ea87c60b03f21",
+        "siriMinutesReadOfExpected": [
+          1787,
+          1800
+        ],
+        "dayFilesSha256": "a070ba9cb2b37870431e163df16c394b8902ca7ce770b44a30dd8a16ebb562cf"
+      },
+      {
+        "serviceDate": "2026-01-22",
+        "dayType": "weekday",
+        "gtfsKey": "gtfs_archive/2026/01/22/israel-public-transportation.zip",
+        "gtfsEtag": "0d6f04b834575848e7a1901dac446b2d-17",
+        "gtfsStopTimesSha256": "573e47fa561915c079d9606aed163281965a9bdda900384a0a51bf4593d55d9f",
+        "gtfsTripsSha256": "0e658fd0c55d17526476fac1736a006cb33849a29e09d4631c66a24d88adf404",
+        "gtfsCalendarSha256": "9615d69dd36c06e7a307a9bd01f898d1cf807b5d80560da726d2efdff634d9b3",
+        "gtfsRoutesSha256": "d2d585f9a28708a39eaad08147b1fe84103740c54815e533e32b9cb0cb5a13d9",
+        "siriManifestSha256": "24c0335cd57fe70a18fa38bebf6a049e0277617bb91d000601ce43912f723f57",
+        "siriManifestFileSha256": "b46be6e06f62ad55f39bf79b906ebd9b686c7ef923083586730b612c9af250e8",
+        "siriMinutesReadOfExpected": [
+          1785,
+          1800
+        ],
+        "dayFilesSha256": "3f65d6bd9b87a04a9b26a4883da78a12d649c87f1f9f69db8d92d3f984555e54"
+      },
+      {
+        "serviceDate": "2026-01-23",
+        "dayType": "friday",
+        "gtfsKey": "gtfs_archive/2026/01/23/israel-public-transportation.zip",
+        "gtfsEtag": "43c70d1af1bb6c65f02eb5549cebe849-17",
+        "gtfsStopTimesSha256": "d347260185d534c3a7b7938708677e60247b4d761f55f6f5c9650e433f8ab1b6",
+        "gtfsTripsSha256": "799713f092b9d2380f7712aef02cb7e7cc44223a9322c71bc9447e89ddcfdb44",
+        "gtfsCalendarSha256": "cf0b40ceea5e7b24f6824ed3f014dccb5568f3ddd7acded73e903e1fdb35c723",
+        "gtfsRoutesSha256": "a4c887b25ff767468166ca7a1516e2aa2428e8ed1d41818b2cfe62d324554e89",
+        "siriManifestSha256": "0109ada0d972c9998d55b10f7bca1a5140212604cfa22af64e49728564b7aa5e",
+        "siriManifestFileSha256": "7ff0f01454b6ee7441ddec9bc4556da62774a854f4870c31a1d91c66976dfc91",
+        "siriMinutesReadOfExpected": [
+          1787,
+          1800
+        ],
+        "dayFilesSha256": "40847a29287f287aa6d68358101324e8eac4e00178bdf76f44f7c1c164c65741"
+      },
+      {
+        "serviceDate": "2026-01-24",
+        "dayType": "saturday",
+        "gtfsKey": "gtfs_archive/2026/01/24/israel-public-transportation.zip",
+        "gtfsEtag": "eb2ab365bcaa2ee459f0fc065e6b85ed-17",
+        "gtfsStopTimesSha256": "d43baae00c166208925c3ea10208789e3b13fad1b79a970d620877a5ee2e4e7d",
+        "gtfsTripsSha256": "2f837d0dedd8a967d15c0367940aae20ea65445493f8e3b4a98c70eb422de2a5",
+        "gtfsCalendarSha256": "f15347cd7e13af4152f8c916aadac61087367fa187f4bb56cd6d7688a160aa06",
+        "gtfsRoutesSha256": "841d0071bb4b23bbee4353aa6b82e08d9333d69bfde043eae03b7b92030c4ccd",
+        "siriManifestSha256": "32640b5e7b2f96f70d75c17476793323762fbc5a247c8b4604a72cb28780f9e7",
+        "siriManifestFileSha256": "e123509e9a9f7d56683061b100954fe5eb63af5caedfb0ae7061ac3609d86f87",
+        "siriMinutesReadOfExpected": [
+          1789,
+          1800
+        ],
+        "dayFilesSha256": "c66ba19b8ca179efb5ee1a01de41182336c8232dc18de4b70300d28b3bbd51f3"
+      },
+      {
+        "serviceDate": "2026-01-25",
+        "dayType": "weekday",
+        "gtfsKey": "gtfs_archive/2026/01/25/israel-public-transportation.zip",
+        "gtfsEtag": "0fecd75dd8223a96c41b2cb7a930b0d8-16",
+        "gtfsStopTimesSha256": "1653d19cc58cc64a643ec455fdd197e9db49a4cb49ebc3e6ed86452deb72dfcd",
+        "gtfsTripsSha256": "f50149a643041006b4d775c6f878775620c27217dd85a198592af651597bff86",
+        "gtfsCalendarSha256": "a6d1c3c0c1c3447059cf966ede32c32fea5ee06353c2e9ddbea7d2b4873ece5a",
+        "gtfsRoutesSha256": "5292f72c2d84465de017320087e63add8cdd853d0e6d39d53447c076cf65e7c2",
+        "siriManifestSha256": "17b0df6f51f32fd1ad31261fc3e17ca1c66714674cca7149bc0c2a3c77105bae",
+        "siriManifestFileSha256": "7bfa3a304d098bff19a707fe45c91bcfaa7e7e121e73dea98bface0aaab1ab52",
+        "siriMinutesReadOfExpected": [
+          1787,
+          1800
+        ],
+        "dayFilesSha256": "a1552c3213ef87877eec0b621b6e38fe209a3cd2b5e8913cae6c98b4909a3b7c"
+      },
+      {
+        "serviceDate": "2026-01-26",
+        "dayType": "weekday",
+        "gtfsKey": "gtfs_archive/2026/01/26/israel-public-transportation.zip",
+        "gtfsEtag": "cd956b78e79d1cb13f856ce3ea5db6f0-17",
+        "gtfsStopTimesSha256": "043df7b3b57a9a502b0c9214fe3b35ad14d4d15906e7a0439cfee7762c1f3b8e",
+        "gtfsTripsSha256": "dc3941228df786ca69a93ec7c4fbd28ae70c9cfea97147385e0aa0ca43ae9584",
+        "gtfsCalendarSha256": "ece813b95ff74cc9ec3c89563ee4db14ed4fe302e10aae8c992c29a42fa22a66",
+        "gtfsRoutesSha256": "5292f72c2d84465de017320087e63add8cdd853d0e6d39d53447c076cf65e7c2",
+        "siriManifestSha256": "b16aec6be20d17dbef585a88f2835e0a3c6c8ad52f633feb7fed3e4ac54e6b42",
+        "siriManifestFileSha256": "95fdd5035faaf3211ac15f82ec845291a157782da95984845fd1ffaf86a326b1",
+        "siriMinutesReadOfExpected": [
+          1786,
+          1800
+        ],
+        "dayFilesSha256": "980a15f6d9a9094568484f1dca769cd9f5411d9c609a21443950115d2f9f905d"
+      },
+      {
+        "serviceDate": "2026-01-27",
+        "dayType": "weekday",
+        "gtfsKey": "gtfs_archive/2026/01/27/israel-public-transportation.zip",
+        "gtfsEtag": "509d3425f1aeb847b539da548737bd30-17",
+        "gtfsStopTimesSha256": "3e225f9e084ebd0b0d5c7a98b17928b1ce7b6f18707a2ae560b8c8d2ee02c902",
+        "gtfsTripsSha256": "5145ca74ed2d6d6a26976021aab16f824d96c7f790eb367e0c3aadc292bfce57",
+        "gtfsCalendarSha256": "05869c11941fdc8bec026eb41792b4be0ad285982c42b74cdddc5093c30dd031",
+        "gtfsRoutesSha256": "dbb3faa0976e20f10a4c3da4a7bd7bc8187b4b9db3329201dd81e301d9037a39",
+        "siriManifestSha256": "8c3fd70cafc027eddc9465cc7f43f1fcce6fc1d1fb4dcc615b04068307dcf2c1",
+        "siriManifestFileSha256": "fb905fb88ccb00169b4856f3dd9385381d81e2f0d064c95d9098ee535f42b8e3",
+        "siriMinutesReadOfExpected": [
+          1787,
+          1800
+        ],
+        "dayFilesSha256": "a83f1a2bc66996b190a739ff16e7f3cb385b9559a2df40405818bc6e330aedd4"
+      },
+      {
+        "serviceDate": "2026-01-28",
+        "dayType": "weekday",
+        "gtfsKey": "gtfs_archive/2026/01/28/israel-public-transportation.zip",
+        "gtfsEtag": "5fa7fd4129f7f31c8d51df5bc3ce9fd8-17",
+        "gtfsStopTimesSha256": "c7b0d2c3b34c4c7699b01589d4880c4b18fa7e11e9c1f90feaca90520e735307",
+        "gtfsTripsSha256": "81705be36f5cb1f355308d98412f6d7e06f31590492ef3ba2a0490e84520b2a4",
+        "gtfsCalendarSha256": "b794b95ec8d931599e4b3adf83d6484684555bd029d6c77daae0660a37caef93",
+        "gtfsRoutesSha256": "3f3304906af4801b4da41bb6f9c7c9c6b572dca7ead65d8a39bb74bf6816afff",
+        "siriManifestSha256": "4004a6aba60bbf3dbe5eeaa0b05142823db907f70e11a38098a94c92a80cc3dd",
+        "siriManifestFileSha256": "ac412cfbd7f1cee4c31524c5a6bb9aa32f857548ef34c622f6b5ae9df1872382",
+        "siriMinutesReadOfExpected": [
+          1787,
+          1800
+        ],
+        "dayFilesSha256": "c635e2187d1adade6e9991ff0e0a7a489d3530a5f49d8232abb35995a57a5192"
+      },
+      {
+        "serviceDate": "2026-01-29",
+        "dayType": "weekday",
+        "gtfsKey": "gtfs_archive/2026/01/29/israel-public-transportation.zip",
+        "gtfsEtag": "23395e1655a0dbf01f547c2d2707dff3-17",
+        "gtfsStopTimesSha256": "3cdbbd160b72b8cc881ec31c54f61f7fab12ad9b4535bfb951bc83f10b909ce7",
+        "gtfsTripsSha256": "22c29048b0da077159ccb9c06129acfde935532f9a8fc53aac0dcb9011934b87",
+        "gtfsCalendarSha256": "be61171e65862ed364adef67f0e229c41328dec702955555226c9b498866707c",
+        "gtfsRoutesSha256": "254dafd8bb99689520202b7ca6681bd5551abc9d13e108219f1572d9822f8edc",
+        "siriManifestSha256": "b9468dcd99a587cb50373c662dc86a8fcc9b96291c009fada58c8f087da48c3a",
+        "siriManifestFileSha256": "b19d691e9919f1b90663e13e160f79ea4eee9ec3d754080d083cc7ad17a41c87",
+        "siriMinutesReadOfExpected": [
+          1787,
+          1800
+        ],
+        "dayFilesSha256": "d2b4812ce47823d09f94f56e6fdab47083bc5d315ecd1130db99869c4a43c9e1"
+      },
+      {
+        "serviceDate": "2026-01-30",
+        "dayType": "friday",
+        "gtfsKey": "gtfs_archive/2026/01/30/israel-public-transportation.zip",
+        "gtfsEtag": "a7e73ae7f119f6c327ffeed91946d0df-18",
+        "gtfsStopTimesSha256": "96beb6c284d85ff27813c1f50fd73eca9542a4164d992658d23fc8cd66b0f440",
+        "gtfsTripsSha256": "105fd331f3cea52992e60be0b2d1c4ea271386ee0950fa640ebda8d0daad4503",
+        "gtfsCalendarSha256": "30d7c3c05a1e0643932bc5cebd7a04e274a6e977276224f0306bdd0341714618",
+        "gtfsRoutesSha256": "7ceb45876ca01f60d472bf5ad0c0cd00eea96977bfac0e95fad3f89e750ba3b4",
+        "siriManifestSha256": "fef9f1420a2af152ae91b2d263234d3c5261782c24b37f8cc2b4716b55d7fe0b",
+        "siriManifestFileSha256": "ffb981186e065020e077536b69d7cfc32f98515a1c821468f8a4bbe1a861c196",
+        "siriMinutesReadOfExpected": [
+          1784,
+          1800
+        ],
+        "dayFilesSha256": "327d67ecb0d2ff832a1f5a4ecc45663ce03fcf2407e968b4798feedc0c8b1bc3"
+      },
+      {
+        "serviceDate": "2026-01-31",
+        "dayType": "saturday",
+        "gtfsKey": "gtfs_archive/2026/01/31/israel-public-transportation.zip",
+        "gtfsEtag": "eac0e2b2113dd6433c984ba8f3e029a1-18",
+        "gtfsStopTimesSha256": "738801dc8084f8c05213b8cb516d814b9c2b8f1a005b3481d35c9caa36e5a0b9",
+        "gtfsTripsSha256": "d2f94cdc6275f6a14164fdcacb81b5a06b0d36d75e802cdea956cda47ac9315a",
+        "gtfsCalendarSha256": "7d425388a9440d23e6cf3646a1ead0beba070033ba5ea97bb9399d07fd0c6841",
+        "gtfsRoutesSha256": "7ceb45876ca01f60d472bf5ad0c0cd00eea96977bfac0e95fad3f89e750ba3b4",
+        "siriManifestSha256": "30e4be70fc56f57e83f5f0d194fb4ec9a9f6190b988afc800b2750785a12bc18",
+        "siriManifestFileSha256": "af958b2390aea2dd6669a7c387403f9083d20bb4af6afdd637ea630dd753b6ad",
+        "siriMinutesReadOfExpected": [
+          1784,
+          1800
+        ],
+        "dayFilesSha256": "f3425459ada7b571d650899753df0f71257b7547a9f5a0fb904b230389fb6f96"
+      }
+    ],
+    "daily": [
+      {
+        "serviceDate": "2026-01-01",
+        "dayType": "weekday",
+        "siriMinutesMissing": 17,
+        "scheduledTrips": 118823,
+        "observedTrips": 112585,
+        "tripCoverage": 0.9475,
+        "callsObserved": 3738591,
+        "interpolationP50Seconds": 4.0
+      },
+      {
+        "serviceDate": "2026-01-02",
+        "dayType": "friday",
+        "siriMinutesMissing": 12,
+        "scheduledTrips": 58131,
+        "observedTrips": 54726,
+        "tripCoverage": 0.9414,
+        "callsObserved": 1774687,
+        "interpolationP50Seconds": 4.0
+      },
+      {
+        "serviceDate": "2026-01-03",
+        "dayType": "saturday",
+        "siriMinutesMissing": 11,
+        "scheduledTrips": 25526,
+        "observedTrips": 23610,
+        "tripCoverage": 0.9249,
+        "callsObserved": 773178,
+        "interpolationP50Seconds": 4.0
+      },
+      {
+        "serviceDate": "2026-01-04",
+        "dayType": "weekday",
+        "siriMinutesMissing": 13,
+        "scheduledTrips": 121961,
+        "observedTrips": 114644,
+        "tripCoverage": 0.94,
+        "callsObserved": 3748602,
+        "interpolationP50Seconds": 4.0
+      },
+      {
+        "serviceDate": "2026-01-05",
+        "dayType": "weekday",
+        "siriMinutesMissing": 13,
+        "scheduledTrips": 121445,
+        "observedTrips": 110601,
+        "tripCoverage": 0.9107,
+        "callsObserved": 3617008,
+        "interpolationP50Seconds": 4.0
+      },
+      {
+        "serviceDate": "2026-01-06",
+        "dayType": "weekday",
+        "siriMinutesMissing": 14,
+        "scheduledTrips": 121483,
+        "observedTrips": 115995,
+        "tripCoverage": 0.9548,
+        "callsObserved": 3809567,
+        "interpolationP50Seconds": 4.0
+      },
+      {
+        "serviceDate": "2026-01-07",
+        "dayType": "weekday",
+        "siriMinutesMissing": 15,
+        "scheduledTrips": 121467,
+        "observedTrips": 114963,
+        "tripCoverage": 0.9465,
+        "callsObserved": 3813257,
+        "interpolationP50Seconds": 4.0
+      },
+      {
+        "serviceDate": "2026-01-08",
+        "dayType": "weekday",
+        "siriMinutesMissing": 13,
+        "scheduledTrips": 121629,
+        "observedTrips": 115349,
+        "tripCoverage": 0.9484,
+        "callsObserved": 3858957,
+        "interpolationP50Seconds": 4.0
+      },
+      {
+        "serviceDate": "2026-01-09",
+        "dayType": "friday",
+        "siriMinutesMissing": 12,
+        "scheduledTrips": 58195,
+        "observedTrips": 55668,
+        "tripCoverage": 0.9566,
+        "callsObserved": 1882634,
+        "interpolationP50Seconds": 4.0
+      },
+      {
+        "serviceDate": "2026-01-10",
+        "dayType": "saturday",
+        "siriMinutesMissing": 13,
+        "scheduledTrips": 25603,
+        "observedTrips": 24119,
+        "tripCoverage": 0.942,
+        "callsObserved": 788982,
+        "interpolationP50Seconds": 4.0
+      },
+      {
+        "serviceDate": "2026-01-11",
+        "dayType": "weekday",
+        "siriMinutesMissing": 19,
+        "scheduledTrips": 121889,
+        "observedTrips": 116866,
+        "tripCoverage": 0.9588,
+        "callsObserved": 3783537,
+        "interpolationP50Seconds": 4.0
+      },
+      {
+        "serviceDate": "2026-01-12",
+        "dayType": "weekday",
+        "siriMinutesMissing": 13,
+        "scheduledTrips": 121674,
+        "observedTrips": 116208,
+        "tripCoverage": 0.9551,
+        "callsObserved": 3858454,
+        "interpolationP50Seconds": 4.0
+      },
+      {
+        "serviceDate": "2026-01-13",
+        "dayType": "weekday",
+        "siriMinutesMissing": 13,
+        "scheduledTrips": 121566,
+        "observedTrips": 115536,
+        "tripCoverage": 0.9504,
+        "callsObserved": 3817421,
+        "interpolationP50Seconds": 4.0
+      },
+      {
+        "serviceDate": "2026-01-14",
+        "dayType": "weekday",
+        "siriMinutesMissing": 14,
+        "scheduledTrips": 121650,
+        "observedTrips": 116347,
+        "tripCoverage": 0.9564,
+        "callsObserved": 3879149,
+        "interpolationP50Seconds": 4.0
+      },
+      {
+        "serviceDate": "2026-01-15",
+        "dayType": "weekday",
+        "siriMinutesMissing": 13,
+        "scheduledTrips": 121949,
+        "observedTrips": 112827,
+        "tripCoverage": 0.9252,
+        "callsObserved": 3767959,
+        "interpolationP50Seconds": 4.0
+      },
+      {
+        "serviceDate": "2026-01-16",
+        "dayType": "friday",
+        "siriMinutesMissing": 12,
+        "scheduledTrips": 58250,
+        "observedTrips": 53195,
+        "tripCoverage": 0.9132,
+        "callsObserved": 1805568,
+        "interpolationP50Seconds": 4.0
+      },
+      {
+        "serviceDate": "2026-01-17",
+        "dayType": "saturday",
+        "siriMinutesMissing": 11,
+        "scheduledTrips": 25578,
+        "observedTrips": 23034,
+        "tripCoverage": 0.9005,
+        "callsObserved": 759478,
+        "interpolationP50Seconds": 4.0
+      },
+      {
+        "serviceDate": "2026-01-18",
+        "dayType": "weekday",
+        "siriMinutesMissing": 14,
+        "scheduledTrips": 121843,
+        "observedTrips": 113968,
+        "tripCoverage": 0.9354,
+        "callsObserved": 3817089,
+        "interpolationP50Seconds": 4.0
+      },
+      {
+        "serviceDate": "2026-01-19",
+        "dayType": "weekday",
+        "siriMinutesMissing": 13,
+        "scheduledTrips": 121746,
+        "observedTrips": 113683,
+        "tripCoverage": 0.9338,
+        "callsObserved": 3830437,
+        "interpolationP50Seconds": 4.0
+      },
+      {
+        "serviceDate": "2026-01-20",
+        "dayType": "weekday",
+        "siriMinutesMissing": 13,
+        "scheduledTrips": 121780,
+        "observedTrips": 113462,
+        "tripCoverage": 0.9317,
+        "callsObserved": 3661642,
+        "interpolationP50Seconds": 4.0
+      },
+      {
+        "serviceDate": "2026-01-21",
+        "dayType": "weekday",
+        "siriMinutesMissing": 13,
+        "scheduledTrips": 121713,
+        "observedTrips": 115522,
+        "tripCoverage": 0.9491,
+        "callsObserved": 3684735,
+        "interpolationP50Seconds": 4.0
+      },
+      {
+        "serviceDate": "2026-01-22",
+        "dayType": "weekday",
+        "siriMinutesMissing": 15,
+        "scheduledTrips": 122021,
+        "observedTrips": 116334,
+        "tripCoverage": 0.9534,
+        "callsObserved": 3845656,
+        "interpolationP50Seconds": 4.0
+      },
+      {
+        "serviceDate": "2026-01-23",
+        "dayType": "friday",
+        "siriMinutesMissing": 13,
+        "scheduledTrips": 58138,
+        "observedTrips": 55272,
+        "tripCoverage": 0.9507,
+        "callsObserved": 1875476,
+        "interpolationP50Seconds": 4.0
+      },
+      {
+        "serviceDate": "2026-01-24",
+        "dayType": "saturday",
+        "siriMinutesMissing": 11,
+        "scheduledTrips": 25446,
+        "observedTrips": 23777,
+        "tripCoverage": 0.9344,
+        "callsObserved": 780704,
+        "interpolationP50Seconds": 4.0
+      },
+      {
+        "serviceDate": "2026-01-25",
+        "dayType": "weekday",
+        "siriMinutesMissing": 13,
+        "scheduledTrips": 121661,
+        "observedTrips": 116274,
+        "tripCoverage": 0.9557,
+        "callsObserved": 3904129,
+        "interpolationP50Seconds": 4.0
+      },
+      {
+        "serviceDate": "2026-01-26",
+        "dayType": "weekday",
+        "siriMinutesMissing": 14,
+        "scheduledTrips": 121777,
+        "observedTrips": 116731,
+        "tripCoverage": 0.9586,
+        "callsObserved": 3863454,
+        "interpolationP50Seconds": 4.0
+      },
+      {
+        "serviceDate": "2026-01-27",
+        "dayType": "weekday",
+        "siriMinutesMissing": 13,
+        "scheduledTrips": 122001,
+        "observedTrips": 117034,
+        "tripCoverage": 0.9593,
+        "callsObserved": 3929784,
+        "interpolationP50Seconds": 4.0
+      },
+      {
+        "serviceDate": "2026-01-28",
+        "dayType": "weekday",
+        "siriMinutesMissing": 13,
+        "scheduledTrips": 121877,
+        "observedTrips": 116348,
+        "tripCoverage": 0.9546,
+        "callsObserved": 3850630,
+        "interpolationP50Seconds": 4.0
+      },
+      {
+        "serviceDate": "2026-01-29",
+        "dayType": "weekday",
+        "siriMinutesMissing": 13,
+        "scheduledTrips": 120169,
+        "observedTrips": 116554,
+        "tripCoverage": 0.9699,
+        "callsObserved": 3897020,
+        "interpolationP50Seconds": 4.0
+      },
+      {
+        "serviceDate": "2026-01-30",
+        "dayType": "friday",
+        "siriMinutesMissing": 16,
+        "scheduledTrips": 56857,
+        "observedTrips": 55462,
+        "tripCoverage": 0.9755,
+        "callsObserved": 1887620,
+        "interpolationP50Seconds": 4.0
+      },
+      {
+        "serviceDate": "2026-01-31",
+        "dayType": "saturday",
+        "siriMinutesMissing": 16,
+        "scheduledTrips": 24557,
+        "observedTrips": 23708,
+        "tripCoverage": 0.9654,
+        "callsObserved": 775949,
+        "interpolationP50Seconds": 4.0
+      }
+    ],
+    "totals": {
+      "scheduledTrips": 2968405,
+      "observedTrips": 2810402,
+      "tripCoverage": 0.9468
+    },
+    "byAgency": {
+      "3": {
+        "scheduledTrips": 566323,
+        "scheduledCalls": 23249114,
+        "observedTrips": 561280,
+        "observedCalls": 20796808,
+        "tripCoverage": 0.991
+      },
+      "18": {
+        "scheduledTrips": 326449,
+        "scheduledCalls": 11221084,
+        "observedTrips": 314595,
+        "observedCalls": 9301698,
+        "tripCoverage": 0.964
+      },
+      "15": {
+        "scheduledTrips": 303406,
+        "scheduledCalls": 11793076,
+        "observedTrips": 296473,
+        "observedCalls": 10446108,
+        "tripCoverage": 0.977
+      },
+      "5": {
+        "scheduledTrips": 287804,
+        "scheduledCalls": 11659423,
+        "observedTrips": 286292,
+        "observedCalls": 10471972,
+        "tripCoverage": 0.995
+      },
+      "16": {
+        "scheduledTrips": 270452,
+        "scheduledCalls": 10248635,
+        "observedTrips": 266987,
+        "observedCalls": 9002285,
+        "tripCoverage": 0.987
+      },
+      "25": {
+        "scheduledTrips": 196259,
+        "scheduledCalls": 7203611,
+        "observedTrips": 186722,
+        "observedCalls": 6288192,
+        "tripCoverage": 0.951
+      },
+      "14": {
+        "scheduledTrips": 144892,
+        "scheduledCalls": 5408802,
+        "observedTrips": 142665,
+        "observedCalls": 4528815,
+        "tripCoverage": 0.985
+      },
+      "31": {
+        "scheduledTrips": 133041,
+        "scheduledCalls": 4101656,
+        "observedTrips": 127799,
+        "observedCalls": 3525619,
+        "tripCoverage": 0.961
+      },
+      "38": {
+        "scheduledTrips": 85161,
+        "scheduledCalls": 3398935,
+        "observedTrips": 72761,
+        "observedCalls": 2494727,
+        "tripCoverage": 0.854
+      },
+      "32": {
+        "scheduledTrips": 68563,
+        "scheduledCalls": 2374374,
+        "observedTrips": 66992,
+        "observedCalls": 2006121,
+        "tripCoverage": 0.977
+      },
+      "34": {
+        "scheduledTrips": 68504,
+        "scheduledCalls": 1876318,
+        "observedTrips": 58610,
+        "observedCalls": 1448853,
+        "tripCoverage": 0.856
+      },
+      "35": {
+        "scheduledTrips": 66892,
+        "scheduledCalls": 2590893,
+        "observedTrips": 65139,
+        "observedCalls": 2105344,
+        "tripCoverage": 0.974
+      },
+      "6": {
+        "scheduledTrips": 58988,
+        "scheduledCalls": 2407534,
+        "observedTrips": 58566,
+        "observedCalls": 2192216,
+        "tripCoverage": 0.993
+      },
+      "4": {
+        "scheduledTrips": 54227,
+        "scheduledCalls": 1557617,
+        "observedTrips": 42239,
+        "observedCalls": 1080201,
+        "tripCoverage": 0.779
+      },
+      "33": {
+        "scheduledTrips": 51296,
+        "scheduledCalls": 153888,
+        "tripCoverage": 0.0
+      },
+      "37": {
+        "scheduledTrips": 44725,
+        "scheduledCalls": 1766841,
+        "observedTrips": 44715,
+        "observedCalls": 1648979,
+        "tripCoverage": 1.0
+      },
+      "7": {
+        "scheduledTrips": 40378,
+        "scheduledCalls": 1623495,
+        "observedTrips": 40041,
+        "observedCalls": 1439852,
+        "tripCoverage": 0.992
+      },
+      "135": {
+        "scheduledTrips": 40340,
+        "scheduledCalls": 1223934,
+        "observedTrips": 39778,
+        "observedCalls": 1081716,
+        "tripCoverage": 0.986
+      },
+      "23": {
+        "scheduledTrips": 29078,
+        "scheduledCalls": 945270,
+        "observedTrips": 28863,
+        "observedCalls": 828014,
+        "tripCoverage": 0.993
+      },
+      "42": {
+        "scheduledTrips": 16978,
+        "scheduledCalls": 634118,
+        "observedTrips": 16268,
+        "observedCalls": 569234,
+        "tripCoverage": 0.958
+      },
+      "2": {
+        "scheduledTrips": 15746,
+        "scheduledCalls": 180883,
+        "observedTrips": 14908,
+        "tripCoverage": 0.947
+      },
+      "22": {
+        "scheduledTrips": 14504,
+        "scheduledCalls": 328188,
+        "observedTrips": 14148,
+        "observedCalls": 247004,
+        "tripCoverage": 0.975
+      },
+      "8": {
+        "scheduledTrips": 11549,
+        "scheduledCalls": 528494,
+        "observedTrips": 11527,
+        "observedCalls": 487736,
+        "tripCoverage": 0.998
+      },
+      "24": {
+        "scheduledTrips": 9778,
+        "scheduledCalls": 305164,
+        "observedTrips": 9759,
+        "observedCalls": 278114,
+        "tripCoverage": 0.998
+      },
+      "21": {
+        "scheduledTrips": 9309,
+        "scheduledCalls": 314078,
+        "observedTrips": 369,
+        "observedCalls": 1285,
+        "tripCoverage": 0.04
+      },
+      "45": {
+        "scheduledTrips": 7993,
+        "scheduledCalls": 198678,
+        "observedTrips": 6839,
+        "observedCalls": 148480,
+        "tripCoverage": 0.856
+      },
+      "40": {
+        "scheduledTrips": 7875,
+        "scheduledCalls": 76125,
+        "observedTrips": 7139,
+        "observedCalls": 46120,
+        "tripCoverage": 0.907
+      },
+      "50": {
+        "scheduledTrips": 7399,
+        "scheduledCalls": 177950,
+        "observedTrips": 6179,
+        "observedCalls": 133262,
+        "tripCoverage": 0.835
+      },
+      "49": {
+        "scheduledTrips": 7089,
+        "scheduledCalls": 175349,
+        "observedTrips": 6595,
+        "observedCalls": 148294,
+        "tripCoverage": 0.93
+      },
+      "47": {
+        "scheduledTrips": 6879,
+        "scheduledCalls": 169914,
+        "observedTrips": 5811,
+        "observedCalls": 126874,
+        "tripCoverage": 0.845
+      },
+      "44": {
+        "scheduledTrips": 6627,
+        "scheduledCalls": 156033,
+        "observedTrips": 6359,
+        "observedCalls": 129686,
+        "tripCoverage": 0.96
+      },
+      "20": {
+        "scheduledTrips": 4316,
+        "scheduledCalls": 25896,
+        "tripCoverage": 0.0
+      },
+      "51": {
+        "scheduledTrips": 3388,
+        "scheduledCalls": 89823,
+        "observedTrips": 2639,
+        "observedCalls": 58617,
+        "tripCoverage": 0.779
+      },
+      "10": {
+        "scheduledTrips": 1159,
+        "scheduledCalls": 26730,
+        "observedTrips": 999,
+        "observedCalls": 18852,
+        "tripCoverage": 0.862
+      },
+      "97": {
+        "scheduledTrips": 292,
+        "scheduledCalls": 584,
+        "observedTrips": 277,
+        "observedCalls": 223,
+        "tripCoverage": 0.949
+      },
+      "98": {
+        "scheduledTrips": 292,
+        "scheduledCalls": 584,
+        "tripCoverage": 0.0
+      },
+      "91": {
+        "scheduledTrips": 265,
+        "scheduledCalls": 530,
+        "tripCoverage": 0.0
+      },
+      "93": {
+        "scheduledTrips": 189,
+        "scheduledCalls": 378,
+        "observedTrips": 69,
+        "observedCalls": 53,
+        "tripCoverage": 0.365
+      }
+    }
+  },
+  "method": "Every held-out observation is placed against the calibration p10/p50/p90 of the same key. If distributions transfer, about 10% fall below p10, 50% below p50 and 10% above p90. medianAbsErrorSeconds compares the calibration p50 with the schedule-only prediction (0 s delay; scheduled run time for segments) in 10 s bins. publishableKeyMedianShiftSeconds compares held-out and calibration medians for keys with at least 20 held-out samples.",
+  "stopDelay": {
+    "observationsWithoutCalibrationKey": 1711604,
+    "byDayType": {
+      "friday": {
+        "observations": 749482,
+        "belowP10": 0.167,
+        "belowP50": 0.563,
+        "aboveP90": 0.1,
+        "withinP10P90": 0.733,
+        "medianAbsErrorSeconds": {
+          "calibrationP50": 125.0,
+          "schedule": 275.0
+        }
+      },
+      "saturday": {
+        "observations": 367990,
+        "belowP10": 0.173,
+        "belowP50": 0.554,
+        "aboveP90": 0.119,
+        "withinP10P90": 0.709,
+        "medianAbsErrorSeconds": {
+          "calibrationP50": 115.0,
+          "schedule": 235.0
+        }
+      },
+      "weekday": {
+        "observations": 72592981,
+        "belowP10": 0.152,
+        "belowP50": 0.536,
+        "aboveP90": 0.112,
+        "withinP10P90": 0.737,
+        "medianAbsErrorSeconds": {
+          "calibrationP50": 115.0,
+          "schedule": 265.0
+        }
+      }
+    },
+    "byHourBand": {
+      "eveningPeak15to19": {
+        "observations": 16897959,
+        "belowP10": 0.164,
+        "belowP50": 0.551,
+        "aboveP90": 0.109,
+        "withinP10P90": 0.727,
+        "medianAbsErrorSeconds": {
+          "calibrationP50": 145.0,
+          "schedule": 395.0
+        }
+      },
+      "midday09to15": {
+        "observations": 26379118,
+        "belowP10": 0.139,
+        "belowP50": 0.515,
+        "aboveP90": 0.121,
+        "withinP10P90": 0.74,
+        "medianAbsErrorSeconds": {
+          "calibrationP50": 115.0,
+          "schedule": 275.0
+        }
+      },
+      "morningPeak06to09": {
+        "observations": 13278572,
+        "belowP10": 0.166,
+        "belowP50": 0.569,
+        "aboveP90": 0.093,
+        "withinP10P90": 0.741,
+        "medianAbsErrorSeconds": {
+          "calibrationP50": 125.0,
+          "schedule": 235.0
+        }
+      },
+      "offPeak": {
+        "observations": 17154804,
+        "belowP10": 0.148,
+        "belowP50": 0.53,
+        "aboveP90": 0.114,
+        "withinP10P90": 0.738,
+        "medianAbsErrorSeconds": {
+          "calibrationP50": 105.0,
+          "schedule": 195.0
+        }
+      }
+    },
+    "bySampleBand": {
+      "samples100plus": {
+        "observations": 9743863,
+        "belowP10": 0.135,
+        "belowP50": 0.537,
+        "aboveP90": 0.098,
+        "withinP10P90": 0.767,
+        "medianAbsErrorSeconds": {
+          "calibrationP50": 125.0,
+          "schedule": 325.0
+        }
+      },
+      "samples20to49": {
+        "observations": 27300956,
+        "belowP10": 0.171,
+        "belowP50": 0.54,
+        "aboveP90": 0.123,
+        "withinP10P90": 0.707,
+        "medianAbsErrorSeconds": {
+          "calibrationP50": 115.0,
+          "schedule": 235.0
+        }
+      },
+      "samples50to99": {
+        "observations": 37088002,
+        "belowP10": 0.143,
+        "belowP50": 0.534,
+        "aboveP90": 0.107,
+        "withinP10P90": 0.751,
+        "medianAbsErrorSeconds": {
+          "calibrationP50": 125.0,
+          "schedule": 275.0
+        }
+      },
+      "samples5to19": {
+        "observations": 14635228,
+        "belowP10": 0.21,
+        "belowP50": 0.55,
+        "aboveP90": 0.14,
+        "withinP10P90": 0.65,
+        "medianAbsErrorSeconds": {
+          "calibrationP50": 115.0,
+          "schedule": 215.0
+        }
+      },
+      "samplesUnder5": {
+        "observations": 2601701,
+        "belowP10": 0.329,
+        "belowP50": 0.55,
+        "aboveP90": 0.245,
+        "withinP10P90": 0.427,
+        "medianAbsErrorSeconds": {
+          "calibrationP50": 115.0,
+          "schedule": 215.0
+        }
+      }
+    },
+    "byStratum": {
+      "notPublishable": {
+        "observations": 17659297,
+        "belowP10": 0.226,
+        "belowP50": 0.55,
+        "aboveP90": 0.155,
+        "withinP10P90": 0.619,
+        "medianAbsErrorSeconds": {
+          "calibrationP50": 115.0,
+          "schedule": 215.0
+        }
+      },
+      "publishable": {
+        "observations": 73710453,
+        "belowP10": 0.152,
+        "belowP50": 0.536,
+        "aboveP90": 0.111,
+        "withinP10P90": 0.737,
+        "medianAbsErrorSeconds": {
+          "calibrationP50": 115.0,
+          "schedule": 265.0
+        }
+      }
+    },
+    "publishableKeyMedianShiftSeconds": {
+      "n": 1406497,
+      "p10": 6.0,
+      "p50": 43.0,
+      "p90": 185.0,
+      "minimumHeldOutSamples": 20
+    }
+  },
+  "segmentRunTime": {
+    "observationsWithoutCalibrationKey": 2030542,
+    "byDayType": {
+      "friday": {
+        "observations": 694458,
+        "belowP10": 0.144,
+        "belowP50": 0.515,
+        "aboveP90": 0.12,
+        "withinP10P90": 0.736,
+        "medianAbsErrorSeconds": {
+          "calibrationP50": 15.0,
+          "schedule": 25.0
+        }
+      },
+      "saturday": {
+        "observations": 345987,
+        "belowP10": 0.144,
+        "belowP50": 0.51,
+        "aboveP90": 0.124,
+        "withinP10P90": 0.731,
+        "medianAbsErrorSeconds": {
+          "calibrationP50": 15.0,
+          "schedule": 25.0
+        }
+      },
+      "weekday": {
+        "observations": 69421648,
+        "belowP10": 0.123,
+        "belowP50": 0.502,
+        "aboveP90": 0.112,
+        "withinP10P90": 0.764,
+        "medianAbsErrorSeconds": {
+          "calibrationP50": 15.0,
+          "schedule": 25.0
+        }
+      }
+    },
+    "byHourBand": {
+      "eveningPeak15to19": {
+        "observations": 16102111,
+        "belowP10": 0.128,
+        "belowP50": 0.512,
+        "aboveP90": 0.11,
+        "withinP10P90": 0.762,
+        "medianAbsErrorSeconds": {
+          "calibrationP50": 15.0,
+          "schedule": 25.0
+        }
+      },
+      "midday09to15": {
+        "observations": 25236414,
+        "belowP10": 0.119,
+        "belowP50": 0.494,
+        "aboveP90": 0.116,
+        "withinP10P90": 0.764,
+        "medianAbsErrorSeconds": {
+          "calibrationP50": 15.0,
+          "schedule": 25.0
+        }
+      },
+      "morningPeak06to09": {
+        "observations": 12708089,
+        "belowP10": 0.128,
+        "belowP50": 0.516,
+        "aboveP90": 0.105,
+        "withinP10P90": 0.767,
+        "medianAbsErrorSeconds": {
+          "calibrationP50": 15.0,
+          "schedule": 25.0
+        }
+      },
+      "offPeak": {
+        "observations": 16415479,
+        "belowP10": 0.122,
+        "belowP50": 0.495,
+        "aboveP90": 0.115,
+        "withinP10P90": 0.763,
+        "medianAbsErrorSeconds": {
+          "calibrationP50": 5.0,
+          "schedule": 15.0
+        }
+      }
+    },
+    "bySampleBand": {
+      "samples100plus": {
+        "observations": 8989105,
+        "belowP10": 0.112,
+        "belowP50": 0.502,
+        "aboveP90": 0.103,
+        "withinP10P90": 0.785,
+        "medianAbsErrorSeconds": {
+          "calibrationP50": 15.0,
+          "schedule": 25.0
+        }
+      },
+      "samples20to49": {
+        "observations": 26079271,
+        "belowP10": 0.136,
+        "belowP50": 0.503,
+        "aboveP90": 0.121,
+        "withinP10P90": 0.743,
+        "medianAbsErrorSeconds": {
+          "calibrationP50": 15.0,
+          "schedule": 25.0
+        }
+      },
+      "samples50to99": {
+        "observations": 35817063,
+        "belowP10": 0.118,
+        "belowP50": 0.502,
+        "aboveP90": 0.108,
+        "withinP10P90": 0.773,
+        "medianAbsErrorSeconds": {
+          "calibrationP50": 15.0,
+          "schedule": 25.0
+        }
+      },
+      "samples5to19": {
+        "observations": 14454536,
+        "belowP10": 0.176,
+        "belowP50": 0.507,
+        "aboveP90": 0.149,
+        "withinP10P90": 0.674,
+        "medianAbsErrorSeconds": {
+          "calibrationP50": 15.0,
+          "schedule": 25.0
+        }
+      },
+      "samplesUnder5": {
+        "observations": 2570134,
+        "belowP10": 0.302,
+        "belowP50": 0.514,
+        "aboveP90": 0.261,
+        "withinP10P90": 0.437,
+        "medianAbsErrorSeconds": {
+          "calibrationP50": 15.0,
+          "schedule": 25.0
+        }
+      }
+    },
+    "byStratum": {
+      "notPublishable": {
+        "observations": 17448016,
+        "belowP10": 0.194,
+        "belowP50": 0.508,
+        "aboveP90": 0.165,
+        "withinP10P90": 0.641,
+        "medianAbsErrorSeconds": {
+          "calibrationP50": 15.0,
+          "schedule": 25.0
+        }
+      },
+      "publishable": {
+        "observations": 70462093,
+        "belowP10": 0.124,
+        "belowP50": 0.502,
+        "aboveP90": 0.112,
+        "withinP10P90": 0.764,
+        "medianAbsErrorSeconds": {
+          "calibrationP50": 15.0,
+          "schedule": 25.0
+        }
+      }
+    },
+    "publishableKeyMedianShiftSeconds": {
+      "n": 1339882,
+      "p10": 0.5,
+      "p50": 3.0,
+      "p90": 14.0,
+      "minimumHeldOutSamples": 20
+    }
+  },
+  "runtimeSeconds": 1333
+}
