@@ -1,0 +1,51 @@
+{
+ "schemaVersion": 1,
+ "id": "api-startup-hash-20261002-01",
+ "kind": "startup verification timing (Python-level, native Windows read of D:) plus one bind-mount hash timing; not a full Docker API readiness measurement",
+ "recordedAt": "2026-10-02",
+ "agent": "Claude Code overnight subagent (task API-STARTUP, branch fix/api-startup-hash-once)",
+ "beforeSource": "fb3ae03 (origin/main)",
+ "afterSource": "branch fix/api-startup-hash-once (ArtifactDigests shared per startup/activation)",
+ "generation": {
+  "path": "D:/ot/generations/oct1b (read-only; not modified)",
+  "generationId": "5eb4e43d9456b96a68ee44ffb7a58fe9137ed16bf40a670cf513c34564e44249",
+  "referenceBytes": 3035238400,
+  "addressCatalogBytes": 134221824,
+  "graphFiles": 59,
+  "referenceSha256": "0c63b84c1fc82aa3146c86a7c95d4efbf6e112cff395e0a262188696665aa88a"
+ },
+ "rootCause": [
+  "Unmanaged startup: verify_artifacts hashed reference.sqlite, then RuntimeSnapshot.load hashed it again for its own reference check.",
+  "Composite generations: _load_address_provider ran verify_address_composite (catalog, attestation, schedule-component manifest), then verify_artifacts inside RuntimeSnapshot.load ran it again.",
+  "Managed startup: SnapshotManager.initialize fully verified the binding only to read its token, reload_current verified it again, and the factory then repeated both steps above (reference read four times)."
+ ],
+ "fix": "One ArtifactDigests per startup or activation; a digest is reused only while the resolved path, size and mtime are unchanged. Every digest is still compared with the manifest at each original check. initialize reads the binding without hashing because reload_current verifies it; a verified binding carries its digests to the factory.",
+ "method": {
+  "tool": "services/api/tools/time_startup_verification.py",
+  "sequence": "verify_address_composite + AddressCatalog open, then RuntimeSnapshot.load with a stub Photon binding (no network); the unmanaged lifespan order",
+  "runs": "alternating before/after/before/after on one machine; file cache warm after the first run; another session's Docker lane was active, so wall times are noisy",
+  "readCounting": "binary Path.open calls per artifact; sqlite opens are not counted"
+ },
+ "runs": [
+  {"variant": "before", "totalSeconds": 184.1, "referenceStoreOpenSeconds": 169.2, "otherSeconds": 14.9, "binaryReadBytes": 7043895837},
+  {"variant": "after", "totalSeconds": 247.3, "referenceStoreOpenSeconds": 238.7, "otherSeconds": 8.6, "binaryReadBytes": 3874391668},
+  {"variant": "before", "totalSeconds": 229.3, "referenceStoreOpenSeconds": 214.5, "otherSeconds": 14.8, "binaryReadBytes": 7043895837},
+  {"variant": "after", "totalSeconds": 209.0, "referenceStoreOpenSeconds": 200.6, "otherSeconds": 8.4, "binaryReadBytes": 3874391668}
+ ],
+ "readsPerArtifact": {
+  "before": {"reference.sqlite": 2, "address-catalog.sqlite": 2, "photon-import-attestation.json": 2, "schedule-component-manifest.json": 2, "config.yml": 1, "motis/* (max)": 1},
+  "after": {"reference.sqlite": 1, "address-catalog.sqlite": 1, "photon-import-attestation.json": 1, "schedule-component-manifest.json": 1, "config.yml": 1, "motis/* (max)": 1}
+ },
+ "bindMountHash": {
+  "container": "ot-t6-hash (alpine:3.20, --memory 128m --cpus 1, generation bind-mounted read-only; removed after the run)",
+  "referenceSha256Seconds": 34,
+  "addressCatalogSha256Seconds": 2,
+  "note": "One full reference read over the Docker Desktop bind mount, possibly with a warm host cache; this is roughly what each removed hash cost the API in the acceptance setup."
+ },
+ "conclusion": [
+  "The fix halves artifact bytes read at unmanaged startup (7.04 GB to 3.87 GB) and cuts file-hash time about 43% natively (14.9/14.8 s to 8.6/8.4 s); on the bind mount it should remove about 36 s (one reference and one catalog hash) from the 530 s readiness measured on October 1.",
+  "Double hashing was not the main cost. ReferenceStore's PRAGMA integrity_check plus its full logical content hash took 169-239 s natively and dominates startup; it is a separate integrity check and was left unchanged. Reducing it is a follow-up design decision.",
+  "Full Docker API readiness after the fix was not measured (the ot-t5 lane was taking memory measurements); H-0/Fargate startup stays unmeasured."
+ ],
+ "tests": "uv run pytest (services/api): 716 passed, 21 skipped, 0 failed (origin/main baseline 707 passed, 21 skipped); new tests in tests/test_startup_hashing.py and tests/test_activation.py"
+}

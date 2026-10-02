@@ -18,7 +18,7 @@ from opentransit.address_catalog import AddressCatalog
 from opentransit.api.log import LOG
 from opentransit.build.activation import read_binding
 from opentransit.config import Settings
-from opentransit.core.artifacts import verify_address_composite
+from opentransit.core.artifacts import ArtifactDigests, verify_address_composite
 from opentransit.motis import MotisClient
 from opentransit.runtime import AddressProviderBinding, RuntimeSnapshot, capture_snapshot
 from opentransit.search_readiness import (
@@ -38,11 +38,13 @@ async def _load_address_provider(
     *,
     photon_url: str | None = None,
     photon_admin_url: str | None = None,
+    digests: ArtifactDigests | None = None,
 ):
     """Verify the sealed Photon binding before making it available to a snapshot.
 
     Explicit origins (from a managed activation binding) take precedence over the fixed
     settings origins, so two address composites can each be served by their own Photon.
+    Pass the load's ``digests`` so the snapshot reuses the artifact hashes computed here.
     """
     manifest_path = Path(manifest_path)
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
@@ -56,7 +58,7 @@ async def _load_address_provider(
         raise ValueError("Composite address generation requires fixed Photon query/admin origins")
 
     def open_verified_catalog():
-        metadata = verify_address_composite(manifest_path.parent, manifest)
+        metadata = verify_address_composite(manifest_path.parent, manifest, digests)
         catalog = AddressCatalog(
             manifest_path.parent / "address-catalog.sqlite", metadata["sourceDumpSha256"]
         )
@@ -434,6 +436,8 @@ def make_lifespan(settings: Settings, transport, clock, signal_installer):
                     follow_redirects=False,
                 )
                 address_provider = None
+                # Reuse the hashes computed when the binding was verified for this activation.
+                digests = binding.artifact_digests or ArtifactDigests()
                 try:
                     address_provider = await _load_address_provider(
                         binding.generation_dir / "manifest.json",
@@ -441,6 +445,7 @@ def make_lifespan(settings: Settings, transport, clock, signal_installer):
                         transport,
                         photon_url=binding.photon_origin,
                         photon_admin_url=binding.photon_admin_origin,
+                        digests=digests,
                     )
                     motis = MotisClient(client)
                     snapshot = await asyncio.to_thread(
@@ -450,6 +455,7 @@ def make_lifespan(settings: Settings, transport, clock, signal_installer):
                         source_check_path=binding.source_check_path,
                         probe_path=binding.probe_path,
                         address_provider=address_provider,
+                        digests=digests,
                     )
                     _record_geocoding_config(
                         app, binding.generation_dir / "manifest.json", snapshot.generation.id
@@ -567,9 +573,11 @@ def make_lifespan(settings: Settings, transport, clock, signal_installer):
             follow_redirects=False,
         ) as client:
             address_provider = None
+            # One digest per artifact for this startup, shared by both verification steps.
+            digests = ArtifactDigests()
             try:
                 address_provider = await _load_address_provider(
-                    settings.manifest_path, settings, transport
+                    settings.manifest_path, settings, transport, digests=digests
                 )
                 snapshot = RuntimeSnapshot.load(
                     settings.manifest_path,
@@ -577,6 +585,7 @@ def make_lifespan(settings: Settings, transport, clock, signal_installer):
                     source_check_path=settings.source_check_path,
                     probe_path=settings.probe_path,
                     address_provider=address_provider,
+                    digests=digests,
                 )
                 _record_geocoding_config(app, settings.manifest_path, snapshot.generation.id)
                 # Index and warm-up finish before the snapshot becomes visible to requests.

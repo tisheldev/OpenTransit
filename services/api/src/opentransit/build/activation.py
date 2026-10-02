@@ -8,11 +8,11 @@ import re
 import threading
 import uuid
 from contextlib import contextmanager
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from urllib.parse import urlsplit
 
-from opentransit.core.artifacts import verify_artifacts
+from opentransit.core.artifacts import ArtifactDigests, verify_artifacts
 from opentransit.core.generation import Generation
 
 _TOKEN = re.compile(r"[A-Za-z0-9._-]{1,128}\Z")
@@ -36,6 +36,9 @@ class GenerationBinding:
     # when absent the worker uses its fixed OPENTRANSIT_PHOTON_* origins.
     photon_origin: str | None = None
     photon_admin_origin: str | None = None
+    # Digests computed while verifying this binding, so the candidate snapshot built from it
+    # in the same activation does not reread the artifacts. Not part of the binding identity.
+    artifact_digests: ArtifactDigests | None = field(default=None, compare=False, repr=False)
 
     def as_dict(self) -> dict:
         data = {
@@ -126,8 +129,10 @@ def validate_binding(
     generation = Generation.load(manifest_path)
     if data.get("generationId") != generation.id:
         raise ValueError("Binding generationId differs from its manifest")
+    digests = None
     if verify:
-        verify_artifacts(generation_dir, manifest)
+        digests = ArtifactDigests()
+        verify_artifacts(generation_dir, manifest, digests)
     probe_path = _safe_path(data.get("probePath"), "probePath")
     source_check_path = _safe_path(data.get("sourceCheckPath"), "sourceCheckPath")
     for label, path in (("probePath", probe_path), ("sourceCheckPath", source_check_path)):
@@ -145,6 +150,7 @@ def validate_binding(
         generation.id,
         _purpose(data),
         *_photon_origins(data),
+        artifact_digests=digests,
     )
 
 
