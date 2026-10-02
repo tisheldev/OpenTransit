@@ -59,6 +59,13 @@ Other Stride endpoints seen: `route_timetable`, `stop_arrivals` (currently plann
 
 The pilot's per-hour medians (+3.8 min at 07, +8.0 min at 08, +7.6 min at 16, p90 up to 29 min) come from one day and are not validated. The slowest segment ratios (10–30×, all in Jerusalem near the Old City and the Shuafat/Anata checkpoints, 3–5 samples each) are unverified: they may be real congestion during the Selichot season or artefacts.
 
+**F — OB-01 month batch, November 2025, checked against January 2026 (measured 2 October 2026).** Results: [month](../../services/api/results/ob01-month-202511-01.json), [held-out](../../services/api/results/ob01-heldout-202601-vs-202511-01.json), [outlier review](../../services/api/results/ob01-outlier-review-202511-01.json).
+
+- **Coverage.** Trips observed: 95.9% in November, 94.7% in January. About 1,786 of 1,800 minutes are present per service day; 2025-11-26 is missing 227.
+- **Held-out check.** On publishable keys, 73.7% of January stop delays and 76.4% of segment run times fall inside November's p10–p90 (nominal 80%). The distributions transfer, but the intervals are somewhat too narrow.
+- **Pilot outliers.** The September Jerusalem outliers do not recur in November. On line 231 the slow trips are mostly SIRI distance freezes while GPS moves.
+- **Slowest November segments.** The checkpoint segments (Qalandiya) are real standstills. Rest stops and the Shuafat terminal show long stationary dwells that the schedule does not include.
+
 ## 4. Hackathon-26 algorithm notes (documented by Hasadna, not verified)
 
 - **bus-arrival-reliability:** arrival = closest geometric approach interpolated between pings; about ±30 s precision at 1-minute pings; actual/planned up to 2.5× on bottleneck segments at 07–09 and 16–18; about 1–2 minutes per line through the API.
