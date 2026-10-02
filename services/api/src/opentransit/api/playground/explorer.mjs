@@ -1,7 +1,9 @@
 // Manual explorer for every public endpoint. It talks only to this origin, stores
 // nothing, and renders API text with textContent only.
 import { clockTime, dateLabel, departureInstant, duration, israelWallTime, tomorrowMorning } from "./time.mjs";
-import { buildJourneyRequest, buildQuery, idKind } from "./explorer-request.mjs";
+import {
+  buildJourneyRequest, buildQuery, describeRequest, idKind, latestOnly, metaFacts, pillState, sameOriginTarget,
+} from "./explorer-request.mjs";
 
 const $ = id => document.getElementById(id);
 const panel = name => document.querySelector(`[data-panel="${name}"]`);
@@ -10,7 +12,23 @@ const TIMEOUT_MS = 30000;
 
 let map, layer, pickTarget = null;
 let current = { request: "", response: "" };
-const history = [];
+const exchanges = [];
+const beginRequest = latestOnly();
+
+// Thrown by call() when a newer request started meanwhile; its result must not render.
+class Superseded extends Error {}
+
+// Runs an explorer action, reporting errors in the banner and dropping superseded results.
+function run(promise) {
+  return Promise.resolve(promise).catch(error => {
+    if (!(error instanceof Superseded)) banner(error.message, "error");
+  });
+}
+
+function required(value, message) {
+  if (!value) throw new Error(message);
+  return value;
+}
 
 // ---------- DOM helpers ----------
 
@@ -63,15 +81,20 @@ function showResult(...nodes) {
 // ---------- Transport ----------
 
 async function call(method, path, body) {
+  const isCurrent = beginRequest();
   const started = performance.now();
   const init = { method, headers: { Accept: "application/json" }, signal: AbortSignal.timeout(TIMEOUT_MS) };
   if (body !== undefined) {
     init.headers["Content-Type"] = "application/json";
     init.body = typeof body === "string" ? body : JSON.stringify(body);
   }
-  const shown = readable(path);
-  current.request = `${method} ${shown}` + (init.body ? `\n\n${pretty(init.body)}` : "");
-  $("ex-request").textContent = current.request;
+  // The request pane shows the exact encoded path that is sent; the decoded line,
+  // banner and history label are for reading Hebrew queries and IDs only.
+  const { exact, decoded } = describeRequest(method, path);
+  const shown = decoded ?? path;
+  const request = exact + (decoded ? `\n(decoded: ${decoded})` : "") + (init.body ? `\n\n${pretty(init.body)}` : "");
+  current.request = request;
+  $("ex-request").textContent = request;
   $("ex-response").textContent = "Waiting…";
   $("exchange-line").textContent = "";
   banner(`${method} ${shown} …`, "busy");
@@ -84,17 +107,18 @@ async function call(method, path, body) {
     try { json = JSON.parse(text); } catch { json = null; }
   } catch (error) {
     text = error.name === "TimeoutError" ? `Timed out after ${TIMEOUT_MS / 1000} s.` : `Network error: ${error.message}. Is the API running?`;
-  } finally {
-    document.body.removeAttribute("aria-busy");
   }
   const ms = Math.round(performance.now() - started);
-  current.response = json ? JSON.stringify(json, null, 2) : text;
-  $("ex-response").textContent = current.response;
-  $("exchange-line").textContent = `· ${status || "no response"} · ${ms} ms`;
-  const entry = { method, path: shown, status, ms, request: current.request, response: current.response };
-  history.unshift(entry);
-  history.length = Math.min(history.length, 50);
+  const responseText = json ? JSON.stringify(json, null, 2) : text;
+  const latest = isCurrent();
+  exchanges.unshift({ method, path: shown, status, ms, request, response: responseText, superseded: !latest });
+  exchanges.length = Math.min(exchanges.length, 50);
   renderHistory();
+  if (!latest) throw new Superseded();  // A newer request owns the result, exchange and banner.
+  document.body.removeAttribute("aria-busy");
+  current.response = responseText;
+  $("ex-response").textContent = responseText;
+  $("exchange-line").textContent = `· ${status || "no response"} · ${ms} ms`;
   const ok = status >= 200 && status < 300;
   if (ok) banner(`${method} ${shown} → ${status} in ${ms} ms`, "ok");
   else if (json?.code) banner(`${json.code} (HTTP ${status}): ${json.detail || json.title}${json.requestId ? ` · request ${json.requestId}` : ""}`, "error");
@@ -102,24 +126,19 @@ async function call(method, path, body) {
   return { ok, status, json };
 }
 
-// Display only: Hebrew queries and IDs are easier to read decoded.
-function readable(path) {
-  try { return decodeURIComponent(path); } catch { return path; }
-}
-
 function pretty(text) {
   try { return JSON.stringify(JSON.parse(text), null, 2); } catch { return text; }
 }
 
 function renderHistory() {
-  $("history").replaceChildren(...history.map(entry => h("li", {},
+  $("history").replaceChildren(...exchanges.map(entry => h("li", {},
     h("button", { type: "button", class: "link", onclick: () => {
       $("ex-request").textContent = current.request = entry.request;
       $("ex-response").textContent = current.response = entry.response;
       $("exchange-line").textContent = `· ${entry.status || "no response"} · ${entry.ms} ms (from history)`;
       $("exchange").open = true;
     } }, `${entry.status || "ERR"} ${entry.method} ${entry.path}`),
-    h("span", { class: "muted" }, ` ${entry.ms} ms`))));
+    h("span", { class: "muted" }, ` ${entry.ms} ms${entry.superseded ? " · superseded, not rendered" : ""}`))));
 }
 
 // Problem responses are shown in full; the exchange panel already has the raw body.
@@ -132,22 +151,22 @@ function problemView(json, status) {
 }
 
 function metaView(meta, extra = {}) {
-  if (!meta) return null;
+  const facts = metaFacts(meta);
+  if (!facts) return null;
   const warnings = meta.warnings ?? [];
   return h("div", { class: "meta" },
-    meta.mode === "fixture" ? h("p", { class: "warn" }, "SYNTHETIC FIXTURE data — not a real route or stop.") : null,
-    h("span", {}, `freshness ${meta.freshness}`),
-    h("span", {}, `mode ${meta.mode}`),
+    facts.synthetic ? h("p", { class: "warn" }, "SYNTHETIC FIXTURE data — not a real route or stop.") : null,
+    ...facts.parts.map(part => h("span", { class: part === "no generation loaded" ? "warn-chip" : null }, part)),
     meta.coverage ? h("span", {}, `coverage ${dateLabel(meta.coverage.from)} – ${dateLabel(new Date(new Date(meta.coverage.until) - 1))}`) : null,
-    h("span", { title: meta.generationId }, `generation ${String(meta.generationId).slice(0, 12)}…`),
-    h("span", {}, `request ${meta.requestId}`),
+    meta.generationId != null ? h("span", { title: meta.generationId }, `generation ${String(meta.generationId).slice(0, 12)}…`) : null,
+    meta.requestId ? h("span", {}, `request ${meta.requestId}`) : null,
     ...Object.entries(extra).map(([k, v]) => h("span", {}, `${k} ${v}`)),
     ...warnings.map(w => h("span", { class: "warn-chip" }, w)));
 }
 
 function pager(tab, nextCursor, rerun) {
   if (!nextCursor) return h("p", { class: "muted" }, "End of results.");
-  return button("Next page →", () => rerun(nextCursor), "secondary");
+  return button("Next page →", () => run(rerun(nextCursor)), "secondary");
 }
 
 // ---------- Map ----------
@@ -261,7 +280,7 @@ function values(form) {
 function onSubmit(name, handler) {
   panel(name).addEventListener("submit", event => {
     event.preventDefault();
-    handler(values(panel(name))).catch(error => banner(error.message, "error"));
+    run(Promise.resolve().then(() => handler(values(panel(name)))));
   });
 }
 
@@ -285,10 +304,9 @@ async function refreshPill() {
   const pill = $("status-pill");
   try {
     const response = await fetch("/v1/status", { signal: AbortSignal.timeout(8000) });
-    const body = await response.json();
-    const d = body.data;
-    pill.textContent = d.ready ? `Ready · ${body.meta.freshness} · ${body.meta.mode}` : `Not ready · data ${d.staticData} · routing ${d.routing}`;
-    pill.className = `status-pill ${d.ready ? "ok" : "bad"}`;
+    const { tone, text } = pillState(response.status, await response.json());
+    pill.textContent = text;
+    pill.className = `status-pill ${tone}`;
   } catch {
     pill.textContent = "API unreachable";
     pill.className = "status-pill bad";
@@ -415,6 +433,7 @@ async function runStop(stopId) {
 // ---------- Departures ----------
 
 async function runDepartures(v, cursor) {
+  required(v.stopId, "Enter a stop ID, or click one in a result.");
   const from = departureInstant(v.from, v.offset);
   const path = `/v1/stops/${encodeURIComponent(v.stopId)}/departures?` +
     buildQuery({ from, horizonMinutes: v.horizonMinutes, limit: v.limit, cursor });
@@ -438,6 +457,12 @@ async function runDepartures(v, cursor) {
 
 // ---------- Routes ----------
 
+// A null operator cannot filter /v1/routes, so it is plain text rather than a button.
+function operatorLink(operatorId) {
+  if (operatorId == null || operatorId === "") return h("span", { class: "muted" }, "—");
+  return h("button", { type: "button", class: "id", title: "Routes by this operator", onclick: () => openRoutesByOperator(operatorId) }, operatorId);
+}
+
 const routeType = t => ({ 0: "light rail", 1: "metro", 2: "rail", 3: "bus", 715: "on-demand" })[t] ?? t;
 
 function routeTable(routes) {
@@ -448,7 +473,7 @@ function routeTable(routes) {
       h("td", {}, h("strong", {}, r.routeShortName ?? "")),
       h("td", {}, bdi(r.routeLongName)),
       h("td", {}, routeType(r.routeType)),
-      h("td", {}, h("button", { type: "button", class: "id", onclick: () => openRoutesByOperator(r.operatorId) }, r.operatorId ?? "")),
+      h("td", {}, operatorLink(r.operatorId)),
       h("td", {}, idLink(r.routeId))))));
 }
 
@@ -469,10 +494,10 @@ async function runRoute(routeId) {
     h("div", { class: "card" },
       h("h3", {}, `Line ${r.routeShortName ?? ""} `, bdi(r.routeLongName)),
       kv([["ID", idLink(r.routeId)], ["Source ID", r.sourceId], ["Type", routeType(r.routeType)], ["Description", r.description],
-        ["Operator", r.agency ? h("span", {}, bdi(r.agency.name), " · ", h("button", { type: "button", class: "id", onclick: () => openRoutesByOperator(r.operatorId) }, r.operatorId)) : r.operatorId],
+        ["Operator", r.agency ? h("span", {}, bdi(r.agency.name), " · ", operatorLink(r.operatorId)) : operatorLink(r.operatorId)],
         ["Colour", r.color ? h("span", { class: "swatch", style: `background:#${/^[0-9a-f]{6}$/i.test(r.color) ? r.color : "ccc"}` }, r.color) : null],
         ["Translations", r.translations ? h("span", {}, Object.entries(r.translations).map(([lang, text]) => h("span", { class: "tag" }, `${lang}: `, bdi(text)))) : null]]),
-      h("div", { class: "row" }, button("All patterns with stops", () => runPatterns(r.routeId)))),
+      h("div", { class: "row" }, button("All patterns with stops", () => run(runPatterns(r.routeId))))),
     h("div", { class: "card" },
       h("h3", {}, `Patterns (${r.patterns_count ?? r.patterns?.length ?? 0}${r.patterns_truncated ? ", truncated" : ""})`),
       h("ul", { class: "plain" }, (r.patterns ?? []).map(p => h("li", {}, h("code", {}, p.patternId), ` · direction ${p.directionId ?? "—"} · `, bdi(p.headsign))))),
@@ -631,15 +656,15 @@ const examples = [
 ];
 
 async function runRaw(v) {
-  if (!v.path.startsWith("/")) throw new Error("Path must start with / (same-origin only).");
+  const target = sameOriginTarget(required(v.path, "Enter a path such as /v1/status."), location.origin);
   let body;
   if (v.method === "POST") {
     body = v.body || "{}";
     try { JSON.parse(body); } catch { banner("Body is not valid JSON; sending it anyway to see the server's answer.", "error"); }
   }
-  const { ok, status, json } = await call(v.method, v.path, body);
+  const { ok, status, json } = await call(v.method, target, body);
   clearMap();
-  showResult(ok ? h("p", { class: "muted" }, "See the raw response below.") : problemView(json, status));
+  showResult(ok ? [h("p", { class: "muted" }, "See the raw response below."), metaView(json?.meta)] : problemView(json, status));
 }
 
 // ---------- Cross-navigation ----------
@@ -647,7 +672,7 @@ async function runRaw(v) {
 function openStop(stopId) {
   showTab("stops");
   field(panel("stops"), "stopId").value = stopId;
-  runStop(stopId);
+  run(runStop(stopId));
 }
 
 function openDepartures(stopId) {
@@ -677,13 +702,13 @@ function openRoutesByOperator(operatorId) {
 function openRoute(routeId) {
   showTab("routes");
   field(panel("routes"), "routeId").value = routeId;
-  runRoute(routeId);
+  run(runRoute(routeId));
 }
 
 function openTrip(tripRef) {
   showTab("trip");
   field(panel("trip"), "tripRef").value = tripRef;
-  runTrip(tripRef);
+  run(runTrip(tripRef));
 }
 
 // ---------- Wiring ----------
@@ -695,16 +720,16 @@ function wire() {
     syncVisibility(form);
   }
   onSubmit("status", () => runStatus());
-  for (const b of document.querySelectorAll("[data-run]")) b.addEventListener("click", () => runStatus(b.dataset.run));
+  for (const b of document.querySelectorAll("[data-run]")) b.addEventListener("click", () => run(runStatus(b.dataset.run)));
   onSubmit("places", runPlaces);
   onSubmit("stops", v => runStops(v));
   onSubmit("departures", v => runDepartures(v));
   onSubmit("routes", v => runRoutes(v));
-  onSubmit("trip", v => runTrip(v.tripRef));
+  onSubmit("trip", v => runTrip(required(v.tripRef, "Enter a trip reference from a departure or journey leg.")));
   onSubmit("journeys", runJourneys);
   onSubmit("raw", runRaw);
 
-  const guard = fn => () => fn().catch(error => banner(error.message, "error"));
+  const guard = fn => () => run(Promise.resolve().then(fn));
   $("stop-detail").addEventListener("click", guard(async () => {
     const id = field(panel("stops"), "stopId").value.trim();
     if (!id) throw new Error("Enter a stop ID, or click one in a result.");
@@ -758,7 +783,7 @@ function wire() {
       catch { banner("Clipboard unavailable; select the text instead.", "error"); }
     });
   }
-  $("status-pill").addEventListener("click", () => { refreshPill(); showTab("status"); runStatus(); });
+  $("status-pill").addEventListener("click", () => { refreshPill(); showTab("status"); run(runStatus()); });
 }
 
 wire();

@@ -43,3 +43,54 @@ export function buildJourneyRequest(v, toInstant) {
   if (v.lang) body.lang = v.lang;
   return body;
 }
+
+// Raw requests may only reach this API. Resolving against the origin catches
+// protocol-relative ("//host") and backslash ("/\host") paths that start with "/".
+export function sameOriginTarget(path, origin) {
+  let url;
+  try { url = new URL(path, origin); } catch { url = null; }
+  if (!url || url.origin !== origin) throw new Error("Raw requests go to this API only: enter a path such as /v1/status.");
+  return url.pathname + url.search;
+}
+
+// The exact request line is what was sent; a decoded copy is added only for readability.
+export function describeRequest(method, path) {
+  let decoded = null;
+  try { decoded = decodeURIComponent(path); } catch { /* malformed escapes: show the exact path only */ }
+  return { exact: `${method} ${path}`, decoded: decoded !== null && decoded !== path ? decoded : null };
+}
+
+// Each call takes a ticket; only the newest ticket may render, so a slow earlier
+// response cannot overwrite a newer one (for example after rapid map clicks).
+export function latestOnly() {
+  let latest = 0;
+  return () => {
+    const id = ++latest;
+    return () => id === latest;
+  };
+}
+
+// Labels for response meta. Fixture data must always be flagged as synthetic, and
+// fields the response lacks (no generation loaded) are skipped, not shown as "undefined".
+export function metaFacts(meta) {
+  if (!meta) return null;
+  const parts = [];
+  if (meta.generationId == null) parts.push("no generation loaded");
+  if (meta.freshness != null) parts.push(`freshness ${meta.freshness}`);
+  if (meta.mode != null) parts.push(`mode ${meta.mode}`);
+  const synthetic = meta.mode === "fixture";
+  return { synthetic, caution: synthetic || meta.freshness !== "current", parts };
+}
+
+// Header pill: green only for a ready API serving current, real data.
+export function pillState(httpStatus, body) {
+  const d = body?.data;
+  if (!d || typeof d.ready !== "boolean") return { tone: "bad", text: `API error (HTTP ${httpStatus})` };
+  if (!d.ready) return { tone: "bad", text: `Not ready · data ${d.staticData} · routing ${d.routing}` };
+  const facts = metaFacts(body.meta) ?? { synthetic: false, caution: true };
+  const mode = facts.synthetic ? "SYNTHETIC fixture" : body.meta?.mode;
+  return {
+    tone: facts.caution ? "warn" : "ok",
+    text: ["Ready", body.meta?.freshness, mode].filter(Boolean).join(" · "),
+  };
+}

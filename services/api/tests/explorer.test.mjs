@@ -1,6 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { buildJourneyRequest, buildQuery, idKind } from "../src/opentransit/api/playground/explorer-request.mjs";
+import {
+  buildJourneyRequest, buildQuery, describeRequest, idKind, latestOnly, metaFacts, pillState, sameOriginTarget,
+} from "../src/opentransit/api/playground/explorer-request.mjs";
 import { departureInstant } from "../src/opentransit/api/playground/time.mjs";
 
 test("identifiers open the endpoint that owns them", () => {
@@ -53,4 +55,50 @@ test("out-of-range values reach the API unchanged so its validation can be inspe
   const body = buildJourneyRequest({ ...base, modes: [], results: "9" }, departureInstant);
   assert.deepEqual(body.modes, []);
   assert.equal(body.results, 9);
+});
+
+test("raw requests stay on this origin, including protocol-relative and backslash tricks", () => {
+  const origin = "http://127.0.0.1:8000";
+  assert.equal(sameOriginTarget("/v1/places?q=a", origin), "/v1/places?q=a");
+  assert.equal(sameOriginTarget("http://127.0.0.1:8000/v1/status#x", origin), "/v1/status");
+  for (const path of ["//example.com/x", "/\\example.com/x", "https://example.com/v1/status", "javascript:alert(1)"]) {
+    assert.throws(() => sameOriginTarget(path, origin), /this API only/, path);
+  }
+});
+
+test("the shown request is the encoded path that was sent, with a decoded line only when it differs", () => {
+  assert.deepEqual(describeRequest("GET", "/v1/status"), { exact: "GET /v1/status", decoded: null });
+  assert.deepEqual(describeRequest("GET", "/v1/places?q=%D7%90%D7%91"), { exact: "GET /v1/places?q=%D7%90%D7%91", decoded: "/v1/places?q=אב" });
+  assert.deepEqual(describeRequest("GET", "/v1/x?q=%E0%A4%A"), { exact: "GET /v1/x?q=%E0%A4%A", decoded: null });
+});
+
+test("only the latest request may render; superseded responses are ignored", () => {
+  const begin = latestOnly();
+  const first = begin();
+  assert.equal(first(), true);
+  const second = begin();
+  assert.equal(first(), false);
+  assert.equal(second(), true);
+});
+
+const realMeta = { requestId: "r1", generationId: "abc", mode: "real", freshness: "current" };
+
+test("meta labels flag synthetic fixture data and skip fields the response lacks", () => {
+  assert.equal(metaFacts(undefined), null);
+  assert.deepEqual(metaFacts(realMeta), { synthetic: false, caution: false, parts: ["freshness current", "mode real"] });
+  assert.deepEqual(metaFacts({ ...realMeta, mode: "fixture", freshness: "aging" }),
+    { synthetic: true, caution: true, parts: ["freshness aging", "mode fixture"] });
+  assert.deepEqual(metaFacts({ requestId: "r2", generatedAt: "2026-10-02T06:00:00Z", generationId: null }),
+    { synthetic: false, caution: true, parts: ["no generation loaded"] });
+});
+
+test("status pill is green only for ready, current, real data", () => {
+  const ready = { ready: true, staticData: "available", routing: "available" };
+  assert.deepEqual(pillState(200, { data: ready, meta: realMeta }), { tone: "ok", text: "Ready · current · real" });
+  assert.deepEqual(pillState(200, { data: ready, meta: { ...realMeta, freshness: "aging", mode: "fixture" } }),
+    { tone: "warn", text: "Ready · aging · SYNTHETIC fixture" });
+  assert.deepEqual(pillState(200, { data: ready, meta: { ...realMeta, freshness: "stale" } }), { tone: "warn", text: "Ready · stale · real" });
+  assert.deepEqual(pillState(200, { data: { ready: false, staticData: "unavailable", routing: "unavailable" }, meta: { generationId: null } }),
+    { tone: "bad", text: "Not ready · data unavailable · routing unavailable" });
+  assert.deepEqual(pillState(500, { code: "INTERNAL" }), { tone: "bad", text: "API error (HTTP 500)" });
 });

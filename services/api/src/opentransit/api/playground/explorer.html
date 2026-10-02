@@ -32,7 +32,7 @@
       </nav>
 
       <!-- Status -->
-      <form class="panel" data-panel="status">
+      <form class="panel" data-panel="status" novalidate>
         <h2>Health and status</h2>
         <p class="hint"><code>GET /healthz</code>, <code>/readyz</code> and <code>/v1/status</code>.</p>
         <div class="row">
@@ -43,7 +43,7 @@
       </form>
 
       <!-- Places -->
-      <form class="panel" data-panel="places">
+      <form class="panel" data-panel="places" novalidate>
         <h2>Place search</h2>
         <p class="hint"><code>GET /v1/places</code> — stops, stations, POIs and addresses.</p>
         <label>Query (q)<input name="q" required minlength="2" maxlength="200" value="דיזנגוף סנטר" dir="auto"></label>
@@ -62,7 +62,7 @@
       </form>
 
       <!-- Stops -->
-      <form class="panel" data-panel="stops">
+      <form class="panel" data-panel="stops" novalidate>
         <h2>Stops nearby or in a box</h2>
         <p class="hint"><code>GET /v1/stops</code>. Click the map to set the centre.</p>
         <fieldset class="checks"><legend>Selector</legend>
@@ -87,7 +87,7 @@
       </form>
 
       <!-- Departures -->
-      <form class="panel" data-panel="departures">
+      <form class="panel" data-panel="departures" novalidate>
         <h2>Departures from a stop</h2>
         <p class="hint"><code>GET /v1/stops/{stopId}/departures</code></p>
         <label>Stop ID<input name="stopId" required placeholder="mot:stop:…"></label>
@@ -104,9 +104,9 @@
       </form>
 
       <!-- Routes -->
-      <form class="panel" data-panel="routes">
+      <form class="panel" data-panel="routes" novalidate>
         <h2>Routes</h2>
-        <p class="hint"><code>GET /v1/routes</code> — all filters optional.</p>
+        <p class="hint"><code>GET /v1/routes</code> — give at least one of line, operator or stop; the API answers 422 without one.</p>
         <label>Route short name<input name="routeShortName" placeholder="e.g. 5"></label>
         <label>Operator ID<input name="operatorId" placeholder="operatorId from a route result"></label>
         <label>Stop ID<input name="stopId" placeholder="mot:stop:…"></label>
@@ -123,7 +123,7 @@
       </form>
 
       <!-- Trip -->
-      <form class="panel" data-panel="trip">
+      <form class="panel" data-panel="trip" novalidate>
         <h2>Dated trip</h2>
         <p class="hint"><code>GET /v1/trips/{tripRef}</code>. Trip references come from departures or journey legs and are generation-scoped.</p>
         <label>Trip reference<input name="tripRef" required placeholder="20261002_08:00_…"></label>
@@ -131,7 +131,7 @@
       </form>
 
       <!-- Journeys -->
-      <form class="panel" data-panel="journeys">
+      <form class="panel" data-panel="journeys" novalidate>
         <h2>Plan a journey</h2>
         <p class="hint"><code>POST /v1/journeys</code>. Blank optional fields are omitted so server defaults apply.</p>
         <fieldset class="endpoint" data-end="from"><legend><span class="dot a">A</span> From</legend>
@@ -180,7 +180,7 @@
       </form>
 
       <!-- Raw -->
-      <form class="panel" data-panel="raw">
+      <form class="panel" data-panel="raw" novalidate>
         <h2>Raw request</h2>
         <p class="hint">Send anything to this API, including invalid input, to check problem responses.</p>
         <div class="grid-method">
