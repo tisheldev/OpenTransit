@@ -12,7 +12,9 @@ from __future__ import annotations
 
 import csv
 import io
+import math
 import zipfile
+from array import array
 from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import date, datetime, timedelta
@@ -32,11 +34,58 @@ class Call:
     distance_m: float | None  # GTFS shape_dist_traveled (metres)
 
 
-@dataclass(slots=True)
 class Trip:
-    trip_id: str
-    route_id: str
-    calls: list[Call] = field(default_factory=list)
+    """One scheduled trip; calls are stored in compact arrays and built on demand."""
+
+    __slots__ = (
+        "trip_id",
+        "route_id",
+        "origin",
+        "_sequence",
+        "_stops",
+        "_arrival",
+        "_departure",
+        "_distance",
+    )
+
+    def __init__(self, trip_id: str, route_id: str, origin: int = 0):
+        self.trip_id, self.route_id, self.origin = trip_id, route_id, origin
+        self._sequence, self._arrival, self._departure = array("i"), array("i"), array("i")
+        self._distance = array("d")
+        self._stops: list[str] = []
+
+    def append(
+        self, sequence: int, stop_id: str, arrival: int, departure: int, distance_m: float | None
+    ) -> None:
+        """Add a call; `arrival`/`departure` are seconds from the service-day origin."""
+        self._sequence.append(sequence)
+        self._stops.append(stop_id)
+        self._arrival.append(arrival)
+        self._departure.append(departure)
+        self._distance.append(math.nan if distance_m is None else distance_m)
+
+    def __len__(self) -> int:
+        return len(self._sequence)
+
+    @property
+    def calls(self) -> list[Call]:
+        order = sorted(range(len(self._sequence)), key=self._sequence.__getitem__)
+        return [
+            Call(
+                sequence=self._sequence[i],
+                stop_id=self._stops[i],
+                arrival=self.origin + self._arrival[i],
+                departure=self.origin + self._departure[i],
+                distance_m=None if math.isnan(self._distance[i]) else self._distance[i],
+            )
+            for i in order
+        ]
+
+    def first_departure(self) -> int | None:
+        if not self._sequence:
+            return None
+        first = min(range(len(self._sequence)), key=self._sequence.__getitem__)
+        return self.origin + self._departure[first]
 
 
 @dataclass(slots=True)
@@ -94,11 +143,12 @@ def load_day(feed: Path, day: date) -> DaySchedule:
             }
             for row in _rows(archive, "routes.txt")
         }
+        origin = service_origin(day)
         trips: dict[str, Trip] = {}
         for row in _rows(archive, "trips.txt"):
             if row["service_id"] in services:
-                trips[row["trip_id"]] = Trip(row["trip_id"], row["route_id"])
-        origin = service_origin(day)
+                trips[row["trip_id"]] = Trip(row["trip_id"], row["route_id"], origin)
+        stops: dict[str, str] = {}  # one shared string per stop_id
         with archive.open("stop_times.txt") as raw:
             reader = csv.reader(io.TextIOWrapper(raw, encoding="utf-8-sig", newline=""))
             header = next(reader)
@@ -111,20 +161,19 @@ def load_day(feed: Path, day: date) -> DaySchedule:
                 if trip is None:
                     continue
                 raw_distance = row[dist] if dist is not None else ""
-                trip.calls.append(
-                    Call(
-                        sequence=int(row[seq]),
-                        stop_id=row[stop],
-                        arrival=origin + gtfs_seconds(row[arr]),
-                        departure=origin + gtfs_seconds(row[dep]),
-                        distance_m=float(raw_distance) if raw_distance else None,
-                    )
+                stop_id = stops.setdefault(row[stop], row[stop])
+                trip.append(
+                    int(row[seq]),
+                    stop_id,
+                    gtfs_seconds(row[arr]),
+                    gtfs_seconds(row[dep]),
+                    float(raw_distance) if raw_distance else None,
                 )
     by_origin: dict[tuple[str, int], list[str]] = defaultdict(list)
     for trip in trips.values():
-        trip.calls.sort(key=lambda call: call.sequence)
-        if trip.calls:
-            by_origin[(trip.route_id, trip.calls[0].departure)].append(trip.trip_id)
+        first = trip.first_departure()
+        if first is not None:
+            by_origin[(trip.route_id, first)].append(trip.trip_id)
     running = {trip.route_id for trip in trips.values()}
     return DaySchedule(day, trips, routes, dict(by_origin), running)
 
