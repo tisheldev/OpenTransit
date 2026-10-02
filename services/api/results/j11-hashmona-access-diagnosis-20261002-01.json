@@ -1,0 +1,117 @@
+{
+ "schemaVersion": 1,
+ "id": "j11-hashmona-access-diagnosis-20261002-01",
+ "kind": "diagnosis (offline OSM/GTFS inspection + engine probes); not an H3 verdict",
+ "recordedAt": "2026-10-01T22:55:00Z",
+ "agent": "J11-ACCESS (Claude Code overnight subagent, branch diag/j11-hashmona-access)",
+ "baseSource": "fb3ae03 (origin/main at branch creation); no product code changed",
+ "subject": {
+  "case": "J11 Tel Aviv Savidor Center -> Haifa Center HaShmona, 2026-10-05 08:00",
+  "h3Verdict": "Unsure (services/api/results/h3-verdicts-20261001-01.json; unchanged)",
+  "comparison": "services/api/results/acceptance-oct1b-20261001-02/h3-moovit-comparison.md",
+  "ourBest": "rail 08:15 -> 37380 arr 09:23; interior transfer 37380 -> 35831 (240 s, street path unavailable); bus 2 09:28 -> 35833 Carmelit 09:29; walk 564 m -> destination 09:38",
+  "moovitBest": "train -> bus 5 08:17 -> 09:29 (Moovit read 2026-10-01 at the same coordinates; alighting stop and walk not recorded)",
+  "gapMinutes": 9,
+  "destination": {"lat": 32.8206, "lon": 34.9985, "source": "frozen corpus point P007 'Haifa Center HaShmona' (poc/corpora/build_places.py, 500 m tolerance)", "osmContext": "on HaNamal (living_street, way 1198902309) in downtown, south of HaAtzmaut Road; 226 m straight line from GTFS stop 37380"}
+ },
+ "generation": {
+  "path": "D:/ot/generations/oct1b (read-only)",
+  "generationId": "5eb4e43d9456b96a68ee44ffb7a58fe9137ed16bf40a670cf513c34564e44249",
+  "osmInput": {"file": "israel-and-palestine-latest.osm.pbf", "sha256": "f98a8b9ad7fb3df19c846d3a562d9394abc5657173faeddcb033a53f4aa701f3", "lastModified": "Tue, 29 Sep 2026 23:52:25 GMT", "readFrom": "C:/Projects/OpenTransit/.runtime/sources/snapshots/20261001T093052Z-31057f27/ (hash verified identical to the generation manifest)"},
+  "gtfsInput": {"sha256": "7d628a2fd0fd11518eb5a0c922b4ac55f4ed1cf52c8251853484deab06247b2e"},
+  "motisConfigRelevant": {"osr_footpath": false, "link_stop_distance": 100, "max_footpath_length": 15, "max_matching_distance": 25, "preprocess_max_matching_distance": 250, "elevators": false},
+  "engineImage": "ghcr.io/motis-project/motis@sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330 (MOTIS source 061857d)"
+ },
+ "method": {
+  "osmExtract": "pyosmium over the generation's OSM input, bbox 32.810-32.832 N / 34.985-35.010 E: all ways with a node in the bbox (full node lists with locations), tagged nodes, stop_area relations. Same extract repeated on the 2026-09-04 PoC PBF (sha256 8a34b30f...).",
+  "footProfile": "Pedestrian graph built with a Python mirror of osr's foot_profile (include/osr/extract/tags.h, motis-project/osr master read 2026-10-02 via GitHub API, file sha256 5e0b1d96...; the image's exact osr commit was not pinned). Default foot access: primary..tertiary(_link), unclassified, residential, road, living_street, service, track, path, steps, pedestrian, platform, corridor, footway, pier, plus platforms and parking; trunk/trunk_link/motorway are NOT foot-accessible by default; access=no blacklists unless foot=yes; sidewalk=separate blacklists the carriageway.",
+  "graphValidation": "Graph distances reproduce the engine within snapping offsets: street footway outside hall -> 35831 387 m (+~40 m snap; engine 37380->35831 440 m); dest -> 2410 683 m (engine 719 m); dest -> 35833 516 m (engine 564 m).",
+  "engineProbes": "Container ot-t8-motis (2g, 127.0.0.1:58800, generation motis dir mounted read-only, same image), /api/v6/plan with the adapter parameters from h3-no-route-diagnosis-20261001-01.json; container removed afterwards. No other lane touched; no generation created."
+ },
+ "rootCause": {
+  "summary": "OSM pedestrian connectivity, not GTFS, corpus, config or adapter code. In the generation's OSM extract the station side of HaAtzmaut Road and the downtown side (where the destination is) are disconnected for walking, and the station platforms are additionally an isolated island. MOTIS therefore cannot walk from the station to the destination 226 m away and substitutes a Metronit hop plus a 564 m walk.",
+  "primary_A_HaAtzmaut_not_crossable_on_foot": {
+   "type": "OSM data (upstream) interacting with osr's foot profile",
+   "evidence": [
+    "HaAtzmaut Road around the station is highway=trunk / trunk_link (ways 785524390, 983017888, 393562171, 983017509, 983017886, 1075339350, ...). osr's foot profile gives trunk/trunk_link no default foot access, and sidewalk=right on 393562171/983017509 does not grant it.",
+    "The signalled crossings of HaAtzmaut by HaBankim are footway=crossing ways 667381519 (4 nodes) and 667381520 (8 nodes) whose ends attach only to trunk carriageway nodes and to the Metronit busway (service, access=no). In the foot graph they are isolated islands of 4 and 8 nodes. No separately mapped sidewalk joins them on either side.",
+    "Crossing 904224733 at Kikar Pallumer belongs to the station-side component and dead-ends on trunk 212452004.",
+    "Foot graph (osr profile): station-side component 1,026 nodes (contains street footway 1528137072, sidewalk 1528137071, bus stops 35831/3839/3840 and the Metronit stop 35832's nearest way) vs downtown component 4,153 nodes (destination, 2410, 35833, 2053, 3588). No edge joins them inside the bbox; allowing trunk/trunk_link joins them (street footway outside the hall -> destination 515 m).",
+    "Engine probe P3: no direct walk to the destination within 30 min from the 37380 coordinate, the platform, the footway outside the hall, sidewalk 1528137071, Kikar Pallumer stop 35831 or Metronit stop 35832; direct walks exist only from downtown-side points (2410: 719 m / 631 s; 35833: 564 m / 511 s).",
+    "Engine probe P6: no direct walk from Kikar Pallumer stop 35831 to stop 2410 (157 m straight line, opposite sides of HaAtzmaut). Same as the earlier '37380 -> 2410: none' observation.",
+    "Engine probe P7: maxMatchingDistance=250 still gives no direct walk 37380 -> destination (matching is not the problem; graph connectivity is)."
+   ]
+  },
+  "secondary_B_platform_island_no_path_through_station_hall": {
+   "type": "OSM data (upstream)",
+   "evidence": [
+    "Platforms 324075888 (ref 1) and 324075885 (ref 2;3), underpass footway 96627671 (tunnel, layer -1) and stub footway 1528137070 form an 8-node island.",
+    "Footway 1528137070 runs from platform node 13926064475 to node 13926064476 on the station building outline (way 96621536, building=train_station, not walkable); street-side footway 1528137072 starts at another outline node 13926064480 about 20 m away. No corridor/footway is mapped through the hall and neither outline node carries entrance=*.",
+    "Not binding for J11 in this engine: MOTIS matched stop 37380 to the street side (probe P2: walk 37380 -> 35831 440 m), so fixing B alone would not change J11. It matters once A is fixed and for routing that snaps to the platform."
+   ]
+  },
+  "notRegression": "Identical island and crossing topology in the 2026-09-04 PoC OSM extract; PoC J11 (10-day feed, also with generous walk caps) used the same bus 2 -> 35833 + 564 m pattern (poc/comparisons/ten-day-2026-09-04/routing/responses/J11.json)."
+ },
+ "ruledOut": {
+  "gtfsTrainTimes": "Probe P5 (toPlace = stop mot60day_37380): train 08:15 arrives 09:23; the shared MOT feed's rail times are not the cause (answers the reviewer's question 'does moovit use the actual train data?').",
+  "gtfsStopCoordinates": "Stop 37380 (32.822306, 34.997177) lies 9 m from platform 1 and 17 m from the OSM station node; correct.",
+  "corpusCoordinate": "The destination point is a legitimate downtown address 226 m from the station (Moovit was read at the same point). Moving it would hide the street-graph defect rather than fix it, and break comparability with the dated Moovit row.",
+  "motisStreetRoutingLimits": "Caps 900/900/1800 s are far above a 226 m walk; the earlier diagnosis showed caps only mattered for J09.",
+  "transferStreetPathUnavailableHandling": "Not causal for the 9-minute gap: the cancelled interior transfer 37380 -> 35831 (engine footpath 240 s) is kept honestly with walkingDistanceMeters null; the gap comes from the egress side (no station -> destination walk, 564 m egress from 35833)."
+ },
+ "relatedCases": {
+  "J15": "Same destination point; same pattern (rail -> bus 1/2 -> 35833 + 564 m), +10 min vs Moovit. The same OSM fix should improve it.",
+  "J16": "Interior transfer 37380 -> 2410 has no street path because 2410 is across HaAtzmaut (cause A).",
+  "J08": "Origin is the same point; unaffected in practice (Δ +1 min) because it departs from downtown-side stops."
+ },
+ "expectedEffectOfFix": "With both A and B linked, the approximate graph gives platform -> destination 547 m even when the only link is walking along the trunk carriageways (an upper bound; mapped sidewalks plus the 667381520 crossing should be shorter, roughly 250-350 m). At osr walking speed that is about 4-8 min, i.e. arrival about 09:27-09:31 after the 09:23 train versus Moovit 09:29 (currently 09:38). Estimate only; confirm with a rebuilt generation.",
+ "recommendation": {
+  "ranked": [
+   {
+    "rank": 1,
+    "option": "OSM upstream fix",
+    "what": "(A) Map the HaAtzmaut sidewalks between Kikar Pallumer and HaBankim as footway=sidewalk on both sides and join crossings 667381519/667381520 to them (or, where sidewalks are not mapped separately, add foot=yes/sidewalk=both to the carriageway segments). (B) Add a footway/corridor through station building 96621536 joining 13926064476 and 13926064480, with entrance nodes on the outline.",
+    "risk": "Low product risk; no code or config change, and generation identity changes naturally on the next OSM fetch. External dependency: needs an on-the-ground check of real sidewalks/crossings and a public OSM edit, which is the user's decision and account (not done here). Effect appears only after Geofabrik's next extract and a new generation build.",
+    "verify": "Rebuild a generation after the edit is in the extract and rerun probes P1/P3/P5/P6 (engine) and the osr-profile connectivity check: expect a direct walk 37380 -> destination and J11 arrival near 09:27-09:31."
+   },
+   {
+    "rank": 2,
+    "option": "Corpus addition (not correction)",
+    "what": "Optionally add a stop-input variant of J11/J15 (toPlace = stop 37380) so H3 separates timetable quality (P5: arrival 09:23) from last-mile OSM quality. Keep the existing coordinate rows unchanged.",
+    "risk": "Low; changes the corpus hash for future runs; does not fix real users' last mile."
+   },
+   {
+    "rank": 3,
+    "option": "Local OSM patch in build-generation (fallback only if the upstream fix stalls)",
+    "what": "Apply a pinned, reviewed .osc to the OSM input before MOTIS import.",
+    "risk": "Medium: diverges from upstream, adds provenance/attribution and maintenance burden, needs an ADR and ground truth anyway. Not recommended now."
+   },
+   {
+    "rank": 4,
+    "option": "Config change",
+    "what": "None effective. MOTIS exposes no foot-profile override; osr_footpath=true would still find no street path here; maxMatchingDistance=250 tested without effect (P7).",
+    "risk": "Rebuild cost with no benefit."
+   },
+   {
+    "rank": 5,
+    "option": "Code change",
+    "what": "None. Synthesizing a walk across an unmapped crossing would fabricate a path, which the API contract forbids.",
+    "risk": "Would violate the no-fabrication rule."
+   }
+  ],
+  "productChangeMade": false
+ },
+ "probes": {
+  "P1_J11_adapter": "reproduces run -02 exactly: 08:14 -> 09:38 (rail, cancelled transfer 37380 -> 35831, bus 2, 564 m walk); 08:25 -> 09:52 (rail to Bat Galim, bus 36 -> 2410, 719 m); 08:44 -> 10:08 (bus 18 -> 2410, 719 m). No direct walk itineraries.",
+  "P2_from_stop37380_at_09:23": "best 09:40 (walk 440 m to 35831, bus 1 to 35833, walk 564 m); alternative 09:39 via buses 18 and 3 and 438 m walk from 3588. No direct walk.",
+  "P3_direct_walk_to_destination_maxDirectTime_1800": {
+   "37380 coordinate": "none", "platform 1": "none", "footway outside hall (13926064480)": "none", "sidewalk 1528137071": "none",
+   "35831 Kikar Pallumer": "none", "35832 Metronit": "none", "2410 south side": "719 m / 631 s", "35833 Carmelit": "564 m / 511 s"
+  },
+  "P5_J11_to_stop37380": "08:14 -> 09:23 (direct rail; walk start 08:14, train 08:15), 08:25 -> 09:35, 08:44 -> 09:52",
+  "P6_35831_to_2410_direct": "none",
+  "P7_37380_to_destination_maxMatchingDistance_250": "none",
+  "one_to_many": "not available in this API form (HTTP 400); not needed"
+ },
+ "notAnH3Verdict": "J11 stays 'Unsure' as recorded by the user; H3 remains PASSED 9/10. No existing result was modified."
+}
