@@ -266,6 +266,14 @@
           "value": "/run/opentransit/probe.json"
         },
         {
+          "name": "OPENTRANSIT_RATE_LIMIT_ENABLED",
+          "value": "1"
+        },
+        {
+          "name": "OPENTRANSIT_TRUSTED_PROXIES",
+          "value": "{{VPC_CIDR}}"
+        },
+        {
           "name": "PYTHONDONTWRITEBYTECODE",
           "value": "1"
         }

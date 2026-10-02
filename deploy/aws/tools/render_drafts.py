@@ -39,6 +39,7 @@ PLACEHOLDERS = {
     "VPC_ID",
     "CERTIFICATE_ARN",
     "REVIEWER_CIDR",
+    "VPC_CIDR",
     "TASK_DEFINITION_REVISION",
 }
 
@@ -102,6 +103,9 @@ VARIANTS = {
     },
 }
 COMPOSE_FILE = "local/compose.yaml"
+# The local emulation has no ALB: the API sees the real TCP peer, so the proxy-trust token
+# (which only a deployment step can resolve) is left out rather than rendered unparseable.
+LOCAL_OMITTED_ENV = "OPENTRANSIT_TRUSTED_PROXIES"
 
 
 def _logging(prefix: str) -> dict:
@@ -278,6 +282,10 @@ def render_task_definition(variant: str) -> dict:
         {"name": "OPENTRANSIT_MANIFEST", "value": "/generation/manifest.json"},
         {"name": "OPENTRANSIT_MOTIS_URL", "value": motis_url},
         {"name": "OPENTRANSIT_PROBE", "value": "/run/opentransit/probe.json"},
+        # Explicit even though 1 is the default. The ALB is the only peer, so its VPC range is
+        # trusted for X-Forwarded-For; the deployment step substitutes the real CIDR for the token.
+        {"name": "OPENTRANSIT_RATE_LIMIT_ENABLED", "value": "1"},
+        {"name": "OPENTRANSIT_TRUSTED_PROXIES", "value": "{{VPC_CIDR}}"},
     ]
     api_depends = [
         {"containerName": "verifier", "condition": "SUCCESS"},
@@ -408,6 +416,8 @@ def render_local_compose(variant: str = "recommended") -> str:
         if "environment" in container:
             lines.append("    environment:")
             for item in container["environment"]:
+                if item["name"] == LOCAL_OMITTED_ENV:
+                    continue
                 lines.append(f"      {item['name']}: {_yaml_scalar(item['value'])}")
         lines.append("    volumes:")
         for mount in container["mountPoints"]:

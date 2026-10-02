@@ -29,6 +29,16 @@
 12-digit account IDs and secret-like text. The MOTIS image digest is the one pinned in
 `compose.yaml`.
 
+**Client identity behind the ALB.** Every task definition's API container sets
+`OPENTRANSIT_RATE_LIMIT_ENABLED=1` and `OPENTRANSIT_TRUSTED_PROXIES={{VPC_CIDR}}`. The
+deployment step must replace `{{VPC_CIDR}}` with the task VPC's CIDR (the ALB's node addresses
+come from its subnets, so the VPC range covers them; the drafts do not pin a literal because the
+VPC is chosen at deployment, like `{{VPC_ID}}`). Left unresolved, the API refuses to start;
+omitted, every passenger shares the ALB's bucket. The validator fails a task definition whose API
+container lacks the variable or sets anything but a CIDR list (or the token), and the local
+Compose emulation omits it because it has no ALB. See
+[rate limiting](../../docs/operations.md#rate-limiting).
+
 ## Memory and CPU budget (proposal; measured locally on one core)
 
 Evidence: MOTIS engine-only load peak 941 MB (September; the preserved M4 serving trial read
