@@ -129,7 +129,8 @@ class PhotonGeocoder:
             backend_ms = _elapsed_ms(started)
             normalize_started = time.perf_counter()
             # Parsing and source verification (one catalog lookup per feature) run on a
-            # worker thread: they cost 5-9 ms per request, which would hold the event loop.
+            # worker thread; the API latency baseline measured 5-9 ms of event-loop time
+            # per address request for them.
             items = await asyncio.to_thread(self._verified_items, raw, limit)
             result_count = len(items)
             outcome = "success" if items else "validempty"
