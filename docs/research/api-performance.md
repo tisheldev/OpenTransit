@@ -105,7 +105,6 @@ Hebrew POI tail.
 | 2.5 | Per-generation reference bundle (all stops, routes, localities) at a content-addressed URL, `immutable` | Stop search, nearby and line lists need no network. Stops alone: 0.64 MB brotli (**M**, computed from `oct1b`) | Bundle names can lag; expiry must still come from `/v1/status` |
 | 2.6 | `meta.sourceCheckedAt` (or the freshness transition times) and `meta.referenceHash` | Lets the client age cached views honestly offline | Small |
 | 2.7 | Separate rate-limit buckets for places and journeys; `RateLimit` headers | Typeahead plus speculative requests fit; today both share 30 per minute and carrier NAT pools users | Abuse budget needs re-tuning |
-| 2.8 | Deadline-bounded geocoders returning partial results | Caps places p95 near 35–40 ms | High: at least 30 of 248 Hebrew POI requests would lose results; `partial` changes meaning |
 
 ### Tier 3 — infrastructure, needs the user's spending or Region decision
 
@@ -143,6 +142,9 @@ edge about 35 ms. All figures are estimates.
   URLs and logs.
 - Disabling MOTIS geocoding: POI search depends on it.
 - Streaming partial itineraries: the engine returns all results at once.
+- Deadline-bounded geocoders returning partial results (formerly 2.8): removed from the
+  plan on 3 October at the user's request. It would cap places p95 near 35–40 ms, but at
+  least 30 of 248 Hebrew POI requests would lose their results.
 
 ## Options for the client
 
@@ -205,5 +207,5 @@ interaction ≤ 100 ms, network reference read ≤ 400 ms, journey options ≤ 1
   first-journey cost are measured but not explained.
 - No Fargate, CloudFront or mobile-network measurement exists; network figures rest on
   assumed round-trip times.
-- Search ranking changes (1.5, 2.8, the POI index, on-device search) need a replay of the
+- Search ranking changes (1.5, the POI index, on-device search) need a replay of the
   183-variant corpus before they can claim parity with H4.
