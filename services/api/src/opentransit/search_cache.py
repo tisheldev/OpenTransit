@@ -20,9 +20,10 @@ from collections import OrderedDict
 from collections.abc import Hashable
 from typing import Any
 
-# Complete stop-search results (at most 20 items each). About 10-20 KB per entry.
+# Complete stop-search results (at most 20 items each): about 7 KB per entry at limit 10
+# measured on the national feed, so the cache stays under about 4 MB.
 STOP_RESULT_CACHE_ENTRIES = 512
-# Complete geocoder responses per backend and snapshot. About 10-30 KB per entry.
+# Complete geocoder responses per backend and snapshot (at most 20 items each).
 GEOCODER_CACHE_ENTRIES = 256
 
 

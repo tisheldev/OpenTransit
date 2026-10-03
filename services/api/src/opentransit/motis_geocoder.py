@@ -14,6 +14,7 @@ from typing import Any
 import httpx
 
 from opentransit.core.place_ref import candidate_identity_hash, encode_place_ref
+from opentransit.search_cache import GeocoderCaches, geocoder_caches
 
 MAX_GEOCODE_RESPONSE_BYTES = 2_000_000
 MAX_GEOCODE_TEXT_CHARS = 200
@@ -49,14 +50,21 @@ async def geocode_places(
     types: tuple[str, ...] = ("poi", "address"),
     limit: int = 10,
     request_id: str | None = None,
+    use_cache: bool = True,
 ) -> GeocodeResult:
-    """Search one captured runtime snapshot, preserving success-empty separately from errors."""
+    """Search one captured runtime snapshot, preserving success-empty separately from errors.
+
+    Complete non-empty answers are cached on the snapshot (see ``MotisGeocoder``);
+    ``use_cache=False`` always asks the engine, which warm-up and health probes need.
+    """
     if snapshot is None or getattr(snapshot, "motis", None) is None:
         raise GeocoderUnavailable("Geocoder generation is unavailable")
     generation_id = getattr(getattr(snapshot, "generation", None), "id", None)
     if not isinstance(generation_id, str) or not generation_id:
         raise GeocoderUnavailable("Geocoder generation is unavailable")
-    adapter = MotisGeocoder(snapshot.motis, generation_id)
+    adapter = MotisGeocoder(
+        snapshot.motis, generation_id, cache=geocoder_caches(snapshot) if use_cache else None
+    )
     return await adapter.search(
         query,
         language=language,
@@ -75,6 +83,7 @@ class MotisGeocoder:
         *,
         timeout_seconds: float = 1.5,
         max_response_bytes: int = MAX_GEOCODE_RESPONSE_BYTES,
+        cache: GeocoderCaches | None = None,
     ) -> None:
         if not isinstance(generation_id, str) or not generation_id:
             raise ValueError("A generation ID is required")
@@ -86,6 +95,13 @@ class MotisGeocoder:
         self.generation_id = generation_id
         self.timeout_seconds = timeout_seconds
         self.max_response_bytes = max_response_bytes
+        # The snapshot's result cache, if any. Only a complete, valid, non-empty answer is
+        # stored; an error, timeout or invalid response is never stored and drops the
+        # backend's cached answers so recovery is observed by a live call. Items are
+        # exactly what the engine's text request returns, so the key is the stripped
+        # text and the request parameters (not a looser normalization the engine might
+        # treat differently).
+        self.cache = cache
 
     async def search(
         self,
@@ -121,10 +137,17 @@ class MotisGeocoder:
             if isinstance(request_id, str) and _REQUEST_ID_PATTERN.fullmatch(request_id)
             else None
         )
+        cache_key = ("motis", tuple(params))
+        if self.cache is not None and (cached := self.cache.get("motis", cache_key)) is not None:
+            _log_phase_timing(
+                safe_request_id, self.generation_id, 0.0, 0.0, None, len(cached), "cached"
+            )
+            return GeocodeResult(cached, tuple(types))
         backend_started = perf_counter()
         try:
             raw = await self._request(params)
         except GeocoderUnavailable:
+            self._forget()
             _log_phase_timing(
                 safe_request_id,
                 self.generation_id,
@@ -151,10 +174,14 @@ class MotisGeocoder:
                 raise ValueError("Geocoder returned a category outside the requested types")
             result_count = len(items)
             outcome = "success" if items else "validempty"
+            if self.cache is not None and items:
+                self.cache.put("motis", cache_key, items)
             return GeocodeResult(items, tuple(types))
         except GeocoderUnavailable:
+            self._forget()
             raise
         except (ValueError, TypeError, KeyError, OverflowError) as exc:
+            self._forget()
             raise GeocoderUnavailable("Geocoder response was invalid") from exc
         finally:
             _log_phase_timing(
@@ -166,6 +193,10 @@ class MotisGeocoder:
                 result_count,
                 outcome,
             )
+
+    def _forget(self) -> None:
+        if self.cache is not None:
+            self.cache.clear("motis")
 
     async def _request(self, params: list[tuple[str, str]]) -> bytes:
         if not isinstance(self.client, httpx.AsyncClient) or self.client.is_closed:
