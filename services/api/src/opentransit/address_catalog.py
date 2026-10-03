@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import re
 import sqlite3
+import threading
 from collections.abc import Mapping
 from pathlib import Path
 from types import MappingProxyType
@@ -25,6 +26,9 @@ class AddressCatalog:
         uri = f"{resolved.as_uri()}?mode=ro&immutable=1"
         self._connection = sqlite3.connect(uri, uri=True, check_same_thread=False)
         self._connection.row_factory = sqlite3.Row
+        # Lookups run on worker threads (address verification is kept off the event loop);
+        # one connection is shared, so its statements are serialized.
+        self._lock = threading.Lock()
         try:
             user_version = self._connection.execute("PRAGMA user_version").fetchone()[0]
             rows = dict(self._connection.execute("SELECT key, value FROM metadata"))
@@ -72,10 +76,11 @@ class AddressCatalog:
             or not full_osm_id.isdigit()
         ):
             return None
-        row = self._connection.execute(
-            "SELECT payload_json FROM places WHERE osm_type = ? AND osm_id = ?",
-            (osm_type, full_osm_id),
-        ).fetchone()
+        with self._lock:
+            row = self._connection.execute(
+                "SELECT payload_json FROM places WHERE osm_type = ? AND osm_id = ?",
+                (osm_type, full_osm_id),
+            ).fetchone()
         if row is None:
             return None
         payload = json.loads(row["payload_json"])
