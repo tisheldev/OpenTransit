@@ -7,6 +7,7 @@ from pathlib import Path
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException
+from starlette.middleware.gzip import GZipMiddleware
 from starlette.staticfiles import StaticFiles
 
 from opentransit.api.lifecycle import make_lifespan
@@ -23,6 +24,12 @@ from opentransit.api.responses import problem
 from opentransit.api.routes import include_routes
 from opentransit.api.schemas import Problem
 from opentransit.config import Settings
+
+# Compress bodies over 1 KiB for clients that accept gzip (API-PERF 1.6). Level 5 shrinks
+# a journey response about 4x for well under a millisecond of CPU; smaller bodies and
+# problem documents are not worth a compression frame.
+GZIP_MINIMUM_BYTES = 1024
+GZIP_LEVEL = 5
 
 RATE_LIMITED_RESPONSE = {
     "description": "Per-client rate limit exceeded (`RATE_LIMITED`)",
@@ -86,6 +93,9 @@ def create_app(
     )
     app.state.rate_limiter = _rate_limiter(settings, rate_limit_clock)
     app.state.trusted_proxies = parse_trusted_proxies(settings.trusted_proxies)
+    # Inside SafeRequests: it sees each complete response, so bodies under the minimum stay
+    # uncompressed (outside, BaseHTTPMiddleware's chunked re-send defeats the size check).
+    app.add_middleware(GZipMiddleware, minimum_size=GZIP_MINIMUM_BYTES, compresslevel=GZIP_LEVEL)
     app.add_middleware(SafeRequests)
     include_routes(app, settings, clock)
     _document_rate_limits(app)

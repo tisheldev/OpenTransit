@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-15",
+  "scope": "API-PERF package A (1.1 translation index, 1.2 slim stop lookup, 1.4 routes?stopId from the stop index, 1.11 pooled connections): output equivalence with the previous SQL paths on a real generation, plus single-threaded query timings. Not an HTTP, container, load or Fargate measurement; not baseline -02.",
+  "provenance": {
+    "generation": "oct1b (D:/ot/generations/oct1b, read-only: mode=ro&immutable=1)",
+    "generationId": "5eb4e43d9456b96a68ee44ffb7a58fe9137ed16bf40a670cf513c34564e44249",
+    "referenceSha256": "0c63b84c1fc82aa3146c86a7c95d4efbf6e112cff395e0a262188696665aa88a",
+    "baselineImplementation": "services/api/src/opentransit/reference.py at 3d151b3 (PR #16 head before package A)",
+    "candidateImplementation": "branch perf/api-t12-wave1 (package A + D, measured from the working tree; the committed reference.py differs only by formatting)",
+    "tool": "services/api/tools/compare_reference_reads.py",
+    "host": "developer machine, Windows 11, native CPython 3.14.6, warm OS file cache"
+  },
+  "method": [
+    "Opened the store with the manifest's reference digest as the attested SHA-256 (no PRAGMA integrity_check); the old implementation reused the same verified file and metadata.",
+    "Compared JSON text (key order included) of old vs new stop() by stop ID and by source ID for all 236 parent stations plus 800 random stops (seed 20261015); old stop()/route() cost too much to run on all 35,321 stops.",
+    "Compared stop_ref() by stop ID and by source ID with the new stop() for every stop.",
+    "Compared old vs new route() for 400 random routes, and routes(stopId=...) for every parent station plus 1,000 random stops, walking every page at limit 20.",
+    "Timed each call once, single-threaded, with the new store's result cache bypassed (private uncached methods).",
+    "Measured the in-memory indexes with tracemalloc on a separate build of the same structures."
+  ],
+  "measured": {
+    "openSecondsWithAttestedDigest": 37.3,
+    "routesStopQueryPlan": [
+      "SEARCH rs USING COVERING INDEX route_stops_stop_idx (stop_id=?)",
+      "SEARCH r USING INDEX sqlite_autoindex_routes_1 (route_id=?)",
+      "USE TEMP B-TREE FOR DISTINCT",
+      "USE TEMP B-TREE FOR ORDER BY"
+    ],
+    "inMemoryIndexBytes": {
+      "translations": 23695778,
+      "translationsPlusStopRefs": 33091509
+    },
+    "compared": {
+      "stopsOldVsNew": 1036,
+      "stopsBySourceIdOldVsNew": 1036,
+      "stopRefsVsNewDetail": 70642,
+      "routesOldVsNew": 400,
+      "routesTotal": 7873,
+      "stopsTotal": 35321,
+      "routesByStopSelectors": 1236,
+      "routesByStopParentStations": 236,
+      "routesByStopPages": 1429
+    },
+    "mismatches": {
+      "stop": 0,
+      "stop_by_source": 0,
+      "stop_ref": 0,
+      "route": 0,
+      "routes_by_stop": 0
+    },
+    "mismatchExamples": {},
+    "timingsUncachedSingleThread": {
+      "stop_old": {
+        "n": 1036,
+        "medianMs": 28.986,
+        "p95Ms": 32.654,
+        "maxMs": 46.776
+      },
+      "stop_new": {
+        "n": 1036,
+        "medianMs": 0.054,
+        "p95Ms": 0.19,
+        "maxMs": 0.548
+      },
+      "route_old": {
+        "n": 400,
+        "medianMs": 27.28,
+        "p95Ms": 29.292,
+        "maxMs": 30.914
+      },
+      "route_new": {
+        "n": 400,
+        "medianMs": 0.062,
+        "p95Ms": 0.094,
+        "maxMs": 0.247
+      },
+      "routes_stop_old": {
+        "n": 1429,
+        "medianMs": 23.627,
+        "p95Ms": 32.823,
+        "maxMs": 44.825
+      },
+      "routes_stop_new": {
+        "n": 1429,
+        "medianMs": 0.127,
+        "p95Ms": 0.246,
+        "maxMs": 0.634
+      }
+    }
+  },
+  "observations": [
+    "0 mismatches in every comparison.",
+    "routes?stopId now searches route_stops_stop_idx (covering) and routes by primary key; no table scan.",
+    "Natively with a warm file cache the old paths cost about 24-29 ms median; the Oct 3 baseline measured about 475 ms per translations query inside Docker on the demo stack. Re-measure through HTTP in baseline -02.",
+    "The translation index and stop lookup add about 33 MB (tracemalloc) to the API process per loaded generation; relevant to the H-0 API limit of 512 MiB (RSS 218 MiB measured Oct 1)."
+  ]
+}

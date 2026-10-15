@@ -33,6 +33,7 @@ from opentransit.search_readiness import (
     READY,
     UNAVAILABLE,
     WARMING,
+    WARMUP_QUERIES_HE,
     WARMUP_QUERY,
     SearchWarmup,
     enabled_backends,
@@ -190,7 +191,11 @@ def test_warmup_uses_one_fixed_query_per_backend_and_marks_ready(monkeypatch):
     record = asyncio.run(run())
     assert record.backends == {"address": READY} and not record.index_failed
     assert search_index_ready(reference)
-    assert calls == [(WARMUP_QUERY, ("address",), 1)] and delays == []
+    # The English probe decides readiness; Hebrew warm-up passes follow it.
+    assert calls == [(WARMUP_QUERY, ("address",), 1)] + [
+        (query, ("address",), 10) for query in WARMUP_QUERIES_HE
+    ]
+    assert delays == []
     assert readiness_reasons(snapshot, record, ("address",)) == []
 
 
