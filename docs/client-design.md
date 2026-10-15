@@ -1,6 +1,49 @@
 # Phase 2 client design
 
-**Proposal, 1 October 2026; not implemented.** Implementation starts under the October 1 [gate revision](../PRD.md): once M2–M4 are accepted locally and the private H-0/H-1 deployment begins. Realtime and alerts remain deferred. The client labels every time as scheduled and shows unavailable live data as unavailable, never as an empty success.
+**Proposal, 1 October 2026; interface direction chosen 2 October 2026; not implemented.** Implementation starts under the October 1 [gate revision](../PRD.md): once M2–M4 are accepted locally and the private H-0/H-1 deployment begins. Realtime and alerts remain deferred. The client labels every time as scheduled and shows unavailable live data as unavailable, never as an empty success.
+
+## Interface direction (user, 2 October 2026)
+
+The client is a **Hebrew-first, right-to-left** mobile web app with English mirrored from it. It focuses on two jobs, with no bloat: **planning a trip** (choose where from and where to, compare the options with every fact needed to choose) and **navigating it** (know where you are, and for each step show when the vehicle leaves, where from, which platform, and the next steps). The user compared three designs and chose **Map + timeline**, then picked its **variant B** in the playable prototype: a map with a bottom sheet holds every screen; options are compared as one compact chart on a shared time axis; tapping an option shows its whole route at once; and navigation pins a high-contrast step card at the top of the sheet, near the thumb, above the whole-trip checklist.
+
+Tokens, components (Hebrew previews), the seven-screen flow and the brand book live in the OpenTransit design system, a private claude.ai artifact (`https://claude.ai/artifact/P3US2NygmWPs1iALn555PU`, owner access). Its palette and copy derive from the API playground. It is a static CSS rendition, not implementation evidence. A playable prototype (`https://claude.ai/artifact/FVufx6zTmyzny45pzRpxb5`, private, sample data and a simulated clock) showed three variants: A, full option rows with the step card over the map; B, a compact timeline chart with the step card in the sheet; C, full rows with a large countdown. The user chose B on 2 October, with one change: tapping an option shows its route in detail immediately.
+
+### Surface
+
+- The map is always behind, centred on the person. It draws whatever the sheet is about, and it is never mirrored.
+- The sheet has three snap points (peek 35%, half 55%, full 92%). Moving forward replaces its content in place; swiping down or the system back gesture goes back one level and keeps the trip.
+- There are no tab bars, menus or overflow buttons. The only floating controls are Back and Locate.
+
+### Plan
+
+| # | Screen | Content | Taps |
+| --- | --- | --- | --- |
+| 1 | Home | Floating From/To fields: From defaults to "המיקום שלי" (my location) or the last origin; swap button. Sheet: Home, Work and favourite chips, then recents | 0 |
+| 2 | Where to | Sheet at full height with results as you type (places, stops, stations, Hebrew or English), and "בחירה במפה" (choose on map) always as a row. A chip or recent skips this screen | 1 + typing |
+| 3 | Compare | Now / Depart at / Arrive by inline. One compact chart: three options as bars on one time axis, earliest on the right, each labelled with its duration and rank (מומלץ / הכי מהיר / בלי החלפות). The best option is preselected and drawn on the map | 1 (2 after typing) |
+| 4 | Route details | Tapping any option selects it, redraws the map, and immediately shows its whole route under the chart: leave → arrive, duration, transfers, walking, first boarding, then every step (line, headsign, platform, stops, exit stop, transfer waits). The sheet scrolls so the chart and the details are both in view. Earlier and Later follow the details. "התחלת ניווט" (Start navigation) is pinned at the bottom | +1 per option tapped |
+
+From a saved place or a recent, navigation starts in two taps (place, Start), or three when another option is chosen. Once both ends are known, results load immediately, with the best option's details already shown; there is no Plan button.
+
+### Navigate
+
+| Step | Step card (pinned at the top of the sheet) | Below it in the sheet |
+| --- | --- | --- |
+| Walk to a stop | Instruction, distance left, countdown to the vehicle; line, departure time, exit stop; margin and next departure | The whole trip as a checklist: done, now (highlighted), next; arrival time |
+| On board | Line and stops left; exit stop and time; what comes next (for example, train · platform 2) | The current item shows the stops, where you are, and the exit stop |
+| Transfer | Walk to the platform; countdown to the next vehicle; destination, platform, departure | Previous legs ticked off |
+| Arrive | Arrival time and Finish | All items done |
+
+- Location is requested at Start and processed only on the device. It updates the distance and position, and advances the step on reaching the stop, boarding, and passing the exit stop. "השלב הבא" (next step) is always available; without location, a banner says steps advance manually.
+- Two stops before the exit the card says "רדו בעוד 2 תחנות" (get off in 2 stops), and one stop before, "רדו בתחנה הבאה" (get off at the next stop). Android also vibrates; every platform changes the card's colour.
+- The Screen Wake Lock keeps the display on. The active trip is restored from `sessionStorage`.
+
+### Language and layout rules
+
+- Every string is written in Hebrew first and addressed with the gender-neutral plural imperative. Units: "דק׳" (min), "מ׳" (m), "ק״מ" (km), "שע׳" (h). Use a 24-hour clock.
+- The root has `dir="rtl"`. Time ranges, leg strips, the comparison axis and progress run right to left; digits, times and line numbers sit in `<bdi>` with tabular figures. Directional icons mirror; mode icons do not.
+- Trains are named by destination and platform; buses by number and headsign.
+- Primary actions sit at the bottom of the sheet. At 360 × 640, after an option is tapped the chart and the start of its route are both visible, and navigation shows the step card and at least the next step without scrolling.
 
 ## Constraints from the current API
 
@@ -23,13 +66,16 @@
 
 ## Screens
 
+Core screens (the two jobs) come first; secondary screens open from them and are built after.
+
 | Screen | API calls |
 | --- | --- |
-| Home: where to, current location, Home/Work, recents, favourites, data-status banner | `GET /v1/status`, cached 5 min |
-| Search | `GET /v1/places` (debounce 250 ms, at least 2 characters, cancel the previous request; `near` only if location is already granted); pick on map |
-| Results | `POST /v1/journeys` with an explicit "now"; earlier and later re-send a shifted time |
-| Journey detail | Cached response; map from `leg.geometry`; all stops via `GET /v1/trips/{engineTripId}` |
-| Stop | `GET /v1/stops/{id}`, `GET /v1/stops/{id}/departures` (infinite list with cursor) |
+| Home: From/To, current location, Home/Work, recents, favourites, data-status banner | `GET /v1/status`, cached 5 min |
+| Search (Where to) | `GET /v1/places` (debounce 250 ms, at least 2 characters, cancel the previous request; `near` only if location is already granted); pick on map |
+| Compare | `POST /v1/journeys` with an explicit "now"; earlier and later re-send a shifted time |
+| Option in place | Cached response; map from `leg.geometry`; stop counts and names via `GET /v1/trips/{engineTripId}` |
+| Navigate | Cached journey and trips; on-device `watchPosition`; Wake Lock; no new server calls except trips not yet fetched |
+| Stop (secondary, from a stop name) | `GET /v1/stops/{id}`, `GET /v1/stops/{id}/departures` (infinite list with cursor) |
 | Trip | `GET /v1/trips/{tripRef}`: calls, restrictions, shape |
 | Nearby / map browse | `GET /v1/stops?near=…` or `bbox` (zoom 14 or closer, at most 100 km²) |
 | Lines | `GET /v1/routes?…`, `GET /v1/routes/{id}` and its patterns |
@@ -63,12 +109,13 @@ Every slice has mocked Playwright/Vitest checks (MSW, no Docker) and `@real` che
 | S1 API layer | `src/api/**`, fixtures, MSW handlers, fixture recorder | Fixtures pass schemas; `classify()` table test; sanitised fixtures; `tripRef` encoding checked against the real API |
 | S2 Foundations | i18n, time/format, storage, common state components | DST tests under a UTC host; key parity; storage migration and clear-all |
 | S3 Map | `src/map/**` | Stubbed component tests; map chunk loads only where used; attribution visible |
-| S4 Home, Search, Settings | Those screens | Hebrew/English search, partial/unavailable categories, saved places, clear data, axe |
-| S5 Plan and Detail | Those screens | Routes, no route, outside window, place-ref fallback, 503/504; real Dizengoff Center → Technion |
-| S6 Stop, Trip, Nearby, Lines | Those screens | Paging without duplicates, cursor restart, empty vs unavailable, 404; real stop → trip |
-| S7 Serving and audit | API static mount, config, Dockerfile, its tests, real end-to-end suite | Off by default and absent from OpenAPI; cache and CSP headers; full real suite plus axe against Compose |
+| S4 Home, Search, Settings | Those screens, map + sheet shell | Hebrew/English search, partial/unavailable categories, saved places, clear data, RTL layout check, axe |
+| S5 Compare and route details | Timeline chart, route details on tap | Routes, no route, outside window, place-ref fallback, 503/504; tap shows details with the chart still in view at 360 × 640; real Dizengoff Center → Technion |
+| S6 Navigate | Step card, checklist, ride progress, location and Wake Lock | Step advance from simulated positions, manual advance without location, get-off cues, trip restore after reload; real journey replayed |
+| S7 Stop, Trip, Nearby, Lines | Secondary screens | Paging without duplicates, cursor restart, empty vs unavailable, 404; real stop → trip |
+| S8 Serving and audit | API static mount, config, Dockerfile, its tests, real end-to-end suite | Off by default and absent from OpenAPI; cache and CSP headers; full real suite plus axe against Compose |
 
-Order: S0; then S1, S2, S3 and the backend half of S7 in parallel; S4–S6 once S1 and S2 exist; S7 end-to-end last.
+Order: S0; then S1, S2, S3 and the backend half of S8 in parallel; S4–S6 once S1 and S2 exist; S7 after the core flows; S8 end-to-end last.
 
 ## API follow-ups (M7, non-blocking)
 
@@ -76,6 +123,7 @@ Add response models to the non-journey endpoints. Unify the unavailable-alerts v
 
 ## Defaults pending user confirmation
 
-- Name "OpenTransit" with a neutral palette.
+- Name "OpenTransit", with the teal palette from the playground as set out in the design system.
+- System fonts (no third-party fonts), drawn line icons with the option of switching to a licensed open set.
 - OpenFreeMap vector tiles for the preview, moving to a self-hosted Protomaps Israel extract before public release. The tile host sees user IPs and viewports.
 - Mobile web first; native deferred.

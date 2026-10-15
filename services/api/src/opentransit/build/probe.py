@@ -14,9 +14,11 @@ from urllib.parse import parse_qs, urlsplit
 import httpx
 
 from opentransit.build.generations import verify_artifacts
+from opentransit.core.artifacts import ArtifactDigests
+from opentransit.core.artifacts import verify_artifacts as verify_candidate_artifacts
 from opentransit.core.generation import Generation
 from opentransit.core.time import engine_time
-from opentransit.reference import ReferenceStore
+from opentransit.reference import ReferenceStore, attested_integrity_sha256
 
 COUNT_DROP_LIMIT = 0.20
 MAX_JOURNEYS = 10
@@ -209,7 +211,8 @@ async def probe_generation(
     }
     try:
         origin = _loopback_origin(engine_url)
-        verified = verify_artifacts(generation_dir)
+        digests = ArtifactDigests()
+        verified = verify_candidate_artifacts(generation_dir, manifest, digests)
         generation = Generation.load(generation_dir / "manifest.json")
         freshness = generation.freshness(checked_at)
         evidence_time = generation.freshness_checked_at()
@@ -232,8 +235,14 @@ async def probe_generation(
         component_id = manifest["scheduleComponentGenerationId"] if composite else generation.id
         if not isinstance(component_id, str) or not component_id:
             raise ValueError("A composed generation must identify its schedule component")
+        # The reference digest was just compared with the manifest; an attested build-time
+        # integrity check of those bytes replaces the repeated full check.
         reference = ReferenceStore(
-            generation_dir / "reference.sqlite", component_id, cursor_generation_id=generation.id
+            generation_dir / "reference.sqlite",
+            component_id,
+            cursor_generation_id=generation.id,
+            integrity_attested_sha256=attested_integrity_sha256(manifest["artifacts"]["reference"]),
+            digests=digests,
         )
         if reference.metadata.counts != manifest["artifacts"]["reference"]["counts"]:
             raise ValueError("Reference counts differ from the manifest")

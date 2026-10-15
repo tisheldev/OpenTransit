@@ -18,6 +18,7 @@ from opentransit.reference import (
     _content_hash,
     _translation_rows,
     _validate_translation_rows,
+    integrity_attestation,
     tables_for_schema,
 )
 
@@ -196,15 +197,18 @@ def repair_reference_generation(
         content_hash, row_count, prior_counts = _repair_database(
             output_generation / "reference.sqlite", rows, generation_id, expected_source
         )
+        # Unattested open: SQLite's full integrity check runs on the repaired bytes.
         reference_metadata = ReferenceStore(
             output_generation / "reference.sqlite", generation_id
         ).metadata
+        repaired_sha256 = file_sha256(output_generation / "reference.sqlite")
         output_manifest["artifacts"]["reference"].update(
             {
                 "path": "reference.sqlite",
-                "sha256": file_sha256(output_generation / "reference.sqlite"),
+                "sha256": repaired_sha256,
                 "contentSha256": content_hash,
                 "counts": reference_metadata.counts,
+                "integrityCheck": integrity_attestation(repaired_sha256),
             }
         )
         output_manifest["artifacts"]["reference"].pop("reusedFrom", None)

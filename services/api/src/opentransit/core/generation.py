@@ -35,7 +35,11 @@ class Generation:
 
     @classmethod
     def load(cls, path: Path) -> Generation:
-        data = json.loads(path.read_text(encoding="utf-8"))
+        return cls.from_manifest(json.loads(path.read_text(encoding="utf-8")))
+
+    @classmethod
+    def from_manifest(cls, data: dict) -> Generation:
+        """Parse an already-read manifest (or a recorded subset with the same fields)."""
         if data["schemaVersion"] != 1 or data["state"] != "ready":
             raise ValueError("Generation is not ready or uses an unsupported schema")
         digest = data["engineDigest"]

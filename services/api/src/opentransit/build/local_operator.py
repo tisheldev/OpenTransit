@@ -55,6 +55,28 @@ class ActivationFailed(RuntimeError):
         self.detail = detail
 
 
+def currency_reasons(generation: Generation, now: datetime, *, rollback: bool) -> list[str]:
+    """Refusal reasons for serving ``generation`` at ``now`` (empty when it may serve).
+
+    The single coverage/freshness rule shared by local activation and the hosted publisher
+    (docs/data-contracts.md "Dates and freshness"): a new candidate needs ``current`` source
+    freshness; a rollback to a previously served generation accepts any serviceable state.
+    Both refuse coverage that has not started or has lapsed.
+    """
+    if now.utcoffset() is None:
+        raise ValueError("Operator clock must have an explicit timezone")
+    reasons = []
+    instant = as_utc_instant(now)
+    if instant < as_utc_instant(generation.coverage_from):
+        reasons.append("coverage_not_started")
+    elif instant >= as_utc_instant(generation.coverage_until):
+        reasons.append("coverage_expired")
+    freshness = generation.freshness(now)
+    if not (generation.freshness_serviceable(now) if rollback else freshness == "current"):
+        reasons.append(f"source_{freshness}")
+    return reasons
+
+
 def check_currency(binding, now: datetime) -> dict:
     """Re-check coverage and source freshness for a binding at ``now`` without the engine.
 
@@ -73,16 +95,9 @@ def check_currency(binding, now: datetime) -> dict:
         generation = apply_source_check(generation, manifest, binding.source_check_path)
     except (OSError, ValueError, KeyError, TypeError) as exc:
         raise ActivationRefused([f"source_check_invalid:{type(exc).__name__}"]) from exc
-    reasons = []
     instant = as_utc_instant(now)
-    if instant < as_utc_instant(generation.coverage_from):
-        reasons.append("coverage_not_started")
-    elif instant >= as_utc_instant(generation.coverage_until):
-        reasons.append("coverage_expired")
     freshness = generation.freshness(now)
-    rollback = binding.purpose == "rollback"
-    if not (generation.freshness_serviceable(now) if rollback else freshness == "current"):
-        reasons.append(f"source_{freshness}")
+    reasons = currency_reasons(generation, now, rollback=binding.purpose == "rollback")
     detail = {
         "generationId": generation.id,
         "checkedAt": instant.isoformat(),
