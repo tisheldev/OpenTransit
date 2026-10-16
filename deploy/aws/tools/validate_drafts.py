@@ -71,7 +71,7 @@ HEAP = re.compile(r"^-Xmx(\d+)([mMgG])$")
 # Rendered release candidates (deploy/aws/tools/publish_generation.py): every image pinned by a
 # concrete digest, account-specific values either still placeholders or well-formed, and the
 # release identity carried as task-definition tags.
-CANDIDATE_PLACEHOLDERS = {"ECR_REGISTRY", "EXECUTION_ROLE_ARN"}
+CANDIDATE_PLACEHOLDERS = {"ECR_REGISTRY", "EXECUTION_ROLE_ARN", "VPC_CIDR"}
 CONCRETE_DIGEST = re.compile(r"@sha256:[a-f0-9]{64}$")
 ROLE_ARN = re.compile(r"arn:aws:iam::[0-9]{12}:role/[A-Za-z0-9+=,.@_/-]{1,512}")
 ECR_REGISTRY = re.compile(r"[0-9]{12}\.dkr\.ecr\.[a-z0-9-]+\.amazonaws\.com")

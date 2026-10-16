@@ -311,7 +311,7 @@ $P publish --generation "$GEN" --probe-queries "$PROBE" --photon-data "$PHOTON" 
 $P publish ... --build
 $P retention --current <release> [--previous <release>] [--pin ...] [--registry-images ...]
 $P rollback --previous <release> [--current <release>] [--now <iso>]   # exit 1 = refused
-$P push --plan <release-plan.json> --region il-central-1 --registry <acct>.dkr.ecr.<region>.amazonaws.com   --cluster <c> --service <s> --execution-role-arn <arn>               # prints steps only
+$P push --plan <release-plan.json> --region il-central-1 --registry <acct>.dkr.ecr.<region>.amazonaws.com   --cluster <c> --service <s> --execution-role-arn <arn> --vpc-cidr <task VPC CIDR>   # prints steps only
 ```
 
 Outputs in `--output` (refuses to overwrite an existing `release-plan.json`): `release-plan.json`
