@@ -250,7 +250,37 @@ def _mutations():
     def api_check_shorter_than_startup(task):
         api(task)["healthCheck"].update(interval=10, retries=3, startPeriod=30)
 
+    def api_env_set(task, name, value):
+        env = api(task)["environment"]
+        env[:] = [e for e in env if e["name"] != name]
+        if value is not None:
+            env.append({"name": name, "value": value})
+
+    def no_trusted_proxies(task):
+        api_env_set(task, "OPENTRANSIT_TRUSTED_PROXIES", None)
+
+    def bare_address_proxy(task):
+        api_env_set(task, "OPENTRANSIT_TRUSTED_PROXIES", "10.0.0.5")
+
+    def catch_all_proxy(task):
+        api_env_set(task, "OPENTRANSIT_TRUSTED_PROXIES", "0.0.0.0/0")
+
+    def empty_proxy_entry(task):
+        api_env_set(task, "OPENTRANSIT_TRUSTED_PROXIES", "10.0.0.0/16,")
+
+    def rate_limit_disabled(task):
+        api_env_set(task, "OPENTRANSIT_RATE_LIMIT_ENABLED", "0")
+
+    def rate_limit_implicit(task):
+        api_env_set(task, "OPENTRANSIT_RATE_LIMIT_ENABLED", None)
+
     return {
+        "no-trusted-proxies": no_trusted_proxies,
+        "trusted-proxies-bare-address": bare_address_proxy,
+        "trusted-proxies-catch-all": catch_all_proxy,
+        "trusted-proxies-empty-entry": empty_proxy_entry,
+        "rate-limit-disabled": rate_limit_disabled,
+        "rate-limit-not-explicit": rate_limit_implicit,
         "extra-engine-port": add_port,
         "second-api-port": second_api_port,
         "dependency-cycle": cycle,
@@ -286,6 +316,60 @@ def test_validator_rejects_violation(name):
     _mutations()[name](task)
     errors, _ = validate.validate_task_definition(task, "t", _digest())
     assert errors, f"{name} was not detected"
+
+
+@pytest.mark.parametrize("variant", ["recommended", "1vcpu-4gib", "no-addresses"])
+def test_every_api_container_trusts_the_vpc_range_and_enables_the_limiter(variant):
+    env = {e["name"]: e["value"] for e in _container(_task(variant), "api")["environment"]}
+    assert env["OPENTRANSIT_RATE_LIMIT_ENABLED"] == "1"
+    assert env["OPENTRANSIT_TRUSTED_PROXIES"] == "{{VPC_CIDR}}"
+    assert "VPC_CIDR" in validate.KNOWN_PLACEHOLDERS
+
+
+def test_local_emulation_has_no_unresolved_proxy_token():
+    text = (AWS / render.COMPOSE_FILE).read_text(encoding="utf-8")
+    assert "{{VPC_CIDR}}" not in text
+    assert "OPENTRANSIT_TRUSTED_PROXIES" not in text
+
+
+@pytest.mark.parametrize(
+    "value",
+    ["10.0.0.0/16", "10.0.0.0/16,172.31.0.0/16", " 10.0.0.0/24 , {{VPC_CIDR}} ", "{{VPC_CIDR}}"],
+)
+def test_trusted_proxies_validator_accepts_cidr_lists(value):
+    assert validate.trusted_proxies_error(value) is None
+
+
+@pytest.mark.parametrize(
+    "value",
+    [
+        None,
+        "",
+        "  ",
+        "10.0.0.5",
+        "10.0.0.0/33",
+        "10.0.0.1/16",
+        "0.0.0.0/0",
+        "::/0",
+        ",10.0.0.0/16",
+        "everyone",
+        "{{OTHER}}",
+    ],
+)
+def test_trusted_proxies_validator_rejects_non_cidr_values(value):
+    assert validate.trusted_proxies_error(value)
+
+
+def test_rendered_value_is_accepted_by_the_api_once_the_token_is_substituted():
+    from opentransit.api.rate_limit import parse_trusted_proxies
+
+    for cidr in ("10.0.0.0/16", "172.31.0.0/16,10.1.0.0/20"):
+        resolved = "{{VPC_CIDR}}".replace("{{VPC_CIDR}}", cidr)
+        assert validate.trusted_proxies_error(resolved) is None
+        assert len(parse_trusted_proxies(resolved)) == len(cidr.split(","))
+    # The unresolved token is a draft marker only: the API refuses to start with it.
+    with pytest.raises(ValueError):
+        parse_trusted_proxies("{{VPC_CIDR}}")
 
 
 def test_validator_rejects_four_gib_overlap_beyond_ceiling():
