@@ -1,6 +1,6 @@
 # OpenTransit web client
 
-The Phase 2 passenger client: a Hebrew-first, right-to-left mobile web app. Its design, slices and acceptance criteria are in [docs/client-design.md](../../docs/client-design.md); project status is in [PROJECT_STATUS.md](../../PROJECT_STATUS.md). Slices S0–S2 (scaffold, API layer, foundations) are implemented; the screens are placeholders until S3–S7.
+A Hebrew-first, right-to-left mobile web client for testing and previewing the API during the H-1 private deployment (user, 31 October 2026). It is not the product release: the native Expo / React Native app is the product client, and the pure modules here are built to be shared with it. Its design, slices and acceptance criteria are in [docs/client-design.md](../../docs/client-design.md); project status is in [PROJECT_STATUS.md](../../PROJECT_STATUS.md). Slices S0–S2 (scaffold, API layer, foundations) are implemented; the screens are placeholders until S3–S7.
 
 Node 22.12 or later. All commands run in `apps/web`.
 
