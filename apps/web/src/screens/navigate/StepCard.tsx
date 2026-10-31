@@ -37,9 +37,9 @@ interface Props {
 }
 
 /** "Bus 249" with its headsign in a lighter run, so a long headsign does not shout. */
-function RideTitle({ ride, headsign: show = true }: { ride: NavStep; headsign?: boolean }) {
+function RideTitle({ ride }: { ride: NavStep }) {
   const { t } = useI18n();
-  const headsign = show ? rideHeadsign(ride) : null;
+  const headsign = rideHeadsign(ride);
   return (
     <>
       <Bdi>{rideName(ride, t)}</Bdi>
@@ -168,8 +168,16 @@ export function StepCard({ steps, state, fix, clock, labels, onEnd }: Props) {
       );
       break;
     case "ride": {
-      // During a cue the passenger is on board: the direction gives way to the exit.
-      title = <RideTitle ride={step} headsign={cue === "none"} />;
+      // During a cue the passenger is on board: the cue is the title and the exit follows.
+      title =
+        cue === "none" ? (
+          <RideTitle ride={step} />
+        ) : (
+          <>
+            <span aria-hidden="true">{cue === "next_stop" ? "⬇ " : "⚠ "}</span>
+            {t(cue === "next_stop" ? "nav.cueNext" : "nav.cueTwo")}
+          </>
+        );
       const stops = rideStopsText(step, state, t);
       const then = thenText(steps, step.index, labels, t, lang);
       const code = step.from ? stopCodeFor(step.from, step) : null;
@@ -248,13 +256,7 @@ export function StepCard({ steps, state, fix, clock, labels, onEnd }: Props) {
           </button>
         )}
       </div>
-      {cue !== "none" && (
-        <p className="step-cue">
-          <span aria-hidden="true">{cue === "next_stop" ? "⬇ " : "⚠ "}</span>
-          {t(cue === "next_stop" ? "nav.cueNext" : "nav.cueTwo")}
-        </p>
-      )}
-      <h2 id="step-card-title" className="step-title">
+      <h2 id="step-card-title" className={`step-title${cue === "none" ? "" : " step-cue"}`}>
         {title}
       </h2>
       {body}

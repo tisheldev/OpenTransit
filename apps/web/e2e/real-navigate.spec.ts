@@ -91,6 +91,14 @@ test.describe("@real navigate", () => {
     }, JSON.stringify(trip));
     await page.goto(appPath("#/navigate"));
     await expect(page.locator(".step-card")).toBeVisible();
+    // The first card and the checklist from the real plan: a ride first boards at its stop;
+    // its stops are counted to the exit (no progress measured yet); every row has a time.
+    if (steps[0]!.kind === "ride") {
+      await expect(page.locator(".step-card")).toContainText(`עלייה ב־${steps[0]!.from!.name}`);
+      await expect(page.locator(".step-card")).toContainText(/\d+ תחנות עד הירידה|תחנה אחת עד הירידה/);
+    }
+    await expect(page.locator(".checklist-time")).toHaveCount(steps.length);
+    await expect(page.locator(".checklist-time").first()).toHaveText(/^\d\d:\d\d$/);
     // Record every announcement (step changes and cues) from the live region.
     await page.evaluate(() => {
       const log: string[] = [];

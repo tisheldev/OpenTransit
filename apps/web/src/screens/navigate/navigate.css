@@ -62,6 +62,7 @@
 /* End trip: small and away from the primary action, still a 44 px target (::after). */
 .step-end {
   position: relative;
+  z-index: 1;
   flex: 0 0 auto;
   min-block-size: 30px;
   padding-inline: var(--space-3);
@@ -77,7 +78,7 @@
 .step-end::after {
   content: "";
   position: absolute;
-  inset: -7px -4px;
+  inset: -8px -4px; /* from the padding box: 28 + 16 = 44 px */
 }
 .step-end:focus-visible {
   outline: 3px solid #ffd166;

@@ -4,7 +4,6 @@ import { http } from "msw";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { fixture } from "../../api/fixtures";
 import type { Journey, Metadata } from "../../api/types";
-import { en } from "../../i18n/en";
 import { he } from "../../i18n/he";
 import { setLocationSource, type Fix, type LocationError, type LocationSource } from "../../lib/geolocation";
 import { getMapState } from "../../map/scene";
@@ -312,6 +311,17 @@ describe("Navigate: location", () => {
     expect(rows()[1]).toHaveAttribute("aria-current", "step");
   });
 
+  it("over plain HTTP the banner says location needs HTTPS (the browser refuses it there)", () => {
+    const secure = Object.getOwnPropertyDescriptor(window, "isSecureContext");
+    Object.defineProperty(window, "isSecureContext", { value: false, configurable: true });
+    seed(recordedJourneys[0]!);
+    renderApp("#/navigate");
+    act(() => handle.onError!("denied"));
+    expect(screen.getByRole("status")).toHaveTextContent(`${he["nav.loc.insecure"]} · ${he["nav.manual"]}`);
+    if (secure) Object.defineProperty(window, "isSecureContext", secure);
+    else delete (window as unknown as { isSecureContext?: boolean }).isSecureContext;
+  });
+
   it("no accepted fix for 60 s → 'no location right now'; nothing advances", () => {
     vi.useFakeTimers({ toFake: ["setInterval", "clearInterval", "Date"] });
     seed(recordedJourneys[0]!);
@@ -342,7 +352,7 @@ describe("Navigate: location", () => {
     expect(JSON.stringify(JSON.parse(sessionStorage.getItem(STORAGE_KEY)!).nav)).not.toContain(String(fixes[0]!.latitude));
   });
 
-  it("on board with real location the map follows at the passenger's zoom", async () => {
+  it("on board the ride stays framed while the dot moves along it", async () => {
     const journey = recordedJourneys[0]!;
     seed(journey);
     renderApp("#/navigate");
@@ -350,8 +360,10 @@ describe("Navigate: location", () => {
     const onTrain = simulateJourney(journey).find((fix) => fix.at > Date.parse("2026-11-02T08:40:00+02:00"))!;
     const before = getMapState().locateRequest;
     act(() => handle.onFix!({ ...onTrain, at: Date.now() }));
-    expect(getMapState().scene.camera).toBe("follow");
+    expect(getMapState().scene.camera).toBe("fit");
+    expect(getMapState().scene.user?.position).toEqual([onTrain.longitude, onTrain.latitude]);
     expect(getMapState().locateRequest).toBe(before);
+    expect(getMapState().scene.route).toHaveLength(1);
     expect(getMapState().scene.route[0]!.mode.toLowerCase()).toBe("rail");
   });
 

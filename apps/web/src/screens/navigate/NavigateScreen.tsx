@@ -139,16 +139,14 @@ function Navigating({ trip }: { trip: ActiveTrip }) {
     if (top && typeof top.scrollIntoView === "function") top.scrollIntoView({ block: "nearest" });
   }, [state.stepIndex, snap]);
 
-  // Camera: the current leg until a fix arrives. On foot (and waiting at the stop) the
+  // Camera: the current leg is framed, and on board it stays framed while the dot moves
+  // along it toward the exit (how far is my stop?). On foot, and waiting at the stop, the
   // map recentres on the passenger at street level (the map's Locate: zoom 15 or closer),
-  // at most twice a second so each move finishes; on board it follows at the zoom the
-  // passenger chose, so zooming out to see the ride stays possible. Simulated playback
-  // runs 30–600 times faster than a vehicle, which a smooth follow cannot keep up with,
-  // so it recentres in steps on board too.
-  const streetLevel = !!fix && (nav.simulated || step.kind !== "ride" || state.phase === "waiting");
+  // at most twice a second so each move finishes, also at simulated speed-ups.
+  const streetLevel = !!fix && (step.kind !== "ride" || state.phase === "waiting");
   const { origin, destination } = labels;
   const scene = useMemo<MapScene>(
-    () => navScene(trip.journey, step, { origin, destination }, fix, !fix ? "fit" : streetLevel ? "keep" : "follow"),
+    () => navScene(trip.journey, step, { origin, destination }, fix, streetLevel ? "keep" : "fit"),
     [trip.journey, step, origin, destination, fix, streetLevel],
   );
   usePublishScene(scene);
@@ -205,18 +203,22 @@ function Navigating({ trip }: { trip: ActiveTrip }) {
                   type="button"
                   className={`checklist-row checklist-${status}`}
                   aria-current={status === "current" ? "step" : undefined}
-                  aria-label={`${t(`nav.row.${status}`)}: ${row.time} ${row.main}${row.sub ? `, ${row.sub}` : ""}`}
                   onClick={() => nav.jump(item.index)}
                 >
-                  <span className="checklist-time tabular" aria-hidden="true">
-                    {row.time}
-                  </span>
+                  {/* The name is the visible text with the state in front (not colour alone). */}
+                  <span className="visually-hidden">{`${t(`nav.row.${status}`)}:`}</span>{" "}
+                  <span className="checklist-time tabular">{row.time}</span>{" "}
                   <span className={`checklist-mark checklist-mark-${status}`} aria-hidden="true">
                     {status === "done" ? "✓" : status === "current" ? "●" : ""}
                   </span>
-                  <span className="checklist-body" aria-hidden="true">
+                  <span className="checklist-body">
                     <bdi className="checklist-main">{row.main}</bdi>
-                    {row.sub && <bdi className="checklist-sub">{row.sub}</bdi>}
+                    {row.sub && (
+                      <>
+                        <span className="visually-hidden">,</span>{" "}
+                        <bdi className="checklist-sub">{row.sub}</bdi>
+                      </>
+                    )}
                   </span>
                 </button>
               </li>
