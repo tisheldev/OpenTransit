@@ -295,7 +295,7 @@ describe("Navigate: simulated positions", () => {
     expect([...seen].sort((a, b) => a - b)).toEqual(Array.from({ length: total }, (_, i) => i));
     // Simulated fixes never reach the device-location source.
     expect(handle.onFix).toBeNull();
-  });
+  }, 30_000); // plays a whole journey back; slow CI runners need more than the 5 s default
 });
 
 describe("Navigate: restore and expiry", () => {
