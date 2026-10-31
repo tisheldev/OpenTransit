@@ -14,7 +14,7 @@ test("Hebrew: data status, unavailable live data, credits and version (axe)", as
   await expect(page.getByText("זמנים בזמן אמת: לא זמין")).toBeAttached();
   await expect(page.getByText("התראות שירות: לא זמין")).toBeAttached();
   await expect(page.getByText("לוח הזמנים: משרד התחבורה")).toBeAttached();
-  await expect(page.getByText("© תורמי OpenStreetMap")).toBeAttached();
+  await expect(page.locator("#main").getByText("© תורמי OpenStreetMap")).toBeAttached();
   await expect(page.getByText("אריחי המפה: OpenFreeMap")).toBeAttached();
   await expect(page.getByText(/^גרסה /)).toBeAttached();
   await expectNoSeriousAxeViolations(page, "Settings (he)");

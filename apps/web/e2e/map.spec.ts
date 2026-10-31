@@ -108,9 +108,9 @@ test("no serious axe violations with the map and a drawn journey", async ({ page
   await expectNoSeriousAxeViolations(page, "map harness");
 });
 
-// Re-enable once the shell (S4) renders <MapHost/> behind the sheet on every screen.
+// The shell renders <MapHost/> behind the sheet on every screen.
 test.describe("in the app shell", () => {
-  test.fixme("home loads the map chunk after first paint", async ({ page }) => {
+  test("home loads the map chunk after first paint", async ({ page }) => {
     await blockExternal(page);
     await page.goto(appPath("#/"));
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
@@ -125,7 +125,7 @@ test.describe("in the app shell", () => {
     expect(late).toBe(true);
   });
 
-  test.fixme("attribution stays visible above the sheet in Hebrew and English", async ({ page }) => {
+  test("attribution stays visible above the sheet in Hebrew and English", async ({ page }) => {
     await blockExternal(page);
     await page.goto(appPath("#/"));
     const attribution = page.getByTestId("map-attribution");
@@ -142,7 +142,7 @@ test.describe("in the app shell", () => {
     await expect(attribution).toContainText("Ministry of Transport");
   });
 
-  test.fixme("the map container is ltr while the app is rtl", async ({ page }) => {
+  test("the map container is ltr while the app is rtl", async ({ page }) => {
     await blockExternal(page);
     await page.goto(appPath("#/"));
     await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
