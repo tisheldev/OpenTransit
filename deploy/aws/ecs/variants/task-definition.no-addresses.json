@@ -10,9 +10,6 @@
     "cpuArchitecture": "X86_64",
     "operatingSystemFamily": "LINUX"
   },
-  "ephemeralStorage": {
-    "sizeInGiB": 20
-  },
   "executionRoleArn": "{{EXECUTION_ROLE_ARN}}",
   "containerDefinitions": [
     {
@@ -59,7 +56,7 @@
         "logDriver": "awslogs",
         "options": {
           "awslogs-group": "/opentransit/h0",
-          "awslogs-region": "il-central-1",
+          "awslogs-region": "eu-north-1",
           "awslogs-stream-prefix": "init",
           "mode": "non-blocking",
           "max-buffer-size": "4m"
@@ -129,7 +126,7 @@
         "logDriver": "awslogs",
         "options": {
           "awslogs-group": "/opentransit/h0",
-          "awslogs-region": "il-central-1",
+          "awslogs-region": "eu-north-1",
           "awslogs-stream-prefix": "motis",
           "mode": "non-blocking",
           "max-buffer-size": "4m"
@@ -201,7 +198,7 @@
         "logDriver": "awslogs",
         "options": {
           "awslogs-group": "/opentransit/h0",
-          "awslogs-region": "il-central-1",
+          "awslogs-region": "eu-north-1",
           "awslogs-stream-prefix": "verifier",
           "mode": "non-blocking",
           "max-buffer-size": "4m"
@@ -300,7 +297,7 @@
         "logDriver": "awslogs",
         "options": {
           "awslogs-group": "/opentransit/h0",
-          "awslogs-region": "il-central-1",
+          "awslogs-region": "eu-north-1",
           "awslogs-stream-prefix": "api",
           "mode": "non-blocking",
           "max-buffer-size": "4m"

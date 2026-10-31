@@ -1,0 +1,3 @@
+1793452031188 2026-10-31T13:07:11Z [info] [server.cc:68] [motis.server] n_threads=2, listening on 0.0.0.0:8080
+1793452031188 local link: http://localhost:8080
+1793453645114 2026-10-31T13:34:05Z [info] [server.cc:55] [motis.server] shutdown

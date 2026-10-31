@@ -157,7 +157,7 @@ After functional coverage, perform consolidated milestone acceptance, finish ref
 
 **Faster sequence, adopted by the user 1 October:** M7 and the client run during the H-1 week rather than after M8 (PRD gate revision). Public release gates are unchanged.
 
-**Progress, end of 1 October.** Step 0 is done. Step 1: T1 done (walking caps, bounds, demo); T2 done (M2.5 harness 10/10 on 1 October; readiness root cause fixed); T3 done (H4 approved with known limits); T4 done (H3 passed 9/10, user, 1 October); T5 drafts (images, task definition, IAM/network, Photon sizing proposal 1 vCPU / 3 GiB) validated, then built and measured locally on 1 October ([H-0 local evidence](../services/api/results/h0-local-images-20261001-01.json)). Step 2: the consolidated live acceptance ran on the October 1 generation and passed mechanically (runs `-01`, `-02`); M2.5 passed locally on 1 October (`r06`, 10/10); M2.8 over further daily pairs stays open. Next: the user's answer to the [H-0 approval request](../PROJECT_STATUS.md#h-0-approval-request) (Step 3).
+**Progress, end of 1 October.** Step 0 is done. Step 1: T1 done (walking caps, bounds, demo); T2 done (M2.5 harness 10/10 on 1 October; readiness root cause fixed); T3 done (H4 approved with known limits); T4 done (H3 passed 9/10, user, 1 October); T5 drafts (images, task definition, IAM/network, Photon sizing proposal 1 vCPU / 3 GiB) validated, then built and measured locally on 1 October ([H-0 local evidence](../services/api/results/h0-local-images-20261001-01.json)). Step 2: the consolidated live acceptance ran on the October 1 generation and passed mechanically (runs `-01`, `-02`); M2.5 passed locally on 1 October (`r06`, 10/10); M2.8 over further daily pairs stays open. Step 3: the user approved the bounded H-0 test on 31 October and it passed the same day in `eu-north-1` on generation `oct31a` ([result](../PROJECT_STATUS.md#h-0-result-31-october), [evidence](../services/api/results/h0-fargate-20261031-01.json)); next is H-1.
 
 **User inputs:** H3/H4 verdicts after T4; constrained-address decision if T3 exhausts its attempts; code licence and repository visibility before CI; AWS access and bounded H-0 spending approval; static GTFS terms before release; MOT follow-up October 19.
 
@@ -169,7 +169,7 @@ After functional coverage, perform consolidated milestone acceptance, finish ref
 
 | ID | Needed | Owner | State on 3 October | Blocks |
 | --- | --- | --- | --- | --- |
-| PRE-1 | Gate: the client is gated on the start of H-0/H-1. Either the [H-0 approval](../PROJECT_STATUS.md#h-0-approval-request) is given and the deployment starts, or the user revises the gate so S0–S6 may start against the local API | User | Open (PRD §10 item 7) | Everything |
+| PRE-1 | Gate: the client is gated on the start of H-0/H-1. Either the H-0 approval is given and the deployment starts, or the user revises the gate so S0–S6 may start against the local API | User | H-0 approved and run 31 October ([result](../PROJECT_STATUS.md#h-0-result-31-october)); H-1 not started (PRD §10 item 7) | Everything |
 | PRE-2 | Review and accept the client PRD 0.3 and the client design (or list changes) | User | Open | Everything |
 | PRE-3 | App identity: display name, Android package and iOS bundle ID; light only or light and dark | User | Open (PRD §10 items 11–13) | S0 |
 | PRE-4 | Approve API-C1 and API-C2 (additive fields on an accepted API) | User | Open (PRD §10 item 8) | S5 details, S6 ride progress |

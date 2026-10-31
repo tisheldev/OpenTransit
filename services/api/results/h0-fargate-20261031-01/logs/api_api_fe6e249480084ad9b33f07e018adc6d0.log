@@ -1,0 +1,69 @@
+1793453273768 INFO:     Started server process [6]
+1793453273768 INFO:     Waiting for application startup.
+1793453485917 {"backend_ms":10.968,"genid":"2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445","normalize_ms":0.204,"outcome":"success","request_id":null,"responsebytes":580,"resultcount":1}
+1793453486602 {"backend_ms":684.712,"genid":"2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445","normalize_ms":12.433,"outcome":"success","request_id":null,"responsebytes":427,"resultcount":1}
+1793453486603 INFO:     Application startup complete.
+1793453486603 INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+1793453491680 request_id=68ba5f36961b4f8e891eeb149b6e076c route=/readyz status=200 duration_ms=22.8
+1793453491680 request_id=a5e5a345b90b4cfdb7a1ad346539aa5b route=/readyz status=200 duration_ms=47.8
+1793453501658 request_id=e6c3f11e6ff24f2ea1f94e61418ae244 route=/readyz status=200 duration_ms=21.4
+1793453501661 request_id=aec1e95968ce4fd89146881a5336676e route=/readyz status=200 duration_ms=19.7
+1793453511110 request_id=d2ee864ff3ee4f0e8b61144fa83b2662 route=/readyz status=200 duration_ms=16.9
+1793453511662 request_id=ae8b318e04544fc8b3d004809d186f80 route=/readyz status=200 duration_ms=19.9
+1793453511665 request_id=37a95b5c0d9e4b288f17251d1311f82f route=/readyz status=200 duration_ms=19.1
+1793453512655 request_id=af30e15ad1334afb927f7565d612be3f route=/healthz status=200 duration_ms=0.5
+1793453521669 request_id=87642d5c11424d568f0abe7b4ad97555 route=/readyz status=200 duration_ms=23.3
+1793453521669 request_id=143f185d982a4ec29272d27ec3ac2e81 route=/readyz status=200 duration_ms=21.0
+1793453526181 request_id=3595a1875df648f78f2442a5d96d7e27 route=/v1/status status=200 duration_ms=23.9
+1793453527903 request_id=833b1e5ee12340f28550b8b34b722009 route=/v1/journeys status=200 duration_ms=38.1
+1793453528324 request_id=e9f00af72c8d4cc880ddeb78313d0ec7 route=/v1/journeys status=200 duration_ms=27.1
+1793453528546 request_id=c60e2e23114444e9b37d67bcd22690d0 route=/v1/journeys status=200 duration_ms=49.4
+1793453529430 request_id=875f94e0e6cd46808fcfb9b1d682fefe route=/v1/journeys status=200 duration_ms=21.3
+1793453529638 request_id=2665aed7fa944d94be4d82fda5caa5cd route=/v1/journeys status=200 duration_ms=26.1
+1793453530272 request_id=256f29fab33842c19eb0f8ac0841dcad route=/healthz status=200 duration_ms=0.5
+1793453530458 request_id=17d650a39326450c863b71859f505e58 route=/healthz status=200 duration_ms=0.4
+1793453530811 request_id=2532fe0af6fc4270b733a833ec696e1a route=/healthz status=200 duration_ms=0.5
+1793453531350 request_id=49d8ed0e5b8e4352bd9d350dd03d63b9 route=/healthz status=200 duration_ms=0.4
+1793453531672 request_id=5ee4220663db49429c04fe619cab7718 route=/readyz status=200 duration_ms=22.4
+1793453531673 request_id=41546406341e4eccb378812a68afe3c5 route=/readyz status=200 duration_ms=20.5
+1793453531702 request_id=15575f30510b428997ca049ff80f88df route=/healthz status=200 duration_ms=0.4
+1793453531872 request_id=a975d7fcd70342e5abe469ff2c71c193 route=/healthz status=200 duration_ms=0.4
+1793453532398 request_id=41e532aadf224aec8caa9acb1aa2f59b route=/healthz status=200 duration_ms=0.4
+1793453532579 request_id=0188e711a0f8486bae4e143a941bacfa route=/healthz status=200 duration_ms=0.4
+1793453533101 request_id=982eadddb50c4319a7423047f31d602d route=/healthz status=200 duration_ms=0.5
+1793453533279 request_id=3b7b3346a0a1452ebd901adbfbea0202 route=/healthz status=200 duration_ms=0.4
+1793453533805 request_id=3f179d2a10394f929b32f0786ae15d65 route=/healthz status=200 duration_ms=0.4
+1793453534150 request_id=bfa11aff4bce467d90df47cd0d38cb7e route=/healthz status=200 duration_ms=0.4
+1793453534506 request_id=68bcf247d3494d1b98d30ac27b81b74a route=/healthz status=200 duration_ms=0.4
+1793453534682 request_id=440e3d3282344e06840632f6dd7145ab route=/healthz status=200 duration_ms=0.4
+1793453535212 request_id=d0c4fe2f10114932b5ca78e4375cc872 route=/healthz status=200 duration_ms=0.4
+1793453535397 request_id=2d8b62e11ef043f79ece4b9bac81b1e2 route=/healthz status=200 duration_ms=0.4
+1793453535748 request_id=db68828b7bdd4dd58c0c0d22500c568e route=/healthz status=200 duration_ms=0.4
+1793453536096 request_id=5671f086d6a54eaf9c38b84f1ac3d649 route=/healthz status=200 duration_ms=0.5
+1793453536618 request_id=3b8f9edb18494d28804d3174414dbb55 route=/healthz status=200 duration_ms=0.4
+1793453536792 request_id=6929e170ba70447798f04af10f13c09a route=/healthz status=200 duration_ms=0.4
+1793453537154 request_id=567501de025543388b22d7a7649a8d7d route=/healthz status=200 duration_ms=0.4
+1793453537511 request_id=2de9c4c5005743689aaeea505bf17817 route=/healthz status=200 duration_ms=0.4
+1793453538033 request_id=3ed3246b97274747a9e058b0f629cc9a route=/healthz status=200 duration_ms=0.4
+1793453538210 request_id=3bc10386d56d4874ab793b21671df411 route=/healthz status=200 duration_ms=0.4
+1793453538740 request_id=36ec014680a74ed89d3d455f234321b9 route=/healthz status=200 duration_ms=0.4
+1793453541674 request_id=bfaadd53443b4a19b39823e3496ed91d route=/readyz status=200 duration_ms=21.4
+1793453541677 request_id=c7fc422b9104442e8be169b775b2c398 route=/readyz status=200 duration_ms=19.9
+1793453542616 request_id=d4913ca7a6c54f0fa9613fbf49136614 route=/healthz status=200 duration_ms=0.4
+1793453550087 request_id=39097d2a73ed435bb36a1f91350128e4 route=/v1/journeys status=200 duration_ms=67.0
+1793453551539 {"backend_ms":7.733,"genid":"2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445","normalize_ms":0.634,"outcome":"success","request_id":"564038f8f8d046e4bfc9a463d1386d02","responsebytes":6081,"resultcount":10}
+1793453551540 {"genid":"2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445","outcome":"validempty","request_id":"564038f8f8d046e4bfc9a463d1386d02","resultcount":0,"search_ms":9.597}
+1793453551794 request_id=540277b61c824bc9a3da5446b5dc6216 route=/readyz status=200 duration_ms=112.0
+1793453551798 request_id=006c61133f2448a394021f8c16ec02ec route=/readyz status=200 duration_ms=114.0
+1793453552083 {"backend_ms":553.472,"genid":"2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445","normalize_ms":0.036,"outcome":"validempty","request_id":"564038f8f8d046e4bfc9a463d1386d02","responsebytes":42,"resultcount":0}
+1793453552085 request_id=564038f8f8d046e4bfc9a463d1386d02 route=/v1/places status=200 duration_ms=557.9
+1793453561685 request_id=a85cfa3528384e38b892bcdbd2974ff2 route=/readyz status=200 duration_ms=21.4
+1793453561685 request_id=94434a7918574547b3f607affe512531 route=/readyz status=200 duration_ms=24.1
+1793453571688 request_id=026eb122d1c1477292ea0d976853ce3d route=/readyz status=200 duration_ms=21.9
+1793453571689 request_id=b7f8a010e71548e5aa2432bd22db9def route=/readyz status=200 duration_ms=20.5
+1793453572614 request_id=8005d520c5b04212b0d1e7d91ea38d8a route=/healthz status=200 duration_ms=0.4
+1793453602613 request_id=bf0ffc18b0b84f9dacba0cdbc9b812dc route=/healthz status=200 duration_ms=0.4
+1793453626402 INFO:     Shutting down
+1793453626502 INFO:     Waiting for application shutdown.
+1793453626503 INFO:     Application shutdown complete.
+1793453626503 INFO:     Finished server process [6]

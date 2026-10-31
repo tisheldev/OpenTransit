@@ -14,7 +14,9 @@ import sys
 from pathlib import Path
 
 AWS_DIR = Path(__file__).resolve().parents[1]
-REGION = "il-central-1"
+REGION = "eu-north-1"
+# VPC created by tools/h0_bounded_test.py; it substitutes this for {{VPC_CIDR}} at registration.
+VPC_CIDR = "10.80.0.0/16"
 LOG_GROUP = "/opentransit/h0"
 MOTIS_DIGEST = "sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330"
 API_PORT = 8000
@@ -351,7 +353,6 @@ def render_task_definition(variant: str) -> dict:
         "cpu": spec["cpu"],
         "memory": spec["memory"],
         "runtimePlatform": {"cpuArchitecture": "X86_64", "operatingSystemFamily": "LINUX"},
-        "ephemeralStorage": {"sizeInGiB": 20},
         "executionRoleArn": "{{EXECUTION_ROLE_ARN}}",
         "containerDefinitions": containers,
         "volumes": [{"name": name} for name in volumes],
