@@ -301,6 +301,55 @@ def test_docker_commands_use_named_capped_isolated_containers(tmp_path):
         assert all(name.startswith("ot-acc-") for name in names)
 
 
+def test_client_dir_is_mounted_read_only_and_enables_the_app_mount(tmp_path):
+    generation, client = tmp_path / "gen", tmp_path / "dist"
+    without = acc.api_argv(
+        "r1", "api:img", generation, tmp_path / "src", tmp_path / "work", photon=False, cpus=None
+    )
+    assert not any("CLIENT" in item or "dst=/client" in item for item in without)
+    served = acc.api_argv(
+        "r1", "api:img", generation, tmp_path / "src", tmp_path / "work",
+        photon=False, cpus=None, client_dir=client,
+    )  # fmt: skip
+    assert "OPENTRANSIT_CLIENT_DIR=/client" in served
+    expected = f"type=bind,src={client.resolve().as_posix()},dst=/client,readonly"
+    assert expected in served
+    assert served.index(expected) < served.index("api:img")  # a docker option, not an argument
+
+
+def test_cli_client_dir_reaches_the_runner(tmp_path):
+    args = acc.parse_args(
+        ["--generation", "g", "--run-id", "r", "--results-prefix", "p", "--client-dir", "d"]
+    )
+    assert args.client_dir == Path("d")
+    assert (
+        acc.parse_args(["--generation", "g", "--run-id", "r", "--results-prefix", "p"]).client_dir
+        is None
+    )
+    generation = tmp_path / "gen"
+    generation.mkdir()
+    (generation / "manifest.json").write_text(
+        json.dumps(
+            {
+                "coverage": {
+                    "from": "2026-11-01T00:00:00+02:00",
+                    "until": "2026-11-30T00:00:00+02:00",
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
+    empty = tmp_path / "empty"
+    empty.mkdir()
+    common = {"generation": generation, "run_id": "r", "prefix": str(tmp_path / "out" / "x")}
+    with pytest.raises(ValueError, match="index.html"):
+        acc.Runner(**common, client_dir=empty)
+    with pytest.raises(FileNotFoundError):
+        acc.Runner(**common, client_dir=tmp_path / "missing")
+    (empty / "index.html").write_text("<!doctype html>", encoding="utf-8")
+    assert acc.Runner(**common, client_dir=empty).client_dir == empty.resolve()
+
+
 def test_ports_are_limited_to_the_assigned_range():
     assert acc.check_port(8500) == 8500 and acc.check_port(8599) == 8599
     for port in (8499, 8600, 8000, 59181):
