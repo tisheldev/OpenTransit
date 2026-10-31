@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-10-31T12:56:27+00:00",
+  "scope": "acceptance_run.py live stack; all final acceptance remains open",
+  "status": "implemented_tested_not_human_accepted",
+  "runId": "oct31a",
+  "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+  "scheduleComponentGenerationId": "a6b81ca4ce926b7e81c36328feff0dfb082488045721658a627e4c8f92b71263",
+  "source": {
+    "commit": "325e4cacbe4201748132f08213536817316c2d19",
+    "branch": "HEAD",
+    "dirtyApiSource": false,
+    "treeOfApiSource": "a108b9bb2a8652a4e18dbf3992aaa0b21d565b22"
+  },
+  "images": {
+    "motis": {
+      "reference": "ghcr.io/motis-project/motis@sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330",
+      "present": true,
+      "id": "sha256:76a15c76bcff11c6f0595fed9a170284e49c2d9017c47bf4da6879a0e7452598",
+      "repoDigests": [
+        "ghcr.io/motis-project/motis@sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330"
+      ],
+      "created": "2026-08-12T09:07:42.796145338Z"
+    },
+    "api": {
+      "reference": "opentransit-api:latest",
+      "present": true,
+      "id": "sha256:4fbaa262800851c1054617dee0569351f366eb3f5a4a18be5d57865ba434fd80",
+      "repoDigests": [],
+      "created": "2026-09-30T10:48:25.760493258Z"
+    },
+    "java": {
+      "reference": "eclipse-temurin:21.0.12.1_1-jre@sha256:628467024d428251da635661936d6180717b1ac1119d41c76d28a03b7293c43c",
+      "present": true,
+      "id": "sha256:a357909fafe361a99d858524d3730be9686b8045d2a8edd7bc1a8eb74db69294",
+      "repoDigests": [
+        "eclipse-temurin@sha256:628467024d428251da635661936d6180717b1ac1119d41c76d28a03b7293c43c"
+      ],
+      "created": "2026-09-25T22:38:04.501987779Z"
+    }
+  },
+  "containers": {
+    "motis": {
+      "name": "ot-acc-oct31a-motis",
+      "memoryCap": "2g"
+    },
+    "photon": {
+      "name": "ot-acc-oct31a-photon",
+      "memoryCap": "1g"
+    },
+    "api": {
+      "name": "ot-acc-oct31a-api",
+      "memoryCap": "1g"
+    },
+    "verifier": {
+      "name": "ot-acc-oct31a-verifier",
+      "memoryCap": "512m"
+    },
+    "photon-init": {
+      "name": "ot-acc-oct31a-photon-init",
+      "memoryCap": "64m"
+    }
+  },
+  "cpus": null,
+  "hostPort": 8500
+}
