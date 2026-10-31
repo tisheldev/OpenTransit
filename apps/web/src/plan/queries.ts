@@ -19,6 +19,8 @@ export const planKeys = {
 };
 
 export const TRIP_STALE_MS = 60 * 60_000;
+/** How long a "now" plan stays "now" before Compare re-plans it on return. */
+export const NOW_STALE_MS = 2 * 60_000;
 
 /** SP04 client marks (design: Performance budget), read by the @real test. */
 export const MARK_REQUEST = "ot:journeys:request";
@@ -32,7 +34,9 @@ export function useJourneyRequest(draft: PlanDraft, lang: Lang, override: TimeOv
   return useQuery({
     queryKey: planKeys.request(draft, lang, override, attempt),
     queryFn: () => resolveJourneyRequest(draft, { lang, override }),
-    staleTime: Infinity,
+    // A fixed time never changes; "now" is re-fixed when Compare is shown again after two
+    // minutes (the previous answer stays, dimmed, until the new one arrives).
+    staleTime: draft.when.mode === "now" && override === null ? NOW_STALE_MS : Infinity,
     gcTime: 5 * 60_000,
     retry: false,
     // A new time for the same two ends keeps the previous request until the new one is

@@ -94,10 +94,14 @@
   cursor: pointer;
   overflow: hidden;
 }
+.ends-from {
+  /* The start keeps a readable share (it shrank to three letters next to a long stop name). */
+  min-inline-size: 40%;
+}
 .ends-to {
   /* A short destination is never cut; a long one keeps most of the line. */
   flex-shrink: 0;
-  max-inline-size: 62%;
+  max-inline-size: 55%;
 }
 .ends-name {
   display: block;

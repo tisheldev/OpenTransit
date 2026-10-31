@@ -182,5 +182,73 @@
     "S7 secondary screens",
     "field timings on reference phones; human HC review",
     "a real ride trace (S6.7 second half; needs the user on a real trip)"
-  ]
+  ],
+  "uxPass1": {
+    "recordedAt": "2026-10-31T21:45:00Z",
+    "scope": "User, 31 Oct: UI/UX polish with human-like testing ('intuitive, fast, as much relevant information without clutter'). Revises the earlier 'no polish pass' note for the web client only.",
+    "method": "Coordinator walked Home -> Search -> Compare -> Navigate -> Back -> Settings at 360 x 640 in Hebrew against the real oct31a API (dev proxy), plus the user's own Compare screenshot; findings G1-G11 (shell/Home/Search/Settings), C1-C9 (Compare), N1-N6 (Navigate) went to three parallel Opus agents, each re-testing with screenshots in Hebrew and English for at least two rounds; the coordinator re-walked the merged app.",
+    "fixedBugs": [
+      "sheet stuck at full on Compare/Navigate (unstable setSnap), so the map was never visible",
+      "Back from Compare looped on a duplicate Compare entry",
+      "sheet scroll position survived navigation",
+      "'my location' default failed on every plain-HTTP phone (the H-1 preview is HTTP): now starts from the last origin or asks for a start",
+      "option rows lacked departure and arrival times",
+      "route details were dense text with links to unbuilt screens and no exit times",
+      "trains named by their exit stop (rows, details, map)",
+      "End trip sat next to Next step",
+      "'N stops left' never counted down without call positions",
+      "checklist rows hidden under the pinned card and Next button when focused or scrolled to",
+      "a 'now' plan stayed frozen at its first timestamp when Compare was shown again",
+      "origin truncated to three letters in Compare's one-line header"
+    ],
+    "layout": "Default snaps: Home half, Search full, Compare half (all options above Start, route on the map; tapping an option expands to the itinerary), Navigate half (step card, what comes next and Next step with the map above).",
+    "performance": {
+      "initialJsGzipKB": 130.14,
+      "beforeKB": 149.9,
+      "compareChunkGzipKB": 11.04,
+      "navigateChunkGzipKB": 10.83,
+      "note": "Compare and Navigate are preloadable lazy chunks prefetched after first paint; the places request goes out 250 ms after typing stops and the local API answered in about 110 ms."
+    },
+    "checks": {
+      "lint": "0 problems",
+      "typecheck": "0 errors",
+      "unit": {
+        "passed": 814,
+        "failed": 0
+      },
+      "e2eMocked": {
+        "passed": 52,
+        "failed": 0,
+        "skipped": 6,
+        "runs": "green twice in a row"
+      },
+      "e2eRealDevServer": {
+        "apiOrigin": "http://127.0.0.1:8590",
+        "passed": 4,
+        "skipped": 2
+      },
+      "e2eRealServedBuild": {
+        "baseUrl": "http://127.0.0.1:8591/app/",
+        "passed": 6,
+        "failed": 0
+      },
+      "e2eRealH1": {
+        "apiOrigin": "H-1 ALB via dev proxy",
+        "passed": 4,
+        "skipped": 2,
+        "skippedWhy": "the preview does not serve /app/ yet"
+      },
+      "axe": "no serious or critical violations on every screen in the mocked suite and on the served real flow"
+    },
+    "notes": [
+      "Leftover dev servers from finished subagent worktrees (ports 5192-5201) were found and stopped; one had made Playwright reuse a stale server. Each worktree must use its own OT_E2E_PORT.",
+      "Not human-reviewed: the user's phone verdict is still to come."
+    ],
+    "knownGaps": [
+      "platforms and intermediate stop names wait for API-C1/API-C2",
+      "plain HTTP: phone browsers refuse location, so real GPS needs HTTPS on H-1 (or Chrome's insecure-origin flag)",
+      "S7 screens are placeholders",
+      "swipe-down-to-go-back not implemented (Back button works)"
+    ]
+  }
 }
