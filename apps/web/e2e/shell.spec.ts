@@ -138,6 +138,10 @@ test("touch targets on the core screens are at least 44 px", async ({ page }) =>
 
 /** Home → Search(to) → a stop → Compare (mocked journeys). */
 async function planToCompare(page: Page): Promise<void> {
+  // "My location" is the default start in a secure context: grant a corpus position
+  // (Dizengoff Center), so Compare shows the fixture options rather than the start prompt.
+  await page.context().grantPermissions(["geolocation"]);
+  await page.context().setGeolocation({ latitude: 32.0753, longitude: 34.7749, accuracy: 20 });
   await page.goto(appPath("#/"));
   await page.getByRole("button", { name: "לאן?" }).click();
   await page.getByRole("searchbox").fill("דיזנגוף");
@@ -181,7 +185,7 @@ test("each screen opens at its top: Back from Search shows Compare unscrolled", 
   await expect.poll(() => content.evaluate((element) => element.scrollHeight > element.clientHeight)).toBe(true);
   await content.evaluate((element) => (element.scrollTop = element.scrollHeight));
   expect(await content.evaluate((element) => element.scrollTop)).toBeGreaterThan(0);
-  await page.getByRole("button", { name: /^מאיפה\?/ }).click();
+  await page.getByRole("button", { name: /^מוצא:/ }).click();
   await expect(page).toHaveURL(/#\/search\/from$/);
   expect(await content.evaluate((element) => element.scrollTop)).toBe(0);
   await page.getByRole("button", { name: "חזרה" }).click();
@@ -191,7 +195,7 @@ test("each screen opens at its top: Back from Search shows Compare unscrolled", 
 
 test("history: Home → Search → Compare → Search → Compare, then Back is Home in one tap", async ({ page }) => {
   await planToCompare(page);
-  await page.getByRole("button", { name: /^מאיפה\?/ }).click();
+  await page.getByRole("button", { name: /^מוצא:/ }).click();
   await expect(page).toHaveURL(/#\/search\/from$/);
   await page.getByRole("searchbox").fill("דיזנגוף");
   await page.getByTestId("search-results").getByRole("button").nth(1).click();

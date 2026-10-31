@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useI18n } from "../../i18n/I18nProvider";
 import type { MessageKey } from "../../i18n/messages";
 import { formatClock } from "../../lib/time";
@@ -139,6 +139,27 @@ function Navigating({ trip }: { trip: ActiveTrip }) {
     if (top && typeof top.scrollIntoView === "function") top.scrollIntoView({ block: "nearest" });
   }, [state.stepIndex, snap]);
 
+  // The card (pinned at the full sheet) and the bottom action cover the checklist's
+  // edges; their heights become scroll margins so a focused or scrolled-to row is never
+  // hidden beneath them (keyboard focus, scrollIntoView).
+  const rootRef = useRef<HTMLDivElement>(null);
+  const actionsRef = useRef<HTMLDivElement>(null);
+  useLayoutEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    const report = () => {
+      const pinned = getComputedStyle(topRef.current ?? root).position === "sticky";
+      root.style.setProperty("--nav-cover-top", `${pinned ? Math.round(topRef.current?.getBoundingClientRect().height ?? 0) : 0}px`);
+      root.style.setProperty("--nav-cover-bottom", `${Math.round(actionsRef.current?.getBoundingClientRect().height ?? 0)}px`);
+    };
+    report();
+    if (typeof ResizeObserver === "undefined") return;
+    const observer = new ResizeObserver(report);
+    if (topRef.current) observer.observe(topRef.current);
+    if (actionsRef.current) observer.observe(actionsRef.current);
+    return () => observer.disconnect();
+  }, [snap]);
+
   // Camera: the current leg is framed, and on board it stays framed while the dot moves
   // along it toward the exit (how far is my stop?). On foot, and waiting at the stop, the
   // map recentres on the passenger at street level (the map's Locate: zoom 15 or closer),
@@ -167,7 +188,7 @@ function Navigating({ trip }: { trip: ActiveTrip }) {
   const manual = state.locationMode === "manual" && !nav.simulated;
 
   return (
-    <div className={`navigate navigate-${snap}`}>
+    <div className={`navigate navigate-${snap}`} ref={rootRef}>
       <h1 className="visually-hidden">{t("screen.navigate")}</h1>
       <div className="navigate-top" ref={topRef}>
         {manual && (
@@ -257,7 +278,7 @@ function Navigating({ trip }: { trip: ActiveTrip }) {
         </label>
       </section>
 
-      <div className="navigate-actions">
+      <div className="navigate-actions" ref={actionsRef}>
         <button type="button" className="button button-primary nav-next" onClick={last ? leave : nav.next}>
           {last ? t("nav.finish") : t("nav.next")}
         </button>

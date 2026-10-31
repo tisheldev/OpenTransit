@@ -14,6 +14,7 @@ const seen = vi.hoisted(() => ({ setSnaps: [] as unknown[], snapOnMount: "full" 
 
 vi.mock("../screens/screens", () => ({
   Screen: ({ route }: { route: Route }) => <Probe key={JSON.stringify(route)} route={route} />,
+  prefetchScreens: () => Promise.resolve(),
 }));
 
 function Probe({ route }: { route: Route }) {

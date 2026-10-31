@@ -13,6 +13,8 @@
 .navigate-half .navigate-top,
 .navigate-peek .navigate-top {
   position: static;
+  /* At half the card and the next step must both clear the pinned action at 360 × 640. */
+  padding-block-end: var(--space-1);
 }
 
 /* One compact line per state (location off, lost, simulated). */
@@ -143,6 +145,8 @@
   padding: 0;
 }
 .checklist-row {
+  /* Clear the pinned card and the bottom action when focused or scrolled to (set by the screen). */
+  scroll-margin-block: calc(var(--nav-cover-top, 0px) + var(--space-2)) calc(var(--nav-cover-bottom, 0px) + var(--space-2));
   display: grid;
   grid-template-columns: 3.1em 20px 1fr;
   align-items: center;

@@ -59,8 +59,9 @@ async function expectCardAndNext(page: Page): Promise<void> {
   await expectFullyVisible(page, card(page));
   await expectFullyVisible(page, nextButton(page));
   const cardBox = (await card(page).boundingBox())!;
-  const actionsBox = (await page.locator(".navigate-actions").boundingBox())!;
-  expect(cardBox.y + cardBox.height).toBeLessThanOrEqual(actionsBox.y);
+  // Nothing of the card is hidden under the pinned action (its padding may overlap).
+  const nextBox = (await nextButton(page).boundingBox())!;
+  expect(cardBox.y + cardBox.height).toBeLessThanOrEqual(nextBox.y);
 }
 
 test.beforeEach(async ({ page }) => {

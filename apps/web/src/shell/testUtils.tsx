@@ -10,6 +10,11 @@ import { PlanProvider } from "../plan/PlanProvider";
 import { readSession } from "../storage/session";
 import { reloadLocalState } from "./localStore";
 import { Shell } from "./Shell";
+import { prefetchScreens } from "../screens/screens";
+
+// Compare and Navigate are lazy chunks in the app; load them once here so a rendered
+// route appears synchronously in tests, as it does in the app after the prefetch.
+await prefetchScreens();
 
 // Test-only: render the whole shell at a route, with a fresh query client and stores.
 

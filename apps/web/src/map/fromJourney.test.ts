@@ -29,11 +29,11 @@ describe("journeyToScene", () => {
     expect(first.from).toEqual([routes.legs[0]!.from.longitude, routes.legs[0]!.from.latitude]);
   });
 
-  it("labels buses by line number and rail by the stop ridden to, never with an empty label", () => {
+  it("labels buses by line number; rail by no label (never by the exit stop), never an empty label", () => {
     const { route } = journeyToScene(routes);
     expect(route[0]!.label).toBe("8");
     expect(routes.legs[2]!.transit!.routeShortName).toBe("");
-    expect(route[2]!.label).toBe(routes.legs[2]!.to.name);
+    expect(route[2]!.label).toBeNull();
     expect(route[4]!.label).toBe("1");
     for (const leg of route.filter((l) => l.kind === "walk")) expect(leg.label).toBeNull();
     for (const leg of route) expect(leg.label).not.toBe("");

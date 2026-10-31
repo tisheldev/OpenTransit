@@ -174,12 +174,12 @@ describe("history (Home → Search → Compare → Search → Compare)", () => {
     await pick("דיזנגוף");
     await waitFor(() => expect(window.location.hash).toBe("#/compare"));
     // Compare → Search(from) → Back returns to Compare.
-    await userEvent.click(await screen.findByRole("button", { name: /^מאיפה\?/ }));
+    await userEvent.click(await screen.findByRole("button", { name: new RegExp(`^${he["compare.fromLabel"]}:`) }));
     await waitFor(() => expect(window.location.hash).toBe("#/search/from"));
     await userEvent.click(screen.getByRole("button", { name: he["nav.back"] }));
     await waitFor(() => expect(window.location.hash).toBe("#/compare"));
     // Compare → Search(from) → choose: back on the same Compare entry.
-    await userEvent.click(await screen.findByRole("button", { name: /^מאיפה\?/ }));
+    await userEvent.click(await screen.findByRole("button", { name: new RegExp(`^${he["compare.fromLabel"]}:`) }));
     await waitFor(() => expect(window.location.hash).toBe("#/search/from"));
     await pick("דיזנגוף");
     await waitFor(() => expect(window.location.hash).toBe("#/compare"));

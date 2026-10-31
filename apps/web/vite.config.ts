@@ -65,6 +65,9 @@ export default defineConfig({
       "/v1": { target: apiOrigin, changeOrigin: false },
       "/readyz": { target: apiOrigin, changeOrigin: false },
     },
+    // Compare and Navigate are lazy chunks; transform them at startup so the first visit
+    // in the dev server is as quick as later ones (mocked e2e runs many in parallel).
+    warmup: { clientFiles: ["./src/screens/compare/CompareScreen.tsx", "./src/screens/navigate/NavigateScreen.tsx"] },
   },
   preview: {
     headers: clientSecurityHeaders,

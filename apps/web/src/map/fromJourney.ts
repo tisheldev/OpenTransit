@@ -30,15 +30,14 @@ function displayName(name: string, override: string | null | undefined): string 
 
 /**
  * Line label: the route short name ("8", "142"). Rail legs carry an empty short name and a
- * train number as headsign, so they are labelled by the stop the passenger rides to; an empty
- * label is never drawn.
+ * train number as headsign; naming a train by the stop the passenger gets off at reads as
+ * its destination (UX pass C7), so a rail line is drawn by its style alone. An empty label
+ * is never drawn.
  */
 export function legLabel(leg: Leg): string | null {
   if (leg.kind !== "transit" || !leg.transit) return null;
   const short = leg.transit.routeShortName.trim();
-  if (short) return short;
-  const to = leg.to.name.trim();
-  return to && !ENGINE_PLACEHOLDER_NAMES.has(to) ? to : null;
+  return short || null;
 }
 
 function legCoordinates(leg: Leg): LonLat[] | null {

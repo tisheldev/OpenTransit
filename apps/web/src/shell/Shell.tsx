@@ -15,7 +15,7 @@ import { locationSource } from "../lib/geolocation";
 import { MapAttribution, MapHost } from "../map/MapHost";
 import { getMapState, requestLocate, setBottomInset, showLocated, useMapSelector } from "../map/scene";
 import { back, hrefFor, useRoute, type Route } from "../router";
-import { Screen } from "../screens/screens";
+import { prefetchScreens, Screen } from "../screens/screens";
 import { Banners } from "./Banners";
 import { useLocationAvailability } from "./location";
 import { SheetContext, SNAP_FRACTION, defaultSnap, fullHeight, nearestSnap, stepSnap, type Snap } from "./sheet";
@@ -228,6 +228,9 @@ export function Shell({ fixtureMode }: { fixtureMode: boolean }) {
   const route = useRoute();
   const painted = useAfterFirstPaint();
   const status = useStatus({ enabled: painted });
+  useEffect(() => {
+    if (painted) void prefetchScreens();
+  }, [painted]);
   const location = useLocationAvailability();
   const picking = useMapSelector((state) => state.scene.pick);
   const mainRef = useRef<HTMLElement>(null);

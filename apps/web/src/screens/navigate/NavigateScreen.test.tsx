@@ -312,14 +312,10 @@ describe("Navigate: location", () => {
   });
 
   it("over plain HTTP the banner says location needs HTTPS (the browser refuses it there)", () => {
-    const secure = Object.getOwnPropertyDescriptor(window, "isSecureContext");
-    Object.defineProperty(window, "isSecureContext", { value: false, configurable: true });
     seed(recordedJourneys[0]!);
-    renderApp("#/navigate");
+    renderApp("#/navigate", { location: "insecure" });
     act(() => handle.onError!("denied"));
     expect(screen.getByRole("status")).toHaveTextContent(`${he["nav.loc.insecure"]} · ${he["nav.manual"]}`);
-    if (secure) Object.defineProperty(window, "isSecureContext", secure);
-    else delete (window as unknown as { isSecureContext?: boolean }).isSecureContext;
   });
 
   it("no accepted fix for 60 s → 'no location right now'; nothing advances", () => {
