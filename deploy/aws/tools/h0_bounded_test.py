@@ -604,6 +604,7 @@ def register(args: argparse.Namespace) -> int:
         "DATA_DIGEST": "sha256:DRY" if DRY_RUN else digest(ev, "data", args.data_tag),
         "PHOTON_DIGEST": "sha256:DRY" if DRY_RUN else digest(ev, "photon", args.photon_tag),
         "EXECUTION_ROLE_ARN": f"arn:aws:iam::{account()}:role/{NAME}-execution",
+        "VPC_CIDR": VPC_CIDR,
     }
     for key, value in values.items():
         text = text.replace("{{" + key + "}}", value)

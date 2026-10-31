@@ -15,8 +15,7 @@ from pathlib import Path
 
 AWS_DIR = Path(__file__).resolve().parents[1]
 REGION = "eu-north-1"
-# H-0 VPC (deploy/aws/network); the ALB connects to the task from inside it, so it is the
-# only proxy the API may trust for X-Forwarded-For (M7 rate limiting).
+# VPC created by tools/h0_bounded_test.py; it substitutes this for {{VPC_CIDR}} at registration.
 VPC_CIDR = "10.80.0.0/16"
 LOG_GROUP = "/opentransit/h0"
 MOTIS_DIGEST = "sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330"
@@ -42,6 +41,7 @@ PLACEHOLDERS = {
     "VPC_ID",
     "CERTIFICATE_ARN",
     "REVIEWER_CIDR",
+    "VPC_CIDR",
     "TASK_DEFINITION_REVISION",
 }
 
@@ -105,6 +105,9 @@ VARIANTS = {
     },
 }
 COMPOSE_FILE = "local/compose.yaml"
+# The local emulation has no ALB: the API sees the real TCP peer, so the proxy-trust token
+# (which only a deployment step can resolve) is left out rather than rendered unparseable.
+LOCAL_OMITTED_ENV = "OPENTRANSIT_TRUSTED_PROXIES"
 
 
 def _logging(prefix: str) -> dict:
@@ -281,6 +284,10 @@ def render_task_definition(variant: str) -> dict:
         {"name": "OPENTRANSIT_MANIFEST", "value": "/generation/manifest.json"},
         {"name": "OPENTRANSIT_MOTIS_URL", "value": motis_url},
         {"name": "OPENTRANSIT_PROBE", "value": "/run/opentransit/probe.json"},
+        # Explicit even though 1 is the default. The ALB is the only peer, so its VPC range is
+        # trusted for X-Forwarded-For; the deployment step substitutes the real CIDR for the token.
+        {"name": "OPENTRANSIT_RATE_LIMIT_ENABLED", "value": "1"},
+        {"name": "OPENTRANSIT_TRUSTED_PROXIES", "value": "{{VPC_CIDR}}"},
     ]
     api_depends = [
         {"containerName": "verifier", "condition": "SUCCESS"},
@@ -295,7 +302,6 @@ def render_task_definition(variant: str) -> dict:
             {"name": "OPENTRANSIT_PHOTON_URL", "value": f"http://127.0.0.1:{PHOTON_PORT}"},
         ]
         api_depends.append({"containerName": "photon", "condition": "HEALTHY"})
-    api_env.append({"name": "OPENTRANSIT_TRUSTED_PROXIES", "value": VPC_CIDR})
     api_env.append({"name": "PYTHONDONTWRITEBYTECODE", "value": "1"})
     containers.append(
         _container(
@@ -411,6 +417,8 @@ def render_local_compose(variant: str = "recommended") -> str:
         if "environment" in container:
             lines.append("    environment:")
             for item in container["environment"]:
+                if item["name"] == LOCAL_OMITTED_ENV:
+                    continue
                 lines.append(f"      {item['name']}: {_yaml_scalar(item['value'])}")
         lines.append("    volumes:")
         for mount in container["mountPoints"]:

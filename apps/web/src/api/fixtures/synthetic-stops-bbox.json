@@ -1,0 +1,93 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/stops",
+    "params": {
+      "bbox": "34.77,32.07,34.79,32.09"
+    },
+    "body": null
+  },
+  "status": 200,
+  "body": {
+    "data": [
+      {
+        "stopId": "mot:stop:platform_a",
+        "sourceId": "platform_a",
+        "code": "A",
+        "name": "Central A",
+        "description": null,
+        "latitude": 32.0801,
+        "longitude": 34.7801,
+        "locationType": 0,
+        "parentStationId": "mot:stop:station",
+        "wheelchairBoarding": null,
+        "platformCode": "A"
+      },
+      {
+        "stopId": "mot:stop:platform_b",
+        "sourceId": "platform_b",
+        "code": "B",
+        "name": "Central B",
+        "description": null,
+        "latitude": 32.081,
+        "longitude": 34.781,
+        "locationType": 0,
+        "parentStationId": "mot:stop:station",
+        "wheelchairBoarding": null,
+        "platformCode": "B"
+      },
+      {
+        "stopId": "mot:stop:station",
+        "sourceId": "station",
+        "code": "S",
+        "name": "Central",
+        "description": null,
+        "latitude": 32.08,
+        "longitude": 34.78,
+        "locationType": 1,
+        "parentStationId": null,
+        "wheelchairBoarding": null,
+        "platformCode": null
+      },
+      {
+        "stopId": "mot:stop:stop_c",
+        "sourceId": "stop_c",
+        "code": "C",
+        "name": "Harbor",
+        "description": null,
+        "latitude": 32.082,
+        "longitude": 34.782,
+        "locationType": 0,
+        "parentStationId": null,
+        "wheelchairBoarding": null,
+        "platformCode": null
+      }
+    ],
+    "meta": {
+      "requestId": "00000000000000000000000000000000",
+      "generationId": "synthetic-test",
+      "generatedAt": "2026-09-30T09:00:00Z",
+      "dataBuiltAt": "2026-09-30T09:00:00Z",
+      "mode": "fixture",
+      "coverage": {
+        "from": "2026-09-29T00:00:00+03:00",
+        "until": "2026-10-30T00:00:00+02:00"
+      },
+      "freshness": "current",
+      "capabilities": {
+        "realtime": "not_enabled",
+        "alerts": "not_enabled"
+      },
+      "attribution": [
+        "Israel Ministry of Transport",
+        "© OpenStreetMap contributors"
+      ],
+      "rankingPolicy": "motis-v2.11.2-feasible-engine-order-v1",
+      "appliedConstraints": {},
+      "warnings": []
+    },
+    "page": {
+      "nextCursor": null
+    }
+  }
+}

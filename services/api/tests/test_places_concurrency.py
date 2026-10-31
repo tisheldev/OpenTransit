@@ -12,6 +12,7 @@ from test_geocode_places_api import _client, _geocoder_transport
 import opentransit.api.routes.places as places_module
 from opentransit.geocoding import GeocodingResult
 from opentransit.motis_geocoder import GeocoderUnavailable
+from opentransit.search_cache import geocoder_caches
 
 GEOCODER_ITEM = {
     "kind": "poi",
@@ -117,6 +118,8 @@ def test_real_geocoder_request_leaves_while_the_stop_search_runs(
         _geocoder_transport(client, instant_engine)
         reference = client.get("/v1/places", params=PARAMS)
         _geocoder_transport(client, pooled_engine)
+        # The first request's answer is cached; this one must reach the (slow) engine.
+        geocoder_caches(client.app.state.snapshot).clear("motis")
         monkeypatch.setattr(places_module, "search_stops", slow_stops)
         started = time.perf_counter()
         response = client.get("/v1/places", params=PARAMS)

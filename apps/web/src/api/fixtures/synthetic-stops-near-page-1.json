@@ -1,0 +1,56 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/stops",
+    "params": {
+      "near": "32.08,34.78",
+      "limit": 1
+    },
+    "body": null
+  },
+  "status": 200,
+  "body": {
+    "data": [
+      {
+        "stopId": "mot:stop:station",
+        "sourceId": "station",
+        "code": "S",
+        "name": "Central",
+        "description": null,
+        "latitude": 32.08,
+        "longitude": 34.78,
+        "locationType": 1,
+        "parentStationId": null,
+        "wheelchairBoarding": null,
+        "platformCode": null,
+        "distanceMeters": 0.0
+      }
+    ],
+    "meta": {
+      "requestId": "00000000000000000000000000000000",
+      "generationId": "synthetic-test",
+      "generatedAt": "2026-09-30T09:00:00Z",
+      "dataBuiltAt": "2026-09-30T09:00:00Z",
+      "mode": "fixture",
+      "coverage": {
+        "from": "2026-09-29T00:00:00+03:00",
+        "until": "2026-10-30T00:00:00+02:00"
+      },
+      "freshness": "current",
+      "capabilities": {
+        "realtime": "not_enabled",
+        "alerts": "not_enabled"
+      },
+      "attribution": [
+        "Israel Ministry of Transport",
+        "© OpenStreetMap contributors"
+      ],
+      "rankingPolicy": "motis-v2.11.2-feasible-engine-order-v1",
+      "appliedConstraints": {},
+      "warnings": []
+    },
+    "page": {
+      "nextCursor": "eyJ2IjoxLCJnIjoic3ludGhldGljLXRlc3QiLCJxIjoiMjQxZTZlM2Q2NmM2MGQ1Y2UxZmRlMjJhMDBkM2UwY2ZhMjVlMTFlMDlhMjI4MWVhYWNlMjJlODM3ZDIzNWJjYyIsInAiOlswLjAsIm1vdDpzdG9wOnN0YXRpb24iXX0"
+    }
+  }
+}

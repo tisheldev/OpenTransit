@@ -5,7 +5,7 @@ Prepared 5 September 2026; reconciled 30 September. D1 (primary feed) is accepte
 ## Do this now
 
 1. **Obtain written static GTFS usage terms and pass along MOT replies.** Implementation and Fargate/ECR hosting are selected ([ADR 0007](../../poc/docs/adr/0007-schedule-api-design.md)); static terms remain a release requirement. M1 stays local; cloud region/resources/cost still need validation.
-2. **Await the MOT response; the 28-day decision point is October 19.** The September 21 email from the correct address is the request baseline. The email variant and attachments are not recorded. Keep any ticket/reference in the [access record](../data-usage-and-access.md).
+2. **The October 19 checkpoint passed with no MOT response recorded and no follow-up sent (checked October 31).** Review the [follow-up draft (DRAFT, NOT SENT)](mot-followup-draft-20261031.md) and decide whether to send it. Then decide how to evidence the static terms using the [static terms summary](static-terms-summary-20261031.md). The September 21 email remains the request baseline. Keep any ticket/reference and the send date in the [access record](../data-usage-and-access.md#checkpoint-result--19-october-2026).
 3. **If MOT still requires a signed application**, use the [field-by-field instructions](form-guide.md), review the Ministry terms and enter your personal details yourself. The prepared form is at `output/pdf/mot-siri-application-draft.pdf` from the repository root. Existing [Hebrew email drafts](mot-email-he.txt) remain reference material.
 
 **H3 (your verdicts) is the open review:** the API-path route sheet with a dated Moovit comparison is ready ([comparison](../../services/api/results/acceptance-oct1b-20261001-02/h3-moovit-comparison.md)); fill in "Usable?" for each row. H4 you approved on 1 October with the address and latency limits accepted. [The review queue](quality-review.md) explains the judgments.
@@ -46,6 +46,8 @@ D1 is justified by 0% versus 100% static mapping-key overlap in the recorded sam
 
 - [Form guide and purpose statement](form-guide.md)
 - [Ready-to-copy Hebrew emails](mot-email-he.txt)
+- [MOT follow-up draft, 31 October 2026 (not sent)](mot-followup-draft-20261031.md)
+- [Static GTFS terms summary, 31 October 2026](static-terms-summary-20261031.md)
 - [Draft technical decisions and implementation handoff](technical-decisions.md)
 - [Human quality-review queue](quality-review.md)
 - [Access and usage evidence](../data-usage-and-access.md)

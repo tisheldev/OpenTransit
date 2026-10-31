@@ -1,0 +1,55 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/stops/mot:stop:13583/departures",
+    "params": {
+      "from": "2026-10-01T00:10:00+03:00",
+      "horizonMinutes": 60,
+      "limit": 2,
+      "cursor": "eyJ2IjoxLCJnIjoiODU2OTFjZDI3YjUzNmFjZGFiNWNjYWIyM2Q5NDAxOWFkODZkMTVjNWZlZGY0Y2YyNWM1NjM1ZmQwN2Y5MmMxYSIsInEiOiJjNjc2ZjdjMDQ1MjMyNWI1ZTVkM2UwMjM4MzMzNmM2NWVjNGQxYTViOWE2OTRlYzcwYWQzNTI4ZTU2OTI4NGYzIiwicCI6WyIyMDI2LTA5LTMwVDIyOjA0OjAwKzAwOjAwIiwiMjAyNjEwMDFfMDA6NDBfbW90NjBkYXlfMzYwMzM0NTdfMzAwOTI2IiwiMTM1ODMiLDIzXX0"
+    },
+    "body": null
+  },
+  "status": 200,
+  "body": {
+    "data": [
+      {
+        "scheduledDeparture": "2026-09-30T22:09:00Z",
+        "stopId": "mot:stop:13583",
+        "routeId": "mot:route:16077",
+        "routeShortName": "8",
+        "headsign": "אוניברסיטת ת\"א",
+        "platformCode": null,
+        "pickupType": 0,
+        "tripRef": "20261001_00:45_mot60day_584901669_300926",
+        "callSequence": 22
+      }
+    ],
+    "page": {
+      "nextCursor": null
+    },
+    "meta": {
+      "requestId": "00000000000000000000000000000000",
+      "generationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
+      "generatedAt": "2026-09-30T19:16:04.031381Z",
+      "dataBuiltAt": "2026-09-30T18:21:10.700556Z",
+      "mode": "real",
+      "coverage": {
+        "from": "2026-09-30T00:00:00+03:00",
+        "until": "2026-10-31T00:00:00+02:00"
+      },
+      "freshness": "current",
+      "capabilities": {
+        "realtime": "not_enabled",
+        "alerts": "not_enabled"
+      },
+      "attribution": [
+        "Israel Ministry of Transport",
+        "© OpenStreetMap contributors"
+      ],
+      "rankingPolicy": "motis-v2.11.2-feasible-engine-order-v1",
+      "appliedConstraints": {},
+      "warnings": []
+    }
+  }
+}

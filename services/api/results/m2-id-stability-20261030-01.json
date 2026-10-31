@@ -1,0 +1,69 @@
+{
+  "previous": {
+    "sha256": "c535afc894eed6251da09d15af848628cf1432032b7de220989ec4fdd9b61cf0",
+    "acquiredDate": "2026-10-29"
+  },
+  "candidate": {
+    "sha256": "147d086084c3df0c6ccf4197126b91bf00a91e9c658b6016e647a3802b3735be",
+    "acquiredDate": "2026-10-30"
+  },
+  "consecutiveDailyFeeds": true,
+  "acquisitionDatesVerified": false,
+  "counts": {
+    "stops": {
+      "previous": 35387,
+      "candidate": 35390,
+      "retained": 35387,
+      "added": 3,
+      "removed": 0,
+      "retainedFraction": 1.0,
+      "metadataChangedCount": 2,
+      "metadataChangedSamples": [
+        "51259",
+        "51260"
+      ]
+    },
+    "routes": {
+      "previous": 7706,
+      "candidate": 7631,
+      "retained": 7631,
+      "added": 0,
+      "removed": 75,
+      "retainedFraction": 0.9902673241629899,
+      "metadataChangedCount": 0,
+      "metadataChangedSamples": []
+    },
+    "trips": {
+      "previous": 380134,
+      "candidate": 285930,
+      "retained": 215001,
+      "added": 70929,
+      "removed": 165133,
+      "retainedFraction": 0.5655926594306219,
+      "metadataChangedCount": 213931,
+      "metadataChangedSamples": [
+        "10004215_301026",
+        "1001413_011126",
+        "1001413_051126",
+        "1001413_301026",
+        "10021196_301026",
+        "10021201_301026",
+        "10022312_301026",
+        "10059907_301026",
+        "10059942_011126",
+        "10059942_301026",
+        "10060326_301026",
+        "10060388_011126",
+        "10060388_051126",
+        "10060388_301026",
+        "10061011_051126",
+        "10061011_301026",
+        "10079035_301026",
+        "10081666_051126",
+        "10081666_301026",
+        "10092411_301026"
+      ]
+    }
+  },
+  "scope": "Full source identifiers; supplied dates require provenance review. Overlap does not prove semantic stability or realtime matching."
+}

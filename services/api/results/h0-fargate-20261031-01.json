@@ -1521,11 +1521,12 @@
   "notes": {
     "apiImage": "The 1 October API image (ot-t5-api, sha256:e819f089…) predates rate limiting/OPENTRANSIT_TRUSTED_PROXIES (PR #4) and the integrity-attestation startup path (PR #13), so it is not pushed; the API image is rebuilt from this branch's commit once the generation session's Docker work is done.",
     "taskRole": "No task role is created: the drafts and the hosting plan keep the serving task role absent (no AWS credentials in the task at all), and validate_drafts rejects taskRoleArn. Only the execution role exists.",
-    "dockerAuth": "Windows Credential Manager rejected the ECR token ('The stub received bad data'); h0_bounded_test.py writes the ECR auth to a throwaway DOCKER_CONFIG under the temp directory and deletes it after the push."
+    "dockerAuth": "Windows Credential Manager rejected the ECR token ('The stub received bad data'); h0_bounded_test.py writes the ECR auth to a throwaway DOCKER_CONFIG under the temp directory and deletes it after the push.",
+    "apiImageSource": "The deployed API image was built from commit b551100, whose services/api equals main 325e4ca (before PR #16 API-PERF wave 1, merged into this branch afterwards). Registered revision 1 set OPENTRANSIT_TRUSTED_PROXIES=10.80.0.0/16 literally and did not set OPENTRANSIT_RATE_LIMIT_ENABLED (default on); main's later drafts (merged here) add the explicit RATE_LIMIT_ENABLED=1 and a {{VPC_CIDR}} token that h0_bounded_test.py substitutes."
   },
   "build": {
     "at": "2026-10-31T12:57-13:00Z",
-    "sourceCommit": "b551100 (this branch; API code equals main 325e4ca)",
+    "sourceCommit": "b551100 (services/api identical to main 325e4ca)",
     "generation": {
       "dir": "D:/ot/generations/oct31a",
       "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",

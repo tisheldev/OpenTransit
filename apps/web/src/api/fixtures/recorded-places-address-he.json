@@ -1,0 +1,255 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/places",
+    "params": {
+      "q": "דיזנגוף 50 תל אביב",
+      "type": "address"
+    },
+    "body": null
+  },
+  "status": 200,
+  "body": {
+    "data": [
+      {
+        "kind": "address",
+        "name": "דיזנגוף 50",
+        "displayName": "דיזנגוף 50",
+        "languageUsed": "he",
+        "locality": "תל־אביב–יפו",
+        "coordinates": {
+          "latitude": 32.075215,
+          "longitude": 34.775697
+        },
+        "street": "דיזנגוף",
+        "houseNumber": "50",
+        "addressLevel": "house_number",
+        "precision": "numbered_label",
+        "candidateIdentityHash": "bc972374b1d7943fc1fc37dc3c9b3289519ae50e99d24d12cf8a65f7de1a9578",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiJiYzk3MjM3NGIxZDc5NDNmYzFmYzM3ZGMzYzliMzI4OTUxOWFlNTBlOTlkMjRkMTJjZjhhNjVmN2RlMWE5NTc4IiwiY29vcmRpbmF0ZXMiOlszMi4wNzUyMTUsMzQuNzc1Njk3XSwiZ2VuZXJhdGlvbklkIjoiODU2OTFjZDI3YjUzNmFjZGFiNWNjYWIyM2Q5NDAxOWFkODZkMTVjNWZlZGY0Y2YyNWM1NjM1ZmQwN2Y5MmMxYSIsImtpbmQiOiJhZGRyZXNzIn0",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiJiYzk3MjM3NGIxZDc5NDNmYzFmYzM3ZGMzYzliMzI4OTUxOWFlNTBlOTlkMjRkMTJjZjhhNjVmN2RlMWE5NTc4IiwiY29vcmRpbmF0ZXMiOlszMi4wNzUyMTUsMzQuNzc1Njk3XSwiZ2VuZXJhdGlvbklkIjoiODU2OTFjZDI3YjUzNmFjZGFiNWNjYWIyM2Q5NDAxOWFkODZkMTVjNWZlZGY0Y2YyNWM1NjM1ZmQwN2Y5MmMxYSIsImtpbmQiOiJhZGRyZXNzIn0"
+        }
+      },
+      {
+        "kind": "address",
+        "name": "דיזנגוף 50",
+        "displayName": "דיזנגוף 50",
+        "languageUsed": "he",
+        "locality": "תל־אביב–יפו",
+        "coordinates": {
+          "latitude": 32.0756734,
+          "longitude": 34.7744256
+        },
+        "street": "דיזנגוף",
+        "houseNumber": "50",
+        "addressLevel": "house_number",
+        "precision": "numbered_label",
+        "candidateIdentityHash": "0d65b16fb70c476a9ae613bb750f790ab3571ba40c35f21960dd8c5c108e8d9a",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiIwZDY1YjE2ZmI3MGM0NzZhOWFlNjEzYmI3NTBmNzkwYWIzNTcxYmE0MGMzNWYyMTk2MGRkOGM1YzEwOGU4ZDlhIiwiY29vcmRpbmF0ZXMiOlszMi4wNzU2NzM0LDM0Ljc3NDQyNTZdLCJnZW5lcmF0aW9uSWQiOiI4NTY5MWNkMjdiNTM2YWNkYWI1Y2NhYjIzZDk0MDE5YWQ4NmQxNWM1ZmVkZjRjZjI1YzU2MzVmZDA3ZjkyYzFhIiwia2luZCI6ImFkZHJlc3MifQ",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiIwZDY1YjE2ZmI3MGM0NzZhOWFlNjEzYmI3NTBmNzkwYWIzNTcxYmE0MGMzNWYyMTk2MGRkOGM1YzEwOGU4ZDlhIiwiY29vcmRpbmF0ZXMiOlszMi4wNzU2NzM0LDM0Ljc3NDQyNTZdLCJnZW5lcmF0aW9uSWQiOiI4NTY5MWNkMjdiNTM2YWNkYWI1Y2NhYjIzZDk0MDE5YWQ4NmQxNWM1ZmVkZjRjZjI1YzU2MzVmZDA3ZjkyYzFhIiwia2luZCI6ImFkZHJlc3MifQ"
+        }
+      },
+      {
+        "kind": "address",
+        "name": "דיזנגוף 50",
+        "displayName": "דיזנגוף 50",
+        "languageUsed": "he",
+        "locality": "תל־אביב–יפו",
+        "coordinates": {
+          "latitude": 32.0755949,
+          "longitude": 34.7753755
+        },
+        "street": "דיזנגוף",
+        "houseNumber": "50",
+        "addressLevel": "house_number",
+        "precision": "numbered_label",
+        "candidateIdentityHash": "b9efda6ea92ec65b2e7b98a8162008c0e4b3cfff9f146a4fbc9edde652bfdc50",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiJiOWVmZGE2ZWE5MmVjNjViMmU3Yjk4YTgxNjIwMDhjMGU0YjNjZmZmOWYxNDZhNGZiYzllZGRlNjUyYmZkYzUwIiwiY29vcmRpbmF0ZXMiOlszMi4wNzU1OTQ5LDM0Ljc3NTM3NTVdLCJnZW5lcmF0aW9uSWQiOiI4NTY5MWNkMjdiNTM2YWNkYWI1Y2NhYjIzZDk0MDE5YWQ4NmQxNWM1ZmVkZjRjZjI1YzU2MzVmZDA3ZjkyYzFhIiwia2luZCI6ImFkZHJlc3MifQ",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiJiOWVmZGE2ZWE5MmVjNjViMmU3Yjk4YTgxNjIwMDhjMGU0YjNjZmZmOWYxNDZhNGZiYzllZGRlNjUyYmZkYzUwIiwiY29vcmRpbmF0ZXMiOlszMi4wNzU1OTQ5LDM0Ljc3NTM3NTVdLCJnZW5lcmF0aW9uSWQiOiI4NTY5MWNkMjdiNTM2YWNkYWI1Y2NhYjIzZDk0MDE5YWQ4NmQxNWM1ZmVkZjRjZjI1YzU2MzVmZDA3ZjkyYzFhIiwia2luZCI6ImFkZHJlc3MifQ"
+        }
+      },
+      {
+        "kind": "address",
+        "name": "דיזנגוף",
+        "displayName": "דיזנגוף",
+        "languageUsed": "he",
+        "locality": "תל־אביב–יפו",
+        "coordinates": {
+          "latitude": 32.0746929,
+          "longitude": 34.7764356
+        },
+        "street": "דיזנגוף",
+        "houseNumber": null,
+        "addressLevel": "street",
+        "precision": "street",
+        "candidateIdentityHash": "125957a0c15b1c80e550e5309e14d22545e75baeb80f65d02cd2f4546414b6a2",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiIxMjU5NTdhMGMxNWIxYzgwZTU1MGU1MzA5ZTE0ZDIyNTQ1ZTc1YmFlYjgwZjY1ZDAyY2QyZjQ1NDY0MTRiNmEyIiwiY29vcmRpbmF0ZXMiOlszMi4wNzQ2OTI5LDM0Ljc3NjQzNTZdLCJnZW5lcmF0aW9uSWQiOiI4NTY5MWNkMjdiNTM2YWNkYWI1Y2NhYjIzZDk0MDE5YWQ4NmQxNWM1ZmVkZjRjZjI1YzU2MzVmZDA3ZjkyYzFhIiwia2luZCI6ImFkZHJlc3MifQ",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiIxMjU5NTdhMGMxNWIxYzgwZTU1MGU1MzA5ZTE0ZDIyNTQ1ZTc1YmFlYjgwZjY1ZDAyY2QyZjQ1NDY0MTRiNmEyIiwiY29vcmRpbmF0ZXMiOlszMi4wNzQ2OTI5LDM0Ljc3NjQzNTZdLCJnZW5lcmF0aW9uSWQiOiI4NTY5MWNkMjdiNTM2YWNkYWI1Y2NhYjIzZDk0MDE5YWQ4NmQxNWM1ZmVkZjRjZjI1YzU2MzVmZDA3ZjkyYzFhIiwia2luZCI6ImFkZHJlc3MifQ"
+        }
+      },
+      {
+        "kind": "address",
+        "name": "כיכר דיזנגוף (צינה)",
+        "displayName": "כיכר דיזנגוף (צינה)",
+        "languageUsed": "he",
+        "locality": "תל־אביב–יפו",
+        "coordinates": {
+          "latitude": 32.0781239,
+          "longitude": 34.7742125
+        },
+        "street": "כיכר דיזנגוף (צינה)",
+        "houseNumber": null,
+        "addressLevel": "street",
+        "precision": "street",
+        "candidateIdentityHash": "083b4a39221507a6ced89fa8516781ca8be59ee8538140e1e0d095aafd703f2d",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiIwODNiNGEzOTIyMTUwN2E2Y2VkODlmYTg1MTY3ODFjYThiZTU5ZWU4NTM4MTQwZTFlMGQwOTVhYWZkNzAzZjJkIiwiY29vcmRpbmF0ZXMiOlszMi4wNzgxMjM5LDM0Ljc3NDIxMjVdLCJnZW5lcmF0aW9uSWQiOiI4NTY5MWNkMjdiNTM2YWNkYWI1Y2NhYjIzZDk0MDE5YWQ4NmQxNWM1ZmVkZjRjZjI1YzU2MzVmZDA3ZjkyYzFhIiwia2luZCI6ImFkZHJlc3MifQ",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiIwODNiNGEzOTIyMTUwN2E2Y2VkODlmYTg1MTY3ODFjYThiZTU5ZWU4NTM4MTQwZTFlMGQwOTVhYWZkNzAzZjJkIiwiY29vcmRpbmF0ZXMiOlszMi4wNzgxMjM5LDM0Ljc3NDIxMjVdLCJnZW5lcmF0aW9uSWQiOiI4NTY5MWNkMjdiNTM2YWNkYWI1Y2NhYjIzZDk0MDE5YWQ4NmQxNWM1ZmVkZjRjZjI1YzU2MzVmZDA3ZjkyYzFhIiwia2luZCI6ImFkZHJlc3MifQ"
+        }
+      },
+      {
+        "kind": "address",
+        "name": "דובנוב",
+        "displayName": "דובנוב",
+        "languageUsed": "he",
+        "locality": "הרצליה",
+        "coordinates": {
+          "latitude": 32.1777349,
+          "longitude": 34.8172343
+        },
+        "street": "דובנוב",
+        "houseNumber": null,
+        "addressLevel": "street",
+        "precision": "street",
+        "candidateIdentityHash": "a47766da8f192d2ba5bd2fd40e1455175593902fc5792289b17521d1809972b7",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiJhNDc3NjZkYThmMTkyZDJiYTViZDJmZDQwZTE0NTUxNzU1OTM5MDJmYzU3OTIyODliMTc1MjFkMTgwOTk3MmI3IiwiY29vcmRpbmF0ZXMiOlszMi4xNzc3MzQ5LDM0LjgxNzIzNDNdLCJnZW5lcmF0aW9uSWQiOiI4NTY5MWNkMjdiNTM2YWNkYWI1Y2NhYjIzZDk0MDE5YWQ4NmQxNWM1ZmVkZjRjZjI1YzU2MzVmZDA3ZjkyYzFhIiwia2luZCI6ImFkZHJlc3MifQ",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiJhNDc3NjZkYThmMTkyZDJiYTViZDJmZDQwZTE0NTUxNzU1OTM5MDJmYzU3OTIyODliMTc1MjFkMTgwOTk3MmI3IiwiY29vcmRpbmF0ZXMiOlszMi4xNzc3MzQ5LDM0LjgxNzIzNDNdLCJnZW5lcmF0aW9uSWQiOiI4NTY5MWNkMjdiNTM2YWNkYWI1Y2NhYjIzZDk0MDE5YWQ4NmQxNWM1ZmVkZjRjZjI1YzU2MzVmZDA3ZjkyYzFhIiwia2luZCI6ImFkZHJlc3MifQ"
+        }
+      },
+      {
+        "kind": "address",
+        "name": "דובנוב",
+        "displayName": "דובנוב",
+        "languageUsed": "he",
+        "locality": "תל־אביב–יפו",
+        "coordinates": {
+          "latitude": 32.0783013,
+          "longitude": 34.78318
+        },
+        "street": "דובנוב",
+        "houseNumber": null,
+        "addressLevel": "street",
+        "precision": "street",
+        "candidateIdentityHash": "bef91fc1484c607005a0cd4470d0108f461d0aaf9546c31b46522ed73d3d89ba",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiJiZWY5MWZjMTQ4NGM2MDcwMDVhMGNkNDQ3MGQwMTA4ZjQ2MWQwYWFmOTU0NmMzMWI0NjUyMmVkNzNkM2Q4OWJhIiwiY29vcmRpbmF0ZXMiOlszMi4wNzgzMDEzLDM0Ljc4MzE4XSwiZ2VuZXJhdGlvbklkIjoiODU2OTFjZDI3YjUzNmFjZGFiNWNjYWIyM2Q5NDAxOWFkODZkMTVjNWZlZGY0Y2YyNWM1NjM1ZmQwN2Y5MmMxYSIsImtpbmQiOiJhZGRyZXNzIn0",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiJiZWY5MWZjMTQ4NGM2MDcwMDVhMGNkNDQ3MGQwMTA4ZjQ2MWQwYWFmOTU0NmMzMWI0NjUyMmVkNzNkM2Q4OWJhIiwiY29vcmRpbmF0ZXMiOlszMi4wNzgzMDEzLDM0Ljc4MzE4XSwiZ2VuZXJhdGlvbklkIjoiODU2OTFjZDI3YjUzNmFjZGFiNWNjYWIyM2Q5NDAxOWFkODZkMTVjNWZlZGY0Y2YyNWM1NjM1ZmQwN2Y5MmMxYSIsImtpbmQiOiJhZGRyZXNzIn0"
+        }
+      },
+      {
+        "kind": "address",
+        "name": "דיזנגוף 50",
+        "displayName": "דיזנגוף 50",
+        "languageUsed": "he",
+        "locality": "נתניה",
+        "coordinates": {
+          "latitude": 32.3266269,
+          "longitude": 34.8520654
+        },
+        "street": "דיזנגוף",
+        "houseNumber": "50",
+        "addressLevel": "house_number",
+        "precision": "numbered_label",
+        "candidateIdentityHash": "88e9ddeb3b924fdb99831514e94f7ad6d6c7ccbcd89cc49a84945d8a9819d421",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiI4OGU5ZGRlYjNiOTI0ZmRiOTk4MzE1MTRlOTRmN2FkNmQ2YzdjY2JjZDg5Y2M0OWE4NDk0NWQ4YTk4MTlkNDIxIiwiY29vcmRpbmF0ZXMiOlszMi4zMjY2MjY5LDM0Ljg1MjA2NTRdLCJnZW5lcmF0aW9uSWQiOiI4NTY5MWNkMjdiNTM2YWNkYWI1Y2NhYjIzZDk0MDE5YWQ4NmQxNWM1ZmVkZjRjZjI1YzU2MzVmZDA3ZjkyYzFhIiwia2luZCI6ImFkZHJlc3MifQ",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiI4OGU5ZGRlYjNiOTI0ZmRiOTk4MzE1MTRlOTRmN2FkNmQ2YzdjY2JjZDg5Y2M0OWE4NDk0NWQ4YTk4MTlkNDIxIiwiY29vcmRpbmF0ZXMiOlszMi4zMjY2MjY5LDM0Ljg1MjA2NTRdLCJnZW5lcmF0aW9uSWQiOiI4NTY5MWNkMjdiNTM2YWNkYWI1Y2NhYjIzZDk0MDE5YWQ4NmQxNWM1ZmVkZjRjZjI1YzU2MzVmZDA3ZjkyYzFhIiwia2luZCI6ImFkZHJlc3MifQ"
+        }
+      },
+      {
+        "kind": "address",
+        "name": "תל גבורים 50",
+        "displayName": "תל גבורים 50",
+        "languageUsed": "he",
+        "locality": "תל־אביב–יפו",
+        "coordinates": {
+          "latitude": 32.036403,
+          "longitude": 34.768793
+        },
+        "street": "תל גבורים",
+        "houseNumber": "50",
+        "addressLevel": "house_number",
+        "precision": "numbered_label",
+        "candidateIdentityHash": "73714f52429e03e732176bc75d2e13da7cedb41dab95be23af245a04849e3fb8",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiI3MzcxNGY1MjQyOWUwM2U3MzIxNzZiYzc1ZDJlMTNkYTdjZWRiNDFkYWI5NWJlMjNhZjI0NWEwNDg0OWUzZmI4IiwiY29vcmRpbmF0ZXMiOlszMi4wMzY0MDMsMzQuNzY4NzkzXSwiZ2VuZXJhdGlvbklkIjoiODU2OTFjZDI3YjUzNmFjZGFiNWNjYWIyM2Q5NDAxOWFkODZkMTVjNWZlZGY0Y2YyNWM1NjM1ZmQwN2Y5MmMxYSIsImtpbmQiOiJhZGRyZXNzIn0",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiI3MzcxNGY1MjQyOWUwM2U3MzIxNzZiYzc1ZDJlMTNkYTdjZWRiNDFkYWI5NWJlMjNhZjI0NWEwNDg0OWUzZmI4IiwiY29vcmRpbmF0ZXMiOlszMi4wMzY0MDMsMzQuNzY4NzkzXSwiZ2VuZXJhdGlvbklkIjoiODU2OTFjZDI3YjUzNmFjZGFiNWNjYWIyM2Q5NDAxOWFkODZkMTVjNWZlZGY0Y2YyNWM1NjM1ZmQwN2Y5MmMxYSIsImtpbmQiOiJhZGRyZXNzIn0"
+        }
+      },
+      {
+        "kind": "address",
+        "name": "דיזנגוף",
+        "displayName": "דיזנגוף",
+        "languageUsed": "he",
+        "locality": "באר יעקב",
+        "coordinates": {
+          "latitude": 31.9320964,
+          "longitude": 34.8334233
+        },
+        "street": "דיזנגוף",
+        "houseNumber": null,
+        "addressLevel": "street",
+        "precision": "street",
+        "candidateIdentityHash": "e391958f44127c199d643c53a2fe2196a27d0669f4ab29c6ceb287a1b3c0631e",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiJlMzkxOTU4ZjQ0MTI3YzE5OWQ2NDNjNTNhMmZlMjE5NmEyN2QwNjY5ZjRhYjI5YzZjZWIyODdhMWIzYzA2MzFlIiwiY29vcmRpbmF0ZXMiOlszMS45MzIwOTY0LDM0LjgzMzQyMzNdLCJnZW5lcmF0aW9uSWQiOiI4NTY5MWNkMjdiNTM2YWNkYWI1Y2NhYjIzZDk0MDE5YWQ4NmQxNWM1ZmVkZjRjZjI1YzU2MzVmZDA3ZjkyYzFhIiwia2luZCI6ImFkZHJlc3MifQ",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiJlMzkxOTU4ZjQ0MTI3YzE5OWQ2NDNjNTNhMmZlMjE5NmEyN2QwNjY5ZjRhYjI5YzZjZWIyODdhMWIzYzA2MzFlIiwiY29vcmRpbmF0ZXMiOlszMS45MzIwOTY0LDM0LjgzMzQyMzNdLCJnZW5lcmF0aW9uSWQiOiI4NTY5MWNkMjdiNTM2YWNkYWI1Y2NhYjIzZDk0MDE5YWQ4NmQxNWM1ZmVkZjRjZjI1YzU2MzVmZDA3ZjkyYzFhIiwia2luZCI6ImFkZHJlc3MifQ"
+        }
+      }
+    ],
+    "meta": {
+      "requestId": "00000000000000000000000000000000",
+      "generationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
+      "generatedAt": "2026-09-30T19:16:05.766793Z",
+      "dataBuiltAt": "2026-09-30T18:21:10.700556Z",
+      "mode": "real",
+      "coverage": {
+        "from": "2026-09-30T00:00:00+03:00",
+        "until": "2026-10-31T00:00:00+02:00"
+      },
+      "freshness": "current",
+      "capabilities": {
+        "realtime": "not_enabled",
+        "alerts": "not_enabled"
+      },
+      "attribution": [
+        "Israel Ministry of Transport",
+        "© OpenStreetMap contributors"
+      ],
+      "rankingPolicy": "motis-v2.11.2-feasible-engine-order-v1",
+      "appliedConstraints": {},
+      "warnings": []
+    },
+    "matchedTypes": [
+      "address"
+    ],
+    "unavailableTypes": [],
+    "partial": false,
+    "rankingPolicy": "alternating-stop-and-geocoder-order-v1"
+  }
+}

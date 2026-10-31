@@ -351,16 +351,20 @@
           "value": "/run/opentransit/probe.json"
         },
         {
+          "name": "OPENTRANSIT_RATE_LIMIT_ENABLED",
+          "value": "1"
+        },
+        {
+          "name": "OPENTRANSIT_TRUSTED_PROXIES",
+          "value": "{{VPC_CIDR}}"
+        },
+        {
           "name": "OPENTRANSIT_PHOTON_ADMIN_URL",
           "value": "http://127.0.0.1:9201"
         },
         {
           "name": "OPENTRANSIT_PHOTON_URL",
           "value": "http://127.0.0.1:2322"
-        },
-        {
-          "name": "OPENTRANSIT_TRUSTED_PROXIES",
-          "value": "10.80.0.0/16"
         },
         {
           "name": "PYTHONDONTWRITEBYTECODE",

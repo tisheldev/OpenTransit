@@ -1,0 +1,237 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/places",
+    "params": {
+      "q": "Dizengoff",
+      "lang": "en",
+      "near": "32.0757,34.7748",
+      "type": "poi"
+    },
+    "body": null
+  },
+  "status": 200,
+  "body": {
+    "data": [
+      {
+        "kind": "poi",
+        "name": "Meir Dizengoff",
+        "displayName": "Meir Dizengoff",
+        "languageUsed": "en",
+        "locality": "Tel-Aviv",
+        "coordinates": {
+          "latitude": 32.0629711,
+          "longitude": 34.7709366
+        },
+        "category": "memorial_16",
+        "osmId": "node/[4975920089]",
+        "candidateIdentityHash": "3fca6a1fe1262206cf0bf79ffae46b664af01726123918f16c24a230cbfe6072",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiIzZmNhNmExZmUxMjYyMjA2Y2YwYmY3OWZmYWU0NmI2NjRhZjAxNzI2MTIzOTE4ZjE2YzI0YTIzMGNiZmU2MDcyIiwiY29vcmRpbmF0ZXMiOlszMi4wNjI5NzExLDM0Ljc3MDkzNjZdLCJnZW5lcmF0aW9uSWQiOiI4NTY5MWNkMjdiNTM2YWNkYWI1Y2NhYjIzZDk0MDE5YWQ4NmQxNWM1ZmVkZjRjZjI1YzU2MzVmZDA3ZjkyYzFhIiwia2luZCI6InBsYWNlIn0",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiIzZmNhNmExZmUxMjYyMjA2Y2YwYmY3OWZmYWU0NmI2NjRhZjAxNzI2MTIzOTE4ZjE2YzI0YTIzMGNiZmU2MDcyIiwiY29vcmRpbmF0ZXMiOlszMi4wNjI5NzExLDM0Ljc3MDkzNjZdLCJnZW5lcmF0aW9uSWQiOiI4NTY5MWNkMjdiNTM2YWNkYWI1Y2NhYjIzZDk0MDE5YWQ4NmQxNWM1ZmVkZjRjZjI1YzU2MzVmZDA3ZjkyYzFhIiwia2luZCI6InBsYWNlIn0"
+        }
+      },
+      {
+        "kind": "poi",
+        "name": "Cafe Dizengoff",
+        "displayName": "Cafe Dizengoff",
+        "languageUsed": "en",
+        "locality": "Tel-Aviv",
+        "coordinates": {
+          "latitude": 32.0857649,
+          "longitude": 34.7747866
+        },
+        "category": "cafe_16",
+        "osmId": "node/[12809524285]",
+        "candidateIdentityHash": "1edcc594716bbd215bcd47d88046aa24849dd4b58e058533b0b09bb0225ce2cf",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiIxZWRjYzU5NDcxNmJiZDIxNWJjZDQ3ZDg4MDQ2YWEyNDg0OWRkNGI1OGUwNTg1MzNiMGIwOWJiMDIyNWNlMmNmIiwiY29vcmRpbmF0ZXMiOlszMi4wODU3NjQ5LDM0Ljc3NDc4NjZdLCJnZW5lcmF0aW9uSWQiOiI4NTY5MWNkMjdiNTM2YWNkYWI1Y2NhYjIzZDk0MDE5YWQ4NmQxNWM1ZmVkZjRjZjI1YzU2MzVmZDA3ZjkyYzFhIiwia2luZCI6InBsYWNlIn0",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiIxZWRjYzU5NDcxNmJiZDIxNWJjZDQ3ZDg4MDQ2YWEyNDg0OWRkNGI1OGUwNTg1MzNiMGIwOWJiMDIyNWNlMmNmIiwiY29vcmRpbmF0ZXMiOlszMi4wODU3NjQ5LDM0Ljc3NDc4NjZdLCJnZW5lcmF0aW9uSWQiOiI4NTY5MWNkMjdiNTM2YWNkYWI1Y2NhYjIzZDk0MDE5YWQ4NmQxNWM1ZmVkZjRjZjI1YzU2MzVmZDA3ZjkyYzFhIiwia2luZCI6InBsYWNlIn0"
+        }
+      },
+      {
+        "kind": "poi",
+        "name": "Dizengoff Tower",
+        "displayName": "Dizengoff Tower",
+        "languageUsed": "en",
+        "locality": "Tel-Aviv",
+        "coordinates": {
+          "latitude": 32.0753617,
+          "longitude": 34.7754221
+        },
+        "category": "rect",
+        "osmId": "node/[3868300059]",
+        "candidateIdentityHash": "2d28928bb4b4242d674468c17992faa2a65afd31fb479cc2e7f6156e19314884",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiIyZDI4OTI4YmI0YjQyNDJkNjc0NDY4YzE3OTkyZmFhMmE2NWFmZDMxZmI0NzljYzJlN2Y2MTU2ZTE5MzE0ODg0IiwiY29vcmRpbmF0ZXMiOlszMi4wNzUzNjE3LDM0Ljc3NTQyMjFdLCJnZW5lcmF0aW9uSWQiOiI4NTY5MWNkMjdiNTM2YWNkYWI1Y2NhYjIzZDk0MDE5YWQ4NmQxNWM1ZmVkZjRjZjI1YzU2MzVmZDA3ZjkyYzFhIiwia2luZCI6InBsYWNlIn0",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiIyZDI4OTI4YmI0YjQyNDJkNjc0NDY4YzE3OTkyZmFhMmE2NWFmZDMxZmI0NzljYzJlN2Y2MTU2ZTE5MzE0ODg0IiwiY29vcmRpbmF0ZXMiOlszMi4wNzUzNjE3LDM0Ljc3NTQyMjFdLCJnZW5lcmF0aW9uSWQiOiI4NTY5MWNkMjdiNTM2YWNkYWI1Y2NhYjIzZDk0MDE5YWQ4NmQxNWM1ZmVkZjRjZjI1YzU2MzVmZDA3ZjkyYzFhIiwia2luZCI6InBsYWNlIn0"
+        }
+      },
+      {
+        "kind": "poi",
+        "name": "Rav Hen Dizengoff",
+        "displayName": "Rav Hen Dizengoff",
+        "languageUsed": "en",
+        "locality": "Tel-Aviv",
+        "coordinates": {
+          "latitude": 32.0780861,
+          "longitude": 34.7734776
+        },
+        "category": "cinema_16",
+        "osmId": "node/[962966928]",
+        "candidateIdentityHash": "25f9c08a550f30b352dd52646e2b80e3a08537dc7f69a718260068d0a36e3fe7",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiIyNWY5YzA4YTU1MGYzMGIzNTJkZDUyNjQ2ZTJiODBlM2EwODUzN2RjN2Y2OWE3MTgyNjAwNjhkMGEzNmUzZmU3IiwiY29vcmRpbmF0ZXMiOlszMi4wNzgwODYxLDM0Ljc3MzQ3NzZdLCJnZW5lcmF0aW9uSWQiOiI4NTY5MWNkMjdiNTM2YWNkYWI1Y2NhYjIzZDk0MDE5YWQ4NmQxNWM1ZmVkZjRjZjI1YzU2MzVmZDA3ZjkyYzFhIiwia2luZCI6InBsYWNlIn0",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiIyNWY5YzA4YTU1MGYzMGIzNTJkZDUyNjQ2ZTJiODBlM2EwODUzN2RjN2Y2OWE3MTgyNjAwNjhkMGEzNmUzZmU3IiwiY29vcmRpbmF0ZXMiOlszMi4wNzgwODYxLDM0Ljc3MzQ3NzZdLCJnZW5lcmF0aW9uSWQiOiI4NTY5MWNkMjdiNTM2YWNkYWI1Y2NhYjIzZDk0MDE5YWQ4NmQxNWM1ZmVkZjRjZjI1YzU2MzVmZDA3ZjkyYzFhIiwia2luZCI6InBsYWNlIn0"
+        }
+      },
+      {
+        "kind": "poi",
+        "name": "Dizengoff Center",
+        "displayName": "Dizengoff Center",
+        "languageUsed": "en",
+        "locality": "Tel-Aviv",
+        "coordinates": {
+          "latitude": 32.075301,
+          "longitude": 34.773702
+        },
+        "category": "shop_other_16",
+        "osmId": "way/[30622051]",
+        "candidateIdentityHash": "2e597494f0d04c0c33a7854fdd3c030be4212630df76e710f2eb99bfacc89094",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiIyZTU5NzQ5NGYwZDA0YzBjMzNhNzg1NGZkZDNjMDMwYmU0MjEyNjMwZGY3NmU3MTBmMmViOTliZmFjYzg5MDk0IiwiY29vcmRpbmF0ZXMiOlszMi4wNzUzMDEsMzQuNzczNzAyXSwiZ2VuZXJhdGlvbklkIjoiODU2OTFjZDI3YjUzNmFjZGFiNWNjYWIyM2Q5NDAxOWFkODZkMTVjNWZlZGY0Y2YyNWM1NjM1ZmQwN2Y5MmMxYSIsImtpbmQiOiJwbGFjZSJ9",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiIyZTU5NzQ5NGYwZDA0YzBjMzNhNzg1NGZkZDNjMDMwYmU0MjEyNjMwZGY3NmU3MTBmMmViOTliZmFjYzg5MDk0IiwiY29vcmRpbmF0ZXMiOlszMi4wNzUzMDEsMzQuNzczNzAyXSwiZ2VuZXJhdGlvbklkIjoiODU2OTFjZDI3YjUzNmFjZGFiNWNjYWIyM2Q5NDAxOWFkODZkMTVjNWZlZGY0Y2YyNWM1NjM1ZmQwN2Y5MmMxYSIsImtpbmQiOiJwbGFjZSJ9"
+        }
+      },
+      {
+        "kind": "poi",
+        "name": "Dizengoff Square (tsina)",
+        "displayName": "Dizengoff Square (tsina)",
+        "languageUsed": "en",
+        "locality": "Tel-Aviv",
+        "coordinates": {
+          "latitude": 32.0779972,
+          "longitude": 34.7738809
+        },
+        "category": "square",
+        "osmId": "way/[27290501]",
+        "candidateIdentityHash": "70b8490ddd088f43d23c154137dc42d5d836a6828eed14cce4980a6cfca918f5",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiI3MGI4NDkwZGRkMDg4ZjQzZDIzYzE1NDEzN2RjNDJkNWQ4MzZhNjgyOGVlZDE0Y2NlNDk4MGE2Y2ZjYTkxOGY1IiwiY29vcmRpbmF0ZXMiOlszMi4wNzc5OTcyLDM0Ljc3Mzg4MDldLCJnZW5lcmF0aW9uSWQiOiI4NTY5MWNkMjdiNTM2YWNkYWI1Y2NhYjIzZDk0MDE5YWQ4NmQxNWM1ZmVkZjRjZjI1YzU2MzVmZDA3ZjkyYzFhIiwia2luZCI6InBsYWNlIn0",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiI3MGI4NDkwZGRkMDg4ZjQzZDIzYzE1NDEzN2RjNDJkNWQ4MzZhNjgyOGVlZDE0Y2NlNDk4MGE2Y2ZjYTkxOGY1IiwiY29vcmRpbmF0ZXMiOlszMi4wNzc5OTcyLDM0Ljc3Mzg4MDldLCJnZW5lcmF0aW9uSWQiOiI4NTY5MWNkMjdiNTM2YWNkYWI1Y2NhYjIzZDk0MDE5YWQ4NmQxNWM1ZmVkZjRjZjI1YzU2MzVmZDA3ZjkyYzFhIiwia2luZCI6InBsYWNlIn0"
+        }
+      },
+      {
+        "kind": "poi",
+        "name": "Meat Bar Burger - Dizengoff",
+        "displayName": "Meat Bar Burger - Dizengoff",
+        "languageUsed": "en",
+        "locality": "Tel-Aviv",
+        "coordinates": {
+          "latitude": 32.0783465,
+          "longitude": 34.773627
+        },
+        "category": "restaurant_14",
+        "osmId": "node/[10034263918]",
+        "candidateIdentityHash": "f642c740004bde1b9e07cff814cec6e004b7bdad024ca50004bea0025c7b0dbb",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiJmNjQyYzc0MDAwNGJkZTFiOWUwN2NmZjgxNGNlYzZlMDA0YjdiZGFkMDI0Y2E1MDAwNGJlYTAwMjVjN2IwZGJiIiwiY29vcmRpbmF0ZXMiOlszMi4wNzgzNDY1LDM0Ljc3MzYyN10sImdlbmVyYXRpb25JZCI6Ijg1NjkxY2QyN2I1MzZhY2RhYjVjY2FiMjNkOTQwMTlhZDg2ZDE1YzVmZWRmNGNmMjVjNTYzNWZkMDdmOTJjMWEiLCJraW5kIjoicGxhY2UifQ",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiJmNjQyYzc0MDAwNGJkZTFiOWUwN2NmZjgxNGNlYzZlMDA0YjdiZGFkMDI0Y2E1MDAwNGJlYTAwMjVjN2IwZGJiIiwiY29vcmRpbmF0ZXMiOlszMi4wNzgzNDY1LDM0Ljc3MzYyN10sImdlbmVyYXRpb25JZCI6Ijg1NjkxY2QyN2I1MzZhY2RhYjVjY2FiMjNkOTQwMTlhZDg2ZDE1YzVmZWRmNGNmMjVjNTYzNWZkMDdmOTJjMWEiLCJraW5kIjoicGxhY2UifQ"
+        }
+      },
+      {
+        "kind": "poi",
+        "name": "Dizengoff Tower",
+        "displayName": "Dizengoff Tower",
+        "languageUsed": "en",
+        "locality": "Tel-Aviv",
+        "coordinates": {
+          "latitude": 32.0755949,
+          "longitude": 34.7753755
+        },
+        "category": "none",
+        "osmId": "way/[90843678]",
+        "candidateIdentityHash": "3be2b6dff1fdd6d76509b128ad7ae4cdcc5f09743c0dc2d5e131396e735ebc8b",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiIzYmUyYjZkZmYxZmRkNmQ3NjUwOWIxMjhhZDdhZTRjZGNjNWYwOTc0M2MwZGMyZDVlMTMxMzk2ZTczNWViYzhiIiwiY29vcmRpbmF0ZXMiOlszMi4wNzU1OTQ5LDM0Ljc3NTM3NTVdLCJnZW5lcmF0aW9uSWQiOiI4NTY5MWNkMjdiNTM2YWNkYWI1Y2NhYjIzZDk0MDE5YWQ4NmQxNWM1ZmVkZjRjZjI1YzU2MzVmZDA3ZjkyYzFhIiwia2luZCI6InBsYWNlIn0",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiIzYmUyYjZkZmYxZmRkNmQ3NjUwOWIxMjhhZDdhZTRjZGNjNWYwOTc0M2MwZGMyZDVlMTMxMzk2ZTczNWViYzhiIiwiY29vcmRpbmF0ZXMiOlszMi4wNzU1OTQ5LDM0Ljc3NTM3NTVdLCJnZW5lcmF0aW9uSWQiOiI4NTY5MWNkMjdiNTM2YWNkYWI1Y2NhYjIzZDk0MDE5YWQ4NmQxNWM1ZmVkZjRjZjI1YzU2MzVmZDA3ZjkyYzFhIiwia2luZCI6InBsYWNlIn0"
+        }
+      },
+      {
+        "kind": "poi",
+        "name": "Dizengoff House",
+        "displayName": "Dizengoff House",
+        "languageUsed": "en",
+        "locality": "Tel-Aviv",
+        "coordinates": {
+          "latitude": 32.0628564,
+          "longitude": 34.7708275
+        },
+        "category": "none",
+        "osmId": "way/[204436041]",
+        "candidateIdentityHash": "69858ad96c699ee5e93a1ae0956074feebd73644a0fd46e8e1c829bb7098db6d",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiI2OTg1OGFkOTZjNjk5ZWU1ZTkzYTFhZTA5NTYwNzRmZWViZDczNjQ0YTBmZDQ2ZThlMWM4MjliYjcwOThkYjZkIiwiY29vcmRpbmF0ZXMiOlszMi4wNjI4NTY0LDM0Ljc3MDgyNzVdLCJnZW5lcmF0aW9uSWQiOiI4NTY5MWNkMjdiNTM2YWNkYWI1Y2NhYjIzZDk0MDE5YWQ4NmQxNWM1ZmVkZjRjZjI1YzU2MzVmZDA3ZjkyYzFhIiwia2luZCI6InBsYWNlIn0",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiI2OTg1OGFkOTZjNjk5ZWU1ZTkzYTFhZTA5NTYwNzRmZWViZDczNjQ0YTBmZDQ2ZThlMWM4MjliYjcwOThkYjZkIiwiY29vcmRpbmF0ZXMiOlszMi4wNjI4NTY0LDM0Ljc3MDgyNzVdLCJnZW5lcmF0aW9uSWQiOiI4NTY5MWNkMjdiNTM2YWNkYWI1Y2NhYjIzZDk0MDE5YWQ4NmQxNWM1ZmVkZjRjZjI1YzU2MzVmZDA3ZjkyYzFhIiwia2luZCI6InBsYWNlIn0"
+        }
+      },
+      {
+        "kind": "poi",
+        "name": "Dizengoff Central",
+        "displayName": "Dizengoff Central",
+        "languageUsed": "en",
+        "locality": "Netanya",
+        "coordinates": {
+          "latitude": 32.3291816,
+          "longitude": 34.8528508
+        },
+        "category": "none",
+        "osmId": "way/[664773610]",
+        "candidateIdentityHash": "2559e7f2d8d298adeb6c353e0b83f8a2a16faf0a66451f7cff387b4c60e0a009",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiIyNTU5ZTdmMmQ4ZDI5OGFkZWI2YzM1M2UwYjgzZjhhMmExNmZhZjBhNjY0NTFmN2NmZjM4N2I0YzYwZTBhMDA5IiwiY29vcmRpbmF0ZXMiOlszMi4zMjkxODE2LDM0Ljg1Mjg1MDhdLCJnZW5lcmF0aW9uSWQiOiI4NTY5MWNkMjdiNTM2YWNkYWI1Y2NhYjIzZDk0MDE5YWQ4NmQxNWM1ZmVkZjRjZjI1YzU2MzVmZDA3ZjkyYzFhIiwia2luZCI6InBsYWNlIn0",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiIyNTU5ZTdmMmQ4ZDI5OGFkZWI2YzM1M2UwYjgzZjhhMmExNmZhZjBhNjY0NTFmN2NmZjM4N2I0YzYwZTBhMDA5IiwiY29vcmRpbmF0ZXMiOlszMi4zMjkxODE2LDM0Ljg1Mjg1MDhdLCJnZW5lcmF0aW9uSWQiOiI4NTY5MWNkMjdiNTM2YWNkYWI1Y2NhYjIzZDk0MDE5YWQ4NmQxNWM1ZmVkZjRjZjI1YzU2MzVmZDA3ZjkyYzFhIiwia2luZCI6InBsYWNlIn0"
+        }
+      }
+    ],
+    "meta": {
+      "requestId": "00000000000000000000000000000000",
+      "generationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
+      "generatedAt": "2026-09-30T19:16:05.662942Z",
+      "dataBuiltAt": "2026-09-30T18:21:10.700556Z",
+      "mode": "real",
+      "coverage": {
+        "from": "2026-09-30T00:00:00+03:00",
+        "until": "2026-10-31T00:00:00+02:00"
+      },
+      "freshness": "current",
+      "capabilities": {
+        "realtime": "not_enabled",
+        "alerts": "not_enabled"
+      },
+      "attribution": [
+        "Israel Ministry of Transport",
+        "© OpenStreetMap contributors"
+      ],
+      "rankingPolicy": "motis-v2.11.2-feasible-engine-order-v1",
+      "appliedConstraints": {},
+      "warnings": []
+    },
+    "matchedTypes": [
+      "poi"
+    ],
+    "unavailableTypes": [],
+    "partial": false,
+    "rankingPolicy": "alternating-stop-and-geocoder-order-v1"
+  }
+}

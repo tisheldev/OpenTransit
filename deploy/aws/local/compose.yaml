@@ -111,9 +111,9 @@ services:
       OPENTRANSIT_MANIFEST: "/generation/manifest.json"
       OPENTRANSIT_MOTIS_URL: "http://127.0.0.1:8080"
       OPENTRANSIT_PROBE: "/run/opentransit/probe.json"
+      OPENTRANSIT_RATE_LIMIT_ENABLED: "1"
       OPENTRANSIT_PHOTON_ADMIN_URL: "http://127.0.0.1:9201"
       OPENTRANSIT_PHOTON_URL: "http://127.0.0.1:2322"
-      OPENTRANSIT_TRUSTED_PROXIES: "10.80.0.0/16"
       PYTHONDONTWRITEBYTECODE: "1"
     volumes:
       - generation:/generation:ro

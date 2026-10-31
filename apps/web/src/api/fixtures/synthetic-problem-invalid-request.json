@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/stops",
+    "params": {
+      "near": "99,35"
+    },
+    "body": null
+  },
+  "status": 422,
+  "body": {
+    "type": "urn:opentransit:problem:invalid-request",
+    "title": "Invalid request",
+    "status": 422,
+    "code": "INVALID_REQUEST",
+    "detail": "Use near=lat,lon or bbox=west,south,east,north.",
+    "requestId": "00000000000000000000000000000000"
+  }
+}

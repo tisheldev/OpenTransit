@@ -1,0 +1,53 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/routes",
+    "params": {
+      "operatorId": "op_1"
+    },
+    "body": null
+  },
+  "status": 200,
+  "body": {
+    "data": [
+      {
+        "routeId": "mot:route:bus_7",
+        "sourceId": "bus_7",
+        "operatorId": "op_1",
+        "routeShortName": "7",
+        "routeLongName": "Loop",
+        "description": null,
+        "routeType": 3,
+        "url": null,
+        "color": null,
+        "textColor": null
+      }
+    ],
+    "meta": {
+      "requestId": "00000000000000000000000000000000",
+      "generationId": "synthetic-test",
+      "generatedAt": "2026-09-30T09:00:00Z",
+      "dataBuiltAt": "2026-09-30T09:00:00Z",
+      "mode": "fixture",
+      "coverage": {
+        "from": "2026-09-29T00:00:00+03:00",
+        "until": "2026-10-30T00:00:00+02:00"
+      },
+      "freshness": "current",
+      "capabilities": {
+        "realtime": "not_enabled",
+        "alerts": "not_enabled"
+      },
+      "attribution": [
+        "Israel Ministry of Transport",
+        "© OpenStreetMap contributors"
+      ],
+      "rankingPolicy": "motis-v2.11.2-feasible-engine-order-v1",
+      "appliedConstraints": {},
+      "warnings": []
+    },
+    "page": {
+      "nextCursor": null
+    }
+  }
+}

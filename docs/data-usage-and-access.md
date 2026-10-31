@@ -1,6 +1,6 @@
 # Data usage and access record
 
-**Updated:** 21 September 2026. **State:** user confirms MOT email sent today from the correct address; awaiting response. 28-day checkpoint: 19 October 2026. Terms acceptance and credentials remain unrecorded.
+**Updated:** 31 October 2026. **State:** MOT email sent 21 September 2026 (user confirmation, request baseline). The 19 October 2026 checkpoint passed with **no response recorded and no follow-up sent**. A follow-up is drafted, not sent ([draft](decision-pack/mot-followup-draft-20261031.md)); the published static terms wording was re-read on 31 October ([summary](decision-pack/static-terms-summary-20261031.md)). Terms acceptance and credentials remain unrecorded.
 
 **Scope revision — 25 September 2026:** The user chose a schedule-based first release. SIRI and live alerts access are deferred feature requirements and no longer block system development. October 19 remains a follow-up checkpoint for those features. Static dataset terms still need recorded review before release; this decision grants no data-use permissions.
 
@@ -14,16 +14,16 @@ Read [the form guide](decision-pack/form-guide.md) for its exact fields and a co
 
 | Item | Current evidence | Resolution needed |
 | --- | --- | --- |
-| H1 request | User confirms email sent from correct address on 21 September 2026; an earlier email was sent about two weeks before from the wrong address. Awaiting response | Ticket/reference if available, and response; 28-day checkpoint 19 October 2026 |
+| H1 request | User confirms email sent from correct address on 21 September 2026; an earlier email was sent about two weeks before from the wrong address. 19 October checkpoint passed with no response recorded (checked 31 October) | Ticket/reference if available, and response; project decision triggered (see [checkpoint result](#checkpoint-result--19-october-2026)); follow-up [drafted, not sent](decision-pack/mot-followup-draft-20261031.md) |
 | Applicant type | Form asks for corporation name and number | Whether an individual may apply, and correct entries when no corporation exists |
 | Static IP | Explicitly requested by official form | Accepted location/provider, binding, change procedure and test access |
 | SIRI access | Application route verified; no usable credentials recorded | Endpoint, requester reference/key, current protocol and rate limits |
 | Alerts access | Requested in draft, not granted | Endpoint, authentication, schema, limits and terms |
-| Static GTFS terms (H2) | Original data-access report did not retrieve exact terms | Authoritative terms text/version, attribution and permitted uses; reviewed decision |
+| Static GTFS terms (H2) | 31 October 2026: the MOT GTFS page (updated 10.09.2026) carries a short terms-of-use clause (use implies agreement; changeable without notice; liability disclaimer) with no licence grant, attribution or redistribution wording. The GTFS feed is not listed as a data.gov.il dataset, so the data.gov.il licence is not shown to apply ([summary](decision-pack/static-terms-summary-20261031.md)) | Written MOT statement, or a recorded user decision on the published wording; attribution and permitted uses; reviewed decision |
 | Redistribution | Not expressly settled by the one-page form | Public display, processed API responses, raw redistribution separately |
 | Storage/fixtures | Not expressly settled by the one-page form | Retention of observations and permission for public test samples |
 | Sustainable fallback | Stride used as an experimental candidate in planning | Separate terms, availability and dependency decision before production reliance |
-| Derived statistics from Hasadna's archive | Added 1 October 2026: Hasadna's public archive of MOT SIRI and GTFS states no data licence ([research note](research/open-bus.md)) | Question to ask at the October 19 follow-up (not sent): may statistics derived from archived MOT realtime data (delay distributions, reliability figures) be displayed publicly, and with what attribution? Ask Hasadna separately |
+| Derived statistics from Hasadna's archive | Added 1 October 2026: Hasadna's public archive of MOT SIRI and GTFS states no data licence ([research note](research/open-bus.md)) | Included in the [follow-up draft](decision-pack/mot-followup-draft-20261031.md) (not sent): may statistics derived from archived MOT realtime data (delay distributions, reliability figures) be displayed publicly, and with what attribution? Ask Hasadna separately |
 
 The old `https://data.gov.il/he/terms-of-use` URL returned 404 during this review. Do not treat the old link as evidence of an accepted licence. This record does not replace reading authoritative terms or obtaining the outstanding answers.
 
@@ -35,4 +35,13 @@ Request sent: 21 September 2026 from the correct email address, per user confirm
 
 The four-week threshold comes from the project's PRD, not an MOT response-time guarantee. It triggers a project decision, not automatic approval of a fallback.
 
-Ready communications: [Hebrew email drafts](decision-pack/mot-email-he.txt). [Decision pack](decision-pack/README.md).
+## Checkpoint result — 19 October 2026
+
+Recorded 31 October 2026 from the repository record; nothing in this file, the dashboard or the decision pack logs an MOT reply, ticket or follow-up. If a reply arrived and was not passed on, record it here with its date.
+
+- **Result:** no response recorded; no follow-up sent. The September 21 request remains the baseline.
+- **What the PRD triggers:** [PRD §5.2](../PRD.md#52-access-prerequisites-added-28-aug-2026) requires an explicit project decision when four weeks pass without a usable answer: Open Bus Stride as a permanent dependency, a static-only planner, or stopping under kill criterion #3. This is a decision for the user, not approval of any fallback. The 25 September schedule-first scope already ships a static-only planner for v1 and states that an unanswered realtime application does not stop it; whether that stands as the realtime answer needs the user's explicit confirmation.
+- **What it does not change:** the [static release gate](api-prd.md#static-release-gate) item 5 still requires recorded evidence of acceptable static dataset terms and attribution. The missing reply leaves that open; options are in the [static terms summary](decision-pack/static-terms-summary-20261031.md).
+- **Next action (user):** review and, if wanted, send the [follow-up draft](decision-pack/mot-followup-draft-20261031.md), then record the send date here.
+
+Ready communications: [follow-up draft, 31 October (not sent)](decision-pack/mot-followup-draft-20261031.md), [Hebrew email drafts](decision-pack/mot-email-he.txt). [Decision pack](decision-pack/README.md).

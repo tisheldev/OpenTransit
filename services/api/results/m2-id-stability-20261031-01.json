@@ -1,0 +1,87 @@
+{
+  "previous": {
+    "sha256": "7d628a2fd0fd11518eb5a0c922b4ac55f4ed1cf52c8251853484deab06247b2e",
+    "acquiredDate": "2026-10-01"
+  },
+  "candidate": {
+    "sha256": "147d086084c3df0c6ccf4197126b91bf00a91e9c658b6016e647a3802b3735be",
+    "acquiredDate": "2026-10-31"
+  },
+  "consecutiveDailyFeeds": false,
+  "acquisitionDatesVerified": false,
+  "counts": {
+    "stops": {
+      "previous": 35321,
+      "candidate": 35390,
+      "retained": 35303,
+      "added": 87,
+      "removed": 18,
+      "retainedFraction": 0.9994903881543558,
+      "metadataChangedCount": 75,
+      "metadataChangedSamples": [
+        "10286",
+        "10514",
+        "11350",
+        "13166",
+        "13519",
+        "13520",
+        "13678",
+        "13722",
+        "13726",
+        "13727",
+        "14104",
+        "14117",
+        "1496",
+        "15678",
+        "15810",
+        "1609",
+        "16434",
+        "16608",
+        "16789",
+        "16817"
+      ]
+    },
+    "routes": {
+      "previous": 7873,
+      "candidate": 7631,
+      "retained": 7559,
+      "added": 72,
+      "removed": 314,
+      "retainedFraction": 0.9601168550743046,
+      "metadataChangedCount": 50,
+      "metadataChangedSamples": [
+        "11271",
+        "12260",
+        "12405",
+        "12406",
+        "14069",
+        "14998",
+        "14999",
+        "15078",
+        "16999",
+        "17897",
+        "18118",
+        "18217",
+        "19260",
+        "19261",
+        "19787",
+        "20324",
+        "20325",
+        "20642",
+        "22057",
+        "22058"
+      ]
+    },
+    "trips": {
+      "previous": 425123,
+      "candidate": 285930,
+      "retained": 728,
+      "added": 285202,
+      "removed": 424395,
+      "retainedFraction": 0.0017124455745748878,
+      "metadataChangedCount": 0,
+      "metadataChangedSamples": []
+    }
+  },
+  "scope": "Full source identifiers; supplied dates require provenance review. Overlap does not prove semantic stability or realtime matching."
+}

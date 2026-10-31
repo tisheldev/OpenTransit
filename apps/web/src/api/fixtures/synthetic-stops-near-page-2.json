@@ -1,0 +1,57 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/stops",
+    "params": {
+      "near": "32.08,34.78",
+      "limit": 1,
+      "cursor": "eyJ2IjoxLCJnIjoic3ludGhldGljLXRlc3QiLCJxIjoiMjQxZTZlM2Q2NmM2MGQ1Y2UxZmRlMjJhMDBkM2UwY2ZhMjVlMTFlMDlhMjI4MWVhYWNlMjJlODM3ZDIzNWJjYyIsInAiOlswLjAsIm1vdDpzdG9wOnN0YXRpb24iXX0"
+    },
+    "body": null
+  },
+  "status": 200,
+  "body": {
+    "data": [
+      {
+        "stopId": "mot:stop:platform_a",
+        "sourceId": "platform_a",
+        "code": "A",
+        "name": "Central A",
+        "description": null,
+        "latitude": 32.0801,
+        "longitude": 34.7801,
+        "locationType": 0,
+        "parentStationId": "mot:stop:station",
+        "wheelchairBoarding": null,
+        "platformCode": "A",
+        "distanceMeters": 14.574315801058932
+      }
+    ],
+    "meta": {
+      "requestId": "00000000000000000000000000000000",
+      "generationId": "synthetic-test",
+      "generatedAt": "2026-09-30T09:00:00Z",
+      "dataBuiltAt": "2026-09-30T09:00:00Z",
+      "mode": "fixture",
+      "coverage": {
+        "from": "2026-09-29T00:00:00+03:00",
+        "until": "2026-10-30T00:00:00+02:00"
+      },
+      "freshness": "current",
+      "capabilities": {
+        "realtime": "not_enabled",
+        "alerts": "not_enabled"
+      },
+      "attribution": [
+        "Israel Ministry of Transport",
+        "© OpenStreetMap contributors"
+      ],
+      "rankingPolicy": "motis-v2.11.2-feasible-engine-order-v1",
+      "appliedConstraints": {},
+      "warnings": []
+    },
+    "page": {
+      "nextCursor": "eyJ2IjoxLCJnIjoic3ludGhldGljLXRlc3QiLCJxIjoiMjQxZTZlM2Q2NmM2MGQ1Y2UxZmRlMjJhMDBkM2UwY2ZhMjVlMTFlMDlhMjI4MWVhYWNlMjJlODM3ZDIzNWJjYyIsInAiOlsxNC41NzQzMTU4MDEwNTg5MzIsIm1vdDpzdG9wOnBsYXRmb3JtX2EiXX0"
+    }
+  }
+}
