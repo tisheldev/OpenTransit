@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/stops/mot:stop:13583/departures",
+    "params": {
+      "from": "2026-12-01T08:00:00+02:00"
+    },
+    "body": null
+  },
+  "status": 422,
+  "body": {
+    "type": "urn:opentransit:problem:outside-service-window",
+    "title": "Outside service window",
+    "status": 422,
+    "code": "OUTSIDE_SERVICE_WINDOW",
+    "detail": "The scheduled departures are temporarily unavailable.",
+    "requestId": "00000000000000000000000000000000"
+  }
+}

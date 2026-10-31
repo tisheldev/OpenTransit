@@ -4,6 +4,8 @@
 
 This document says what the first product client must do and how we will know it does it. The [client design](client-design.md) says how it looks and how it is built, the [client execution plan](next-steps.md#phase-2-client-execution-plan) lists the tasks and what must be ready before coding, and the [dashboard](../PROJECT_STATUS.md) tracks progress. The [root PRD](../PRD.md) (§4, §15–§23) governs the overall product, and the [API PRD](api-prd.md) governs the API the client consumes. Implementation follows the October 1 gate revision: the client may start once M2–M4 are accepted locally and the private H-0/H-1 deployment begins. Public release still needs every Phase 1 acceptance item.
 
+**Sequencing revision (user, 31 October 2026): web now, native later.** A Vite/React web client ([`apps/web`](../apps/web/README.md)) is built first, to a usable preview for the H-1 private deployment. The native app in the platform decision below follows after the API and deployment are stable, and shares the pure modules (API layer, `classify`, i18n, formatting, plan/nav logic). Requirements and phase gates are unchanged.
+
 **Platform decision (user, 3 October 2026):** the client is a **native app for iPhone and Android**, built from one **Expo (React Native)** codebase, because an installed app opens faster, scrolls and responds with the system's own feel, and can keep navigating while the phone is locked. This replaces the design's earlier mobile-web plan; the API playground remains the browser tool. The Apple Developer Program fee ($99/year) is **not yet approved**, so iPhone builds wait for that decision (§10).
 
 Requirements here are targets until a recorded measurement or human review shows they have been met.

@@ -1,0 +1,55 @@
+/* OpenTransit design tokens. Palette from the API playground (services/api/.../playground/
+   style.css) as set out in the design system; system fonts only, no third-party fonts. */
+:root {
+  color-scheme: light;
+
+  --font-sans: system-ui, -apple-system, "Segoe UI", "Noto Sans Hebrew", "Arial Hebrew", Arial, sans-serif;
+
+  --color-ink: #172d36;
+  --color-ink-strong: #173b43;
+  --color-ink-muted: #54717a;
+  --color-ink-soft: #5e7780;
+  --color-bg: #f4f7f7;
+  --color-surface: #ffffff;
+  --color-surface-sunken: #eef3f4;
+  --color-border: #dfe8e9;
+  --color-border-strong: #ccd8db;
+
+  --color-brand: #137c78;
+  --color-brand-strong: #087d76;
+  --color-brand-tint: #d9efed;
+  --color-link: #146b73;
+  --color-focus: #139a94;
+  --color-destination: #bf5647;
+
+  --color-notice-bg: #fbf7ee;
+  --color-notice-border: #d2a054;
+  --color-notice-ink: #675637;
+  --color-error-bg: #fbeeec;
+  --color-error-ink: #8a2f24;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+
+  --radius-s: 8px;
+  --radius-m: 14px;
+  --radius-pill: 999px;
+
+  --text-xs: 12px;
+  --text-s: 14px;
+  --text-m: 16px;
+  --text-l: 20px;
+  --text-xl: 26px;
+
+  /* WCAG 2.2 target size; the design asks for 44 px. */
+  --target-min: 44px;
+
+  /* Bottom sheet snap points (design: Surface). */
+  --sheet-peek: 35dvh;
+  --sheet-half: 55dvh;
+  --sheet-full: 92dvh;
+}

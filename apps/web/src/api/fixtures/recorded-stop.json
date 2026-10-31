@@ -1,0 +1,147 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/stops/mot:stop:13583",
+    "params": null,
+    "body": null
+  },
+  "status": 200,
+  "body": {
+    "data": {
+      "stopId": "mot:stop:13583",
+      "sourceId": "13583",
+      "code": "25609",
+      "name": "דיזנגוף סנטר/דיזנגוף",
+      "description": "רחוב: דיזנגוף 50 עיר: תל אביב יפו רציף:  קומה: ",
+      "latitude": 32.075566,
+      "longitude": 34.77512,
+      "locationType": 0,
+      "parentStationId": null,
+      "wheelchairBoarding": null,
+      "platformCode": null,
+      "translations": {},
+      "children": [],
+      "routes": [
+        {
+          "routeId": "mot:route:16077",
+          "sourceId": "16077",
+          "operatorId": "5",
+          "routeShortName": "8",
+          "routeLongName": "מסוף הטייסים-תל אביב יפו<->מסוף אוניברסיטת ת''א/הורדה-תל אביב יפו-20",
+          "description": "55008-2-0",
+          "routeType": 3,
+          "url": null,
+          "color": null,
+          "textColor": null
+        },
+        {
+          "routeId": "mot:route:2261",
+          "sourceId": "2261",
+          "operatorId": "5",
+          "routeShortName": "5",
+          "routeLongName": "משרד הרישוי/הלוחמים-חולון<->ת. רכבת תל אביב - סבידור/הורדה-תל אביב יפו-20",
+          "description": "25005-2-0",
+          "routeType": 3,
+          "url": null,
+          "color": null,
+          "textColor": null
+        },
+        {
+          "routeId": "mot:route:23919",
+          "sourceId": "23919",
+          "operatorId": "5",
+          "routeShortName": "62",
+          "routeLongName": "בי''ח שיב''א/שדרות אהרון קציר-רמת גן<->מסוף רדינג/הורדה-תל אביב יפו-20",
+          "description": "33062-2-0",
+          "routeType": 3,
+          "url": null,
+          "color": null,
+          "textColor": null
+        },
+        {
+          "routeId": "mot:route:24041",
+          "sourceId": "24041",
+          "operatorId": "5",
+          "routeShortName": "62א",
+          "routeLongName": "מסוף רדינג/רציפים-תל אביב יפו<->מסוף רדינג/הורדה-תל אביב יפו-11",
+          "description": "33062-1-1",
+          "routeType": 3,
+          "url": null,
+          "color": "3399FF",
+          "textColor": null
+        },
+        {
+          "routeId": "mot:route:27082",
+          "sourceId": "27082",
+          "operatorId": "5",
+          "routeShortName": "2",
+          "routeLongName": "פרופ' ישעיהו ליבוביץ'/הרב יעקב טראב-תל אביב יפו<->משמר הירדן/טורקוב-תל אביב יפו-20",
+          "description": "99002-2-0",
+          "routeType": 3,
+          "url": null,
+          "color": null,
+          "textColor": null
+        },
+        {
+          "routeId": "mot:route:27901",
+          "sourceId": "27901",
+          "operatorId": "15",
+          "routeShortName": "115",
+          "routeLongName": "מסוף קרית אונו-קרית אונו<->מסוף רדינג/הורדה-תל אביב יפו-10",
+          "description": "16115-1-0",
+          "routeType": 3,
+          "url": null,
+          "color": null,
+          "textColor": null
+        },
+        {
+          "routeId": "mot:route:9780",
+          "sourceId": "9780",
+          "operatorId": "5",
+          "routeShortName": "39",
+          "routeLongName": "מסוף עמידר-רמת גן<->מסוף רדינג/הורדה-תל אביב יפו-20",
+          "description": "13039-2-0",
+          "routeType": 3,
+          "url": null,
+          "color": null,
+          "textColor": null
+        },
+        {
+          "routeId": "mot:route:9809",
+          "sourceId": "9809",
+          "operatorId": "5",
+          "routeShortName": "172",
+          "routeLongName": "חניון תמנע-חולון<->מסוף רדינג/הורדה-תל אביב יפו-20",
+          "description": "12172-2-0",
+          "routeType": 3,
+          "url": null,
+          "color": null,
+          "textColor": null
+        }
+      ]
+    },
+    "meta": {
+      "requestId": "00000000000000000000000000000000",
+      "generationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
+      "generatedAt": "2026-09-30T19:16:05.573969Z",
+      "dataBuiltAt": "2026-09-30T18:21:10.700556Z",
+      "mode": "real",
+      "coverage": {
+        "from": "2026-09-30T00:00:00+03:00",
+        "until": "2026-10-31T00:00:00+02:00"
+      },
+      "freshness": "current",
+      "capabilities": {
+        "realtime": "not_enabled",
+        "alerts": "not_enabled"
+      },
+      "attribution": [
+        "Israel Ministry of Transport",
+        "© OpenStreetMap contributors"
+      ],
+      "rankingPolicy": "motis-v2.11.2-feasible-engine-order-v1",
+      "appliedConstraints": {},
+      "warnings": []
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/readyz",
+    "params": null,
+    "body": null
+  },
+  "status": 503,
+  "body": {
+    "type": "urn:opentransit:problem:not-ready",
+    "title": "Not ready",
+    "status": 503,
+    "code": "NOT_READY",
+    "detail": "A complete usable generation is required.",
+    "requestId": "00000000000000000000000000000000"
+  }
+}
