@@ -1,7 +1,16 @@
 import { describe, expect, it } from "vitest";
 import type { Journey, Leg } from "../api/types";
 import { derivedJourneyFixtures } from "../screens/compare/derivedFixtures";
-import { isRail, layoutChart, lineLabel, MIN_LABEL_FRACTION, physicalLeft } from "./chartLayout";
+import {
+  isRail,
+  layoutChart,
+  lineLabel,
+  MIN_GAP_FRACTION,
+  MIN_TRANSIT_FRACTION,
+  physicalLeft,
+  transitMode,
+  widenRow,
+} from "./chartLayout";
 
 const three = () => (derivedJourneyFixtures["derived-journey-three"]().body as { data: { journeys: Journey[] } }).data.journeys;
 
@@ -51,19 +60,49 @@ describe("layoutChart", () => {
     expect(row.segments.filter((s) => s.kind !== "transit").every((s) => s.label === null)).toBe(true);
   });
 
-  it("shows a waiting gap between legs and hides labels too narrow to read", () => {
+  it("shows a waiting gap between legs", () => {
     const layout = layoutChart([journey([leg("walk", "08:00", "08:05"), leg("transit", "08:10", "09:00")])], "en")!;
     const [walkSeg, wait, ride] = layout.rows[0]!.segments;
     expect(wait!.kind).toBe("wait");
     expect(wait!.start).toBeCloseTo(walkSeg!.width);
     expect(wait!.width).toBeCloseTo(5 / 60);
     expect(ride!.showLabel).toBe(true);
-    const narrow = layoutChart(
-      [journey([leg("transit", "08:00", "08:02")]), journey([leg("walk", "08:00", "09:00")])],
-      "en",
-    )!.rows[0]!.segments[0]!;
-    expect(narrow.width).toBeLessThan(MIN_LABEL_FRACTION);
-    expect(narrow.showLabel).toBe(false);
+  });
+
+  it("widens a short ride to a readable minimum, taking the room from walks and waits", () => {
+    // 2-minute ride, 3-minute walk, then a 55-minute ride: the short ride would be 3% wide.
+    const legs = [leg("transit", "08:00", "08:02"), leg("walk", "08:02", "08:05"), leg("transit", "08:05", "09:00")];
+    const natural = layoutChart([journey(legs)], "en", 0)!.rows[0]!.segments;
+    expect(natural[0]!.width).toBeLessThan(MIN_TRANSIT_FRACTION);
+    expect(natural[0]!.showLabel).toBe(false);
+    const [short, walkSeg, long] = layoutChart([journey(legs)], "en")!.rows[0]!.segments;
+    expect(short!.width).toBeCloseTo(MIN_TRANSIT_FRACTION);
+    expect(short!.showLabel).toBe(true);
+    expect(walkSeg!.width).toBeCloseTo(MIN_GAP_FRACTION);
+    // The walk could not give it all: the long ride gave the rest, so the row still
+    // starts and ends at its own times, contiguous and in order.
+    expect(long!.width).toBeLessThan(natural[2]!.width);
+    expect(short!.start).toBe(0);
+    expect(walkSeg!.start).toBeCloseTo(short!.start + short!.width);
+    expect(long!.start).toBeCloseTo(walkSeg!.start + walkSeg!.width);
+    expect(long!.start + long!.width).toBeCloseTo(1);
+  });
+
+  it("grows a row only when its walks and waits cannot give enough, and never leaves the axis", () => {
+    // Two 1-minute rides back to back at the very end of a 60-minute axis.
+    const late = journey([leg("transit", "08:58", "08:59"), leg("transit", "08:59", "09:00")]);
+    const early = journey([leg("walk", "08:00", "09:00")]);
+    const row = layoutChart([early, late], "en")!.rows[1]!.segments;
+    expect(row.every((s) => s.width >= MIN_TRANSIT_FRACTION - 1e-9)).toBe(true);
+    expect(row.at(-1)!.start + row.at(-1)!.width).toBeLessThanOrEqual(1 + 1e-9);
+    expect(row[0]!.start).toBeGreaterThanOrEqual(0);
+    expect(row[1]!.start).toBeCloseTo(row[0]!.start + row[0]!.width);
+  });
+
+  it("keeps a row as it is when every ride is already wide enough", () => {
+    const segments = layoutChart(three(), "he", 0)!.rows[0]!.segments;
+    const wide = segments.map((s) => ({ ...s, width: s.kind === "transit" ? Math.max(s.width, 0.2) : s.width }));
+    expect(widenRow(wide, 0.05).map((s) => s.width)).toEqual(wide.map((s) => s.width));
   });
 
   it("names lines by their number and detects trains", () => {
@@ -71,6 +110,9 @@ describe("layoutChart", () => {
     expect(isRail(rail)).toBe(true);
     expect(lineLabel(rail)).toBeNull();
     expect(lineLabel(leg("transit", "08:00", "09:00"))).toBe("8");
+    expect(transitMode(rail)).toBe("rail");
+    expect(transitMode(leg("transit", "08:00", "09:00"))).toBe("bus");
+    expect(transitMode(leg("transit", "08:00", "09:00", { mode: "tram" }))).toBe("tram");
   });
 
   it("puts the earliest time on the right in Hebrew and on the left in English", () => {

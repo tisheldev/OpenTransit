@@ -5,21 +5,33 @@ import { formatClock, type Lang } from "../lib/time";
 // time axis from the earliest departure to the latest arrival. Positions are fractions of
 // the axis measured from its inline start, so CSS `inset-inline-start` puts the earliest
 // time on the right in Hebrew and on the left in English without mirroring the data.
+//
+// Legibility: a ride shorter than MIN_TRANSIT_FRACTION of the axis is widened to it so its
+// line number can be read; the room comes out of the same row's walks and waits first,
+// and only when those cannot give enough does the row grow past its own times (it never
+// leaves the axis). Every number stays the API's; only the drawing is adjusted.
 
 export const RESERVED_ROWS = 3;
+/** A ride is drawn at least this wide (about 26 px on a 360 px phone), with its label. */
+export const MIN_TRANSIT_FRACTION = 0.085;
+/** A walk or a wait keeps at least this much of the axis when room is taken from it. */
+export const MIN_GAP_FRACTION = 0.012;
 /** Below this share of the axis a segment is drawn without its text label. */
-export const MIN_LABEL_FRACTION = 0.1;
+export const MIN_LABEL_FRACTION = MIN_TRANSIT_FRACTION;
 
 export type SegmentKind = "walk" | "transit" | "wait";
+export type TransitMode = "bus" | "rail" | "tram";
 
 export interface ChartSegment {
   kind: SegmentKind;
-  /** Fraction of the axis from its inline start (earliest time). */
+  /** Fraction of the axis from its inline start (earliest time), after widening. */
   start: number;
   width: number;
   /** Line number for a bus or light rail; "rail" for a train (drawn as a train icon). */
   label: string | null;
   rail: boolean;
+  /** Ride mode (colour and icon); null for walks and waits. */
+  mode: TransitMode | null;
   showLabel: boolean;
   legIndex: number | null;
 }
@@ -51,6 +63,13 @@ export function isRail(leg: Leg): boolean {
   return /^(rail|train|heavy_rail)$/i.test(leg.mode);
 }
 
+/** The ride's mode for colour and icon: train, light rail / tram / metro, otherwise bus. */
+export function transitMode(leg: Leg): TransitMode {
+  if (isRail(leg)) return "rail";
+  if (/tram|light|subway|metro|cable/i.test(leg.mode)) return "tram";
+  return "bus";
+}
+
 /** A transit leg's short label: its line number, or null for a train (never an empty label). */
 export function lineLabel(leg: Leg): string | null {
   const name = leg.transit?.routeShortName.trim() ?? "";
@@ -75,7 +94,45 @@ function ticksFor(start: number, end: number, lang: Lang, maxTicks = 4): ChartTi
   return ticks;
 }
 
-export function layoutChart(journeys: readonly Journey[], lang: Lang): ChartLayout | null {
+/**
+ * Widen short rides to `minTransit`. The room comes, in order, from the row's walks and
+ * waits (down to `MIN_GAP_FRACTION` each), then from its longer rides (never below the
+ * minimum), so the row keeps its own departure and arrival on the axis; only a row of
+ * nothing but short rides grows (towards the axis end, then back). Order and adjacency
+ * are kept; the row stays inside [0, 1].
+ */
+export function widenRow(segments: ChartSegment[], minTransit = MIN_TRANSIT_FRACTION): ChartSegment[] {
+  if (segments.length === 0) return segments;
+  const rowStart = segments[0]!.start;
+  const widths = segments.map((s) => (s.kind === "transit" ? Math.max(s.width, minTransit) : s.width));
+  let extra = widths.reduce((sum, w, i) => sum + (w - segments[i]!.width), 0);
+  const takeFrom = (floor: (index: number) => number | null) => {
+    if (extra <= 0) return;
+    const give = widths.map((w, i) => {
+      const min = floor(i);
+      return min === null ? 0 : Math.max(0, w - min);
+    });
+    const available = give.reduce((sum, g) => sum + g, 0);
+    const take = Math.min(extra, available);
+    if (take <= 0) return;
+    give.forEach((g, i) => (widths[i] = widths[i]! - (g * take) / available));
+    extra -= take;
+  };
+  takeFrom((i) => (segments[i]!.kind === "transit" ? null : Math.min(widths[i]!, MIN_GAP_FRACTION)));
+  takeFrom((i) => (segments[i]!.kind === "transit" ? minTransit : null));
+  const total = widths.reduce((sum, w) => sum + w, 0);
+  // Grow towards the axis end first; slide back only when the end is reached.
+  const start = Math.max(0, Math.min(rowStart, 1 - total));
+  let cursor = start;
+  return segments.map((segment, i) => {
+    const width = Math.min(widths[i]!, 1);
+    const placed = { ...segment, start: cursor, width };
+    cursor += width;
+    return { ...placed, showLabel: placed.label !== null && width >= MIN_LABEL_FRACTION - 1e-9 };
+  });
+}
+
+export function layoutChart(journeys: readonly Journey[], lang: Lang, minTransit = MIN_TRANSIT_FRACTION): ChartLayout | null {
   if (journeys.length === 0) return null;
   const start = Math.min(...journeys.map((j) => ms(j.timing.scheduledDeparture)));
   const end = Math.max(...journeys.map((j) => ms(j.timing.scheduledArrival)));
@@ -95,6 +152,7 @@ export function layoutChart(journeys: readonly Journey[], lang: Lang): ChartLayo
           width: fraction(legStart) - fraction(cursor),
           label: null,
           rail: false,
+          mode: null,
           showLabel: false,
           legIndex: null,
         });
@@ -108,6 +166,7 @@ export function layoutChart(journeys: readonly Journey[], lang: Lang): ChartLayo
         width,
         label,
         rail,
+        mode: leg.kind === "transit" ? transitMode(leg) : null,
         showLabel: label !== null && width >= MIN_LABEL_FRACTION,
         legIndex,
       });
@@ -120,7 +179,7 @@ export function layoutChart(journeys: readonly Journey[], lang: Lang): ChartLayo
       arrival: journey.timing.scheduledArrival,
       durationSeconds: journey.durationSeconds,
       transfers: journey.transfers,
-      segments,
+      segments: minTransit > 0 ? widenRow(segments, minTransit) : segments,
     };
   });
 

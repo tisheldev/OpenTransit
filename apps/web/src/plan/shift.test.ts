@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { Journey } from "../api/types";
-import { earlierTime, laterTime, NO_ROUTE_STEP_MIN } from "./shift";
+import { earlierTime, laterTime, NO_ROUTE_STEP_MIN, whenFromOverride } from "./shift";
 
 const j = (departure: string, arrival: string) =>
   ({ timing: { scheduledDeparture: departure, scheduledArrival: arrival } }) as Journey;
@@ -29,6 +29,25 @@ describe("Earlier / Later", () => {
   it("keeps an explicit Israel offset across the autumn change", () => {
     expect(laterTime([j("2026-10-25T01:59:00+03:00", "2026-10-25T03:00:00+02:00")])).toEqual({
       departAt: "2026-10-25T01:00:00+02:00",
+    });
+  });
+
+  it("becomes the plan's time with the same instant, its explicit offset kept", () => {
+    expect(whenFromOverride({ departAt: "2026-11-02T08:36:00+02:00" })).toEqual({
+      mode: "depart_at",
+      wall: "2026-11-02T08:36",
+      offset: "+02:00",
+    });
+    expect(whenFromOverride({ arriveBy: "2026-10-01T09:51:00+03:00" })).toEqual({
+      mode: "arrive_by",
+      wall: "2026-10-01T09:51",
+      offset: "+03:00",
+    });
+    // The repeated autumn hour stays the one shifted to, not re-asked.
+    expect(whenFromOverride({ departAt: "2026-10-25T01:00:00+02:00" })).toEqual({
+      mode: "depart_at",
+      wall: "2026-10-25T01:00",
+      offset: "+02:00",
     });
   });
 
