@@ -4,7 +4,7 @@ import { unwrap } from "../api/result";
 import type { Trip } from "../api/schemas";
 import type { JourneyRequest, JourneyResponse } from "../api/types";
 import type { Lang } from "../lib/time";
-import type { PlanDraft } from "./draft";
+import { sameEndpoint, type PlanDraft } from "./draft";
 import { resolveJourneyRequest, type PlannedRequest, type TimeOverride } from "./journeyQuery";
 
 // Compare's queries (design: Compare, "Data"). Journeys are keyed by the exact request;
@@ -35,6 +35,13 @@ export function useJourneyRequest(draft: PlanDraft, lang: Lang, override: TimeOv
     staleTime: Infinity,
     gcTime: 5 * 60_000,
     retry: false,
+    // A new time for the same two ends keeps the previous request until the new one is
+    // built (one tick, or a location fix), so the answer on screen does not blink.
+    placeholderData: (previous, previousQuery) => {
+      const before = previousQuery?.queryKey[1] as PlanDraft | undefined;
+      const sameEnds = before && sameEndpoint(before.from, draft.from) && sameEndpoint(before.to, draft.to);
+      return sameEnds && previousQuery?.queryKey[2] === lang ? previous : undefined;
+    },
   });
 }
 
@@ -49,6 +56,20 @@ export async function fetchJourneys(planned: PlannedRequest, signal?: AbortSigna
   return { response: unwrap(await planJourney(planned.request, signal)), sent: planned.request };
 }
 
+const sameJson = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
+
+/**
+ * While only the time changed (Earlier / Later, the time chip), the previous answer for
+ * the same two ends stays on screen, marked as placeholder, until the new one replaces
+ * it: nothing collapses and focus stays on the button pressed. New ends never show the
+ * old answer.
+ */
+export function keepForSameEnds(previous: JourneyAnswer | undefined, planned: PlannedRequest | null): JourneyAnswer | undefined {
+  if (!previous || !planned) return undefined;
+  const { from, to, lang } = planned.request;
+  return sameJson(previous.sent.from, from) && sameJson(previous.sent.to, to) && previous.sent.lang === lang ? previous : undefined;
+}
+
 /** Journeys for a built request; null keeps the query idle. Retry is the passenger's. */
 export function useJourneys(planned: PlannedRequest | null) {
   return useQuery({
@@ -57,6 +78,7 @@ export function useJourneys(planned: PlannedRequest | null) {
     enabled: planned !== null,
     staleTime: 2 * 60_000,
     retry: false,
+    placeholderData: (previous) => keepForSameEnds(previous, planned),
   });
 }
 

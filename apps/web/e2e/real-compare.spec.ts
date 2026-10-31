@@ -55,7 +55,7 @@ test.describe("@real compare", () => {
     await server?.close();
   });
 
-  test("Dizengoff Center → Technion: options, details, a train by destination, Start", async ({ page }, testInfo) => {
+  test("Dizengoff Center → Technion: options with times on the half sheet, itinerary, a train from boarding to exit, Start", async ({ page }, testInfo) => {
     const draft = {
       from: {
         type: "place",
@@ -97,15 +97,30 @@ test.describe("@real compare", () => {
     await expect(options).toHaveCount(body.data.journeys.length);
     expect(body.data.journeys.length).toBeGreaterThan(0);
     const details = page.getByRole("region", { name: /פרטי מסלול/ });
-    await expect(details.locator(".leg").first()).toBeVisible();
+    await expect(details.locator(".it").first()).toBeVisible();
+    await expect(details.getByRole("link")).toHaveCount(0);
+
+    // Half sheet: every option, with its departure and arrival, above the pinned Start.
+    await expect(page.locator(".sheet")).toHaveAttribute("data-snap", "half");
+    const bar = (await page.locator(".compare-start").boundingBox())!;
+    const clock = (iso: string) =>
+      new Intl.DateTimeFormat("he-IL", { timeZone: "Asia/Jerusalem", hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).format(
+        new Date(iso),
+      );
+    for (let i = 0; i < body.data.journeys.length; i += 1) {
+      const box = (await options.nth(i).boundingBox())!;
+      expect(box.y + box.height, `option ${i + 1} above Start`).toBeLessThanOrEqual(bar.y + 1);
+      const { scheduledDeparture, scheduledArrival } = body.data.journeys[i].timing;
+      await expect(options.nth(i)).toHaveAccessibleName(new RegExp(`יציאה ${clock(scheduledDeparture)}, הגעה ${clock(scheduledArrival)}`));
+    }
     await expect(details).not.toContainText(/\bSTART\b|\bEND\b/);
 
     // SP04 client work: request sent → chart painted (marks from src/plan/queries.ts).
     const clientMs = await page.evaluate(() => performance.getEntriesByName("ot:journeys:client")[0]?.duration ?? null);
     testInfo.annotations.push({ type: "SP04 client ms", description: String(clientMs) });
 
-    // Every option: a rail leg reads as a train to its destination; a walk without a
-    // distance reads as time only.
+    // Every option: a rail leg reads as Israel Railways from its boarding stop to its exit
+    // (never "a train to <exit>"); a walk without a distance reads as time only.
     let sawTrain = false;
     let sawTimeOnly = false;
     const summary: string[] = [];
@@ -113,9 +128,14 @@ test.describe("@real compare", () => {
       await options.nth(i).click();
       await expect(options.nth(i)).toHaveAttribute("aria-pressed", "true");
       const journey = body.data.journeys[i];
-      const rails = journey.legs.filter((leg: { mode: string }) => /rail/i.test(leg.mode));
+      const rails = journey.legs.filter((leg: { mode: string }) => /rail/i.test(leg.mode)) as {
+        to: { name: string };
+        transit: { operatorName: string };
+      }[];
       for (const leg of rails) {
-        await expect(details.getByText(`רכבת ל${leg.to.name}`).first()).toBeVisible();
+        await expect(details.locator(".it-ride-name", { hasText: leg.transit.operatorName }).first()).toBeVisible();
+        await expect(details.locator(".it-name", { hasText: leg.to.name }).first()).toBeVisible();
+        await expect(details).not.toContainText(`רכבת ל${leg.to.name}`);
         sawTrain = true;
       }
       const timeOnly = journey.legs.filter((leg: { kind: string; distanceMeters: number | null }) => leg.kind === "walk" && leg.distanceMeters === null);
