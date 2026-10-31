@@ -14,6 +14,7 @@ import {
   resetMapState,
   setBottomInset,
   setMapScene,
+  showLocated,
   type MapRouteLeg,
   type MapScene,
 } from "./scene";
@@ -193,7 +194,8 @@ describe("MapView", () => {
     act(() => setBottomInset(224));
     act(() => setMapScene({ ...emptyScene, pins: [pin], camera: "fit" }));
     const fit = () => map.calls.filter((c) => c.method === "fitBounds").at(-1)!.args[1];
-    expect(fit()).toMatchObject({ padding: { top: 64, bottom: 224 + 24, left: 32, right: 32 }, maxZoom: 16 });
+    // A single point frames at street level (15), not the closest zoom.
+    expect(fit()).toMatchObject({ padding: { top: 64, bottom: 224 + 24, left: 32, right: 32 }, maxZoom: 15 });
     act(() => setBottomInset(5000));
     expect(fit()).toMatchObject({ padding: { bottom: 480 + 24 } });
     // No persistent map padding (it left part of the canvas undrawn in MapLibre 6.14).
@@ -216,6 +218,38 @@ describe("MapView", () => {
     // keep: a new scene leaves the camera alone.
     act(() => setMapScene({ ...emptyScene, pins: [pin], camera: "keep" }));
     expect(map.calls.length).toBe(before + 1);
+  });
+
+  it("with nothing to frame, a fit scene goes to its focus (or the default view) above the sheet, once", async () => {
+    renderWith(<MapView />);
+    const map = await loadedMap();
+    act(() => setBottomInset(224));
+    const focus = { center: [34.7749, 32.0753] as [number, number], zoom: 13 };
+    act(() => setMapScene({ ...emptyScene, camera: "fit", focus }));
+    expect(map.calls.filter((c) => c.method === "easeTo").at(-1)!.args[0]).toMatchObject({
+      center: focus.center,
+      zoom: 13,
+      offset: [0, -112],
+    });
+    act(() => setMapScene({ ...emptyScene, camera: "fit" }));
+    expect(map.calls.filter((c) => c.method === "easeTo").at(-1)!.args[0]).toMatchObject({ center: [34.7818, 32.0853], zoom: 11 });
+    // Long after the scene arrived, a resize no longer moves the camera (the passenger may have panned).
+    const now = Date.now();
+    vi.spyOn(Date, "now").mockReturnValue(now + 5000);
+    const before = map.calls.length;
+    act(() => setBottomInset(300));
+    expect(map.calls.length).toBe(before);
+  });
+
+  it("draws a one-off located fix where the scene has no user, recentres on it, and drops it with the next scene", async () => {
+    renderWith(<MapView />);
+    const map = await loadedMap();
+    act(() => setMapScene({ ...emptyScene, camera: "keep" }));
+    act(() => showLocated({ position: [34.7749, 32.0753], accuracyMeters: 20 }));
+    expect((map.getSource("ot-user")!.data as { features: unknown[] }).features).toHaveLength(1);
+    expect(map.calls.at(-1)).toMatchObject({ method: "easeTo", args: [{ center: [34.7749, 32.0753], zoom: 15 }] });
+    act(() => setMapScene({ ...emptyScene, camera: "keep" }));
+    expect((map.getSource("ot-user")!.data as { features: unknown[] }).features).toHaveLength(0);
   });
 
   it("reports the visible centre (above the sheet) in pick mode", async () => {
@@ -273,7 +307,7 @@ describe("MapHost", () => {
     expect(host).toHaveAttribute("dir", "ltr");
     expect(host).toHaveAttribute("data-map-ready", "false");
     expect(screen.queryByTestId("map-view")).toBeNull();
-    expect(screen.getByTestId("map-attribution")).toHaveTextContent("© תורמי OpenStreetMap");
+    expect(screen.getByTestId("map-attribution")).toHaveTextContent("© OpenStreetMap");
     // Frames run: the chunk is imported and the map is created.
     vi.mocked(window.requestAnimationFrame).mockImplementation((callback) => {
       setTimeout(() => callback(0), 0);
@@ -288,7 +322,7 @@ describe("MapHost", () => {
     renderWith(<MapHost />, "en");
     const text = screen.getByTestId("map-attribution");
     expect(text).toHaveAttribute("dir", "ltr");
-    expect(text).toHaveTextContent("© OpenStreetMap contributors");
+    expect(text).toHaveTextContent("© OpenStreetMap");
     expect(text).toHaveTextContent("OpenFreeMap");
     expect(text).toHaveTextContent("Ministry of Transport");
   });

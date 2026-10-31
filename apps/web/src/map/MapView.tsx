@@ -16,7 +16,7 @@ import {
   sceneBounds,
   userFeatures,
 } from "./layers";
-import { setMapCenter, useMapState, type MapScene } from "./scene";
+import { setMapCenter, useMapState, type MapScene, type MapUser } from "./scene";
 
 // The lazy map chunk: everything that imports MapLibre lives here (MapHost loads it after
 // the first frame). The map is never mirrored; MapHost gives this container dir="ltr".
@@ -131,13 +131,14 @@ function applyLabelLanguage(map: MapLibreMap, lang: "he" | "en"): void {
   }
 }
 
-function drawScene(map: MapLibreMap, scene: MapScene): void {
+function drawScene(map: MapLibreMap, scene: MapScene, located: MapUser | null): void {
   const set = (id: (typeof SOURCES)[number], data: unknown) =>
     (map.getSource(id) as GeoJSONSource | undefined)?.setData(data as never);
+  const user = scene.user ?? located;
   set("ot-route", routeFeatures(scene.route));
   set("ot-pins", pinFeatures(scene.pins));
-  set("ot-user", userFeatures(scene.user));
-  set("ot-accuracy", accuracyFeatures(scene.user));
+  set("ot-user", userFeatures(user));
+  set("ot-accuracy", accuracyFeatures(user));
 }
 
 /** The sheet's height over the map, clamped so a tall sheet still leaves a quarter visible. */
@@ -157,7 +158,7 @@ function reportCenter(map: MapLibreMap, inset: number): void {
 
 export default function MapView() {
   const { lang, t } = useI18n();
-  const { scene, bottomInset, locateRequest } = useMapState();
+  const { scene, bottomInset, locateRequest, located } = useMapState();
   const container = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
   const [loaded, setLoaded] = useState(false);
@@ -215,8 +216,8 @@ export default function MapView() {
 
   useEffect(() => {
     const map = mapRef.current;
-    if (map && loaded) drawScene(map, scene);
-  }, [scene, loaded]);
+    if (map && loaded) drawScene(map, scene, located);
+  }, [scene, located, loaded]);
 
   // The sheet covers the bottom, so fitting, following and the pick centre all use the
   // visible area above it. This is done per camera move (fit padding, centre offset)
@@ -226,6 +227,12 @@ export default function MapView() {
   useEffect(() => {
     insetRef.current = inset;
   }, [inset]);
+  // After Locate on a scene without a user, the camera stays on that fix until the next scene.
+  const locatedRef = useRef(located);
+  useEffect(() => {
+    locatedRef.current = located;
+  }, [located]);
+  const focusedScene = useRef<{ scene: MapScene | null; at: number }>({ scene: null, at: 0 });
 
   useEffect(() => {
     const map = mapRef.current;
@@ -235,10 +242,27 @@ export default function MapView() {
     if (scene.camera === "fit") {
       const bounds = sceneBounds(scene);
       if (bounds) {
+        // One point (a single pin) frames at street level rather than the closest zoom.
+        const point = bounds[0][0] === bounds[1][0] && bounds[0][1] === bounds[1][1];
         try {
-          map.fitBounds(bounds, { padding: { ...FIT_PADDING, bottom: FIT_PADDING.bottom + bottom }, maxZoom: 16, duration });
+          map.fitBounds(bounds, {
+            padding: { ...FIT_PADDING, bottom: FIT_PADDING.bottom + bottom },
+            maxZoom: point ? 15 : 16,
+            duration,
+          });
         } catch (error) {
           console.warn("Map fit failed", error);
+        }
+      } else if (!locatedRef.current) {
+        // Nothing to frame (Home, pick on map): the scene's focus or the default view,
+        // centred in the part of the map the sheet leaves visible. Applied when the scene
+        // arrives and while the sheet settles into its new snap, then left alone, so a
+        // later resize (or the browser's bar) never undoes the passenger's own panning.
+        const fresh = focusedScene.current.scene !== scene;
+        if (fresh) focusedScene.current = { scene, at: Date.now() };
+        if (fresh || Date.now() - focusedScene.current.at < 800) {
+          const focus = scene.focus ?? { center: DEFAULT_CENTER, zoom: DEFAULT_ZOOM };
+          map.easeTo({ center: focus.center, zoom: focus.zoom, offset: [0, -bottom / 2], duration: fresh ? duration : 0 });
         }
       }
     } else if (scene.camera === "follow" && scene.user) {
@@ -246,20 +270,22 @@ export default function MapView() {
     }
   }, [scene, inset, loaded]);
 
-  // requestLocate(): recentre on the user if the scene has one. The initial value is not a request.
+  // requestLocate(): recentre on the user (the scene's, or a one-off fix from Locate). The
+  // initial value is not a request.
   const seenLocate = useRef(locateRequest);
+  const target = scene.user ?? located;
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !loaded || locateRequest === seenLocate.current) return;
     seenLocate.current = locateRequest;
-    if (!scene.user) return;
+    if (!target) return;
     map.easeTo({
-      center: scene.user.position,
+      center: target.position,
       zoom: Math.max(map.getZoom(), 15),
       offset: [0, -coveredHeight(map, insetRef.current) / 2],
       duration: prefersReducedMotion() ? 0 : 400,
     });
-  }, [locateRequest, scene.user, loaded]);
+  }, [locateRequest, target, loaded]);
 
   // Entering pick mode (or the sheet moving) reports the visible centre straight away.
   useEffect(() => {

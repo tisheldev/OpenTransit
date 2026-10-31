@@ -1,16 +1,18 @@
-import { useEffect, useId, useMemo, useRef, useState, type FormEvent } from "react";
+import { useEffect, useId, useMemo, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { usePlaceSearch, PLACES_MIN_CHARS } from "../../api/queries";
 import { ApiFailure } from "../../api/result";
-import type { Meta, PlaceCandidate } from "../../api/schemas";
+import type { Meta, PlaceCandidate, Places } from "../../api/schemas";
 import { Empty, ErrorState } from "../../components/states";
 import { useI18n } from "../../i18n/I18nProvider";
-import { emptyScene, useMapState, usePublishScene } from "../../map/scene";
-import { choiceFromSaved, type Endpoint, type PlaceChoice } from "../../plan/draft";
+import { DEFAULT_CENTER } from "../../map/layers";
+import { emptyScene, useMapState, usePublishScene, type MapFocus } from "../../map/scene";
+import { choiceFromSaved, type Endpoint, type PlaceChoice, type PlanDraft } from "../../plan/draft";
 import { usePlan } from "../../plan/PlanProvider";
-import { back, go, type SearchField } from "../../router";
-import { addFavourite, addRecent, saveSlot, storable, useLocalState } from "../../shell/localStore";
+import { back, go, openerRoute, type SearchField } from "../../router";
+import { addFavourite, addRecent, rememberOrigin, saveSlot, storable, useLocalState } from "../../shell/localStore";
+import { useLocationAvailability } from "../../shell/location";
 import { useSheet } from "../../shell/sheet";
-import type { SavedPlace } from "../../storage/local";
+import type { LocalState, SavedPlace } from "../../storage/local";
 import { candidateKey, choiceFromCandidate, choiceFromPin, isStreetLevel, readableLocality } from "./choice";
 import { useNearIfGranted } from "./near";
 
@@ -29,14 +31,51 @@ function useDebounced<T>(value: T, ms: number): T {
   return debounced;
 }
 
-const KIND_ICON: Record<PlaceCandidate["kind"], string> = { stop: "🚏", station: "🚉", address: "⌖", poi: "★" };
+const KIND_ICON: Record<PlaceCandidate["kind"], string> = { stop: "🚏", station: "🚉", address: "📍", poi: "⭐" };
 const SKELETON_ROWS = 4;
+
+/**
+ * Parts of a result's second line, joined by a quiet "·" that wraps with the part after
+ * it (never left dangling at a line end). A tag needs no separator.
+ */
+function Parts({ children }: { children: Array<{ node: ReactNode; separated: boolean } | null> }) {
+  const parts = children.filter((part) => part !== null);
+  return (
+    <span className="row-sub">
+      {parts.map((part, index) => (
+        <span key={index} className="row-part">
+          {index > 0 && part.separated && (
+            <span className="row-sep" aria-hidden="true">
+              ·{" "}
+            </span>
+          )}
+          {part.node}
+        </span>
+      ))}
+    </span>
+  );
+}
 
 function ResultRow({ candidate, meta, onChoose }: { candidate: PlaceCandidate; meta: Meta; onChoose: (choice: PlaceChoice) => void }) {
   const { t, lang } = useI18n();
   const locality = readableLocality(candidate.locality);
   const other = candidate.languageUsed !== lang && /^[a-z]{2}$/.test(candidate.languageUsed);
   const stopCode = candidate.kind === "stop" || candidate.kind === "station" ? candidate.stopCode : null;
+  // A stop reads "Stop 43073 · street, city"; the code says what it is.
+  const kind =
+    candidate.kind === "stop" && stopCode ? (
+      <bdi className="tabular">{t("place.stopCode", { code: stopCode })}</bdi>
+    ) : (
+      <span className="kind-label">
+        {t(`place.${candidate.kind}`)}
+        {stopCode && (
+          <>
+            {" "}
+            <bdi className="tabular">{stopCode}</bdi>
+          </>
+        )}
+      </span>
+    );
   return (
     <li>
       <button type="button" className="row-button" onClick={() => onChoose(choiceFromCandidate(candidate, meta))}>
@@ -44,17 +83,16 @@ function ResultRow({ candidate, meta, onChoose }: { candidate: PlaceCandidate; m
           {KIND_ICON[candidate.kind]}
         </span>
         <span className="row-text">
-          <bdi className="row-title" lang={other ? candidate.languageUsed : undefined}>
-            {candidate.displayName}
-          </bdi>
-          <span className="row-sub">
-            <span className="kind-label">{t(`place.${candidate.kind}`)}</span>
-            {isStreetLevel(candidate) && <span className="tag">{t("place.streetLevel")}</span>}
-            {stopCode && (
-              <bdi className="tabular">{t("place.stopCode", { code: stopCode })}</bdi>
-            )}
-            {locality && <bdi>{locality}</bdi>}
+          <span className="row-title">
+            <bdi lang={other ? candidate.languageUsed : undefined}>{candidate.displayName}</bdi>
           </span>
+          <Parts>
+            {[
+              { node: kind, separated: true },
+              isStreetLevel(candidate) ? { node: <span className="tag">{t("place.streetLevel")}</span>, separated: false } : null,
+              locality ? { node: <bdi>{locality}</bdi>, separated: true } : null,
+            ]}
+          </Parts>
         </span>
       </button>
     </li>
@@ -69,7 +107,11 @@ function SavedRow({ icon, title, place, onChoose }: { icon: string; title: strin
           {icon}
         </span>
         <span className="row-text">
-          <span className="row-title">{title}</span>
+          {/* A recent is its label alone: plain weight, as on Home. The block keeps the
+              page's direction; only the name inside is isolated. */}
+          <span className={title === place.label ? undefined : "row-title"}>
+            <bdi>{title}</bdi>
+          </span>
           {title !== place.label && (
             <span className="row-sub">
               <bdi>{place.label}</bdi>
@@ -153,6 +195,46 @@ function NameFavourite({ choice, onSave, onCancel }: { choice: PlaceChoice; onSa
   );
 }
 
+
+/** Where "choose on map" starts: the field's own place, the plan's other end, the last place, Tel Aviv. */
+function pickFocus(field: SearchField, draft: PlanDraft, local: LocalState): MapFocus {
+  const place = (endpoint: Endpoint | null) => (endpoint?.type === "place" ? endpoint.place : null);
+  const saved = field === "home" ? local.home : field === "work" ? local.work : null;
+  const own = field === "from" ? place(draft.from) : field === "to" ? place(draft.to) : null;
+  const other = field === "from" ? place(draft.to) : place(draft.from);
+  const start = own ?? saved ?? other ?? local.recents[0] ?? null;
+  return start ? { center: [start.longitude, start.latitude], zoom: 15 } : { center: DEFAULT_CENTER, zoom: 14 };
+}
+
+function MyLocationRow({ onChoose }: { onChoose: () => void }) {
+  const { t } = useI18n();
+  const location = useLocationAvailability();
+  if (location.availability === "unavailable") {
+    // Shown, not offered: a one-line reason instead of a choice bound to fail.
+    return (
+      <li className="row-static" aria-disabled="true">
+        <span className="row-icon" aria-hidden="true">
+          ◎
+        </span>
+        <span className="row-text">
+          <span className="row-title">{t("place.myLocation")}</span>
+          <span className="row-sub">{t(`search.myLocation.${location.reason ?? "unsupported"}`)}</span>
+        </span>
+      </li>
+    );
+  }
+  return (
+    <li>
+      <button type="button" className="row-button" onClick={onChoose}>
+        <span className="row-icon" aria-hidden="true">
+          ◎
+        </span>
+        <span className="row-text row-title">{t("place.myLocation")}</span>
+      </button>
+    </li>
+  );
+}
+
 export function SearchScreen({ field }: { field: SearchField }) {
   const { t, lang } = useI18n();
   const { draft, setFrom, setTo } = usePlan();
@@ -170,18 +252,41 @@ export function SearchScreen({ field }: { field: SearchField }) {
   const debounced = useDebounced(typed, SEARCH_DEBOUNCE_MS);
   const query = usePlaceSearch(debounced, lang, near);
 
-  const scene = useMemo(() => ({ ...emptyScene, pick: mode === "pick" }), [mode]);
+  // The pick-on-map start is fixed when picking begins, so the map is not moved under the pin.
+  const [focus, setFocus] = useState<MapFocus | null>(null);
+  const scene = useMemo(() => ({ ...emptyScene, pick: mode === "pick", camera: mode === "pick" ? ("fit" as const) : ("keep" as const), focus }), [mode, focus]);
   usePublishScene(scene);
+
+  const searching = typed.length >= PLACES_MIN_CHARS;
+  const loading = searching && (debounced !== typed || query.isPending || (query.isFetching && query.isError));
+  const failure = query.error instanceof ApiFailure ? query.error : null;
+  const answer = searching && !loading && query.data ? query.data : null;
+  // While the next answer loads, the previous one stays (dimmed) instead of a skeleton:
+  // no rows jump on every keystroke. Skeleton rows only when there is nothing to show.
+  const [kept, setKept] = useState<Places | null>(null);
+  if (answer && answer !== kept) setKept(answer);
+  if (!searching && kept !== null) setKept(null);
+  const shown = answer ?? (loading ? kept : null);
+  const stale = shown !== null && shown !== answer;
+  const skeleton = loading && shown === null;
 
   const choose = (choice: PlaceChoice | "myLocation") => {
     setSaveFailed(false);
     if (field === "from" || field === "to") {
       const endpoint: Endpoint = choice === "myLocation" ? { type: "myLocation" } : { type: "place", place: choice };
-      if (choice !== "myLocation") addRecent(choice); // "my location" is never a recent (CU11)
+      // "my location" is never a recent (CU11); a chosen start is remembered as the last one.
+      if (choice !== "myLocation") {
+        if (field === "from") rememberOrigin(choice);
+        else addRecent(choice);
+      }
       if (field === "from") setFrom(endpoint);
       else setTo(endpoint);
-      const otherKnown = field === "from" ? draft.to !== null : true;
-      if (otherKnown) go({ name: "compare" }, { replace: true });
+      // Return to whatever opened Search (Compare stays one entry: Back from it is Home).
+      // From Home with both ends known, Search's own entry becomes Compare; a destination
+      // without a start asks for the start next, in the same entry.
+      if (openerRoute()?.name === "compare") back();
+      else if (field === "to" && draft.from === null) go({ name: "search", field: "from" }, { replace: true });
+      else if (field === "to" || draft.to !== null) go({ name: "compare" }, { replace: true });
       else back();
       return;
     }
@@ -234,14 +339,10 @@ export function SearchScreen({ field }: { field: SearchField }) {
     );
   }
 
-  const searching = typed.length >= PLACES_MIN_CHARS;
-  const skeleton = searching && (debounced !== typed || query.isPending || (query.isFetching && query.isError));
-  const failure = query.error instanceof ApiFailure ? query.error : null;
-  const answer = searching && !skeleton && query.data ? query.data : null;
   const retryAfter = failure?.error.kind === "problem" ? failure.error.retryAfterSeconds : null;
 
   let live = "";
-  if (skeleton) live = t("search.searching");
+  if (loading) live = t("search.searching");
   else if (answer && answer.data.length > 0) live = t("search.results", { count: answer.data.length });
 
   return (
@@ -268,7 +369,7 @@ export function SearchScreen({ field }: { field: SearchField }) {
         {q !== "" && (
           <button
             type="button"
-            className="icon-button"
+            className="icon-button quiet search-clear"
             aria-label={t("search.clear")}
             onClick={() => {
               setQ("");
@@ -290,6 +391,8 @@ export function SearchScreen({ field }: { field: SearchField }) {
         </p>
       )}
 
+      {typed.length > 0 && !searching && <p className="muted small search-hint">{t("search.minChars")}</p>}
+
       {!searching && (
         <ul className="rows">
           <li>
@@ -297,26 +400,18 @@ export function SearchScreen({ field }: { field: SearchField }) {
               type="button"
               className="row-button"
               onClick={() => {
+                setFocus(pickFocus(field, draft, local));
                 setMode("pick");
                 setSnap("peek");
               }}
             >
               <span className="row-icon" aria-hidden="true">
-                📍
+                🗺️
               </span>
               <span className="row-text row-title">{t("search.pickOnMap")}</span>
             </button>
           </li>
-          {field === "from" && (
-            <li>
-              <button type="button" className="row-button" onClick={() => choose("myLocation")}>
-                <span className="row-icon" aria-hidden="true">
-                  ◎
-                </span>
-                <span className="row-text row-title">{t("place.myLocation")}</span>
-              </button>
-            </li>
-          )}
+          {field === "from" && <MyLocationRow onChoose={() => choose("myLocation")} />}
           {local.home && field !== "home" && <SavedRow icon="⌂" title={t("place.home")} place={local.home} onChoose={choose} />}
           {local.work && field !== "work" && <SavedRow icon="▣" title={t("place.work")} place={local.work} onChoose={choose} />}
           {local.favourites.map((favourite) => (
@@ -327,8 +422,6 @@ export function SearchScreen({ field }: { field: SearchField }) {
           ))}
         </ul>
       )}
-
-      {typed.length > 0 && !searching && <p className="muted">{t("search.minChars")}</p>}
 
       {skeleton && (
         <ul className="rows" aria-hidden="true" data-testid="search-skeleton">
@@ -344,7 +437,7 @@ export function SearchScreen({ field }: { field: SearchField }) {
         </ul>
       )}
 
-      {searching && !skeleton && failure && (
+      {searching && !loading && failure && (
         <>
           <ErrorState state={failure.state} retryAfterSeconds={retryAfter} onRetry={() => void query.refetch()} />
           {failure.state === "category_unavailable" && (
@@ -355,14 +448,18 @@ export function SearchScreen({ field }: { field: SearchField }) {
         </>
       )}
 
-      {answer && (
+      {shown && (
         <>
-          {answer.data.length === 0 && answer.unavailableTypes.length === 0 && <Empty kind="noMatches" />}
-          <ul className="rows" data-testid="search-results">
-            {answer.data.map((candidate, index) => (
-              <ResultRow key={candidateKey(candidate, index)} candidate={candidate} meta={answer.meta} onChoose={choose} />
+          {!stale && shown.data.length === 0 && shown.unavailableTypes.length === 0 && <Empty kind="noMatches" />}
+          <ul
+            className={stale ? "rows rows-stale" : "rows"}
+            data-testid={stale ? "search-results-previous" : "search-results"}
+            aria-busy={stale || undefined}
+          >
+            {shown.data.map((candidate, index) => (
+              <ResultRow key={candidateKey(candidate, index)} candidate={candidate} meta={shown.meta} onChoose={choose} />
             ))}
-            {answer.unavailableTypes.map((type) => (
+            {shown.unavailableTypes.map((type) => (
               <li key={type} className="row-note" role="note">
                 <span className="row-icon" aria-hidden="true">
                   ⓘ

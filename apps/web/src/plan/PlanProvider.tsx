@@ -1,6 +1,9 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import { isLocationPossible } from "../lib/geolocation";
+import { lastOrigin } from "../shell/localStore";
+import { useLocationAvailability } from "../shell/location";
 import { readSession, writeSession } from "../storage/session";
-import { initialDraft, type Endpoint, type PlanDraft, type When } from "./draft";
+import { startingDraft, startingOrigin, type Endpoint, type PlanDraft, type When } from "./draft";
 
 // Transient plan state shared by Home, Search and Compare (design: Where state lives).
 
@@ -24,8 +27,18 @@ function isDraft(value: unknown): value is PlanDraft {
 }
 
 export function PlanProvider({ children, initial }: { children: ReactNode; initial?: PlanDraft }) {
-  const [draft, setDraft] = useState<PlanDraft>(() => initial ?? readSession("plan", isDraft) ?? initialDraft);
+  const [draft, setDraft] = useState<PlanDraft>(
+    () => initial ?? readSession("plan", isDraft) ?? startingDraft(isLocationPossible(), lastOrigin()),
+  );
   const [selected, setSelected] = useState(0);
+
+  // "My location" cannot work (denied, or no secure context): start from the last chosen
+  // start instead, or ask. Applied during render so Compare never builds a request that is
+  // bound to fail. A draft passed in as `initial` is left as given (tests drive it).
+  const { availability } = useLocationAvailability();
+  if (initial === undefined && availability === "unavailable" && draft.from?.type === "myLocation") {
+    setDraft({ ...draft, from: startingOrigin(false, lastOrigin()) });
+  }
 
   useEffect(() => {
     writeSession("plan", draft);

@@ -32,14 +32,25 @@ export interface MapUser {
   accuracyMeters: number | null;
 }
 
+/** A place to centre on at a zoom (Home's last place, the pick-on-map start). */
+export interface MapFocus {
+  center: LonLat;
+  zoom: number;
+}
+
 export interface MapScene {
   route: MapRouteLeg[];
   pins: MapPin[];
   user: MapUser | null;
-  /** fit: frame route and pins; follow: keep the user centred; keep: leave the camera. */
+  /**
+   * fit: frame route and pins (with nothing to frame, go to `focus` or the default view);
+   * follow: keep the user centred; keep: leave the camera.
+   */
   camera: "fit" | "follow" | "keep";
   /** "Choose on map": a centre pin is shown and the centre is reported via setMapCenter. */
   pick: boolean;
+  /** Optional: where a "fit" camera goes when there are no route or pins to frame. */
+  focus?: MapFocus | null;
 }
 
 export const emptyScene: MapScene = { route: [], pins: [], user: null, camera: "keep", pick: false };
@@ -52,9 +63,15 @@ interface MapState {
   center: LonLat | null;
   /** Bumped by requestLocate(); the map recentres on the user when it changes. */
   locateRequest: number;
+  /**
+   * A one-off fix from the Locate button on a screen whose scene has no user (Home, pick
+   * on map). Memory only, never stored; dropped when the next scene is published.
+   */
+  located: MapUser | null;
 }
 
-let state: MapState = { scene: emptyScene, bottomInset: 0, center: null, locateRequest: 0 };
+const initialState: MapState = { scene: emptyScene, bottomInset: 0, center: null, locateRequest: 0, located: null };
+let state: MapState = initialState;
 const listeners = new Set<() => void>();
 
 function update(change: Partial<MapState>): void {
@@ -72,7 +89,7 @@ export function getMapState(): MapState {
 }
 
 export function setMapScene(scene: MapScene): void {
-  update({ scene });
+  update({ scene, located: null });
 }
 
 export function setBottomInset(px: number): void {
@@ -87,8 +104,19 @@ export function requestLocate(): void {
   update({ locateRequest: state.locateRequest + 1 });
 }
 
+/** Show a one-off fix (Locate on a scene without a user) and recentre on it. */
+export function showLocated(user: MapUser): void {
+  update({ located: user, locateRequest: state.locateRequest + 1 });
+}
+
 export function useMapState(): MapState {
   return useSyncExternalStore(subscribe, getMapState, getMapState);
+}
+
+/** One derived value (return a primitive): re-renders only when it changes. */
+export function useMapSelector<T>(select: (state: MapState) => T): T {
+  const read = () => select(state);
+  return useSyncExternalStore(subscribe, read, read);
 }
 
 /**
@@ -106,6 +134,6 @@ export function usePublishScene(scene: MapScene): void {
 
 /** Reset between tests. */
 export function resetMapState(): void {
-  state = { scene: emptyScene, bottomInset: 0, center: null, locateRequest: 0 };
+  state = initialState;
   for (const listener of listeners) listener();
 }

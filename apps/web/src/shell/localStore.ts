@@ -1,6 +1,13 @@
 import { useSyncExternalStore } from "react";
-import { recentId, savedFromChoice, type PlaceChoice } from "../plan/draft";
-import { loadLocalState, updateLocalState, withRecent, type LocalState, type SavedPlace } from "../storage/local";
+import { choiceFromSaved, recentId, savedFromChoice, type PlaceChoice } from "../plan/draft";
+import {
+  SESSION_PREFIX,
+  loadLocalState,
+  updateLocalState,
+  withRecent,
+  type LocalState,
+  type SavedPlace,
+} from "../storage/local";
 
 // A reactive view of storage/local.ts for Home, Search and Settings: read synchronously
 // before the first frame (design: Home, "storage only"), written through on change.
@@ -53,6 +60,43 @@ export function storable(choice: PlaceChoice): boolean {
 export function addRecent(choice: PlaceChoice): boolean {
   if (!storable(choice)) return false;
   return changeLocal((state) => withRecent(state, savedFromChoice(choice, recentId(choice))));
+}
+
+// The last start the passenger chose, so a plan can start from it when "my location"
+// cannot work (plain-http preview, denied permission). Only a pointer to one of the
+// recents is kept (its id), never a device position; "clear all" removes it with the
+// other "opentransit:" keys, and it is forgotten once that recent is pushed out.
+const LAST_ORIGIN_KEY = `${SESSION_PREFIX}lastOrigin`;
+
+function localStore(): Storage | null {
+  try {
+    return globalThis.localStorage ?? null;
+  } catch {
+    return null;
+  }
+}
+
+/** Record a chosen From place (it is added to recents too). */
+export function rememberOrigin(choice: PlaceChoice): void {
+  if (!addRecent(choice)) return;
+  try {
+    localStore()?.setItem(LAST_ORIGIN_KEY, recentId(choice));
+  } catch {
+    // storage full or blocked: nothing to remember
+  }
+}
+
+/** The most recent From place, if it is still among the recents. */
+export function lastOrigin(): PlaceChoice | null {
+  let id: string | null = null;
+  try {
+    id = localStore()?.getItem(LAST_ORIGIN_KEY) ?? null;
+  } catch {
+    return null;
+  }
+  if (id === null) return null;
+  const recent = get().recents.find((item) => item.id === id);
+  return recent ? choiceFromSaved(recent) : null;
 }
 
 export function saveSlot(slot: SavedSlot, choice: PlaceChoice, label?: string): boolean {

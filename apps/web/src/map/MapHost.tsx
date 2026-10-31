@@ -7,9 +7,10 @@ import "./map.css";
 // first frame and an idle moment, so it never delays Home becoming interactive.
 //
 // Placement hooks for the shell: .map-host is position:absolute; inset:0 (give its parent
-// a positioning context). The attribution sits at the top of the map, below any header
-// the shell overlays: set --map-attribution-top on .map-host (or an ancestor) to that
-// header's height. The sheet never reaches the top, so the attribution stays visible.
+// a positioning context). On its own (the e2e harness) the attribution floats at the top
+// of the map, below --map-attribution-top. The shell renders <MapHost attribution={false}/>
+// and places <MapAttribution inline/> in its top row beside Back, a band the sheet never
+// covers (the full snap stops below it).
 
 function MapUnavailable() {
   const { t, dir } = useI18n();
@@ -56,20 +57,26 @@ function afterFirstFrame(callback: () => void): () => void {
   };
 }
 
-export function MapAttribution() {
+/**
+ * The map credits as one compact, semi-opaque line (full credits are in Settings).
+ * `inline`: placed by its container (the shell's top row) instead of floating on the map.
+ */
+export function MapAttribution({ inline = false }: { inline?: boolean }) {
   const { t, dir, lang } = useI18n();
   return (
-    <p className="map-attribution" dir={dir} lang={lang} data-testid="map-attribution">
-      <span>{t("map.attribution.osm")}</span>
+    <p className={inline ? "map-attribution map-attribution-inline" : "map-attribution"} dir={dir} lang={lang} data-testid="map-attribution">
+      {/* Each credit is isolated, so Latin names keep their order inside a Hebrew line. */}
+      <bdi>{t("map.attribution.osm")}</bdi>
       <span aria-hidden="true"> · </span>
-      <span>{t("map.attribution.tiles")}</span>
+      <bdi>{t("map.attribution.tiles")}</bdi>
       <span aria-hidden="true"> · </span>
-      <span>{t("map.attribution.mot")}</span>
+      <bdi>{t("map.attribution.mot")}</bdi>
     </p>
   );
 }
 
-export function MapHost() {
+/** `attribution={false}` when the host page shows <MapAttribution inline /> itself (the shell). */
+export function MapHost({ attribution = true }: { attribution?: boolean }) {
   const [ready, setReady] = useState(false);
   useEffect(() => afterFirstFrame(() => setReady(true)), []);
 
@@ -81,7 +88,7 @@ export function MapHost() {
           <MapView />
         </Suspense>
       )}
-      <MapAttribution />
+      {attribution && <MapAttribution />}
     </div>
   );
 }
