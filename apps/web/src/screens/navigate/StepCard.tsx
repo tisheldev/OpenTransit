@@ -8,6 +8,7 @@ import type { NavState } from "../../nav/engine";
 import { haversineMeters } from "../../nav/geo";
 import type { NavStep } from "../../nav/steps";
 import {
+  isolate,
   isSameStop,
   placeName,
   relativeText,
@@ -131,7 +132,7 @@ export function StepCard({ steps, state, fix, clock, labels, onEnd }: Props) {
         title = t("nav.step.transferSameStop");
         body = (
           <p className="step-line">
-            <Bdi>{[stop, codeText, windowText].filter(Boolean).join(" · ")}</Bdi>
+            <Bdi>{[isolate(stop, lang), codeText, windowText].filter(Boolean).join(" · ")}</Bdi>
           </p>
         );
       } else {
@@ -207,12 +208,12 @@ export function StepCard({ steps, state, fix, clock, labels, onEnd }: Props) {
           <>
             {step.from && (
               <p className="step-line">
-                <Bdi>{[t("nav.board", { stop: step.from.name }), code ? t("nav.stopCode", { code }) : null].filter(Boolean).join(" · ")}</Bdi>
+                <Bdi>{[t("nav.board", { stop: isolate(step.from.name, lang) }), code ? t("nav.stopCode", { code }) : null].filter(Boolean).join(" · ")}</Bdi>
               </p>
             )}
             <Departure ride={step} clock={clock} />
             <p className="step-line">
-              <Bdi>{[t("nav.exitAt", { stop: step.target.name, time: formatClock(step.scheduledArrival, lang) }), stops].filter(Boolean).join(" · ")}</Bdi>
+              <Bdi>{[t("nav.exitAt", { stop: isolate(step.target.name, lang), time: formatClock(step.scheduledArrival, lang) }), stops].filter(Boolean).join(" · ")}</Bdi>
             </p>
           </>
         ) : (

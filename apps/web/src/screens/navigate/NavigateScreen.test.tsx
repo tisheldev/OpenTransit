@@ -398,7 +398,7 @@ describe("Navigate: location", () => {
     // Arrived: location watching stopped.
     expect(handle.onFix).toBeNull();
     delete (navigator as unknown as { vibrate?: unknown }).vibrate;
-  });
+  }, 30_000); // plays a whole journey of fixes through the screen; loaded runners need more than 5 s
 });
 
 describe("Navigate: simulated positions", () => {

@@ -22,6 +22,15 @@ export function placeName(place: NavPlace | null, labels: EndLabels, t: T): stri
   return name;
 }
 
+/**
+ * In an English (LTR) line a Hebrew name followed by a number pulls the number into its
+ * right-to-left run ("Walk to הטכניון · 4 min" shows as "4 · הטכניון min"): isolate it
+ * (FSI … PDI). Hebrew lines are right-to-left already and need nothing.
+ */
+export function isolate(name: string, lang: Lang): string {
+  return lang === "en" ? `⁨${name}⁩` : name;
+}
+
 function modeLabel(mode: string, t: T): string {
   const m = mode.toLowerCase();
   if (m === "bus") return t("nav.mode.bus");
@@ -136,11 +145,11 @@ export function stepSummary(step: NavStep, labels: EndLabels, t: T, lang: Lang, 
   const duration = formatDuration(step.durationSeconds, lang);
   switch (step.kind) {
     case "walk_to_stop":
-      return t("nav.summary.walkToStop", { stop: walkTargetName(step, following, labels, t), duration });
+      return t("nav.summary.walkToStop", { stop: isolate(walkTargetName(step, following, labels, t), lang), duration });
     case "transfer_walk":
       return isSameStop(step) ? t("nav.summary.transferSameStop") : t("nav.summary.transfer", { duration });
     case "walk_to_destination":
-      return t("nav.summary.walkToDestination", { place: placeName(step.target, labels, t), duration });
+      return t("nav.summary.walkToDestination", { place: isolate(placeName(step.target, labels, t), lang), duration });
     case "ride":
       return t("nav.summary.ride", { ride: rideName(step, t), stop: step.target.name });
     case "arrive":
@@ -161,18 +170,18 @@ export function rowText(step: NavStep, labels: EndLabels, t: T, lang: Lang, foll
   const duration = formatDuration(step.durationSeconds, lang);
   switch (step.kind) {
     case "walk_to_stop":
-      return { time, main: t("nav.summary.walkToStop", { stop: walkTargetName(step, following, labels, t), duration }), sub: null };
+      return { time, main: t("nav.summary.walkToStop", { stop: isolate(walkTargetName(step, following, labels, t), lang), duration }), sub: null };
     case "transfer_walk":
       return { time, main: isSameStop(step) ? t("nav.summary.transferSameStop") : t("nav.summary.transfer", { duration }), sub: null };
     case "walk_to_destination":
-      return { time, main: t("nav.summary.walkToDestination", { place: placeName(step.target, labels, t), duration }), sub: null };
+      return { time, main: t("nav.summary.walkToDestination", { place: isolate(placeName(step.target, labels, t), lang), duration }), sub: null };
     case "ride": {
       const count = step.ride?.stopCount ?? null;
       const name = rideName(step, t);
       return {
         time,
         main: count === null ? name : `${name} · ${stopsText(count, t)}`,
-        sub: t("nav.exitAt", { stop: step.target.name, time: formatClock(step.scheduledArrival, lang) }),
+        sub: t("nav.exitAt", { stop: isolate(step.target.name, lang), time: formatClock(step.scheduledArrival, lang) }),
       };
     }
     case "arrive":

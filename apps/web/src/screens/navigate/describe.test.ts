@@ -128,4 +128,11 @@ describe("checklist rows (N2)", () => {
     const noDetail = buildSteps(recordedJourneys[0]!, {});
     expect(rowText(noDetail[2]!, labels, t, "he").main).toBe("רכבת 156");
   });
+
+  it("English isolates a Hebrew name so the time after it stays after it", () => {
+    expect(rowText(j2[1]!, labels, tEn, "en").sub).toBe("Get off at ⁨ת. רכבת תל אביב - סבידור/דרך נמיר⁩ · 08:48");
+    expect(rowText(j2[10]!, { origin: null, destination: "הטכניון" }, tEn, "en").main).toBe("Walk to ⁨הטכניון⁩ · 4 min");
+    // Hebrew lines are right-to-left already: no marks added.
+    expect(rowText(j2[1]!, labels, t, "he").sub).not.toMatch(/[⁨⁩]/);
+  });
 });
