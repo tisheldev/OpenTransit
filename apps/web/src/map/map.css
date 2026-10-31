@@ -1,0 +1,71 @@
+/* Map layer (S3). Logical properties only. The map itself is never mirrored (.map-host is
+   dir="ltr"); the attribution and note follow the page language. */
+
+.map-host {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #e6ecee;
+  z-index: 0;
+}
+
+.map-view {
+  position: absolute;
+  inset: 0;
+}
+
+/* MapLibre makes its container position:relative, so size it explicitly. */
+.map-canvas {
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+/* Always visible, never collapsed; at the top so the sheet (from the bottom) cannot cover it.
+   The shell sets --map-attribution-top to the height of anything it overlays at the top. */
+.map-attribution {
+  position: absolute;
+  inset-block-start: calc(var(--map-attribution-top, 0px) + var(--space-1));
+  inset-inline-end: var(--space-1);
+  max-inline-size: calc(100% - 2 * var(--space-1));
+  margin: 0;
+  padding-block: 2px;
+  padding-inline: var(--space-2);
+  border-radius: var(--radius-s);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font-size: var(--text-xs);
+  line-height: 1.4;
+  z-index: 2;
+}
+
+.map-note {
+  position: absolute;
+  inset-block-start: calc(var(--map-attribution-top, 0px) + 40px);
+  inset-inline: var(--space-4);
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-s);
+  background: var(--color-surface);
+  color: var(--color-ink-muted);
+  font-size: var(--text-s);
+  text-align: center;
+  z-index: 1;
+}
+
+/* Pick mode: a fixed pin whose tip marks the centre of the visible map (above the sheet). */
+.map-pick-pin {
+  position: absolute;
+  inset-inline-start: 50%;
+  inset-block-start: calc((100% - min(var(--map-inset, 0px), 75%)) / 2);
+  inline-size: 28px;
+  block-size: 28px;
+  margin-inline-start: -14px;
+  margin-block-start: -34px; /* centre 20 px above the target: the rotated corner lands on it */
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  background: var(--color-destination);
+  border: 3px solid var(--color-surface);
+  box-shadow: 0 1px 4px rgb(0 0 0 / 35%);
+  pointer-events: none;
+  z-index: 1;
+}
