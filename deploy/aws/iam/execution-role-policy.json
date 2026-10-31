@@ -16,17 +16,17 @@
         "ecr:GetDownloadUrlForLayer"
       ],
       "Resource": [
-        "arn:aws:ecr:il-central-1:{{ACCOUNT_ID}}:repository/opentransit-api",
-        "arn:aws:ecr:il-central-1:{{ACCOUNT_ID}}:repository/opentransit-data",
-        "arn:aws:ecr:il-central-1:{{ACCOUNT_ID}}:repository/opentransit-photon",
-        "arn:aws:ecr:il-central-1:{{ACCOUNT_ID}}:repository/opentransit-motis"
+        "arn:aws:ecr:eu-north-1:{{ACCOUNT_ID}}:repository/opentransit-api",
+        "arn:aws:ecr:eu-north-1:{{ACCOUNT_ID}}:repository/opentransit-data",
+        "arn:aws:ecr:eu-north-1:{{ACCOUNT_ID}}:repository/opentransit-photon",
+        "arn:aws:ecr:eu-north-1:{{ACCOUNT_ID}}:repository/opentransit-motis"
       ]
     },
     {
       "Sid": "WriteTaskLogsToPrecreatedGroup",
       "Effect": "Allow",
       "Action": ["logs:CreateLogStream", "logs:PutLogEvents"],
-      "Resource": "arn:aws:logs:il-central-1:{{ACCOUNT_ID}}:log-group:/opentransit/h0:log-stream:*"
+      "Resource": "arn:aws:logs:eu-north-1:{{ACCOUNT_ID}}:log-group:/opentransit/h0:log-stream:*"
     }
   ]
 }

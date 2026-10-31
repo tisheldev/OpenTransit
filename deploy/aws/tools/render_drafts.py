@@ -14,7 +14,10 @@ import sys
 from pathlib import Path
 
 AWS_DIR = Path(__file__).resolve().parents[1]
-REGION = "il-central-1"
+REGION = "eu-north-1"
+# H-0 VPC (deploy/aws/network); the ALB connects to the task from inside it, so it is the
+# only proxy the API may trust for X-Forwarded-For (M7 rate limiting).
+VPC_CIDR = "10.80.0.0/16"
 LOG_GROUP = "/opentransit/h0"
 MOTIS_DIGEST = "sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330"
 API_PORT = 8000
@@ -292,6 +295,7 @@ def render_task_definition(variant: str) -> dict:
             {"name": "OPENTRANSIT_PHOTON_URL", "value": f"http://127.0.0.1:{PHOTON_PORT}"},
         ]
         api_depends.append({"containerName": "photon", "condition": "HEALTHY"})
+    api_env.append({"name": "OPENTRANSIT_TRUSTED_PROXIES", "value": VPC_CIDR})
     api_env.append({"name": "PYTHONDONTWRITEBYTECODE", "value": "1"})
     containers.append(
         _container(

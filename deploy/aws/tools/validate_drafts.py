@@ -18,7 +18,7 @@ AWS_DIR = Path(__file__).resolve().parents[1]
 REPO_ROOT = AWS_DIR.parents[1]
 
 CEILING_MIB = 8192
-REGION = "il-central-1"
+REGION = "eu-north-1"
 LOG_GROUP = "/opentransit/h0"
 PLACEHOLDER = re.compile(r"\{\{([A-Z_]+)\}\}")
 KNOWN_PLACEHOLDERS = {
@@ -528,6 +528,9 @@ def validate_target_group(group: dict) -> list[str]:
     return errors
 
 
+ALLOWED_LISTENERS = ([("HTTPS", 443)], [("HTTP", 80)])
+
+
 def validate_load_balancer(document: dict) -> list[str]:
     errors = []
     balancer = document.get("loadBalancer", {})
@@ -536,8 +539,10 @@ def validate_load_balancer(document: dict) -> list[str]:
         if attributes.get(key) != "false":
             errors.append(f"load balancer: {key} must be false (logs carry client IP and URL)")
     listeners = document.get("listeners", [])
-    if [(x.get("Protocol"), x.get("Port")) for x in listeners] != [("HTTPS", 443)]:
-        errors.append("load balancer: only an HTTPS:443 listener is allowed")
+    # HTTPS:443 needs an ACM certificate for a controlled DNS name; the October 31 H-0 test had
+    # none and ran HTTP:80 restricted to the reviewer CIDR. Exactly one listener either way.
+    if [(x.get("Protocol"), x.get("Port")) for x in listeners] not in ALLOWED_LISTENERS:
+        errors.append("load balancer: exactly one HTTPS:443 or HTTP:80 listener is allowed")
     if balancer.get("Scheme") != "internet-facing" or balancer.get("Type") != "application":
         errors.append("load balancer: must be an internet-facing application balancer")
     return errors
@@ -606,10 +611,11 @@ def validate_iam(execution_policy: dict, task_policy: dict, trusts: list[dict]) 
 def validate_security_groups(groups: dict) -> list[str]:
     errors = []
     alb, task = groups["albSecurityGroup"], groups["taskSecurityGroup"]
-    if [(r["fromPort"], r["toPort"], r.get("cidr")) for r in alb["ingress"]] != [
-        (443, 443, "{{REVIEWER_CIDR}}")
-    ]:
-        errors.append("network: ALB ingress must be 443 from the reviewer range only")
+    if [(r["fromPort"], r["toPort"], r.get("cidr")) for r in alb["ingress"]] not in (
+        [(443, 443, "{{REVIEWER_CIDR}}")],
+        [(80, 80, "{{REVIEWER_CIDR}}")],
+    ):
+        errors.append("network: ALB ingress must be 443 or 80 from the reviewer range only")
     if [(r["fromPort"], r["toPort"], r.get("securityGroup")) for r in alb["egress"]] != [
         (8000, 8000, "taskSecurityGroup")
     ]:

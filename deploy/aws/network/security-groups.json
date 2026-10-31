@@ -1,10 +1,10 @@
 {
   "albSecurityGroup": {
     "GroupName": "opentransit-h0-alb",
-    "Description": "H-0 draft: reviewer HTTPS in, API port to the task group only",
+    "Description": "H-0: reviewer HTTP in (no domain, no ACM), API port to the task group only",
     "VpcId": "{{VPC_ID}}",
     "ingress": [
-      {"protocol": "tcp", "fromPort": 443, "toPort": 443, "cidr": "{{REVIEWER_CIDR}}"}
+      {"protocol": "tcp", "fromPort": 80, "toPort": 80, "cidr": "{{REVIEWER_CIDR}}"}
     ],
     "egress": [
       {"protocol": "tcp", "fromPort": 8000, "toPort": 8000, "securityGroup": "taskSecurityGroup"}

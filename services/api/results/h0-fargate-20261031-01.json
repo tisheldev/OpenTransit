@@ -1,0 +1,257 @@
+{
+  "schemaVersion": 1,
+  "kind": "h0-fargate",
+  "label": "BOUNDED PRIVATE AWS TEST in eu-north-1 (user approval 31 October 2026). Measured values are marked as such; costs are estimates from list prices.",
+  "task": "H0-IMG",
+  "region": "eu-north-1",
+  "accountId": "{{ACCOUNT_ID}}",
+  "resources": [
+    {
+      "type": "ecr-repository",
+      "id": "opentransit-api",
+      "arn": "arn:aws:ecr:eu-north-1:{{ACCOUNT_ID}}:repository/opentransit-api",
+      "createdAt": "2026-10-31T12:19:32+00:00",
+      "deletedAt": null,
+      "keep": true
+    },
+    {
+      "type": "ecr-repository",
+      "id": "opentransit-data",
+      "arn": "arn:aws:ecr:eu-north-1:{{ACCOUNT_ID}}:repository/opentransit-data",
+      "createdAt": "2026-10-31T12:19:33+00:00",
+      "deletedAt": null,
+      "keep": true
+    },
+    {
+      "type": "ecr-repository",
+      "id": "opentransit-photon",
+      "arn": "arn:aws:ecr:eu-north-1:{{ACCOUNT_ID}}:repository/opentransit-photon",
+      "createdAt": "2026-10-31T12:19:35+00:00",
+      "deletedAt": null,
+      "keep": true
+    },
+    {
+      "type": "ecr-repository",
+      "id": "opentransit-motis",
+      "arn": "arn:aws:ecr:eu-north-1:{{ACCOUNT_ID}}:repository/opentransit-motis",
+      "createdAt": "2026-10-31T12:19:36+00:00",
+      "deletedAt": null,
+      "keep": true
+    },
+    {
+      "type": "log-group",
+      "id": "/opentransit/h0",
+      "arn": "arn:aws:logs:eu-north-1:{{ACCOUNT_ID}}:log-group:/opentransit/h0",
+      "createdAt": "2026-10-31T12:19:39+00:00",
+      "deletedAt": null,
+      "retentionDays": 7
+    },
+    {
+      "type": "iam-role",
+      "id": "opentransit-h0-execution",
+      "arn": "arn:aws:iam::{{ACCOUNT_ID}}:role/opentransit-h0-execution",
+      "createdAt": "2026-10-31T12:19:40+00:00",
+      "deletedAt": null
+    },
+    {
+      "type": "iam-inline-policy",
+      "id": "opentransit-h0-execution/opentransit-h0-execution",
+      "arn": null,
+      "createdAt": "2026-10-31T12:19:42+00:00",
+      "deletedAt": null
+    },
+    {
+      "type": "vpc",
+      "id": "vpc-0554d9c999a95c58a",
+      "arn": null,
+      "createdAt": "2026-10-31T12:19:44+00:00",
+      "deletedAt": null,
+      "cidr": "10.80.0.0/16"
+    },
+    {
+      "type": "internet-gateway",
+      "id": "igw-034f1e129191b39ba",
+      "arn": null,
+      "createdAt": "2026-10-31T12:19:47+00:00",
+      "deletedAt": null,
+      "vpcId": "vpc-0554d9c999a95c58a"
+    },
+    {
+      "type": "route-table",
+      "id": "rtb-0d9b7e4fb656a5e4c",
+      "arn": null,
+      "createdAt": "2026-10-31T12:19:50+00:00",
+      "deletedAt": null,
+      "vpcId": "vpc-0554d9c999a95c58a"
+    },
+    {
+      "type": "subnet",
+      "id": "subnet-048574c3ca081f6c2",
+      "arn": null,
+      "createdAt": "2026-10-31T12:19:54+00:00",
+      "deletedAt": null,
+      "cidr": "10.80.0.0/24",
+      "zone": "eu-north-1a"
+    },
+    {
+      "type": "route-table-association",
+      "id": "rtbassoc-0eb76f8a16d13d6a8",
+      "arn": null,
+      "createdAt": "2026-10-31T12:19:55+00:00",
+      "deletedAt": null,
+      "routeTableId": "rtb-0d9b7e4fb656a5e4c",
+      "subnetId": "subnet-048574c3ca081f6c2"
+    },
+    {
+      "type": "subnet",
+      "id": "subnet-096a6cfe5fb4518d5",
+      "arn": null,
+      "createdAt": "2026-10-31T12:19:57+00:00",
+      "deletedAt": null,
+      "cidr": "10.80.1.0/24",
+      "zone": "eu-north-1b"
+    },
+    {
+      "type": "route-table-association",
+      "id": "rtbassoc-0e0d85ab003485478",
+      "arn": null,
+      "createdAt": "2026-10-31T12:19:59+00:00",
+      "deletedAt": null,
+      "routeTableId": "rtb-0d9b7e4fb656a5e4c",
+      "subnetId": "subnet-096a6cfe5fb4518d5"
+    },
+    {
+      "type": "security-group",
+      "id": "sg-04b302a6153ad200e",
+      "arn": null,
+      "createdAt": "2026-10-31T12:20:00+00:00",
+      "deletedAt": null,
+      "name": "opentransit-h0-alb",
+      "vpcId": "vpc-0554d9c999a95c58a"
+    },
+    {
+      "type": "security-group",
+      "id": "sg-0f6bb12a2bd7703c1",
+      "arn": null,
+      "createdAt": "2026-10-31T12:20:04+00:00",
+      "deletedAt": null,
+      "name": "opentransit-h0-task",
+      "vpcId": "vpc-0554d9c999a95c58a"
+    },
+    {
+      "type": "target-group",
+      "id": "opentransit-h0-api",
+      "arn": "arn:aws:elasticloadbalancing:eu-north-1:{{ACCOUNT_ID}}:targetgroup/opentransit-h0-api/31aec7e083959a22",
+      "createdAt": "2026-10-31T12:20:14+00:00",
+      "deletedAt": null
+    },
+    {
+      "type": "load-balancer",
+      "id": "opentransit-h0",
+      "arn": "arn:aws:elasticloadbalancing:eu-north-1:{{ACCOUNT_ID}}:loadbalancer/app/opentransit-h0/a5ee142285674309",
+      "createdAt": "2026-10-31T12:20:18+00:00",
+      "deletedAt": null,
+      "dnsName": "opentransit-h0-452882192.eu-north-1.elb.amazonaws.com"
+    },
+    {
+      "type": "listener",
+      "id": "HTTP:80",
+      "arn": "arn:aws:elasticloadbalancing:eu-north-1:{{ACCOUNT_ID}}:listener/app/opentransit-h0/a5ee142285674309/090716f3b4bbbf4e",
+      "createdAt": "2026-10-31T12:20:21+00:00",
+      "deletedAt": null
+    },
+    {
+      "type": "ecs-cluster",
+      "id": "opentransit-h0",
+      "arn": "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:cluster/opentransit-h0",
+      "createdAt": "2026-10-31T12:20:23+00:00",
+      "deletedAt": null
+    }
+  ],
+  "steps": [
+    {
+      "step": "setup-start",
+      "at": "2026-10-31T12:19:30+00:00",
+      "ok": true,
+      "reviewerCidr": "93.173.37.36/32"
+    },
+    {
+      "step": "setup-complete",
+      "at": "2026-10-31T12:20:23+00:00",
+      "ok": true,
+      "albDns": "opentransit-h0-452882192.eu-north-1.elb.amazonaws.com"
+    },
+    {
+      "step": "push-photon",
+      "at": "2026-10-31T12:22:19+00:00",
+      "ok": true,
+      "digest": "sha256:52f94ba3722d73dc06022ffa8a1392ca96bff5418ae3f85ce54c725ab3803e83",
+      "compressedBytes": 203741244
+    },
+    {
+      "step": "push-motis-first-attempt",
+      "at": "2026-10-31T12:23:40+00:00",
+      "ok": false,
+      "detail": "docker buildx imagetools create pushes each child manifest under the tag before the index; with IMMUTABLE tags the second PUT returned 400. Workaround: opentransit-motis set MUTABLE for the mirror only, then back to IMMUTABLE (both 2026-10-31 ~12:25 UTC). The index digest is preserved; ECR holds the amd64, arm64 and two attestation manifests untagged under it."
+    },
+    {
+      "step": "push-motis",
+      "at": "2026-10-31T12:23:26+00:00",
+      "ok": true,
+      "digest": "sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330",
+      "compressedBytes": 68329952
+    }
+  ],
+  "measurements": {},
+  "inventory": {
+    "before": {
+      "at": "2026-10-31T12:19:11+00:00",
+      "ecsClusters": [],
+      "taskDefinitionsActive": [],
+      "loadBalancers": [],
+      "targetGroups": [],
+      "vpcs": [
+        [
+          "vpc-05c5ec16fabce864c",
+          "172.31.0.0/16",
+          true
+        ]
+      ],
+      "nonDefaultSecurityGroups": [],
+      "networkInterfaces": [],
+      "elasticIps": [],
+      "natGateways": [],
+      "logGroups": [],
+      "logGroupsUsEast1": [],
+      "iamRolesOpenTransit": [],
+      "ecrRepositories": {},
+      "taggedResources": []
+    }
+  },
+  "images": [
+    {
+      "repository": "opentransit-photon",
+      "tag": "h0-20261031",
+      "digest": "sha256:52f94ba3722d73dc06022ffa8a1392ca96bff5418ae3f85ce54c725ab3803e83",
+      "compressedBytes": 203741244,
+      "pushedAt": "2026-10-31T12:22:19+00:00",
+      "localImage": "ot-t5-photon:local",
+      "localImageId": "sha256:96aadfab3ee73434d5f0d6e826355d95760588021b46b4152a95aa8b3bc93b93",
+      "pushSeconds": 37.6
+    },
+    {
+      "repository": "opentransit-motis",
+      "tag": "h0-20261031",
+      "digest": "sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330",
+      "compressedBytes": 68329952,
+      "pushedAt": "2026-10-31T12:23:26+00:00",
+      "source": "ghcr.io/motis-project/motis@sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330",
+      "pushSeconds": 4.6
+    }
+  ],
+  "notes": {
+    "apiImage": "The 1 October API image (ot-t5-api, sha256:e819f089…) predates rate limiting/OPENTRANSIT_TRUSTED_PROXIES (PR #4) and the integrity-attestation startup path (PR #13), so it is not pushed; the API image is rebuilt from this branch's commit once the generation session's Docker work is done.",
+    "taskRole": "No task role is created: the drafts and the hosting plan keep the serving task role absent (no AWS credentials in the task at all), and validate_drafts rejects taskRoleArn. Only the execution role exists.",
+    "dockerAuth": "Windows Credential Manager rejected the ECR token ('The stub received bad data'); h0_bounded_test.py writes the ECR auth to a throwaway DOCKER_CONFIG under the temp directory and deletes it after the push."
+  }
+}

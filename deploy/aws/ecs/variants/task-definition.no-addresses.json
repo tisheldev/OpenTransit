@@ -59,7 +59,7 @@
         "logDriver": "awslogs",
         "options": {
           "awslogs-group": "/opentransit/h0",
-          "awslogs-region": "il-central-1",
+          "awslogs-region": "eu-north-1",
           "awslogs-stream-prefix": "init",
           "mode": "non-blocking",
           "max-buffer-size": "4m"
@@ -129,7 +129,7 @@
         "logDriver": "awslogs",
         "options": {
           "awslogs-group": "/opentransit/h0",
-          "awslogs-region": "il-central-1",
+          "awslogs-region": "eu-north-1",
           "awslogs-stream-prefix": "motis",
           "mode": "non-blocking",
           "max-buffer-size": "4m"
@@ -201,7 +201,7 @@
         "logDriver": "awslogs",
         "options": {
           "awslogs-group": "/opentransit/h0",
-          "awslogs-region": "il-central-1",
+          "awslogs-region": "eu-north-1",
           "awslogs-stream-prefix": "verifier",
           "mode": "non-blocking",
           "max-buffer-size": "4m"
@@ -266,6 +266,10 @@
           "value": "/run/opentransit/probe.json"
         },
         {
+          "name": "OPENTRANSIT_TRUSTED_PROXIES",
+          "value": "10.80.0.0/16"
+        },
+        {
           "name": "PYTHONDONTWRITEBYTECODE",
           "value": "1"
         }
@@ -292,7 +296,7 @@
         "logDriver": "awslogs",
         "options": {
           "awslogs-group": "/opentransit/h0",
-          "awslogs-region": "il-central-1",
+          "awslogs-region": "eu-north-1",
           "awslogs-stream-prefix": "api",
           "mode": "non-blocking",
           "max-buffer-size": "4m"

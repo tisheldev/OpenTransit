@@ -8,7 +8,7 @@
       "Action": "sts:AssumeRole",
       "Condition": {
         "StringEquals": {"aws:SourceAccount": "{{ACCOUNT_ID}}"},
-        "ArnLike": {"aws:SourceArn": "arn:aws:ecs:il-central-1:{{ACCOUNT_ID}}:*"}
+        "ArnLike": {"aws:SourceArn": "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:*"}
       }
     }
   ]
