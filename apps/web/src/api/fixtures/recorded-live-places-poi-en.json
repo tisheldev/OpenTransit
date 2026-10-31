@@ -1,0 +1,236 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/places",
+    "params": {
+      "q": "Technion",
+      "lang": "en",
+      "type": "poi"
+    },
+    "body": null
+  },
+  "status": 200,
+  "body": {
+    "data": [
+      {
+        "kind": "poi",
+        "name": "Technion Obelisk",
+        "displayName": "Technion Obelisk",
+        "languageUsed": "en",
+        "locality": "Haifa",
+        "coordinates": {
+          "latitude": 32.7769672,
+          "longitude": 35.0228674
+        },
+        "category": "artwork_14",
+        "osmId": "way/[194197832]",
+        "candidateIdentityHash": "3ae252459dc4b98b6c5ff304384ab1de54c6727381e831839119c2d0ad27b8da",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiIzYWUyNTI0NTlkYzRiOThiNmM1ZmYzMDQzODRhYjFkZTU0YzY3MjczODFlODMxODM5MTE5YzJkMGFkMjdiOGRhIiwiY29vcmRpbmF0ZXMiOlszMi43NzY5NjcyLDM1LjAyMjg2NzRdLCJnZW5lcmF0aW9uSWQiOiIyZDhlYzI3NDZiYjUwMGFiYWNkMGYzODMzMTZkMjM2MTZmY2YxZGM0YjNlMjAxMDRiMTRjMmNiMTM5YWFkNDQ1Iiwia2luZCI6InBsYWNlIn0",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiIzYWUyNTI0NTlkYzRiOThiNmM1ZmYzMDQzODRhYjFkZTU0YzY3MjczODFlODMxODM5MTE5YzJkMGFkMjdiOGRhIiwiY29vcmRpbmF0ZXMiOlszMi43NzY5NjcyLDM1LjAyMjg2NzRdLCJnZW5lcmF0aW9uSWQiOiIyZDhlYzI3NDZiYjUwMGFiYWNkMGYzODMzMTZkMjM2MTZmY2YxZGM0YjNlMjAxMDRiMTRjMmNiMTM5YWFkNDQ1Iiwia2luZCI6InBsYWNlIn0"
+        }
+      },
+      {
+        "kind": "poi",
+        "name": "Technion International Office",
+        "displayName": "Technion International Office",
+        "languageUsed": "en",
+        "locality": "Haifa",
+        "coordinates": {
+          "latitude": 32.7784311,
+          "longitude": 35.0237529
+        },
+        "category": "office_16",
+        "osmId": "node/[6008463376]",
+        "candidateIdentityHash": "77940fcc45e66ff25601fa2eaba95ff7451b7bce41f09b68d768bdcc601e38ef",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiI3Nzk0MGZjYzQ1ZTY2ZmYyNTYwMWZhMmVhYmE5NWZmNzQ1MWI3YmNlNDFmMDliNjhkNzY4YmRjYzYwMWUzOGVmIiwiY29vcmRpbmF0ZXMiOlszMi43Nzg0MzExLDM1LjAyMzc1MjldLCJnZW5lcmF0aW9uSWQiOiIyZDhlYzI3NDZiYjUwMGFiYWNkMGYzODMzMTZkMjM2MTZmY2YxZGM0YjNlMjAxMDRiMTRjMmNiMTM5YWFkNDQ1Iiwia2luZCI6InBsYWNlIn0",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiI3Nzk0MGZjYzQ1ZTY2ZmYyNTYwMWZhMmVhYmE5NWZmNzQ1MWI3YmNlNDFmMDliNjhkNzY4YmRjYzYwMWUzOGVmIiwiY29vcmRpbmF0ZXMiOlszMi43Nzg0MzExLDM1LjAyMzc1MjldLCJnZW5lcmF0aW9uSWQiOiIyZDhlYzI3NDZiYjUwMGFiYWNkMGYzODMzMTZkMjM2MTZmY2YxZGM0YjNlMjAxMDRiMTRjMmNiMTM5YWFkNDQ1Iiwia2luZCI6InBsYWNlIn0"
+        }
+      },
+      {
+        "kind": "poi",
+        "name": "Technion Swimming pool",
+        "displayName": "Technion Swimming pool",
+        "languageUsed": "en",
+        "locality": "Haifa",
+        "coordinates": {
+          "latitude": 32.7799463,
+          "longitude": 35.0198973
+        },
+        "category": "none",
+        "osmId": "way/[98221331]",
+        "candidateIdentityHash": "91703bbd740cee998d108fc6883dae54936885d0851022c0b1f27bd5c9878fbc",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiI5MTcwM2JiZDc0MGNlZTk5OGQxMDhmYzY4ODNkYWU1NDkzNjg4NWQwODUxMDIyYzBiMWYyN2JkNWM5ODc4ZmJjIiwiY29vcmRpbmF0ZXMiOlszMi43Nzk5NDYzLDM1LjAxOTg5NzNdLCJnZW5lcmF0aW9uSWQiOiIyZDhlYzI3NDZiYjUwMGFiYWNkMGYzODMzMTZkMjM2MTZmY2YxZGM0YjNlMjAxMDRiMTRjMmNiMTM5YWFkNDQ1Iiwia2luZCI6InBsYWNlIn0",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiI5MTcwM2JiZDc0MGNlZTk5OGQxMDhmYzY4ODNkYWU1NDkzNjg4NWQwODUxMDIyYzBiMWYyN2JkNWM5ODc4ZmJjIiwiY29vcmRpbmF0ZXMiOlszMi43Nzk5NDYzLDM1LjAxOTg5NzNdLCJnZW5lcmF0aW9uSWQiOiIyZDhlYzI3NDZiYjUwMGFiYWNkMGYzODMzMTZkMjM2MTZmY2YxZGM0YjNlMjAxMDRiMTRjMmNiMTM5YWFkNDQ1Iiwia2luZCI6InBsYWNlIn0"
+        }
+      },
+      {
+        "kind": "poi",
+        "name": "Technion Sports Center",
+        "displayName": "Technion Sports Center",
+        "languageUsed": "en",
+        "locality": "Haifa",
+        "coordinates": {
+          "latitude": 32.7791183,
+          "longitude": 35.0198942
+        },
+        "category": "none",
+        "osmId": "way/[101686736]",
+        "candidateIdentityHash": "35825a2ab970be0f5acca2c97fe624951d38d58e8cd33e9ff4c8d3636c66aafb",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiIzNTgyNWEyYWI5NzBiZTBmNWFjY2EyYzk3ZmU2MjQ5NTFkMzhkNThlOGNkMzNlOWZmNGM4ZDM2MzZjNjZhYWZiIiwiY29vcmRpbmF0ZXMiOlszMi43NzkxMTgzLDM1LjAxOTg5NDJdLCJnZW5lcmF0aW9uSWQiOiIyZDhlYzI3NDZiYjUwMGFiYWNkMGYzODMzMTZkMjM2MTZmY2YxZGM0YjNlMjAxMDRiMTRjMmNiMTM5YWFkNDQ1Iiwia2luZCI6InBsYWNlIn0",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiIzNTgyNWEyYWI5NzBiZTBmNWFjY2EyYzk3ZmU2MjQ5NTFkMzhkNThlOGNkMzNlOWZmNGM4ZDM2MzZjNjZhYWZiIiwiY29vcmRpbmF0ZXMiOlszMi43NzkxMTgzLDM1LjAxOTg5NDJdLCJnZW5lcmF0aW9uSWQiOiIyZDhlYzI3NDZiYjUwMGFiYWNkMGYzODMzMTZkMjM2MTZmY2YxZGM0YjNlMjAxMDRiMTRjMmNiMTM5YWFkNDQ1Iiwia2luZCI6InBsYWNlIn0"
+        }
+      },
+      {
+        "kind": "poi",
+        "name": "Hadarion Building (Technion)",
+        "displayName": "Hadarion Building (Technion)",
+        "languageUsed": "en",
+        "locality": "Haifa",
+        "coordinates": {
+          "latitude": 32.8082386,
+          "longitude": 34.9954162
+        },
+        "category": "none",
+        "osmId": "way/[1119263838]",
+        "candidateIdentityHash": "e39fef4ef68c808ff04df674ec3e0149d07350034d66f6635c326e3b853b61b6",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiJlMzlmZWY0ZWY2OGM4MDhmZjA0ZGY2NzRlYzNlMDE0OWQwNzM1MDAzNGQ2NmY2NjM1YzMyNmUzYjg1M2I2MWI2IiwiY29vcmRpbmF0ZXMiOlszMi44MDgyMzg2LDM0Ljk5NTQxNjJdLCJnZW5lcmF0aW9uSWQiOiIyZDhlYzI3NDZiYjUwMGFiYWNkMGYzODMzMTZkMjM2MTZmY2YxZGM0YjNlMjAxMDRiMTRjMmNiMTM5YWFkNDQ1Iiwia2luZCI6InBsYWNlIn0",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiJlMzlmZWY0ZWY2OGM4MDhmZjA0ZGY2NzRlYzNlMDE0OWQwNzM1MDAzNGQ2NmY2NjM1YzMyNmUzYjg1M2I2MWI2IiwiY29vcmRpbmF0ZXMiOlszMi44MDgyMzg2LDM0Ljk5NTQxNjJdLCJnZW5lcmF0aW9uSWQiOiIyZDhlYzI3NDZiYjUwMGFiYWNkMGYzODMzMTZkMjM2MTZmY2YxZGM0YjNlMjAxMDRiMTRjMmNiMTM5YWFkNDQ1Iiwia2luZCI6InBsYWNlIn0"
+        }
+      },
+      {
+        "kind": "poi",
+        "name": "Technion Ecological Garden",
+        "displayName": "Technion Ecological Garden",
+        "languageUsed": "en",
+        "locality": "Haifa",
+        "coordinates": {
+          "latitude": 32.7789323,
+          "longitude": 35.0245303
+        },
+        "category": "none",
+        "osmId": "way/[97851263]",
+        "candidateIdentityHash": "b2d3b42b0d18e0fcd316bab793f787dfac2b7561e6e3bc7b1f52014bac99d0ec",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiJiMmQzYjQyYjBkMThlMGZjZDMxNmJhYjc5M2Y3ODdkZmFjMmI3NTYxZTZlM2JjN2IxZjUyMDE0YmFjOTlkMGVjIiwiY29vcmRpbmF0ZXMiOlszMi43Nzg5MzIzLDM1LjAyNDUzMDNdLCJnZW5lcmF0aW9uSWQiOiIyZDhlYzI3NDZiYjUwMGFiYWNkMGYzODMzMTZkMjM2MTZmY2YxZGM0YjNlMjAxMDRiMTRjMmNiMTM5YWFkNDQ1Iiwia2luZCI6InBsYWNlIn0",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiJiMmQzYjQyYjBkMThlMGZjZDMxNmJhYjc5M2Y3ODdkZmFjMmI3NTYxZTZlM2JjN2IxZjUyMDE0YmFjOTlkMGVjIiwiY29vcmRpbmF0ZXMiOlszMi43Nzg5MzIzLDM1LjAyNDUzMDNdLCJnZW5lcmF0aW9uSWQiOiIyZDhlYzI3NDZiYjUwMGFiYWNkMGYzODMzMTZkMjM2MTZmY2YxZGM0YjNlMjAxMDRiMTRjMmNiMTM5YWFkNDQ1Iiwia2luZCI6InBsYWNlIn0"
+        }
+      },
+      {
+        "kind": "poi",
+        "name": "Upper Technion Upper Tram Terminal",
+        "displayName": "Upper Technion Upper Tram Terminal",
+        "languageUsed": "en",
+        "locality": "Haifa",
+        "coordinates": {
+          "latitude": 32.7724793,
+          "longitude": 35.0173088
+        },
+        "category": "none",
+        "osmId": "way/[814912745]",
+        "candidateIdentityHash": "539393429acd1805246afa18040eaaa91c59b2e7e31c2a86cedf32d4843bd46f",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiI1MzkzOTM0MjlhY2QxODA1MjQ2YWZhMTgwNDBlYWFhOTFjNTliMmU3ZTMxYzJhODZjZWRmMzJkNDg0M2JkNDZmIiwiY29vcmRpbmF0ZXMiOlszMi43NzI0NzkzLDM1LjAxNzMwODhdLCJnZW5lcmF0aW9uSWQiOiIyZDhlYzI3NDZiYjUwMGFiYWNkMGYzODMzMTZkMjM2MTZmY2YxZGM0YjNlMjAxMDRiMTRjMmNiMTM5YWFkNDQ1Iiwia2luZCI6InBsYWNlIn0",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiI1MzkzOTM0MjlhY2QxODA1MjQ2YWZhMTgwNDBlYWFhOTFjNTliMmU3ZTMxYzJhODZjZWRmMzJkNDg0M2JkNDZmIiwiY29vcmRpbmF0ZXMiOlszMi43NzI0NzkzLDM1LjAxNzMwODhdLCJnZW5lcmF0aW9uSWQiOiIyZDhlYzI3NDZiYjUwMGFiYWNkMGYzODMzMTZkMjM2MTZmY2YxZGM0YjNlMjAxMDRiMTRjMmNiMTM5YWFkNDQ1Iiwia2luZCI6InBsYWNlIn0"
+        }
+      },
+      {
+        "kind": "poi",
+        "name": "Technion Centre Upper Tram Terminal",
+        "displayName": "Technion Centre Upper Tram Terminal",
+        "languageUsed": "en",
+        "locality": "Haifa",
+        "coordinates": {
+          "latitude": 32.7738067,
+          "longitude": 35.0263184
+        },
+        "category": "none",
+        "osmId": "way/[814912744]",
+        "candidateIdentityHash": "f8c5097f5a4100a190e1e5eeb5ebb4ee2ad0a8567433361ff2951450cd96d0e1",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiJmOGM1MDk3ZjVhNDEwMGExOTBlMWU1ZWViNWViYjRlZTJhZDBhODU2NzQzMzM2MWZmMjk1MTQ1MGNkOTZkMGUxIiwiY29vcmRpbmF0ZXMiOlszMi43NzM4MDY3LDM1LjAyNjMxODRdLCJnZW5lcmF0aW9uSWQiOiIyZDhlYzI3NDZiYjUwMGFiYWNkMGYzODMzMTZkMjM2MTZmY2YxZGM0YjNlMjAxMDRiMTRjMmNiMTM5YWFkNDQ1Iiwia2luZCI6InBsYWNlIn0",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiJmOGM1MDk3ZjVhNDEwMGExOTBlMWU1ZWViNWViYjRlZTJhZDBhODU2NzQzMzM2MWZmMjk1MTQ1MGNkOTZkMGUxIiwiY29vcmRpbmF0ZXMiOlszMi43NzM4MDY3LDM1LjAyNjMxODRdLCJnZW5lcmF0aW9uSWQiOiIyZDhlYzI3NDZiYjUwMGFiYWNkMGYzODMzMTZkMjM2MTZmY2YxZGM0YjNlMjAxMDRiMTRjMmNiMTM5YWFkNDQ1Iiwia2luZCI6InBsYWNlIn0"
+        }
+      },
+      {
+        "kind": "poi",
+        "name": "TechnoGym",
+        "displayName": "TechnoGym",
+        "languageUsed": "en",
+        "locality": "Gaza",
+        "coordinates": {
+          "latitude": 31.5094823,
+          "longitude": 34.4337746
+        },
+        "category": "fitness",
+        "osmId": "way/[297754560]",
+        "candidateIdentityHash": "02a06733e9f4d4f290bd230b572db4c49e2ada3f84185eda4dfc7cd67ab50ce6",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiIwMmEwNjczM2U5ZjRkNGYyOTBiZDIzMGI1NzJkYjRjNDllMmFkYTNmODQxODVlZGE0ZGZjN2NkNjdhYjUwY2U2IiwiY29vcmRpbmF0ZXMiOlszMS41MDk0ODIzLDM0LjQzMzc3NDZdLCJnZW5lcmF0aW9uSWQiOiIyZDhlYzI3NDZiYjUwMGFiYWNkMGYzODMzMTZkMjM2MTZmY2YxZGM0YjNlMjAxMDRiMTRjMmNiMTM5YWFkNDQ1Iiwia2luZCI6InBsYWNlIn0",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiIwMmEwNjczM2U5ZjRkNGYyOTBiZDIzMGI1NzJkYjRjNDllMmFkYTNmODQxODVlZGE0ZGZjN2NkNjdhYjUwY2U2IiwiY29vcmRpbmF0ZXMiOlszMS41MDk0ODIzLDM0LjQzMzc3NDZdLCJnZW5lcmF0aW9uSWQiOiIyZDhlYzI3NDZiYjUwMGFiYWNkMGYzODMzMTZkMjM2MTZmY2YxZGM0YjNlMjAxMDRiMTRjMmNiMTM5YWFkNDQ1Iiwia2luZCI6InBsYWNlIn0"
+        }
+      },
+      {
+        "kind": "poi",
+        "name": "TechnoGym",
+        "displayName": "TechnoGym",
+        "languageUsed": "en",
+        "locality": "Gaza",
+        "coordinates": {
+          "latitude": 31.5095211,
+          "longitude": 34.4335638
+        },
+        "category": "fitness",
+        "osmId": "way/[297754481]",
+        "candidateIdentityHash": "a2f9e0a69ca4eeef3f8ce82c9b4e346a9ebaedb3b5b94a53d780b11ed1d93399",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiJhMmY5ZTBhNjljYTRlZWVmM2Y4Y2U4MmM5YjRlMzQ2YTllYmFlZGIzYjViOTRhNTNkNzgwYjExZWQxZDkzMzk5IiwiY29vcmRpbmF0ZXMiOlszMS41MDk1MjExLDM0LjQzMzU2MzhdLCJnZW5lcmF0aW9uSWQiOiIyZDhlYzI3NDZiYjUwMGFiYWNkMGYzODMzMTZkMjM2MTZmY2YxZGM0YjNlMjAxMDRiMTRjMmNiMTM5YWFkNDQ1Iiwia2luZCI6InBsYWNlIn0",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiJhMmY5ZTBhNjljYTRlZWVmM2Y4Y2U4MmM5YjRlMzQ2YTllYmFlZGIzYjViOTRhNTNkNzgwYjExZWQxZDkzMzk5IiwiY29vcmRpbmF0ZXMiOlszMS41MDk1MjExLDM0LjQzMzU2MzhdLCJnZW5lcmF0aW9uSWQiOiIyZDhlYzI3NDZiYjUwMGFiYWNkMGYzODMzMTZkMjM2MTZmY2YxZGM0YjNlMjAxMDRiMTRjMmNiMTM5YWFkNDQ1Iiwia2luZCI6InBsYWNlIn0"
+        }
+      }
+    ],
+    "meta": {
+      "requestId": "00000000000000000000000000000000",
+      "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+      "generatedAt": "2026-10-31T17:31:08.186255Z",
+      "dataBuiltAt": "2026-10-31T12:18:07.213453Z",
+      "mode": "real",
+      "coverage": {
+        "from": "2026-10-31T00:00:00+02:00",
+        "until": "2026-11-30T00:00:00+02:00"
+      },
+      "freshness": "current",
+      "capabilities": {
+        "realtime": "not_enabled",
+        "alerts": "not_enabled"
+      },
+      "attribution": [
+        "Israel Ministry of Transport",
+        "© OpenStreetMap contributors"
+      ],
+      "rankingPolicy": "motis-v2.11.2-feasible-engine-order-v1",
+      "appliedConstraints": {},
+      "warnings": []
+    },
+    "matchedTypes": [
+      "poi"
+    ],
+    "unavailableTypes": [],
+    "partial": false,
+    "rankingPolicy": "alternating-stop-and-geocoder-order-v1"
+  }
+}

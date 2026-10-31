@@ -1,0 +1,289 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/trips/20261102_07%3A48_mot60day_1_521247",
+    "params": null,
+    "body": null
+  },
+  "status": 200,
+  "body": {
+    "data": {
+      "tripRef": "20261102_07:48_mot60day_1_521247",
+      "sourceTripId": "1_521247",
+      "serviceDate": "2026-11-02",
+      "startTime": "07:48",
+      "routeId": "mot:route:29990",
+      "routeShortName": "",
+      "headsign": "156",
+      "shape": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            35.005712,
+            31.901238
+          ],
+          [
+            34.960682,
+            31.893133
+          ],
+          [
+            34.870481,
+            32.00036
+          ],
+          [
+            34.784839,
+            32.053978
+          ],
+          [
+            34.793256,
+            32.073346
+          ],
+          [
+            34.798247,
+            32.083715
+          ],
+          [
+            34.804499,
+            32.103515
+          ],
+          [
+            34.949573,
+            32.514386
+          ],
+          [
+            34.940314,
+            32.692924
+          ],
+          [
+            34.957404,
+            32.7936
+          ],
+          [
+            34.981888,
+            32.830498
+          ],
+          [
+            34.997177,
+            32.822306
+          ],
+          [
+            35.037079,
+            32.793921
+          ],
+          [
+            35.054514,
+            32.809527
+          ],
+          [
+            35.06429,
+            32.824918
+          ],
+          [
+            35.07003,
+            32.833133
+          ],
+          [
+            35.082984,
+            32.928339
+          ],
+          [
+            35.09871,
+            33.005075
+          ]
+        ]
+      },
+      "calls": [
+        {
+          "callSequence": 1,
+          "ordinal": 0,
+          "stopId": "mot:stop:37394",
+          "scheduledArrival": null,
+          "scheduledDeparture": "2026-11-02T05:48:00Z",
+          "pickupType": 0,
+          "dropOffType": 1
+        },
+        {
+          "callSequence": 2,
+          "ordinal": 1,
+          "stopId": "mot:stop:37396",
+          "scheduledArrival": "2026-11-02T05:54:00Z",
+          "scheduledDeparture": "2026-11-02T05:54:00Z",
+          "pickupType": 0,
+          "dropOffType": 0
+        },
+        {
+          "callSequence": 3,
+          "ordinal": 2,
+          "stopId": "mot:stop:37306",
+          "scheduledArrival": "2026-11-02T06:05:00Z",
+          "scheduledDeparture": "2026-11-02T06:05:00Z",
+          "pickupType": 0,
+          "dropOffType": 0
+        },
+        {
+          "callSequence": 4,
+          "ordinal": 3,
+          "stopId": "mot:stop:37292",
+          "scheduledArrival": "2026-11-02T06:16:00Z",
+          "scheduledDeparture": "2026-11-02T06:16:00Z",
+          "pickupType": 0,
+          "dropOffType": 0
+        },
+        {
+          "callSequence": 5,
+          "ordinal": 4,
+          "stopId": "mot:stop:37350",
+          "scheduledArrival": "2026-11-02T06:21:00Z",
+          "scheduledDeparture": "2026-11-02T06:21:00Z",
+          "pickupType": 0,
+          "dropOffType": 0
+        },
+        {
+          "callSequence": 6,
+          "ordinal": 5,
+          "stopId": "mot:stop:37358",
+          "scheduledArrival": "2026-11-02T06:26:00Z",
+          "scheduledDeparture": "2026-11-02T06:26:00Z",
+          "pickupType": 0,
+          "dropOffType": 0
+        },
+        {
+          "callSequence": 7,
+          "ordinal": 6,
+          "stopId": "mot:stop:37360",
+          "scheduledArrival": "2026-11-02T06:31:00Z",
+          "scheduledDeparture": "2026-11-02T06:31:00Z",
+          "pickupType": 0,
+          "dropOffType": 0
+        },
+        {
+          "callSequence": 8,
+          "ordinal": 7,
+          "stopId": "mot:stop:37372",
+          "scheduledArrival": "2026-11-02T07:01:00Z",
+          "scheduledDeparture": "2026-11-02T07:01:00Z",
+          "pickupType": 0,
+          "dropOffType": 0
+        },
+        {
+          "callSequence": 9,
+          "ordinal": 8,
+          "stopId": "mot:stop:37374",
+          "scheduledArrival": "2026-11-02T07:14:00Z",
+          "scheduledDeparture": "2026-11-02T07:14:00Z",
+          "pickupType": 0,
+          "dropOffType": 0
+        },
+        {
+          "callSequence": 10,
+          "ordinal": 9,
+          "stopId": "mot:stop:37376",
+          "scheduledArrival": "2026-11-02T07:24:00Z",
+          "scheduledDeparture": "2026-11-02T07:24:00Z",
+          "pickupType": 0,
+          "dropOffType": 0
+        },
+        {
+          "callSequence": 11,
+          "ordinal": 10,
+          "stopId": "mot:stop:37378",
+          "scheduledArrival": "2026-11-02T07:31:00Z",
+          "scheduledDeparture": "2026-11-02T07:31:00Z",
+          "pickupType": 0,
+          "dropOffType": 0
+        },
+        {
+          "callSequence": 12,
+          "ordinal": 11,
+          "stopId": "mot:stop:37380",
+          "scheduledArrival": "2026-11-02T07:35:00Z",
+          "scheduledDeparture": "2026-11-02T07:35:00Z",
+          "pickupType": 0,
+          "dropOffType": 0
+        },
+        {
+          "callSequence": 13,
+          "ordinal": 12,
+          "stopId": "mot:stop:37388",
+          "scheduledArrival": "2026-11-02T07:43:00Z",
+          "scheduledDeparture": "2026-11-02T07:43:00Z",
+          "pickupType": 0,
+          "dropOffType": 0
+        },
+        {
+          "callSequence": 14,
+          "ordinal": 13,
+          "stopId": "mot:stop:37386",
+          "scheduledArrival": "2026-11-02T07:48:00Z",
+          "scheduledDeparture": "2026-11-02T07:48:00Z",
+          "pickupType": 0,
+          "dropOffType": 0
+        },
+        {
+          "callSequence": 15,
+          "ordinal": 14,
+          "stopId": "mot:stop:37392",
+          "scheduledArrival": "2026-11-02T07:52:00Z",
+          "scheduledDeparture": "2026-11-02T07:52:00Z",
+          "pickupType": 0,
+          "dropOffType": 0
+        },
+        {
+          "callSequence": 16,
+          "ordinal": 15,
+          "stopId": "mot:stop:41293",
+          "scheduledArrival": "2026-11-02T07:55:00Z",
+          "scheduledDeparture": "2026-11-02T07:55:00Z",
+          "pickupType": 0,
+          "dropOffType": 0
+        },
+        {
+          "callSequence": 17,
+          "ordinal": 16,
+          "stopId": "mot:stop:37384",
+          "scheduledArrival": "2026-11-02T08:04:00Z",
+          "scheduledDeparture": "2026-11-02T08:04:00Z",
+          "pickupType": 0,
+          "dropOffType": 0
+        },
+        {
+          "callSequence": 18,
+          "ordinal": 17,
+          "stopId": "mot:stop:37382",
+          "scheduledArrival": "2026-11-02T08:13:00Z",
+          "scheduledDeparture": null,
+          "pickupType": 1,
+          "dropOffType": 0
+        }
+      ],
+      "timingState": "scheduled",
+      "expectedArrival": null,
+      "expectedDeparture": null,
+      "delaySeconds": null,
+      "alerts": "not_enabled"
+    },
+    "meta": {
+      "requestId": "00000000000000000000000000000000",
+      "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+      "generatedAt": "2026-10-31T17:31:10.038090Z",
+      "dataBuiltAt": "2026-10-31T12:18:07.213453Z",
+      "mode": "real",
+      "coverage": {
+        "from": "2026-10-31T00:00:00+02:00",
+        "until": "2026-11-30T00:00:00+02:00"
+      },
+      "freshness": "current",
+      "capabilities": {
+        "realtime": "not_enabled",
+        "alerts": "not_enabled"
+      },
+      "attribution": [
+        "Israel Ministry of Transport",
+        "© OpenStreetMap contributors"
+      ],
+      "rankingPolicy": "motis-v2.11.2-feasible-engine-order-v1",
+      "appliedConstraints": {},
+      "warnings": []
+    }
+  }
+}

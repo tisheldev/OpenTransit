@@ -29,12 +29,12 @@ const core = {
   "screen.backHome": "חזרה לבית",
 
   "nav.back": "חזרה",
-  "nav.locate": "המיקום שלי",
+  "nav.locate": "מרכוז המפה על המיקום שלי",
 
   "settings.language": "שפה",
   "settings.language.he": "עברית",
   "settings.language.en": "English",
-  "settings.clearData": "מחיקת כל הנתונים המקומיים",
+  "settings.clearData": "מחיקת כל הנתונים במכשיר",
   "settings.clearData.confirm": "למחוק את המקומות השמורים, החיפושים האחרונים וההגדרות מהמכשיר הזה?",
   "settings.clearData.done": "הנתונים המקומיים נמחקו.",
 
@@ -53,7 +53,7 @@ const core = {
   "time.arriveBy": "הגעה עד",
 
   "state.loading": "טוענים…",
-  "state.retry": "לנסות שוב",
+  "state.retry": "נסו שוב",
   "state.retryIn": "אפשר לנסות שוב בעוד {seconds} שנ׳",
   "state.empty.noRoute": "לא נמצא מסלול בשעה הזאת. נסו שעה אחרת או נקודה קרובה.",
   "state.empty.noDepartures": "אין יציאות מתוכננות בטווח הזה.",

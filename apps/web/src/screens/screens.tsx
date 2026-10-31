@@ -10,7 +10,9 @@ import { StopScreen } from "./secondary/StopScreen";
 import { TripScreen } from "./secondary/TripScreen";
 import { SettingsScreen } from "./settings/SettingsScreen";
 
-// The sheet's content for each route (design: Surface). Each screen owns its folder.
+// The sheet's content for each route (design: Surface). Each screen owns its folder,
+// renders its own <h1> and publishes its map scene; the shell (src/shell/Shell.tsx)
+// places it in the bottom sheet and moves focus to it on navigation.
 
 export function Screen({ route }: { route: Route }) {
   const { t } = useI18n();
@@ -18,7 +20,7 @@ export function Screen({ route }: { route: Route }) {
     case "home":
       return <HomeScreen />;
     case "search":
-      return <SearchScreen field={route.field} />;
+      return <SearchScreen key={route.field} field={route.field} />;
     case "compare":
       return <CompareScreen />;
     case "navigate":
