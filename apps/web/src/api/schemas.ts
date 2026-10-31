@@ -1,6 +1,8 @@
 import { z } from "zod";
 import type { JourneyResponse, Problem } from "./types";
 
+z.config({ jitless: true });
+
 // Objects are loose: the API may add fields (M7 adds response models and departure
 // operator/mode), and an addition must not break the client. Fields the client reads
 // are required with their exact nullability, so a removal or type change fails loudly.
