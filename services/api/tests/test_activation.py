@@ -37,7 +37,8 @@ class FakeClient:
 
 
 @pytest.fixture
-def generation_factory(inputs, tmp_path):
+def generation_factory(current_inputs, tmp_path):
+    inputs = current_inputs
     provenance_path = inputs / "provenance.json"
     provenance = json.loads(provenance_path.read_text(encoding="utf-8"))
     checked = (datetime.now(UTC) - timedelta(minutes=1)).isoformat()

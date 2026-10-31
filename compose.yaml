@@ -24,6 +24,11 @@ services:
       OPENTRANSIT_MOTIS_URL: http://motis:8080
       OPENTRANSIT_MANIFEST: /generation/manifest.json
       OPENTRANSIT_PLAYGROUND: "1"
+      # Same as the API defaults when unset: limiter on, no trusted proxies. Set
+      # OPENTRANSIT_RATE_LIMIT_ENABLED=0 for load/corpus runs; set OPENTRANSIT_TRUSTED_PROXIES
+      # (CIDR list) only when a reverse proxy fronts this service.
+      OPENTRANSIT_RATE_LIMIT_ENABLED: ${OPENTRANSIT_RATE_LIMIT_ENABLED:-1}
+      OPENTRANSIT_TRUSTED_PROXIES: ${OPENTRANSIT_TRUSTED_PROXIES:-}
     volumes:
       - ${OPENTRANSIT_GENERATION_DIR:?Set generation directory using generated compose.env}:/generation:ro
     depends_on:
