@@ -50,7 +50,7 @@ TARGET="--region eu-north-1 --cluster opentransit-h1 --service opentransit-h1 --
   execution role, then `$H1 inventory --label after`. ECR repositories and images are kept. Also
   disable the scheduled task `OpenTransit H-1 daily refresh`.
 
-**Daily refresh.** Windows Task Scheduler on the operator machine runs
+**Daily refresh.** Once registered (`powershell -ExecutionPolicy Bypass -File D:/ot/src-<commit>/deploy/aws/scheduler/register-task.ps1`, which also disables the old fetch-only task; not yet done), Windows Task Scheduler on the operator machine runs
 `D:/ot/src-<commit>/deploy/aws/scheduler/daily-refresh.cmd` at 06:30 local (task
 `OpenTransit H-1 daily refresh`): fetch → validate → build-generation (only if the
 GTFS/TripIdToDate pair changed) → local probe (new builds only) → publish/push → ALB probe →

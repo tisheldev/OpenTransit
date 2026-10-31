@@ -912,6 +912,282 @@
       },
       "maxTasksObserved": 2,
       "note": "Both directions used publish_generation.py rollback --execute-aws --wait; ECS rolling 200/100 kept at most two tasks (6 GiB allocated)"
+    },
+    "dailyRefresh": {
+      "wrapper": "D:/ot/src-<commit>/deploy/aws/scheduler/daily-refresh.cmd, run manually via cmd (Task Scheduler registration was blocked for the agent; deploy/aws/scheduler/register-task.ps1 is for the user)",
+      "runs": [
+        {
+          "log": "D:/ot/logs/daily-20261031T1818Z.log",
+          "outcome": "failed",
+          "failure": "TypeError: Job.record() got multiple values for argument 'ok'",
+          "startedAt": "2026-10-31T18:18:11+00:00",
+          "finishedAt": "2026-10-31T18:41:29+00:00",
+          "source": {
+            "pairedValidation": "passed",
+            "changedFromServing": false,
+            "sha256": {
+              "israel-public-transportation.zip": "147d086084c3",
+              "TripIdToDate.zip": "2537dcb9b690"
+            }
+          },
+          "steps": [
+            {
+              "step": "fetch",
+              "at": "2026-10-31T18:22:17+00:00",
+              "ok": true,
+              "seconds": 246.0
+            },
+            {
+              "step": "validate",
+              "at": "2026-10-31T18:25:59+00:00",
+              "ok": true,
+              "seconds": 222.0
+            },
+            {
+              "step": "build-generation",
+              "at": "2026-10-31T18:25:59+00:00",
+              "ok": true,
+              "skipped": "feed pair unchanged since the serving build"
+            },
+            {
+              "step": "probe",
+              "at": "2026-10-31T18:25:59+00:00",
+              "ok": true,
+              "skipped": "no new generation; the in-task verifier probes it"
+            },
+            {
+              "step": "publish",
+              "at": "2026-10-31T18:26:08+00:00",
+              "ok": true,
+              "seconds": 9.0
+            },
+            {
+              "step": "push",
+              "at": "2026-10-31T18:41:25+00:00",
+              "ok": true,
+              "seconds": 917.1
+            }
+          ],
+          "deployed": {
+            "taskDefinition": "opentransit-h1:4",
+            "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+            "sourceCheckedAt": "2026-10-31T18:18:12.369861+00:00",
+            "deployment": {
+              "startedAt": "2026-10-31T18:26:23+00:00",
+              "seconds": 902.1,
+              "deployments": 1,
+              "rolloutState": "COMPLETED",
+              "taskDefinition": "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:task-definition/opentransit-h1:4",
+              "runningCount": 1,
+              "desiredCount": 1,
+              "converged": true
+            },
+            "pushes": {
+              "motis": {
+                "digest": "sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330",
+                "pushed": false
+              },
+              "api": {
+                "tag": "gen-2d8ec2746bb5-33be0e2d5085",
+                "digest": "sha256:114fc4977595e7c9dc0e4002324c857abbf53950b0b0f90b829acaed43544287",
+                "pushed": false,
+                "seconds": 1.3
+              },
+              "data": {
+                "tag": "gen-2d8ec2746bb5-70f33ec4af67",
+                "digest": "sha256:64eb35650eadf73cbb6619d2ad571655afd7ab351f864412698d5f9c87c51059",
+                "pushed": false,
+                "seconds": 1.3
+              },
+              "photon": {
+                "tag": "gen-2d8ec2746bb5-96aadfab3ee7",
+                "digest": "sha256:52f94ba3722d73dc06022ffa8a1392ca96bff5418ae3f85ce54c725ab3803e83",
+                "pushed": false,
+                "seconds": 1.2
+              }
+            }
+          },
+          "retentionCandidates": [],
+          "note": "Deployed revision 4 (converged), then crashed recording the ALB probe (duplicate 'ok' keyword); fixed in daily_refresh.py and the whole job re-run"
+        },
+        {
+          "log": "D:/ot/logs/daily-20261031T1842Z.log",
+          "outcome": "ok",
+          "failure": null,
+          "startedAt": "2026-10-31T18:42:41+00:00",
+          "finishedAt": "2026-10-31T19:04:27+00:00",
+          "source": {
+            "pairedValidation": "passed",
+            "changedFromServing": false,
+            "sha256": {
+              "israel-public-transportation.zip": "147d086084c3",
+              "TripIdToDate.zip": "2537dcb9b690"
+            }
+          },
+          "steps": [
+            {
+              "step": "fetch",
+              "at": "2026-10-31T18:46:21+00:00",
+              "ok": true,
+              "seconds": 220.6
+            },
+            {
+              "step": "validate",
+              "at": "2026-10-31T18:49:59+00:00",
+              "ok": true,
+              "seconds": 217.6
+            },
+            {
+              "step": "build-generation",
+              "at": "2026-10-31T18:49:59+00:00",
+              "ok": true,
+              "skipped": "feed pair unchanged since the serving build"
+            },
+            {
+              "step": "probe",
+              "at": "2026-10-31T18:49:59+00:00",
+              "ok": true,
+              "skipped": "no new generation; the in-task verifier probes it"
+            },
+            {
+              "step": "publish",
+              "at": "2026-10-31T18:50:04+00:00",
+              "ok": true,
+              "seconds": 4.8
+            },
+            {
+              "step": "push",
+              "at": "2026-10-31T19:04:00+00:00",
+              "ok": true,
+              "seconds": 836.2
+            },
+            {
+              "step": "alb-probe",
+              "at": "2026-10-31T19:04:04+00:00",
+              "ok": true,
+              "seconds": 4.0,
+              "readyz": {
+                "status": 200,
+                "ms": 208.7
+              },
+              "journeys": [
+                {
+                  "id": "J01",
+                  "status": 200,
+                  "ms": 216.9,
+                  "pass": true
+                },
+                {
+                  "id": "J04",
+                  "status": 200,
+                  "ms": 204.8,
+                  "pass": true
+                },
+                {
+                  "id": "J11",
+                  "status": 200,
+                  "ms": 217.5,
+                  "pass": true
+                },
+                {
+                  "id": "J12",
+                  "status": 200,
+                  "ms": 203.9,
+                  "pass": true
+                },
+                {
+                  "id": "J15",
+                  "status": 200,
+                  "ms": 324.7,
+                  "pass": true
+                },
+                {
+                  "id": "J16",
+                  "status": 200,
+                  "ms": 215.6,
+                  "pass": true
+                },
+                {
+                  "id": "J19",
+                  "status": 200,
+                  "ms": 339.0,
+                  "pass": true
+                },
+                {
+                  "id": "J21",
+                  "status": 200,
+                  "ms": 198.5,
+                  "pass": true
+                },
+                {
+                  "id": "J22",
+                  "status": 200,
+                  "ms": 296.0,
+                  "pass": true
+                },
+                {
+                  "id": "J23",
+                  "status": 200,
+                  "ms": 182.5,
+                  "pass": true
+                }
+              ],
+              "journeysPassed": 10,
+              "demoExit": 0
+            },
+            {
+              "step": "retention",
+              "at": "2026-10-31T19:04:27+00:00",
+              "ok": true,
+              "seconds": 22.5
+            }
+          ],
+          "deployed": {
+            "taskDefinition": "opentransit-h1:5",
+            "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+            "sourceCheckedAt": "2026-10-31T18:42:42.027547+00:00",
+            "deployment": {
+              "startedAt": "2026-10-31T18:50:19+00:00",
+              "seconds": 820.8,
+              "deployments": 1,
+              "rolloutState": "COMPLETED",
+              "taskDefinition": "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:task-definition/opentransit-h1:5",
+              "runningCount": 1,
+              "desiredCount": 1,
+              "converged": true
+            },
+            "pushes": {
+              "motis": {
+                "digest": "sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330",
+                "pushed": false
+              },
+              "api": {
+                "tag": "gen-2d8ec2746bb5-33be0e2d5085",
+                "digest": "sha256:114fc4977595e7c9dc0e4002324c857abbf53950b0b0f90b829acaed43544287",
+                "pushed": false,
+                "seconds": 1.3
+              },
+              "data": {
+                "tag": "gen-2d8ec2746bb5-70f33ec4af67",
+                "digest": "sha256:64eb35650eadf73cbb6619d2ad571655afd7ab351f864412698d5f9c87c51059",
+                "pushed": false,
+                "seconds": 1.3
+              },
+              "photon": {
+                "tag": "gen-2d8ec2746bb5-96aadfab3ee7",
+                "digest": "sha256:52f94ba3722d73dc06022ffa8a1392ca96bff5418ae3f85ce54c725ab3803e83",
+                "pushed": false,
+                "seconds": 1.3
+              }
+            }
+          },
+          "retentionCandidates": [
+            "D:\\ot\\generations\\oct1a",
+            "D:\\ot\\generations\\oct1b"
+          ]
+        }
+      ],
+      "freshness": "oct31a renewed in-task to sourceCheckedAt 2026-10-31T18:42:42Z (revision 5): serviceable until 2026-11-07T18:42Z without a further renewal"
     }
   },
   "costEstimate": {
@@ -973,5 +1249,10 @@
       "pushedAt": "2026-10-31T17:06:14+00:00",
       "source": "pushed in H-0"
     }
-  ]
+  ],
+  "measuredCost": {
+    "checkedAt": "2026-10-31T19:00Z",
+    "source": "Cost Explorer get-cost-and-usage, daily by service, 30-31 Oct",
+    "result": "no charges reported yet for 31 Oct (Cost Explorer lags up to 24 h); re-check on 1-2 November"
+  }
 }

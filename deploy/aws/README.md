@@ -36,7 +36,7 @@
 | `tools/h0_bounded_test.py` | Bounded H-0 runner: setup, push, register, service, wait-ready, probe, metrics, export-logs, cleanup, inventory; records every resource in the evidence file as it is created ([below](#bounded-h-0-test-31-october-2026)) | Run 31 October; `--dry-run` prints commands only |
 | `tools/publish_generation.py` | H-1 publisher: verify, stage/build or reuse local images, source-check renewal, render a digest-pinned revision, retention and rollback plans, `push --execute-aws` and `rollback --execute-aws` ([below](#h-1-generation-publisher)) | Tested; push and rollback first run 31 October on H-1 |
 | `tools/h1_preview.py` | H-1 preview runner (the H-0 runner with H-1 names): estimate, setup, adopt-images, register, service, wait-ready, probe, converge, pause/resume, cleanup (with `--dry-run`), inventory | Run 31 October; cleanup dry-run only |
-| `tools/daily_refresh.py`, `scheduler/daily-refresh.cmd` | Daily refresh job for Windows Task Scheduler (06:30 local) | Registered and run once 31 October |
+| `tools/daily_refresh.py`, `scheduler/daily-refresh.cmd` | Daily refresh job for Windows Task Scheduler (06:30 local) | Run end to end once 31 October (manually); scheduled-task registration pending (user runs `register-task.ps1`) |
 
 `{{TOKENS}}` are deliberate placeholders; the validator rejects unknown tokens, literal
 12-digit account IDs and secret-like text. The MOTIS image digest is the one pinned in
@@ -357,6 +357,57 @@ session scratchpad, not in Git.
 **Still open for H-1:** a week of unattended refreshes (the H-1 acceptance), a credential that
 outlives an `aws login` session for unattended pushes, HTTPS (needs a domain), and a cloud build
 host (deferred as a user decision; the operator machine builds for the preview).
+
+## H-1 private preview, 31 October 2026
+
+Running and left running (task from the coordinating session, 31 October; the user decisions of the
+H-0 approval apply: `eu-north-1`, 1 vCPU / 3 GiB with Photon, 8 GiB ceiling on allocated memory,
+reviewer CIDR `93.173.37.36/32`, HTTP only because there is no domain). Spending guard: $30/week
+pre-tax; the recorded projection is about **$18.15/week** (Fargate $9.95, ALB $4.02 + LCU upper bound
+$1.28, three public IPv4 addresses $2.52, rollout overlap ≈ $0.18, ECR ≤ $0.15, logs ≈ $0.06), from
+Price List API rates in the [evidence](../../services/api/results/h1-preview-20261031-01.json).
+
+Built by `tools/h1_preview.py setup` (the H-0 runner with H-1 names; tags `Project=OpenTransit`,
+`Purpose=H1`): VPC `10.80.0.0/16`, internet gateway, route table, two public subnets
+(`eu-north-1a`/`b`, no NAT), ALB security group (HTTP:80 from the reviewer CIDR only, egress 8000 to
+the task group) and task security group (8000 from the ALB group, egress 443), target group with the
+H-0 health check (`/readyz`, 10 s / 2 s / 2 / 2, 30 s deregistration), internet-facing ALB with an
+HTTP:80 listener, cluster `opentransit-h1` (Container Insights off), log group `/opentransit/h1`
+(14 days), execution role `opentransit-h1-execution` (pull the four repositories, write the one log
+group). **No task role**: the serving task needs no AWS API access, so least privilege is none
+(the validator rejects a task role). Service `opentransit-h1`: desired 1, rolling 200/100 with circuit
+breaker rollback, grace 1200 s, so a rollout runs at most two 3 GiB tasks. The four H-0 ECR
+repositories are reused, never created or deleted by these tools.
+
+```sh
+H1="uv run --project services/api --locked python deploy/aws/tools/h1_preview.py"
+$H1 estimate && $H1 setup && $H1 adopt-images --tag h0-20261031
+$H1 register && $H1 service --desired 1 && $H1 wait-ready --label first-deploy
+$H1 probe --label first-deploy --queries services/api/results/h0-fargate-20261031-01/probe-queries.json
+$H1 --dry-run cleanup      # prints the teardown; run without --dry-run only to remove H-1
+```
+
+Measured on 31 October (all in the evidence): task creation → `/readyz` 200 through the ALB in
+**699 s** (image pull 39 s); demo exit 0 and 10/10 probe journeys; from Israel `/healthz` median
+175 ms; the web client's `@real` Playwright tests passed against the ALB (2/2). Publisher runs:
+revision 2 from the H-0 images (`--local-image`, pushes resolved to the H-0 digests, converged
+893 s); revision 3 with this branch's API image and a renewing source check (804 s); rollback drill
+3 → 2 (898 s, probe 10/10) and forward 2 → 3 (813 s), each with at most two tasks; revision 4 from
+the daily job (902 s). Rollouts take 13–15 minutes because the replacement task must pass the
+verifier and API startup before the old one drains. The daily job's clean run (18:42–19:04 UTC) renewed `oct31a` to 18:42 UTC as revision 5 (all pushes skipped; ALB probe 10/10, demo 0).
+
+**Freshness renewal in the task.** `opentransit probe` accepts a later same-hash paired check
+(`--source-check` or the inline `OPENTRANSIT_SOURCE_CHECK_RECORD`), writes it exclusively to
+`source-check.json` beside its report and applies the same `apply_source_check` rule as the API;
+the publisher's `--source-check` adds that record (only the fields the rule reads, < 1 KiB) to the
+verifier and `OPENTRANSIT_SOURCE_CHECK=/run/opentransit/source-check.json` to the API. An unchanged
+generation is therefore renewed by a new revision with the same data image, not by a rebuild; it
+still needs a task replacement (no hot reload).
+
+**Daily refresh** (`tools/daily_refresh.py`, `scheduler/daily-refresh.cmd`, registration
+`scheduler/register-task.ps1`): see [operations](../../docs/operations.md#h-1-private-preview-eu-north-1-running-since-31-october-2026).
+The build host for the preview is this Windows machine (default pending the user's confirmation);
+generations stay on `D:/ot/`, images in ECR, evidence in Git; S3 is deferred.
 
 ## Bounded H-0 test, 31 October 2026
 
