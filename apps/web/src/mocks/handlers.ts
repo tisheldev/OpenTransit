@@ -1,5 +1,6 @@
 import { delay, http, HttpResponse } from "msw";
 import { fixture, fixtures, type Fixture } from "../api/fixtures";
+import { derivedEngineTimeout, derivedJourneyFixtures, derivedTrip } from "../screens/compare/derivedFixtures";
 
 // MSW handlers that answer every public endpoint from fixtures. Used by Vitest (node)
 // and by the dev server's `fixtures` mode (browser), so mocked e2e needs no API.
@@ -90,6 +91,40 @@ const tripsByRef = new Map(
     .map(([, found]) => [(found.body as { data: { tripRef: string } }).data.tripRef, found]),
 );
 
+// --- journeys (slice S5): one scenario per Compare state -----------------------
+
+/** Journey requests answered so far in this page (the "...-once" scenarios fail first). */
+let journeyCalls = 0;
+
+function journeyAnswer(): HttpResponse<string> {
+  journeyCalls += 1;
+  const three = () => respond(derivedJourneyFixtures["derived-journey-three"]());
+  switch (scenario()) {
+    case "compare-one":
+      return send("recorded-journey-routes");
+    case "compare-two":
+      return respond(derivedJourneyFixtures["derived-journey-two"]());
+    case "compare-no-route":
+      return respond(derivedJourneyFixtures["derived-journey-no-route"]());
+    case "compare-walk-only":
+      return respond(derivedJourneyFixtures["derived-journey-walk-only"]());
+    case "compare-outside-window":
+      return send("recorded-problem-outside-window");
+    case "compare-unavailable":
+      return send("recorded-problem-not-ready");
+    case "compare-unavailable-once":
+      return journeyCalls === 1 ? send("recorded-problem-not-ready") : three();
+    case "compare-timeout":
+      return respond(derivedEngineTimeout());
+    case "compare-rate-limited":
+      return send("synthetic-problem-rate-limited");
+    case "compare-offline":
+      return HttpResponse.error() as unknown as HttpResponse<string>;
+    default:
+      return three();
+  }
+}
+
 export const handlers = [
   http.get("*/v1/status", () => {
     switch (scenario()) {
@@ -130,10 +165,12 @@ export const handlers = [
     return send("recorded-places-stop-he");
   }),
 
-  http.post("*/v1/journeys", () => send("recorded-journey-routes")),
+  http.post("*/v1/journeys", () => journeyAnswer()),
 
   http.get("*/v1/trips/:tripRef", ({ params }) => {
-    const found = tripsByRef.get(decoded(params.tripRef));
+    if (scenario() === "compare-trip-failed") return send("recorded-problem-not-ready");
+    const ref = decoded(params.tripRef);
+    const found = tripsByRef.get(ref) ?? derivedTrip(ref);
     return found ? respond(found) : send("recorded-problem-trip-not-found");
   }),
 
