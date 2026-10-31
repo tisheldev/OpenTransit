@@ -449,8 +449,9 @@ def refresh(job: Job) -> int:
     # 7. post-deploy probe through the ALB
     started = time.monotonic()
     probe = alb_probe(job, alb_url(REPO), corpus_path)
-    job.record("alb-probe", probe["ok"], seconds=time.monotonic() - started, **probe)
-    if not probe["ok"]:
+    passed = probe.pop("ok")
+    job.record("alb-probe", passed, seconds=time.monotonic() - started, **probe)
+    if not passed:
         raise StepFailed("post-deploy ALB probe failed (previous release: see current.json)")
 
     # 8. retention: candidates only

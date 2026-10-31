@@ -742,6 +742,176 @@
       "result": "2 passed (4.1 s): dev proxy /v1/status ready+real+realtime not_enabled; real engine trip ID opens through the encoded /v1/trips path with matching tripRef",
       "project": "mobile-chromium (Pixel 7, 360x640)",
       "notRun": "npm run fixtures:record (writes apps/web fixtures owned by the CLIENT task)"
+    },
+    "publisher": {
+      "note": "First executions of publish_generation.py push --execute-aws (operator machine, 31 Oct). Release records kept in D:/ot/releases (not in Git).",
+      "r2ExistingImages": {
+        "plan": "publish --local-image api=ot-h0-api:local data=ot-h0-data:local photon=ot-t5-photon:local (no build)",
+        "result": "MOTIS mirror skipped (digest present); api/data/photon pushed under new gen-<id12>-<image12> tags in 3.3-3.4 s each, resolving to the same registry digests as H-0 (no-op by digest); revision 2 registered; update-service converged with one task",
+        "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+        "taskDefinitionArn": "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:task-definition/opentransit-h1:2",
+        "images": {
+          "api": "sha256:0d501f356ab5a1af6cfd02ea0aa2610e05166e85bf14521a676318358f5a57d8",
+          "data": "sha256:64eb35650eadf73cbb6619d2ad571655afd7ab351f864412698d5f9c87c51059",
+          "photon": "sha256:52f94ba3722d73dc06022ffa8a1392ca96bff5418ae3f85ce54c725ab3803e83"
+        },
+        "localImageIds": {
+          "api": "sha256:fa1914fda8d9c8467a739dfba18e82a9bbec7a0039399bd8268f3fb2eb0d80e1",
+          "data": "sha256:70f33ec4af6721e974597caa4d52e60fe469b669a068d413e9037f2ed0c95778",
+          "photon": "sha256:96aadfab3ee73434d5f0d6e826355d95760588021b46b4152a95aa8b3bc93b93"
+        },
+        "pushes": {
+          "motis": {
+            "digest": "sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330",
+            "pushed": false
+          },
+          "api": {
+            "tag": "gen-2d8ec2746bb5-fa1914fda8d9",
+            "digest": "sha256:0d501f356ab5a1af6cfd02ea0aa2610e05166e85bf14521a676318358f5a57d8",
+            "pushed": true,
+            "seconds": 3.4
+          },
+          "data": {
+            "tag": "gen-2d8ec2746bb5-70f33ec4af67",
+            "digest": "sha256:64eb35650eadf73cbb6619d2ad571655afd7ab351f864412698d5f9c87c51059",
+            "pushed": true,
+            "seconds": 3.3
+          },
+          "photon": {
+            "tag": "gen-2d8ec2746bb5-96aadfab3ee7",
+            "digest": "sha256:52f94ba3722d73dc06022ffa8a1392ca96bff5418ae3f85ce54c725ab3803e83",
+            "pushed": true,
+            "seconds": 3.4
+          }
+        },
+        "sourceCheckedAt": "2026-10-31T12:00:20.906984+00:00",
+        "registeredAt": "2026-10-31T17:19:46+00:00",
+        "deployment": {
+          "startedAt": "2026-10-31T17:19:48+00:00",
+          "seconds": 892.6,
+          "deployments": 1,
+          "rolloutState": "COMPLETED",
+          "taskDefinition": "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:task-definition/opentransit-h1:2",
+          "runningCount": 1,
+          "desiredCount": 1,
+          "converged": true
+        },
+        "sourceCheck": null
+      },
+      "r3Renewal": {
+        "plan": "publish --local-image api=ot-h1-api:20261031a (this branch: probe source-check support) + H-0 data/photon --source-check D:/ot/src/checks/20261031T172006Z-673a7d51.json (unchanged GTFS 147d0860/TripIdToDate 2537dcb9, paired validation passed)",
+        "result": "verifier exit 0 with the inline record; API started with OPENTRANSIT_SOURCE_CHECK; /v1/status freshness current",
+        "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+        "taskDefinitionArn": "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:task-definition/opentransit-h1:3",
+        "images": {
+          "api": "sha256:114fc4977595e7c9dc0e4002324c857abbf53950b0b0f90b829acaed43544287",
+          "data": "sha256:64eb35650eadf73cbb6619d2ad571655afd7ab351f864412698d5f9c87c51059",
+          "photon": "sha256:52f94ba3722d73dc06022ffa8a1392ca96bff5418ae3f85ce54c725ab3803e83"
+        },
+        "localImageIds": {
+          "api": "sha256:33be0e2d508581d0f3a2df13d509c09d38368b8b3b558493c6fb147e4ff037e5",
+          "data": "sha256:70f33ec4af6721e974597caa4d52e60fe469b669a068d413e9037f2ed0c95778",
+          "photon": "sha256:96aadfab3ee73434d5f0d6e826355d95760588021b46b4152a95aa8b3bc93b93"
+        },
+        "pushes": {
+          "motis": {
+            "digest": "sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330",
+            "pushed": false
+          },
+          "api": {
+            "tag": "gen-2d8ec2746bb5-33be0e2d5085",
+            "digest": "sha256:114fc4977595e7c9dc0e4002324c857abbf53950b0b0f90b829acaed43544287",
+            "pushed": true,
+            "seconds": 9.6
+          },
+          "data": {
+            "tag": "gen-2d8ec2746bb5-70f33ec4af67",
+            "digest": "sha256:64eb35650eadf73cbb6619d2ad571655afd7ab351f864412698d5f9c87c51059",
+            "pushed": false,
+            "seconds": 1.5
+          },
+          "photon": {
+            "tag": "gen-2d8ec2746bb5-96aadfab3ee7",
+            "digest": "sha256:52f94ba3722d73dc06022ffa8a1392ca96bff5418ae3f85ce54c725ab3803e83",
+            "pushed": false,
+            "seconds": 1.6
+          }
+        },
+        "sourceCheckedAt": "2026-10-31T17:20:01.268427+00:00",
+        "registeredAt": "2026-10-31T17:35:17+00:00",
+        "deployment": {
+          "startedAt": "2026-10-31T17:35:19+00:00",
+          "seconds": 804.4,
+          "deployments": 1,
+          "rolloutState": "COMPLETED",
+          "taskDefinition": "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:task-definition/opentransit-h1:3",
+          "runningCount": 1,
+          "desiredCount": 1,
+          "converged": true
+        },
+        "sourceCheck": {
+          "pairedValidation": "passed",
+          "record": {
+            "name": "20261031T172006Z-673a7d51.json",
+            "sha256": "58db71b68e6b2534bb7c0dad00c20d86b445f0b93c5f5be127ba11166130c512"
+          },
+          "sources": {
+            "gtfs": {
+              "checkedAt": "2026-10-31T17:20:01.268427+00:00",
+              "sha256": "147d086084c3df0c6ccf4197126b91bf00a91e9c658b6016e647a3802b3735be",
+              "status": "unchanged"
+            },
+            "trip_id_to_date": {
+              "checkedAt": "2026-10-31T17:20:01.268427+00:00",
+              "sha256": "2537dcb9b690421b7bf0cc4428542e5b5218a90315a2943582662c9ecad63a4d",
+              "status": "unchanged"
+            }
+          },
+          "validatedAt": "2026-10-31T17:23:48.216018+00:00",
+          "validation": {
+            "valid": true
+          }
+        }
+      },
+      "fixesFromReality": [
+        "Windows Docker credential store rejects ECR tokens: throwaway DOCKER_CONFIG",
+        "aws calls without --profile: --profile option",
+        "H-0 family and log group: render_drafts.retarget to opentransit-h1 and /opentransit/h1",
+        "immutable repositories and reused tags: tag gen-<generation12>-<local image12>, skip push when the tag exists",
+        "registry digest from local RepoDigests could pick the H-0 entry: read the digest from ECR describe-images",
+        "no wait or executable rollback: --wait and rollback --execute-aws",
+        "push accepted only --build plans: existing-images mode"
+      ]
+    },
+    "rollbackDrill": {
+      "from": "opentransit-h1:3 (R3)",
+      "to": "opentransit-h1:2 (R2) via rollback plan",
+      "rollback": {
+        "startedAt": "2026-10-31T17:49:05+00:00",
+        "allowed": true,
+        "freshness": "current",
+        "seconds": 898.3,
+        "deployments": 1,
+        "rolloutState": "COMPLETED",
+        "taskDefinition": "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:task-definition/opentransit-h1:2",
+        "runningCount": 1,
+        "desiredCount": 1,
+        "converged": true
+      },
+      "probeAfterRollback": "see probes[label=rollback-drill-rev2]",
+      "rollForward": {
+        "to": "opentransit-h1:3",
+        "startedAt": "2026-10-31T18:04:22+00:00",
+        "seconds": 813.3,
+        "deployments": 1,
+        "rolloutState": "COMPLETED",
+        "taskDefinition": "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:task-definition/opentransit-h1:3",
+        "runningCount": 1,
+        "desiredCount": 1,
+        "converged": true
+      },
+      "maxTasksObserved": 2,
+      "note": "Both directions used publish_generation.py rollback --execute-aws --wait; ECS rolling 200/100 kept at most two tasks (6 GiB allocated)"
     }
   },
   "costEstimate": {
