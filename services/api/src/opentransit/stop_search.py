@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import heapq
 import math
 import re
 import sqlite3
@@ -9,11 +10,14 @@ import statistics
 import threading
 import unicodedata
 import weakref
-from collections.abc import Callable
+from array import array
+from bisect import bisect_right
+from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 from typing import Any
 
 from opentransit.reference import STOP_PREFIX, ReferenceStore
+from opentransit.search_cache import STOP_RESULT_CACHE_ENTRIES, ResultCache
 
 SUPPORTED_TYPES = frozenset({"stop", "station"})
 KNOWN_TYPES = SUPPORTED_TYPES | {"poi", "address"}
@@ -309,6 +313,140 @@ def _locality_name_forms(name: str) -> list[str]:
     return list(dict.fromkeys(forms))
 
 
+# A query of one or two characters has no trigram to probe, so every stop would be
+# scored in Python (120-250 ms on the national feed), and ranking then groups every
+# match (up to all 35,000 stops). Both steps are precomputed or bounded instead.
+_SHORT_QUERY_MAX_CHARS = 2
+_WORD_START = re.compile(r"(?<!\S)\S{1,2}")
+# Per-label separator of the substring blob; normalized labels never contain it
+# (normalization splits on whitespace and rejoins with single spaces).
+_LABEL_SEPARATOR = "\n"
+# Level-4 (substring) row lists computed on demand and kept for repeats.
+_SUPERSET_MEMO_ENTRIES = 64
+_FAR_PENALTY = 2
+
+
+def _is_short_query(query: str) -> bool:
+    """A single token of one or two characters: the case ``matching_rows`` cannot filter."""
+    return 0 < len(query) <= _SHORT_QUERY_MAX_CHARS and not any(c.isspace() for c in query)
+
+
+class _ShortQueryScores:
+    """Exact ``_score_normalized`` results for every one- and two-character query.
+
+    For a single token of at most two characters the scorer is five string predicates
+    over a row's labels: the stop code equals the query (0), a label equals it (1), a
+    label starts with it (2), a word of a label starts with it (3), or it occurs inside
+    a label or the code (4). Levels 0-3 depend only on the leading one or two characters
+    of a label or word, so one pass over the labels records the rows of every such
+    string; they are built with the index. Level 4 is the superset (every row containing
+    the string anywhere): it would be the bulk of the memory and build time, and most
+    queries never need it, so it is found on demand with a substring scan of one blob
+    and kept for repeats. Rows come out in ascending order per level; a row listed at a
+    better level scores that level. ``ascii_only`` limits the keys to ASCII strings (the
+    transliteration-folded pass is only queried by Latin text).
+    """
+
+    def __init__(
+        self, labels: list[list[str]], codes: list[str] | None, *, ascii_only: bool = False
+    ) -> None:
+        levels: tuple[dict[str, array], ...] = tuple({} for _ in range(4))
+        code_rows: dict[str, array] = {}
+        starts = array("I")
+        offset = 0
+        for row_index, row_labels in enumerate(labels):
+            starts.append(offset)
+            tiers: tuple[set[str], ...] = tuple(set() for _ in range(4))
+            code = codes[row_index] if codes is not None else ""
+            if code and len(code) <= _SHORT_QUERY_MAX_CHARS:
+                tiers[0].add(code)
+            for label in row_labels:
+                offset += len(label) + 1
+                if not label:
+                    continue
+                if len(label) <= _SHORT_QUERY_MAX_CHARS:
+                    tiers[1].add(label)
+                tiers[2].update((label[:1], label[:2]))
+                for head in _WORD_START.findall(label):
+                    tiers[3].update((head[:1], head))
+            if ascii_only:
+                for tier in tiers:
+                    tier.difference_update([key for key in tier if not key.isascii()])
+            for level, keys in zip(levels, tiers, strict=True):
+                for key in keys:
+                    rows = level.get(key)
+                    if rows is None:
+                        level[key] = rows = array("I")
+                    rows.append(row_index)
+            if code:
+                # Codes are short; their substrings are listed directly.
+                keys = {code[i : i + 2] for i in range(len(code) - 1)}
+                keys.update(code)
+                for key in keys:
+                    if not ascii_only or key.isascii():
+                        rows = code_rows.get(key)
+                        if rows is None:
+                            code_rows[key] = rows = array("I")
+                        rows.append(row_index)
+        self._levels = levels
+        self._code_rows = code_rows
+        self._starts = starts
+        self._blob = _LABEL_SEPARATOR.join(label for row_labels in labels for label in row_labels)
+        self._memo: dict[str, array] = {}
+        self._memo_lock = threading.Lock()
+
+    def levels_for(self, query: str) -> list[tuple[int, Callable[[], Iterable[int]]]]:
+        """(level, rows supplier) for each level that may hold rows for ``query``.
+
+        The level-4 supplier does its scan only when called, so a caller that is satisfied
+        by the better levels never pays for it.
+        """
+        found: list[tuple[int, Callable[[], Iterable[int]]]] = []
+        for level in range(4):
+            rows = self._levels[level].get(query)
+            if rows is not None:
+                found.append((level, lambda rows=rows: rows))
+        found.append((4, lambda: self.superset(query)))
+        return found
+
+    def superset(self, query: str) -> array:
+        """Ascending rows with ``query`` inside a label (or the code): the level-4 rows."""
+        cached = self._memo.get(query)
+        if cached is not None:
+            return cached
+        blob, starts = self._blob, self._starts
+        rows = array("I")
+        find = blob.find
+        end = len(blob)
+        position = find(query)
+        while position != -1:
+            row = bisect_right(starts, position) - 1
+            rows.append(row)
+            # One hit is enough for this row: continue at the next row's first label.
+            following = starts[row + 1] if row + 1 < len(starts) else end
+            position = find(query, max(following, position + 1))
+        code_rows = self._code_rows.get(query)
+        if code_rows is not None:
+            rows = array("I", sorted(set(rows).union(code_rows)))
+        with self._memo_lock:
+            if len(self._memo) >= _SUPERSET_MEMO_ENTRIES:
+                self._memo.pop(next(iter(self._memo)), None)
+            self._memo[query] = rows
+        return rows
+
+    def scores(self, query: str) -> dict[int, int]:
+        """Row -> score for a short single-token query, in ascending row order."""
+        superset = self.superset(query)
+        if not superset:
+            return {}
+        scored = dict.fromkeys(superset, 4)
+        for score in (3, 2, 1, 0):
+            rows = self._levels[score].get(query)
+            if rows is not None:
+                scored.update(dict.fromkeys(rows, score))
+        return scored
+
+
 class _SearchIndex:
     def __init__(
         self, rows: list[dict[str, Any]], localities: list[dict[str, Any]] | None = None
@@ -412,6 +550,55 @@ class _SearchIndex:
             "INSERT INTO compact_labels(candidate_index, label) VALUES (?, ?)",
             [(index, key) for index, keys in enumerate(self.compact) for key in keys],
         )
+        # One- and two-character queries are answered from these maps instead of scoring
+        # every row. Setting both to None restores exhaustive scoring (tests use that as
+        # the reference); the literal pass also scores the stop code, the folded pass not.
+        self.short_literal: _ShortQueryScores | None = _ShortQueryScores(self.labels, self.codes)
+        self.short_folded: _ShortQueryScores | None = _ShortQueryScores(
+            self.folded, None, ascii_only=True
+        )
+        self._index_row_statics()
+        # Complete results of this generation only; released with the index.
+        self.results = ResultCache(STOP_RESULT_CACHE_ENTRIES)
+
+    def _index_row_statics(self) -> None:
+        """Per-row facts the bounded short-query ranking reads instead of row dicts."""
+        rows, position = self.rows, self.position
+        self.row_sid = [row["source_id"] for row in rows]
+        self.row_station = [(row.get("location_type") or 0) == 1 for row in rows]
+        self.row_rail = [
+            bool(row.get("rail")) and not station
+            for row, station in zip(rows, self.row_station, strict=True)
+        ]
+        self.row_parent = [-1] * len(rows)
+        self.row_group = list(range(len(rows)))
+        self.row_lat: list[float | None] = []
+        self.row_lon: list[float | None] = []
+        # A station that itself has a parent would be listed under its parent's ID while
+        # forming its own group; the bounded ranking assumes that never happens.
+        self.short_ranking_exact = True
+        for index, row in enumerate(rows):
+            parent_source = row.get("parent_station")
+            parent = self.by_source.get(parent_source) if parent_source else None
+            if parent is not None:
+                self.row_parent[index] = position[parent["source_id"]]
+                if not self.row_station[index]:
+                    self.row_group[index] = self.row_parent[index]
+                else:
+                    self.short_ranking_exact = False
+            located = row.get("latitude") is not None and row.get("longitude") is not None
+            self.row_lat.append(row["latitude"] if located else None)
+            self.row_lon.append(row["longitude"] if located else None)
+        self.display_norm: dict[str, list[str]] = {}
+        for language in ("he", "en"):
+            memo: dict[str, str] = {}
+            names = []
+            for row in rows:
+                shown = _display(row, language)[0]
+                if (norm := memo.get(shown)) is None:
+                    norm = memo[shown] = normalize_label(shown)
+                names.append(norm)
+            self.display_norm[language] = names
 
     def _index_osm_localities(self, localities: list[dict[str, Any]]) -> None:
         """Name forms and stop membership of the reference's OSM localities."""
@@ -516,20 +703,144 @@ class _SearchIndex:
             lambda row_index: bool(self.row_localities[row_index]) and row_index not in members,
         )
 
+    def _scored_rows(self, query: str, *, folded: bool) -> Iterable[tuple[int, int]]:
+        """(row, score) for every row the scorer accepts, in ascending row order."""
+        short = self.short_folded if folded else self.short_literal
+        if short is not None and _is_short_query(query):
+            return short.scores(query).items()
+        return self._exhaustive_scores(query, folded=folded)
+
+    def _exhaustive_scores(self, query: str, *, folded: bool) -> Iterable[tuple[int, int]]:
+        for row_index in self.matching_rows(query):
+            if folded:
+                score = _score_normalized(query, self.folded[row_index], "")
+            else:
+                score = _score_normalized(query, self.labels[row_index], self.codes[row_index])
+            if score is not None:
+                yield row_index, score
+
+    def _score_sources(self, query: str) -> dict[float, list[Callable[[], Iterable[int]]]]:
+        """Rows by the score ``strict_matches`` would give them, as suppliers per score.
+
+        The same variants and passes as ``strict_matches``; a row listed under several
+        scores takes the lowest, because callers visit scores in ascending order. Level 4
+        of a short query is a supplier that scans only when called.
+        """
+        sources: dict[float, list[Callable[[], Iterable[int]]]] = {}
+
+        def add(text: str, *, folded: bool, penalty: float) -> None:
+            short = self.short_folded if folded else self.short_literal
+            if short is not None and _is_short_query(text):
+                for level, supplier in short.levels_for(text):
+                    sources.setdefault(level + penalty, []).append(supplier)
+                return
+            by_score: dict[int, list[int]] = {}
+            for row_index, score in self._exhaustive_scores(text, folded=folded):
+                by_score.setdefault(score, []).append(row_index)
+            for score, found in by_score.items():
+                sources.setdefault(score + penalty, []).append(lambda found=found: found)
+
+        for variant in _query_variants(query):
+            folded = fold_transliteration(variant)
+            add(variant, folded=False, penalty=0.0)
+            if folded == variant and not variant.isascii():
+                continue
+            add(folded, folded=True, penalty=_FOLDED_PENALTY)
+        return sources
+
+    def short_winners(
+        self,
+        query: str,
+        language: str,
+        near: tuple[float, float] | None,
+        requested: set[str],
+        limit: int,
+    ) -> dict[int, float] | None:
+        """The rows that decide the first ``limit`` results of a one- or two-character query.
+
+        Ranking such a query by grouping all of its matches (up to every stop) costs
+        100-300 ms, yet only ``limit`` results leave. This visits matches in ascending
+        score, groups them exactly as ``search_stops`` does (a parent and its platforms
+        form one group, the lowest (score, source ID) row represents it, the display name
+        falls back to the matching row's own), keys each group with the same ordering the
+        ranking uses, and stops once ``limit`` groups are certain to beat everything not
+        yet visited (an unseen group scores at least the next level, and a distant one is
+        pushed back two levels, so the check compares the limit-th best effective score).
+        It returns each winning group's representative row with its score; ``search_stops``
+        then builds and orders those candidates with the unchanged code. ``None`` means the
+        general path must run (not a short query, nothing matched, or an unusual index).
+        """
+        if (
+            not self.short_ranking_exact
+            or self.short_literal is None
+            or self.short_folded is None
+            or not _is_short_query(query)
+        ):
+            return None
+        sources = self._score_sources(query)
+        if not sources:
+            return None
+        values = sorted(sources)
+        station_requested = "station" in requested
+        stop_requested = "stop" in requested
+        row_sid, row_station, row_rail = self.row_sid, self.row_station, self.row_rail
+        row_parent, row_group = self.row_parent, self.row_group
+        names = self.display_norm[language]
+        best: dict[int, tuple[float, int]] = {}
+        keyed: list[tuple[tuple, int, float]] = []
+        for step, value in enumerate(values):
+            fresh: list[int] = []
+            for supplier in sources[value]:
+                for row in supplier():
+                    # Same filter as the grouping loop: category requested, or a rail stop.
+                    if not (
+                        row_rail[row] or (station_requested if row_station[row] else stop_requested)
+                    ):
+                        continue
+                    group = row_group[row]
+                    current = best.get(group)
+                    if current is None:
+                        best[group] = (value, row)
+                        fresh.append(group)
+                    elif current[0] == value and row_sid[row] < row_sid[current[1]]:
+                        best[group] = (value, row)
+            for group in fresh:
+                row = best[group][1]
+                base = row_parent[row] if station_requested and row_parent[row] >= 0 else row
+                name = names[base]
+                if base != row and query not in name:
+                    # The station's label does not show the match: show the platform's.
+                    name = names[row]
+                distance = math.inf
+                effective = value
+                if near is not None:
+                    if self.row_lat[base] is not None:
+                        distance = _distance_m(
+                            near[0], near[1], self.row_lat[base], self.row_lon[base]
+                        )
+                    if distance > _NEAR_FAR_M:
+                        effective = value + _FAR_PENALTY
+                keyed.append(((effective, distance, name, row_sid[base]), row, value))
+            if len(keyed) >= limit:
+                bound = heapq.nsmallest(limit, (item[0][0] for item in keyed))[-1]
+                if step + 1 == len(values) or bound < values[step + 1]:
+                    break
+        if not keyed:
+            return None
+        return {row: value for _key, row, value in heapq.nsmallest(limit, keyed)}
+
     def strict_matches(self, query: str) -> dict[int, float]:
         """Best strict score per row; transliteration-folded matches rank lower."""
         best: dict[int, float] = {}
         for variant in _query_variants(query):
             folded = fold_transliteration(variant)
-            for row_index in self.matching_rows(variant):
-                score = _score_normalized(variant, self.labels[row_index], self.codes[row_index])
-                if score is not None and score < best.get(row_index, 5):
+            for row_index, score in self._scored_rows(variant, folded=False):
+                if score < best.get(row_index, 5):
                     best[row_index] = score
             if folded == variant and not variant.isascii():
                 continue
-            for row_index in self.matching_rows(folded):
-                score = _score_normalized(folded, self.folded[row_index], "")
-                if score is not None and score + _FOLDED_PENALTY < best.get(row_index, 5):
+            for row_index, score in self._scored_rows(folded, folded=True):
+                if score + _FOLDED_PENALTY < best.get(row_index, 5):
                     best[row_index] = score + _FOLDED_PENALTY
         if not best:
             # Joined/split spelling is a rescue for queries nothing else matched; it
@@ -660,18 +971,53 @@ def search_stops(
         raise ValueError("Search query contains no searchable characters")
 
     index = _search_index(reference)
+    # Everything that shapes the result is in the key (the query only through its
+    # normalized form, which is all the search reads). The cache belongs to this index,
+    # so it is empty for every new snapshot and released with the retired one. Results
+    # are deterministic for one immutable generation, so a hit equals a fresh search.
+    cache_key = (normalized_query, language, near, tuple(sorted(types)), limit)
+    cacheable = near is None or all(math.isfinite(value) for value in near)
+    if cacheable and (cached := index.results.get(cache_key)) is not None:
+        return cached
+    result = _search_uncached(
+        index, normalized_query, language, near, requested, unsupported, limit
+    )
+    if cacheable:
+        index.results.put(cache_key, result)
+    return result
+
+
+def _search_uncached(
+    index: _SearchIndex,
+    normalized_query: str,
+    language: str,
+    near: tuple[float, float] | None,
+    requested: set[str],
+    unsupported: tuple[str, ...],
+    limit: int,
+) -> dict[str, Any]:
     rows = index.rows
     by_source = index.by_source
-    scored = index.strict_matches(normalized_query)
-    partial = False
-    if not scored:
-        # Partial coverage is a fallback only: full matches always rank as before.
-        scored = {
-            row: 10 - covered for row, covered in index.partial_matches(normalized_query).items()
-        }
-        partial = True
-
     locality = index.locality_for(normalized_query)
+    # A one- or two-character query would score and group every stop; only the rows that
+    # decide the first `limit` results are kept, and the code below ranks those unchanged.
+    short = (
+        index.short_winners(normalized_query, language, near, requested, limit)
+        if locality is None
+        else None
+    )
+    partial = False
+    if short is not None:
+        scored = short
+    else:
+        scored = index.strict_matches(normalized_query)
+        if not scored:
+            # Partial coverage is a fallback only: full matches always rank as before.
+            scored = {
+                row: 10 - covered
+                for row, covered in index.partial_matches(normalized_query).items()
+            }
+            partial = True
     centers: tuple[tuple[float, float], ...] = ()
     locality_hits: set[int] = set()
     if locality is not None:

@@ -28,7 +28,7 @@ never been run (no account, region, cluster or spending is approved).
         [--registry-images <aws ecr describe-images output>]
     ... publish_generation.py rollback --current <file> --previous <file> [--now <iso>]
     ... publish_generation.py push --plan <release-plan.json> --region ... --registry ... \\
-        --cluster ... --service ... --execution-role-arn ... [--execute-aws]
+        --cluster ... --service ... --execution-role-arn ... --vpc-cidr ... [--execute-aws]
 
 See deploy/aws/README.md, "H-1 generation publisher".
 """
@@ -298,6 +298,7 @@ def render_candidate(
     digest_kind: str,
     registry: str | None = None,
     execution_role_arn: str | None = None,
+    vpc_cidr: str | None = None,
 ) -> dict:
     """Render the task definition with every image pinned and the release identity tagged."""
     spec = render_drafts.VARIANTS[variant]
@@ -322,6 +323,10 @@ def render_candidate(
         if not validate_drafts.ROLE_ARN.fullmatch(execution_role_arn):
             raise ValueError("execution role must be an IAM role ARN")
         replacements["{{EXECUTION_ROLE_ARN}}"] = execution_role_arn
+    if vpc_cidr is not None:
+        if "{{" in vpc_cidr or validate_drafts.trusted_proxies_error(vpc_cidr):
+            raise ValueError("vpc_cidr must be a CIDR list with prefix lengths, not a catch-all")
+        replacements["{{VPC_CIDR}}"] = vpc_cidr
     task = _replace_strings(render_drafts.render_task_definition(variant), replacements)
     tags = [t for t in task["tags"] if t["key"] != "purpose"]
     tags += [
@@ -561,7 +566,9 @@ def push_steps(release: dict, *, region: str, registry: str, cluster: str, servi
     return steps
 
 
-def execute_push(plan: dict, plan_dir: Path, *, region, registry, cluster, service, role) -> dict:
+def execute_push(
+    plan: dict, plan_dir: Path, *, region, registry, cluster, service, role, vpc_cidr
+) -> dict:
     """Push, register and deploy. NEVER RUN: no AWS account, region or spending is approved.
 
     Requires ``push --execute-aws``. It never deregisters, deletes or prunes anything, so a
@@ -604,8 +611,12 @@ def execute_push(plan: dict, plan_dir: Path, *, region, registry, cluster, servi
         digest_kind="registry-manifest",
         registry=registry,
         execution_role_arn=role,
+        vpc_cidr=vpc_cidr,
     )
     errors, _ = validate_drafts.validate_candidate(task, "registered", render_drafts.MOTIS_DIGEST)
+    leftover = sorted(set(validate_drafts.PLACEHOLDER.findall(json.dumps(task))))
+    if leftover:
+        errors.append(f"registered: unresolved placeholders {leftover}")
     if errors:
         raise PublishRefused(errors)
     task_path = plan_dir / "task-definition.registered.json"
@@ -858,7 +869,14 @@ def main(argv: list[str] | None = None) -> int:
 
     push = commands.add_parser("push", help="push/register/deploy (only with --execute-aws)")
     push.add_argument("--plan", type=Path, required=True)
-    for name in ("--region", "--registry", "--cluster", "--service", "--execution-role-arn"):
+    for name in (
+        "--region",
+        "--registry",
+        "--cluster",
+        "--service",
+        "--execution-role-arn",
+        "--vpc-cidr",
+    ):
         push.add_argument(name, required=True)
     push.add_argument("--execute-aws", action="store_true", help="really call AWS (never run)")
 
@@ -915,6 +933,8 @@ def main(argv: list[str] | None = None) -> int:
         plan = json.loads(args.plan.read_text(encoding="utf-8"))
         if "release" not in plan or plan.get("outcome") != "ok" or plan.get("mode") != "build":
             raise PublishRefused(["plan_not_a_successful_build"])
+        if "{{" in args.vpc_cidr or validate_drafts.trusted_proxies_error(args.vpc_cidr):
+            raise PublishRefused(["vpc_cidr_invalid"])
         steps = push_steps(
             plan["release"],
             region=args.region,
@@ -933,6 +953,7 @@ def main(argv: list[str] | None = None) -> int:
             cluster=args.cluster,
             service=args.service,
             role=args.execution_role_arn,
+            vpc_cidr=args.vpc_cidr,
         )
         print(json.dumps({"executed": True, "release": release}, indent=2))
         return 0

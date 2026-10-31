@@ -1,6 +1,8 @@
 """Liveness, readiness and status endpoints."""
 
 import asyncio
+import time
+import weakref
 
 from fastapi import APIRouter, Request
 from fastapi.encoders import jsonable_encoder
@@ -17,8 +19,49 @@ def _reason(condition: str, reason: str) -> dict[str, str]:
     return {"condition": condition, "reason": reason}
 
 
+class EngineHealthCache:
+    """One engine health result per snapshot, reused for a few seconds (API-PERF 1.9).
+
+    Each check plans a short journey on the engine; status polls and load-balancer probes
+    would otherwise each pay for one. Concurrent callers share a single in-flight check.
+    The entry belongs to the snapshot it checked (held weakly, so a retired generation is
+    not kept alive), and a new generation is checked afresh.
+    """
+
+    def __init__(self, ttl_seconds: float, monotonic=time.monotonic) -> None:
+        self.ttl_seconds = ttl_seconds
+        self._monotonic = monotonic
+        self._lock = asyncio.Lock()
+        self._entry: tuple[weakref.ref, float, dict[str, str] | None] | None = None
+
+    def _fresh(self, snapshot):
+        entry = self._entry
+        if entry is not None and entry[0]() is snapshot and self._monotonic() < entry[1]:
+            return True, entry[2]
+        return False, None
+
+    async def failure(self, snapshot, check) -> dict[str, str] | None:
+        try:
+            snapshot_ref = weakref.ref(snapshot)
+        except TypeError:
+            snapshot_ref = None
+        if self.ttl_seconds <= 0 or snapshot_ref is None:
+            return await check()
+        fresh, failure = self._fresh(snapshot)
+        if fresh:
+            return failure
+        async with self._lock:
+            fresh, failure = self._fresh(snapshot)
+            if fresh:
+                return failure
+            failure = await check()
+            self._entry = (snapshot_ref, self._monotonic() + self.ttl_seconds, failure)
+            return failure
+
+
 def health_router(settings, clock, problem) -> APIRouter:
     router = APIRouter()
+    engine_health = EngineHealthCache(settings.engine_health_cache_seconds)
 
     @router.get("/healthz")
     async def health():
@@ -38,13 +81,17 @@ def health_router(settings, clock, problem) -> APIRouter:
             return False, "expired", "unchecked", reasons
         if not snapshot.routing_verified:
             return False, "available", "unverified", [_reason("routing", "PROBE_UNVERIFIED")]
-        try:
-            async with asyncio.timeout(settings.journey_deadline_seconds):
-                failure = await snapshot.motis.health(now)
-        except EngineFailure:
-            failure = {"reason": "ENGINE_UNAVAILABLE"}
-        except TimeoutError:
-            failure = {"reason": "ENGINE_TIMEOUT"}
+
+        async def check():
+            try:
+                async with asyncio.timeout(settings.journey_deadline_seconds):
+                    return await snapshot.motis.health(now)
+            except EngineFailure:
+                return {"reason": "ENGINE_UNAVAILABLE"}
+            except TimeoutError:
+                return {"reason": "ENGINE_TIMEOUT"}
+
+        failure = await engine_health.failure(snapshot, check)
         if failure is not None:
             return False, "available", "unavailable", [{"condition": "engine", **failure}]
         if snapshot.reference is None:
