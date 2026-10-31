@@ -31,6 +31,29 @@ function fixtureWorker(): Plugin {
   };
 }
 
+/**
+ * The headers the API's /app/ mount sends (S8 contract). `vite preview` sends them too, so
+ * a build can be checked under the real CSP (MapLibre's worker, tiles, styles) locally.
+ */
+export const clientSecurityHeaders: Record<string, string> = {
+  "Content-Security-Policy": [
+    "default-src 'self'",
+    "script-src 'self'",
+    "style-src 'self'",
+    "img-src 'self' data: blob: https://tiles.openfreemap.org",
+    "font-src 'self'",
+    "connect-src 'self' https://tiles.openfreemap.org",
+    "worker-src 'self' blob:",
+    "manifest-src 'self'",
+    "object-src 'none'",
+    "base-uri 'none'",
+    "form-action 'none'",
+    "frame-ancestors 'none'",
+  ].join("; "),
+  "Referrer-Policy": "strict-origin-when-cross-origin",
+  "X-Content-Type-Options": "nosniff",
+};
+
 export default defineConfig({
   // Built files are served by the API at /app/ (design: Stack and hosting).
   base: process.env.NODE_ENV === "production" ? "/app/" : "/",
@@ -43,9 +66,18 @@ export default defineConfig({
       "/readyz": { target: apiOrigin, changeOrigin: false },
     },
   },
+  preview: {
+    headers: clientSecurityHeaders,
+  },
+  // MapLibre is imported only by the lazy map chunk; pre-bundle it so the dev server does
+  // not discover it late and reload the page.
+  optimizeDeps: { include: ["maplibre-gl"] },
   build: {
     target: "es2022",
     sourcemap: true,
+    // The lazy MapLibre chunk is ~1 MB raw (~270 kB gzipped) by itself; the initial
+    // bundle has its own 150 kB-gzipped budget (design: Stack and hosting).
+    chunkSizeWarningLimit: 1100,
   },
   test: {
     environment: "jsdom",
