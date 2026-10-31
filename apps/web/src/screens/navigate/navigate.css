@@ -1,0 +1,138 @@
+/* Navigate — C05 (S6). Test quality; logical properties only. The sheet content is the
+   scroll container: the step card is pinned at the top and the actions at the bottom. */
+
+.navigate-top {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 1;
+  background: var(--color-surface);
+  padding-block-end: var(--space-2);
+}
+
+.nav-banner {
+  margin: 0 0 var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-s);
+  border: 1px solid var(--color-notice-border);
+  background: var(--color-notice-bg);
+  color: var(--color-notice-ink);
+  font-size: var(--text-s);
+}
+.nav-banner-sim {
+  border-style: dashed;
+  font-weight: 650;
+}
+
+.step-card {
+  padding: var(--space-3);
+  border-radius: var(--radius-m);
+  background: var(--color-ink-strong);
+  color: #fff;
+}
+.step-card-cue {
+  border: 3px solid #ffd166;
+}
+.step-card-next_stop {
+  background: #7a1f12;
+}
+.step-card-two_stops {
+  background: #5a3b00;
+}
+.step-cue {
+  margin: 0 0 var(--space-1);
+  font-size: var(--text-l);
+  font-weight: 800;
+}
+.step-of {
+  margin: 0;
+  font-size: var(--text-xs);
+  opacity: 0.9;
+}
+.step-card .step-title {
+  margin: 0 0 var(--space-1);
+  font-size: var(--text-l);
+  line-height: 1.25;
+}
+.step-line {
+  margin: 0;
+  font-size: var(--text-s);
+  line-height: 1.4;
+}
+.step-strong {
+  font-size: var(--text-m);
+  font-weight: 700;
+}
+
+.checklist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.checklist-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  inline-size: 100%;
+  min-block-size: var(--target-min);
+  padding-inline: var(--space-1);
+  border: 0;
+  border-block-end: 1px solid var(--color-border);
+  background: transparent;
+  color: var(--color-ink);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+.checklist-done {
+  color: var(--color-ink-muted);
+}
+.checklist-current {
+  font-weight: 700;
+  background: var(--color-brand-tint);
+}
+.checklist-mark {
+  inline-size: 1.5em;
+  text-align: center;
+}
+
+.nav-testing {
+  margin-block: var(--space-3);
+}
+.nav-sim-toggle,
+.nav-sim-speed {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-block-size: var(--target-min);
+}
+.nav-sim-toggle input {
+  inline-size: 22px;
+  block-size: 22px;
+}
+.nav-sim-speed select {
+  min-block-size: 36px;
+  font: inherit;
+}
+
+/* Chrome pins a sticky box at the padding edge: offset by the sheet-content padding. */
+.navigate-actions {
+  position: sticky;
+  inset-block-end: calc(-1 * var(--space-5));
+  z-index: 1;
+  display: flex;
+  gap: var(--space-2);
+  margin-block-start: var(--space-2);
+  padding-block: var(--space-2) var(--space-5);
+  margin-block-end: calc(-1 * var(--space-5));
+  background: var(--color-surface);
+}
+.navigate-actions .button {
+  min-block-size: 48px;
+}
+.nav-end {
+  flex: 0 0 auto;
+}
+.nav-next {
+  flex: 1;
+  font-size: var(--text-m);
+}

@@ -2,6 +2,7 @@ import { useSyncExternalStore } from "react";
 import type { Trip } from "../api/schemas";
 import type { Journey, Metadata } from "../api/types";
 import { readSession, removeSession, writeSession } from "../storage/session";
+import type { CallPosition } from "./engine";
 
 // The active trip (design: ActiveTrip, Restore after the app is killed). In the web test
 // client it lives in sessionStorage: it survives a reload, never a closed tab, and holds
@@ -26,6 +27,46 @@ export interface ActiveTrip {
   trips: Record<string, Trip["data"]>;
   startedAt: string;
   nav: NavProgress;
+  /**
+   * S6, optional (absent until Navigate first mounts): call positions for cues, by ride
+   * step index, from `GET /v1/stops/{id}` for at most the two calls before each exit.
+   * "failed" disables cues for that ride; an absent step has not been fetched yet.
+   */
+  callPositions?: Record<string, StoredCallPositions>;
+  /** S6, optional: trip details already requested once at Start (fetched or not). */
+  tripsRequested?: string[];
+  /** S6, optional: the plan's end labels at Start (coordinate ends are "START"/"END"). */
+  labels?: { origin: string | null; destination: string | null };
+}
+
+export type StoredCallPositions = { status: "ok"; positions: CallPosition[] } | { status: "failed" };
+
+const isFiniteNumber = (v: unknown): v is number => typeof v === "number" && Number.isFinite(v);
+
+function validCallPositions(value: unknown): boolean {
+  if (value === undefined) return true;
+  if (!value || typeof value !== "object" || Array.isArray(value)) return false;
+  return Object.values(value as Record<string, unknown>).every((entry) => {
+    const e = entry as { status?: unknown; positions?: unknown } | null;
+    if (!e || typeof e !== "object") return false;
+    if (e.status === "failed") return true;
+    return (
+      e.status === "ok" &&
+      Array.isArray(e.positions) &&
+      e.positions.every((p: unknown) => {
+        const c = p as Partial<CallPosition> | null;
+        return !!c && isFiniteNumber(c.ordinal) && isFiniteNumber(c.latitude) && isFiniteNumber(c.longitude);
+      })
+    );
+  });
+}
+
+function validLabels(value: unknown): boolean {
+  if (value === undefined) return true;
+  if (!value || typeof value !== "object") return false;
+  const l = value as Record<string, unknown>;
+  const ok = (v: unknown) => v === null || typeof v === "string";
+  return ok(l.origin) && ok(l.destination);
 }
 
 function isActiveTrip(value: unknown): value is ActiveTrip {
@@ -36,7 +77,13 @@ function isActiveTrip(value: unknown): value is ActiveTrip {
     typeof trip.journey === "object" &&
     trip.journey !== null &&
     Array.isArray(trip.journey.legs) &&
-    typeof trip.nav?.stepIndex === "number"
+    typeof trip.nav?.stepIndex === "number" &&
+    typeof trip.trips === "object" &&
+    trip.trips !== null &&
+    validCallPositions(trip.callPositions) &&
+    (trip.tripsRequested === undefined ||
+      (Array.isArray(trip.tripsRequested) && trip.tripsRequested.every((ref) => typeof ref === "string"))) &&
+    validLabels(trip.labels)
   );
 }
 
@@ -46,6 +93,8 @@ export function isExpired(trip: ActiveTrip, now: number = Date.now()): boolean {
 }
 
 let cached: ActiveTrip | null | undefined;
+/** The last load found a trip past its expiry and cleared it (Navigate then goes Home). */
+let expiredOnLoad = false;
 const listeners = new Set<() => void>();
 
 function notify(): void {
@@ -55,11 +104,18 @@ function notify(): void {
 /** Read the stored trip; an expired or unreadable one is cleared. */
 export function loadActiveTrip(now: number = Date.now()): ActiveTrip | null {
   const stored = readSession("activeTrip", isActiveTrip);
+  expiredOnLoad = false;
   if (stored && isExpired(stored, now)) {
     removeSession("activeTrip");
+    expiredOnLoad = true;
     return null;
   }
   return stored;
+}
+
+/** True when the last load cleared a stored trip because it had expired. */
+export function wasExpiredOnLoad(): boolean {
+  return expiredOnLoad;
 }
 
 export function getActiveTrip(): ActiveTrip | null {
@@ -87,6 +143,7 @@ export function updateActiveTrip(change: (trip: ActiveTrip) => ActiveTrip): void
 /** Finish or End trip: cleared from storage. */
 export function endActiveTrip(): void {
   cached = null;
+  expiredOnLoad = false;
   removeSession("activeTrip");
   notify();
 }
