@@ -1,8 +1,9 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useI18n } from "../../i18n/I18nProvider";
+import type { MessageKey } from "../../i18n/messages";
 import { formatClock } from "../../lib/time";
-import { journeyToScene } from "../../map/fromJourney";
-import { usePublishScene, type MapScene } from "../../map/scene";
+import type { LocationError } from "../../lib/geolocation";
+import { requestLocate, usePublishScene, type MapScene } from "../../map/scene";
 import {
   endActiveTrip,
   isExpired,
@@ -20,23 +21,33 @@ import { usePlan } from "../../plan/PlanProvider";
 import type { Endpoint } from "../../plan/draft";
 import { go, hrefFor } from "../../router";
 import { useSheet } from "../../shell/sheet";
-import { stepSummary, type EndLabels } from "./describe";
+import { rowText, stepSummary, type EndLabels } from "./describe";
+import { navScene } from "./navScene";
 import { StepCard } from "./StepCard";
 import "./navigate.css";
 
 // Navigate — C05 (design: Screens 5). Reads the active trip only; the engine advances on
 // location fixes, Next step or a checklist tap. The web client cannot follow location
 // with the screen locked (design S6.5 is native-only), so it says "keep this page open".
+//
+// Layout at the half sheet (the shell's default for Navigate): the step card, with what
+// comes next in it, above one primary action, and the map (your position, the active leg)
+// above the sheet. Drag the sheet up for every step and the testing tools.
 
-/**
- * The sheet snap Navigate opens at: full. At 360 × 640 a half sheet cannot hold a long
- * step card (rail names, two banners) above the pinned actions; the passenger can drag
- * the sheet down to see more map.
- */
-export const NAVIGATE_SNAP = "full" as const;
+/** Street-level recentring at most this often (real time), so each camera move finishes. */
+const LOCATE_EVERY_MS = 500;
+/** One more recentre this long after the last fix (the lazy map may not have been there). */
+const LOCATE_SETTLE_MS = 2_000;
 
 const endpointLabel = (endpoint: Endpoint | null): string | null =>
   endpoint?.type === "place" ? endpoint.place.label : null;
+
+/** Why location is off, in one short phrase (the banner adds "steps advance manually"). */
+function locationReason(error: LocationError | null): MessageKey {
+  if (typeof window !== "undefined" && window.isSecureContext === false) return "nav.loc.insecure";
+  if (error === "unsupported") return "nav.loc.unsupported";
+  return "nav.loc.denied";
+}
 
 function NoTrip() {
   const { t } = useI18n();
@@ -63,10 +74,9 @@ export function NavigateScreen() {
 function Navigating({ trip }: { trip: ActiveTrip }) {
   const { t, lang } = useI18n();
   const { draft } = usePlan();
-  const { setSnap } = useSheet();
+  const { snap, setSnap } = useSheet();
   const [announcement, setAnnouncement] = useState<{ text: string; n: number }>({ text: "", n: 0 });
-
-  useEffect(() => setSnap(NAVIGATE_SNAP), [setSnap]);
+  const topRef = useRef<HTMLDivElement>(null);
 
   // The plan's end labels at Start: coordinate ends are "START"/"END" in the journey.
   const labels: EndLabels = trip.labels ?? { origin: endpointLabel(draft.from), destination: endpointLabel(draft.to) };
@@ -83,7 +93,7 @@ function Navigating({ trip }: { trip: ActiveTrip }) {
     for (const effect of effects) {
       if (effect.type === "step_changed") {
         const changed = steps[effect.stepIndex]!;
-        parts.push(t("nav.announce.step", { n: effect.stepIndex + 1, total: steps.length, summary: stepSummary(changed, labels, t, lang) }));
+        parts.push(t("nav.announce.step", { n: effect.stepIndex + 1, total: steps.length, summary: stepSummary(changed, labels, t, lang, steps[effect.stepIndex + 1]) }));
       } else if (effect.type === "cue") {
         cue = true;
         parts.push(t(effect.cue === "next_stop" ? "nav.cueNext" : "nav.cueTwo"));
@@ -118,30 +128,51 @@ function Navigating({ trip }: { trip: ActiveTrip }) {
     return () => clearInterval(id);
   }, [trip]);
 
-  const scene = useMemo<MapScene>(() => {
-    const base = journeyToScene(trip.journey, {
-      activeLeg: step.legIndex,
-      originLabel: labels.origin,
-      destinationLabel: labels.destination,
-    });
-    return {
-      ...base,
-      user: fix ? { position: [fix.longitude, fix.latitude], accuracyMeters: fix.accuracyMeters } : null,
-      camera: fix ? "follow" : "fit",
-      pick: false,
-    };
-  }, [trip.journey, step.legIndex, labels.origin, labels.destination, fix]);
+  // A new step (a checklist tap, Next, or the engine) or a smaller sheet brings the card
+  // (and the banners above it: "simulated" must stay in view) back into view when the
+  // passenger had scrolled down to the checklist or the tools.
+  const seen = useRef({ stepIndex: state.stepIndex, snap });
+  useEffect(() => {
+    if (seen.current.stepIndex === state.stepIndex && seen.current.snap === snap) return;
+    seen.current = { stepIndex: state.stepIndex, snap };
+    const top = topRef.current;
+    if (top && typeof top.scrollIntoView === "function") top.scrollIntoView({ block: "nearest" });
+  }, [state.stepIndex, snap]);
+
+  // Camera: the current leg is framed, and on board it stays framed while the dot moves
+  // along it toward the exit (how far is my stop?). On foot, and waiting at the stop, the
+  // map recentres on the passenger at street level (the map's Locate: zoom 15 or closer),
+  // at most twice a second so each move finishes, also at simulated speed-ups.
+  const streetLevel = !!fix && (step.kind !== "ride" || state.phase === "waiting");
+  const { origin, destination } = labels;
+  const scene = useMemo<MapScene>(
+    () => navScene(trip.journey, step, { origin, destination }, fix, streetLevel ? "keep" : "fit"),
+    [trip.journey, step, origin, destination, fix, streetLevel],
+  );
   usePublishScene(scene);
+  const lastLocate = useRef(-Infinity);
+  useEffect(() => {
+    if (!streetLevel) return;
+    const locate = () => {
+      lastLocate.current = performance.now();
+      requestLocate();
+    };
+    if (performance.now() - lastLocate.current >= LOCATE_EVERY_MS) locate();
+    // The map loads lazily and ignores a request made before it mounted, and a passenger
+    // standing still gets few fixes: recentre once more after the map has had time to load.
+    const id = setTimeout(locate, LOCATE_SETTLE_MS);
+    return () => clearTimeout(id);
+  }, [scene, streetLevel]);
 
   const manual = state.locationMode === "manual" && !nav.simulated;
 
   return (
-    <div className="navigate">
+    <div className={`navigate navigate-${snap}`}>
       <h1 className="visually-hidden">{t("screen.navigate")}</h1>
-      <div className="navigate-top">
+      <div className="navigate-top" ref={topRef}>
         {manual && (
           <p className="nav-banner" role="status">
-            {t("nav.manual")}
+            {t(locationReason(nav.locationError))} · {t("nav.manual")}
           </p>
         )}
         {!manual && state.locationLost && (
@@ -151,10 +182,11 @@ function Navigating({ trip }: { trip: ActiveTrip }) {
         )}
         {nav.simulated && (
           <p className="nav-banner nav-banner-sim" role="note">
-            {t("nav.sim.on", { time: formatClock(new Date(nav.clock), lang) })}
+            <span aria-hidden="true">◌ </span>
+            {t("nav.sim.on", { time: formatClock(new Date(nav.clock), lang), n: nav.simSpeed })}
           </p>
         )}
-        <StepCard steps={steps} state={state} fix={fix} clock={nav.clock} labels={labels} />
+        <StepCard steps={steps} state={state} fix={fix} clock={nav.clock} labels={labels} onEnd={last ? null : leave} />
       </div>
 
       <section className="nav-checklist" aria-labelledby="nav-checklist-title">
@@ -164,25 +196,36 @@ function Navigating({ trip }: { trip: ActiveTrip }) {
         <ol className="checklist">
           {steps.map((item) => {
             const status = item.index < state.stepIndex ? "done" : item.index === state.stepIndex ? "current" : "pending";
-            const summary = stepSummary(item, labels, t, lang);
+            const row = rowText(item, labels, t, lang, steps[item.index + 1]);
             return (
               <li key={item.index}>
                 <button
                   type="button"
                   className={`checklist-row checklist-${status}`}
                   aria-current={status === "current" ? "step" : undefined}
-                  aria-label={`${t(`nav.row.${status}`)}: ${summary}`}
                   onClick={() => nav.jump(item.index)}
                 >
-                  <span className="checklist-mark" aria-hidden="true">
-                    {status === "done" ? "✓" : status === "current" ? "●" : "○"}
+                  {/* The name is the visible text with the state in front (not colour alone). */}
+                  <span className="visually-hidden">{`${t(`nav.row.${status}`)}:`}</span>{" "}
+                  <span className="checklist-time tabular">{row.time}</span>{" "}
+                  <span className={`checklist-mark checklist-mark-${status}`} aria-hidden="true">
+                    {status === "done" ? "✓" : status === "current" ? "●" : ""}
                   </span>
-                  <bdi className="checklist-text">{summary}</bdi>
+                  <span className="checklist-body">
+                    <bdi className="checklist-main">{row.main}</bdi>
+                    {row.sub && (
+                      <>
+                        <span className="visually-hidden">,</span>{" "}
+                        <bdi className="checklist-sub">{row.sub}</bdi>
+                      </>
+                    )}
+                  </span>
                 </button>
               </li>
             );
           })}
         </ol>
+        <p className="muted small nav-keep-open">{t("nav.keepOpen")}</p>
       </section>
 
       <section className="nav-testing" aria-labelledby="nav-testing-title">
@@ -190,7 +233,16 @@ function Navigating({ trip }: { trip: ActiveTrip }) {
           {t("nav.testing")}
         </h2>
         <label className="nav-sim-toggle">
-          <input type="checkbox" checked={nav.simulated} onChange={(event) => nav.setSimulated(event.target.checked)} />
+          <input
+            type="checkbox"
+            checked={nav.simulated}
+            onChange={(event) => {
+              const on = event.target.checked;
+              nav.setSimulated(on);
+              // Show the map: the simulated dot moving along the route is the point.
+              if (on) setSnap("half");
+            }}
+          />
           {t("nav.sim.toggle")}
         </label>
         <label className="nav-sim-speed">
@@ -203,13 +255,9 @@ function Navigating({ trip }: { trip: ActiveTrip }) {
             ))}
           </select>
         </label>
-        <p className="muted small">{t("nav.keepOpen")}</p>
       </section>
 
       <div className="navigate-actions">
-        <button type="button" className="button nav-end" onClick={leave}>
-          {t("nav.end")}
-        </button>
         <button type="button" className="button button-primary nav-next" onClick={last ? leave : nav.next}>
           {last ? t("nav.finish") : t("nav.next")}
         </button>
