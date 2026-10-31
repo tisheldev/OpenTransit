@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/trips/20261001_08:00_mot60day_missing",
+    "params": null,
+    "body": null
+  },
+  "status": 404,
+  "body": {
+    "type": "urn:opentransit:problem:not-found",
+    "title": "Not found",
+    "status": 404,
+    "code": "NOT_FOUND",
+    "detail": "The dated trip occurrence is absent.",
+    "requestId": "00000000000000000000000000000000"
+  }
+}

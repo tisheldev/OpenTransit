@@ -1,0 +1,114 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/places",
+    "params": {
+      "q": "Dizengoff Center",
+      "lang": "en",
+      "near": "32.0757,34.7748",
+      "type": "stop",
+      "limit": 5
+    },
+    "body": null
+  },
+  "status": 200,
+  "body": {
+    "data": [
+      {
+        "kind": "stop",
+        "id": "mot:stop:13583",
+        "displayName": "Dizengoff Center/Dizengoff",
+        "languageUsed": "en",
+        "locality": "רחוב: דיזנגוף 50 עיר: תל אביב יפו רציף:  קומה: ",
+        "coordinates": {
+          "latitude": 32.075566,
+          "longitude": 34.77512
+        },
+        "stopCode": "25609",
+        "parentId": null,
+        "platformIds": [],
+        "matchedTypes": [
+          "stop"
+        ],
+        "distance": 33.63150896399701,
+        "locationRef": {
+          "kind": "stop",
+          "stopId": "mot:stop:13583"
+        }
+      },
+      {
+        "kind": "stop",
+        "id": "mot:stop:13561",
+        "displayName": "Dizengoff Center/Dizengoff",
+        "languageUsed": "en",
+        "locality": "רחוב: דיזנגוף 53 עיר: תל אביב יפו רציף:  קומה: ",
+        "coordinates": {
+          "latitude": 32.075129,
+          "longitude": 34.77537
+        },
+        "stopCode": "25565",
+        "parentId": null,
+        "platformIds": [],
+        "matchedTypes": [
+          "stop"
+        ],
+        "distance": 83.16022635831483,
+        "locationRef": {
+          "kind": "stop",
+          "stopId": "mot:stop:13561"
+        }
+      },
+      {
+        "kind": "stop",
+        "id": "mot:stop:13560",
+        "displayName": "Dizengoff Center/Tchernichovsky",
+        "languageUsed": "en",
+        "locality": "רחוב: טשרניחובסקי 53 עיר: תל אביב יפו רציף:  קומה: ",
+        "coordinates": {
+          "latitude": 32.075585,
+          "longitude": 34.773887
+        },
+        "stopCode": "25564",
+        "parentId": null,
+        "platformIds": [],
+        "matchedTypes": [
+          "stop"
+        ],
+        "distance": 86.96891680757814,
+        "locationRef": {
+          "kind": "stop",
+          "stopId": "mot:stop:13560"
+        }
+      }
+    ],
+    "meta": {
+      "requestId": "00000000000000000000000000000000",
+      "generationId": "c7b66eee1ad04dddba13f4c5dade5ef2023963a1ac0384857aaf173b9d164aa1",
+      "generatedAt": "2026-09-30T23:10:08.788692Z",
+      "dataBuiltAt": "2026-09-30T19:28:59.565385Z",
+      "mode": "real",
+      "coverage": {
+        "from": "2026-09-30T00:00:00+03:00",
+        "until": "2026-10-31T00:00:00+02:00"
+      },
+      "freshness": "current",
+      "capabilities": {
+        "realtime": "not_enabled",
+        "alerts": "not_enabled"
+      },
+      "attribution": [
+        "Israel Ministry of Transport",
+        "© OpenStreetMap contributors"
+      ],
+      "rankingPolicy": "motis-v2.11.2-feasible-engine-order-v1",
+      "appliedConstraints": {},
+      "warnings": []
+    },
+    "matchedTypes": [
+      "stop"
+    ],
+    "unavailableTypes": [],
+    "partial": false,
+    "rankingPolicy": "alternating-stop-and-geocoder-order-v1"
+  }
+}

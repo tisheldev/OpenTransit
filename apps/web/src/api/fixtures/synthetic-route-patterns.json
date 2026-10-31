@@ -1,0 +1,103 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/routes/mot:route:bus_7/patterns",
+    "params": null,
+    "body": null
+  },
+  "status": 200,
+  "body": {
+    "data": [
+      {
+        "patternId": "8a933f999038f384f9de8d5870a768c518a282a160bef7e3033ecf5811334bfb",
+        "routeId": "mot:route:bus_7",
+        "directionId": "0",
+        "headsign": "Harbor",
+        "stops": [
+          {
+            "sequence": 0,
+            "stopId": "mot:stop:platform_a",
+            "pickupType": 0,
+            "dropOffType": 0
+          },
+          {
+            "sequence": 1,
+            "stopId": "mot:stop:platform_b",
+            "pickupType": 1,
+            "dropOffType": 2
+          },
+          {
+            "sequence": 2,
+            "stopId": "mot:stop:platform_a",
+            "pickupType": 0,
+            "dropOffType": 0
+          },
+          {
+            "sequence": 3,
+            "stopId": "mot:stop:stop_c",
+            "pickupType": 0,
+            "dropOffType": 0
+          }
+        ]
+      },
+      {
+        "patternId": "a432a4a585f2d70de8ae4c524f495ab17deab398850635179b048bc1fa6c6760",
+        "routeId": "mot:route:bus_7",
+        "directionId": "1",
+        "headsign": "Central",
+        "stops": [
+          {
+            "sequence": 0,
+            "stopId": "mot:stop:stop_c",
+            "pickupType": 0,
+            "dropOffType": 0
+          },
+          {
+            "sequence": 1,
+            "stopId": "mot:stop:platform_b",
+            "pickupType": 0,
+            "dropOffType": 0
+          },
+          {
+            "sequence": 2,
+            "stopId": "mot:stop:platform_a",
+            "pickupType": 0,
+            "dropOffType": 0
+          },
+          {
+            "sequence": 3,
+            "stopId": "mot:stop:station",
+            "pickupType": 0,
+            "dropOffType": 0
+          }
+        ]
+      }
+    ],
+    "meta": {
+      "requestId": "00000000000000000000000000000000",
+      "generationId": "synthetic-test",
+      "generatedAt": "2026-09-30T09:00:00Z",
+      "dataBuiltAt": "2026-09-30T09:00:00Z",
+      "mode": "fixture",
+      "coverage": {
+        "from": "2026-09-29T00:00:00+03:00",
+        "until": "2026-10-30T00:00:00+02:00"
+      },
+      "freshness": "current",
+      "capabilities": {
+        "realtime": "not_enabled",
+        "alerts": "not_enabled"
+      },
+      "attribution": [
+        "Israel Ministry of Transport",
+        "© OpenStreetMap contributors"
+      ],
+      "rankingPolicy": "motis-v2.11.2-feasible-engine-order-v1",
+      "appliedConstraints": {},
+      "warnings": []
+    },
+    "page": {
+      "nextCursor": null
+    }
+  }
+}
