@@ -2,11 +2,7 @@ import type { he_compare } from "./compare.he";
 
 // Mirrors compare.he.ts key for key.
 export const en_compare: Record<keyof typeof he_compare, string> = {
-  "compare.fromTo": "From and to",
-  "compare.from": "From",
-  "compare.to": "To",
   "compare.myLocation": "My location",
-  "compare.swap": "Swap start and destination",
 
   "compare.when": "When?",
   "compare.when.pick": "Date and time (Israel time)",

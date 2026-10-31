@@ -76,6 +76,8 @@ describe("shell", () => {
     await userEvent.click(first);
     await waitFor(() => expect(window.location.hash).toBe("#/compare"));
     act(() => go({ name: "home" }));
+    // hashchange is async: wait for Home, or this finds Compare's own compact From/To swap.
+    await screen.findByRole("heading", { level: 1, name: en["home.title"] });
     const swap = await screen.findByRole("button", { name: en["fromTo.swap"] });
     expect(swap).toBeEnabled();
     await userEvent.click(swap);

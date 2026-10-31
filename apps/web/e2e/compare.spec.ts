@@ -99,7 +99,7 @@ test("unavailable offers a retry that replaces the error with options", async ({
   await openCompare(page, "compare-unavailable-once");
   await expect(page.getByRole("alert")).toContainText("השירות אינו זמין זמנית");
   await expectNoSeriousAxeViolations(page, "compare unavailable");
-  await page.getByRole("button", { name: "לנסות שוב" }).click();
+  await page.getByRole("button", { name: "נסו שוב" }).click();
   await expect(optionList(page).getByRole("button")).toHaveCount(3);
   await expect(page.getByRole("alert")).toHaveCount(0);
 });

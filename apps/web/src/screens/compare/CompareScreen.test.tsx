@@ -180,7 +180,7 @@ describe("Compare (Hebrew)", () => {
     const user = userEvent.setup();
     renderCompare();
     expect(await screen.findByRole("alert")).toHaveTextContent("השירות אינו זמין זמנית.");
-    await user.click(screen.getByRole("button", { name: "לנסות שוב" }));
+    await user.click(screen.getByRole("button", { name: "נסו שוב" }));
     await waitFor(() => expect(options()).toHaveLength(1));
     expect(screen.queryByRole("alert")).toBeNull();
   });
@@ -189,7 +189,7 @@ describe("Compare (Hebrew)", () => {
     useScenario("compare-timeout");
     renderCompare();
     expect(await screen.findByRole("alert")).toHaveTextContent("השירות אינו זמין זמנית.");
-    expect(screen.getByRole("button", { name: "לנסות שוב" })).toBeEnabled();
+    expect(screen.getByRole("button", { name: "נסו שוב" })).toBeEnabled();
   });
 
   it("honours Retry-After when rate limited", async () => {
@@ -197,7 +197,7 @@ describe("Compare (Hebrew)", () => {
     renderCompare();
     expect(await screen.findByRole("alert")).toHaveTextContent("יותר מדי בקשות");
     expect(screen.getByRole("button", { name: /אפשר לנסות שוב בעוד 1/ })).toBeDisabled();
-    expect(await screen.findByRole("button", { name: "לנסות שוב" }, { timeout: 3000 })).toBeEnabled();
+    expect(await screen.findByRole("button", { name: "נסו שוב" }, { timeout: 3000 })).toBeEnabled();
   });
 
   it("says when OpenTransit cannot be reached", async () => {

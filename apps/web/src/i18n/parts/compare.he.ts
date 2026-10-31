@@ -1,10 +1,6 @@
 // Hebrew strings owned by the compare slice; merged into he.ts. Keys are "<area>.<name>".
 export const he_compare = {
-  "compare.fromTo": "מוצא ויעד",
-  "compare.from": "מ־",
-  "compare.to": "אל",
   "compare.myLocation": "המיקום שלי",
-  "compare.swap": "החלפה בין המוצא ליעד",
 
   "compare.when": "מתי יוצאים?",
   "compare.when.pick": "תאריך ושעה (שעון ישראל)",

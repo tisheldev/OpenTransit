@@ -14,8 +14,10 @@ import { usePlan } from "../../plan/PlanProvider";
 import { cachedTrips, MARK_PAINTED, MARK_REQUEST, useJourneyRequest, useJourneys, useTrips } from "../../plan/queries";
 import { earlierTime, laterTime } from "../../plan/shift";
 import { go, hrefFor } from "../../router";
-import { CompactFromTo } from "./CompactFromTo";
-import { draftScene, journeyScene } from "./journeyScene";
+import { journeyToScene } from "../../map/fromJourney";
+import { FromTo } from "../../shell/FromTo";
+import { useSheet } from "../../shell/sheet";
+import { draftScene } from "./journeyScene";
 import { endpointLabel, type EndLabels } from "./labels";
 import { ChartSkeleton, OptionsChart } from "./OptionsChart";
 import { RouteDetails, type TripState } from "./RouteDetails";
@@ -121,6 +123,10 @@ export function CompareScreen() {
   const { t, lang } = useI18n();
   const { draft, setWhen, selected, setSelected } = usePlan();
   const client = useQueryClient();
+  // At 360 x 640 the chart and the start of the selected route only fit together on the
+  // full sheet (design: Language and layout rules), so Compare opens it fully.
+  const { setSnap } = useSheet();
+  useEffect(() => setSnap("full"), [setSnap]);
   const [shift, setShift] = useState<{ draft: PlanDraft; time: TimeOverride } | null>(null);
   const [editing, setEditing] = useState<Editing>(null);
   const override = shift && shift.draft === draft ? shift.time : null;
@@ -149,7 +155,15 @@ export function CompareScreen() {
   });
 
   const scene = useMemo(
-    () => (chosen ? journeyScene(chosen, ends) : draftScene(draft.from, draft.to, ends)),
+    () =>
+      chosen
+        ? {
+            ...journeyToScene(chosen, { originLabel: ends.from, destinationLabel: ends.to }),
+            user: null,
+            camera: "fit" as const,
+            pick: false,
+          }
+        : draftScene(draft.from, draft.to, ends),
     [chosen, ends, draft.from, draft.to],
   );
   usePublishScene(scene);
@@ -248,7 +262,7 @@ export function CompareScreen() {
   return (
     <div className="compare">
       <h1 className="visually-hidden">{t("screen.compare")}</h1>
-      <CompactFromTo />
+      <FromTo variant="compact" />
       <TimeControl
         when={draft.when}
         onChange={(when) => {
