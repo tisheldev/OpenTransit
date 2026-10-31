@@ -38,6 +38,8 @@ export interface NavRide {
   exitOrdinal: number | null;
   /** Stops ridden (exit ordinal − board ordinal); null without both ordinals. */
   stopCount: number | null;
+  /** Boarding platform when the API provides one (API-C2, not yet implemented); never guessed. */
+  platform: string | null;
 }
 
 export interface NavStep {
@@ -96,6 +98,12 @@ export function rideOrdinals(
   return { boardOrdinal: board.ordinal, exitOrdinal: exit.ordinal, stopCount: exit.ordinal - board.ordinal };
 }
 
+/** `leg.from.platformCode` once API-C2 adds it; absent or blank today, so null. */
+function platformOf(leg: Leg): string | null {
+  const code = (leg.from as { platformCode?: unknown }).platformCode;
+  return typeof code === "string" && code.trim() !== "" ? code.trim() : null;
+}
+
 function walkKind(legs: readonly Leg[], index: number): NavStepKind {
   const transitBefore = legs.slice(0, index).some((leg) => leg.kind === "transit");
   const transitAfter = legs.slice(index + 1).some((leg) => leg.kind === "transit");
@@ -137,6 +145,7 @@ export function buildSteps(journey: Journey, trips: Readonly<Record<string, Trip
           operatorName: transit.operatorName,
           routeId: transit.routeId,
           ...rideOrdinals(leg, trips[transit.engineTripId]),
+          platform: platformOf(leg),
         },
       };
     }

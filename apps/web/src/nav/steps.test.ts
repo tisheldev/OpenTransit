@@ -79,6 +79,17 @@ describe("buildSteps", () => {
     expect(rail.stopCount).toBe(5);
   });
 
+  it("carries a platform only when the leg has one (API-C2), never guessed", () => {
+    const journey = recordedJourneys[0]!;
+    expect(buildSteps(journey, recordedTrips).flatMap((step) => (step.ride ? [step.ride.platform] : []))).toEqual([null, null, null]);
+    const withPlatform = structuredClone(journey);
+    Object.assign(withPlatform.legs[2]!.from, { platformCode: " 3 " });
+    Object.assign(withPlatform.legs[0]!.from, { platformCode: "" });
+    const steps = buildSteps(withPlatform, recordedTrips);
+    expect(steps[2]!.ride!.platform).toBe("3");
+    expect(steps[0]!.ride!.platform).toBeNull();
+  });
+
   it("leaves ride ordinals null without trip detail and breaks nothing else", () => {
     const steps = buildSteps(recordedJourneys[0]!, {});
     expect(steps[0]!.ride).toMatchObject({ boardOrdinal: null, exitOrdinal: null, stopCount: null, lineLabel: "8" });

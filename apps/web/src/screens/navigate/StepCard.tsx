@@ -3,14 +3,28 @@ import { Bdi } from "../../components/states";
 import { useI18n } from "../../i18n/I18nProvider";
 import { formatDistance, formatDuration } from "../../lib/format";
 import type { Fix } from "../../lib/geolocation";
-import { formatClock } from "../../lib/time";
+import { formatClock, type Lang } from "../../lib/time";
 import type { NavState } from "../../nav/engine";
 import { haversineMeters } from "../../nav/geo";
 import type { NavStep } from "../../nav/steps";
-import { countdownText, placeName, rideHeadsign, rideName, stepSummary, stopsLeftText, type EndLabels } from "./describe";
+import {
+  isSameStop,
+  placeName,
+  relativeText,
+  rideHeadsign,
+  rideName,
+  ridePlatform,
+  rideStopsText,
+  stopCodeFor,
+  thenText,
+  transferWindowSeconds,
+  walkTargetName,
+  type EndLabels,
+} from "./describe";
 
-// The step card (design: Navigate — C05, "Step kind" table): pinned, high contrast.
-// Times are scheduled and say so; a platform is never guessed (API-C1 pending).
+// The step card (design: Navigate — C05, "Step kind" table): pinned, high contrast, the
+// one thing to do now and the time that matters for it. Times are scheduled (said once in
+// the header); a platform is shown only for rail and only when the API gives one.
 
 interface Props {
   steps: readonly NavStep[];
@@ -18,104 +32,190 @@ interface Props {
   fix: Fix | null;
   clock: number;
   labels: EndLabels;
+  /** End trip (small, in the card header, away from the primary action); none on arrive. */
+  onEnd: (() => void) | null;
 }
 
-function NextVehicle({ ride, clock }: { ride: NavStep; clock: number }) {
-  const { t, lang } = useI18n();
-  const headsign = rideHeadsign(ride);
+/** "Bus 249" with its headsign in a lighter run, so a long headsign does not shout. */
+function RideTitle({ ride, headsign: show = true }: { ride: NavStep; headsign?: boolean }) {
+  const { t } = useI18n();
+  const headsign = show ? rideHeadsign(ride) : null;
   return (
     <>
-      <p className="step-line step-strong">
-        <Bdi>{rideName(ride, t)}</Bdi>
-        {headsign && (
-          <>
-            {" "}
+      <Bdi>{rideName(ride, t)}</Bdi>
+      {headsign && (
+        <>
+          {" "}
+          <span className="step-toward">
             <Bdi>{t("nav.ride.headsign", { headsign })}</Bdi>
-          </>
-        )}
-      </p>
-      <p className="step-line">
-        <Bdi>{t("nav.departsAt", { time: formatClock(ride.scheduledDeparture, lang) })}</Bdi> ·{" "}
-        <Bdi>{countdownText(ride.scheduledDeparture, clock, t, lang)}</Bdi> · {t("nav.platformUnknown")}
-      </p>
+          </span>
+        </>
+      )}
     </>
   );
 }
 
-function WalkDistance({ step, fix }: { step: NavStep; fix: Fix | null }) {
+/** The departure that matters while walking or waiting: time, countdown, platform (rail, known). */
+function Departure({ ride, clock }: { ride: NavStep; clock: number }) {
   const { t, lang } = useI18n();
-  if (fix && Number.isFinite(step.target.latitude)) {
-    const left = formatDistance(haversineMeters(fix, step.target), lang);
-    if (left) return <p className="step-line"><Bdi>{t("nav.distanceLeft", { distance: left })}</Bdi></p>;
-  }
-  const distance = formatDistance(step.distanceMeters, lang);
-  if (distance) return <p className="step-line"><Bdi>{t("nav.walkDistance", { distance })}</Bdi></p>;
+  const platform = ridePlatform(ride);
   return (
-    <p className="step-line">
-      <Bdi>{t("nav.walkTimeOnly", { duration: formatDuration(step.durationSeconds, lang) })}</Bdi>
+    <p className="step-line step-when">
+      <Bdi>{t("nav.departs", { time: formatClock(ride.scheduledDeparture, lang) })}</Bdi>
+      {" · "}
+      <strong className="step-countdown">
+        <Bdi>{relativeText(ride.scheduledDeparture, clock, t, lang, "departure")}</Bdi>
+      </strong>
+      {platform && (
+        <>
+          {" · "}
+          <Bdi>{t("nav.platform", { platform })}</Bdi>
+        </>
+      )}
     </p>
   );
 }
 
-export function StepCard({ steps, state, fix, clock, labels }: Props) {
+/** The vehicle to catch after a walk: line and direction (rail: where to get off), departure. */
+function NextVehicle({ ride, clock }: { ride: NavStep; clock: number }) {
+  const { t } = useI18n();
+  // No headsign (trains: a train number): say where to get off, which gives the direction.
+  const noDirection = !rideHeadsign(ride);
+  return (
+    <div className="step-vehicle">
+      <p className="step-line step-strong">
+        <RideTitle ride={ride} />
+        {noDirection && (
+          <>
+            {" · "}
+            <Bdi>{t("nav.exit", { stop: ride.target.name })}</Bdi>
+          </>
+        )}
+      </p>
+      <Departure ride={ride} clock={clock} />
+    </div>
+  );
+}
+
+function walkLine(step: NavStep, fix: Fix | null, extra: Array<string | null>, t: ReturnType<typeof useI18n>["t"], lang: Lang): string {
+  let first: string;
+  const left = fix && Number.isFinite(step.target.latitude) ? formatDistance(haversineMeters(fix, step.target), lang) : null;
+  const distance = formatDistance(step.distanceMeters, lang);
+  const duration = formatDuration(step.durationSeconds, lang);
+  if (left) first = t("nav.distanceLeft", { distance: left });
+  else if (distance) first = t("nav.walk", { distance, duration });
+  else first = t("nav.walkTimeOnly", { duration });
+  return [first, ...extra.filter((part): part is string => !!part)].join(" · ");
+}
+
+export function StepCard({ steps, state, fix, clock, labels, onEnd }: Props) {
   const { t, lang } = useI18n();
   const step = steps[state.stepIndex]!;
   const following = steps[step.index + 1];
   const cue = step.kind === "ride" ? state.cue : "none";
   const n = step.index + 1;
 
-  let title: string;
+  let title: ReactNode;
   let body: ReactNode;
   switch (step.kind) {
     case "walk_to_stop":
-    case "transfer_walk":
-      title = t(step.kind === "walk_to_stop" ? "nav.step.walkToStop" : "nav.step.transferWalk", {
-        stop: placeName(step.target, labels, t),
-      });
+    case "transfer_walk": {
+      const ride = following?.kind === "ride" ? following : undefined;
+      const code = stopCodeFor(step.target, ride);
+      const window = transferWindowSeconds(steps, step.index);
+      const windowText = window === null ? null : t("nav.transferWindow", { duration: formatDuration(window, lang) });
+      const codeText = code ? t("nav.stopCode", { code }) : null;
+      const stop = walkTargetName(step, ride, labels, t);
+      const waiting = state.phase === "waiting";
+      if (step.kind === "transfer_walk" && isSameStop(step)) {
+        title = t("nav.step.transferSameStop");
+        body = (
+          <p className="step-line">
+            <Bdi>{[stop, codeText, windowText].filter(Boolean).join(" · ")}</Bdi>
+          </p>
+        );
+      } else {
+        title = waiting ? t("nav.step.waitAt", { stop }) : t(step.kind === "walk_to_stop" ? "nav.step.walkToStop" : "nav.step.transferWalk", { stop });
+        body = (
+          <p className="step-line">
+            <Bdi>{waiting ? [codeText, windowText].filter(Boolean).join(" · ") || stop : walkLine(step, fix, [codeText, windowText], t, lang)}</Bdi>
+          </p>
+        );
+      }
       body = (
         <>
-          <WalkDistance step={step} fix={fix} />
-          {following?.kind === "ride" && <NextVehicle ride={following} clock={clock} />}
+          {body}
+          {ride && <NextVehicle ride={ride} clock={clock} />}
         </>
       );
       break;
+    }
     case "walk_to_destination":
       title = t("nav.step.walkToDestination", { place: placeName(step.target, labels, t) });
       body = (
         <>
-          <WalkDistance step={step} fix={fix} />
           <p className="step-line">
-            <Bdi>{t("nav.arriveAt", { time: formatClock(step.scheduledArrival, lang) })}</Bdi>
+            <Bdi>{walkLine(step, fix, [], t, lang)}</Bdi>
+          </p>
+          <p className="step-line step-when">
+            <Bdi>{t("nav.arrival", { time: formatClock(step.scheduledArrival, lang) })}</Bdi>
+            {" · "}
+            <strong className="step-countdown">
+              <Bdi>{relativeText(step.scheduledArrival, clock, t, lang, "arrival")}</Bdi>
+            </strong>
           </p>
         </>
       );
       break;
     case "ride": {
-      const headsign = rideHeadsign(step);
-      title = rideName(step, t);
-      const left = state.stopsLeft ?? step.ride?.stopCount ?? null;
+      // During a cue the passenger is on board: the direction gives way to the exit.
+      title = <RideTitle ride={step} headsign={cue === "none"} />;
+      const stops = rideStopsText(step, state, t);
+      const then = thenText(steps, step.index, labels, t, lang);
+      const code = step.from ? stopCodeFor(step.from, step) : null;
+      const exit = (
+        <>
+          <p className="step-line step-lead">
+            <Bdi>{t("nav.exit", { stop: step.target.name })}</Bdi>
+          </p>
+          <p className="step-line step-when">
+            <Bdi>{formatClock(step.scheduledArrival, lang)}</Bdi>
+            {" · "}
+            <strong className="step-countdown">
+              <Bdi>{relativeText(step.scheduledArrival, clock, t, lang, "arrival")}</Bdi>
+            </strong>
+            {stops && (
+              <>
+                {" · "}
+                <Bdi>{stops}</Bdi>
+              </>
+            )}
+          </p>
+        </>
+      );
+      body =
+        state.phase === "waiting" ? (
+          // At the boarding stop: where to board and when it leaves come first.
+          <>
+            {step.from && (
+              <p className="step-line">
+                <Bdi>{[t("nav.board", { stop: step.from.name }), code ? t("nav.stopCode", { code }) : null].filter(Boolean).join(" · ")}</Bdi>
+              </p>
+            )}
+            <Departure ride={step} clock={clock} />
+            <p className="step-line">
+              <Bdi>{[t("nav.exitAt", { stop: step.target.name, time: formatClock(step.scheduledArrival, lang) }), stops].filter(Boolean).join(" · ")}</Bdi>
+            </p>
+          </>
+        ) : (
+          exit
+        );
       body = (
         <>
-          {headsign && (
-            <p className="step-line">
-              <Bdi>{t("nav.ride.headsign", { headsign })}</Bdi>
-            </p>
-          )}
-          <p className="step-line step-strong">{left === null ? t("nav.stopsUnknown") : stopsLeftText(left, t)}</p>
-          <p className="step-line">
-            <Bdi>
-              {t("nav.exitAt", { stop: step.target.name, time: formatClock(step.scheduledArrival, lang) })}
-            </Bdi>
-          </p>
-          {state.phase === "waiting" && (
-            <p className="step-line">
-              <Bdi>{t("nav.departsAt", { time: formatClock(step.scheduledDeparture, lang) })}</Bdi> ·{" "}
-              <Bdi>{countdownText(step.scheduledDeparture, clock, t, lang)}</Bdi> · {t("nav.platformUnknown")}
-            </p>
-          )}
-          {following && (
-            <p className="step-line muted-on-card">
-              <Bdi>{t("nav.then", { next: stepSummary(following, labels, t, lang) })}</Bdi>
+          {body}
+          {then && (
+            <p className="step-line step-then">
+              <Bdi>{then}</Bdi>
             </p>
           )}
         </>
@@ -126,23 +226,36 @@ export function StepCard({ steps, state, fix, clock, labels }: Props) {
       title = t("nav.step.arrive", { place: placeName(step.target, labels, t) });
       body = (
         <p className="step-line">
-          <Bdi>{t("nav.arriveAt", { time: formatClock(step.scheduledArrival, lang) })}</Bdi>
+          <Bdi>{t("nav.arrival", { time: formatClock(step.scheduledArrival, lang) })}</Bdi>
         </p>
       );
       break;
   }
 
   return (
-    <section className={`step-card${cue === "none" ? "" : ` step-card-cue step-card-${cue}`}`} aria-labelledby="step-card-title" data-step-kind={step.kind}>
+    <section
+      className={`step-card${cue === "none" ? "" : ` step-card-cue step-card-${cue}`}`}
+      aria-labelledby="step-card-title"
+      data-step-kind={step.kind}
+    >
+      <div className="step-head">
+        <p className="step-of">
+          {t("nav.stepOf", { n, total: steps.length })} · {t("nav.scheduled")}
+        </p>
+        {onEnd && (
+          <button type="button" className="step-end" onClick={onEnd}>
+            {t("nav.end")}
+          </button>
+        )}
+      </div>
       {cue !== "none" && (
         <p className="step-cue">
           <span aria-hidden="true">{cue === "next_stop" ? "⬇ " : "⚠ "}</span>
           {t(cue === "next_stop" ? "nav.cueNext" : "nav.cueTwo")}
         </p>
       )}
-      <p className="step-of">{t("nav.stepOf", { n, total: steps.length })}</p>
       <h2 id="step-card-title" className="step-title">
-        <Bdi>{title}</Bdi>
+        {title}
       </h2>
       {body}
     </section>
