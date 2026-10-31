@@ -12,8 +12,6 @@ export const he_shell = {
   "fromTo.label": "מוצא ויעד",
   "fromTo.from": "מאיפה?",
   "fromTo.to": "לאן?",
-  "fromTo.fromValue": "מוצא: {place}",
-  "fromTo.toValue": "יעד: {place}",
   "fromTo.swap": "החלפת מוצא ויעד",
 
   "place.myLocation": "המיקום שלי",

@@ -41,7 +41,7 @@ describe("Home", () => {
     renderApp("#/");
     expect(statusCalls).toBe(0);
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(he["home.title"]);
-    expect(screen.getByRole("button", { name: `מוצא: ${he["place.myLocation"]}` })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /מאיפה\?\s*המיקום שלי/ })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: he["fromTo.to"] })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: he["fromTo.swap"] })).toBeDisabled();
     expect(screen.getByRole("button", { name: new RegExp(he["home.setHome"]) })).toBeInTheDocument();

@@ -13,8 +13,6 @@ export const en_shell: Record<keyof typeof he_shell, string> = {
   "fromTo.label": "From and to",
   "fromTo.from": "Where from?",
   "fromTo.to": "Where to?",
-  "fromTo.fromValue": "From: {place}",
-  "fromTo.toValue": "To: {place}",
   "fromTo.swap": "Swap from and to",
 
   "place.myLocation": "My location",

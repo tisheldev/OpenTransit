@@ -80,8 +80,8 @@ describe("shell", () => {
     expect(swap).toBeEnabled();
     await userEvent.click(swap);
     await waitFor(() => expect(storedDraft()?.to).toEqual({ type: "myLocation" }));
-    expect(screen.getByRole("button", { name: `To: ${en["place.myLocation"]}` })).toBeInTheDocument();
-    await userEvent.click(screen.getByRole("button", { name: /^From: / }));
+    expect(screen.getByRole("button", { name: /^Where to\?\s*My location$/ })).toBeInTheDocument();
+    await userEvent.click(screen.getByRole("button", { name: /^Where from\?/ }));
     expect(window.location.hash).toBe("#/search/from");
   });
 

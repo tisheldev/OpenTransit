@@ -27,24 +27,24 @@ export function FromTo({ variant = "full" }: { variant?: "full" | "compact" }) {
         <button
           type="button"
           className="from-to-field"
-          aria-label={t("fromTo.fromValue", { place: from })}
           onClick={() => go({ name: "search", field: "from" })}
         >
           <span className="from-to-dot from-to-dot-origin" aria-hidden="true" />
           <span className="from-to-text">
-            {variant === "full" && <span className="from-to-caption">{t("fromTo.from")}</span>}
+            <span className={variant === "full" ? "from-to-caption" : "visually-hidden"}>{t("fromTo.from")} </span>
             <bdi className="from-to-value">{from}</bdi>
           </span>
         </button>
         <button
           type="button"
           className="from-to-field"
-          aria-label={to === null ? t("fromTo.to") : t("fromTo.toValue", { place: to })}
           onClick={() => go({ name: "search", field: "to" })}
         >
           <span className="from-to-dot from-to-dot-destination" aria-hidden="true" />
           <span className="from-to-text">
-            {variant === "full" && to !== null && <span className="from-to-caption">{t("fromTo.to")}</span>}
+            {to !== null && (
+              <span className={variant === "full" ? "from-to-caption" : "visually-hidden"}>{t("fromTo.to")} </span>
+            )}
             {to === null ? (
               <span className="from-to-placeholder">{t("fromTo.to")}</span>
             ) : (

@@ -1,4 +1,4 @@
-import { http, HttpResponse } from "msw";
+import { delay, http, HttpResponse } from "msw";
 import { fixture, fixtures, type Fixture } from "../api/fixtures";
 
 // MSW handlers that answer every public endpoint from fixtures. Used by Vitest (node)
@@ -104,7 +104,7 @@ export const handlers = [
     }
   }),
 
-  http.get("*/v1/places", ({ request }) => {
+  http.get("*/v1/places", async ({ request }) => {
     const url = new URL(request.url);
     const q = url.searchParams.get("q") ?? "";
     const lang = url.searchParams.get("lang") ?? "he";
@@ -119,6 +119,9 @@ export const handlers = [
         return send("synthetic-problem-rate-limited");
       case "places-offline":
         return HttpResponse.error();
+      case "places-slow":
+        await delay(4000);
+        break;
     }
     if (q.startsWith("street")) return respond(derivedStreetLevelAddress());
     if (q.startsWith("zzz")) return send("recorded-places-empty");
