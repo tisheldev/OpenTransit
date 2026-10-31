@@ -275,11 +275,303 @@
       "ok": true,
       "desired": 1,
       "taskDefinition": "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:task-definition/opentransit-h1:1"
+    },
+    {
+      "step": "wait-ready-first-deploy",
+      "at": "2026-10-31T17:18:20+00:00",
+      "ok": true,
+      "readyz200At": "2026-10-31T17:18:16+00:00",
+      "targets": {
+        "10.80.0.13": "healthy"
+      }
+    },
+    {
+      "step": "probe-first-deploy",
+      "at": "2026-10-31T17:18:46+00:00",
+      "ok": true,
+      "demoExit": 0,
+      "journeysPassed": 10,
+      "journeysTotal": 10,
+      "healthzMedianMs": 174.6
     }
   ],
   "measurements": {
-    "tasks": {},
-    "taskRunningSecondsSoFar": 0.0
+    "tasks": {
+      "5d3f0de184a74a9bbd504728107caea1": {
+        "createdAt": "2026-10-31T19:06:37.279000+02:00",
+        "pullStartedAt": "2026-10-31T19:06:49.639000+02:00",
+        "pullStoppedAt": "2026-10-31T19:07:28.758000+02:00",
+        "startedAt": "2026-10-31T19:14:38.331000+02:00",
+        "stoppingAt": null,
+        "stoppedAt": null,
+        "lastStatus": "RUNNING",
+        "healthStatus": "UNKNOWN",
+        "stopCode": null,
+        "stoppedReason": null,
+        "taskDefinitionArn": "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:task-definition/opentransit-h1:1",
+        "containers": {
+          "verifier": {
+            "lastStatus": "STOPPED",
+            "exitCode": 0,
+            "reason": null,
+            "healthStatus": "UNKNOWN"
+          },
+          "init": {
+            "lastStatus": "STOPPED",
+            "exitCode": 0,
+            "reason": null,
+            "healthStatus": "UNKNOWN"
+          },
+          "photon": {
+            "lastStatus": "RUNNING",
+            "exitCode": null,
+            "reason": null,
+            "healthStatus": "HEALTHY"
+          },
+          "motis": {
+            "lastStatus": "RUNNING",
+            "exitCode": null,
+            "reason": null,
+            "healthStatus": "HEALTHY"
+          },
+          "api": {
+            "lastStatus": "RUNNING",
+            "exitCode": null,
+            "reason": null,
+            "healthStatus": "UNKNOWN"
+          }
+        }
+      }
+    },
+    "taskRunningSecondsSoFar": 221.7,
+    "readiness": [
+      {
+        "label": "first-deploy",
+        "waitStartedAt": "2026-10-31T17:06:31+00:00",
+        "readyz200At": "2026-10-31T17:18:16+00:00",
+        "targets": {
+          "10.80.0.13": "healthy"
+        },
+        "taskTimes": {
+          "5d3f0de184a74a9bbd504728107caea1": {
+            "createdAt": "2026-10-31T19:06:37.279000+02:00",
+            "pullStartedAt": "2026-10-31T19:06:49.639000+02:00",
+            "pullStoppedAt": "2026-10-31T19:07:28.758000+02:00",
+            "startedAt": "2026-10-31T19:14:38.331000+02:00",
+            "stoppingAt": null,
+            "stoppedAt": null,
+            "lastStatus": "RUNNING",
+            "healthStatus": "UNKNOWN",
+            "stopCode": null,
+            "stoppedReason": null,
+            "taskDefinitionArn": "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:task-definition/opentransit-h1:1",
+            "containers": {
+              "verifier": {
+                "lastStatus": "STOPPED",
+                "exitCode": 0,
+                "reason": null,
+                "healthStatus": "UNKNOWN"
+              },
+              "init": {
+                "lastStatus": "STOPPED",
+                "exitCode": 0,
+                "reason": null,
+                "healthStatus": "UNKNOWN"
+              },
+              "photon": {
+                "lastStatus": "RUNNING",
+                "exitCode": null,
+                "reason": null,
+                "healthStatus": "HEALTHY"
+              },
+              "motis": {
+                "lastStatus": "RUNNING",
+                "exitCode": null,
+                "reason": null,
+                "healthStatus": "HEALTHY"
+              },
+              "api": {
+                "lastStatus": "RUNNING",
+                "exitCode": null,
+                "reason": null,
+                "healthStatus": "UNKNOWN"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "probes": [
+      {
+        "label": "first-deploy",
+        "startedAt": "2026-10-31T17:18:34+00:00",
+        "from": "developer machine (Israel)",
+        "readyz": {
+          "status": 200,
+          "ms": 247.3,
+          "body": {
+            "status": "ready",
+            "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445"
+          }
+        },
+        "status": {
+          "status": 200,
+          "ms": 209.7,
+          "body": {
+            "data": {
+              "ready": true,
+              "staticData": "available",
+              "routing": "available",
+              "reference": "available",
+              "realtime": "not_enabled",
+              "alerts": "not_enabled",
+              "lastValidatedAt": "2026-10-31T12:00:20.906984+00:00"
+            },
+            "meta": {
+              "requestId": "8030b06e87c54309a64d5056d35d54de",
+              "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+              "generatedAt": "2026-10-31T17:18:34.563785Z",
+              "dataBuiltAt": "2026-10-31T12:18:07.213453Z",
+              "mode": "real",
+              "coverage": {
+                "from": "2026-10-31T00:00:00+02:00",
+                "until": "2026-11-30T00:00:00+02:00"
+              },
+              "freshness": "current",
+              "capabilities": {
+                "realtime": "not_enabled",
+                "alerts": "not_enabled"
+              },
+              "attribution": [
+                "Israel Ministry of Transport",
+                "© OpenStreetMap contributors"
+              ],
+              "rankingPolicy": "motis-v2.11.2-feasible-engine-order-v1",
+              "appliedConstraints": {},
+              "warnings": []
+            }
+          }
+        },
+        "demo": {
+          "exit": 0,
+          "stdoutTail": "]\n    08:26-08:28  walk       START -> ??????? ????/???????  [scheduled]\n    08:28-08:42  bus        ??????? ????/??????? -> ??? ????/????? ????? line 5 to ?? ???? ???_???? ???? (??, service date 2026-11-01)  [scheduled]\n    08:42-08:44  walk       ??? ????/????? ????? -> ??? ????/????? ?????  [scheduled]\n    08:44-09:09  bus        ??? ????/????? ????? -> ???? ????? line 650 to ?????_???? ??? ????? (?????????, service date 2026-11-01)  [scheduled]\n    09:11-09:13  walk       ???? ????? -> ???? ?????  [scheduled]\n    09:13-10:05  bus        ???? ????? -> ?. ?????? ??? ?????/????? line 947 to ????_?????? ??? ????? (???, service date 2026-11-01)  [scheduled]\n    10:09-10:11  walk       ?. ?????? ??? ?????/????? -> ?. ?????? ??? ?????/?????? ??????  [scheduled]\n    10:11-10:19  bus        ?. ?????? ??? ?????/?????? ?????? -> ???? ?????/???? ???? line 4 to ???? ??????_?????? ?????? (???????, service date 2026-11-01)  [scheduled]\n    10:19-10:21  walk       ???? ?????/???? ???? -> ???? ?????/???? ????  [scheduled]\n    10:25-10:32  bus        ???? ?????/???? ???? -> ??????/?????? ????? line 144 to ????_?????????? (???, service date 2026-11-01)  [scheduled]\n    10:32-10:37  walk       ??????/?????? ????? -> END  [scheduled]\n\n  Constraints: timeMode=departAt, modes=['bus', 'rail', 'light_rail'], maxAccessWalkMinutes=15, maxEgressWalkMinutes=15, maxDirectWalkMinutes=30, engineWalkCapConformance=unverified, transferWalkLimit=not_enforced\n  Warnings:    TRANSFER_STREET_PATH_UNAVAILABLE\n",
+          "stderrTail": ""
+        },
+        "journeys": [
+          {
+            "id": "J01",
+            "status": 200,
+            "ms": 191.5,
+            "journeys": 1,
+            "outcome": "routes_found",
+            "expected": "route",
+            "pass": true
+          },
+          {
+            "id": "J04",
+            "status": 200,
+            "ms": 196.8,
+            "journeys": 1,
+            "outcome": "routes_found",
+            "expected": "route",
+            "pass": true
+          },
+          {
+            "id": "J11",
+            "status": 200,
+            "ms": 196.3,
+            "journeys": 1,
+            "outcome": "routes_found",
+            "expected": "route",
+            "pass": true
+          },
+          {
+            "id": "J12",
+            "status": 200,
+            "ms": 209.8,
+            "journeys": 1,
+            "outcome": "routes_found",
+            "expected": "route",
+            "pass": true
+          },
+          {
+            "id": "J15",
+            "status": 200,
+            "ms": 307.4,
+            "journeys": 1,
+            "outcome": "routes_found",
+            "expected": "route",
+            "pass": true
+          },
+          {
+            "id": "J16",
+            "status": 200,
+            "ms": 215.5,
+            "journeys": 1,
+            "outcome": "routes_found",
+            "expected": "route",
+            "pass": true
+          },
+          {
+            "id": "J19",
+            "status": 200,
+            "ms": 318.8,
+            "journeys": 1,
+            "outcome": "routes_found",
+            "expected": "route",
+            "pass": true
+          },
+          {
+            "id": "J21",
+            "status": 200,
+            "ms": 195.7,
+            "journeys": 1,
+            "outcome": "routes_found",
+            "expected": "route",
+            "pass": true
+          },
+          {
+            "id": "J22",
+            "status": 200,
+            "ms": 297.2,
+            "journeys": 1,
+            "outcome": "routes_found",
+            "expected": "either",
+            "pass": true
+          },
+          {
+            "id": "J23",
+            "status": 200,
+            "ms": 175.9,
+            "journeys": 0,
+            "outcome": "no_route",
+            "expected": "no_route",
+            "pass": true
+          }
+        ],
+        "healthzLatencyMs": {
+          "n": 50,
+          "min": 168.7,
+          "median": 174.6,
+          "p95": 189.7,
+          "max": 201.0,
+          "note": "HTTP round trip from this machine through the ALB (new connection each)"
+        },
+        "journeyLatencyMs": {
+          "n": 10,
+          "median": 203.3,
+          "max": 318.8
+        },
+        "finishedAt": "2026-10-31T17:18:46+00:00"
+      }
+    ],
+    "webClientRealE2e": {
+      "at": "2026-10-31T17:20Z",
+      "command": "cd apps/web && OPENTRANSIT_API_ORIGIN=http://<alb> npx playwright test e2e/real.spec.ts",
+      "result": "2 passed (4.1 s): dev proxy /v1/status ready+real+realtime not_enabled; real engine trip ID opens through the encoded /v1/trips path with matching tripRef",
+      "project": "mobile-chromium (Pixel 7, 360x640)",
+      "notRun": "npm run fixtures:record (writes apps/web fixtures owned by the CLIENT task)"
+    }
   },
   "costEstimate": {
     "basis": "eu-north-1 on-demand list prices (AWS Price List API, 31 Oct 2026), pre-tax",

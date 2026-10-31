@@ -1,10 +1,69 @@
 # Scheduled API operations
 
-**Prepared for M7/M8; procedures and restore drill are not yet exercised.** Cloud
-resources are drafts. Use [deploy/aws/README.md](../deploy/aws/README.md) for image
+**The H-1 private preview runs on AWS (below); the restore drill, load and fault injection
+(M7) are not yet exercised.** Other cloud resources are drafts. Use [deploy/aws/README.md](../deploy/aws/README.md) for image
 staging, dependency ordering, task variants, IAM, ingress and bounded-test cleanup.
 See [development](development.md) for local setup and [policies](policies/privacy.md)
 for the proposed logging contract. Do not infer deployment/spending authorization.
+
+## H-1 private preview (eu-north-1, running since 31 October 2026)
+
+One ECS service `opentransit-h1` (cluster of the same name) runs one 1 vCPU / 3 GiB task
+behind an internet-facing ALB on **HTTP:80, reachable only from `93.173.37.36/32`** (no domain,
+so no HTTPS). Rolling deployments allow one extra task (maximum 200 %, minimum healthy 100 %,
+circuit breaker with rollback), so at most 6 GiB is allocated, under the 8 GiB ceiling. Every
+resource and measurement is in the [H-1 evidence](../services/api/results/h1-preview-20261031-01.json);
+tooling is in [deploy/aws](../deploy/aws/README.md#h-1-private-preview-31-october-2026). Commands
+below run from the repository root with the `opentransit` profile (`aws login --profile
+opentransit` when it has expired); `H1`, `PUB` and the variables stand for:
+
+```sh
+H1="uv run --project services/api --locked python deploy/aws/tools/h1_preview.py"
+PUB="uv run --project services/api --locked python deploy/aws/tools/publish_generation.py"
+A=$(aws --profile opentransit sts get-caller-identity --query Account --output text)
+TARGET="--region eu-north-1 --cluster opentransit-h1 --service opentransit-h1 --profile opentransit"
+```
+
+* **Check health.** `curl -s http://<alb>/readyz` (200 or 503 with reason codes) and
+  `$H1 probe --label <label> --queries services/api/results/h0-fargate-20261031-01/probe-queries.json`
+  (readiness, status, demo, ten journeys, latency; appended to the evidence). `$H1 tasks` lists task
+  and container states; ECS service events: `aws --profile opentransit --region eu-north-1 ecs
+  describe-services --cluster opentransit-h1 --services opentransit-h1 --query 'services[0].events[:5]'`.
+* **Read logs.** Log group `/opentransit/h1` (14 days), one stream per container
+  (`api/api/<task>`, `verifier/...`, `init/...`, `motis/...`, `photon/...`): `aws --profile opentransit
+  --region eu-north-1 logs tail /opentransit/h1 --since 1h`, or `$H1 export-logs --output <dir>`.
+* **Deploy** (normally the daily job does this): `$PUB publish ... --output D:/ot/releases/<stamp>
+  --previous-release <serving release-registered.json>` then `$PUB push --plan <dir>/release-plan.json
+  --registry $A.dkr.ecr.eu-north-1.amazonaws.com --execution-role-arn
+  arn:aws:iam::$A:role/opentransit-h1-execution --vpc-cidr 10.80.0.0/16 $TARGET --execute-aws --wait`.
+  A replacement task takes about 12–15 minutes to pass `/readyz`; the old task serves until then.
+  Update `D:/ot/releases/current.json` (`release`, `previous`) after a manual deploy.
+* **Roll back** to the retained previous revision: `$PUB rollback --current <serving
+  release-registered.json> --previous <previous release-registered.json> --execute-aws --wait
+  $TARGET`. It refuses expired freshness or coverage (exit 1) and deletes nothing. If a new task
+  never becomes healthy the circuit breaker rolls back on its own.
+* **Pause to save cost.** `$H1 pause` sets desired count 0 (Fargate and task IPv4 stop; the ALB,
+  about $4/week, keeps billing); `$H1 resume` starts one task (about 12 minutes to ready). Disable
+  the scheduled task while paused, or the next refresh will wait for a deployment that cannot start.
+* **Clean up.** `$H1 --dry-run cleanup` prints the teardown; `$H1 cleanup` deletes the service,
+  ALB, target group, every `opentransit-h1` revision, cluster, VPC and its parts, log group and
+  execution role, then `$H1 inventory --label after`. ECR repositories and images are kept. Also
+  disable the scheduled task `OpenTransit H-1 daily refresh`.
+
+**Daily refresh.** Windows Task Scheduler on the operator machine runs
+`D:/ot/src-<commit>/deploy/aws/scheduler/daily-refresh.cmd` at 06:30 local (task
+`OpenTransit H-1 daily refresh`): fetch → validate → build-generation (only if the
+GTFS/TripIdToDate pair changed) → local probe (new builds only) → publish/push → ALB probe →
+`prune --dry-run`, stopping at the first failure. Logs: `D:/ot/logs/daily-<UTC stamp>.log` and
+`.json`, and `D:/ot/logs/daily-scheduler.log`. An unchanged pair renews freshness without a
+rebuild: the new revision carries the day's paired check, which the in-task verifier writes to
+`/run/opentransit/source-check.json` and the API applies at startup (`OPENTRANSIT_SOURCE_CHECK`).
+The job needs the machine on, Docker Desktop running and a valid `opentransit` login; a failed
+day leaves the previous revision serving, and an unchanged generation stays serviceable for
+7 days after its last renewal.
+
+**Archive (decision, 31 October 2026).** Generations stay on `D:/ot/` (`generations/`, `src/`,
+`releases/`, `logs/`), images in ECR (never deleted automatically), evidence in Git. S3 is deferred.
 
 ## Incident checks and evidence
 
