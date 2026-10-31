@@ -855,7 +855,7 @@ def probe(args: argparse.Namespace) -> int:
         status, ms, payload = http("POST", base + "/v1/journeys", body, timeout=60)
         count, outcome = None, None
         if status == 200:
-            answer = json.loads(payload)
+            answer = json.loads(payload)["data"]
             count = len(answer.get("journeys", []))
             outcome = answer.get("outcome")
         expected = case.get("expect", {}).get("outcome")
@@ -955,7 +955,7 @@ def metrics(args: argparse.Namespace) -> int:
 
 def export_logs(args: argparse.Namespace) -> int:
     ev = load()
-    folder = Path(args.output)
+    folder = Path(args.output).resolve()
     folder.mkdir(parents=True, exist_ok=True)
     streams = aws("logs", "describe-log-streams", "--log-group-name", LOG_GROUP).get(
         "logStreams", []

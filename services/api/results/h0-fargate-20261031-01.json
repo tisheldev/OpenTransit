@@ -43,7 +43,7 @@
       "id": "/opentransit/h0",
       "arn": "arn:aws:logs:eu-north-1:{{ACCOUNT_ID}}:log-group:/opentransit/h0",
       "createdAt": "2026-10-31T12:19:39+00:00",
-      "deletedAt": null,
+      "deletedAt": "2026-10-31T13:38:41+00:00",
       "retentionDays": 7
     },
     {
@@ -51,21 +51,21 @@
       "id": "opentransit-h0-execution",
       "arn": "arn:aws:iam::{{ACCOUNT_ID}}:role/opentransit-h0-execution",
       "createdAt": "2026-10-31T12:19:40+00:00",
-      "deletedAt": null
+      "deletedAt": "2026-10-31T13:38:44+00:00"
     },
     {
       "type": "iam-inline-policy",
       "id": "opentransit-h0-execution/opentransit-h0-execution",
       "arn": null,
       "createdAt": "2026-10-31T12:19:42+00:00",
-      "deletedAt": null
+      "deletedAt": "2026-10-31T13:38:43+00:00"
     },
     {
       "type": "vpc",
       "id": "vpc-0554d9c999a95c58a",
       "arn": null,
       "createdAt": "2026-10-31T12:19:44+00:00",
-      "deletedAt": null,
+      "deletedAt": "2026-10-31T13:38:40+00:00",
       "cidr": "10.80.0.0/16"
     },
     {
@@ -73,7 +73,7 @@
       "id": "igw-034f1e129191b39ba",
       "arn": null,
       "createdAt": "2026-10-31T12:19:47+00:00",
-      "deletedAt": null,
+      "deletedAt": "2026-10-31T13:38:38+00:00",
       "vpcId": "vpc-0554d9c999a95c58a"
     },
     {
@@ -81,7 +81,7 @@
       "id": "rtb-0d9b7e4fb656a5e4c",
       "arn": null,
       "createdAt": "2026-10-31T12:19:50+00:00",
-      "deletedAt": null,
+      "deletedAt": "2026-10-31T13:38:35+00:00",
       "vpcId": "vpc-0554d9c999a95c58a"
     },
     {
@@ -89,7 +89,7 @@
       "id": "subnet-048574c3ca081f6c2",
       "arn": null,
       "createdAt": "2026-10-31T12:19:54+00:00",
-      "deletedAt": null,
+      "deletedAt": "2026-10-31T13:38:31+00:00",
       "cidr": "10.80.0.0/24",
       "zone": "eu-north-1a"
     },
@@ -98,7 +98,7 @@
       "id": "rtbassoc-0eb76f8a16d13d6a8",
       "arn": null,
       "createdAt": "2026-10-31T12:19:55+00:00",
-      "deletedAt": null,
+      "deletedAt": "2026-10-31T13:38:28+00:00",
       "routeTableId": "rtb-0d9b7e4fb656a5e4c",
       "subnetId": "subnet-048574c3ca081f6c2"
     },
@@ -107,7 +107,7 @@
       "id": "subnet-096a6cfe5fb4518d5",
       "arn": null,
       "createdAt": "2026-10-31T12:19:57+00:00",
-      "deletedAt": null,
+      "deletedAt": "2026-10-31T13:38:33+00:00",
       "cidr": "10.80.1.0/24",
       "zone": "eu-north-1b"
     },
@@ -116,7 +116,7 @@
       "id": "rtbassoc-0e0d85ab003485478",
       "arn": null,
       "createdAt": "2026-10-31T12:19:59+00:00",
-      "deletedAt": null,
+      "deletedAt": "2026-10-31T13:38:30+00:00",
       "routeTableId": "rtb-0d9b7e4fb656a5e4c",
       "subnetId": "subnet-096a6cfe5fb4518d5"
     },
@@ -125,7 +125,7 @@
       "id": "sg-04b302a6153ad200e",
       "arn": null,
       "createdAt": "2026-10-31T12:20:00+00:00",
-      "deletedAt": null,
+      "deletedAt": "2026-10-31T13:38:25+00:00",
       "name": "opentransit-h0-alb",
       "vpcId": "vpc-0554d9c999a95c58a"
     },
@@ -134,7 +134,7 @@
       "id": "sg-0f6bb12a2bd7703c1",
       "arn": null,
       "createdAt": "2026-10-31T12:20:04+00:00",
-      "deletedAt": null,
+      "deletedAt": "2026-10-31T13:38:27+00:00",
       "name": "opentransit-h0-task",
       "vpcId": "vpc-0554d9c999a95c58a"
     },
@@ -143,14 +143,14 @@
       "id": "opentransit-h0-api",
       "arn": "arn:aws:elasticloadbalancing:eu-north-1:{{ACCOUNT_ID}}:targetgroup/opentransit-h0-api/31aec7e083959a22",
       "createdAt": "2026-10-31T12:20:14+00:00",
-      "deletedAt": null
+      "deletedAt": "2026-10-31T13:37:45+00:00"
     },
     {
       "type": "load-balancer",
       "id": "opentransit-h0",
       "arn": "arn:aws:elasticloadbalancing:eu-north-1:{{ACCOUNT_ID}}:loadbalancer/app/opentransit-h0/a5ee142285674309",
       "createdAt": "2026-10-31T12:20:18+00:00",
-      "deletedAt": null,
+      "deletedAt": "2026-10-31T13:37:44+00:00",
       "dnsName": "opentransit-h0-452882192.eu-north-1.elb.amazonaws.com"
     },
     {
@@ -158,14 +158,35 @@
       "id": "HTTP:80",
       "arn": "arn:aws:elasticloadbalancing:eu-north-1:{{ACCOUNT_ID}}:listener/app/opentransit-h0/a5ee142285674309/090716f3b4bbbf4e",
       "createdAt": "2026-10-31T12:20:21+00:00",
-      "deletedAt": null
+      "deletedAt": "2026-10-31T13:37:41+00:00"
     },
     {
       "type": "ecs-cluster",
       "id": "opentransit-h0",
       "arn": "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:cluster/opentransit-h0",
       "createdAt": "2026-10-31T12:20:23+00:00",
-      "deletedAt": null
+      "deletedAt": "2026-10-31T13:37:49+00:00"
+    },
+    {
+      "type": "task-definition",
+      "id": "opentransit-h0:1",
+      "arn": "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:task-definition/opentransit-h0:1",
+      "createdAt": "2026-10-31T13:04:44+00:00",
+      "deletedAt": "2026-10-31T13:37:48+00:00",
+      "images": {
+        "init": "{{ACCOUNT_ID}}.dkr.ecr.eu-north-1.amazonaws.com/opentransit-data@sha256:64eb35650eadf73cbb6619d2ad571655afd7ab351f864412698d5f9c87c51059",
+        "motis": "{{ACCOUNT_ID}}.dkr.ecr.eu-north-1.amazonaws.com/opentransit-motis@sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330",
+        "photon": "{{ACCOUNT_ID}}.dkr.ecr.eu-north-1.amazonaws.com/opentransit-photon@sha256:52f94ba3722d73dc06022ffa8a1392ca96bff5418ae3f85ce54c725ab3803e83",
+        "verifier": "{{ACCOUNT_ID}}.dkr.ecr.eu-north-1.amazonaws.com/opentransit-api@sha256:0d501f356ab5a1af6cfd02ea0aa2610e05166e85bf14521a676318358f5a57d8",
+        "api": "{{ACCOUNT_ID}}.dkr.ecr.eu-north-1.amazonaws.com/opentransit-api@sha256:0d501f356ab5a1af6cfd02ea0aa2610e05166e85bf14521a676318358f5a57d8"
+      }
+    },
+    {
+      "type": "ecs-service",
+      "id": "opentransit-h0",
+      "arn": "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:service/opentransit-h0/opentransit-h0",
+      "createdAt": "2026-10-31T13:04:51+00:00",
+      "deletedAt": "2026-10-31T13:37:36+00:00"
     }
   ],
   "steps": [
@@ -200,9 +221,1147 @@
       "ok": true,
       "digest": "sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330",
       "compressedBytes": 68329952
+    },
+    {
+      "step": "push-api",
+      "at": "2026-10-31T13:00:03+00:00",
+      "ok": true,
+      "digest": "sha256:0d501f356ab5a1af6cfd02ea0aa2610e05166e85bf14521a676318358f5a57d8",
+      "compressedBytes": 77364059
+    },
+    {
+      "step": "push-data",
+      "at": "2026-10-31T13:03:32+00:00",
+      "ok": true,
+      "digest": "sha256:64eb35650eadf73cbb6619d2ad571655afd7ab351f864412698d5f9c87c51059",
+      "compressedBytes": 760649241
+    },
+    {
+      "step": "register-task-definition-first-attempt",
+      "at": "2026-10-31T13:04:01+00:00",
+      "ok": false,
+      "detail": "ClientException: EphemeralStorage size should be at least 21. Draft fixed to omit ephemeralStorage (Fargate default 20 GiB)."
+    },
+    {
+      "step": "register-task-definition",
+      "at": "2026-10-31T13:04:44+00:00",
+      "ok": true,
+      "arn": "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:task-definition/opentransit-h0:1"
+    },
+    {
+      "step": "service-create",
+      "at": "2026-10-31T13:04:51+00:00",
+      "ok": true,
+      "desired": 1,
+      "taskDefinition": "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:task-definition/opentransit-h0:1"
+    },
+    {
+      "step": "wait-ready-task1",
+      "at": "2026-10-31T13:18:11+00:00",
+      "ok": true,
+      "readyz200At": "2026-10-31T13:18:06+00:00",
+      "targets": {
+        "10.80.1.22": "healthy"
+      }
+    },
+    {
+      "step": "probe-task1",
+      "at": "2026-10-31T13:18:51+00:00",
+      "ok": false,
+      "demoExit": 0,
+      "journeysPassed": 2,
+      "journeysTotal": 10,
+      "healthzMedianMs": 173.8,
+      "note": "FAIL was a tool parsing bug, not an API failure; see probe task1-rerun"
+    },
+    {
+      "step": "probe-task1-rerun",
+      "at": "2026-10-31T13:19:36+00:00",
+      "ok": true,
+      "demoExit": 0,
+      "journeysPassed": 10,
+      "journeysTotal": 10,
+      "healthzMedianMs": 175.7
+    },
+    {
+      "step": "service-desired-count",
+      "at": "2026-10-31T13:19:54+00:00",
+      "ok": true,
+      "desired": 2
+    },
+    {
+      "step": "wait-ready-task2-overlap",
+      "at": "2026-10-31T13:31:55+00:00",
+      "ok": true,
+      "readyz200At": "2026-10-31T13:31:50+00:00",
+      "targets": {
+        "10.80.0.170": "healthy",
+        "10.80.1.22": "healthy"
+      }
+    },
+    {
+      "step": "probe-two-tasks",
+      "at": "2026-10-31T13:32:17+00:00",
+      "ok": true,
+      "demoExit": 0,
+      "journeysPassed": 10,
+      "journeysTotal": 10,
+      "healthzMedianMs": 174.5
+    },
+    {
+      "step": "metrics",
+      "at": "2026-10-31T13:32:35+00:00",
+      "ok": true,
+      "points": {
+        "CPUUtilization": 25,
+        "MemoryUtilization": 25
+      }
+    },
+    {
+      "step": "service-desired-count",
+      "at": "2026-10-31T13:32:45+00:00",
+      "ok": true,
+      "desired": 0
+    },
+    {
+      "step": "export-logs",
+      "at": "2026-10-31T13:36:49+00:00",
+      "ok": true,
+      "streams": 10,
+      "events": 743,
+      "sentinels": {
+        "32.0817731": 0,
+        "34.7817731": 0,
+        "Qzentinel7731": 0
+      }
+    },
+    {
+      "step": "cleanup-start",
+      "at": "2026-10-31T13:37:01+00:00",
+      "ok": true
+    },
+    {
+      "step": "cleanup-complete",
+      "at": "2026-10-31T13:38:44+00:00",
+      "ok": true,
+      "remaining": [],
+      "kept": [
+        "opentransit-api",
+        "opentransit-data",
+        "opentransit-photon",
+        "opentransit-motis"
+      ]
     }
   ],
-  "measurements": {},
+  "measurements": {
+    "tasks": {
+      "af40177cdbd5456fad1b96eb1c6a6108": {
+        "createdAt": "2026-10-31T15:05:09.153000+02:00",
+        "pullStartedAt": "2026-10-31T15:05:23.978000+02:00",
+        "pullStoppedAt": "2026-10-31T15:06:05.819000+02:00",
+        "startedAt": "2026-10-31T15:13:41.380000+02:00",
+        "stoppingAt": "2026-10-31T15:32:48.048000+02:00",
+        "stoppedAt": "2026-10-31T15:34:39.488000+02:00",
+        "lastStatus": "STOPPED",
+        "healthStatus": "UNKNOWN",
+        "stopCode": "ServiceSchedulerInitiated",
+        "stoppedReason": "Scaling activity initiated by (deployment ecs-svc/7751822054371493207)",
+        "taskDefinitionArn": "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:task-definition/opentransit-h0:1",
+        "containers": {
+          "api": {
+            "lastStatus": "STOPPED",
+            "exitCode": 143,
+            "reason": null,
+            "healthStatus": "UNKNOWN"
+          },
+          "photon": {
+            "lastStatus": "STOPPED",
+            "exitCode": 143,
+            "reason": null,
+            "healthStatus": "HEALTHY"
+          },
+          "init": {
+            "lastStatus": "STOPPED",
+            "exitCode": 0,
+            "reason": null,
+            "healthStatus": "UNKNOWN"
+          },
+          "verifier": {
+            "lastStatus": "STOPPED",
+            "exitCode": 0,
+            "reason": null,
+            "healthStatus": "UNKNOWN"
+          },
+          "motis": {
+            "lastStatus": "STOPPED",
+            "exitCode": 0,
+            "reason": null,
+            "healthStatus": "HEALTHY"
+          }
+        }
+      },
+      "fe6e249480084ad9b33f07e018adc6d0": {
+        "createdAt": "2026-10-31T15:20:01.656000+02:00",
+        "pullStartedAt": "2026-10-31T15:20:15.083000+02:00",
+        "pullStoppedAt": "2026-10-31T15:20:54.573000+02:00",
+        "startedAt": "2026-10-31T15:28:05.513000+02:00",
+        "stoppingAt": "2026-10-31T15:32:48.079000+02:00",
+        "stoppedAt": "2026-10-31T15:34:43.231000+02:00",
+        "lastStatus": "STOPPED",
+        "healthStatus": "UNKNOWN",
+        "stopCode": "ServiceSchedulerInitiated",
+        "stoppedReason": "Scaling activity initiated by (deployment ecs-svc/7751822054371493207)",
+        "taskDefinitionArn": "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:task-definition/opentransit-h0:1",
+        "containers": {
+          "verifier": {
+            "lastStatus": "STOPPED",
+            "exitCode": 0,
+            "reason": null,
+            "healthStatus": "UNKNOWN"
+          },
+          "init": {
+            "lastStatus": "STOPPED",
+            "exitCode": 0,
+            "reason": null,
+            "healthStatus": "UNKNOWN"
+          },
+          "motis": {
+            "lastStatus": "STOPPED",
+            "exitCode": 0,
+            "reason": null,
+            "healthStatus": "HEALTHY"
+          },
+          "api": {
+            "lastStatus": "STOPPED",
+            "exitCode": 143,
+            "reason": null,
+            "healthStatus": "UNKNOWN"
+          },
+          "photon": {
+            "lastStatus": "STOPPED",
+            "exitCode": 143,
+            "reason": null,
+            "healthStatus": "HEALTHY"
+          }
+        }
+      }
+    },
+    "taskRunningSecondsSoFar": 1655.8,
+    "readiness": [
+      {
+        "label": "task1",
+        "waitStartedAt": "2026-10-31T13:05:01+00:00",
+        "readyz200At": "2026-10-31T13:18:06+00:00",
+        "targets": {
+          "10.80.1.22": "healthy"
+        },
+        "taskTimes": {
+          "af40177cdbd5456fad1b96eb1c6a6108": {
+            "createdAt": "2026-10-31T15:05:09.153000+02:00",
+            "pullStartedAt": "2026-10-31T15:05:23.978000+02:00",
+            "pullStoppedAt": "2026-10-31T15:06:05.819000+02:00",
+            "startedAt": "2026-10-31T15:13:41.380000+02:00",
+            "stoppingAt": null,
+            "stoppedAt": null,
+            "lastStatus": "RUNNING",
+            "healthStatus": "UNKNOWN",
+            "stopCode": null,
+            "stoppedReason": null,
+            "taskDefinitionArn": "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:task-definition/opentransit-h0:1",
+            "containers": {
+              "api": {
+                "lastStatus": "RUNNING",
+                "exitCode": null,
+                "reason": null,
+                "healthStatus": "UNKNOWN"
+              },
+              "photon": {
+                "lastStatus": "RUNNING",
+                "exitCode": null,
+                "reason": null,
+                "healthStatus": "HEALTHY"
+              },
+              "init": {
+                "lastStatus": "STOPPED",
+                "exitCode": 0,
+                "reason": null,
+                "healthStatus": "UNKNOWN"
+              },
+              "verifier": {
+                "lastStatus": "STOPPED",
+                "exitCode": 0,
+                "reason": null,
+                "healthStatus": "UNKNOWN"
+              },
+              "motis": {
+                "lastStatus": "RUNNING",
+                "exitCode": null,
+                "reason": null,
+                "healthStatus": "HEALTHY"
+              }
+            }
+          }
+        }
+      },
+      {
+        "label": "task2-overlap",
+        "waitStartedAt": "2026-10-31T13:19:56+00:00",
+        "readyz200At": "2026-10-31T13:31:50+00:00",
+        "targets": {
+          "10.80.0.170": "healthy",
+          "10.80.1.22": "healthy"
+        },
+        "taskTimes": {
+          "af40177cdbd5456fad1b96eb1c6a6108": {
+            "createdAt": "2026-10-31T15:05:09.153000+02:00",
+            "pullStartedAt": "2026-10-31T15:05:23.978000+02:00",
+            "pullStoppedAt": "2026-10-31T15:06:05.819000+02:00",
+            "startedAt": "2026-10-31T15:13:41.380000+02:00",
+            "stoppingAt": null,
+            "stoppedAt": null,
+            "lastStatus": "RUNNING",
+            "healthStatus": "HEALTHY",
+            "stopCode": null,
+            "stoppedReason": null,
+            "taskDefinitionArn": "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:task-definition/opentransit-h0:1",
+            "containers": {
+              "api": {
+                "lastStatus": "RUNNING",
+                "exitCode": null,
+                "reason": null,
+                "healthStatus": "HEALTHY"
+              },
+              "photon": {
+                "lastStatus": "RUNNING",
+                "exitCode": null,
+                "reason": null,
+                "healthStatus": "HEALTHY"
+              },
+              "init": {
+                "lastStatus": "STOPPED",
+                "exitCode": 0,
+                "reason": null,
+                "healthStatus": "UNKNOWN"
+              },
+              "verifier": {
+                "lastStatus": "STOPPED",
+                "exitCode": 0,
+                "reason": null,
+                "healthStatus": "UNKNOWN"
+              },
+              "motis": {
+                "lastStatus": "RUNNING",
+                "exitCode": null,
+                "reason": null,
+                "healthStatus": "HEALTHY"
+              }
+            }
+          },
+          "fe6e249480084ad9b33f07e018adc6d0": {
+            "createdAt": "2026-10-31T15:20:01.656000+02:00",
+            "pullStartedAt": "2026-10-31T15:20:15.083000+02:00",
+            "pullStoppedAt": "2026-10-31T15:20:54.573000+02:00",
+            "startedAt": "2026-10-31T15:28:05.513000+02:00",
+            "stoppingAt": null,
+            "stoppedAt": null,
+            "lastStatus": "RUNNING",
+            "healthStatus": "UNKNOWN",
+            "stopCode": null,
+            "stoppedReason": null,
+            "taskDefinitionArn": "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:task-definition/opentransit-h0:1",
+            "containers": {
+              "verifier": {
+                "lastStatus": "STOPPED",
+                "exitCode": 0,
+                "reason": null,
+                "healthStatus": "UNKNOWN"
+              },
+              "init": {
+                "lastStatus": "STOPPED",
+                "exitCode": 0,
+                "reason": null,
+                "healthStatus": "UNKNOWN"
+              },
+              "motis": {
+                "lastStatus": "RUNNING",
+                "exitCode": null,
+                "reason": null,
+                "healthStatus": "HEALTHY"
+              },
+              "api": {
+                "lastStatus": "RUNNING",
+                "exitCode": null,
+                "reason": null,
+                "healthStatus": "UNKNOWN"
+              },
+              "photon": {
+                "lastStatus": "RUNNING",
+                "exitCode": null,
+                "reason": null,
+                "healthStatus": "HEALTHY"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "probes": [
+      {
+        "label": "task1",
+        "startedAt": "2026-10-31T13:18:29+00:00",
+        "from": "developer machine (Israel)",
+        "readyz": {
+          "status": 200,
+          "ms": 232.9,
+          "body": {
+            "status": "ready",
+            "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445"
+          }
+        },
+        "status": {
+          "status": 200,
+          "ms": 205.6,
+          "body": {
+            "data": {
+              "ready": true,
+              "staticData": "available",
+              "routing": "available",
+              "reference": "available",
+              "realtime": "not_enabled",
+              "alerts": "not_enabled",
+              "lastValidatedAt": "2026-10-31T12:00:20.906984+00:00"
+            },
+            "meta": {
+              "requestId": "f63e6734565c4dabaaff6b36d6dbb0c8",
+              "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+              "generatedAt": "2026-10-31T13:18:30.791656Z",
+              "dataBuiltAt": "2026-10-31T12:18:07.213453Z",
+              "mode": "real",
+              "coverage": {
+                "from": "2026-10-31T00:00:00+02:00",
+                "until": "2026-11-30T00:00:00+02:00"
+              },
+              "freshness": "current",
+              "capabilities": {
+                "realtime": "not_enabled",
+                "alerts": "not_enabled"
+              },
+              "attribution": [
+                "Israel Ministry of Transport",
+                "© OpenStreetMap contributors"
+              ],
+              "rankingPolicy": "motis-v2.11.2-feasible-engine-order-v1",
+              "appliedConstraints": {},
+              "warnings": []
+            }
+          }
+        },
+        "demo": {
+          "exit": 0,
+          "stdoutTail": "]\n    08:26-08:28  walk       START -> ??????? ????/???????  [scheduled]\n    08:28-08:42  bus        ??????? ????/??????? -> ??? ????/????? ????? line 5 to ?? ???? ???_???? ???? (??, service date 2026-11-01)  [scheduled]\n    08:42-08:44  walk       ??? ????/????? ????? -> ??? ????/????? ?????  [scheduled]\n    08:44-09:09  bus        ??? ????/????? ????? -> ???? ????? line 650 to ?????_???? ??? ????? (?????????, service date 2026-11-01)  [scheduled]\n    09:11-09:13  walk       ???? ????? -> ???? ?????  [scheduled]\n    09:13-10:05  bus        ???? ????? -> ?. ?????? ??? ?????/????? line 947 to ????_?????? ??? ????? (???, service date 2026-11-01)  [scheduled]\n    10:09-10:11  walk       ?. ?????? ??? ?????/????? -> ?. ?????? ??? ?????/?????? ??????  [scheduled]\n    10:11-10:19  bus        ?. ?????? ??? ?????/?????? ?????? -> ???? ?????/???? ???? line 4 to ???? ??????_?????? ?????? (???????, service date 2026-11-01)  [scheduled]\n    10:19-10:21  walk       ???? ?????/???? ???? -> ???? ?????/???? ????  [scheduled]\n    10:25-10:32  bus        ???? ?????/???? ???? -> ??????/?????? ????? line 144 to ????_?????????? (???, service date 2026-11-01)  [scheduled]\n    10:32-10:37  walk       ??????/?????? ????? -> END  [scheduled]\n\n  Constraints: timeMode=departAt, modes=['bus', 'rail', 'light_rail'], maxAccessWalkMinutes=15, maxEgressWalkMinutes=15, maxDirectWalkMinutes=30, engineWalkCapConformance=unverified, transferWalkLimit=not_enforced\n  Warnings:    TRANSFER_STREET_PATH_UNAVAILABLE\n",
+          "stderrTail": ""
+        },
+        "journeys": [
+          {
+            "id": "J01",
+            "status": 200,
+            "ms": 213.8,
+            "journeys": 0,
+            "outcome": null,
+            "expected": "route",
+            "pass": false
+          },
+          {
+            "id": "J04",
+            "status": 200,
+            "ms": 223.7,
+            "journeys": 0,
+            "outcome": null,
+            "expected": "route",
+            "pass": false
+          },
+          {
+            "id": "J11",
+            "status": 200,
+            "ms": 216.2,
+            "journeys": 0,
+            "outcome": null,
+            "expected": "route",
+            "pass": false
+          },
+          {
+            "id": "J12",
+            "status": 200,
+            "ms": 211.3,
+            "journeys": 0,
+            "outcome": null,
+            "expected": "route",
+            "pass": false
+          },
+          {
+            "id": "J15",
+            "status": 200,
+            "ms": 334.9,
+            "journeys": 0,
+            "outcome": null,
+            "expected": "route",
+            "pass": false
+          },
+          {
+            "id": "J16",
+            "status": 200,
+            "ms": 220.1,
+            "journeys": 0,
+            "outcome": null,
+            "expected": "route",
+            "pass": false
+          },
+          {
+            "id": "J19",
+            "status": 200,
+            "ms": 357.0,
+            "journeys": 0,
+            "outcome": null,
+            "expected": "route",
+            "pass": false
+          },
+          {
+            "id": "J21",
+            "status": 200,
+            "ms": 204.0,
+            "journeys": 0,
+            "outcome": null,
+            "expected": "route",
+            "pass": false
+          },
+          {
+            "id": "J22",
+            "status": 200,
+            "ms": 298.5,
+            "journeys": 0,
+            "outcome": null,
+            "expected": "either",
+            "pass": true
+          },
+          {
+            "id": "J23",
+            "status": 200,
+            "ms": 192.0,
+            "journeys": 0,
+            "outcome": null,
+            "expected": "no_route",
+            "pass": true
+          }
+        ],
+        "healthzLatencyMs": {
+          "n": 100,
+          "min": 168.3,
+          "median": 173.8,
+          "p95": 185.8,
+          "max": 187.4,
+          "note": "HTTP round trip from this machine through the ALB (new connection each)"
+        },
+        "journeyLatencyMs": {
+          "n": 10,
+          "median": 218.1,
+          "max": 357.0
+        },
+        "finishedAt": "2026-10-31T13:18:51+00:00",
+        "parserNote": "SUPERSEDED: this probe's journey counts are wrong (the tool read journeys at the top level instead of under data); statuses and latencies stand. Re-run as task1-rerun."
+      },
+      {
+        "label": "task1-rerun",
+        "startedAt": "2026-10-31T13:19:14+00:00",
+        "from": "developer machine (Israel)",
+        "readyz": {
+          "status": 200,
+          "ms": 237.8,
+          "body": {
+            "status": "ready",
+            "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445"
+          }
+        },
+        "status": {
+          "status": 200,
+          "ms": 199.6,
+          "body": {
+            "data": {
+              "ready": true,
+              "staticData": "available",
+              "routing": "available",
+              "reference": "available",
+              "realtime": "not_enabled",
+              "alerts": "not_enabled",
+              "lastValidatedAt": "2026-10-31T12:00:20.906984+00:00"
+            },
+            "meta": {
+              "requestId": "b1ef0fbc804e440b8cdf197c3c5c832d",
+              "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+              "generatedAt": "2026-10-31T13:19:15.744663Z",
+              "dataBuiltAt": "2026-10-31T12:18:07.213453Z",
+              "mode": "real",
+              "coverage": {
+                "from": "2026-10-31T00:00:00+02:00",
+                "until": "2026-11-30T00:00:00+02:00"
+              },
+              "freshness": "current",
+              "capabilities": {
+                "realtime": "not_enabled",
+                "alerts": "not_enabled"
+              },
+              "attribution": [
+                "Israel Ministry of Transport",
+                "© OpenStreetMap contributors"
+              ],
+              "rankingPolicy": "motis-v2.11.2-feasible-engine-order-v1",
+              "appliedConstraints": {},
+              "warnings": []
+            }
+          }
+        },
+        "demo": {
+          "exit": 0,
+          "stdoutTail": "]\n    08:26-08:28  walk       START -> ??????? ????/???????  [scheduled]\n    08:28-08:42  bus        ??????? ????/??????? -> ??? ????/????? ????? line 5 to ?? ???? ???_???? ???? (??, service date 2026-11-01)  [scheduled]\n    08:42-08:44  walk       ??? ????/????? ????? -> ??? ????/????? ?????  [scheduled]\n    08:44-09:09  bus        ??? ????/????? ????? -> ???? ????? line 650 to ?????_???? ??? ????? (?????????, service date 2026-11-01)  [scheduled]\n    09:11-09:13  walk       ???? ????? -> ???? ?????  [scheduled]\n    09:13-10:05  bus        ???? ????? -> ?. ?????? ??? ?????/????? line 947 to ????_?????? ??? ????? (???, service date 2026-11-01)  [scheduled]\n    10:09-10:11  walk       ?. ?????? ??? ?????/????? -> ?. ?????? ??? ?????/?????? ??????  [scheduled]\n    10:11-10:19  bus        ?. ?????? ??? ?????/?????? ?????? -> ???? ?????/???? ???? line 4 to ???? ??????_?????? ?????? (???????, service date 2026-11-01)  [scheduled]\n    10:19-10:21  walk       ???? ?????/???? ???? -> ???? ?????/???? ????  [scheduled]\n    10:25-10:32  bus        ???? ?????/???? ???? -> ??????/?????? ????? line 144 to ????_?????????? (???, service date 2026-11-01)  [scheduled]\n    10:32-10:37  walk       ??????/?????? ????? -> END  [scheduled]\n\n  Constraints: timeMode=departAt, modes=['bus', 'rail', 'light_rail'], maxAccessWalkMinutes=15, maxEgressWalkMinutes=15, maxDirectWalkMinutes=30, engineWalkCapConformance=unverified, transferWalkLimit=not_enforced\n  Warnings:    TRANSFER_STREET_PATH_UNAVAILABLE\n",
+          "stderrTail": ""
+        },
+        "journeys": [
+          {
+            "id": "J01",
+            "status": 200,
+            "ms": 236.2,
+            "journeys": 1,
+            "outcome": "routes_found",
+            "expected": "route",
+            "pass": true
+          },
+          {
+            "id": "J04",
+            "status": 200,
+            "ms": 222.6,
+            "journeys": 1,
+            "outcome": "routes_found",
+            "expected": "route",
+            "pass": true
+          },
+          {
+            "id": "J11",
+            "status": 200,
+            "ms": 214.3,
+            "journeys": 1,
+            "outcome": "routes_found",
+            "expected": "route",
+            "pass": true
+          },
+          {
+            "id": "J12",
+            "status": 200,
+            "ms": 214.7,
+            "journeys": 1,
+            "outcome": "routes_found",
+            "expected": "route",
+            "pass": true
+          },
+          {
+            "id": "J15",
+            "status": 200,
+            "ms": 337.0,
+            "journeys": 1,
+            "outcome": "routes_found",
+            "expected": "route",
+            "pass": true
+          },
+          {
+            "id": "J16",
+            "status": 200,
+            "ms": 222.2,
+            "journeys": 1,
+            "outcome": "routes_found",
+            "expected": "route",
+            "pass": true
+          },
+          {
+            "id": "J19",
+            "status": 200,
+            "ms": 359.0,
+            "journeys": 1,
+            "outcome": "routes_found",
+            "expected": "route",
+            "pass": true
+          },
+          {
+            "id": "J21",
+            "status": 200,
+            "ms": 218.6,
+            "journeys": 1,
+            "outcome": "routes_found",
+            "expected": "route",
+            "pass": true
+          },
+          {
+            "id": "J22",
+            "status": 200,
+            "ms": 294.1,
+            "journeys": 1,
+            "outcome": "routes_found",
+            "expected": "either",
+            "pass": true
+          },
+          {
+            "id": "J23",
+            "status": 200,
+            "ms": 193.9,
+            "journeys": 0,
+            "outcome": "no_route",
+            "expected": "no_route",
+            "pass": true
+          }
+        ],
+        "healthzLatencyMs": {
+          "n": 100,
+          "min": 170.7,
+          "median": 175.7,
+          "p95": 186.3,
+          "max": 194.3,
+          "note": "HTTP round trip from this machine through the ALB (new connection each)"
+        },
+        "journeyLatencyMs": {
+          "n": 10,
+          "median": 222.4,
+          "max": 359.0
+        },
+        "finishedAt": "2026-10-31T13:19:36+00:00"
+      },
+      {
+        "label": "two-tasks",
+        "startedAt": "2026-10-31T13:32:04+00:00",
+        "from": "developer machine (Israel)",
+        "readyz": {
+          "status": 200,
+          "ms": 230.1,
+          "body": {
+            "status": "ready",
+            "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445"
+          }
+        },
+        "status": {
+          "status": 200,
+          "ms": 194.6,
+          "body": {
+            "data": {
+              "ready": true,
+              "staticData": "available",
+              "routing": "available",
+              "reference": "available",
+              "realtime": "not_enabled",
+              "alerts": "not_enabled",
+              "lastValidatedAt": "2026-10-31T12:00:20.906984+00:00"
+            },
+            "meta": {
+              "requestId": "3595a1875df648f78f2442a5d96d7e27",
+              "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+              "generatedAt": "2026-10-31T13:32:06.157696Z",
+              "dataBuiltAt": "2026-10-31T12:18:07.213453Z",
+              "mode": "real",
+              "coverage": {
+                "from": "2026-10-31T00:00:00+02:00",
+                "until": "2026-11-30T00:00:00+02:00"
+              },
+              "freshness": "current",
+              "capabilities": {
+                "realtime": "not_enabled",
+                "alerts": "not_enabled"
+              },
+              "attribution": [
+                "Israel Ministry of Transport",
+                "© OpenStreetMap contributors"
+              ],
+              "rankingPolicy": "motis-v2.11.2-feasible-engine-order-v1",
+              "appliedConstraints": {},
+              "warnings": []
+            }
+          }
+        },
+        "demo": {
+          "exit": 0,
+          "stdoutTail": "]\n    08:26-08:28  walk       START -> ??????? ????/???????  [scheduled]\n    08:28-08:42  bus        ??????? ????/??????? -> ??? ????/????? ????? line 5 to ?? ???? ???_???? ???? (??, service date 2026-11-01)  [scheduled]\n    08:42-08:44  walk       ??? ????/????? ????? -> ??? ????/????? ?????  [scheduled]\n    08:44-09:09  bus        ??? ????/????? ????? -> ???? ????? line 650 to ?????_???? ??? ????? (?????????, service date 2026-11-01)  [scheduled]\n    09:11-09:13  walk       ???? ????? -> ???? ?????  [scheduled]\n    09:13-10:05  bus        ???? ????? -> ?. ?????? ??? ?????/????? line 947 to ????_?????? ??? ????? (???, service date 2026-11-01)  [scheduled]\n    10:09-10:11  walk       ?. ?????? ??? ?????/????? -> ?. ?????? ??? ?????/?????? ??????  [scheduled]\n    10:11-10:19  bus        ?. ?????? ??? ?????/?????? ?????? -> ???? ?????/???? ???? line 4 to ???? ??????_?????? ?????? (???????, service date 2026-11-01)  [scheduled]\n    10:19-10:21  walk       ???? ?????/???? ???? -> ???? ?????/???? ????  [scheduled]\n    10:25-10:32  bus        ???? ?????/???? ???? -> ??????/?????? ????? line 144 to ????_?????????? (???, service date 2026-11-01)  [scheduled]\n    10:32-10:37  walk       ??????/?????? ????? -> END  [scheduled]\n\n  Constraints: timeMode=departAt, modes=['bus', 'rail', 'light_rail'], maxAccessWalkMinutes=15, maxEgressWalkMinutes=15, maxDirectWalkMinutes=30, engineWalkCapConformance=unverified, transferWalkLimit=not_enforced\n  Warnings:    TRANSFER_STREET_PATH_UNAVAILABLE\n",
+          "stderrTail": ""
+        },
+        "journeys": [
+          {
+            "id": "J01",
+            "status": 200,
+            "ms": 217.8,
+            "journeys": 1,
+            "outcome": "routes_found",
+            "expected": "route",
+            "pass": true
+          },
+          {
+            "id": "J04",
+            "status": 200,
+            "ms": 222.1,
+            "journeys": 1,
+            "outcome": "routes_found",
+            "expected": "route",
+            "pass": true
+          },
+          {
+            "id": "J11",
+            "status": 200,
+            "ms": 214.9,
+            "journeys": 1,
+            "outcome": "routes_found",
+            "expected": "route",
+            "pass": true
+          },
+          {
+            "id": "J12",
+            "status": 200,
+            "ms": 199.8,
+            "journeys": 1,
+            "outcome": "routes_found",
+            "expected": "route",
+            "pass": true
+          },
+          {
+            "id": "J15",
+            "status": 200,
+            "ms": 306.5,
+            "journeys": 1,
+            "outcome": "routes_found",
+            "expected": "route",
+            "pass": true
+          },
+          {
+            "id": "J16",
+            "status": 200,
+            "ms": 233.1,
+            "journeys": 1,
+            "outcome": "routes_found",
+            "expected": "route",
+            "pass": true
+          },
+          {
+            "id": "J19",
+            "status": 200,
+            "ms": 369.9,
+            "journeys": 1,
+            "outcome": "routes_found",
+            "expected": "route",
+            "pass": true
+          },
+          {
+            "id": "J21",
+            "status": 200,
+            "ms": 195.9,
+            "journeys": 1,
+            "outcome": "routes_found",
+            "expected": "route",
+            "pass": true
+          },
+          {
+            "id": "J22",
+            "status": 200,
+            "ms": 292.6,
+            "journeys": 1,
+            "outcome": "routes_found",
+            "expected": "either",
+            "pass": true
+          },
+          {
+            "id": "J23",
+            "status": 200,
+            "ms": 194.9,
+            "journeys": 0,
+            "outcome": "no_route",
+            "expected": "no_route",
+            "pass": true
+          }
+        ],
+        "healthzLatencyMs": {
+          "n": 50,
+          "min": 170.5,
+          "median": 174.5,
+          "p95": 184.7,
+          "max": 189.7,
+          "note": "HTTP round trip from this machine through the ALB (new connection each)"
+        },
+        "journeyLatencyMs": {
+          "n": 10,
+          "median": 219.9,
+          "max": 369.9
+        },
+        "finishedAt": "2026-10-31T13:32:17+00:00"
+      }
+    ],
+    "serviceMetrics": {
+      "source": "CloudWatch AWS/ECS service metrics (percent of task CPU/memory reservation, averaged over running tasks; no per-container breakdown without Container Insights)",
+      "CPUUtilization": [
+        {
+          "t": "2026-10-31T15:06:00+02:00",
+          "avg": 26.98,
+          "max": 42.98
+        },
+        {
+          "t": "2026-10-31T15:07:00+02:00",
+          "avg": 103.17,
+          "max": 125.12
+        },
+        {
+          "t": "2026-10-31T15:08:00+02:00",
+          "avg": 13.25,
+          "max": 13.8
+        },
+        {
+          "t": "2026-10-31T15:09:00+02:00",
+          "avg": 23.36,
+          "max": 29.74
+        },
+        {
+          "t": "2026-10-31T15:10:00+02:00",
+          "avg": 31.03,
+          "max": 32.68
+        },
+        {
+          "t": "2026-10-31T15:11:00+02:00",
+          "avg": 30.57,
+          "max": 31.23
+        },
+        {
+          "t": "2026-10-31T15:12:00+02:00",
+          "avg": 30.3,
+          "max": 30.86
+        },
+        {
+          "t": "2026-10-31T15:13:00+02:00",
+          "avg": 30.87,
+          "max": 56.17
+        },
+        {
+          "t": "2026-10-31T15:14:00+02:00",
+          "avg": 19.66,
+          "max": 26.08
+        },
+        {
+          "t": "2026-10-31T15:15:00+02:00",
+          "avg": 38.27,
+          "max": 41.36
+        },
+        {
+          "t": "2026-10-31T15:16:00+02:00",
+          "avg": 49.93,
+          "max": 50.56
+        },
+        {
+          "t": "2026-10-31T15:17:00+02:00",
+          "avg": 36.99,
+          "max": 56.63
+        },
+        {
+          "t": "2026-10-31T15:18:00+02:00",
+          "avg": 2.94,
+          "max": 3.83
+        },
+        {
+          "t": "2026-10-31T15:19:00+02:00",
+          "avg": 3.31,
+          "max": 4.08
+        },
+        {
+          "t": "2026-10-31T15:20:00+02:00",
+          "avg": 1.35,
+          "max": 4.05
+        },
+        {
+          "t": "2026-10-31T15:21:00+02:00",
+          "avg": 8.15,
+          "max": 14.13
+        },
+        {
+          "t": "2026-10-31T15:22:00+02:00",
+          "avg": 30.96,
+          "max": 72.67
+        },
+        {
+          "t": "2026-10-31T15:23:00+02:00",
+          "avg": 5.44,
+          "max": 8.74
+        },
+        {
+          "t": "2026-10-31T15:24:00+02:00",
+          "avg": 9.29,
+          "max": 20.25
+        },
+        {
+          "t": "2026-10-31T15:25:00+02:00",
+          "avg": 11.59,
+          "max": 20.71
+        },
+        {
+          "t": "2026-10-31T15:26:00+02:00",
+          "avg": 11.55,
+          "max": 21.25
+        },
+        {
+          "t": "2026-10-31T15:27:00+02:00",
+          "avg": 11.57,
+          "max": 21.13
+        },
+        {
+          "t": "2026-10-31T15:28:00+02:00",
+          "avg": 16.35,
+          "max": 46.11
+        },
+        {
+          "t": "2026-10-31T15:29:00+02:00",
+          "avg": 11.2,
+          "max": 27.17
+        },
+        {
+          "t": "2026-10-31T15:30:00+02:00",
+          "avg": 18.58,
+          "max": 38.32
+        }
+      ],
+      "MemoryUtilization": [
+        {
+          "t": "2026-10-31T15:06:00+02:00",
+          "avg": 0.4,
+          "max": 0.67
+        },
+        {
+          "t": "2026-10-31T15:07:00+02:00",
+          "avg": 15.64,
+          "max": 19.6
+        },
+        {
+          "t": "2026-10-31T15:08:00+02:00",
+          "avg": 19.94,
+          "max": 20.05
+        },
+        {
+          "t": "2026-10-31T15:09:00+02:00",
+          "avg": 20.01,
+          "max": 20.02
+        },
+        {
+          "t": "2026-10-31T15:10:00+02:00",
+          "avg": 20.09,
+          "max": 20.17
+        },
+        {
+          "t": "2026-10-31T15:11:00+02:00",
+          "avg": 20.26,
+          "max": 20.33
+        },
+        {
+          "t": "2026-10-31T15:12:00+02:00",
+          "avg": 20.18,
+          "max": 20.28
+        },
+        {
+          "t": "2026-10-31T15:13:00+02:00",
+          "avg": 20.02,
+          "max": 20.72
+        },
+        {
+          "t": "2026-10-31T15:14:00+02:00",
+          "avg": 21.16,
+          "max": 21.22
+        },
+        {
+          "t": "2026-10-31T15:15:00+02:00",
+          "avg": 21.03,
+          "max": 21.06
+        },
+        {
+          "t": "2026-10-31T15:16:00+02:00",
+          "avg": 21.02,
+          "max": 21.06
+        },
+        {
+          "t": "2026-10-31T15:17:00+02:00",
+          "avg": 22.85,
+          "max": 26.45
+        },
+        {
+          "t": "2026-10-31T15:18:00+02:00",
+          "avg": 26.52,
+          "max": 26.6
+        },
+        {
+          "t": "2026-10-31T15:19:00+02:00",
+          "avg": 26.43,
+          "max": 26.56
+        },
+        {
+          "t": "2026-10-31T15:20:00+02:00",
+          "avg": 13.29,
+          "max": 26.64
+        },
+        {
+          "t": "2026-10-31T15:21:00+02:00",
+          "avg": 13.61,
+          "max": 26.66
+        },
+        {
+          "t": "2026-10-31T15:22:00+02:00",
+          "avg": 21.38,
+          "max": 26.92
+        },
+        {
+          "t": "2026-10-31T15:23:00+02:00",
+          "avg": 23.45,
+          "max": 26.95
+        },
+        {
+          "t": "2026-10-31T15:24:00+02:00",
+          "avg": 23.44,
+          "max": 26.89
+        },
+        {
+          "t": "2026-10-31T15:25:00+02:00",
+          "avg": 23.51,
+          "max": 26.94
+        },
+        {
+          "t": "2026-10-31T15:26:00+02:00",
+          "avg": 23.54,
+          "max": 26.92
+        },
+        {
+          "t": "2026-10-31T15:27:00+02:00",
+          "avg": 23.53,
+          "max": 26.94
+        },
+        {
+          "t": "2026-10-31T15:28:00+02:00",
+          "avg": 23.89,
+          "max": 26.94
+        },
+        {
+          "t": "2026-10-31T15:29:00+02:00",
+          "avg": 24.05,
+          "max": 26.92
+        },
+        {
+          "t": "2026-10-31T15:30:00+02:00",
+          "avg": 24.05,
+          "max": 26.94
+        }
+      ]
+    },
+    "logExport": {
+      "folder": "services/api/results/h0-fargate-20261031-01/logs",
+      "streams": 10,
+      "events": 743,
+      "sentinelHits": {
+        "32.0817731": 0,
+        "34.7817731": 0,
+        "Qzentinel7731": 0
+      }
+    }
+  },
   "inventory": {
     "before": {
       "at": "2026-10-31T12:19:11+00:00",
@@ -226,6 +1385,96 @@
       "iamRolesOpenTransit": [],
       "ecrRepositories": {},
       "taggedResources": []
+    },
+    "after": {
+      "at": "2026-10-31T13:39:15+00:00",
+      "ecsClusters": [],
+      "taskDefinitionsActive": [],
+      "loadBalancers": [],
+      "targetGroups": [],
+      "vpcs": [
+        [
+          "vpc-05c5ec16fabce864c",
+          "172.31.0.0/16",
+          true
+        ]
+      ],
+      "nonDefaultSecurityGroups": [],
+      "networkInterfaces": [],
+      "elasticIps": [],
+      "natGateways": [],
+      "logGroups": [],
+      "logGroupsUsEast1": [],
+      "iamRolesOpenTransit": [],
+      "ecrRepositories": {
+        "opentransit-data": [
+          {
+            "tags": [
+              "h0-20261031"
+            ],
+            "digest": "sha256:64eb35650eadf73cbb6619d2ad571655afd7ab351f864412698d5f9c87c51059",
+            "bytes": 760649241
+          }
+        ],
+        "opentransit-motis": [
+          {
+            "tags": null,
+            "digest": "sha256:176cb0b615e0899d40d622be3f79de62f5b418aa4c87fc5174f22e9a0a99c95d",
+            "bytes": 68329952
+          },
+          {
+            "tags": null,
+            "digest": "sha256:5912f4f342fed7ad8112e338dd69079058d33fc5495aab74592e6f9fdf208846",
+            "bytes": 17907
+          },
+          {
+            "tags": null,
+            "digest": "sha256:b1854bdeb8053b3a77802610c332c79dfe1af7efd3b018f7cfa9523a7a98a8e8",
+            "bytes": 68220635
+          },
+          {
+            "tags": null,
+            "digest": "sha256:52dd2d453e0a9036f208d1c2eae0156d2f13e6252d7a24da59d75bef528d4883",
+            "bytes": 17907
+          },
+          {
+            "tags": [
+              "h0-20261031"
+            ],
+            "digest": "sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330",
+            "bytes": 68329952
+          }
+        ],
+        "opentransit-api": [
+          {
+            "tags": [
+              "h0-20261031"
+            ],
+            "digest": "sha256:0d501f356ab5a1af6cfd02ea0aa2610e05166e85bf14521a676318358f5a57d8",
+            "bytes": 77364059
+          }
+        ],
+        "opentransit-photon": [
+          {
+            "tags": [
+              "h0-20261031"
+            ],
+            "digest": "sha256:52f94ba3722d73dc06022ffa8a1392ca96bff5418ae3f85ce54c725ab3803e83",
+            "bytes": 203741244
+          }
+        ]
+      },
+      "taggedResources": [
+        "arn:aws:ecr:eu-north-1:{{ACCOUNT_ID}}:repository/opentransit-api",
+        "arn:aws:ecr:eu-north-1:{{ACCOUNT_ID}}:repository/opentransit-motis",
+        "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:task-definition/opentransit-h0:1",
+        "arn:aws:ecr:eu-north-1:{{ACCOUNT_ID}}:repository/opentransit-data",
+        "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:cluster/opentransit-h0",
+        "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:service/opentransit-h0/opentransit-h0",
+        "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:task/opentransit-h0/fe6e249480084ad9b33f07e018adc6d0",
+        "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:task/opentransit-h0/af40177cdbd5456fad1b96eb1c6a6108",
+        "arn:aws:ecr:eu-north-1:{{ACCOUNT_ID}}:repository/opentransit-photon"
+      ]
     }
   },
   "images": [
@@ -247,11 +1496,228 @@
       "pushedAt": "2026-10-31T12:23:26+00:00",
       "source": "ghcr.io/motis-project/motis@sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330",
       "pushSeconds": 4.6
+    },
+    {
+      "repository": "opentransit-api",
+      "tag": "h0-20261031",
+      "digest": "sha256:0d501f356ab5a1af6cfd02ea0aa2610e05166e85bf14521a676318358f5a57d8",
+      "compressedBytes": 77364059,
+      "pushedAt": "2026-10-31T13:00:03+00:00",
+      "localImage": "ot-h0-api:local",
+      "localImageId": "sha256:fa1914fda8d9c8467a739dfba18e82a9bbec7a0039399bd8268f3fb2eb0d80e1",
+      "pushSeconds": 40.8
+    },
+    {
+      "repository": "opentransit-data",
+      "tag": "h0-20261031",
+      "digest": "sha256:64eb35650eadf73cbb6619d2ad571655afd7ab351f864412698d5f9c87c51059",
+      "compressedBytes": 760649241,
+      "pushedAt": "2026-10-31T13:03:32+00:00",
+      "localImage": "ot-h0-data:local",
+      "localImageId": "sha256:70f33ec4af6721e974597caa4d52e60fe469b669a068d413e9037f2ed0c95778",
+      "pushSeconds": 206.7
     }
   ],
   "notes": {
     "apiImage": "The 1 October API image (ot-t5-api, sha256:e819f089…) predates rate limiting/OPENTRANSIT_TRUSTED_PROXIES (PR #4) and the integrity-attestation startup path (PR #13), so it is not pushed; the API image is rebuilt from this branch's commit once the generation session's Docker work is done.",
     "taskRole": "No task role is created: the drafts and the hosting plan keep the serving task role absent (no AWS credentials in the task at all), and validate_drafts rejects taskRoleArn. Only the execution role exists.",
     "dockerAuth": "Windows Credential Manager rejected the ECR token ('The stub received bad data'); h0_bounded_test.py writes the ECR auth to a throwaway DOCKER_CONFIG under the temp directory and deletes it after the push."
+  },
+  "build": {
+    "at": "2026-10-31T12:57-13:00Z",
+    "sourceCommit": "b551100 (this branch; API code equals main 325e4ca)",
+    "generation": {
+      "dir": "D:/ot/generations/oct31a",
+      "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+      "coverage": "2026-10-31T00:00+02:00..2026-11-30T00:00+02:00 (feed ends 29 Nov)",
+      "sourceCheckedAt": "2026-10-31T12:00:20.906984+00:00",
+      "integrityCheckAttestation": true,
+      "acceptance": "10/10 PASS by the generation session (31 Oct)"
+    },
+    "stageBundle": {
+      "seconds": 7.6,
+      "files": 155,
+      "bytes": 3434544504,
+      "output": "D:/ot/h0-fargate/stage (hard links)"
+    },
+    "probeCorpus": {
+      "path": "services/api/results/h0-fargate-20261031-01/probe-queries.json",
+      "sha256": "5d926e33900abc13ac61dc9a5a66ce07cf6543e8f9b69184e54820ba9192bec4",
+      "source": "services/api/tools/acceptance-probe-corpus.json redated by acceptance_run.redate_probe_corpus (10 cases)"
+    },
+    "dockerBuildSeconds": {
+      "api": 6,
+      "data": 89,
+      "note": "api build reused cached layers"
+    },
+    "localImages": {
+      "api": {
+        "tag": "ot-h0-api:local",
+        "imageId": "sha256:fa1914fda8d9c8467a739dfba18e82a9bbec7a0039399bd8268f3fb2eb0d80e1",
+        "uncompressedBytes": 202514933
+      },
+      "data": {
+        "tag": "ot-h0-data:local",
+        "imageId": "sha256:70f33ec4af6721e974597caa4d52e60fe469b669a068d413e9037f2ed0c95778",
+        "uncompressedBytes": 3556753526
+      },
+      "photon": {
+        "tag": "ot-t5-photon:local (1 October build, loaded from D:/ot/t5-h0/photon.tar.gz)",
+        "imageId": "sha256:96aadfab3ee73434d5f0d6e826355d95760588021b46b4152a95aa8b3bc93b93"
+      }
+    }
+  },
+  "capturedAt": "2026-10-31T13:45:00Z",
+  "branch": "claude/h0-fargate-test-538eea",
+  "decisions": {
+    "source": "user, 31 October 2026 (relayed by the coordinating session)",
+    "boundedTest": "at most 2 simultaneous tasks, at most 2 h of task running time, $10 pre-tax ceiling, cleanup afterwards",
+    "ecrImagesMayStay": true,
+    "region": "eu-north-1 accepted for the private preview; latency from Israel to be measured",
+    "firstConfiguration": "1 vCPU / 3 GiB with Photon addresses",
+    "ceilingBasis": "allocated",
+    "access": "existing opentransit aws login profile; user set a billing alert",
+    "reviewerCidr": "93.173.37.36/32",
+    "ingress": "HTTP:80 on the ALB hostname restricted to the reviewer CIDR (no domain, so no ACM or DNS)"
+  },
+  "summary": {
+    "verdict": "PASS (bounded private H-0 test): one 1 vCPU / 3 GiB task from private ECR in a public subnet without NAT reached /readyz 200 behind the ALB; demo and 10/10 structural probe journeys passed through the ALB with one and with two tasks; two tasks ran overlapped; everything except the ECR repositories was deleted and the final inventory matches the pre-test baseline.",
+    "measured": {
+      "task1": {
+        "createdAt": "2026-10-31T13:05:09Z",
+        "imagePullSeconds": 41.8,
+        "initCompleteAt": "2026-10-31T13:07:08Z",
+        "initCopyAndVerifySeconds": 58.4,
+        "verifierPassedAt": "2026-10-31T13:13:27Z",
+        "apiContainerStartedAt": "2026-10-31T13:13:30Z",
+        "readyz200ThroughAlbAt": "2026-10-31T13:18:06Z",
+        "createdToReadyz200Seconds": 777,
+        "apiStartToReadyzSeconds": 276,
+        "stoppedAt": "2026-10-31T13:34:39Z"
+      },
+      "task2": {
+        "createdAt": "2026-10-31T13:20:02Z",
+        "imagePullSeconds": 39.5,
+        "containersStartedAt": "2026-10-31T13:28:06Z",
+        "bothTargetsHealthyAt": "2026-10-31T13:31:50Z",
+        "createdToReadyz200Seconds": 708,
+        "stoppedAt": "2026-10-31T13:34:43Z"
+      },
+      "overlap": "two tasks RUNNING and both ALB targets healthy 13:31:50-13:32:45 (probe two-tasks: demo exit 0, 10/10 journeys); serving overlap of task1 with task2's startup 13:20-13:32",
+      "taskRunningTime": {
+        "createdToStoppedSeconds": 2652,
+        "note": "task1 29.5 min + task2 14.7 min; the tool's taskRunningSecondsSoFar (1656 s) counts from ECS startedAt (after init and verifier) and understates billing time",
+        "limitSeconds": 7200
+      },
+      "probes": {
+        "task1-rerun": "demo exit 0; 10/10 journeys (J23 no_route as expected, J22 either)",
+        "two-tasks": "demo exit 0; 10/10",
+        "task1": "tool parsing bug, superseded (statuses 200, latencies valid)"
+      },
+      "latencyFromIsrael": {
+        "client": "developer machine, public IP inside the reviewer CIDR, Israel",
+        "tcpConnectMs": "about 88 (curl time_connect, 5 samples before tasks existed)",
+        "healthzRoundTripMs": {
+          "median": 175.7,
+          "p95": 186.3,
+          "n": 100,
+          "note": "new TCP connection per request, so about two network round trips"
+        },
+        "journeyRoundTripMs": {
+          "median": 222.4,
+          "max": 359.0,
+          "n": 10
+        },
+        "interpretation": "about 88 ms network RTT Israel to eu-north-1; a journey adds about 45 ms of server time over /healthz"
+      },
+      "memory": {
+        "source": "CloudWatch AWS/ECS MemoryUtilization (service average over running tasks, 1-minute max)",
+        "maxPercentOfTaskReservation": 26.95,
+        "approxMiB": 828,
+        "note": "ECS memory utilization excludes page cache, so it compares with the local RSS sum (925 MiB), not the local high-water incl. cache (1728 MiB). No per-container numbers (Container Insights off)."
+      },
+      "cpu": {
+        "maxPercent1MinAvg": 103.17,
+        "note": "startup peak at image unpack/init; steady serving 1-20%"
+      },
+      "ephemeralDisk": {
+        "freeBytesAfterInitCopy": 11601551360,
+        "note": "of the 20 GiB default after image layers and the 3.43 GB copy"
+      },
+      "logSentinels": {
+        "coordinate": "32.0817731,34.7817731",
+        "query": "Qzentinel7731 + Hebrew",
+        "hits": 0,
+        "streams": 10,
+        "events": 743
+      },
+      "exitCodes": "init 0, verifier 0, motis 0, api 143 and photon 143 on SIGTERM at scale-in (API logged a clean 'Application shutdown complete')"
+    },
+    "assumptionsOnFargate": {
+      "U1": "HOLDS: root init wrote and chowned the task-local volumes; services ran as 10001",
+      "U4": "HOLDS: startTimeout/startPeriod accepted as written",
+      "U5": "HOLDS: capabilities drop ALL and the init drop list accepted",
+      "U6": "HOLDS for these requests (0 sentinel hits)",
+      "U7": "HOLDS: public-subnet task pulled private ECR images and shipped logs without NAT (task egress 443 only)",
+      "readonlyRootFilesystem": "HOLDS for all five containers"
+    },
+    "failuresAndFixes": [
+      "ECR login: Windows Credential Manager rejected the token; tool writes a throwaway DOCKER_CONFIG",
+      "MOTIS mirror: imagetools vs IMMUTABLE tags; repository made MUTABLE for the mirror only",
+      "RegisterTaskDefinition rejected ephemeralStorage 20 (must be 21-200); draft now omits it (20 GiB default)",
+      "first task1 probe: tool parsed the response envelope wrongly (journeys under data); fixed and re-run"
+    ],
+    "notTested": [
+      "HTTPS/ACM (no domain)",
+      "load, fault injection, restore drill (M7, H-1)",
+      "rolling deployment / circuit-breaker rollback",
+      "per-container memory on Fargate",
+      "OPENTRANSIT_TRUSTED_PROXIES behaviour under the ALB (configured; rate-limit buckets not exercised)"
+    ]
+  },
+  "cost": {
+    "basis": "ESTIMATE from AWS Price List API on-demand rates for eu-north-1 (queried 31 Oct) and the recorded lifetimes; actual spend to be read in Cost Explorer later",
+    "rates": {
+      "fargateVcpuHour": 0.0445,
+      "fargateGbHour": 0.0049,
+      "albHour": 0.02394,
+      "albLcuHour": 0.0076,
+      "publicIpv4Hour": 0.005,
+      "ecrGbMonth": 0.1
+    },
+    "items": {
+      "fargate": {
+        "hours": 0.737,
+        "usd": 0.044
+      },
+      "alb": {
+        "hours": 1.29,
+        "billedHours": 2,
+        "usd": 0.048
+      },
+      "albLcuUpperBound": {
+        "usd": 0.015
+      },
+      "publicIpv4": {
+        "usd": 0.017,
+        "note": "2 ALB addresses x 1.29 h + task addresses 0.74 h"
+      },
+      "cloudwatchLogs": {
+        "usd": 0.0,
+        "note": "under 0.1 MB ingested"
+      },
+      "dataTransfer": {
+        "usd": 0.0,
+        "note": "ECR pull in-Region free; a few MB out"
+      }
+    },
+    "oneTimeUsd": 0.12,
+    "oneTimeUpperBoundUsd": 0.15,
+    "ceilingUsd": 10,
+    "ongoing": {
+      "ecrStoredBytesReported": 1178340945,
+      "usdPerMonth": 0.12,
+      "note": "sum of reported image sizes (upper bound; ECR deduplicates layers); user decision: images stay"
+    }
   }
 }

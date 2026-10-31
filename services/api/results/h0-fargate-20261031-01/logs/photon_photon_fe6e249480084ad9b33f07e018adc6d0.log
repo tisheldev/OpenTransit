@@ -1,0 +1,87 @@
+1793452920881 2026-10-31 13:22:00,825 [main] INFO  de.komoot.photon.App - Start up database cluster, this might take some time.
+1793452920983 Cluster Name: photon
+1793452920983 Base Path:    /photon_data/photon_data
+1793452920985 Num Of Node:  1
+1793452921007 Node Name:      Node 1
+1793452921007 HTTP Port:      9201
+1793452921007 Data Directory: /photon_data/photon_data/node_1/data
+1793452921007 Log Directory:  /photon_data/photon_data/node_1/logs
+1793452921418 [2026-10-31T13:22:01,418][INFO ][stdout                   ] Creating /photon_data/photon_data/node_1/modules
+1793452921419 [2026-10-31T13:22:01,419][INFO ][stdout                   ] Creating /photon_data/photon_data/node_1/plugins
+1793452921488 [2026-10-31T13:22:01,487][INFO ][o.o.n.Node               ] version[3.8.0], pid[7], build[unknown/unknown/unknown], OS[Linux/6.1.188/amd64], JVM[Eclipse Adoptium/OpenJDK 64-Bit Server VM/21.0.12.1/21.0.12.1+1-LTS]
+1793452921488 [2026-10-31T13:22:01,488][INFO ][o.o.n.Node               ] JVM home [/opt/java/openjdk]
+1793452921494 [2026-10-31T13:22:01,493][INFO ][o.o.n.Node               ] JVM arguments [-Xms256m, -Xmx512m]
+1793452921509 [2026-10-31T13:22:01,509][INFO ][o.o.p.PluginsService     ] no modules loaded
+1793452921510 [2026-10-31T13:22:01,510][INFO ][o.o.p.PluginsService     ] loaded plugin [org.opensearch.analysis.common.CommonAnalysisModulePlugin]
+1793452921510 [2026-10-31T13:22:01,510][INFO ][o.o.p.PluginsService     ] loaded plugin [org.opensearch.geo.GeoModulePlugin]
+1793452921510 [2026-10-31T13:22:01,510][INFO ][o.o.p.PluginsService     ] loaded plugin [org.opensearch.transport.Netty4ModulePlugin]
+1793452921690 [2026-10-31T13:22:01,690][WARN ][stderr                   ] WARNING: A restricted method in java.lang.foreign.Linker has been called
+1793452921691 [2026-10-31T13:22:01,691][WARN ][stderr                   ] WARNING: java.lang.foreign.Linker::downcallHandle has been called by the unnamed module
+1793452921692 [2026-10-31T13:22:01,692][WARN ][stderr                   ] WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for this module
+1793452921819 [2026-10-31T13:22:01,816][INFO ][o.o.e.NodeEnvironment    ] using [1] data paths, mounts [[/photon_data (/dev/nvme1n1)]], net usable_space [10.8gb], net total_space [20.5gb], types [ext4]
+1793452921821 [2026-10-31T13:22:01,821][INFO ][o.o.e.NodeEnvironment    ] heap size [494.9mb], compressed ordinary object pointers [true]
+1793452921958 [2026-10-31T13:22:01,958][WARN ][o.a.l.i.v.VectorizationProvider] Java vector incubator module is not readable. For optimal vector performance, pass '--add-modules jdk.incubator.vector' to enable Vector API.
+1793452922082 [2026-10-31T13:22:02,081][INFO ][o.o.n.Node               ] node name [Node 1], node ID [8V22CMFsQmq7sYCXWRh1Og], cluster name [photon], roles [data, cluster_manager]
+1793452922123 [2026-10-31T13:22:02,123][INFO ][o.o.e.ExtensionsManager  ] ExtensionsManager initialized
+1793452922623 [2026-10-31T13:22:02,623][INFO ][o.o.i.MergeSchedulerConfig] Updating autoThrottle for index _na_ from [false] to [true]
+1793452922623 [2026-10-31T13:22:02,623][INFO ][o.o.i.MergeSchedulerConfig] Updating maxThreadCount from [0] to [1] and maxMergeCount from [0] to [6] for index _na_.
+1793452922624 [2026-10-31T13:22:02,623][INFO ][o.o.i.MergeSchedulerConfig] Initialized index _na_ with maxMergeCount=6, maxThreadCount=1, autoThrottleEnabled=true
+1793452922994 [2026-10-31T13:22:02,994][INFO ][o.o.i.MergeSchedulerConfig] Updating autoThrottle for index _na_ from [false] to [true]
+1793452922996 [2026-10-31T13:22:02,996][INFO ][o.o.i.MergeSchedulerConfig] Updating maxThreadCount from [0] to [1] and maxMergeCount from [0] to [6] for index _na_.
+1793452922996 [2026-10-31T13:22:02,996][INFO ][o.o.i.MergeSchedulerConfig] Initialized index _na_ with maxMergeCount=6, maxThreadCount=1, autoThrottleEnabled=true
+1793452924817 [2026-10-31T13:22:04,817][INFO ][o.o.t.NettyAllocator     ] creating NettyAllocator with the following configs: [name=unpooled, suggested_max_allocation_size=1mb, factors={opensearch.unsafe.use_unpooled_allocator=null, g1gc_enabled=false, g1gc_region_size=0b, heap_size=494.9mb}]
+1793452924910 [2026-10-31T13:22:04,910][INFO ][o.o.d.DiscoveryModule    ] using discovery type [single-node] and seed hosts providers [settings]
+1793452925608 [2026-10-31T13:22:05,608][WARN ][o.o.g.DanglingIndicesState] gateway.auto_import_dangling_indices is disabled, dangling indices will not be automatically detected or imported and must be managed manually
+1793452926101 [2026-10-31T13:22:06,100][INFO ][o.o.n.Node               ] initialized
+1793452926101 [2026-10-31T13:22:06,101][INFO ][o.o.n.Node               ] starting ...
+1793452926219 [2026-10-31T13:22:06,216][INFO ][o.o.t.TransportService   ] publish_address {127.0.0.1:9300}, bound_addresses {[::1]:9300}, {127.0.0.1:9300}
+1793452926498 [2026-10-31T13:22:06,498][INFO ][o.o.c.c.Coordinator      ] cluster UUID [117m1GTtRcmVg4UbBRzBQQ]
+1793452926584 [2026-10-31T13:22:06,583][INFO ][o.o.c.s.ClusterManagerService] Tasks batched with key: org.opensearch.cluster.coordination.JoinHelper, count:3 and sample tasks: elected-as-cluster-manager ([1] nodes joined)[{Node 1}{8V22CMFsQmq7sYCXWRh1Og}{cD4qQxAySA2jyyPa2N3oVA}{127.0.0.1}{127.0.0.1:9300}{dm}{shard_indexing_pressure_enabled=true} elect leader, _BECOME_CLUSTER_MANAGER_TASK_, _FINISH_ELECTION_], term: 3, version: 20, delta: cluster-manager node changed {previous [], current [{Node 1}{8V22CMFsQmq7sYCXWRh1Og}{cD4qQxAySA2jyyPa2N3oVA}{127.0.0.1}{127.0.0.1:9300}{dm}{shard_indexing_pressure_enabled=true}]}
+1793452926626 [2026-10-31T13:22:06,626][INFO ][o.o.c.s.ClusterApplierService] cluster-manager node changed {previous [], current [{Node 1}{8V22CMFsQmq7sYCXWRh1Og}{cD4qQxAySA2jyyPa2N3oVA}{127.0.0.1}{127.0.0.1:9300}{dm}{shard_indexing_pressure_enabled=true}]}, term: 3, version: 20, reason: Publication{term=3, version=20}
+1793452926634 [2026-10-31T13:22:06,633][INFO ][o.o.d.PeerFinder         ] setting findPeersInterval to [1s] as node commission status = [true] for local node [{Node 1}{8V22CMFsQmq7sYCXWRh1Og}{cD4qQxAySA2jyyPa2N3oVA}{127.0.0.1}{127.0.0.1:9300}{dm}{shard_indexing_pressure_enabled=true}]
+1793452926687 [2026-10-31T13:22:06,686][INFO ][o.o.h.AbstractHttpServerTransport] publish_address {127.0.0.1:9201}, bound_addresses {[::1]:9201}, {127.0.0.1:9201}
+1793452926687 [2026-10-31T13:22:06,687][INFO ][o.o.n.Node               ] started
+1793452926719 [2026-10-31T13:22:06,719][INFO ][o.o.g.GatewayService     ] recovered [1] indices into cluster_state
+1793452926913 [2026-10-31T13:22:06,913][INFO ][o.o.i.MergeSchedulerConfig] Updating autoThrottle for index photon from [false] to [true]
+1793452926913 [2026-10-31T13:22:06,913][INFO ][o.o.i.MergeSchedulerConfig] Updating maxThreadCount from [0] to [1] and maxMergeCount from [0] to [6] for index photon.
+1793452926913 [2026-10-31T13:22:06,913][INFO ][o.o.i.MergeSchedulerConfig] Initialized index photon with maxMergeCount=6, maxThreadCount=1, autoThrottleEnabled=true
+1793452926930 [2026-10-31T13:22:06,930][INFO ][o.o.p.PluginsService     ] PluginService:onIndexModule index:[photon/phDTn0XCTXaYkt0CXkeT2Q]
+1793452927087 [2026-10-31T13:22:07,087][INFO ][o.o.i.MergeSchedulerConfig] Updating autoThrottle for index photon from [true] to [true]
+1793452927821 [2026-10-31T13:22:07,820][INFO ][o.o.c.r.a.AllocationService] Cluster health status changed from [RED] to [YELLOW] (reason: [shards started [[photon][3]]]).
+1793452928787 [2026-10-31T13:22:08,786][INFO ][d.k.p.App                ] Database cluster is now ready.
+1793452929196 [2026-10-31T13:22:09,196][INFO ][d.k.p.App                ] Starting API with the following settings:
+1793452929196  Languages: [en, he]
+1793452929196  Import Date: null
+1793452929196  Support Structured Queries: true
+1793452929196  Support Geometries: false
+1793452930057 [2026-10-31T13:22:10,057][INFO ][i.j.Javalin              ] Starting Javalin ...
+1793452930062 [2026-10-31T13:22:10,062][INFO ][o.e.j.s.Server           ] jetty-12.1.8; built: 2026-04-01T01:09:18.991Z; git: c9cdc9aaa434a3665b8a53b4d1cc3684992da649; jvm 21.0.12.1+1-LTS
+1793452930119 [2026-10-31T13:22:10,119][INFO ][o.e.j.s.DefaultSessionIdManager] Session workerName=node0
+1793452930126 [2026-10-31T13:22:10,126][INFO ][o.e.j.s.h.ContextHandler ] Started oeje10s.ServletContextHandler@28592982{ROOT,/,b=null,a=AVAILABLE,h=oeje10s.SessionHandler@caee26e{STARTED}}
+1793452930130 [2026-10-31T13:22:10,129][INFO ][o.e.j.e.s.ServletContextHandler] Started oeje10s.ServletContextHandler@28592982{ROOT,/,b=null,a=AVAILABLE,h=oeje10s.SessionHandler@caee26e{STARTED}}
+1793452930133 [2026-10-31T13:22:10,133][INFO ][o.e.j.s.AbstractConnector] Started oejs.ServerConnector@21902b76{HTTP/1.1, (http/1.1)}{127.0.0.1:2322}
+1793452930134 [2026-10-31T13:22:10,134][INFO ][o.e.j.s.Server           ] Started oejs.Server@3eb6d7a9{STARTING}[12.1.8,sto=0] @75ms
+1793452930134 [2026-10-31T13:22:10,134][INFO ][i.j.Javalin              ] 
+1793452930134        __                  ___          _____
+1793452930134       / /___ __   ______ _/ (_)___     /__  /
+1793452930134  __  / / __ `/ | / / __ `/ / / __ \      / /
+1793452930134 / /_/ / /_/ /| |/ / /_/ / / / / / /     / /
+1793452930134 \____/\__,_/ |___/\__,_/_/_/_/ /_/     /_/
+1793452930134        https://javalin.io/documentation
+1793452930134 [2026-10-31T13:22:10,134][INFO ][i.j.Javalin              ] Javalin started in 654ms \o/
+1793452930136 [2026-10-31T13:22:10,135][INFO ][i.j.Javalin              ] Listening on http://127.0.0.1:2322/
+1793452930146 [2026-10-31T13:22:10,146][INFO ][i.j.Javalin              ] You are running Javalin 7.2.2 (released May 14, 2026. Your Javalin version is 170 days old. Consider checking for a newer version.).
+1793453637572 [2026-10-31T13:33:57,571][INFO ][d.k.p.App                ] Shutdown requested.
+1793453637573 [2026-10-31T13:33:57,573][INFO ][d.k.p.App                ] Shutting down the service.
+1793453637573 [2026-10-31T13:33:57,573][INFO ][i.j.Javalin              ] Stopping Javalin ...
+1793453637573 [2026-10-31T13:33:57,573][INFO ][o.e.j.s.Server           ] Stopped oejs.Server@3eb6d7a9{STOPPING}[12.1.8,sto=0]
+1793453637575 [2026-10-31T13:33:57,575][INFO ][o.e.j.s.AbstractConnector] Stopped oejs.ServerConnector@21902b76{HTTP/1.1, (http/1.1)}{127.0.0.1:2322}
+1793453637578 [2026-10-31T13:33:57,578][INFO ][o.e.j.e.s.ServletContextHandler] Stopped oeje10s.ServletContextHandler@28592982{ROOT,/,b=null,a=AVAILABLE,h=oeje10s.SessionHandler@caee26e{STOPPED}}
+1793453637582 [2026-10-31T13:33:57,582][INFO ][i.j.Javalin              ] Javalin has stopped
+1793453637582 [2026-10-31T13:33:57,582][INFO ][d.k.p.App                ] Server has been stopped. Shutting down node.
+1793453637583 [2026-10-31T13:33:57,583][INFO ][d.k.p.Server             ] Shutting down OpenSearch runner
+1793453637583 [2026-10-31T13:33:57,583][INFO ][o.o.n.Node               ] stopping ...
+1793453637608 [2026-10-31T13:33:57,605][INFO ][o.o.n.Node               ] stopped
+1793453637608 [2026-10-31T13:33:57,605][INFO ][o.o.n.Node               ] closing ...
+1793453637617 [2026-10-31T13:33:57,617][INFO ][o.o.n.Node               ] closed
+1793453637618 [2026-10-31T13:33:57,618][INFO ][stdout                   ] Closed all nodes.

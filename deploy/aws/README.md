@@ -1,10 +1,14 @@
-# AWS ECS Fargate H-0 preparation (drafts)
+# AWS ECS Fargate H-0 (bounded test run 31 October 2026)
 
-> **NOT DEPLOYED. NO CLOUD RESOURCES. NO SPENDING.** The images were built and the task was run
-> locally on 1 October 2026 as a one-core Docker Compose emulation for generation `oct1b`
-> ([evidence](../../services/api/results/h0-local-images-20261001-01.json)); nothing was pushed or run in AWS. A passing validator or local run
-> is **not** a Fargate result. Region, ingress and spending remain user decisions
-> ([approval request](../../PROJECT_STATUS.md#h-0-approval-request), [hosting plan](../../docs/next-steps.md#hosting-plan)).
+> **Bounded private H-0 test RUN AND CLEANED UP on 31 October 2026 in `eu-north-1`**
+> ([evidence](../../services/api/results/h0-fargate-20261031-01.json)). One 1 vCPU / 3 GiB task built from
+> generation `oct31a` reached `/readyz` 200 behind the ALB in 777 s from task creation; the demo and
+> 10/10 structural probe journeys passed through the ALB with one and with two tasks; total task time
+> 44 minutes; estimated cost about $0.12 (list prices, not a bill). Everything except the four ECR
+> repositories (about 1.18 GB of evidence images, about $0.12/month, kept by user decision) was deleted.
+> This is not a load test, an HTTPS deployment or H-1. The 1 October local emulation for `oct1b` is
+> [here](../../services/api/results/h0-local-images-20261001-01.json); the hosting plan is in
+> [next-steps](../../docs/next-steps.md#hosting-plan).
 
 ## What is here
 
@@ -16,14 +20,15 @@
 | `ecs/task-definition.json` | Recommended draft (proposal): 1 vCPU / 3 GiB, API + MOTIS + Photon + init + verifier | Draft |
 | `ecs/variants/` | `1vcpu-4gib` (Photon, larger) and `no-addresses` (0.5 vCPU / 2 GiB, no Photon) | Draft |
 | `ecs/service.json`, `ecs/cluster.json` | Rolling 100/200, circuit-breaker rollback, one on-demand task | Draft |
-| `alb/` | Target group (`/readyz`, 10 s / 2 s / 2 / 2, 30 s deregistration), HTTPS-only listener, logs off | Draft |
-| `iam/` | Execution role (pull four repositories, write one log group) and task role (explicit deny-all) | Draft |
-| `network/security-groups.json` | ALB: 443 from reviewer range; task: 8000 from ALB group only | Draft |
+| `alb/` | Target group (`/readyz`, 10 s / 2 s / 2 / 2, 30 s deregistration), one listener (HTTP:80 for the no-domain H-0 test; HTTPS:443 once an ACM name exists), logs off | Used on 31 Oct (HTTP:80) |
+| `iam/` | Execution role (pull four repositories, write one log group); `task-role-*.json` (deny-all) is kept for a future role, but the serving task has **no** task role | Execution role used on 31 Oct |
+| `network/security-groups.json` | ALB: 80 (or 443) from the reviewer range only; task: 8000 from the ALB group only, egress 443 | Used on 31 Oct (80 from `93.173.37.36/32`) |
 | `logs/log-group.json` | `/opentransit/h0`, 7-day retention, pre-created (no auto-create) | Draft |
 | `local/compose.yaml` | Generated Compose emulation of the recommended task (shared network namespace, same limits/mounts/ordering) | Draft; run locally (runs 03/04 in the evidence) |
 | `tools/render_drafts.py` | Single source for the three task definitions and the Compose emulation | Tested |
 | `tools/stage_bundle.py` | Verifies a generation with `verify_artifacts` and stages the image build context | Tested; staged `oct1b` (155 files, 3.95 GB) |
 | `tools/validate_drafts.py` | Structural validator (see below); `validate_candidate` checks rendered release revisions | Tested |
+| `tools/h0_bounded_test.py` | Bounded H-0 runner: setup, push, register, service, wait-ready, probe, metrics, export-logs, cleanup, inventory; records every resource in the evidence file as it is created ([below](#bounded-h-0-test-31-october-2026)) | Run 31 October; `--dry-run` prints commands only |
 | `tools/publish_generation.py` | H-1 publisher, local part: verify, stage/build, render a digest-pinned revision, retention and rollback plans ([below](#h-1-generation-publisher-local-no-aws-calls)) | Tested; dry run on `oct1b` 2 October; push path never run |
 
 `{{TOKENS}}` are deliberate placeholders; the validator rejects unknown tokens, literal
@@ -301,7 +306,7 @@ $P publish --generation "$GEN" --probe-queries "$PROBE" --photon-data "$PHOTON" 
 $P publish ... --build
 $P retention --current <release> [--previous <release>] [--pin ...] [--registry-images ...]
 $P rollback --previous <release> [--current <release>] [--now <iso>]   # exit 1 = refused
-$P push --plan <release-plan.json> --region il-central-1 --registry <acct>.dkr.ecr.<region>.amazonaws.com   --cluster <c> --service <s> --execution-role-arn <arn>               # prints steps only
+$P push --plan <release-plan.json> --region eu-north-1 --registry <acct>.dkr.ecr.<region>.amazonaws.com   --cluster <c> --service <s> --execution-role-arn <arn>               # prints steps only
 ```
 
 Outputs in `--output` (refuses to overwrite an existing `release-plan.json`): `release-plan.json`
@@ -335,32 +340,86 @@ probing and a recorded rollback drill on ECS; renewing an unchanged generation's
 task (`OPENTRANSIT_SOURCE_CHECK` is not wired into the image or verifier, so every refresh
 publishes a newly built generation); and a week of unattended refreshes as the H-1 acceptance.
 
-## Cleanup procedure for a future bounded H-0 test
+## Bounded H-0 test, 31 October 2026
 
-**Not authorized; none of this has been run or prepared against an account.** It applies only
-after the user approves region, ingress, a reviewer IP range, a controlled DNS name and a bounded
-test (proposal: at most two simultaneous tasks, two hours, $10 pre-tax ceiling; a spending alert
-is not a hard cap). Use a dedicated profile and `--region il-central-1`; set a calendar stop time
-before creating anything.
+User decisions (31 October): at most two simultaneous tasks, at most two hours of task time, $10
+pre-tax ceiling; evidence images may stay in ECR; `eu-north-1`; 1 vCPU / 3 GiB with Photon; ceiling
+read on allocated memory; the `opentransit` profile; reviewer CIDR `93.173.37.36/32`; no domain, so
+HTTP:80 on the ALB hostname only. Every value below is in the
+[evidence file](../../services/api/results/h0-fargate-20261031-01.json) with timestamps; the account ID is
+stored there as `{{ACCOUNT_ID}}`.
 
-1. Export log streams and task/service events needed as evidence, then record start/stop times.
-2. `aws ecs update-service --desired-count 0`, then `aws ecs delete-service --force`, then wait for
-   `services-inactive`.
-3. Delete the ALB listener, the load balancer (wait for `load-balancers-deleted`), then the target group.
-4. Revoke the two security-group cross-references, then delete both groups; confirm no leftover ENIs.
-5. Deregister then delete the task-definition revisions; delete the cluster.
-6. Delete the `/opentransit/h0` log group after exporting evidence.
-7. Delete the ACM certificate (unattached) and any validation DNS record.
-8. Detach policies and delete the execution and task roles.
-9. ECR: either keep the evidence-pinned and rollback generation images (record the retained size
-   and monthly charge) or delete throwaway repositories; never apply an automatic lifecycle rule
-   that removes evidence or rollback digests.
-10. Verify nothing billable remains: no clusters, services, load balancers, target groups, ENIs,
-    public IPv4 addresses or log groups; check Cost Explorer the next day and record the actual
-    spend against the ceiling.
+Created (tags `Project=OpenTransit`, `Purpose=H0`): four tag-immutable ECR repositories, log group
+`/opentransit/h0` (7 days), execution role `opentransit-h0-execution` with the draft inline policy (no
+task role), VPC `10.80.0.0/16` with an internet gateway, one route table and two public subnets
+(`eu-north-1a`/`b`, no NAT), the two security groups (default egress replaced by the draft rules),
+target group, internet-facing ALB with an HTTP:80 listener, cluster (Container Insights off), task
+definition revision 1 pinned to registry digests, and service `opentransit-h0` (`assignPublicIp`
+enabled, `OPENTRANSIT_TRUSTED_PROXIES=10.80.0.0/16`).
+
+```sh
+P="uv run --project services/api --locked python deploy/aws/tools/h0_bounded_test.py"
+$P inventory --label before && $P setup
+# Photon: the 1 October image (Dockerfile unchanged) loaded from its tarball. MOTIS: mirrored by digest;
+# the repository is MUTABLE for the mirror only (imagetools pushes child manifests under the tag).
+# API: rebuilt from this branch. Data: staged from oct31a with the redated probe corpus.
+uv run --project services/api --locked python deploy/aws/tools/stage_bundle.py \
+  --generation D:/ot/generations/oct31a --photon-data D:/ot/generations/oct31a/photon \
+  --probe-queries services/api/results/h0-fargate-20261031-01/probe-queries.json --output D:/ot/h0-fargate/stage
+docker build -t ot-h0-api:local services/api
+docker build --build-context bundle=D:/ot/h0-fargate/stage -t ot-h0-data:local deploy/aws/data-image
+$P push --image photon=ot-t5-photon:local --mirror-motis
+$P push --image api=ot-h0-api:local --image data=ot-h0-data:local
+$P register --api-tag h0-20261031 --data-tag h0-20261031 --photon-tag h0-20261031 --motis-tag h0-20261031
+$P service --desired 1 && $P wait-ready --label task1
+$P probe --label task1 --queries services/api/results/h0-fargate-20261031-01/probe-queries.json
+$P service --desired 2 && $P wait-ready --label task2-overlap --targets 2   # then probe again
+$P metrics --since <start> && $P service --desired 0
+$P export-logs --output services/api/results/h0-fargate-20261031-01/logs --sentinel <coordinate> --sentinel <query>
+$P cleanup && $P inventory --label after
+```
+
+Measured: image pull 40-42 s; init copy and double verification of 3.43 GB 58 s; verifier about
+380 s; API startup about 276 s; task creation to `/readyz` 200 through the ALB 777 s (task 1) and
+708 s (task 2). Demo exit 0 and 10/10 probe journeys with one task and with two. From the developer
+machine in Israel: TCP connect about 88 ms, `/healthz` median 176 ms (new connection each), journeys
+median 222 ms. ECS service memory at most 26.95% of 3 GiB (about 0.83 GiB, page cache excluded);
+11.6 GB of the 20 GiB ephemeral disk free after init. Log sentinels: 0 hits in 10 streams. U1, U4, U5,
+U6 (for these requests) and U7 hold on Fargate, and `readonlyRootFilesystem` works for every
+container. Estimated cost: about $0.12 one-off (Fargate $0.044, ALB $0.048 plus LCU up to $0.015,
+public IPv4 $0.017) and $0.12/month for the kept images.
+
+Fixed during the run: the Windows Docker credential store rejects ECR tokens (the tool writes a
+throwaway `DOCKER_CONFIG`); `RegisterTaskDefinition` rejects an explicit 20 GiB `ephemeralStorage`
+(21-200 only), so the drafts omit it. Not covered: HTTPS/ACM, load, fault injection, restore drill,
+rolling deployment and circuit-breaker rollback, per-container memory on Fargate, rate-limit buckets
+behind the ALB.
+
+## Cleanup procedure (bounded H-0 test)
+
+`h0_bounded_test.py cleanup` runs these steps from the evidence file's resource list. Each resource
+gets a `deletedAt`, and the run fails if anything not marked `keep` remains. On 31 October it took
+1 min 45 s.
+
+1. Export log streams into the evidence folder (`export-logs`) and record task times (`tasks`).
+2. Service desired count 0, `delete-service --force`, wait `services-inactive`.
+3. Delete the listener, the load balancer (wait `load-balancers-deleted`), then the target group.
+4. Deregister and delete the task-definition revisions; delete the cluster.
+5. Wait until the VPC has no network interfaces; revoke both security groups' rules and delete them.
+6. Disassociate and delete the route table, delete the subnets, detach and delete the internet
+   gateway, delete the VPC.
+7. Delete the `/opentransit/h0` log group (after step 1).
+8. Delete the execution role's inline policy and the role.
+9. ECR: kept (user decision). Never apply a lifecycle rule that removes evidence or rollback digests.
+10. `inventory --label after`: no clusters, services, load balancers, target groups, non-default VPCs
+    or security groups, ENIs, Elastic IPs, NAT gateways or log groups (`us-east-1` log groups checked
+    too). The tagging API may list INACTIVE ECS records for a while. Check Cost Explorer after a day and
+    record the actual spend against the ceiling.
+
+With a domain, an ACM certificate (and its validation record) is created before step 3's resources
+and deleted after them.
 
 ## Open questions for the user
 
-The consolidated questions (bounded test, region/ingress, first configuration, ceiling basis,
-access, reviewer range and DNS name) are in the dashboard's
-[H-0 approval request](../../PROJECT_STATUS.md#h-0-approval-request).
+The H-0 questions were answered on 31 October (see the [dashboard](../../PROJECT_STATUS.md) decisions).
+Open for H-1: a DNS name for ACM/HTTPS, the scheduler/build host and the items listed above.
