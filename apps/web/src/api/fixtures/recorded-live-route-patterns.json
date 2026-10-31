@@ -1,0 +1,301 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/routes/mot%3Aroute%3A16077/patterns",
+    "params": {
+      "limit": 2
+    },
+    "body": null
+  },
+  "status": 200,
+  "body": {
+    "data": [
+      {
+        "patternId": "3028ae2f8036583c80ca9f435a038d8027fa947ae386ef908482c23678c8b223",
+        "routeId": "mot:route:16077",
+        "directionId": "1",
+        "headsign": "אוניברסיטת ת\"א",
+        "stops": [
+          {
+            "sequence": 0,
+            "stopId": "mot:stop:13112",
+            "pickupType": 0,
+            "dropOffType": 1
+          },
+          {
+            "sequence": 1,
+            "stopId": "mot:stop:12981",
+            "pickupType": 0,
+            "dropOffType": 0
+          },
+          {
+            "sequence": 2,
+            "stopId": "mot:stop:12969",
+            "pickupType": 0,
+            "dropOffType": 0
+          },
+          {
+            "sequence": 3,
+            "stopId": "mot:stop:13082",
+            "pickupType": 0,
+            "dropOffType": 0
+          },
+          {
+            "sequence": 4,
+            "stopId": "mot:stop:13161",
+            "pickupType": 0,
+            "dropOffType": 0
+          },
+          {
+            "sequence": 5,
+            "stopId": "mot:stop:13081",
+            "pickupType": 0,
+            "dropOffType": 0
+          },
+          {
+            "sequence": 6,
+            "stopId": "mot:stop:13162",
+            "pickupType": 0,
+            "dropOffType": 0
+          },
+          {
+            "sequence": 7,
+            "stopId": "mot:stop:13267",
+            "pickupType": 0,
+            "dropOffType": 0
+          },
+          {
+            "sequence": 8,
+            "stopId": "mot:stop:12978",
+            "pickupType": 0,
+            "dropOffType": 0
+          },
+          {
+            "sequence": 9,
+            "stopId": "mot:stop:13773",
+            "pickupType": 0,
+            "dropOffType": 0
+          },
+          {
+            "sequence": 10,
+            "stopId": "mot:stop:13785",
+            "pickupType": 0,
+            "dropOffType": 0
+          },
+          {
+            "sequence": 11,
+            "stopId": "mot:stop:12988",
+            "pickupType": 0,
+            "dropOffType": 0
+          },
+          {
+            "sequence": 12,
+            "stopId": "mot:stop:51355",
+            "pickupType": 0,
+            "dropOffType": 0
+          },
+          {
+            "sequence": 13,
+            "stopId": "mot:stop:13083",
+            "pickupType": 0,
+            "dropOffType": 0
+          },
+          {
+            "sequence": 14,
+            "stopId": "mot:stop:12999",
+            "pickupType": 0,
+            "dropOffType": 0
+          },
+          {
+            "sequence": 15,
+            "stopId": "mot:stop:13095",
+            "pickupType": 0,
+            "dropOffType": 0
+          },
+          {
+            "sequence": 16,
+            "stopId": "mot:stop:13130",
+            "pickupType": 0,
+            "dropOffType": 0
+          },
+          {
+            "sequence": 17,
+            "stopId": "mot:stop:12987",
+            "pickupType": 0,
+            "dropOffType": 0
+          },
+          {
+            "sequence": 18,
+            "stopId": "mot:stop:12823",
+            "pickupType": 0,
+            "dropOffType": 0
+          },
+          {
+            "sequence": 19,
+            "stopId": "mot:stop:14549",
+            "pickupType": 0,
+            "dropOffType": 0
+          },
+          {
+            "sequence": 20,
+            "stopId": "mot:stop:42859",
+            "pickupType": 0,
+            "dropOffType": 0
+          },
+          {
+            "sequence": 21,
+            "stopId": "mot:stop:13585",
+            "pickupType": 0,
+            "dropOffType": 0
+          },
+          {
+            "sequence": 22,
+            "stopId": "mot:stop:13583",
+            "pickupType": 0,
+            "dropOffType": 0
+          },
+          {
+            "sequence": 23,
+            "stopId": "mot:stop:13565",
+            "pickupType": 0,
+            "dropOffType": 0
+          },
+          {
+            "sequence": 24,
+            "stopId": "mot:stop:13664",
+            "pickupType": 0,
+            "dropOffType": 0
+          },
+          {
+            "sequence": 25,
+            "stopId": "mot:stop:29490",
+            "pickupType": 0,
+            "dropOffType": 0
+          },
+          {
+            "sequence": 26,
+            "stopId": "mot:stop:13670",
+            "pickupType": 0,
+            "dropOffType": 0
+          },
+          {
+            "sequence": 27,
+            "stopId": "mot:stop:13683",
+            "pickupType": 0,
+            "dropOffType": 0
+          },
+          {
+            "sequence": 28,
+            "stopId": "mot:stop:13688",
+            "pickupType": 0,
+            "dropOffType": 0
+          },
+          {
+            "sequence": 29,
+            "stopId": "mot:stop:14472",
+            "pickupType": 0,
+            "dropOffType": 0
+          },
+          {
+            "sequence": 30,
+            "stopId": "mot:stop:13701",
+            "pickupType": 0,
+            "dropOffType": 0
+          },
+          {
+            "sequence": 31,
+            "stopId": "mot:stop:13703",
+            "pickupType": 0,
+            "dropOffType": 0
+          },
+          {
+            "sequence": 32,
+            "stopId": "mot:stop:13739",
+            "pickupType": 0,
+            "dropOffType": 0
+          },
+          {
+            "sequence": 33,
+            "stopId": "mot:stop:13743",
+            "pickupType": 0,
+            "dropOffType": 0
+          },
+          {
+            "sequence": 34,
+            "stopId": "mot:stop:13744",
+            "pickupType": 0,
+            "dropOffType": 0
+          },
+          {
+            "sequence": 35,
+            "stopId": "mot:stop:13747",
+            "pickupType": 0,
+            "dropOffType": 0
+          },
+          {
+            "sequence": 36,
+            "stopId": "mot:stop:13750",
+            "pickupType": 0,
+            "dropOffType": 0
+          },
+          {
+            "sequence": 37,
+            "stopId": "mot:stop:52652",
+            "pickupType": 0,
+            "dropOffType": 0
+          },
+          {
+            "sequence": 38,
+            "stopId": "mot:stop:14100",
+            "pickupType": 0,
+            "dropOffType": 0
+          },
+          {
+            "sequence": 39,
+            "stopId": "mot:stop:14349",
+            "pickupType": 0,
+            "dropOffType": 0
+          },
+          {
+            "sequence": 40,
+            "stopId": "mot:stop:13145",
+            "pickupType": 0,
+            "dropOffType": 0
+          },
+          {
+            "sequence": 41,
+            "stopId": "mot:stop:14126",
+            "pickupType": 1,
+            "dropOffType": 0
+          }
+        ]
+      }
+    ],
+    "meta": {
+      "requestId": "00000000000000000000000000000000",
+      "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+      "generatedAt": "2026-10-31T17:31:08.706808Z",
+      "dataBuiltAt": "2026-10-31T12:18:07.213453Z",
+      "mode": "real",
+      "coverage": {
+        "from": "2026-10-31T00:00:00+02:00",
+        "until": "2026-11-30T00:00:00+02:00"
+      },
+      "freshness": "current",
+      "capabilities": {
+        "realtime": "not_enabled",
+        "alerts": "not_enabled"
+      },
+      "attribution": [
+        "Israel Ministry of Transport",
+        "© OpenStreetMap contributors"
+      ],
+      "rankingPolicy": "motis-v2.11.2-feasible-engine-order-v1",
+      "appliedConstraints": {},
+      "warnings": []
+    },
+    "page": {
+      "nextCursor": null
+    }
+  }
+}

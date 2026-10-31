@@ -47,6 +47,8 @@ describe("classify()", () => {
       "recorded-problem-trip-not-found": "not_found",
       "recorded-problem-invalid-place-ref": "invalid_place_ref",
       "recorded-problem-not-ready": "temporarily_unavailable",
+      "recorded-live-problem-outside-window": "outside_window",
+      "recorded-live-problem-trip-not-found": "not_found",
       "synthetic-problem-stop-not-found": "not_found",
       "synthetic-problem-invalid-request": "invalid_request",
       "synthetic-problem-rate-limited": "rate_limited",
