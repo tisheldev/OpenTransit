@@ -7,41 +7,168 @@
   "api": {
     "generation": "oct31a",
     "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
-    "coverage": { "from": "2026-10-31T00:00:00+02:00", "until": "2026-11-30T00:00:00+02:00" },
+    "coverage": {
+      "from": "2026-10-31T00:00:00+02:00",
+      "until": "2026-11-30T00:00:00+02:00"
+    },
     "freshness": "current",
     "stacks": [
-      { "name": "ot-acc-client-*", "port": 8590, "how": "services/api/tools/acceptance_run.py --steps stack,probe,api_start --keep-stack (stack 17.8 s, probe 105.9 s, api_start 120.6 s)", "rateLimiter": "off (runner default)", "servesClient": false },
-      { "name": "ot-acc-clientapp-*", "port": 8591, "how": "same runner with --client-dir <built apps/web dist> (probe 101.6 s, api_start 107.8 s)", "rateLimiter": "off (runner default)", "servesClient": "/app/" }
+      {
+        "name": "ot-acc-client-*",
+        "port": 8590,
+        "how": "services/api/tools/acceptance_run.py --steps stack,probe,api_start --keep-stack (stack 17.8 s, probe 105.9 s, api_start 120.6 s)",
+        "rateLimiter": "off (runner default)",
+        "servesClient": false
+      },
+      {
+        "name": "ot-acc-clientapp-*",
+        "port": 8591,
+        "how": "same runner with --client-dir <built apps/web dist> (probe 101.6 s, api_start 107.8 s)",
+        "rateLimiter": "off (runner default)",
+        "servesClient": "/app/"
+      }
     ],
     "note": "Both stacks bind-mount this branch's API source into the existing opentransit-api image; /readyz 200 on both. Memory at idle about 0.29 GiB API, 0.40 GiB Photon, 0.44 GiB MOTIS per stack."
   },
   "checks": {
     "lint": "eslint --max-warnings 0: 0 problems",
     "typecheck": "tsc --noEmit: 0 errors",
-    "unit": { "tool": "Vitest 5 (UTC host)", "passed": 686, "failed": 0, "before": 242 },
-    "e2eMocked": { "tool": "Playwright 1.64.1, mobile-chromium 360 x 640, fixtures mode (MSW)", "passed": 38, "failed": 0, "skipped": 6, "skippedWhy": "@real tests; they skip without a ready API" },
-    "e2eRealDevServer": { "apiOrigin": "http://127.0.0.1:8590", "passed": 4, "skipped": 2, "skippedWhy": "two page checks run only against the build served by the API", "tests": ["@real /v1/status", "@real real engine trip ID through the encoded trips path", "@real compare Dizengoff Center -> Technion", "@real navigate replay through every step"] },
-    "e2eRealServedBuild": { "baseUrl": "http://127.0.0.1:8591/app/", "passed": 6, "failed": 0, "skipped": 0, "tests": ["@real /v1/status", "@real trip ID encoding", "@real served build under the API CSP with real status, no test-data banner, 0 CSP violations", "@real compare Dizengoff Center -> Technion", "@real navigate replay", "@real served: Home -> Search (typed 'טכניון') -> Compare (now; routes_found, 3 journeys) -> Navigate -> End trip -> Settings, Hebrew RTL at 360 x 640, no horizontal scroll, axe on each screen"] },
+    "unit": {
+      "tool": "Vitest 5 (UTC host)",
+      "passed": 686,
+      "failed": 0,
+      "before": 242
+    },
+    "e2eMocked": {
+      "tool": "Playwright 1.64.1, mobile-chromium 360 x 640, fixtures mode (MSW)",
+      "passed": 38,
+      "failed": 0,
+      "skipped": 6,
+      "skippedWhy": "@real tests; they skip without a ready API"
+    },
+    "e2eRealDevServer": {
+      "apiOrigin": "http://127.0.0.1:8590",
+      "passed": 4,
+      "skipped": 2,
+      "skippedWhy": "two page checks run only against the build served by the API",
+      "tests": [
+        "@real /v1/status",
+        "@real real engine trip ID through the encoded trips path",
+        "@real compare Dizengoff Center -> Technion",
+        "@real navigate replay through every step"
+      ]
+    },
+    "e2eRealServedBuild": {
+      "baseUrl": "http://127.0.0.1:8591/app/",
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "tests": [
+        "@real /v1/status",
+        "@real trip ID encoding",
+        "@real served build under the API CSP with real status, no test-data banner, 0 CSP violations",
+        "@real compare Dizengoff Center -> Technion",
+        "@real navigate replay",
+        "@real served: Home -> Search (typed 'טכניון') -> Compare (now; routes_found, 3 journeys) -> Navigate -> End trip -> Settings, Hebrew RTL at 360 x 640, no horizontal scroll, axe on each screen"
+      ]
+    },
     "axe": "No serious or critical violations: mocked e2e on Home (first launch, saved places, expired), Search (before typing, typing, results, empty; he and en), Settings (he, en, clear armed), Compare (he, en), Navigate (he, en), map harness; served real build on Home, Search results, Compare, Navigate, Settings (he). The map canvas is excluded (decorative; every map fact is also text).",
-    "apiSuite": { "command": "uv run --project services/api --locked pytest services/api/tests -m 'not integration' -q", "before": "925 passed, 20 skipped, 1 deselected", "after": "962 passed, 20 skipped, 1 deselected", "ruff": "check and format clean" },
-    "build": { "initialJsGzipKB": 141.19, "budgetKB": 150, "mapChunkGzipKB": 280.9, "mapCssGzipKB": 10.7, "note": "Map chunk loads after first paint and is excluded from the budget, as designed." },
-    "dockerImage": { "tag": "ot-client-api:final (local, not pushed)", "build": "docker build --build-context web=apps/web services/api", "sizeMB": 209, "nodeStage": "node:22.23.4-bookworm-slim pinned by digest", "result": "container without a generation (OPENTRANSIT_CLIENT_DIR=/app/client, 127.0.0.1:8592): /app/ 200 with the contract CSP, /app 307 -> /app/, hashed asset immutable, /readyz 503; Chromium at 360 x 640 loaded it in Hebrew, dir=rtl, no horizontal overflow, 0 CSP violations, OpenFreeMap tiles with Hebrew labels; container removed" }
+    "apiSuite": {
+      "command": "uv run --project services/api --locked pytest services/api/tests -m 'not integration' -q",
+      "before": "925 passed, 20 skipped, 1 deselected",
+      "after": "962 passed, 20 skipped, 1 deselected",
+      "ruff": "check and format clean"
+    },
+    "build": {
+      "initialJsGzipKB": 141.19,
+      "budgetKB": 150,
+      "mapChunkGzipKB": 280.9,
+      "mapCssGzipKB": 10.7,
+      "note": "Map chunk loads after first paint and is excluded from the budget, as designed."
+    },
+    "dockerImage": {
+      "tag": "ot-client-api:final (local, not pushed)",
+      "build": "docker build --build-context web=apps/web services/api",
+      "sizeMB": 209,
+      "nodeStage": "node:22.23.4-bookworm-slim pinned by digest",
+      "result": "container without a generation (OPENTRANSIT_CLIENT_DIR=/app/client, 127.0.0.1:8592): /app/ 200 with the contract CSP, /app 307 -> /app/, hashed asset immutable, /readyz 503; Chromium at 360 x 640 loaded it in Hebrew, dir=rtl, no horizontal overflow, 0 CSP violations, OpenFreeMap tiles with Hebrew labels; container removed"
+    },
+    "e2eRealH1": {
+      "ranAt": "2026-10-31T19:00:00Z",
+      "apiOrigin": "http://opentransit-h1-492730486.eu-north-1.elb.amazonaws.com (H-1 private preview, eu-north-1, HTTP:80 restricted to the reviewer CIDR; rate limiter on)",
+      "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+      "readyz": 200,
+      "mode": "dev-server proxy to the ALB (the preview does not serve /app/ yet: OPENTRANSIT_CLIENT_DIR unset in its task definition)",
+      "passed": 4,
+      "failed": 0,
+      "skipped": 2,
+      "skippedWhy": "the two served-build tests need /app/ on the preview",
+      "tests": [
+        "@real /v1/status",
+        "@real trip ID encoding",
+        "@real compare Dizengoff Center -> Technion",
+        "@real navigate replay"
+      ],
+      "command": "OPENTRANSIT_API_ORIGIN=<alb> npx playwright test --grep @real --workers 1"
+    }
   },
   "s1RealChecks": {
     "fixturesRecorded": 21,
     "fixturePrefix": "recorded-live-*",
     "partialSearch": "not obtained: every category was available on a healthy API; partial/unavailable search states are covered by answers derived in code from recorded fixtures (src/mocks/handlers.ts, labelled)",
-    "tripRef": { "realIdsChecked": 26, "containingColon": 26, "containingSlash": 0, "roundTripFailures": 0 },
-    "placeRefVsCoordinate": { "comparisons": 8, "places": 4, "identical": 8, "decision": "Per the design rule, the client sends searched places as coordinates and the INVALID_PLACE_REF retry is deleted (src/plan/journeyQuery.ts)." },
+    "tripRef": {
+      "realIdsChecked": 26,
+      "containingColon": 26,
+      "containingSlash": 0,
+      "roundTripFailures": 0
+    },
+    "placeRefVsCoordinate": {
+      "comparisons": 8,
+      "places": 4,
+      "identical": 8,
+      "decision": "Per the design rule, the client sends searched places as coordinates and the INVALID_PLACE_REF retry is deleted (src/plan/journeyQuery.ts)."
+    },
     "devProxy": "the dev server's /v1 proxy reached the real API (@real /v1/status passed)"
   },
   "slices": {
-    "S3": { "doneWhen": "Map never delays first paint; attribution visible; fixture journey drawn; time-only walk draws no invented line; pin confirm returns a coordinate; nothing mirrored in RTL", "result": "PASS mechanically: MapLibre 6.14 lazy chunk fetched after first paint (e2e), attribution (OSM, OpenFreeMap, Ministry of Transport) visible above the sheet at 360 x 640 in he/en, container dir=ltr, journeyToScene unit-tested incl. null geometry, pick mode reports the map centre", "deviation": "The RTL text plugin is not loaded: MapLibre 6.14 shapes Hebrew itself and deprecates setRTLTextPlugin, and the plugin needs eval/WebAssembly which the CSP blocks. Hebrew labels render (screenshot check)." },
-    "S4": { "doneWhen": "Hebrew/English search, partial/unavailable categories, saved places, clear data, axe; no prompt or network for the first frame", "result": "PASS mechanically: shell (three-snap sheet, Back, Locate, banners), Home, Search (all states, choose on map, my location), Settings (language, saved places, two-tap clear, data status, credits, version)", "gaps": ["choose-on-map confirm covered by unit tests only", "swipe-down-to-go-back not implemented (Back button and system back work)"] },
-    "S5": { "doneWhen": "Routes, no route, outside window, place-ref fallback, 503/504; rank/chart/shift unit-tested; real Dizengoff Center -> Technion", "result": "PASS mechanically: chart on a shared axis (earliest at inline start), rank labels, details per leg with trip-detail stop counts, every state as a fixture scenario, Earlier/Later, Start/Resume; real 2 Nov 08:00 gave 3 journeys (bus 8 > train > bus 1; bus 8 > train > bus 17 with a time-only walk; 249 > 825 > 947 > 4 > 144); request-to-chart about 107-122 ms client side incl. the API round trip", "gaps": ["no platform (API-C2) and intermediate stop names (API-C1) not shown", "time control keeps the chosen time after Earlier/Later"], "placeRefFallback": "deleted per the S1 check (8/8 identical)" },
-    "S6": { "doneWhen": "Step card, checklist, ride progress, geolocation and Wake Lock, simulated positions, restore after reload, real journey replayed", "result": "PASS mechanically: pure engine (no clock-only advance, no stored positions), step card per step kind, checklist jump both ways, manual mode banner, location-lost hint, Wake Lock, simulated positions x10-x600, restore after reload from sessionStorage, expiry 2 h after arrival; @real replay of journey 0: 7 steps, 6 advances all from simulated fixes, cues fired on all 3 rides (two-stops x3, next-stop x3) using the two call positions before each exit fetched from GET /v1/stops/{id}", "gaps": ["background location, locked-phone cue and Android notification are native-only (not attempted in the web client)", "ride progress and cues depend on the two fetched call positions per ride until API-C1"] },
-    "S7": { "result": "SKIPPED by design choice: optional and last in the brief; Stop, Trip, Nearby and Lines remain placeholder screens. Time went to making S3-S6 solid." },
-    "S8": { "doneWhen": "Static mount off by default and absent from OpenAPI; cache and CSP headers; Node build stage; full real suite plus axe against the API-served build", "result": "PASS: OPENTRANSIT_CLIENT_DIR mount at /app/ (off by default, OpenAPI byte-identical, rate-limiter exempt), CSP/Referrer-Policy/nosniff on every /app response, immutable hashed assets, no-store index; Dockerfile Node stage; acceptance_run.py --client-dir; real suite 6/6 against the API-served build", "compose": "Root compose.yaml now passes the web build context and sets OPENTRANSIT_CLIENT_DIR, but a full `docker compose up` was not run: that lane needs an external MOTIS graph volume and no oct31a volume exists. The Compose-lane evidence is the Dockerfile-built image serving /app/ and the acceptance-runner Docker stack serving the build for the real suite." }
+    "S3": {
+      "doneWhen": "Map never delays first paint; attribution visible; fixture journey drawn; time-only walk draws no invented line; pin confirm returns a coordinate; nothing mirrored in RTL",
+      "result": "PASS mechanically: MapLibre 6.14 lazy chunk fetched after first paint (e2e), attribution (OSM, OpenFreeMap, Ministry of Transport) visible above the sheet at 360 x 640 in he/en, container dir=ltr, journeyToScene unit-tested incl. null geometry, pick mode reports the map centre",
+      "deviation": "The RTL text plugin is not loaded: MapLibre 6.14 shapes Hebrew itself and deprecates setRTLTextPlugin, and the plugin needs eval/WebAssembly which the CSP blocks. Hebrew labels render (screenshot check)."
+    },
+    "S4": {
+      "doneWhen": "Hebrew/English search, partial/unavailable categories, saved places, clear data, axe; no prompt or network for the first frame",
+      "result": "PASS mechanically: shell (three-snap sheet, Back, Locate, banners), Home, Search (all states, choose on map, my location), Settings (language, saved places, two-tap clear, data status, credits, version)",
+      "gaps": [
+        "choose-on-map confirm covered by unit tests only",
+        "swipe-down-to-go-back not implemented (Back button and system back work)"
+      ]
+    },
+    "S5": {
+      "doneWhen": "Routes, no route, outside window, place-ref fallback, 503/504; rank/chart/shift unit-tested; real Dizengoff Center -> Technion",
+      "result": "PASS mechanically: chart on a shared axis (earliest at inline start), rank labels, details per leg with trip-detail stop counts, every state as a fixture scenario, Earlier/Later, Start/Resume; real 2 Nov 08:00 gave 3 journeys (bus 8 > train > bus 1; bus 8 > train > bus 17 with a time-only walk; 249 > 825 > 947 > 4 > 144); request-to-chart about 107-122 ms client side incl. the API round trip",
+      "gaps": [
+        "no platform (API-C2) and intermediate stop names (API-C1) not shown",
+        "time control keeps the chosen time after Earlier/Later"
+      ],
+      "placeRefFallback": "deleted per the S1 check (8/8 identical)"
+    },
+    "S6": {
+      "doneWhen": "Step card, checklist, ride progress, geolocation and Wake Lock, simulated positions, restore after reload, real journey replayed",
+      "result": "PASS mechanically: pure engine (no clock-only advance, no stored positions), step card per step kind, checklist jump both ways, manual mode banner, location-lost hint, Wake Lock, simulated positions x10-x600, restore after reload from sessionStorage, expiry 2 h after arrival; @real replay of journey 0: 7 steps, 6 advances all from simulated fixes, cues fired on all 3 rides (two-stops x3, next-stop x3) using the two call positions before each exit fetched from GET /v1/stops/{id}",
+      "gaps": [
+        "background location, locked-phone cue and Android notification are native-only (not attempted in the web client)",
+        "ride progress and cues depend on the two fetched call positions per ride until API-C1"
+      ]
+    },
+    "S7": {
+      "result": "SKIPPED by design choice: optional and last in the brief; Stop, Trip, Nearby and Lines remain placeholder screens. Time went to making S3-S6 solid."
+    },
+    "S8": {
+      "doneWhen": "Static mount off by default and absent from OpenAPI; cache and CSP headers; Node build stage; full real suite plus axe against the API-served build",
+      "result": "PASS: OPENTRANSIT_CLIENT_DIR mount at /app/ (off by default, OpenAPI byte-identical, rate-limiter exempt), CSP/Referrer-Policy/nosniff on every /app response, immutable hashed assets, no-store index; Dockerfile Node stage; acceptance_run.py --client-dir; real suite 6/6 against the API-served build",
+      "compose": "Root compose.yaml now passes the web build context and sets OPENTRANSIT_CLIENT_DIR, but a full `docker compose up` was not run: that lane needs an external MOTIS graph volume and no oct31a volume exists. The Compose-lane evidence is the Dockerfile-built image serving /app/ and the acceptance-runner Docker stack serving the build for the real suite."
+    }
   },
   "fixesDuringIntegration": [
     "zod jitless config: zod 4's eval probe violated script-src 'self' in the served build",
@@ -51,7 +178,7 @@
     "stale Vitest cache (node_modules/.vitest-cache) hid new fixture files; clear it if a glob misses files"
   ],
   "notRun": [
-    "H-1 preview run: the ALB hostname was not on main when this was recorded (checked 31 Oct about 18:30 UTC)",
+    "H-1 served-build run: the preview does not serve /app/ yet (needs this image and OPENTRANSIT_CLIENT_DIR in its task definition; H-1 follow-up)",
     "S7 secondary screens",
     "field timings on reference phones; human HC review",
     "a real ride trace (S6.7 second half; needs the user on a real trip)"
