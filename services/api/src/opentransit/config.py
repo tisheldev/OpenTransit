@@ -33,6 +33,9 @@ class Settings:
     motis_url: str = "http://127.0.0.1:58081"
     engine_timeout_seconds: float = 1.2
     journey_deadline_seconds: float = 1.5
+    # /readyz and /v1/status reuse one engine health check for this long (API-PERF 1.9);
+    # readiness can lag the engine by at most this much. 0 checks on every request.
+    engine_health_cache_seconds: float = 2.0
     playground_enabled: bool = False
     source_check_path: Path | None = None
     probe_path: Path | None = None
@@ -74,6 +77,8 @@ class Settings:
             raise ValueError("MOTIS URL must contain only a local origin")
         if not 0 < self.engine_timeout_seconds < self.journey_deadline_seconds <= 10:
             raise ValueError("Invalid engine timeout or journey deadline")
+        if not 0 <= self.engine_health_cache_seconds <= 10:
+            raise ValueError("Engine health cache must be 0-10 seconds")
         if (self.photon_url is None) != (self.photon_admin_url is None):
             raise ValueError("Photon query and admin origins must be configured together")
         for label, value in (("Photon", self.photon_url), ("Photon admin", self.photon_admin_url)):

@@ -20,10 +20,15 @@ from opentransit.api.log import LOG
 from opentransit.geocoding import geocode_places
 from opentransit.stop_search import prepare_search_index, search_index_ready
 
-# Fixed, non-personal warm-up query. It is the only query text any warm-up ever sends
-# or logs; results are discarded.
+# Fixed, non-personal warm-up queries. They are the only query text any warm-up ever
+# sends or logs; results are discarded. The English query decides readiness. After it
+# succeeds the address backend also gets Hebrew passes, because the first Hebrew Photon
+# request on a fresh process costs about twice a warm one (60 ms against 30 ms measured).
 WARMUP_QUERY = "Tel Aviv"
 WARMUP_LANGUAGE = "en"
+WARMUP_QUERIES_HE = ("תל אביב", "הרצל")
+WARMUP_LANGUAGE_HE = "he"
+WARMUP_LIMIT_HE = 10
 
 INDEX_BUILDING = "SEARCH_INDEX_BUILDING"
 INDEX_UNAVAILABLE = "SEARCH_INDEX_UNAVAILABLE"
@@ -125,15 +130,43 @@ def readiness_reasons(snapshot, record: SearchWarmup | None, backends) -> list[d
 
 
 async def _probe(snapshot, kind: str, timeout_seconds: float) -> bool:
-    """One bounded fixed-query request; True only when the backend itself answered."""
+    """One bounded fixed-query request; True only when the backend itself answered.
+
+    Probes bypass the result caches, so a cached answer can never vouch for a backend.
+    """
     try:
         async with asyncio.timeout(timeout_seconds):
             result = await geocode_places(
-                snapshot, WARMUP_QUERY, language=WARMUP_LANGUAGE, types=(kind,), limit=1
+                snapshot,
+                WARMUP_QUERY,
+                language=WARMUP_LANGUAGE,
+                types=(kind,),
+                limit=1,
+                use_cache=False,
             )
     except Exception:
         return False
-    return kind in result.searched_types and kind not in result.unavailable_types
+    answered = kind in result.searched_types and kind not in result.unavailable_types
+    if answered and kind == "address":
+        await _warm_hebrew(snapshot, kind, timeout_seconds)
+    return answered
+
+
+async def _warm_hebrew(snapshot, kind: str, timeout_seconds: float) -> None:
+    """Best-effort Hebrew passes; they warm the backend and never change readiness."""
+    for query in WARMUP_QUERIES_HE:
+        try:
+            async with asyncio.timeout(timeout_seconds):
+                await geocode_places(
+                    snapshot,
+                    query,
+                    language=WARMUP_LANGUAGE_HE,
+                    types=(kind,),
+                    limit=WARMUP_LIMIT_HE,
+                    use_cache=False,
+                )
+        except Exception:
+            LOG.info("search_warmup_hebrew_pass_failed backend=%s", kind)
 
 
 async def warm_backend(

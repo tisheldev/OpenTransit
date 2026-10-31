@@ -16,6 +16,7 @@ from urllib.parse import urlsplit
 import httpx
 
 from opentransit.core.place_ref import candidate_identity_hash, encode_place_ref
+from opentransit.search_cache import GeocoderCaches
 
 MAX_PHOTON_RESPONSE_BYTES = 2_000_000
 MAX_PHOTON_TIMEOUT_SECONDS = 1.5
@@ -42,7 +43,11 @@ class PhotonAddressResult:
 
 class PhotonGeocoder:
     def __init__(
-        self, binding, generation_id: str, *, timeout_seconds: float = MAX_PHOTON_TIMEOUT_SECONDS
+        self,
+        binding,
+        generation_id: str,
+        *,
+        timeout_seconds: float = MAX_PHOTON_TIMEOUT_SECONDS,
     ):
         if not isinstance(generation_id, str) or not generation_id:
             raise ValueError("A generation ID is required")
@@ -73,6 +78,11 @@ class PhotonGeocoder:
             raise PhotonUnavailable("Photon client is unavailable")
         self.generation_id = generation_id
         self.timeout_seconds = timeout_seconds
+        # The snapshot's result cache; the caller attaches it. Only a complete,
+        # source-verified, non-empty answer is stored; a failure is never stored and drops
+        # the cached answers so recovery is observed by a live call. The key is the exact
+        # request sent to Photon.
+        self.cache: GeocoderCaches | None = None
 
     async def search(
         self,
@@ -105,6 +115,10 @@ class PhotonGeocoder:
         ]
         if near is not None:
             params.extend((("lat", f"{near[0]:.8f}"), ("lon", f"{near[1]:.8f}")))
+        cache_key = ("photon", tuple(params))
+        if self.cache is not None and (cached := self.cache.get("photon", cache_key)) is not None:
+            _log_phase(safe_request_id, self.generation_id, 0.0, 0.0, None, len(cached), "cached")
+            return PhotonAddressResult(cached)
         started = time.perf_counter()
         raw: bytes | None = None
         normalize_started = None
@@ -114,14 +128,20 @@ class PhotonGeocoder:
             raw = await self._request(params)
             backend_ms = _elapsed_ms(started)
             normalize_started = time.perf_counter()
-            features = _features(json.loads(raw), limit)
-            items = [self._candidate(feature) for feature in features]
+            # Parsing and source verification (one catalog lookup per feature) run on a
+            # worker thread; the API latency baseline measured 5-9 ms of event-loop time
+            # per address request for them.
+            items = await asyncio.to_thread(self._verified_items, raw, limit)
             result_count = len(items)
             outcome = "success" if items else "validempty"
+            if self.cache is not None and items:
+                self.cache.put("photon", cache_key, items)
             return PhotonAddressResult(items)
         except PhotonUnavailable:
+            self._forget()
             raise
         except (ValueError, TypeError, KeyError, OverflowError, json.JSONDecodeError) as exc:
+            self._forget()
             raise PhotonUnavailable("Photon response could not be source-verified") from exc
         finally:
             if normalize_started is None:
@@ -138,6 +158,14 @@ class PhotonGeocoder:
                 result_count,
                 outcome,
             )
+
+    def _verified_items(self, raw: bytes, limit: int) -> list[dict[str, Any]]:
+        features = _features(json.loads(raw), limit)
+        return [self._candidate(feature) for feature in features]
+
+    def _forget(self) -> None:
+        if self.cache is not None:
+            self.cache.clear("photon")
 
     async def _request(self, params: list[tuple[str, str]]) -> bytes:
         if self.client.is_closed:

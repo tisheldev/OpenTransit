@@ -24,7 +24,7 @@ _generation_sequence = count()
 
 
 class Reference:
-    def stop(self, _stop_ref):
+    def stop_ref(self, _stop_ref):
         return {
             "source_id": "board",
             "platform_code": "Bay 1",
@@ -147,7 +147,7 @@ def test_departure_reference_database_failure_is_unavailable_not_internal_error(
         snapshot = attach_snapshot(client)
 
         class BrokenReference:
-            def stop(self, _stop_ref):
+            def stop_ref(self, _stop_ref):
                 raise sqlite3.DatabaseError("private database detail")
 
         client.app.state.snapshot = SimpleNamespace(

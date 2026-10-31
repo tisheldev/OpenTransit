@@ -9,6 +9,7 @@ from typing import Any
 from opentransit.motis_geocoder import GeocodeResult, GeocoderUnavailable
 from opentransit.motis_geocoder import geocode_places as geocode_with_motis
 from opentransit.photon_geocoder import PhotonGeocoder, PhotonUnavailable
+from opentransit.search_cache import geocoder_caches
 
 
 @dataclass(frozen=True)
@@ -31,8 +32,14 @@ async def geocode_places(
     types: tuple[str, ...] = ("poi", "address"),
     limit: int = 10,
     request_id: str | None = None,
+    use_cache: bool = True,
 ) -> GeocodingResult:
-    """Use a declared Photon binding for addresses without changing legacy MOTIS mode."""
+    """Use a declared Photon binding for addresses without changing legacy MOTIS mode.
+
+    Each backend's complete non-empty answers are cached on the snapshot (generation-bound,
+    bounded LRU; see ``search_cache``). ``use_cache=False`` always asks the backends, which
+    readiness probes need so a cached answer never vouches for a backend.
+    """
     address_provider = getattr(snapshot, "address_provider", None)
     address_required = bool(getattr(snapshot, "address_provider_required", False))
     if address_provider is None and not address_required:
@@ -44,6 +51,7 @@ async def geocode_places(
             types=types,
             limit=limit,
             request_id=request_id,
+            use_cache=use_cache,
         )
         return GeocodingResult(result.items, result.searched_types)
 
@@ -59,6 +67,8 @@ async def geocode_places(
         else:
             try:
                 adapter = PhotonGeocoder(address_provider, snapshot.generation.id)
+                if use_cache:
+                    adapter.cache = geocoder_caches(snapshot)
             except PhotonUnavailable, ValueError:
                 unavailable.add("address")
 
@@ -81,6 +91,7 @@ async def geocode_places(
             types=("poi",),
             limit=limit,
             request_id=request_id,
+            use_cache=use_cache,
         )
 
     # The backends are independent, so they run concurrently and the slower one

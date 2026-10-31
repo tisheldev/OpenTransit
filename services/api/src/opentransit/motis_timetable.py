@@ -409,7 +409,7 @@ async def departures(
         snapshot.generation.coverage_until
     ):
         raise TimetableFailure("OUTSIDE_SERVICE_WINDOW", 422)
-    stop = snapshot.reference.stop(stop_ref)
+    stop = snapshot.reference.stop_ref(stop_ref)
     if stop is None:
         return None
     children = stop.get("children") or []

@@ -5,7 +5,7 @@ import hashlib
 import json
 import subprocess
 import zipfile
-from datetime import date
+from datetime import UTC, date, datetime, timedelta
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -30,9 +30,8 @@ def _zip(path, members):
             archive.writestr(name, stream.getvalue())
 
 
-@pytest.fixture
-def inputs(tmp_path):
-    root = tmp_path / "inputs"
+def write_inputs(root, first_day, last_day):
+    """Write the synthetic canonical inputs with daily service from first_day to last_day."""
     root.mkdir()
     _zip(
         root / CANONICAL_INPUTS["gtfs"],
@@ -73,7 +72,14 @@ def inputs(tmp_path):
                     "start_date",
                     "end_date",
                 ],
-                [["wk", "1", "1", "1", "1", "1", "1", "1", "20260928", "20261031"]],
+                [
+                    [
+                        "wk",
+                        *["1"] * 7,
+                        first_day.strftime("%Y%m%d"),
+                        last_day.strftime("%Y%m%d"),
+                    ]
+                ],
             ),
         },
     )
@@ -82,7 +88,15 @@ def inputs(tmp_path):
         {
             "TripIdToDate.txt": (
                 ["TripId", "FromDate", "ToDate", "DayInWeek"],
-                [["trip", "28/09/2026", "31/10/2026", day_in_week] for day_in_week in range(1, 8)],
+                [
+                    [
+                        "trip",
+                        first_day.strftime("%d/%m/%Y"),
+                        last_day.strftime("%d/%m/%Y"),
+                        day_in_week,
+                    ]
+                    for day_in_week in range(1, 8)
+                ],
             )
         },
     )
@@ -101,6 +115,20 @@ def inputs(tmp_path):
     }
     (root / "provenance.json").write_text(json.dumps(provenance), encoding="utf-8")
     return root
+
+
+@pytest.fixture
+def inputs(tmp_path):
+    return write_inputs(tmp_path / "inputs", date(2026, 9, 28), date(2026, 10, 31))
+
+
+@pytest.fixture
+def current_inputs(tmp_path):
+    """Inputs whose service covers today, for tests that build and serve on the real clock."""
+    today = datetime.now(UTC).date()
+    return write_inputs(
+        tmp_path / "current-inputs", today - timedelta(days=7), today + timedelta(days=60)
+    )
 
 
 def successful_runner(commands, *, write_graph=True):
