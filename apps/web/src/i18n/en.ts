@@ -26,7 +26,7 @@ const core = {
   "screen.backHome": "Back to home",
 
   "nav.back": "Back",
-  "nav.locate": "My location",
+  "nav.locate": "Centre the map on my location",
 
   "settings.language": "Language",
   "settings.language.he": "עברית",

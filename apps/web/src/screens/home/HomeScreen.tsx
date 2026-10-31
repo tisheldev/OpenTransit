@@ -1,61 +1,124 @@
-import { useStatus } from "../../api/queries";
-import { ApiFailure } from "../../api/result";
-import type { Meta } from "../../api/schemas";
-import { Bdi, ErrorState, Loading, StaleDataBanner, TestDataBanner } from "../../components/states";
 import { useI18n } from "../../i18n/I18nProvider";
-import { formatDate } from "../../lib/time";
-import { hrefFor } from "../../router";
+import { emptyScene, usePublishScene } from "../../map/scene";
+import { useActiveTrip } from "../../nav/activeTrip";
+import { choiceFromSaved } from "../../plan/draft";
+import { usePlan } from "../../plan/PlanProvider";
+import { go, hrefFor } from "../../router";
+import { FromTo } from "../../shell/FromTo";
+import { useLocalState } from "../../shell/localStore";
+import type { SavedPlace } from "../../storage/local";
 
-// CONTRACT STUB, replaced by slice S4 (S0 behaviour kept so the existing e2e stays green).
-function DataStatus({ fixtureMode }: { fixtureMode: boolean }) {
-  const { t, lang } = useI18n();
-  const status = useStatus();
-  if (status.isPending) return <Loading label={t("status.checking")} />;
-  if (status.isError) {
-    const failure = status.error instanceof ApiFailure ? status.error : null;
-    return (
-      <ErrorState
-        state={failure?.state ?? "unexpected"}
-        retryAfterSeconds={failure?.error.kind === "problem" ? failure.error.retryAfterSeconds : null}
-        onRetry={() => void status.refetch()}
-      />
-    );
-  }
-  const { data, meta } = status.data;
-  // Without a generation, meta carries only a request ID and a null generationId.
-  const generation = meta.generationId === null ? null : (meta as Meta);
-  const coverage = generation?.coverage ?? null;
-  const stale = generation !== null && generation.freshness !== "current";
-  const testData = fixtureMode || generation?.mode === "fixture";
-  return (
-    <section className="data-status" aria-label={t("status.ready")}>
-      {testData && <TestDataBanner />}
-      {stale && <StaleDataBanner />}
-      <p>{data.ready ? t("status.ready") : t("status.notReady")}</p>
-      {coverage && (
-        <p>
-          {t("time.scheduled")} ·{" "}
-          <Bdi>
-            {t("status.coverage", { from: formatDate(coverage.from, lang), until: formatDate(coverage.until, lang) })}
-          </Bdi>
-        </p>
-      )}
-      <p>{t("banner.liveUnavailable")}</p>
-    </section>
-  );
-}
+// Home — C01 (design: Screens 1). Renders from storage only; the data status banner is
+// the shell's and arrives after the first paint.
 
 export function HomeScreen() {
   const { t } = useI18n();
+  const local = useLocalState();
+  const trip = useActiveTrip();
+  const { draft, setTo } = usePlan();
+  usePublishScene(emptyScene);
+
+  const travelTo = (saved: SavedPlace) => {
+    setTo({ type: "place", place: choiceFromSaved(saved) });
+    go({ name: "compare" });
+  };
+
   return (
-    <>
-      <h1>{t("screen.home")}</h1>
-      <DataStatus fixtureMode={import.meta.env.MODE === "fixtures"} />
-      <ul className="link-list">
-        <li><a href={hrefFor({ name: "search", field: "to" })}>{t("screen.search")}</a></li>
-        <li><a href={hrefFor({ name: "nearby" })}>{t("screen.nearby")}</a></li>
-        <li><a href={hrefFor({ name: "settings" })}>{t("screen.settings")}</a></li>
-      </ul>
-    </>
+    <div className="home">
+      <div className="screen-header">
+        <h1 className="visually-hidden">{t("home.title")}</h1>
+      </div>
+
+      {trip && (
+        <button type="button" className="row-button active-trip" onClick={() => go({ name: "navigate" })}>
+          <span className="row-icon" aria-hidden="true">
+            ➤
+          </span>
+          <span className="row-text">{t("home.activeTrip")}</span>
+        </button>
+      )}
+
+      <FromTo variant="full" />
+
+      {draft.to !== null && (
+        <button type="button" className="button button-primary block" onClick={() => go({ name: "compare" })}>
+          {t("home.compare")}
+        </button>
+      )}
+
+      <section aria-label={t("home.saved")}>
+        <ul className="chips">
+          <li>
+            {local.home ? (
+              <button type="button" className="chip chip-filled" onClick={() => travelTo(local.home!)}>
+                <span aria-hidden="true">⌂</span> {t("place.home")}
+              </button>
+            ) : (
+              <button type="button" className="chip" onClick={() => go({ name: "search", field: "home" })}>
+                <span aria-hidden="true">⌂</span> {t("home.setHome")}
+              </button>
+            )}
+          </li>
+          <li>
+            {local.work ? (
+              <button type="button" className="chip chip-filled" onClick={() => travelTo(local.work!)}>
+                <span aria-hidden="true">▣</span> {t("place.work")}
+              </button>
+            ) : (
+              <button type="button" className="chip" onClick={() => go({ name: "search", field: "work" })}>
+                <span aria-hidden="true">▣</span> {t("home.setWork")}
+              </button>
+            )}
+          </li>
+          {local.favourites.map((favourite) => (
+            <li key={favourite.id}>
+              <button type="button" className="chip chip-filled" onClick={() => travelTo(favourite)}>
+                <span aria-hidden="true">★</span> <bdi>{favourite.label}</bdi>
+              </button>
+            </li>
+          ))}
+          <li>
+            <button
+              type="button"
+              className="chip chip-add"
+              aria-label={t("home.addFavourite")}
+              onClick={() => go({ name: "search", field: "favourite" })}
+            >
+              <span aria-hidden="true">+</span>
+            </button>
+          </li>
+        </ul>
+      </section>
+
+      <section aria-labelledby="home-recents">
+        <h2 id="home-recents" className="section-title">
+          {t("home.recents")}
+        </h2>
+        {local.recents.length === 0 ? (
+          <p className="muted">{t("home.noRecents")}</p>
+        ) : (
+          <ul className="rows">
+            {local.recents.slice(0, 10).map((recent) => (
+              <li key={recent.id}>
+                <button type="button" className="row-button" onClick={() => travelTo(recent)}>
+                  <span className="row-icon" aria-hidden="true">
+                    🕘
+                  </span>
+                  <bdi className="row-text">{recent.label}</bdi>
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+
+      <p className="muted small">
+        {t("home.scheduledOnly")} · {t("banner.liveUnavailable")}
+      </p>
+
+      <a className="icon-button settings-link" href={hrefFor({ name: "settings" })} aria-label={t("screen.settings")}>
+        <span aria-hidden="true">⚙</span>
+      </a>
+    </div>
   );
 }

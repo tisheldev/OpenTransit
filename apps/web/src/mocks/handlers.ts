@@ -1,4 +1,4 @@
-import { http, HttpResponse } from "msw";
+import { delay, http, HttpResponse } from "msw";
 import { fixture, fixtures, type Fixture } from "../api/fixtures";
 
 // MSW handlers that answer every public endpoint from fixtures. Used by Vitest (node)
@@ -30,6 +30,59 @@ export function scenario(): string | null {
 }
 const decoded = (value: string | readonly string[] | undefined) => decodeURIComponent(String(value ?? ""));
 
+// DERIVED answers (not recorded): built at runtime from a recorded fixture to show a
+// state the recorded evidence lacks. Each says what it changed; none is presented as a
+// real API response. (Kept in code: schemas.test.ts accepts only recorded-/synthetic-
+// fixture files.)
+
+/** Derived from recorded-places-stop-he: addresses marked unavailable, partial answer. */
+export function derivedPartialPlaces(): Fixture {
+  const base = fixture("recorded-places-stop-he");
+  const body = structuredClone(base.body) as {
+    data: Array<{ kind: string }>;
+    matchedTypes: string[];
+    unavailableTypes: string[];
+    partial: boolean;
+  };
+  body.data = body.data.filter((item) => item.kind !== "address");
+  body.matchedTypes = body.matchedTypes.filter((type) => type !== "address");
+  body.unavailableTypes = ["address"];
+  body.partial = true;
+  return { ...base, body };
+}
+
+/** Derived from recorded-places-address-he: the first address resolved to street level only. */
+export function derivedStreetLevelAddress(): Fixture {
+  const base = fixture("recorded-places-address-he");
+  const body = structuredClone(base.body) as { data: Array<Record<string, unknown>> };
+  body.data = body.data.slice(0, 1).map((item) => ({
+    ...item,
+    name: "דיזנגוף",
+    displayName: "דיזנגוף",
+    houseNumber: null,
+    addressLevel: "street",
+  }));
+  return { ...base, body };
+}
+
+/** Derived from synthetic-problem-feed-expired: every search category unavailable (503). */
+export function derivedCategoryUnavailable(): Fixture {
+  const base = fixture("synthetic-problem-feed-expired");
+  return {
+    ...base,
+    request: { ...base.request, path: "/v1/places" },
+    status: 503,
+    body: {
+      ...(base.body as Record<string, unknown>),
+      type: "urn:opentransit:problem:category-unavailable",
+      title: "Category unavailable",
+      status: 503,
+      code: "CATEGORY_UNAVAILABLE",
+      detail: "No requested place category is available.",
+    },
+  };
+}
+
 /** Fixtures holding a trip, keyed by trip ref. */
 const tripsByRef = new Map(
   Object.entries(fixtures)
@@ -38,14 +91,39 @@ const tripsByRef = new Map(
 );
 
 export const handlers = [
-  http.get("*/v1/status", () => send("synthetic-status-ready")),
+  http.get("*/v1/status", () => {
+    switch (scenario()) {
+      case "status-expired":
+        return send("synthetic-status-expired");
+      case "status-offline":
+        return HttpResponse.error();
+      case "status-not-ready":
+        return send("recorded-problem-not-ready");
+      default:
+        return send("synthetic-status-ready");
+    }
+  }),
 
-  http.get("*/v1/places", ({ request }) => {
+  http.get("*/v1/places", async ({ request }) => {
     const url = new URL(request.url);
     const q = url.searchParams.get("q") ?? "";
     const lang = url.searchParams.get("lang") ?? "he";
     const types = url.searchParams.getAll("type");
     if (q.trim().length < 2) return send("synthetic-problem-invalid-request");
+    switch (scenario()) {
+      case "places-partial":
+        return respond(derivedPartialPlaces());
+      case "places-unavailable":
+        return respond(derivedCategoryUnavailable());
+      case "places-rate-limited":
+        return send("synthetic-problem-rate-limited");
+      case "places-offline":
+        return HttpResponse.error();
+      case "places-slow":
+        await delay(4000);
+        break;
+    }
+    if (q.startsWith("street")) return respond(derivedStreetLevelAddress());
     if (q.startsWith("zzz")) return send("recorded-places-empty");
     if (types.length === 1 && types[0] === "address") return send("recorded-places-address-he");
     if (lang === "en") return send(types.includes("poi") ? "recorded-places-poi-en" : "recorded-places-stop-en");
