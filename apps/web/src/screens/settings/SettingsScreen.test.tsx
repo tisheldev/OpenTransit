@@ -98,9 +98,9 @@ describe("Settings", () => {
     expect(screen.getByText(en["settings.realtime"])).toBeInTheDocument();
     expect(screen.getByText(en["settings.alerts"])).toBeInTheDocument();
     expect(screen.getByText(en["settings.testData"])).toBeInTheDocument();
-    expect(screen.getByText(en["settings.attribution.mot"])).toBeInTheDocument();
-    expect(screen.getByText(en["settings.attribution.osm"])).toBeInTheDocument();
-    expect(screen.getByText(en["settings.attribution.tiles"])).toBeInTheDocument();
+    expect(screen.getAllByText(en["settings.attribution.mot"]).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(en["settings.attribution.osm"]).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(en["settings.attribution.tiles"]).length).toBeGreaterThan(0);
     expect(screen.getByText(/^Version 0\.0\.0/)).toBeInTheDocument();
   });
 });

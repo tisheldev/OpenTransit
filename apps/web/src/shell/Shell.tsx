@@ -149,6 +149,8 @@ export function Shell({ fixtureMode }: { fixtureMode: boolean }) {
   const painted = useAfterFirstPaint();
   const status = useStatus({ enabled: painted });
   const mainRef = useRef<HTMLElement>(null);
+  const shellRef = useRef<HTMLDivElement>(null);
+  const topRef = useRef<HTMLDivElement>(null);
   const routeKey = JSON.stringify(route);
 
   // Each route opens at its own snap; a screen may change it afterwards (pick on map).
@@ -162,6 +164,20 @@ export function Shell({ fixtureMode }: { fixtureMode: boolean }) {
     () => ({ snap, setSnap: (next: Snap) => setSnapState({ key: routeKey, snap: next }) }),
     [snap, routeKey],
   );
+
+  // The map attribution sits just below whatever floats at the top (banners, Back),
+  // so neither those nor the sheet ever cover it (map.css --map-attribution-top).
+  useLayoutEffect(() => {
+    const top = topRef.current;
+    const shell = shellRef.current;
+    if (!top || !shell) return;
+    const report = () => shell.style.setProperty("--map-attribution-top", `${Math.round(top.getBoundingClientRect().height)}px`);
+    report();
+    if (typeof ResizeObserver === "undefined") return;
+    const observer = new ResizeObserver(report);
+    observer.observe(top);
+    return () => observer.disconnect();
+  }, []);
 
   // Move focus to the new screen on navigation (not on first load, unless it asks).
   const first = useRef(true);
@@ -177,7 +193,7 @@ export function Shell({ fixtureMode }: { fixtureMode: boolean }) {
 
   return (
     <SheetContext.Provider value={sheet}>
-      <div className="shell">
+      <div className="shell" ref={shellRef}>
         <a
           className="skip-link"
           href="#main"
@@ -191,7 +207,7 @@ export function Shell({ fixtureMode }: { fixtureMode: boolean }) {
         <div className="map-layer">
           <MapHost />
         </div>
-        <div className="overlay-top">
+        <div className="overlay-top" ref={topRef}>
           <Banners fixtureMode={fixtureMode} status={status} />
           {route.name !== "home" && (
             <button type="button" className="icon-button floating back-button" aria-label={t("nav.back")} onClick={() => back()}>
