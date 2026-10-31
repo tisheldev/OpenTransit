@@ -7,6 +7,7 @@ import { getMapState } from "../map/scene";
 import { go } from "../router";
 import { renderApp, storedDraft } from "./testUtils";
 import { nearestSnap, stepSnap } from "./sheet";
+import { backFallback } from "./Shell";
 
 const sheet = () => document.querySelector(".sheet")!;
 const handle = () => screen.getByRole("button", { name: /גודל הגיליון|Sheet size/ });
@@ -91,5 +92,13 @@ describe("shell", () => {
     renderApp("#/settings");
     await userEvent.click(screen.getByText(he["app.skipToContent"]));
     expect(screen.getByRole("heading", { level: 1 })).toHaveFocus();
+  });
+});
+
+describe("backFallback", () => {
+  it("returns from Navigate to Compare and from everything else to Home", () => {
+    expect(backFallback({ name: "navigate" })).toEqual({ name: "compare" });
+    expect(backFallback({ name: "compare" })).toEqual({ name: "home" });
+    expect(backFallback({ name: "search", field: "to" })).toEqual({ name: "home" });
   });
 });

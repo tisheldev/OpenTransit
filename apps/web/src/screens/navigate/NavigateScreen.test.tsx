@@ -15,6 +15,7 @@ import { simulateJourney } from "../../nav/simulate";
 import { recordedJourneys, recordedTrips } from "../../nav/testdata";
 import recorded from "../../nav/testdata/recorded-oct31a-dizengoff-technion.json";
 import { renderApp } from "../../shell/testUtils";
+import { go } from "../../router";
 
 const stopPositions = (recorded as unknown as { stopPositions: Record<string, { latitude: number; longitude: number }> }).stopPositions;
 const STORAGE_KEY = "opentransit:activeTrip";
@@ -198,7 +199,10 @@ describe("Navigate: manual control", () => {
     renderApp("#/navigate");
     await userEvent.click(screen.getByRole("button", { name: he["nav.back"] }));
     await waitFor(() => expect(handle.stops).toBe(1));
+    // A deep link has no in-app history: Back falls back to Compare (design: App flow).
+    await waitFor(() => expect(window.location.hash).toBe("#/compare"));
     expect(getActiveTrip()).not.toBeNull();
+    act(() => go({ name: "home" }));
     expect(await screen.findByRole("button", { name: he["home.activeTrip"] })).toBeInTheDocument();
   });
 

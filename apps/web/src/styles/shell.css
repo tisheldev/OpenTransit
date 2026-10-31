@@ -26,6 +26,8 @@
   position: fixed;
   inset: 0;
   overflow: hidden;
+  /* clip also stops programmatic scrolling (focus or scrollIntoView) of the shell itself */
+  overflow: clip;
 }
 
 .map-layer {

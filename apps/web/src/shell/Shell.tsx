@@ -12,7 +12,12 @@ import { useStatus } from "../api/queries";
 import { useI18n } from "../i18n/I18nProvider";
 import { MapHost } from "../map/MapHost";
 import { requestLocate, setBottomInset } from "../map/scene";
-import { back, useRoute } from "../router";
+import { back, useRoute, type Route } from "../router";
+
+/** Where Back leads when there is no in-app history entry (a deep link or a reload). */
+export function backFallback(route: Route): Route {
+  return route.name === "navigate" ? { name: "compare" } : { name: "home" };
+}
 import { Screen } from "../screens/screens";
 import { Banners } from "./Banners";
 import { SheetContext, SNAP_FRACTION, defaultSnap, nearestSnap, stepSnap, type Snap } from "./sheet";
@@ -210,7 +215,7 @@ export function Shell({ fixtureMode }: { fixtureMode: boolean }) {
         <div className="overlay-top" ref={topRef}>
           <Banners fixtureMode={fixtureMode} status={status} />
           {route.name !== "home" && (
-            <button type="button" className="icon-button floating back-button" aria-label={t("nav.back")} onClick={() => back()}>
+            <button type="button" className="icon-button floating back-button" aria-label={t("nav.back")} onClick={() => back(backFallback(route))}>
               <span className="mirror" aria-hidden="true">
                 →
               </span>

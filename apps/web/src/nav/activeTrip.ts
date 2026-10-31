@@ -87,7 +87,14 @@ function isActiveTrip(value: unknown): value is ActiveTrip {
   );
 }
 
+/**
+ * Fixture mode (dev server only) replays recorded timetables dated in the past; expiry
+ * there would make every fixture trip unreachable, so it applies to real data only.
+ */
+const FIXTURE_MODE = import.meta.env.MODE === "fixtures";
+
 export function isExpired(trip: ActiveTrip, now: number = Date.now()): boolean {
+  if (FIXTURE_MODE) return false;
   const arrival = Date.parse(trip.journey.timing.scheduledArrival);
   return !Number.isFinite(arrival) || now > arrival + EXPIRY_AFTER_ARRIVAL_MS;
 }
