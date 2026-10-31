@@ -13,7 +13,7 @@ from datetime import timedelta
 
 import httpx
 import pytest
-from test_generation_build import inputs  # noqa: F401
+from test_generation_build import current_inputs  # noqa: F401
 from test_generation_probe import current_generation  # noqa: F401
 from test_localities import _dataset
 from test_probe_composite_freshness import (
