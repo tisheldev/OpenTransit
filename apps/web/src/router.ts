@@ -76,23 +76,39 @@ export function go(route: Route, options: { replace?: boolean } = {}): void {
 
 /**
  * Each history entry this app creates carries its depth, so Back knows whether there is
- * an in-app screen to return to. A deep link or a reload starts at depth 0.
+ * an in-app screen to return to, and the screen that opened it (`otOpener`, a hash), so a
+ * screen such as Search can return to whatever opened it. A deep link or a reload starts
+ * at depth 0 with no opener.
  */
+interface EntryState {
+  otDepth?: unknown;
+  otOpener?: unknown;
+}
 let currentDepth = 0;
+let lastHash = typeof window === "undefined" ? "" : window.location.hash;
 function stampDepth(): void {
-  const state = window.history.state as { otDepth?: unknown } | null;
+  const state = window.history.state as EntryState | null;
+  const opener = lastHash;
+  lastHash = window.location.hash;
   if (typeof state?.otDepth === "number") {
     currentDepth = state.otDepth;
     return;
   }
   currentDepth += 1;
-  window.history.replaceState({ ...(state ?? {}), otDepth: currentDepth }, "");
+  window.history.replaceState({ ...(state ?? {}), otDepth: currentDepth, otOpener: opener }, "");
 }
 
 /** Back one level (design: Surface; Back never asks). Without an in-app entry, go to `fallback`. */
 export function back(fallback: Route = { name: "home" }): void {
   if (currentDepth > 0) window.history.back();
   else go(fallback, { replace: true });
+}
+
+/** The route that opened the current history entry; null for a deep link or a reload. */
+export function openerRoute(): Route | null {
+  if (typeof window === "undefined" || currentDepth === 0) return null;
+  const opener = (window.history.state as EntryState | null)?.otOpener;
+  return typeof opener === "string" ? parseHash(opener) : null;
 }
 
 function subscribe(onChange: () => void): () => void {

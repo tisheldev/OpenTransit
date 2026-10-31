@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { expect, test, type Page } from "@playwright/test";
 import { appPath, blockExternal, expectNoSeriousAxeViolations, useScenario } from "./helpers";
 
@@ -61,6 +62,87 @@ test("with saved places (English): a chip goes straight to Compare", async ({ pa
   const draft = await page.evaluate(() => JSON.parse(sessionStorage.getItem("opentransit:plan") ?? "null"));
   expect(draft.to.place.label).toBe("דיזנגוף 50, תל־אביב–יפו");
   expect(page.url()).not.toContain("32.07");
+});
+
+/** The browser refuses location for this origin (a real "Block", not a fake API). */
+async function denyLocation(page: Page): Promise<void> {
+  const session = await page.context().newCDPSession(page);
+  const { targetInfo } = (await session.send("Target.getTargetInfo")) as { targetInfo: { browserContextId: string } };
+  const browser = await page.context().browser()!.newBrowserCDPSession();
+  await browser.send("Browser.setPermission", {
+    permission: { name: "geolocation" },
+    setting: "denied",
+    origin: new URL(page.url()).origin,
+    browserContextId: targetInfo.browserContextId,
+  });
+}
+
+test("location refused: From starts empty, Locate is hidden, and a destination asks for the start next", async ({ page }) => {
+  await page.goto(appPath("#/"));
+  await denyLocation(page);
+  await page.reload();
+  await expect(page.getByRole("button", { name: "מאיפה?", exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: /המיקום שלי/ })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "מרכוז המפה על המיקום שלי" })).toHaveCount(0);
+  await expectNoSeriousAxeViolations(page, "Home, location refused (he)");
+
+  await page.getByRole("button", { name: "לאן?" }).click();
+  await page.getByRole("searchbox").fill("דיזנגוף");
+  await page.getByTestId("search-results").getByRole("button").first().click();
+  // No start yet: Search asks for it in the same entry, and says why "My location" is not offered.
+  await expect(page).toHaveURL(/#\/search\/from$/);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("מאיפה?");
+  await expect(page.getByText("לא זמין: אין הרשאה למיקום. אפשר לאשר אותה בהגדרות הדפדפן")).toBeVisible();
+  await expectNoSeriousAxeViolations(page, "Search From, location refused (he)");
+  await page.getByRole("searchbox").fill("דיזנגוף");
+  await page.getByTestId("search-results").getByRole("button").nth(1).click();
+  await expect(page).toHaveURL(/#\/compare$/);
+  await page.getByRole("button", { name: "חזרה" }).click();
+  await expect(page).toHaveURL(/#\/$/);
+
+  // Next visit: the plan starts from the start chosen last time.
+  await page.evaluate(() => sessionStorage.removeItem("opentransit:plan"));
+  await page.reload();
+  await expect(page.getByRole("button", { name: /^מאיפה\? דיזנגוף סנטר/ })).toBeVisible();
+});
+
+test("an active trip: a resume card first in the sheet, fully visible at half (axe)", async ({ page }) => {
+  const recorded = JSON.parse(
+    readFileSync(new URL("../src/nav/testdata/recorded-oct31a-dizengoff-technion.json", import.meta.url), "utf8"),
+  ) as { journeys: { data: { journeys: unknown[] }; meta: unknown } };
+  const trip = {
+    version: 1,
+    journey: recorded.journeys.data.journeys[0],
+    meta: recorded.journeys.meta,
+    trips: {},
+    startedAt: "2026-10-31T10:00:00.000Z",
+    nav: { stepIndex: 0 },
+    labels: { origin: "דיזנגוף סנטר", destination: "טכניון" },
+  };
+  await page.addInitScript((value) => sessionStorage.setItem("opentransit:activeTrip", value), JSON.stringify(trip));
+  await page.goto(appPath("#/"));
+  const resume = page.getByRole("button", { name: "חזרה לניווט" });
+  await expect(resume).toBeVisible();
+  await expect(resume).toContainText(/נסיעה פעילה אל טכניון · הגעה \d\d:\d\d/);
+  const card = (await resume.boundingBox())!;
+  const sheet = (await page.locator(".sheet").boundingBox())!;
+  expect(card.y).toBeGreaterThan(sheet.y);
+  expect(card.y + card.height).toBeLessThan(sheet.y + sheet.height);
+  const fromTo = (await page.getByRole("group", { name: "מוצא ויעד" }).boundingBox())!;
+  expect(card.y).toBeLessThan(fromTo.y);
+  await expectNoSeriousAxeViolations(page, "Home, active trip (he)");
+  await resume.click();
+  await expect(page).toHaveURL(/#\/navigate$/);
+});
+
+test("no scheduled-times footnote on Home; Settings is the gear in the sheet's top row", async ({ page }) => {
+  await page.goto(appPath("#/"));
+  await expect(page.getByText("זמנים בזמן אמת והתראות אינם זמינים")).toHaveCount(0);
+  const gear = page.getByRole("link", { name: "הגדרות" });
+  const box = (await gear.boundingBox())!;
+  const sheet = (await page.locator(".sheet").boundingBox())!;
+  expect(box.y - sheet.y).toBeLessThan(10);
+  expect(box.height).toBeGreaterThanOrEqual(44);
 });
 
 test("an expired timetable shows one banner", async ({ page }) => {

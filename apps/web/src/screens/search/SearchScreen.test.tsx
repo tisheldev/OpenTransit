@@ -8,6 +8,8 @@ import { he } from "../../i18n/he";
 import { getMapState, setMapCenter } from "../../map/scene";
 import { derivedCategoryUnavailable, derivedPartialPlaces, respond } from "../../mocks/handlers";
 import { server } from "../../mocks/node";
+import { go } from "../../router";
+import { lastOrigin } from "../../shell/localStore";
 import { loadLocalState } from "../../storage/local";
 import { renderApp, storedDraft } from "../../shell/testUtils";
 import { readableLocality } from "./choice";
@@ -35,6 +37,19 @@ describe("Search before typing", () => {
     const rows = screen.getAllByRole("button").filter((button) => button.classList.contains("row-button"));
     expect(rows[0]).toHaveTextContent(he["search.pickOnMap"]);
     expect(rows[1]).toHaveTextContent(he["place.myLocation"]);
+  });
+
+  it("shows My location without offering it when location cannot work, with the reason", async () => {
+    renderApp("#/search/from", { location: "insecure" });
+    expect(screen.queryByRole("button", { name: he["place.myLocation"] })).toBeNull();
+    expect(screen.getByText(he["place.myLocation"]).closest("li")).toHaveAttribute("aria-disabled", "true");
+    expect(screen.getByText(he["search.myLocation.insecure"])).toBeInTheDocument();
+  });
+
+  it("says permission is off when it was denied", async () => {
+    renderApp("#/search/from", { location: "denied", lang: "en" });
+    expect(await screen.findByText(en["search.myLocation.denied"])).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: en["place.myLocation"] })).toBeNull();
   });
 
   it("does not offer My location for To", () => {
@@ -83,6 +98,32 @@ describe("Search requests", () => {
     await screen.findByTestId("search-results");
   });
 
+  it("keeps the previous results (dimmed, busy) while the next answer loads: no skeleton flash", async () => {
+    let calls = 0;
+    trackPlaces(async () => {
+      calls += 1;
+      if (calls > 1) await delay(300);
+      return respond(fixture("recorded-places-stop-he"));
+    });
+    renderApp("#/search/to");
+    await userEvent.type(input(), "דיזנגוף");
+    await screen.findByTestId("search-results");
+    await userEvent.type(input(), " ס");
+    const previous = screen.getByTestId("search-results-previous");
+    expect(previous).toHaveAttribute("aria-busy", "true");
+    expect(within(previous).getAllByRole("button").length).toBeGreaterThan(0);
+    expect(screen.queryByTestId("search-skeleton")).toBeNull();
+    await screen.findByTestId("search-results");
+    expect(screen.queryByTestId("search-results-previous")).toBeNull();
+  });
+
+  it("keeps the places list under one typed character, with a hint", async () => {
+    renderApp("#/search/to");
+    await userEvent.type(input(), "ד");
+    expect(screen.getByText(he["search.minChars"])).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: he["search.pickOnMap"] })).toBeInTheDocument();
+  });
+
   it("shows skeleton rows while typing, then announces the result count", async () => {
     trackPlaces(async () => {
       await delay(100);
@@ -108,6 +149,25 @@ describe("Search results and states", () => {
     expect(first).toHaveTextContent(he["place.poi"]);
     expect(first.querySelector("bdi[lang='en']")).not.toBeNull();
     expect(readableLocality("רחוב: דיזנגוף 50 עיר: תל אביב יפו רציף:  קומה: ")).toBe("דיזנגוף 50, תל אביב יפו");
+  });
+
+  it("reads a stop as 'Stop <code> · street, city', without a separate kind word", async () => {
+    renderApp("#/search/to");
+    await userEvent.type(input(), "דיזנגוף");
+    const results = await screen.findByTestId("search-results");
+    const sub = within(results).getAllByRole("button")[0]!.querySelector(".row-sub")!;
+    expect(sub.textContent).toMatch(/^תחנה \d+\s*·\s/);
+    expect(sub.querySelector(".kind-label")).toBeNull();
+  });
+
+  it("has one clear button, inside the field", async () => {
+    renderApp("#/search/to", { lang: "en" });
+    await userEvent.type(input(), "Di");
+    const clear = screen.getByRole("button", { name: en["search.clear"] });
+    expect(clear.closest(".search-field")).not.toBeNull();
+    await userEvent.click(clear);
+    expect(input()).toHaveValue("");
+    expect(input()).toHaveFocus();
   });
 
   it("tags a street-level address", async () => {
@@ -210,6 +270,30 @@ describe("Choosing a place", () => {
     await waitFor(() => expect(window.location.hash).toBe("#/"));
     expect(loadLocalState().state.recents).toHaveLength(0);
     expect(storedDraft()?.from).toEqual({ type: "myLocation" });
+  });
+
+  it("without a start, a destination asks for the start next; the start is remembered for next time", async () => {
+    renderApp("#/search/to", { location: "unsupported" });
+    await userEvent.type(input(), "דיזנגוף");
+    await userEvent.click(within(await screen.findByTestId("search-results")).getAllByRole("button")[0]!);
+    await waitFor(() => expect(window.location.hash).toBe("#/search/from"));
+    expect(await screen.findByRole("heading", { level: 1 })).toHaveTextContent(he["search.title.from"]);
+    await userEvent.type(input(), "דיזנגוף");
+    await userEvent.click(within(await screen.findByTestId("search-results")).getAllByRole("button")[1]!);
+    await waitFor(() => expect(window.location.hash).toBe("#/compare"));
+    await waitFor(() => expect(storedDraft()?.from).toMatchObject({ type: "place", place: { label: "דיזנגוף סנטר" } }));
+    expect(lastOrigin()).toMatchObject({ label: expect.stringContaining("דיזנגוף סנטר") });
+  });
+
+  it("Choose on map starts at the plan's place, at street level", async () => {
+    renderApp("#/search/to");
+    await userEvent.type(input(), "דיזנגוף");
+    await userEvent.click(within(await screen.findByTestId("search-results")).getAllByRole("button")[0]!);
+    await waitFor(() => expect(window.location.hash).toBe("#/compare"));
+    act(() => go({ name: "search", field: "to" }));
+    await userEvent.click(await screen.findByRole("button", { name: he["search.pickOnMap"] }));
+    const to = storedDraft()!.to as { place: { latitude: number; longitude: number } };
+    expect(getMapState().scene).toMatchObject({ pick: true, camera: "fit", focus: { center: [to.place.longitude, to.place.latitude], zoom: 15 } });
   });
 
   it("save mode Home stores the place and returns", async () => {

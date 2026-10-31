@@ -37,6 +37,19 @@ export interface PlanDraft {
 
 export const initialDraft: PlanDraft = { from: { type: "myLocation" }, to: null, when: { mode: "now" } };
 
+/**
+ * Where a new plan starts from: "my location" when it can work at all, otherwise the last
+ * start the passenger chose, otherwise nothing (the plan asks "where from?").
+ */
+export function startingOrigin(locationPossible: boolean, lastOrigin: PlaceChoice | null): Endpoint | null {
+  if (locationPossible) return { type: "myLocation" };
+  return lastOrigin ? { type: "place", place: lastOrigin } : null;
+}
+
+export function startingDraft(locationPossible: boolean, lastOrigin: PlaceChoice | null): PlanDraft {
+  return { ...initialDraft, from: startingOrigin(locationPossible, lastOrigin) };
+}
+
 export function sameEndpoint(a: Endpoint | null, b: Endpoint | null): boolean {
   if (a === null || b === null) return a === b;
   if (a.type === "myLocation" || b.type === "myLocation") return a.type === b.type;

@@ -28,6 +28,50 @@ test("Hebrew: To opens focused, results arrive, and a stop opens Compare without
   expect(draft.to.place.stopId).toBe("mot:stop:13583");
 });
 
+test("one clear button inside the field; a stop reads 'stop code · street, city'", async ({ page }) => {
+  await page.goto(appPath("#/search/to"));
+  const field = page.getByRole("searchbox");
+  await field.fill("דיזנגוף סנטר");
+  const clear = page.getByRole("button", { name: "ניקוי החיפוש" });
+  await expect(clear).toHaveCount(1);
+  const fieldBox = (await field.boundingBox())!;
+  const clearBox = (await clear.boundingBox())!;
+  // Inside the field's box, at its inline end (left in Hebrew).
+  expect(clearBox.x).toBeGreaterThanOrEqual(fieldBox.x - 1);
+  expect(clearBox.x + clearBox.width).toBeLessThan(fieldBox.x + fieldBox.width / 2);
+  const first = page.getByTestId("search-results").getByRole("button").first();
+  await expect(first.locator(".row-sub")).toHaveText(/^תחנה \d+\s*·\s*\S/);
+  await clear.click();
+  await expect(field).toHaveValue("");
+  await expect(field).toBeFocused();
+});
+
+test("typing more keeps the previous results in place while the next answer loads", async ({ page }) => {
+  await page.goto(appPath("#/search/to"));
+  const field = page.getByRole("searchbox");
+  await field.fill("דיזנגוף");
+  await expect(page.getByTestId("search-results")).toBeVisible();
+  const before = (await page.getByTestId("search-results").boundingBox())!;
+  await field.press("End");
+  await field.pressSequentially(" ס", { delay: 30 });
+  // Either the new answer already arrived or the old one is still shown: never an empty jump.
+  await expect(page.getByTestId("search-skeleton")).toHaveCount(0);
+  const list = page.locator("[data-testid=search-results], [data-testid=search-results-previous]");
+  await expect(list).toHaveCount(1);
+  expect(Math.abs((await list.boundingBox())!.y - before.y)).toBeLessThan(2);
+});
+
+test("choose on map starts at street level, with Locate available", async ({ page }) => {
+  await page.goto(appPath("#/search/from"));
+  await page.getByRole("button", { name: "בחירה במפה" }).click();
+  await expect(page.locator(".sheet")).toHaveAttribute("data-snap", "peek");
+  await expect(page.getByRole("button", { name: "מרכוז המפה על המיקום שלי" })).toBeVisible();
+  await expectNoSeriousAxeViolations(page, "Search, choose on map (he)");
+  await page.getByRole("button", { name: "חזרה לחיפוש" }).click();
+  await expect(page.locator(".sheet")).toHaveAttribute("data-snap", "full");
+  await expect(page.getByRole("button", { name: "מרכוז המפה על המיקום שלי" })).toHaveCount(0);
+});
+
 test("typing shows skeleton rows (axe)", async ({ page }) => {
   await useScenario(page, "places-slow");
   await page.goto(appPath("#/search/to"));

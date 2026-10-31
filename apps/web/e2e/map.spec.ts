@@ -68,7 +68,7 @@ test("attribution is visible above the sheet at 360 × 640 in English", async ({
   await trackExternal(page);
   await page.goto(harness("lang=en&scene=journey"));
   await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
-  await expectAttributionVisible(page, ["© OpenStreetMap contributors", "OpenFreeMap", "Ministry of Transport"]);
+  await expectAttributionVisible(page, ["© OpenStreetMap", "OpenFreeMap", "Ministry of Transport"]);
 });
 
 test("the map is never mirrored: its container is ltr while the page is rtl", async ({ page }) => {
@@ -140,6 +140,33 @@ test.describe("in the app shell", () => {
     await page.goto(appPath("#/settings"));
     await page.getByLabel("English").check();
     await expect(attribution).toContainText("Ministry of Transport");
+  });
+
+  test("attribution is one compact line beside Back, never under the full sheet", async ({ page }) => {
+    await blockExternal(page);
+    for (const hash of ["#/search/to", "#/settings", "#/"]) {
+      await page.goto(appPath(hash));
+      const attribution = page.getByTestId("map-attribution");
+      await expect(attribution).toBeVisible();
+      await expect(attribution).toContainText("© OpenStreetMap");
+      await expect(attribution).toContainText("OpenFreeMap");
+      await expect(attribution).toContainText("משרד התחבורה");
+      const box = (await attribution.boundingBox())!;
+      expect(box.height, `${hash}: one line`).toBeLessThan(20);
+      const sheet = (await page.locator(".sheet").boundingBox())!;
+      expect(box.y + box.height, `${hash}: above the sheet`).toBeLessThanOrEqual(sheet.y);
+      const back = page.getByRole("button", { name: "חזרה" });
+      if (await back.count()) {
+        const b = (await back.boundingBox())!;
+        expect(box.x + box.width <= b.x || box.x >= b.x + b.width, `${hash}: beside Back`).toBe(true);
+      }
+      const onTop = await attribution.evaluate((element) => {
+        const rect = element.getBoundingClientRect();
+        const hit = document.elementFromPoint(rect.x + rect.width / 2, rect.y + rect.height / 2);
+        return !!hit && (element.contains(hit) || hit.contains(element));
+      });
+      expect(onTop, `${hash}: not covered`).toBe(true);
+    }
   });
 
   test("the map container is ltr while the app is rtl", async ({ page }) => {

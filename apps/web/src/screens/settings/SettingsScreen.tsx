@@ -8,7 +8,8 @@ import { LANGS } from "../../i18n/messages";
 import { formatDate } from "../../lib/time";
 import { emptyScene, usePublishScene } from "../../map/scene";
 import { endActiveTrip } from "../../nav/activeTrip";
-import { initialDraft } from "../../plan/draft";
+import { isLocationPossible } from "../../lib/geolocation";
+import { initialDraft, startingOrigin } from "../../plan/draft";
 import { usePlan } from "../../plan/PlanProvider";
 import { go } from "../../router";
 import { generationMeta } from "../../shell/Banners";
@@ -26,7 +27,7 @@ function SavedItem({
 }: {
   title: string;
   place: SavedPlace | null;
-  /** Home and Work can be set or replaced through Search; favourites cannot. */
+  /** Home and Work are set or replaced through Search (no rename: "Home" is the name); favourites are renamed. */
   onSet?: () => void;
 }) {
   const { t } = useI18n();
@@ -34,6 +35,7 @@ function SavedItem({
   const [renaming, setRenaming] = useState(false);
   const [label, setLabel] = useState(place?.label ?? "");
   const name = place?.label ?? title;
+  const favourite = onSet === undefined;
 
   const submit = (event: FormEvent) => {
     event.preventDefault();
@@ -43,8 +45,19 @@ function SavedItem({
   return (
     <li className="saved-item">
       <div className="saved-item-text">
-        <span className="row-title">{title}</span>
-        <span className="row-sub">{place ? <bdi>{place.label}</bdi> : t("settings.notSet")}</span>
+        {favourite && place ? (
+          <>
+            <span className="row-title">
+              <bdi>{place.label}</bdi>
+            </span>
+            <span className="row-sub">{title}</span>
+          </>
+        ) : (
+          <>
+            <span className="row-title">{title}</span>
+            <span className="row-sub">{place ? <bdi>{place.label}</bdi> : t("settings.notSet")}</span>
+          </>
+        )}
       </div>
       {renaming && place ? (
         <form className="name-form" onSubmit={submit}>
@@ -67,34 +80,34 @@ function SavedItem({
           </div>
         </form>
       ) : (
-        <div className="actions">
+        <div className="saved-item-actions">
           {onSet && (
-            <button type="button" className="button" onClick={onSet}>
+            <button type="button" className="button button-quiet" onClick={onSet}>
               {place ? t("settings.change") : t("settings.set")}
             </button>
           )}
+          {place && favourite && (
+            <button
+              type="button"
+              className="button button-quiet"
+              aria-label={t("settings.renameNamed", { place: name })}
+              onClick={() => {
+                setLabel(place.label);
+                setRenaming(true);
+              }}
+            >
+              {t("settings.rename")}
+            </button>
+          )}
           {place && (
-            <>
-              <button
-                type="button"
-                className="button"
-                aria-label={t("settings.renameNamed", { place: name })}
-                onClick={() => {
-                  setLabel(place.label);
-                  setRenaming(true);
-                }}
-              >
-                {t("settings.rename")}
-              </button>
-              <button
-                type="button"
-                className="button"
-                aria-label={t("settings.deleteNamed", { place: name })}
-                onClick={() => deleteSaved(place.id)}
-              >
-                {t("settings.delete")}
-              </button>
-            </>
+            <button
+              type="button"
+              className="button button-quiet"
+              aria-label={t("settings.deleteNamed", { place: name })}
+              onClick={() => deleteSaved(place.id)}
+            >
+              {t("settings.delete")}
+            </button>
           )}
         </div>
       )}
@@ -155,7 +168,7 @@ function ClearAll() {
 
   const clear = () => {
     setLang("he");
-    setFrom(initialDraft.from);
+    setFrom(startingOrigin(isLocationPossible(), null));
     setTo(initialDraft.to);
     setWhen(initialDraft.when);
     endActiveTrip();
@@ -233,13 +246,6 @@ export function SettingsScreen() {
         </button>
       </section>
 
-      <section aria-labelledby="settings-clear">
-        <h2 id="settings-clear" className="section-title">
-          {t("settings.clearData")}
-        </h2>
-        <ClearAll />
-      </section>
-
       <section aria-labelledby="settings-status">
         <h2 id="settings-status" className="section-title">
           {t("settings.dataStatus")}
@@ -265,6 +271,14 @@ export function SettingsScreen() {
             })}
           </Bdi>
         </p>
+      </section>
+
+      {/* The one destructive action comes last, after everything worth reading. */}
+      <section aria-labelledby="settings-clear">
+        <h2 id="settings-clear" className="section-title">
+          {t("settings.deviceData")}
+        </h2>
+        <ClearAll />
       </section>
     </div>
   );

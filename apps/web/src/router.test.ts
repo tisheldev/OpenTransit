@@ -1,5 +1,30 @@
+import { act, renderHook, waitFor } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { hrefFor, parseHash, type Route } from "./router";
+import { back, go, hrefFor, openerRoute, parseHash, useRoute, type Route } from "./router";
+
+describe("history entries", () => {
+  it("remember the screen that opened them; a deep link has no opener", async () => {
+    window.history.replaceState({ otDepth: 0 }, "", "/#/");
+    const { result } = renderHook(() => useRoute());
+    act(() => {
+      window.dispatchEvent(new HashChangeEvent("hashchange"));
+    });
+    expect(openerRoute()).toBeNull();
+    act(() => go({ name: "compare" }));
+    await waitFor(() => expect(result.current).toEqual({ name: "compare" }));
+    expect(openerRoute()).toEqual({ name: "home" });
+    act(() => go({ name: "search", field: "from" }));
+    await waitFor(() => expect(result.current).toEqual({ name: "search", field: "from" }));
+    expect(openerRoute()).toEqual({ name: "compare" });
+    // Replacing an entry keeps who opened it.
+    act(() => go({ name: "settings" }, { replace: true }));
+    await waitFor(() => expect(result.current).toEqual({ name: "settings" }));
+    expect(openerRoute()).toEqual({ name: "compare" });
+    act(() => back());
+    await waitFor(() => expect(result.current).toEqual({ name: "compare" }));
+    expect(openerRoute()).toEqual({ name: "home" });
+  });
+});
 
 describe("hash router", () => {
   it.each<[string, Route]>([

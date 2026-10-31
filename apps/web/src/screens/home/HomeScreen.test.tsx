@@ -1,4 +1,4 @@
-import { screen, waitFor } from "@testing-library/react";
+import { act, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { http, HttpResponse } from "msw";
 import { describe, expect, it } from "vitest";
@@ -6,11 +6,26 @@ import { fixture } from "../../api/fixtures";
 import type { Journey, Metadata } from "../../api/types";
 import { en } from "../../i18n/en";
 import { he } from "../../i18n/he";
+import { locationSource } from "../../lib/geolocation";
+import { getMapState } from "../../map/scene";
 import { respond } from "../../mocks/handlers";
 import { server } from "../../mocks/node";
 import { startActiveTrip } from "../../nav/activeTrip";
+import type { PlaceChoice } from "../../plan/draft";
 import { defaultLocalState, saveLocalState, type SavedPlace } from "../../storage/local";
+import { writeSession } from "../../storage/session";
 import { renderApp, storedDraft } from "../../shell/testUtils";
+
+const choice: PlaceChoice = {
+  label: "",
+  locality: null,
+  kind: "pin",
+  latitude: 32,
+  longitude: 34.8,
+  stopId: null,
+  placeRef: null,
+  refGenerationId: null,
+};
 
 const place = (id: string, label: string, latitude = 32.0757): SavedPlace => ({
   id,
@@ -96,8 +111,70 @@ describe("Home", () => {
     startActiveTrip({ journey, meta: {} as Metadata, trips: {} });
     renderApp("#/");
     const resume = screen.getByRole("button", { name: he["home.activeTrip"] });
+    // First in the sheet, before the From/To card, with when it arrives.
+    const content = document.querySelector(".home")!;
+    expect(content.querySelector("button")).toBe(resume);
+    expect(resume).toHaveAccessibleDescription(/^נסיעה פעילה · הגעה \d\d:\d\d$/);
     await userEvent.click(resume);
     expect(window.location.hash).toBe("#/navigate");
+  });
+
+  it("has no scheduled-times footnote (Compare carries it) and frames the map on the last place", () => {
+    saveLocalState({ ...defaultLocalState(), recents: [place("r0", "Recent 0", 32.7767)] });
+    renderApp("#/");
+    expect(screen.queryByText(he["banner.liveUnavailable"])).toBeNull();
+    expect(getMapState().scene).toMatchObject({ camera: "fit", pins: [], focus: { center: [34.7748, 32.7767], zoom: 13 } });
+  });
+
+  it("shows the plan's chosen ends on the map", () => {
+    writeSession("plan", {
+      from: { type: "place", place: { ...choice, label: "A", latitude: 32.07, longitude: 34.77 } },
+      to: { type: "place", place: { ...choice, label: "B", latitude: 32.78, longitude: 35.02 } },
+      when: { mode: "now" },
+    });
+    renderApp("#/");
+    expect(getMapState().scene.pins.map((pin) => [pin.role, pin.label])).toEqual([
+      ["origin", "A"],
+      ["destination", "B"],
+    ]);
+  });
+
+  describe("when my location cannot work", () => {
+    it("no secure context: From starts empty, Locate is hidden, and a destination asks for the start next", async () => {
+      saveLocalState({ ...defaultLocalState(), recents: [place("r0", "Recent 0")] });
+      renderApp("#/", { location: "insecure" });
+      expect(screen.getByRole("button", { name: he["fromTo.from"] })).toBeInTheDocument();
+      expect(screen.queryByRole("button", { name: /המיקום שלי/ })).toBeNull();
+      expect(screen.queryByRole("button", { name: he["nav.locate"] })).toBeNull();
+      expect(storedDraft()?.from).toBeNull();
+      await userEvent.click(screen.getByRole("button", { name: "Recent 0" }));
+      expect(window.location.hash).toBe("#/search/from");
+    });
+
+    it("denied: the plan starts from the last start chosen instead of my location", async () => {
+      saveLocalState({ ...defaultLocalState(), recents: [place("r1", "Dizengoff Center"), place("32.07570,34.77480", "Old start")] });
+      localStorage.setItem("opentransit:lastOrigin", "32.07570,34.77480");
+      renderApp("#/", { location: "denied" });
+      expect(await screen.findByRole("button", { name: /^מאיפה\?\s*Old start$/ })).toBeInTheDocument();
+      await waitFor(() => expect(storedDraft()?.from).toMatchObject({ type: "place", place: { label: "Old start" } }));
+      expect(screen.queryByRole("button", { name: he["nav.locate"] })).toBeNull();
+    });
+
+    it("a refusal at the prompt during this visit switches From away from my location", async () => {
+      renderApp("#/");
+      expect(screen.getByRole("button", { name: /^מאיפה\?\s*המיקום שלי$/ })).toBeInTheDocument();
+      // What a dismissed prompt looks like: the position request fails with PERMISSION_DENIED.
+      const denied = { code: 1, PERMISSION_DENIED: 1, POSITION_UNAVAILABLE: 2, TIMEOUT: 3, message: "denied" };
+      Object.defineProperty(navigator, "geolocation", {
+        configurable: true,
+        value: { getCurrentPosition: (_ok: unknown, fail: (error: unknown) => void) => fail(denied) },
+      });
+      await act(async () => {
+        await locationSource().current();
+      });
+      expect(await screen.findByRole("button", { name: he["fromTo.from"] })).toBeInTheDocument();
+      await waitFor(() => expect(storedDraft()?.from).toBeNull());
+    });
   });
 
   it("shows the stale-data banner when the timetable is ageing", async () => {

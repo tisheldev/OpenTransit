@@ -22,20 +22,27 @@
 
 /* Always visible, never collapsed; at the top so the sheet (from the bottom) cannot cover it.
    The shell sets --map-attribution-top to the height of anything it overlays at the top. */
+/* One compact line: small, semi-opaque, still readable (dark ink on near-white). */
 .map-attribution {
   position: absolute;
   inset-block-start: calc(var(--map-attribution-top, 0px) + var(--space-1));
   inset-inline-end: var(--space-1);
   max-inline-size: calc(100% - 2 * var(--space-1));
   margin: 0;
-  padding-block: 2px;
-  padding-inline: var(--space-2);
-  border-radius: var(--radius-s);
-  background: var(--color-surface);
+  padding-block: 1px;
+  padding-inline: 6px;
+  border-radius: 6px;
+  background: rgb(255 255 255 / 82%);
   color: var(--color-ink);
-  font-size: var(--text-xs);
-  line-height: 1.4;
+  font-size: 11px;
+  line-height: 1.35;
   z-index: 2;
+}
+/* Placed by the shell's top row (beside Back) instead of floating on the map. */
+.map-attribution-inline {
+  position: static;
+  max-inline-size: none;
+  pointer-events: auto;
 }
 
 .map-note {
