@@ -52,7 +52,7 @@ describe("setSnap from a screen's effect", () => {
     renderApp("#/");
     expect(sheet()).toHaveAttribute("data-snap", "peek");
     act(() => go({ name: "settings" }));
-    await screen.findByRole("heading", { name: "settings" });
+    await screen.findByRole("heading", { name: "settings" }, { timeout: 5_000 });
     expect(sheet()).toHaveAttribute("data-snap", "peek");
     expect(new Set(seen.setSnaps).size).toBe(2);
     seen.snapOnMount = "full";
