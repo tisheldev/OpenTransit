@@ -4,10 +4,13 @@ import { departureInstant, toIsraelIso, type Lang } from "../lib/time";
 import type { Endpoint, PlaceChoice, PlanDraft } from "./draft";
 
 // Journey input (design: Domain model, "Journey input"). A stop is sent as {kind: stop};
-// my location and map pins as coordinates; a searched place as its placeRef when it came
-// from the current generation, otherwise as its saved coordinate. "Now" is always an
-// explicit Israel timestamp with an offset. INVALID_PLACE_REF retries once with the
-// coordinate (queries.ts uses `fallback`).
+// my location, map pins and searched places as coordinates. "Now" is always an explicit
+// Israel timestamp with an offset.
+//
+// Searched places are sent as their coordinate, never as `placeRef`: the S1 real check on
+// generation oct31a (31 Oct 2026) found a placeRef and its returned coordinate route
+// identically 8/8 (4 places, both directions). Per the design that settles it: the client
+// sends coordinates always and the INVALID_PLACE_REF retry path is deleted.
 
 export const JOURNEY_RESULTS = 3;
 
@@ -16,8 +19,6 @@ export type TimeOverride = { departAt: string } | { arriveBy: string };
 
 export interface PlannedRequest {
   request: JourneyRequest;
-  /** The same request with every placeRef replaced by its coordinate; null when none was sent. */
-  fallback: JourneyRequest | null;
 }
 
 export type TimeProblem = "nonexistent" | "ambiguous" | "invalid" | "offset_mismatch";
@@ -33,8 +34,6 @@ export interface BuildContext {
   myLocation: Fix | LocationError | null;
   now: Date;
   lang: Lang;
-  /** The generation the client last saw (status or journey meta); null when unknown. */
-  generationId: string | null;
   override?: TimeOverride | null;
 }
 
@@ -44,12 +43,8 @@ const coordinate = (point: { latitude: number; longitude: number }): LocationInp
   longitude: point.longitude,
 });
 
-function placeInput(place: PlaceChoice, generationId: string | null): { input: LocationInput; usedRef: boolean } {
-  if (place.stopId) return { input: { kind: "stop", stopId: place.stopId }, usedRef: false };
-  if (place.placeRef && place.refGenerationId !== null && place.refGenerationId === generationId) {
-    return { input: { kind: "place", placeRef: place.placeRef }, usedRef: true };
-  }
-  return { input: coordinate(place), usedRef: false };
+function placeInput(place: PlaceChoice): LocationInput {
+  return place.stopId ? { kind: "stop", stopId: place.stopId } : coordinate(place);
 }
 
 /** Does this draft need a device fix? Only then is the location source asked. */
@@ -57,18 +52,16 @@ export function needsMyLocation(draft: PlanDraft): boolean {
   return draft.from.type === "myLocation" || draft.to?.type === "myLocation";
 }
 
-type EndResult = { ok: true; input: LocationInput; fallback: LocationInput; usedRef: boolean } | { ok: false; error: LocationError };
+type EndResult = { ok: true; input: LocationInput } | { ok: false; error: LocationError };
 
 function endpointInput(endpoint: Endpoint, context: BuildContext): EndResult {
   if (endpoint.type === "myLocation") {
     const fix = context.myLocation;
     if (fix === null) return { ok: false, error: "unavailable" };
     if (typeof fix === "string") return { ok: false, error: fix };
-    const input = coordinate(fix);
-    return { ok: true, input, fallback: input, usedRef: false };
+    return { ok: true, input: coordinate(fix) };
   }
-  const { input, usedRef } = placeInput(endpoint.place, context.generationId);
-  return { ok: true, input, fallback: usedRef ? coordinate(endpoint.place) : input, usedRef };
+  return { ok: true, input: placeInput(endpoint.place) };
 }
 
 /** Build the journey request exactly per the design's input rule. Pure: no clock, no device. */
@@ -91,8 +84,7 @@ export function buildJourneyRequest(draft: PlanDraft, context: BuildContext): Bu
   }
 
   const request: JourneyRequest = { from: from.input, to: to.input, ...time, results: JOURNEY_RESULTS, lang: context.lang };
-  const fallback = from.usedRef || to.usedRef ? { ...request, from: from.fallback, to: to.fallback } : null;
-  return { ok: true, request, fallback };
+  return { ok: true, request };
 }
 
 /**

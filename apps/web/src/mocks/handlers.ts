@@ -43,12 +43,7 @@ const tripsByRef = new Map(
 /** Journey requests answered so far in this page (the "...-once" scenarios fail first). */
 let journeyCalls = 0;
 
-const usesPlaceRef = (body: unknown) => {
-  const request = body as { from?: { kind?: string }; to?: { kind?: string } } | null;
-  return request?.from?.kind === "place" || request?.to?.kind === "place";
-};
-
-function journeyAnswer(body: unknown): HttpResponse<string> {
+function journeyAnswer(): HttpResponse<string> {
   journeyCalls += 1;
   const three = () => respond(derivedJourneyFixtures["derived-journey-three"]());
   switch (scenario()) {
@@ -72,9 +67,6 @@ function journeyAnswer(body: unknown): HttpResponse<string> {
       return send("synthetic-problem-rate-limited");
     case "compare-offline":
       return HttpResponse.error() as unknown as HttpResponse<string>;
-    case "compare-place-ref":
-      // The ref belongs to another generation: 422, then the coordinate retry succeeds.
-      return usesPlaceRef(body) ? send("recorded-problem-invalid-place-ref") : three();
     default:
       return three();
   }
@@ -95,7 +87,7 @@ export const handlers = [
     return send("recorded-places-stop-he");
   }),
 
-  http.post("*/v1/journeys", async ({ request }) => journeyAnswer(await request.json().catch(() => null))),
+  http.post("*/v1/journeys", () => journeyAnswer()),
 
   http.get("*/v1/trips/:tripRef", ({ params }) => {
     if (scenario() === "compare-trip-failed") return send("recorded-problem-not-ready");

@@ -1,7 +1,6 @@
-import { useQueries, useQuery, useQueryClient, type QueryClient } from "@tanstack/react-query";
+import { useQueries, useQuery, type QueryClient } from "@tanstack/react-query";
 import { planJourney, getTrip } from "../api/endpoints";
-import { queryKeys } from "../api/queries";
-import { ApiFailure, unwrap } from "../api/result";
+import { unwrap } from "../api/result";
 import type { Trip } from "../api/schemas";
 import type { JourneyRequest, JourneyResponse } from "../api/types";
 import type { Lang } from "../lib/time";
@@ -25,24 +24,14 @@ export const TRIP_STALE_MS = 60 * 60_000;
 export const MARK_REQUEST = "ot:journeys:request";
 export const MARK_PAINTED = "ot:journeys:painted";
 
-/** The generation the client last saw, from /v1/status or a journey answer; null if none. */
-export function currentGenerationId(client: QueryClient): string | null {
-  const status = client.getQueryData<{ meta: { generationId: string | null } }>(queryKeys.status);
-  if (status?.meta.generationId) return status.meta.generationId;
-  const answers = client.getQueriesData<JourneyAnswer>({ queryKey: ["journeys"] });
-  for (const [, answer] of answers) if (answer?.response.meta.generationId) return answer.response.meta.generationId;
-  return null;
-}
-
 /**
  * Build the request for a draft. "My location" is resolved here, when the request is
  * made, and "now" is fixed at that moment; `attempt` forces a fresh resolution.
  */
 export function useJourneyRequest(draft: PlanDraft, lang: Lang, override: TimeOverride | null, attempt = 0) {
-  const client = useQueryClient();
   return useQuery({
     queryKey: planKeys.request(draft, lang, override, attempt),
-    queryFn: () => resolveJourneyRequest(draft, { lang, generationId: currentGenerationId(client), override }),
+    queryFn: () => resolveJourneyRequest(draft, { lang, override }),
     staleTime: Infinity,
     gcTime: 5 * 60_000,
     retry: false,
@@ -51,20 +40,13 @@ export function useJourneyRequest(draft: PlanDraft, lang: Lang, override: TimeOv
 
 export interface JourneyAnswer {
   response: JourneyResponse;
-  /** The request the answer belongs to (the coordinate fallback after INVALID_PLACE_REF). */
+  /** The request the answer belongs to. */
   sent: JourneyRequest;
-  retriedWithCoordinate: boolean;
 }
 
 export async function fetchJourneys(planned: PlannedRequest, signal?: AbortSignal): Promise<JourneyAnswer> {
   globalThis.performance?.mark?.(MARK_REQUEST);
-  const first = await planJourney(planned.request, signal);
-  if (first.ok) return { response: first.value, sent: planned.request, retriedWithCoordinate: false };
-  if (first.state === "invalid_place_ref" && planned.fallback) {
-    const retry = await planJourney(planned.fallback, signal);
-    return { response: unwrap(retry), sent: planned.fallback, retriedWithCoordinate: true };
-  }
-  throw new ApiFailure(first.error, first.state);
+  return { response: unwrap(await planJourney(planned.request, signal)), sent: planned.request };
 }
 
 /** Journeys for a built request; null keeps the query idle. Retry is the passenger's. */

@@ -4,7 +4,7 @@ import userEvent from "@testing-library/user-event";
 import { http } from "msw";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { fixture } from "../../api/fixtures";
-import { createQueryClient, queryKeys } from "../../api/queries";
+import { createQueryClient } from "../../api/queries";
 import { I18nProvider } from "../../i18n/I18nProvider";
 import type { Lang } from "../../i18n/messages";
 import { setLocationSource } from "../../lib/geolocation";
@@ -216,15 +216,11 @@ describe("Compare (Hebrew)", () => {
     expect(within(details).getByText(/הליכה 18 דק׳ · 1.4 ק״מ אל טכניון/)).toBeInTheDocument();
   });
 
-  it("retries an outdated place reference once with its coordinate, without telling the passenger", async () => {
-    useScenario("compare-place-ref");
-    const client = createQueryClient();
-    client.setQueryData(queryKeys.status, { data: {}, meta: { generationId: "gen-now" } });
+  it("sends a searched place as its coordinate, even with a placeRef", async () => {
     const searched: PlaceChoice = { ...technion, kind: "address", placeRef: "mot:place:v1:old", refGenerationId: "gen-now" };
-    renderCompare("he", { ...baseDraft, to: { type: "place", place: searched } }, client);
+    renderCompare("he", { ...baseDraft, to: { type: "place", place: searched } });
     await waitFor(() => expect(options()).toHaveLength(3));
-    expect(journeyPosts().map((r) => (r.body!.to as { kind: string }).kind)).toEqual(["place", "coordinate"]);
-    expect(screen.queryByRole("alert")).toBeNull();
+    expect(journeyPosts().map((r) => (r.body!.to as { kind: string }).kind)).toEqual(["coordinate"]);
   });
 
   it("shows the route without stop counts when trip details fail, and Start still works", async () => {

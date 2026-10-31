@@ -23,7 +23,6 @@ const ctx = (over: Partial<BuildContext> = {}): BuildContext => ({
   myLocation: null,
   now: new Date("2026-11-02T06:00:00Z"),
   lang: "he",
-  generationId: "gen-a",
   ...over,
 });
 
@@ -46,7 +45,6 @@ describe("buildJourneyRequest", () => {
         results: 3,
         lang: "en",
       },
-      fallback: null,
     });
   });
 
@@ -74,22 +72,12 @@ describe("buildJourneyRequest", () => {
     expect(buildJourneyRequest(draft({ from: { type: "myLocation" } }), ctx())).toMatchObject({ ok: false, error: "unavailable" });
   });
 
-  it("sends a searched place as its placeRef from the current generation, with a coordinate fallback", () => {
+  it("sends a searched place as its coordinate, never its placeRef (S1: identical routing 8/8)", () => {
     const result = buildJourneyRequest(draft({ to: { type: "place", place: searched } }), ctx());
-    expect(result.ok && result.request.to).toEqual({ kind: "place", placeRef: "mot:place:v1:abc" });
-    expect(result.ok && result.fallback?.to).toEqual({ kind: "coordinate", latitude: 32.07, longitude: 34.77 });
-    expect(result.ok && result.fallback?.from).toEqual({ kind: "stop", stopId: "mot:stop:13583" });
-  });
-
-  it("sends the coordinate when the ref belongs to another or an unknown generation", () => {
-    for (const generationId of ["gen-b", null]) {
-      const result = buildJourneyRequest(draft({ to: { type: "place", place: searched } }), ctx({ generationId }));
-      expect(result.ok && result.request.to).toEqual({ kind: "coordinate", latitude: 32.07, longitude: 34.77 });
-      expect(result.ok && result.fallback).toBeNull();
-    }
+    expect(result.ok && result.request.to).toEqual({ kind: "coordinate", latitude: 32.07, longitude: 34.77 });
     const saved = place({ placeRef: "mot:place:v1:old", refGenerationId: null });
-    const result = buildJourneyRequest(draft({ to: { type: "place", place: saved } }), ctx());
-    expect(result.ok && result.request.to.kind).toBe("coordinate");
+    const fromSaved = buildJourneyRequest(draft({ to: { type: "place", place: saved } }), ctx());
+    expect(fromSaved.ok && fromSaved.request.to.kind).toBe("coordinate");
   });
 
   it("sends depart at and arrive by through departureInstant", () => {
@@ -135,9 +123,9 @@ describe("resolveJourneyRequest", () => {
     const current = vi.fn(async () => ({ ok: true as const, fix: { latitude: 32, longitude: 34.8, accuracyMeters: null, at: 1 } }));
     const restore = setLocationSource(source(current));
     try {
-      await resolveJourneyRequest(draft({}), { lang: "he", generationId: null });
+      await resolveJourneyRequest(draft({}), { lang: "he" });
       expect(current).not.toHaveBeenCalled();
-      const result = await resolveJourneyRequest(draft({ from: { type: "myLocation" } }), { lang: "he", generationId: null });
+      const result = await resolveJourneyRequest(draft({ from: { type: "myLocation" } }), { lang: "he" });
       expect(current).toHaveBeenCalledTimes(1);
       expect(result.ok && result.request.from).toEqual({ kind: "coordinate", latitude: 32, longitude: 34.8 });
     } finally {
@@ -148,7 +136,7 @@ describe("resolveJourneyRequest", () => {
   it("passes a denied permission through as a location problem", async () => {
     const restore = setLocationSource(source(async () => ({ ok: false, error: "denied" })));
     try {
-      expect(await resolveJourneyRequest(draft({ from: { type: "myLocation" } }), { lang: "he", generationId: null })).toEqual({
+      expect(await resolveJourneyRequest(draft({ from: { type: "myLocation" } }), { lang: "he" })).toEqual({
         ok: false,
         reason: "location",
         error: "denied",
