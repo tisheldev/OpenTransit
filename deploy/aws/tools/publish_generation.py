@@ -263,7 +263,17 @@ def build_commands(
     commands = [
         {
             "image": "api",
-            "argv": ["docker", "build", "-t", tags["api"], str(REPO / "services/api")],
+            # The API image builds the web test client (served at /app/ only when the task sets
+            # OPENTRANSIT_CLIENT_DIR); an unused named context is harmless to older Dockerfiles.
+            "argv": [
+                "docker",
+                "build",
+                "--build-context",
+                f"web={REPO / 'apps/web'}",
+                "-t",
+                tags["api"],
+                str(REPO / "services/api"),
+            ],
         },
         {
             "image": "data",
