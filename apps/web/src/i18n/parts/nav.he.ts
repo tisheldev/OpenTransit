@@ -1,2 +1,62 @@
 // Hebrew strings owned by the nav slice; merged into he.ts. Keys are "<area>.<name>".
-export const he_nav = {} as const;
+export const he_nav = {
+  "nav.noTrip": "אין נסיעה פעילה.",
+  "nav.stepOf": "שלב {n} מתוך {total}",
+  "nav.origin": "נקודת המוצא",
+  "nav.destination": "היעד",
+
+  "nav.step.walkToStop": "הליכה אל {stop}",
+  "nav.step.transferWalk": "מעבר: הליכה אל {stop}",
+  "nav.step.walkToDestination": "הליכה אל {place}",
+  "nav.step.arrive": "הגעתם אל {place}",
+
+  "nav.mode.bus": "אוטובוס",
+  "nav.mode.rail": "רכבת",
+  "nav.mode.light_rail": "רכבת קלה",
+  "nav.mode.other": "קו",
+  "nav.ride.train": "רכבת אל {to}",
+  "nav.ride.headsign": "לכיוון {headsign}",
+
+  "nav.distanceLeft": "נשארו {distance}",
+  "nav.walkDistance": "{distance} הליכה",
+  "nav.walkTimeOnly": "כ־{duration} הליכה · אין מסלול הליכה מפורט",
+  "nav.departsAt": "יציאה ב־{time} (מתוכנן)",
+  "nav.countdown": "בעוד {duration}",
+  "nav.countdownNow": "יוצא עכשיו",
+  "nav.countdownPast": "שעת היציאה המתוכננת עברה",
+  "nav.platformUnknown": "רציף לא ידוע",
+  "nav.stopsLeft": "נשארו {count} תחנות",
+  "nav.stopsLeftOne": "נשארה תחנה אחת",
+  "nav.stopCount": "{count} תחנות",
+  "nav.stopsUnknown": "מספר התחנות אינו ידוע",
+  "nav.exitAt": "ירידה ב־{stop} · {time} (מתוכנן)",
+  "nav.then": "אחר כך: {next}",
+  "nav.arriveAt": "הגעה ב־{time} (מתוכנן)",
+
+  "nav.cueTwo": "רדו בעוד 2 תחנות",
+  "nav.cueNext": "רדו בתחנה הבאה",
+
+  "nav.next": "השלב הבא",
+  "nav.finish": "סיום",
+  "nav.end": "סיום הנסיעה",
+  "nav.manual": "השלבים מתקדמים ידנית",
+  "nav.lost": "אין מיקום כרגע",
+  "nav.keepOpen": "השאירו את הדף פתוח: הדפדפן לא עוקב אחרי המיקום כשהמסך נעול.",
+
+  "nav.checklist": "כל השלבים",
+  "nav.row.done": "הושלם",
+  "nav.row.current": "השלב הנוכחי",
+  "nav.row.pending": "בהמשך",
+  "nav.summary.walkToStop": "הליכה אל {stop} · {duration}",
+  "nav.summary.rideNoStops": "{ride} · ירידה ב־{stop}",
+  "nav.summary.transfer": "מעבר · {duration}",
+  "nav.summary.walkToDestination": "הליכה אל {place} · {duration}",
+  "nav.summary.arrive": "הגעה {time}",
+  "nav.announce.step": "שלב {n} מתוך {total}: {summary}",
+
+  "nav.testing": "כלי בדיקה",
+  "nav.sim.toggle": "מיקום מדומה (בדיקה)",
+  "nav.sim.speed": "מהירות ההדמיה",
+  "nav.sim.speedValue": "פי {n}",
+  "nav.sim.on": "מיקום מדומה — לא המיקום האמיתי שלכם. שעון מדומה {time}.",
+} as const;
