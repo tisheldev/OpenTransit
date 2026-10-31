@@ -7,9 +7,9 @@ import type { EndLabels } from "./labels";
 const lonLat = (point: { latitude: number; longitude: number }): LonLat => [point.longitude, point.latitude];
 
 /** Before an answer: pins for the ends already known (my location has no position yet). */
-export function draftScene(from: Endpoint, to: Endpoint | null, ends: EndLabels): MapScene {
+export function draftScene(from: Endpoint | null, to: Endpoint | null, ends: EndLabels): MapScene {
   const pins: MapPin[] = [];
-  if (from.type === "place") pins.push({ id: "origin", role: "origin", position: lonLat(from.place), label: ends.from });
+  if (from?.type === "place") pins.push({ id: "origin", role: "origin", position: lonLat(from.place), label: ends.from });
   if (to?.type === "place") pins.push({ id: "destination", role: "destination", position: lonLat(to.place), label: ends.to });
   return pins.length === 0 ? emptyScene : { ...emptyScene, pins, camera: "fit" };
 }

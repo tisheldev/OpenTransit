@@ -26,6 +26,7 @@ export type TimeProblem = "nonexistent" | "ambiguous" | "invalid" | "offset_mism
 export type BuildResult =
   | ({ ok: true } & PlannedRequest)
   | { ok: false; reason: "missing_destination" }
+  | { ok: false; reason: "missing_origin" }
   | { ok: false; reason: "location"; error: LocationError }
   | { ok: false; reason: "time"; problem: TimeProblem; candidates: string[] };
 
@@ -49,7 +50,7 @@ function placeInput(place: PlaceChoice): LocationInput {
 
 /** Does this draft need a device fix? Only then is the location source asked. */
 export function needsMyLocation(draft: PlanDraft): boolean {
-  return draft.from.type === "myLocation" || draft.to?.type === "myLocation";
+  return draft.from?.type === "myLocation" || draft.to?.type === "myLocation";
 }
 
 type EndResult = { ok: true; input: LocationInput } | { ok: false; error: LocationError };
@@ -67,6 +68,7 @@ function endpointInput(endpoint: Endpoint, context: BuildContext): EndResult {
 /** Build the journey request exactly per the design's input rule. Pure: no clock, no device. */
 export function buildJourneyRequest(draft: PlanDraft, context: BuildContext): BuildResult {
   if (draft.to === null) return { ok: false, reason: "missing_destination" };
+  if (draft.from === null) return { ok: false, reason: "missing_origin" };
   const from = endpointInput(draft.from, context);
   if (!from.ok) return { ok: false, reason: "location", error: from.error };
   const to = endpointInput(draft.to, context);
@@ -96,6 +98,7 @@ export async function resolveJourneyRequest(
   context: Omit<BuildContext, "myLocation" | "now"> & { now?: Date },
 ): Promise<BuildResult> {
   if (draft.to === null) return { ok: false, reason: "missing_destination" };
+  if (draft.from === null) return { ok: false, reason: "missing_origin" };
   let myLocation: BuildContext["myLocation"] = null;
   if (needsMyLocation(draft)) {
     const result = await locationSource().current();

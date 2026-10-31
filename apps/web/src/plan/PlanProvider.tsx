@@ -6,7 +6,7 @@ import { initialDraft, type Endpoint, type PlanDraft, type When } from "./draft"
 
 interface Plan {
   draft: PlanDraft;
-  setFrom: (from: Endpoint) => void;
+  setFrom: (from: Endpoint | null) => void;
   setTo: (to: Endpoint | null) => void;
   swap: () => void;
   setWhen: (when: When) => void;
@@ -20,7 +20,7 @@ const PlanContext = createContext<Plan | null>(null);
 function isDraft(value: unknown): value is PlanDraft {
   if (!value || typeof value !== "object") return false;
   const draft = value as Partial<PlanDraft>;
-  return typeof draft.from === "object" && draft.from !== null && typeof draft.when === "object" && draft.when !== null;
+  return typeof draft.from === "object" && typeof draft.when === "object" && draft.when !== null;
 }
 
 export function PlanProvider({ children, initial }: { children: ReactNode; initial?: PlanDraft }) {
@@ -31,7 +31,7 @@ export function PlanProvider({ children, initial }: { children: ReactNode; initi
     writeSession("plan", draft);
   }, [draft]);
 
-  const setFrom = useCallback((from: Endpoint) => {
+  const setFrom = useCallback((from: Endpoint | null) => {
     setDraft((d) => ({ ...d, from }));
     setSelected(0);
   }, []);

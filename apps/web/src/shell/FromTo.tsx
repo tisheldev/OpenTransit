@@ -15,7 +15,7 @@ export function FromTo({ variant = "full" }: { variant?: "full" | "compact" }) {
   const { t } = useI18n();
   const { draft, swap } = usePlan();
   const labelId = useId();
-  const from = endpointLabel(draft.from, t("place.myLocation"));
+  const from = draft.from === null ? null : endpointLabel(draft.from, t("place.myLocation"));
   const to = draft.to === null ? null : endpointLabel(draft.to, t("place.myLocation"));
 
   return (
@@ -31,8 +31,14 @@ export function FromTo({ variant = "full" }: { variant?: "full" | "compact" }) {
         >
           <span className="from-to-dot from-to-dot-origin" aria-hidden="true" />
           <span className="from-to-text">
-            <span className={variant === "full" ? "from-to-caption" : "visually-hidden"}>{t("fromTo.from")} </span>
-            <bdi className="from-to-value">{from}</bdi>
+            {from === null ? (
+              <span className="from-to-placeholder">{t("fromTo.from")}</span>
+            ) : (
+              <>
+                <span className={variant === "full" ? "from-to-caption" : "visually-hidden"}>{t("fromTo.from")} </span>
+                <bdi className="from-to-value">{from}</bdi>
+              </>
+            )}
           </span>
         </button>
         <button

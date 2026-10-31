@@ -29,7 +29,8 @@ export type When =
   | { mode: "depart_at" | "arrive_by"; wall: string; offset: "auto" | "+03:00" | "+02:00" };
 
 export interface PlanDraft {
-  from: Endpoint;
+  /** Null when no start is chosen yet (e.g. location unavailable): the plan asks for one. */
+  from: Endpoint | null;
   to: Endpoint | null;
   when: When;
 }
