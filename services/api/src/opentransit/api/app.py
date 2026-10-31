@@ -10,6 +10,7 @@ from starlette.exceptions import HTTPException
 from starlette.middleware.gzip import GZipMiddleware
 from starlette.staticfiles import StaticFiles
 
+from opentransit.api.client import mount_client
 from opentransit.api.lifecycle import make_lifespan
 from opentransit.api.middleware import SafeRequests
 from opentransit.api.rate_limit import (
@@ -105,6 +106,8 @@ def create_app(
             StaticFiles(directory=Path(__file__).with_name("playground"), html=True),
             name="playground",
         )
+    if settings.client_dir is not None:
+        mount_client(app, settings.client_dir)
 
     @app.exception_handler(RequestValidationError)
     async def validation(request: Request, exc: RequestValidationError):

@@ -59,7 +59,8 @@ class SafeRequests(BaseHTTPMiddleware):
         else:
             response = await call_next(request)
         response.headers["X-Request-ID"] = request.state.request_id
-        response.headers["Cache-Control"] = "no-store"
+        # API routes never set their own; the /app/ client mount sets per-file rules.
+        response.headers.setdefault("Cache-Control", "no-store")
         route = request.scope.get("route")
         label = getattr(request.state, "log_route", None)
         LOG.info(
