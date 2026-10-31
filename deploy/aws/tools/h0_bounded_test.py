@@ -853,17 +853,23 @@ def probe(args: argparse.Namespace) -> int:
             "results": 1,
         }
         status, ms, payload = http("POST", base + "/v1/journeys", body, timeout=60)
-        count = None
+        count, outcome = None, None
         if status == 200:
-            count = len(json.loads(payload).get("journeys", []))
+            answer = json.loads(payload)
+            count = len(answer.get("journeys", []))
+            outcome = answer.get("outcome")
         expected = case.get("expect", {}).get("outcome")
-        passed = status == 200 and ((count or 0) > 0) == (expected == "route")
+        # Structural check, as in the probe: "either" accepts both outcomes.
+        passed = status == 200 and (
+            expected == "either" or ((count or 0) > 0) == (expected == "route")
+        )
         journeys.append(
             {
                 "id": case["id"],
                 "status": status,
                 "ms": round(ms, 1),
                 "journeys": count,
+                "outcome": outcome,
                 "expected": expected,
                 "pass": passed,
             }

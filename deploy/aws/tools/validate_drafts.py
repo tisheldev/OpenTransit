@@ -159,8 +159,10 @@ def validate_task_definition(
         "operatingSystemFamily": "LINUX",
     }:
         fail("runtimePlatform must be Linux/X86_64")
-    if task.get("ephemeralStorage", {}).get("sizeInGiB", 0) < 20:
-        fail("ephemeralStorage must be at least the 20 GiB Fargate default")
+    # Fargate's default is 20 GiB; RegisterTaskDefinition accepts an explicit size only from 21
+    # (rejected on 31 October 2026); the measured 8.1 GiB fits the default, so the key is omitted.
+    if "ephemeralStorage" in task and task["ephemeralStorage"].get("sizeInGiB", 0) < 21:
+        fail("ephemeralStorage: omit it for the 20 GiB default; an explicit size must be 21-200")
     if "taskRoleArn" in task:
         fail("the serving task has no task role (no AWS permissions)")
     role = str(task.get("executionRoleArn", ""))

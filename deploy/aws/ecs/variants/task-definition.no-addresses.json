@@ -10,9 +10,6 @@
     "cpuArchitecture": "X86_64",
     "operatingSystemFamily": "LINUX"
   },
-  "ephemeralStorage": {
-    "sizeInGiB": 20
-  },
   "executionRoleArn": "{{EXECUTION_ROLE_ARN}}",
   "containerDefinitions": [
     {

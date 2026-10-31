@@ -347,7 +347,6 @@ def render_task_definition(variant: str) -> dict:
         "cpu": spec["cpu"],
         "memory": spec["memory"],
         "runtimePlatform": {"cpuArchitecture": "X86_64", "operatingSystemFamily": "LINUX"},
-        "ephemeralStorage": {"sizeInGiB": 20},
         "executionRoleArn": "{{EXECUTION_ROLE_ARN}}",
         "containerDefinitions": containers,
         "volumes": [{"name": name} for name in volumes],
