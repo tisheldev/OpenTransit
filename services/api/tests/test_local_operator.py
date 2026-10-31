@@ -9,7 +9,7 @@ from pathlib import Path
 
 import pytest
 from test_activation import FakeClient, generation_factory, lease_for  # noqa: F401
-from test_generation_build import inputs  # noqa: F401
+from test_generation_build import current_inputs  # noqa: F401
 
 from opentransit.activation import SnapshotManager
 from opentransit.api.lifecycle import _process_start_identity

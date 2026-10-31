@@ -161,6 +161,115 @@ After functional coverage, perform consolidated milestone acceptance, finish ref
 
 **User inputs:** H3/H4 verdicts after T4; constrained-address decision if T3 exhausts its attempts; code licence and repository visibility before CI; AWS access and bounded H-0 spending approval; static GTFS terms before release; MOT follow-up October 19.
 
+## Phase 2 client execution plan
+
+**Proposal, 3 October 2026; nothing here is started.** Requirements and stories: [client PRD](client-prd.md). Design, UML and screens: [client design](client-design.md). This section holds the tasks and their acceptance; the dashboard tracks state under the `CLIENT` ID. The roles and rules of the [continuation plan](#continuation-execution-plan--1-october-2026) apply (root accepts slices; agents work in isolated worktrees on disjoint files; one evidence file per accepted slice; two failed attempts escalate).
+
+### Before any client code (readiness checklist)
+
+| ID | Needed | Owner | State on 3 October | Blocks |
+| --- | --- | --- | --- | --- |
+| PRE-1 | Gate: the client is gated on the start of H-0/H-1. Either the [H-0 approval](../PROJECT_STATUS.md#h-0-approval-request) is given and the deployment starts, or the user revises the gate so S0–S6 may start against the local API | User | Open (PRD §10 item 7) | Everything |
+| PRE-2 | Review and accept the client PRD 0.3 and the client design (or list changes) | User | Open | Everything |
+| PRE-3 | App identity: display name, Android package and iOS bundle ID; light only or light and dark | User | Open (PRD §10 items 11–13) | S0 |
+| PRE-4 | Approve API-C1 and API-C2 (additive fields on an accepted API) | User | Open (PRD §10 item 8) | S5 details, S6 ride progress |
+| PRE-5 | Storage module and local-notification permission | User | Open (PRD §10 items 9–10) | S2, S6 |
+| PRE-6 | Developer machine toolchain: Node 22 (present: v22.17.0); JDK 17, Android Studio with SDK, platform tools and an emulator image, and Maestro are **not installed** (checked 3 October: `java`, `adb`, `maestro` not found, no Android SDK directory). Add two emulator profiles: a current phone and 360 × 640 | Agent prepares the list; user installs (large downloads) | Open | S0 |
+| PRE-7 | A local API answering `/readyz` 200 on a complete generation, for recording fixtures and `@real` checks ([runbook](development.md)) | Agent | Available when Compose runs `oct1b` or a newer generation | S1 fixtures, every `@real` check |
+| PRE-8 | Design tokens and icons copied from the private design-system artifact into the repository (`theme/tokens.ts`); the artifact is not readable by CI or other contributors | Agent, from the artifact | Open | S0.3 |
+| PRE-9 | Hebrew copy deck reviewed by the user ([core deck](client-design.md#core-copy-deck)) | User | Open | S4 (not S0–S3) |
+| PRE-10 | Reference Android phone and the user's iPhone model recorded (PRD §10 item 2) | User | Open | Timing baseline at the end of S4 |
+| PRE-11 | Expo account for cloud builds; Apple Developer Program (PRD §10 item 1); Google Play account (item 5). Accounts are created by the user; credentials never pass through agents or Git | User | Open | iPhone builds (S6 on iPhone, HC); store builds (S8). Not needed for local Android builds |
+| PRE-12 | Preview access from a phone on 4G and the hosting Region (PRD §10 items 3–4) | User | Open | S8 field timings |
+
+Only PRE-1 to PRE-3 and PRE-6 block the first commit. The rest block later slices as shown.
+
+### API tasks for the client
+
+Small additive changes in `services/api`, each with tests, an updated OpenAPI snapshot and a fixture; they follow the API's own acceptance rules (no mixed generations, no invented values).
+
+| ID | Change | Done when | Needed before |
+| --- | --- | --- | --- |
+| API-C1 | `GET /v1/trips/{tripRef}`: each call gains `name` (requested language, with the language actually used), `latitude`, `longitude`, `platformCode` (nullable) from the generation's reference store | Unit tests; real trip checked against `GET /v1/stops/{id}` for the same stops; response size and p95 recorded | S5.3, S6.2 |
+| API-C2 | `POST /v1/journeys`: transit legs' `from`/`to` gain nullable `platformCode` | Response model and tests updated; a rail journey shows platforms that match the stop detail | S5.3 |
+| API-C3 | Response models for non-journey endpoints; one value for unavailable alerts; operator and mode on departures (existing M7 follow-ups) | OpenAPI snapshot covers every `/v1` response | S7 (non-blocking) |
+| API-C4 | Preview access for phones, as decided in PRE-12 | Phone on 4G reaches the preview; others do not | S8 |
+
+### Client tasks
+
+Sizes are relative (S about a session, M two to three, L more). Every task ends with its checks green in CI and, where it has a screen, Hebrew and English screenshots at 360 × 640.
+
+| ID | Task | Size | Depends on | Done when | Stories / requirements |
+| --- | --- | --- | --- | --- | --- |
+| S0.1 | Create `apps/mobile`: Expo, TypeScript strict, Hermes, Expo Router shell with placeholder routes; build profiles local/preview/production with the API base URL; cleartext HTTP only in local | M | PRE-1–3, PRE-6 | Android development build runs on the emulator and shows `/v1/status` from the local API | SE03, SE07 |
+| S0.2 | Spike SPK-1: MapLibre map behind a draggable three-snap sheet, forced RTL with a Hebrew/English switch | M | S0.1 | Recorded: versions that work, drag frame rate, RTL screenshot | SP10 |
+| S0.3 | Tokens, typography and icons into `theme/` from the design system | S | PRE-8 | Token file matches the artifact; contrast check passes AA | §2.5 |
+| S0.4 | Performance marks and the hidden timing panel (copy-out) | S | S0.1 | SP01 mark visible on the emulator; SPK-4 storage read measured | SP01, §4.1 |
+| S0.5 | CI job for `apps/mobile`: lint, typecheck, Jest, dictionary key parity, JS bundle size baseline with a 10% growth failure | S | S0.1 | Job green on Linux; baseline recorded | SP12, SE06 |
+| S0.6 | Maestro set up with one smoke flow on the emulator; documented in the [runbook](development.md) | S | S0.1 | Flow passes locally; run instructions written | SI01 tooling |
+| S1.1 | Committed OpenAPI snapshot; generated journey and problem types | S | S0.1 | Types compile; regeneration is one command | SE02 |
+| S1.2 | zod schemas for status, places, trips, stops, departures, routes | M | S1.1, PRE-7 | Every recorded fixture parses; a deliberately broken fixture fails | §8 |
+| S1.3 | `Result<T>` client: base URL, `lang`, abort, 10 s timeout; query hooks | M | S1.1 | Abort and timeout tests; no `fetch` outside `src/api` (lint rule) | SP05 |
+| S1.4 | `classify(status, code)` with a table test covering every code the API emits | S | S1.1 | Table test matches the [design table](client-design.md#cross-cutting-rules) | SE05, CU07 |
+| S1.5 | Fixture recorder (corpus journeys only, sanitised) and fixture replay mode with the "test data" banner | M | S1.2, PRE-7 | Fixtures for: routes found, no route, outside window, partial search, unavailable, rail with a transfer, time-only walk | §2.3 |
+| S1.6 | Trip reference encoding and the `placeRef`-versus-coordinate check against the real API | S | S1.3, PRE-7 | Result recorded; the retry path is kept or deleted accordingly | CU19 |
+| S2.1 | Hebrew and English dictionaries, `t()`, key parity; copy deck sent for review | S | S0.1 | Parity check in CI; PRE-9 requested | SE06, CU09 |
+| S2.2 | Time and format module ported from the playground's `time.mjs` with its tests; SPK-3 on device | M | S0.1 | DST tests (25 October 2026) pass with the host in UTC and on the emulator | CU12, §8 |
+| S2.3 | Storage v1: keys, zod validation on read, migrations, clear-all | M | PRE-5 | Migration and corrupt-value tests; clear-all leaves nothing | SE04, CU21 |
+| S2.4 | Shared state components: skeleton, empty, error with retry, banner | S | S1.4, S2.1 | Each `UiState` renders in both languages with screen-reader labels | CU07, CU22 |
+| S3.1 | Map component, initialised after Home is interactive; attribution always visible | M | S0.2 | Map never delays the SP01 mark; attribution screenshot | SP01, §8 |
+| S3.2 | Layers: route by leg (walk dashed, transit solid), stops, pins, user position | M | S3.1, S1.5 | Fixture journey drawn; time-only walk draws no invented line | CU06 |
+| S3.3 | Camera rules (fit route, follow user while navigating) and "choose on map" mode | M | S3.1 | Pin confirm returns a coordinate; nothing mirrored in RTL | CU10 |
+| S4.1 | Shell: map + sheet + From/To card; snap points; Back and edge-swipe handling | M | S0.2, S2.4, S3.1 | Back returns one level on Android and iOS gestures | SI04, SI06 |
+| S4.2 | Home: chips, recents, status banner, first-launch state, active-trip row | M | S4.1, S2.3 | No prompt and no network needed for the first frame | C01, CU01, CU16, SI03 |
+| S4.3 | Search for From and To: debounce, cancel, kinds and localities, partial/unavailable rows, "my location" | L | S4.1, S1.3 | Hebrew and English fixtures; street-level label shown; SP05 client work measured | C02, CU02, CU09, CU11 |
+| S4.4 | Settings and saved places: language, Home/Work/favourites, clear all, data status, attribution, licences | M | S4.1, S2.3 | Save, rename, delete; language switch flips layout without restart or with one documented restart | C07, CU20, CU21 |
+| S4.5 | Accessibility and RTL pass on Home, Search, Settings; first timing baseline on the reference phones | M | S4.2–S4.4, PRE-10 | TalkBack walk-through recorded; SP01, SP03, SP05 baselines dated | CU22, §4.4 |
+| S5.1 | Plan draft, journey query with explicit "now", time control (now / depart at / arrive by) | M | S4.3, S1.5 | Request built exactly as the [input rule](client-design.md#domain-model) says; DST edge handled | C03, CU03, CU12 |
+| S5.2 | Timeline chart: layout function, bars, rank labels, reserved space, list semantics for screen readers | L | S5.1 | Layout and label unit tests; three, two and one option; readable at 360 × 640 | CU04, SI07, SE02 |
+| S5.3 | Route details on tap; background trip prefetch; map redraw | L | S5.2, S3.2, API-C1, API-C2 | SP06 measured; details complete for a bus and a rail leg; missing trip never blocks Start | C04, CU06, CU14 |
+| S5.4 | Compare states: no route, outside window (coverage dates), unavailable, rate-limited, offline, place-ref retry | M | S5.1, S1.4 | One fixture-driven test per state | CU07, CU19 |
+| S5.5 | Earlier and Later | S | S5.2 | Shift rule unit-tested; chart replaced, never merged | CU13, SP09 |
+| S5.6 | `@real`: Dizengoff Center → Technion plans against the local API; SP04 client work measured | S | S5.3 | Recorded result file | PRD §9 mechanical |
+| S6.0 | Spike SPK-2: background fixes with "while using" permission and a locked-phone cue (Android emulator and phone; iPhone when PRE-11 allows) | M | S0.1, PRE-5 | Written result; if it fails on a platform, the decision returns to the user before S6.5 | C05, SI03 |
+| S6.1 | `nav/steps`: journey and trips → steps | M | S1.5 | Unit tests on every fixture journey, including a time-only transfer | C05 |
+| S6.2 | `nav/engine` reducer and `nav/geo`; thresholds in one file; tests on synthetic routes | L | S6.1, API-C1 | Advance, cues, no backwards drift, no clock-only advance, jump to step | CU05, CU15 |
+| S6.3 | Navigate screen: step card per step kind, checklist, next step, tap-to-correct, end trip, resume from Compare | L | S6.1, S4.1 | SP07 measured; fits 360 × 640; step changes announced | C05, CU06, CU18, SI07 |
+| S6.4 | Foreground location, keep-awake, haptic and colour cues, manual mode banner | M | S6.2, S6.3 | Simulated route on the emulator advances every step | CU05, CU17 |
+| S6.5 | Background task, Android navigation notification module, locked-phone cue | L | S6.0, S6.4 | Simulated route advances and cues with the screen locked; updates stop at Finish | CU05, SP08 |
+| S6.6 | Persist and restore the active trip; expiry | M | S6.3, S2.3 | Kill and reopen restores the step with the network off | CU08 |
+| S6.7 | `@real`: the Dizengoff Center → Technion journey replayed through navigation from a recorded trace; first real ride trace recorded by the user | M | S6.5, S5.6 | Recorded result; thresholds retuned once from the trace | PRD §9 mechanical |
+| S6.8 | iPhone Live Activity (SHOULD; may follow the first preview) | M | PRE-11, S6.5 | Current step on the lock screen | C05 |
+| S7.1–S7.4 | Stop board, Trip, Nearby, Lines | M each | S5.3, API-C3 for operator/mode | Paging without duplicates, cursor restart, empty versus unavailable, 404; real stop → trip | C06, CU23 |
+| S8.1 | Release build profiles, icons, store privacy labels, attribution and licence screen audit | M | S6, PRE-11 | Release builds within SP11; licence audit updated | SP11, §8 |
+| S8.2 | Preview profile against H-1 with API-C4; field timings on both reference phones | M | H-1 running, API-C4, PRE-10, PRE-12 | SP01, SP04, SP05, SP08, SP09 dated records | PRD §9 field |
+| S8.3 | Full Maestro suite and `@real` suite against Compose and the preview; HC review sheet prepared for the user | M | S8.2 | Suites green; sheet lists the five trips and the first-time-user run | PRD §9 HC |
+
+```mermaid
+flowchart LR
+  PRE["PRE-1..3, PRE-6"] --> S0["S0 Scaffold"]
+  S0 --> S1["S1 API layer"]
+  S0 --> S2["S2 Foundations"]
+  S0 --> S3["S3 Map"]
+  S0 --> S60["S6.0 background spike"]
+  S1 --> S4["S4 Home, Search, Settings"]
+  S2 --> S4
+  S3 --> S4
+  S4 --> S5["S5 Compare and details"]
+  APIC["API-C1, API-C2"] --> S5
+  S5 --> S6["S6 Navigate"]
+  S60 --> S6
+  APIC --> S6
+  S5 --> S7["S7 Secondary screens"]
+  S6 --> S8["S8 Release and field"]
+  H1["H-1 preview, API-C4"] --> S8
+  S8 --> HC["HC human review"]
+```
+
+Parallel lanes after S0: S1, S2, S3, S6.0 and API-C1/API-C2 touch disjoint files. `nav/steps` and `nav/engine` (S6.1, S6.2) are pure and may start as soon as S1.5 fixtures exist, alongside S4. The emulator is the one shared heavy resource on this machine; do not run it beside a graph build or the full Compose stack (15.8 GiB RAM).
+
+Acceptance for the client as a whole is in [PRD §9](client-prd.md#9-acceptance-and-release): mechanical, field, then the HC human review. Passing these tasks' automated checks is not HC approval.
+
 ## Hosting plan
 
 **AWS ECS on Fargate selected by the user 30 September 2026; deployment not implemented or verified.** The first private deployment carries its prepared data generation in a private ECR image. S3 is optional. This replaces the September 25 Hetzner/VM proposal; Docker Compose remains the local development path. [ADR 0007 hosting amendment](../poc/docs/adr/0007-schedule-api-design.md#hosting-amendment--accepted-30-september-2026) records the decision. M1 and the static/API-before-client release gates are unchanged.

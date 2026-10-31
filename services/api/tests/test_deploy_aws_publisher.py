@@ -224,6 +224,7 @@ def test_recommended_candidate_with_registry_and_role_validates(tmp_path):
         digest_kind="registry-manifest",
         registry="111122223333.dkr.ecr.il-central-1.amazonaws.com",
         execution_role_arn="arn:aws:iam::111122223333:role/opentransit-h0-execution",
+        vpc_cidr="10.0.0.0/16",
     )
     errors, _ = pub.validate_drafts.validate_candidate(task, "c", pub.render_drafts.MOTIS_DIGEST)
     assert errors == []
@@ -231,6 +232,17 @@ def test_recommended_candidate_with_registry_and_role_validates(tmp_path):
     assert "{{" not in json.dumps(task)
     tags = {t["key"]: t["value"] for t in task["tags"]}
     assert tags["schedule-component-id"] == "8" * 64
+    env = {e["name"]: e["value"] for e in _container(task, "api")["environment"]}
+    assert env["OPENTRANSIT_TRUSTED_PROXIES"] == "10.0.0.0/16"
+
+
+def test_candidate_refuses_a_catch_all_or_bare_vpc_cidr(tmp_path):
+    verified = pub.verify_candidate(_generation(tmp_path), _corpus(tmp_path), now=NOW)
+    for bad in ("0.0.0.0/0", "10.0.0.1", "{{VPC_CIDR}}"):
+        with pytest.raises(ValueError):
+            pub.render_candidate(
+                "no-addresses", IDS, verified, digest_kind="local-image-id", vpc_cidr=bad
+            )
 
 
 def _candidate(tmp_path) -> dict:
@@ -402,6 +414,8 @@ def test_push_cli_without_execute_flag_only_prints(tmp_path, no_subprocess, caps
     args = ["push", "--plan", str(path), "--region", "il-central-1"]
     args += ["--registry", "111122223333.dkr.ecr.il-central-1.amazonaws.com"]
     args += ["--cluster", "c", "--service", "s", "--execution-role-arn", "r"]
+    assert pub.main([*args, "--vpc-cidr", "0.0.0.0/0"]) == 1  # catch-all refused
+    args += ["--vpc-cidr", "10.0.0.0/16"]
     assert pub.main(args) == 0
     assert json.loads(capsys.readouterr().out)["executed"] is False
     path.write_text(json.dumps({**plan, "mode": "dry-run"}), encoding="utf-8")

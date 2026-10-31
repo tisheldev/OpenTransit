@@ -17,7 +17,8 @@ pytest_plugins = ["test_generation_build"]
 
 
 @pytest.fixture
-def current_generation(inputs, tmp_path):
+def current_generation(current_inputs, tmp_path):
+    inputs = current_inputs
     provenance_path = inputs / "provenance.json"
     provenance = json.loads(provenance_path.read_text(encoding="utf-8"))
     checked = (datetime.now(UTC) - timedelta(minutes=2)).isoformat()

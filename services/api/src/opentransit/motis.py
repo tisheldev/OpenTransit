@@ -314,7 +314,7 @@ def _engine_place(value: Coordinate | StopLocation, reference) -> str:
         return f"{value.latitude},{value.longitude}"
     if reference is None:
         raise EngineFailure("DATA_UNAVAILABLE", 503)
-    stop = reference.stop(value.stopId)
+    stop = reference.stop_ref(value.stopId)
     if stop is None:
         raise EngineFailure("NOT_FOUND", 404)
     source_id = stop.get("source_id")
