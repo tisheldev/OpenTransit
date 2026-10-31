@@ -16,9 +16,9 @@ Turns one built generation (``opentransit build-generation``) into a release can
    previous release could be rolled back to now. Nothing is ever deleted.
 
 The default is a dry run: it verifies, plans and renders, and runs no Docker or AWS command.
-``push`` is the only code path that talks to AWS. It prints its steps unless ``--execute-aws``
-is given; it is deliberately small, shells out to the ``aws`` and ``docker`` CLIs, and has
-never been run (no account, region, cluster or spending is approved).
+``push`` and ``rollback --execute-aws`` are the only code paths that talk to AWS. ``push``
+prints its steps unless ``--execute-aws`` is given; both shell out to the ``aws`` and
+``docker`` CLIs. First executed on 31 October 2026 against the H-1 preview service.
 
     uv run --project services/api --locked python deploy/aws/tools/publish_generation.py \\
         publish --generation <gen> --probe-queries <corpus> [--photon-data <checkpoint>] \\
@@ -26,7 +26,9 @@ never been run (no account, region, cluster or spending is approved).
         [--pin sha256:...=<reason>] [--build --photon-jar-dir <dir>]
     ... publish_generation.py retention --current <file> [--previous <file>] [--pin ...] \\
         [--registry-images <aws ecr describe-images output>]
-    ... publish_generation.py rollback --current <file> --previous <file> [--now <iso>]
+    ... publish_generation.py rollback --current <file> --previous <file> [--now <iso>] \\
+        [--execute-aws --region ... --cluster ... --service ... [--profile ...] [--wait]]
+    ... publish ... --local-image api=<ref> --local-image data=<ref> [--source-check <record>]
     ... publish_generation.py push --plan <release-plan.json> --region ... --registry ... \\
         --cluster ... --service ... --execution-role-arn ... --vpc-cidr ... [--execute-aws]
 
@@ -36,11 +38,16 @@ See deploy/aws/README.md, "H-1 generation publisher".
 from __future__ import annotations
 
 import argparse
+import base64
 import hashlib
 import json
+import os
 import re
+import shutil
 import subprocess
 import sys
+import tempfile
+import time
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -51,7 +58,6 @@ if str(TOOLS) not in sys.path:
 import render_drafts  # noqa: E402
 import stage_bundle  # noqa: E402
 import validate_drafts  # noqa: E402
-
 from opentransit.build.local_operator import currency_reasons  # noqa: E402
 from opentransit.build.probe import _journeys as parse_probe_corpus  # noqa: E402
 from opentransit.core.artifacts import (  # noqa: E402
@@ -60,6 +66,7 @@ from opentransit.core.artifacts import (  # noqa: E402
     verify_artifacts,
 )
 from opentransit.core.generation import Generation  # noqa: E402
+from opentransit.runtime import apply_source_check  # noqa: E402
 
 AWS_DIR = TOOLS.parent
 REPO = AWS_DIR.parents[1]
@@ -83,6 +90,11 @@ MANIFEST_SUMMARY_KEYS = (
     "mode",
     "sourceCheckedAt",
 )
+# In the task the verifier writes the inline record here; the API reads it at startup.
+SOURCE_CHECK_ENV = "OPENTRANSIT_SOURCE_CHECK_RECORD"
+SOURCE_CHECK_IN_TASK = "/run/opentransit/source-check.json"
+SOURCE_CHECK_KEYS = ("status", "sha256", "checkedAt")
+PUSHABLE_MODES = {"build", "existing-images"}
 LABEL = (
     "LOCAL PUBLISH PLAN. No AWS call, push, registration or deployment was made. Local image "
     "IDs are not registry manifest digests; only `push --execute-aws` produces a deployable "
@@ -117,8 +129,13 @@ def verify_candidate(
     *,
     now: datetime,
     photon_data: Path | None = None,
+    source_check: Path | None = None,
 ) -> dict:
     """Verify a built generation is publishable as a new candidate at ``now``.
+
+    ``source_check`` is a later successful same-hash paired check (``opentransit fetch``
+    record): it renews an unchanged generation's freshness without rebuilding it, by the same
+    ``apply_source_check`` rule the API and the in-task verifier apply.
 
     Raises :class:`PublishRefused` with every reason found. Reuses the serving-side
     verification code; nothing here re-implements hashing or the freshness rule.
@@ -135,6 +152,14 @@ def verify_candidate(
         generation = Generation.from_manifest(manifest)
     except (OSError, KeyError, ValueError) as exc:
         raise PublishRefused([f"artifacts_invalid:{exc}"]) from exc
+    manifest_checked_at = _iso(generation.freshness_checked_at())
+    renewal = None
+    if source_check is not None:
+        try:
+            generation = apply_source_check(generation, manifest, Path(source_check))
+            renewal = source_check_summary(Path(source_check))
+        except (OSError, KeyError, ValueError) as exc:
+            raise PublishRefused([f"source_check_invalid:{exc}"]) from exc
 
     reasons = currency_reasons(generation, now, rollback=False)
     detail: dict = {
@@ -184,16 +209,38 @@ def verify_candidate(
     if reasons:
         raise PublishRefused(reasons, detail)
 
+    summary = {k: manifest[k] for k in MANIFEST_SUMMARY_KEYS if k in manifest}
+    if renewal is not None:
+        # Rollback reads freshness from this summary, so it carries the renewed check time.
+        summary["sourceCheckedAt"] = detail["sourceCheckedAt"]
     return {
         **detail,
+        "manifestSourceCheckedAt": manifest_checked_at,
+        "sourceCheck": renewal,
         "scheduleComponentGenerationId": manifest.get("scheduleComponentGenerationId"),
         "addressSearch": addresses,
         "artifacts": {k: v for k, v in verified.items() if isinstance(v, str | None)},
         "photonTreeSha256": photon_tree,
-        "manifestSummary": {k: manifest[k] for k in MANIFEST_SUMMARY_KEYS if k in manifest},
+        "manifestSummary": summary,
         "generationDir": str(generation_dir),
         "probeQueries": str(Path(probe_queries).resolve()),
         "photonData": str(Path(photon_data).resolve()) if photon_data else None,
+    }
+
+
+def source_check_summary(path: Path) -> dict:
+    """The fields ``apply_source_check`` reads, small enough for a task environment value."""
+    raw = Path(path).read_bytes()
+    evidence = json.loads(raw)
+    return {
+        "pairedValidation": evidence["pairedValidation"],
+        "validation": {"valid": evidence["validation"]["valid"]},
+        "validatedAt": evidence["validatedAt"],
+        "sources": {
+            key: {field: evidence["sources"][key][field] for field in SOURCE_CHECK_KEYS}
+            for key in ("gtfs", "trip_id_to_date")
+        },
+        "record": {"name": Path(path).name, "sha256": hashlib.sha256(raw).hexdigest()},
     }
 
 
@@ -263,9 +310,11 @@ def check_photon_jar(photon_jar_dir: Path) -> str:
     return digest
 
 
-def _run(argv: list[str]) -> str:
-    """Run one local Docker command; only reached with --build (never in a dry run)."""
-    completed = subprocess.run(argv, check=True, capture_output=True, text=True)
+def _run(argv: list[str], env: dict | None = None) -> str:
+    """Run one local command; only reached with --build, existing images or push."""
+    completed = subprocess.run(
+        argv, check=True, capture_output=True, text=True, encoding="utf-8", env=env
+    )
     return completed.stdout.strip()
 
 
@@ -299,6 +348,8 @@ def render_candidate(
     registry: str | None = None,
     execution_role_arn: str | None = None,
     vpc_cidr: str | None = None,
+    family: str | None = None,
+    log_group: str | None = None,
 ) -> dict:
     """Render the task definition with every image pinned and the release identity tagged."""
     spec = render_drafts.VARIANTS[variant]
@@ -328,6 +379,21 @@ def render_candidate(
             raise ValueError("vpc_cidr must be a CIDR list with prefix lengths, not a catch-all")
         replacements["{{VPC_CIDR}}"] = vpc_cidr
     task = _replace_strings(render_drafts.render_task_definition(variant), replacements)
+    if family or log_group:
+        task = render_drafts.retarget(
+            task,
+            family=family or task["family"],
+            log_group=log_group or render_drafts.LOG_GROUP,
+        )
+    if verified.get("sourceCheck"):
+        record = json.dumps(verified["sourceCheck"], sort_keys=True, separators=(",", ":"))
+        for container in task["containerDefinitions"]:
+            if container["name"] == "verifier":
+                container["environment"].append({"name": SOURCE_CHECK_ENV, "value": record})
+            elif container["name"] == "api":
+                container["environment"].append(
+                    {"name": "OPENTRANSIT_SOURCE_CHECK", "value": SOURCE_CHECK_IN_TASK}
+                )
     tags = [t for t in task["tags"] if t["key"] != "purpose"]
     tags += [
         {"key": "purpose", "value": "h1-candidate"},
@@ -357,6 +423,7 @@ def release_record(
         "coverage": verified["coverage"],
         "sourceCheckedAt": verified["sourceCheckedAt"],
         "freshnessBasis": verified["freshnessBasis"],
+        "sourceCheck": verified.get("sourceCheck"),
         "manifestSummary": verified["manifestSummary"],
         "probeCorpusSha256": verified["probe"]["corpusSha256"],
         "verifierConfigSha256": verifier_config_sha256(task),
@@ -524,20 +591,26 @@ def motis_mirror_command(registry: str, digest: str) -> list[str]:
     ]
 
 
+def remote_tag(release: dict, name: str) -> str:
+    """One immutable tag per (generation, local image): a rebuilt API never reuses a tag."""
+    image_id = release["images"][name].removeprefix("sha256:")
+    return f"gen-{release['generationId'][:12]}-{image_id[:12]}"
+
+
 def push_steps(release: dict, *, region: str, registry: str, cluster: str, service: str) -> list:
     """Human-readable plan of what ``execute_push`` would do. Pure; used for dry runs/tests."""
-    short = release["generationId"][:12]
     steps = [
         ["aws", "ecr", "get-login-password", "--region", region],
-        ["docker", "login", "--username", "AWS", "--password-stdin", registry],
+        ["<write a throwaway DOCKER_CONFIG with the ECR token>"],
+        ["aws", "ecr", "describe-images", "--repository-name", REPOSITORIES["motis"]],
         motis_mirror_command(registry, release["motisDigest"]),
     ]
     for name in sorted(release["images"]):
-        remote = f"{registry}/{REPOSITORIES[name]}:gen-{short}"
+        remote = f"{registry}/{REPOSITORIES[name]}:{remote_tag(release, name)}"
         steps += [
+            ["aws", "ecr", "describe-images", "--repository-name", REPOSITORIES[name]],
             ["docker", "tag", release["localTags"][name], remote],
             ["docker", "push", remote],
-            ["docker", "image", "inspect", "--format", "{{json .RepoDigests}}", remote],
         ]
     steps += [
         [
@@ -566,44 +639,146 @@ def push_steps(release: dict, *, region: str, registry: str, cluster: str, servi
     return steps
 
 
-def execute_push(
-    plan: dict, plan_dir: Path, *, region, registry, cluster, service, role, vpc_cidr
-) -> dict:
-    """Push, register and deploy. NEVER RUN: no AWS account, region or spending is approved.
+class AwsSession:
+    """``aws``/``docker`` calls for push and rollback: one profile and Region, and an ECR login
+    kept in a throwaway Docker config (the Windows credential store rejects ECR tokens)."""
 
-    Requires ``push --execute-aws``. It never deregisters, deletes or prunes anything, so a
-    failed push/registration leaves the current revision serving, and the service's circuit
-    breaker (``ecs/service.json``) rolls a failed deployment back to it.
+    def __init__(self, region: str, profile: str | None = None, runner=_run) -> None:
+        self.region, self.profile, self.runner = region, profile, runner
+        self.docker_env: dict | None = None
+        self._config: Path | None = None
+
+    def _profile(self) -> list[str]:
+        return ["--profile", self.profile] if self.profile else []
+
+    def aws(self, *args: str) -> dict:
+        argv = ["aws", *self._profile(), "--region", self.region, "--output", "json", *args]
+        out = self.runner(argv)
+        return json.loads(out) if out else {}
+
+    def login(self, registry: str) -> None:
+        password = self.runner(
+            ["aws", *self._profile(), "--region", self.region, "ecr", "get-login-password"]
+        )
+        self._config = Path(tempfile.mkdtemp(prefix="ot-publish-"))
+        auth = base64.b64encode(f"AWS:{password.strip()}".encode()).decode()
+        (self._config / "config.json").write_text(
+            json.dumps({"auths": {registry: {"auth": auth}}}), encoding="utf-8"
+        )
+        self.docker_env = {**os.environ, "DOCKER_CONFIG": str(self._config)}
+
+    def docker(self, *args: str) -> str:
+        return self.runner(["docker", *args], env=self.docker_env)
+
+    def close(self) -> None:
+        if self._config is not None:
+            shutil.rmtree(self._config, ignore_errors=True)
+
+    def image_digest(self, repository: str, key: str, value: str) -> str | None:
+        try:
+            out = self.aws(
+                "ecr",
+                "describe-images",
+                "--repository-name",
+                repository,
+                "--image-ids",
+                f"{key}={value}",
+            )
+        except subprocess.CalledProcessError:
+            return None  # ImageNotFoundException
+        details = out.get("imageDetails") or []
+        return details[0]["imageDigest"] if details else None
+
+    def wait_for_deployment(self, cluster: str, service: str, timeout: float) -> dict:
+        """Poll until the service has one COMPLETED deployment with its desired tasks running."""
+        started = time.monotonic()
+        state: dict = {}
+        while time.monotonic() - started < timeout:
+            svc = self.aws("ecs", "describe-services", "--cluster", cluster, "--services", service)
+            svc = (svc.get("services") or [{}])[0]
+            deployments = svc.get("deployments", [])
+            primary = next((d for d in deployments if d["status"] == "PRIMARY"), {})
+            state = {
+                "seconds": round(time.monotonic() - started, 1),
+                "deployments": len(deployments),
+                "rolloutState": primary.get("rolloutState"),
+                "taskDefinition": primary.get("taskDefinition"),
+                "runningCount": svc.get("runningCount"),
+                "desiredCount": svc.get("desiredCount"),
+                "events": [e["message"] for e in svc.get("events", [])[:5]],
+            }
+            if state["rolloutState"] == "FAILED":
+                break
+            if (
+                state["deployments"] == 1
+                and state["rolloutState"] == "COMPLETED"
+                and state["runningCount"] == state["desiredCount"]
+            ):
+                break
+            time.sleep(15)
+        state["converged"] = (
+            state.get("deployments") == 1
+            and state.get("rolloutState") == "COMPLETED"
+            and state.get("runningCount") == state.get("desiredCount")
+        )
+        return state
+
+
+def execute_push(
+    plan: dict,
+    plan_dir: Path,
+    *,
+    region,
+    registry,
+    cluster,
+    service,
+    role,
+    vpc_cidr,
+    profile: str | None = None,
+    family: str = render_drafts.H1_FAMILY,
+    log_group: str = render_drafts.H1_LOG_GROUP,
+    wait: bool = False,
+    timeout: float = 2700,
+    runner=_run,
+) -> dict:
+    """Push, register and deploy (``push --execute-aws``; first run 31 October 2026, H-1).
+
+    It never deregisters, deletes or prunes anything, so a failed push/registration leaves the
+    current revision serving, and the service's circuit breaker (``ecs/service.json``) rolls a
+    failed deployment back to it. An image whose tag already holds it is not pushed again.
     """
     release = dict(plan["release"])
     for name, image_id in release["images"].items():
-        if _run(inspect_command(release["localTags"][name])) != image_id:
+        if runner(inspect_command(release["localTags"][name])) != image_id:
             raise PublishRefused([f"local_image_changed:{name}"])
-    password = subprocess.run(
-        ["aws", "ecr", "get-login-password", "--region", region],
-        check=True,
-        capture_output=True,
-        text=True,
-    ).stdout
-    subprocess.run(
-        ["docker", "login", "--username", "AWS", "--password-stdin", registry],
-        input=password,
-        check=True,
-        capture_output=True,
-        text=True,
-    )
-    _run(motis_mirror_command(registry, release["motisDigest"]))
-    digests = {}
-    short = release["generationId"][:12]
-    for name in sorted(release["images"]):
-        remote = f"{registry}/{REPOSITORIES[name]}:gen-{short}"
-        _run(["docker", "tag", release["localTags"][name], remote])
-        _run(["docker", "push", remote])
-        repo_digests = json.loads(
-            _run(["docker", "image", "inspect", "--format", "{{json .RepoDigests}}", remote])
-        )
-        prefix = f"{registry}/{REPOSITORIES[name]}@"
-        digests[name] = next(d for d in repo_digests if d.startswith(prefix))[len(prefix) :]
+    session = AwsSession(region, profile, runner)
+    pushes = {}
+    try:
+        session.login(registry)
+        motis = session.image_digest(REPOSITORIES["motis"], "imageDigest", release["motisDigest"])
+        if motis is None:
+            session.docker(*motis_mirror_command(registry, release["motisDigest"])[1:])
+        pushes["motis"] = {"digest": release["motisDigest"], "pushed": motis is None}
+        digests = {}
+        for name in sorted(release["images"]):
+            tag = remote_tag(release, name)
+            remote = f"{registry}/{REPOSITORIES[name]}:{tag}"
+            existing = session.image_digest(REPOSITORIES[name], "imageTag", tag)
+            started = time.monotonic()
+            if existing is None:
+                session.docker("tag", release["localTags"][name], remote)
+                session.docker("push", remote)
+            digests[name] = session.image_digest(REPOSITORIES[name], "imageTag", tag)
+            if not digests[name]:
+                raise PublishRefused([f"pushed_digest_unknown:{name}"])
+            pushes[name] = {
+                "tag": tag,
+                "digest": digests[name],
+                "pushed": existing is None,
+                "seconds": round(time.monotonic() - started, 1),
+            }
+    finally:
+        session.close()
     task = render_candidate(
         release["variant"],
         digests,
@@ -612,6 +787,8 @@ def execute_push(
         registry=registry,
         execution_role_arn=role,
         vpc_cidr=vpc_cidr,
+        family=family,
+        log_group=log_group,
     )
     errors, _ = validate_drafts.validate_candidate(task, "registered", render_drafts.MOTIS_DIGEST)
     leftover = sorted(set(validate_drafts.PLACEHOLDER.findall(json.dumps(task))))
@@ -621,40 +798,72 @@ def execute_push(
         raise PublishRefused(errors)
     task_path = plan_dir / "task-definition.registered.json"
     task_path.write_text(json.dumps(task, indent=2) + "\n", encoding="utf-8")
-    registered = json.loads(
-        _run(
-            [
-                "aws",
-                "ecs",
-                "register-task-definition",
-                "--region",
-                region,
-                "--cli-input-json",
-                f"file://{task_path}",
-            ]
-        )
+    registered = session.aws(
+        "ecs", "register-task-definition", "--cli-input-json", f"file://{task_path.as_posix()}"
     )
     arn = registered["taskDefinition"]["taskDefinitionArn"]
-    release.update(images=digests, digestKind="registry-manifest", taskDefinitionArn=arn)
-    (plan_dir / "release-registered.json").write_text(
-        json.dumps(release, indent=2) + "\n", encoding="utf-8"
+    release.update(
+        images=digests,
+        localImageIds=plan["release"]["images"],
+        digestKind="registry-manifest",
+        taskDefinitionArn=arn,
+        taskDefinitionFamily=family,
+        registeredAt=datetime.now(UTC).isoformat(timespec="seconds"),
+        pushes=pushes,
     )
-    _run(
-        [
-            "aws",
-            "ecs",
-            "update-service",
-            "--region",
-            region,
-            "--cluster",
-            cluster,
-            "--service",
-            service,
-            "--task-definition",
-            arn,
-        ]
+    record = plan_dir / "release-registered.json"
+    record.write_text(json.dumps(release, indent=2) + "\n", encoding="utf-8")
+    session.aws(
+        "ecs",
+        "update-service",
+        "--cluster",
+        cluster,
+        "--service",
+        service,
+        "--task-definition",
+        arn,
     )
+    release["deployment"] = {"startedAt": datetime.now(UTC).isoformat(timespec="seconds")}
+    if wait:
+        release["deployment"].update(session.wait_for_deployment(cluster, service, timeout))
+    record.write_text(json.dumps(release, indent=2) + "\n", encoding="utf-8")
     return release
+
+
+def execute_rollback(
+    plan: dict,
+    *,
+    region: str,
+    cluster: str,
+    service: str,
+    profile: str | None = None,
+    wait: bool = False,
+    timeout: float = 2700,
+    runner=_run,
+) -> dict:
+    """Deploy the retained previous revision that ``rollback_plan`` allowed. Deletes nothing."""
+    if not plan.get("allowed"):
+        raise PublishRefused(plan.get("reasons") or ["rollback_not_allowed"])
+    session = AwsSession(region, profile, runner)
+    arn = plan["command"][-1]
+    session.aws(
+        "ecs",
+        "update-service",
+        "--cluster",
+        cluster,
+        "--service",
+        service,
+        "--task-definition",
+        arn,
+    )
+    result = {
+        **plan,
+        "executed": True,
+        "startedAt": datetime.now(UTC).isoformat(timespec="seconds"),
+    }
+    if wait:
+        result["deployment"] = session.wait_for_deployment(cluster, service, timeout)
+    return result
 
 
 # --- orchestration ---------------------------------------------------------------------------
@@ -676,6 +885,8 @@ def publish(
     registry_images: list[dict] | None = None,
     build: bool = False,
     tag_prefix: str = "ot-h1-",
+    source_check: Path | None = None,
+    local_images: dict[str, str] | None = None,
     runner=_run,
 ) -> tuple[int, dict]:
     """Run the local stages and write ``release-plan.json`` (+ the candidate) to ``output``.
@@ -690,7 +901,7 @@ def publish(
         "schemaVersion": SCHEMA_VERSION,
         "kind": "h1-generation-publish-plan",
         "label": LABEL,
-        "mode": "build" if build else "dry-run",
+        "mode": "build" if build else "existing-images" if local_images else "dry-run",
         "clock": {"now": now.astimezone(UTC).isoformat(), "overridden": clock_overridden},
         "variant": variant,
         "stages": {},
@@ -705,7 +916,13 @@ def publish(
         return code, plan
 
     try:
-        verified = verify_candidate(generation, probe_queries, now=now, photon_data=photon_data)
+        verified = verify_candidate(
+            generation,
+            probe_queries,
+            now=now,
+            photon_data=photon_data,
+            source_check=source_check,
+        )
         if photon_jar_dir is not None and verified["addressSearch"]:
             verified["photonJarSha256"] = check_photon_jar(photon_jar_dir)
     except PublishRefused as exc:
@@ -733,6 +950,23 @@ def publish(
     }
     digests = dict(image_ids or {})
     digest_source = "--image-id" if digests else None
+    if local_images:
+        # Images already built (and possibly already in ECR): inspect them, build nothing.
+        missing = sorted(set(tags) - set(local_images))
+        if missing or build:
+            plan["stages"]["build"].update(
+                status="refused",
+                reasons=[f"local_image_missing:{n}" for n in missing] or ["build_and_local_images"],
+            )
+            return finish(1)
+        tags = {name: local_images[name] for name in tags}
+        try:
+            digests = {name: runner(inspect_command(ref)) for name, ref in tags.items()}
+        except subprocess.CalledProcessError:
+            plan["stages"]["build"].update(status="failed", reasons=["local_image_not_found"])
+            return finish(1)
+        plan["stages"]["build"].update(status="existing-images", localTags=tags, imageIds=digests)
+        digest_source = "docker image inspect (existing local images)"
     if build:
         if verified["addressSearch"] and photon_jar_dir is None:
             plan["stages"]["build"]["status"] = "refused"
@@ -796,7 +1030,7 @@ def publish(
     plan["release"] = release
     plan["stages"]["push-and-deploy"] = {
         "executed": False,
-        "how": "publish_generation.py push --plan <this file> ... --execute-aws (never run)",
+        "how": "publish_generation.py push --plan <this file> ... --execute-aws",
     }
     # The new release becomes active; the currently serving one becomes previous.
     plan["retention"] = retention_plan(
@@ -852,6 +1086,17 @@ def main(argv: list[str] | None = None) -> int:
     pub.add_argument("--registry-images", type=Path, help="aws ecr describe-images JSON")
     pub.add_argument("--now", help="override the clock (ISO with offset; recorded in the plan)")
     pub.add_argument("--tag-prefix", default="ot-h1-")
+    pub.add_argument(
+        "--source-check",
+        type=Path,
+        help="later same-hash paired check record that renews freshness",
+    )
+    pub.add_argument(
+        "--local-image",
+        action="append",
+        default=[],
+        help="name=local-ref: use an existing local image (api/data/photon) instead of building",
+    )
     mode = pub.add_mutually_exclusive_group()
     mode.add_argument("--dry-run", action="store_true", help="the default: no Docker, no AWS")
     mode.add_argument("--build", action="store_true", help="stage and docker build (heavy)")
@@ -866,6 +1111,10 @@ def main(argv: list[str] | None = None) -> int:
     rb.add_argument("--current", type=Path)
     rb.add_argument("--previous", type=Path, required=True)
     rb.add_argument("--now")
+    rb.add_argument("--execute-aws", action="store_true", help="deploy the previous revision")
+    for name in ("--region", "--cluster", "--service", "--profile"):
+        rb.add_argument(name)
+    rb.add_argument("--wait", action="store_true")
 
     push = commands.add_parser("push", help="push/register/deploy (only with --execute-aws)")
     push.add_argument("--plan", type=Path, required=True)
@@ -878,7 +1127,12 @@ def main(argv: list[str] | None = None) -> int:
         "--vpc-cidr",
     ):
         push.add_argument(name, required=True)
-    push.add_argument("--execute-aws", action="store_true", help="really call AWS (never run)")
+    push.add_argument("--execute-aws", action="store_true", help="really call AWS")
+    push.add_argument("--profile", help="AWS CLI profile (default: the environment's)")
+    push.add_argument("--family", default=render_drafts.H1_FAMILY)
+    push.add_argument("--log-group", default=render_drafts.H1_LOG_GROUP)
+    push.add_argument("--wait", action="store_true", help="wait for the deployment to converge")
+    push.add_argument("--timeout", type=float, default=2700)
 
     args = parser.parse_args(argv)
     try:
@@ -901,6 +1155,8 @@ def main(argv: list[str] | None = None) -> int:
                 registry_images=_registry_images(args.registry_images),
                 build=args.build,
                 tag_prefix=args.tag_prefix,
+                source_check=args.source_check,
+                local_images=dict(v.split("=", 1) for v in args.local_image),
             )
             summary = {
                 "outcome": plan["outcome"],
@@ -928,10 +1184,26 @@ def main(argv: list[str] | None = None) -> int:
                 load_release(args.previous),
                 now,
             )
+            if args.execute_aws and result["allowed"]:
+                if not (args.region and args.cluster and args.service):
+                    raise ValueError("rollback --execute-aws needs --region, --cluster, --service")
+                result = execute_rollback(
+                    result,
+                    region=args.region,
+                    cluster=args.cluster,
+                    service=args.service,
+                    profile=args.profile,
+                    wait=args.wait,
+                )
             print(json.dumps(result, indent=2))
-            return 0 if result["allowed"] else 1
+            converged = result.get("deployment", {}).get("converged", True)
+            return 0 if result["allowed"] and converged else 1
         plan = json.loads(args.plan.read_text(encoding="utf-8"))
-        if "release" not in plan or plan.get("outcome") != "ok" or plan.get("mode") != "build":
+        if (
+            "release" not in plan
+            or plan.get("outcome") != "ok"
+            or plan.get("mode") not in PUSHABLE_MODES
+        ):
             raise PublishRefused(["plan_not_a_successful_build"])
         if "{{" in args.vpc_cidr or validate_drafts.trusted_proxies_error(args.vpc_cidr):
             raise PublishRefused(["vpc_cidr_invalid"])
@@ -954,9 +1226,14 @@ def main(argv: list[str] | None = None) -> int:
             service=args.service,
             role=args.execution_role_arn,
             vpc_cidr=args.vpc_cidr,
+            profile=args.profile,
+            family=args.family,
+            log_group=args.log_group,
+            wait=args.wait,
+            timeout=args.timeout,
         )
         print(json.dumps({"executed": True, "release": release}, indent=2))
-        return 0
+        return 0 if release["deployment"].get("converged", True) else 1
     except PublishRefused as exc:
         print(json.dumps({"refused": exc.reasons, **exc.detail}, indent=2), file=sys.stderr)
         return 1

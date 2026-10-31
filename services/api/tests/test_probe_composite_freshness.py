@@ -301,3 +301,71 @@ def test_composite_probe_applies_the_same_freshness_rule(composite_generation, a
     result = _pinned_probe(directory)
     assert result["sourceFreshness"]["state"] == state
     assert (result["status"] == "passed") is (state != "expired")
+
+
+def _source_check_record(manifest, checked_at, *, gtfs_sha256=None):
+    inputs = manifest["inputs"]
+    return {
+        "pairedValidation": "passed",
+        "validation": {"valid": True},
+        "validatedAt": checked_at.isoformat(),
+        "sources": {
+            "gtfs": {
+                "status": "unchanged",
+                "sha256": gtfs_sha256 or inputs["israel-public-transportation.zip"]["sha256"],
+                "checkedAt": checked_at.isoformat(),
+            },
+            "trip_id_to_date": {
+                "status": "unchanged",
+                "sha256": inputs["TripIdToDate.zip"]["sha256"],
+                "checkedAt": checked_at.isoformat(),
+            },
+        },
+    }
+
+
+def _renewed_probe(generation_dir, record):
+    ok = httpx.MockTransport(lambda request: httpx.Response(200, json=response_payload()))
+    return _probe(
+        generation_dir,
+        ENGINE,
+        [journey(departure=PINNED_NOW + timedelta(minutes=1))],
+        transport=ok,
+        now=PINNED_NOW,
+        source_check_record=json.dumps(record),
+    )
+
+
+def test_inline_source_check_renews_an_expired_unchanged_generation(current_generation):
+    _pin_clock(current_generation, timedelta(days=9))
+    manifest = _read(current_generation / "manifest.json")
+    record = _source_check_record(manifest, PINNED_NOW - timedelta(hours=1))
+    result = _renewed_probe(current_generation, record)
+    assert result["status"] == "passed", result.get("failure")
+    assert result["sourceFreshness"]["state"] == "current"
+    written = current_generation / "source-check.json"
+    assert _read(written) == record
+    assert result["sourceCheck"]["sha256"] == hashlib.sha256(written.read_bytes()).hexdigest()
+
+    # The API applies the same file at startup (OPENTRANSIT_SOURCE_CHECK).
+    client = httpx.AsyncClient(base_url=ENGINE)
+    try:
+        snapshot = RuntimeSnapshot.load(
+            current_generation / "manifest.json",
+            MotisClient(client),
+            probe_path=current_generation / "probe.json",
+            source_check_path=written,
+        )
+        assert snapshot.generation.freshness(PINNED_NOW) == "current"
+        assert snapshot.routing_verified
+    finally:
+        asyncio.run(client.aclose())
+
+
+def test_inline_source_check_for_other_inputs_cannot_renew(current_generation):
+    _pin_clock(current_generation, timedelta(days=9))
+    manifest = _read(current_generation / "manifest.json")
+    record = _source_check_record(manifest, PINNED_NOW - timedelta(hours=1), gtfs_sha256="0" * 64)
+    result = _renewed_probe(current_generation, record)
+    assert result["status"] == "failed"
+    assert "input pair" in result["failure"]

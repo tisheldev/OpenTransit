@@ -19,8 +19,13 @@ from opentransit.core.artifacts import verify_artifacts as verify_candidate_arti
 from opentransit.core.generation import Generation
 from opentransit.core.time import engine_time
 from opentransit.reference import ReferenceStore, attested_integrity_sha256
+from opentransit.runtime import apply_source_check
 
 COUNT_DROP_LIMIT = 0.20
+# A deployed verifier receives the renewing paired source check inline (task environment) and
+# writes it beside its report, where the API reads it through OPENTRANSIT_SOURCE_CHECK.
+SOURCE_CHECK_RECORD_ENV = "OPENTRANSIT_SOURCE_CHECK_RECORD"
+SOURCE_CHECK_FILENAME = "source-check.json"
 MAX_JOURNEYS = 10
 JOURNEY_TIMEOUT_SECONDS = 1.5
 _REQUIRED_PARAMS = {"fromPlace", "toPlace", "time"}
@@ -179,8 +184,17 @@ async def probe_generation(
     count_drop_limit: float = COUNT_DROP_LIMIT,
     now: datetime | None = None,
     report_path: Path | None = None,
+    source_check: Path | None = None,
+    source_check_record: str | None = None,
 ) -> dict:
-    """Probe an already-running candidate engine and exclusively write its report."""
+    """Probe an already-running candidate engine and exclusively write its report.
+
+    ``source_check`` (a file) or ``source_check_record`` (its JSON text, written exclusively to
+    ``source-check.json`` beside the report) renews an unchanged generation's freshness with a
+    later successful same-hash paired check, exactly as the API does at startup.
+    """
+    if source_check is not None and source_check_record is not None:
+        raise ValueError("Pass a source-check file or an inline record, not both")
     generation_dir = Path(generation_dir).resolve()
     report_path = Path(report_path) if report_path else generation_dir / "probe.json"
     if report_path.exists():
@@ -214,6 +228,16 @@ async def probe_generation(
         digests = ArtifactDigests()
         verified = verify_candidate_artifacts(generation_dir, manifest, digests)
         generation = Generation.load(generation_dir / "manifest.json")
+        if source_check_record is not None:
+            source_check = report_path.parent / SOURCE_CHECK_FILENAME
+            _write_exclusive(source_check, json.dumps(json.loads(source_check_record)))
+        if source_check is not None:
+            generation = apply_source_check(generation, manifest, source_check)
+            report["sourceCheck"] = {
+                "path": str(source_check),
+                "sha256": hashlib.sha256(Path(source_check).read_bytes()).hexdigest(),
+                "sourceCheckedAt": generation.source_checked_at.isoformat(),
+            }
         freshness = generation.freshness(checked_at)
         evidence_time = generation.freshness_checked_at()
         report["sourceFreshness"] = {
@@ -322,6 +346,13 @@ async def probe_generation(
         report["failure"] = f"{type(exc).__name__}: {exc}"
     _write_probe_report(report_path, report)
     return report
+
+
+def _write_exclusive(path: Path, text: str) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    descriptor = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o644)
+    with os.fdopen(descriptor, "w", encoding="utf-8") as stream:
+        stream.write(text)
 
 
 def _write_probe_report(report_path: Path, report: dict) -> None:

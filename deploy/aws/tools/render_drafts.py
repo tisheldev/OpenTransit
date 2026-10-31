@@ -18,6 +18,9 @@ REGION = "eu-north-1"
 # VPC created by tools/h0_bounded_test.py; it substitutes this for {{VPC_CIDR}} at registration.
 VPC_CIDR = "10.80.0.0/16"
 LOG_GROUP = "/opentransit/h0"
+# The continuous H-1 preview (tools/h1_preview.py) registers the same task under its own names.
+H1_FAMILY = "opentransit-h1"
+H1_LOG_GROUP = "/opentransit/h1"
 MOTIS_DIGEST = "sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330"
 API_PORT = 8000
 MOTIS_PORT = 8080
@@ -361,6 +364,15 @@ def render_task_definition(variant: str) -> dict:
             {"key": "purpose", "value": "h0-draft"},
         ],
     }
+
+
+def retarget(task: dict, *, family: str, log_group: str) -> dict:
+    """Copy of a rendered task definition under another family and pre-created log group."""
+    task = json.loads(json.dumps(task))
+    task["family"] = family
+    for container in task["containerDefinitions"]:
+        container["logConfiguration"]["options"]["awslogs-group"] = log_group
+    return task
 
 
 def _yaml_scalar(value: object) -> str:

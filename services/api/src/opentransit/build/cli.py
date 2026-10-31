@@ -3,6 +3,7 @@
 import argparse
 import asyncio
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -147,6 +148,12 @@ def main(argv: list[str] | None = None) -> int:
     probe.add_argument("--queries", type=Path, required=True)
     probe.add_argument("--active", type=Path)
     probe.add_argument("--output", type=Path)
+    probe.add_argument(
+        "--source-check",
+        type=Path,
+        help="later same-hash paired check that renews freshness (default: inline record in "
+        "OPENTRANSIT_SOURCE_CHECK_RECORD, if set)",
+    )
     prune = commands.add_parser("prune", help="List retention candidates; never delete")
     prune.add_argument("--generations-root", type=Path, required=True)
     prune.add_argument("--active", required=True)
@@ -283,7 +290,7 @@ def main(argv: list[str] | None = None) -> int:
                 )
             )
         elif args.command == "probe":
-            from opentransit.build.probe import probe_generation
+            from opentransit.build.probe import SOURCE_CHECK_RECORD_ENV, probe_generation
 
             result = asyncio.run(
                 probe_generation(
@@ -292,6 +299,10 @@ def main(argv: list[str] | None = None) -> int:
                     args.queries,
                     args.active,
                     report_path=args.output,
+                    source_check=args.source_check,
+                    source_check_record=None
+                    if args.source_check
+                    else os.environ.get(SOURCE_CHECK_RECORD_ENV) or None,
                 )
             )
             print(result["status"])

@@ -1,0 +1,344 @@
+{
+  "schemaVersion": 1,
+  "kind": "h1-preview",
+  "label": "H-1 PRIVATE PREVIEW in eu-north-1, left running (task 31 October 2026). Measured values are marked as such; costs are estimates from list prices.",
+  "task": "H-1",
+  "region": "eu-north-1",
+  "accountId": "{{ACCOUNT_ID}}",
+  "resources": [
+    {
+      "type": "log-group",
+      "id": "/opentransit/h1",
+      "arn": "arn:aws:logs:eu-north-1:{{ACCOUNT_ID}}:log-group:/opentransit/h1",
+      "createdAt": "2026-10-31T17:05:22+00:00",
+      "deletedAt": null,
+      "retentionDays": 14
+    },
+    {
+      "type": "iam-role",
+      "id": "opentransit-h1-execution",
+      "arn": "arn:aws:iam::{{ACCOUNT_ID}}:role/opentransit-h1-execution",
+      "createdAt": "2026-10-31T17:05:23+00:00",
+      "deletedAt": null
+    },
+    {
+      "type": "iam-inline-policy",
+      "id": "opentransit-h1-execution/opentransit-h1-execution",
+      "arn": null,
+      "createdAt": "2026-10-31T17:05:25+00:00",
+      "deletedAt": null
+    },
+    {
+      "type": "vpc",
+      "id": "vpc-009f065404ed4cf6f",
+      "arn": null,
+      "createdAt": "2026-10-31T17:05:27+00:00",
+      "deletedAt": null,
+      "cidr": "10.80.0.0/16"
+    },
+    {
+      "type": "internet-gateway",
+      "id": "igw-0ca1d481be563ad01",
+      "arn": null,
+      "createdAt": "2026-10-31T17:05:30+00:00",
+      "deletedAt": null,
+      "vpcId": "vpc-009f065404ed4cf6f"
+    },
+    {
+      "type": "route-table",
+      "id": "rtb-0bd1e8479ac82db59",
+      "arn": null,
+      "createdAt": "2026-10-31T17:05:33+00:00",
+      "deletedAt": null,
+      "vpcId": "vpc-009f065404ed4cf6f"
+    },
+    {
+      "type": "subnet",
+      "id": "subnet-016e2b126f6ff9908",
+      "arn": null,
+      "createdAt": "2026-10-31T17:05:36+00:00",
+      "deletedAt": null,
+      "cidr": "10.80.0.0/24",
+      "zone": "eu-north-1a"
+    },
+    {
+      "type": "route-table-association",
+      "id": "rtbassoc-091e2a1fb057478e6",
+      "arn": null,
+      "createdAt": "2026-10-31T17:05:37+00:00",
+      "deletedAt": null,
+      "routeTableId": "rtb-0bd1e8479ac82db59",
+      "subnetId": "subnet-016e2b126f6ff9908"
+    },
+    {
+      "type": "subnet",
+      "id": "subnet-044fc28c9e3289c4b",
+      "arn": null,
+      "createdAt": "2026-10-31T17:05:39+00:00",
+      "deletedAt": null,
+      "cidr": "10.80.1.0/24",
+      "zone": "eu-north-1b"
+    },
+    {
+      "type": "route-table-association",
+      "id": "rtbassoc-0851762b522bb39c8",
+      "arn": null,
+      "createdAt": "2026-10-31T17:05:41+00:00",
+      "deletedAt": null,
+      "routeTableId": "rtb-0bd1e8479ac82db59",
+      "subnetId": "subnet-044fc28c9e3289c4b"
+    },
+    {
+      "type": "security-group",
+      "id": "sg-040c0e8a8a6a1944a",
+      "arn": null,
+      "createdAt": "2026-10-31T17:05:42+00:00",
+      "deletedAt": null,
+      "name": "opentransit-h1-alb",
+      "vpcId": "vpc-009f065404ed4cf6f"
+    },
+    {
+      "type": "security-group",
+      "id": "sg-0c90e6a6a4c3330b7",
+      "arn": null,
+      "createdAt": "2026-10-31T17:05:45+00:00",
+      "deletedAt": null,
+      "name": "opentransit-h1-task",
+      "vpcId": "vpc-009f065404ed4cf6f"
+    },
+    {
+      "type": "target-group",
+      "id": "opentransit-h1-api",
+      "arn": "arn:aws:elasticloadbalancing:eu-north-1:{{ACCOUNT_ID}}:targetgroup/opentransit-h1-api/a4d6eb1571b6209b",
+      "createdAt": "2026-10-31T17:05:55+00:00",
+      "deletedAt": null
+    },
+    {
+      "type": "load-balancer",
+      "id": "opentransit-h1",
+      "arn": "arn:aws:elasticloadbalancing:eu-north-1:{{ACCOUNT_ID}}:loadbalancer/app/opentransit-h1/d16d3fbe2b4258b1",
+      "createdAt": "2026-10-31T17:05:58+00:00",
+      "deletedAt": null,
+      "dnsName": "opentransit-h1-492730486.eu-north-1.elb.amazonaws.com"
+    },
+    {
+      "type": "listener",
+      "id": "HTTP:80",
+      "arn": "arn:aws:elasticloadbalancing:eu-north-1:{{ACCOUNT_ID}}:listener/app/opentransit-h1/d16d3fbe2b4258b1/a09a7e0ec8b917f1",
+      "createdAt": "2026-10-31T17:06:01+00:00",
+      "deletedAt": null
+    },
+    {
+      "type": "ecs-cluster",
+      "id": "opentransit-h1",
+      "arn": "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:cluster/opentransit-h1",
+      "createdAt": "2026-10-31T17:06:02+00:00",
+      "deletedAt": null
+    },
+    {
+      "type": "ecr-repository",
+      "id": "opentransit-api",
+      "arn": "arn:aws:ecr:eu-north-1:{{ACCOUNT_ID}}:repository/opentransit-api",
+      "createdAt": "2026-10-31T17:06:05+00:00",
+      "deletedAt": null,
+      "keep": true,
+      "preExisting": "H-0"
+    },
+    {
+      "type": "ecr-repository",
+      "id": "opentransit-data",
+      "arn": "arn:aws:ecr:eu-north-1:{{ACCOUNT_ID}}:repository/opentransit-data",
+      "createdAt": "2026-10-31T17:06:07+00:00",
+      "deletedAt": null,
+      "keep": true,
+      "preExisting": "H-0"
+    },
+    {
+      "type": "ecr-repository",
+      "id": "opentransit-photon",
+      "arn": "arn:aws:ecr:eu-north-1:{{ACCOUNT_ID}}:repository/opentransit-photon",
+      "createdAt": "2026-10-31T17:06:10+00:00",
+      "deletedAt": null,
+      "keep": true,
+      "preExisting": "H-0"
+    },
+    {
+      "type": "ecr-repository",
+      "id": "opentransit-motis",
+      "arn": "arn:aws:ecr:eu-north-1:{{ACCOUNT_ID}}:repository/opentransit-motis",
+      "createdAt": "2026-10-31T17:06:12+00:00",
+      "deletedAt": null,
+      "keep": true,
+      "preExisting": "H-0"
+    },
+    {
+      "type": "task-definition",
+      "id": "opentransit-h1:1",
+      "arn": "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:task-definition/opentransit-h1:1",
+      "createdAt": "2026-10-31T17:06:17+00:00",
+      "deletedAt": null,
+      "images": {
+        "init": "{{ACCOUNT_ID}}.dkr.ecr.eu-north-1.amazonaws.com/opentransit-data@sha256:64eb35650eadf73cbb6619d2ad571655afd7ab351f864412698d5f9c87c51059",
+        "motis": "{{ACCOUNT_ID}}.dkr.ecr.eu-north-1.amazonaws.com/opentransit-motis@sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330",
+        "photon": "{{ACCOUNT_ID}}.dkr.ecr.eu-north-1.amazonaws.com/opentransit-photon@sha256:52f94ba3722d73dc06022ffa8a1392ca96bff5418ae3f85ce54c725ab3803e83",
+        "verifier": "{{ACCOUNT_ID}}.dkr.ecr.eu-north-1.amazonaws.com/opentransit-api@sha256:0d501f356ab5a1af6cfd02ea0aa2610e05166e85bf14521a676318358f5a57d8",
+        "api": "{{ACCOUNT_ID}}.dkr.ecr.eu-north-1.amazonaws.com/opentransit-api@sha256:0d501f356ab5a1af6cfd02ea0aa2610e05166e85bf14521a676318358f5a57d8"
+      }
+    },
+    {
+      "type": "ecs-service",
+      "id": "opentransit-h1",
+      "arn": "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:service/opentransit-h1/opentransit-h1",
+      "createdAt": "2026-10-31T17:06:23+00:00",
+      "deletedAt": null
+    }
+  ],
+  "steps": [
+    {
+      "step": "cost-estimate",
+      "at": "2026-10-31T17:05:05+00:00",
+      "ok": true,
+      "basis": "eu-north-1 on-demand list prices (AWS Price List API, 31 Oct 2026), pre-tax",
+      "prices": {
+        "fargateVcpuHour": 0.0445,
+        "fargateGbHour": 0.0049,
+        "albHour": 0.02394,
+        "albLcuHour": 0.0076,
+        "publicIpv4Hour": 0.005,
+        "ecrGbMonth": 0.1,
+        "logsIngestGb": 0.54,
+        "logsStorageGbMonth": 0.028
+      },
+      "weeklyUsd": {
+        "fargateOneTask": 9.95,
+        "alb": 4.02,
+        "albLcuUpperBound": 1.28,
+        "publicIpv4TaskAndTwoAlbNodes": 2.52,
+        "secondTaskDuringRollouts": 0.18,
+        "ecrStorage": 0.15,
+        "logs": 0.06
+      },
+      "weeklyTotalUsd": 18.15,
+      "guardUsd": 30.0,
+      "withinGuard": true,
+      "notIncluded": "data transfer out (small JSON responses, free tier), tax"
+    },
+    {
+      "step": "setup-start",
+      "at": "2026-10-31T17:05:19+00:00",
+      "ok": true,
+      "reviewerCidr": "93.173.37.36/32"
+    },
+    {
+      "step": "setup-complete",
+      "at": "2026-10-31T17:06:02+00:00",
+      "ok": true,
+      "albDns": "opentransit-h1-492730486.eu-north-1.elb.amazonaws.com"
+    },
+    {
+      "step": "push-api",
+      "at": "2026-10-31T17:06:06+00:00",
+      "ok": true,
+      "digest": "sha256:0d501f356ab5a1af6cfd02ea0aa2610e05166e85bf14521a676318358f5a57d8",
+      "compressedBytes": 77364059
+    },
+    {
+      "step": "push-data",
+      "at": "2026-10-31T17:06:09+00:00",
+      "ok": true,
+      "digest": "sha256:64eb35650eadf73cbb6619d2ad571655afd7ab351f864412698d5f9c87c51059",
+      "compressedBytes": 760649241
+    },
+    {
+      "step": "push-photon",
+      "at": "2026-10-31T17:06:11+00:00",
+      "ok": true,
+      "digest": "sha256:52f94ba3722d73dc06022ffa8a1392ca96bff5418ae3f85ce54c725ab3803e83",
+      "compressedBytes": 203741244
+    },
+    {
+      "step": "push-motis",
+      "at": "2026-10-31T17:06:14+00:00",
+      "ok": true,
+      "digest": "sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330",
+      "compressedBytes": 68329952
+    },
+    {
+      "step": "register-task-definition",
+      "at": "2026-10-31T17:06:17+00:00",
+      "ok": true,
+      "arn": "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:task-definition/opentransit-h1:1"
+    },
+    {
+      "step": "service-create",
+      "at": "2026-10-31T17:06:23+00:00",
+      "ok": true,
+      "desired": 1,
+      "taskDefinition": "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:task-definition/opentransit-h1:1"
+    }
+  ],
+  "measurements": {
+    "tasks": {},
+    "taskRunningSecondsSoFar": 0.0
+  },
+  "costEstimate": {
+    "basis": "eu-north-1 on-demand list prices (AWS Price List API, 31 Oct 2026), pre-tax",
+    "prices": {
+      "fargateVcpuHour": 0.0445,
+      "fargateGbHour": 0.0049,
+      "albHour": 0.02394,
+      "albLcuHour": 0.0076,
+      "publicIpv4Hour": 0.005,
+      "ecrGbMonth": 0.1,
+      "logsIngestGb": 0.54,
+      "logsStorageGbMonth": 0.028
+    },
+    "weeklyUsd": {
+      "fargateOneTask": 9.95,
+      "alb": 4.02,
+      "albLcuUpperBound": 1.28,
+      "publicIpv4TaskAndTwoAlbNodes": 2.52,
+      "secondTaskDuringRollouts": 0.18,
+      "ecrStorage": 0.15,
+      "logs": 0.06
+    },
+    "weeklyTotalUsd": 18.15,
+    "guardUsd": 30.0,
+    "withinGuard": true,
+    "notIncluded": "data transfer out (small JSON responses, free tier), tax"
+  },
+  "images": [
+    {
+      "repository": "opentransit-api",
+      "tag": "h0-20261031",
+      "digest": "sha256:0d501f356ab5a1af6cfd02ea0aa2610e05166e85bf14521a676318358f5a57d8",
+      "compressedBytes": 77364059,
+      "pushedAt": "2026-10-31T17:06:06+00:00",
+      "source": "pushed in H-0"
+    },
+    {
+      "repository": "opentransit-data",
+      "tag": "h0-20261031",
+      "digest": "sha256:64eb35650eadf73cbb6619d2ad571655afd7ab351f864412698d5f9c87c51059",
+      "compressedBytes": 760649241,
+      "pushedAt": "2026-10-31T17:06:09+00:00",
+      "source": "pushed in H-0"
+    },
+    {
+      "repository": "opentransit-photon",
+      "tag": "h0-20261031",
+      "digest": "sha256:52f94ba3722d73dc06022ffa8a1392ca96bff5418ae3f85ce54c725ab3803e83",
+      "compressedBytes": 203741244,
+      "pushedAt": "2026-10-31T17:06:11+00:00",
+      "source": "pushed in H-0"
+    },
+    {
+      "repository": "opentransit-motis",
+      "tag": "h0-20261031",
+      "digest": "sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330",
+      "compressedBytes": 68329952,
+      "pushedAt": "2026-10-31T17:06:14+00:00",
+      "source": "pushed in H-0"
+    }
+  ]
+}
