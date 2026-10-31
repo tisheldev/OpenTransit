@@ -1,0 +1,223 @@
+/* Logical properties only (inline/block), so the layout mirrors with dir="rtl". */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: var(--font-sans);
+  color: var(--color-ink);
+  background: var(--color-bg);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-block-size: 100dvh;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+a {
+  color: var(--color-link);
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+.skip-link {
+  position: absolute;
+  inset-inline-start: var(--space-2);
+  inset-block-start: -100px;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-surface);
+  border-radius: var(--radius-s);
+  z-index: 10;
+}
+.skip-link:focus {
+  inset-block-start: var(--space-2);
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-block-size: 100dvh;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding-block: var(--space-3);
+  padding-inline: var(--space-4);
+  background: var(--color-surface);
+  border-block-end: 1px solid var(--color-border);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-l);
+  font-weight: 750;
+  color: var(--color-ink-strong);
+  text-decoration: none;
+  min-block-size: var(--target-min);
+}
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  inline-size: 30px;
+  block-size: 30px;
+  border-radius: var(--radius-s);
+  background: var(--color-brand);
+  color: #fff;
+  font-size: var(--text-s);
+}
+
+.screen {
+  flex: 1;
+  padding: var(--space-4);
+  max-inline-size: 720px;
+  inline-size: 100%;
+  margin-inline: auto;
+}
+
+.screen h1 {
+  font-size: var(--text-xl);
+  line-height: 1.2;
+  margin-block: 0 var(--space-3);
+}
+
+.placeholder-note {
+  color: var(--color-ink-muted);
+}
+
+.link-list {
+  list-style: none;
+  padding: 0;
+  margin: var(--space-4) 0;
+  display: grid;
+  gap: var(--space-2);
+}
+
+.link-list a,
+.button {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--target-min);
+  min-inline-size: var(--target-min);
+  padding-inline: var(--space-4);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-s);
+  background: var(--color-surface);
+  color: var(--color-ink-strong);
+  text-decoration: none;
+  cursor: pointer;
+}
+.button:hover,
+.link-list a:hover {
+  background: #ecf4f4;
+}
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.segmented {
+  display: inline-flex;
+  gap: var(--space-2);
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+.segmented label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-block-size: var(--target-min);
+  padding-inline: var(--space-4);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  cursor: pointer;
+}
+.segmented label:has(input:checked) {
+  background: var(--color-brand-tint);
+  border-color: var(--color-brand-strong);
+}
+
+.banner {
+  padding-block: var(--space-2);
+  padding-inline: var(--space-4);
+  font-size: var(--text-s);
+  border-block-end: 1px solid var(--color-border);
+}
+.banner-test {
+  background: var(--color-surface-sunken);
+  color: var(--color-ink-muted);
+  font-weight: 650;
+}
+.banner-stale {
+  background: var(--color-notice-bg);
+  color: var(--color-notice-ink);
+  border-inline-start: 3px solid var(--color-notice-border);
+}
+
+.state {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-s);
+  margin-block: var(--space-3);
+}
+.state-unavailable {
+  background: var(--color-notice-bg);
+  color: var(--color-notice-ink);
+}
+.state-error {
+  flex-direction: column;
+  align-items: flex-start;
+  background: var(--color-error-bg);
+  color: var(--color-error-ink);
+}
+.state-error p {
+  margin: 0;
+}
+
+.spinner {
+  inline-size: 18px;
+  block-size: 18px;
+  border: 3px solid var(--color-border);
+  border-block-start-color: var(--color-brand);
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation: none;
+  }
+}
+
+.data-status {
+  font-size: var(--text-s);
+  color: var(--color-ink-muted);
+}

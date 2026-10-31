@@ -1,0 +1,230 @@
+{
+  "recorded-departures-last-page": {
+    "provenance": "recorded",
+    "source": "services/api/results/m3-m4-functional-http-20260930-01.json",
+    "sourceSha256": "bc4b7528112cf3ea74749228103d5717325141b89901814ff68b2ca1bc00eba1",
+    "case": "overnight-departures-page-7",
+    "generationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
+    "recordedAt": "2026-09-30T19:16:01.793965+00:00"
+  },
+  "recorded-departures-page-1": {
+    "provenance": "recorded",
+    "source": "services/api/results/m3-m4-functional-http-20260930-01.json",
+    "sourceSha256": "bc4b7528112cf3ea74749228103d5717325141b89901814ff68b2ca1bc00eba1",
+    "case": "overnight-departures-page-1",
+    "generationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
+    "recordedAt": "2026-09-30T19:16:01.793965+00:00"
+  },
+  "recorded-departures-page-2": {
+    "provenance": "recorded",
+    "source": "services/api/results/m3-m4-functional-http-20260930-01.json",
+    "sourceSha256": "bc4b7528112cf3ea74749228103d5717325141b89901814ff68b2ca1bc00eba1",
+    "case": "overnight-departures-page-2",
+    "generationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
+    "recordedAt": "2026-09-30T19:16:01.793965+00:00"
+  },
+  "recorded-journey-poi": {
+    "provenance": "recorded",
+    "source": "services/api/results/m3-m4-functional-http-20260930-01.json",
+    "sourceSha256": "bc4b7528112cf3ea74749228103d5717325141b89901814ff68b2ca1bc00eba1",
+    "case": "poi-ref-to-journey",
+    "generationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
+    "recordedAt": "2026-09-30T19:16:01.793965+00:00"
+  },
+  "recorded-journey-routes": {
+    "provenance": "recorded",
+    "source": "services/api/results/m3-m4-functional-http-20260930-01.json",
+    "sourceSha256": "bc4b7528112cf3ea74749228103d5717325141b89901814ff68b2ca1bc00eba1",
+    "case": "search-to-journey",
+    "generationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
+    "recordedAt": "2026-09-30T19:16:01.793965+00:00"
+  },
+  "recorded-places-address-he": {
+    "provenance": "recorded",
+    "source": "services/api/results/m3-m4-functional-http-20260930-01.json",
+    "sourceSha256": "bc4b7528112cf3ea74749228103d5717325141b89901814ff68b2ca1bc00eba1",
+    "case": "address-category-request",
+    "generationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
+    "recordedAt": "2026-09-30T19:16:01.793965+00:00"
+  },
+  "recorded-places-empty": {
+    "provenance": "recorded",
+    "source": "services/api/results/m4-english-functional-http-20260930-03.json",
+    "sourceSha256": "29bf86cf7103484e5c21a45e55fe8fca3751600ca66763f30b1dad84d077ea0b",
+    "case": "valid-empty-stop-search",
+    "generationId": "c7b66eee1ad04dddba13f4c5dade5ef2023963a1ac0384857aaf173b9d164aa1",
+    "recordedAt": "2026-09-30T23:10:08.656155+00:00"
+  },
+  "recorded-places-poi-en": {
+    "provenance": "recorded",
+    "source": "services/api/results/m3-m4-functional-http-20260930-01.json",
+    "sourceSha256": "bc4b7528112cf3ea74749228103d5717325141b89901814ff68b2ca1bc00eba1",
+    "case": "poi-search",
+    "generationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
+    "recordedAt": "2026-09-30T19:16:01.793965+00:00"
+  },
+  "recorded-places-stop-en": {
+    "provenance": "recorded",
+    "source": "services/api/results/m4-english-functional-http-20260930-03.json",
+    "sourceSha256": "29bf86cf7103484e5c21a45e55fe8fca3751600ca66763f30b1dad84d077ea0b",
+    "case": "english-stop-search",
+    "generationId": "c7b66eee1ad04dddba13f4c5dade5ef2023963a1ac0384857aaf173b9d164aa1",
+    "recordedAt": "2026-09-30T23:10:08.656155+00:00"
+  },
+  "recorded-places-stop-he": {
+    "provenance": "recorded",
+    "source": "services/api/results/m3-m4-functional-http-20260930-01.json",
+    "sourceSha256": "bc4b7528112cf3ea74749228103d5717325141b89901814ff68b2ca1bc00eba1",
+    "case": "stop-search",
+    "generationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
+    "recordedAt": "2026-09-30T19:16:01.793965+00:00"
+  },
+  "recorded-problem-invalid-cursor": {
+    "provenance": "recorded",
+    "source": "services/api/results/m3-m4-functional-http-20260930-01.json",
+    "sourceSha256": "bc4b7528112cf3ea74749228103d5717325141b89901814ff68b2ca1bc00eba1",
+    "case": "cursor-query-mismatch",
+    "generationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
+    "recordedAt": "2026-09-30T19:16:01.793965+00:00"
+  },
+  "recorded-problem-invalid-place-ref": {
+    "provenance": "recorded",
+    "source": "services/api/results/m3-m4-functional-http-20260930-01.json",
+    "sourceSha256": "bc4b7528112cf3ea74749228103d5717325141b89901814ff68b2ca1bc00eba1",
+    "case": "invalid-place-ref",
+    "generationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
+    "recordedAt": "2026-09-30T19:16:01.793965+00:00"
+  },
+  "recorded-problem-not-ready": {
+    "provenance": "recorded",
+    "source": "services/api/results/m4-english-functional-http-20260930-03.json",
+    "sourceSha256": "29bf86cf7103484e5c21a45e55fe8fca3751600ca66763f30b1dad84d077ea0b",
+    "case": "readiness-observation",
+    "generationId": "c7b66eee1ad04dddba13f4c5dade5ef2023963a1ac0384857aaf173b9d164aa1",
+    "recordedAt": "2026-09-30T23:10:08.656155+00:00"
+  },
+  "recorded-problem-outside-window": {
+    "provenance": "recorded",
+    "source": "services/api/results/m3-m4-functional-http-20260930-01.json",
+    "sourceSha256": "bc4b7528112cf3ea74749228103d5717325141b89901814ff68b2ca1bc00eba1",
+    "case": "outside-coverage",
+    "generationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
+    "recordedAt": "2026-09-30T19:16:01.793965+00:00"
+  },
+  "recorded-problem-trip-not-found": {
+    "provenance": "recorded",
+    "source": "services/api/results/m3-m4-functional-http-20260930-01.json",
+    "sourceSha256": "bc4b7528112cf3ea74749228103d5717325141b89901814ff68b2ca1bc00eba1",
+    "case": "unknown-trip",
+    "generationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
+    "recordedAt": "2026-09-30T19:16:01.793965+00:00"
+  },
+  "recorded-stop": {
+    "provenance": "recorded",
+    "source": "services/api/results/m3-m4-functional-http-20260930-01.json",
+    "sourceSha256": "bc4b7528112cf3ea74749228103d5717325141b89901814ff68b2ca1bc00eba1",
+    "case": "search-stop-resolves",
+    "generationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
+    "recordedAt": "2026-09-30T19:16:01.793965+00:00"
+  },
+  "recorded-trip-dst-fold-first": {
+    "provenance": "recorded",
+    "source": "services/api/results/m3-m4-functional-http-20260930-01.json",
+    "sourceSha256": "bc4b7528112cf3ea74749228103d5717325141b89901814ff68b2ca1bc00eba1",
+    "case": "real-stop-fold-first-20261025-trip",
+    "generationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
+    "recordedAt": "2026-09-30T19:16:01.793965+00:00"
+  },
+  "recorded-trip-overnight": {
+    "provenance": "recorded",
+    "source": "services/api/results/m3-m4-functional-http-20260930-01.json",
+    "sourceSha256": "bc4b7528112cf3ea74749228103d5717325141b89901814ff68b2ca1bc00eba1",
+    "case": "real-stop-overnight-20261001-trip",
+    "generationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
+    "recordedAt": "2026-09-30T19:16:01.793965+00:00"
+  },
+  "synthetic-problem-feed-expired": {
+    "provenance": "synthetic",
+    "source": "services/api/tests/test_reference_api.py::reference_client (fixture mode, synthetic feed, mocked engine)",
+    "sourceSha256": "9e87a6c8a17bf3aa7d526a76d4d3288c8b32c432c4b806815202e2251b7f05c5",
+    "exporter": "apps/web/scripts/synthetic_api_fixtures.py"
+  },
+  "synthetic-problem-invalid-request": {
+    "provenance": "synthetic",
+    "source": "services/api/tests/test_reference_api.py::reference_client (fixture mode, synthetic feed, mocked engine)",
+    "sourceSha256": "9e87a6c8a17bf3aa7d526a76d4d3288c8b32c432c4b806815202e2251b7f05c5",
+    "exporter": "apps/web/scripts/synthetic_api_fixtures.py"
+  },
+  "synthetic-problem-rate-limited": {
+    "provenance": "synthetic",
+    "source": "services/api/tests/test_reference_api.py::reference_client (fixture mode, synthetic feed, mocked engine)",
+    "sourceSha256": "9e87a6c8a17bf3aa7d526a76d4d3288c8b32c432c4b806815202e2251b7f05c5",
+    "exporter": "apps/web/scripts/synthetic_api_fixtures.py"
+  },
+  "synthetic-problem-stop-not-found": {
+    "provenance": "synthetic",
+    "source": "services/api/tests/test_reference_api.py::reference_client (fixture mode, synthetic feed, mocked engine)",
+    "sourceSha256": "9e87a6c8a17bf3aa7d526a76d4d3288c8b32c432c4b806815202e2251b7f05c5",
+    "exporter": "apps/web/scripts/synthetic_api_fixtures.py"
+  },
+  "synthetic-route": {
+    "provenance": "synthetic",
+    "source": "services/api/tests/test_reference_api.py::reference_client (fixture mode, synthetic feed, mocked engine)",
+    "sourceSha256": "9e87a6c8a17bf3aa7d526a76d4d3288c8b32c432c4b806815202e2251b7f05c5",
+    "exporter": "apps/web/scripts/synthetic_api_fixtures.py"
+  },
+  "synthetic-route-patterns": {
+    "provenance": "synthetic",
+    "source": "services/api/tests/test_reference_api.py::reference_client (fixture mode, synthetic feed, mocked engine)",
+    "sourceSha256": "9e87a6c8a17bf3aa7d526a76d4d3288c8b32c432c4b806815202e2251b7f05c5",
+    "exporter": "apps/web/scripts/synthetic_api_fixtures.py"
+  },
+  "synthetic-routes": {
+    "provenance": "synthetic",
+    "source": "services/api/tests/test_reference_api.py::reference_client (fixture mode, synthetic feed, mocked engine)",
+    "sourceSha256": "9e87a6c8a17bf3aa7d526a76d4d3288c8b32c432c4b806815202e2251b7f05c5",
+    "exporter": "apps/web/scripts/synthetic_api_fixtures.py"
+  },
+  "synthetic-status-expired": {
+    "provenance": "synthetic",
+    "source": "services/api/tests/test_reference_api.py::reference_client (fixture mode, synthetic feed, mocked engine)",
+    "sourceSha256": "9e87a6c8a17bf3aa7d526a76d4d3288c8b32c432c4b806815202e2251b7f05c5",
+    "exporter": "apps/web/scripts/synthetic_api_fixtures.py"
+  },
+  "synthetic-status-ready": {
+    "provenance": "synthetic",
+    "source": "services/api/tests/test_reference_api.py::reference_client (fixture mode, synthetic feed, mocked engine)",
+    "sourceSha256": "9e87a6c8a17bf3aa7d526a76d4d3288c8b32c432c4b806815202e2251b7f05c5",
+    "exporter": "apps/web/scripts/synthetic_api_fixtures.py"
+  },
+  "synthetic-status-routing-unavailable": {
+    "provenance": "synthetic",
+    "source": "services/api/tests/test_reference_api.py::reference_client (fixture mode, synthetic feed, mocked engine)",
+    "sourceSha256": "9e87a6c8a17bf3aa7d526a76d4d3288c8b32c432c4b806815202e2251b7f05c5",
+    "exporter": "apps/web/scripts/synthetic_api_fixtures.py"
+  },
+  "synthetic-stop-station": {
+    "provenance": "synthetic",
+    "source": "services/api/tests/test_reference_api.py::reference_client (fixture mode, synthetic feed, mocked engine)",
+    "sourceSha256": "9e87a6c8a17bf3aa7d526a76d4d3288c8b32c432c4b806815202e2251b7f05c5",
+    "exporter": "apps/web/scripts/synthetic_api_fixtures.py"
+  },
+  "synthetic-stops-bbox": {
+    "provenance": "synthetic",
+    "source": "services/api/tests/test_reference_api.py::reference_client (fixture mode, synthetic feed, mocked engine)",
+    "sourceSha256": "9e87a6c8a17bf3aa7d526a76d4d3288c8b32c432c4b806815202e2251b7f05c5",
+    "exporter": "apps/web/scripts/synthetic_api_fixtures.py"
+  },
+  "synthetic-stops-near-page-1": {
+    "provenance": "synthetic",
+    "source": "services/api/tests/test_reference_api.py::reference_client (fixture mode, synthetic feed, mocked engine)",
+    "sourceSha256": "9e87a6c8a17bf3aa7d526a76d4d3288c8b32c432c4b806815202e2251b7f05c5",
+    "exporter": "apps/web/scripts/synthetic_api_fixtures.py"
+  },
+  "synthetic-stops-near-page-2": {
+    "provenance": "synthetic",
+    "source": "services/api/tests/test_reference_api.py::reference_client (fixture mode, synthetic feed, mocked engine)",
+    "sourceSha256": "9e87a6c8a17bf3aa7d526a76d4d3288c8b32c432c4b806815202e2251b7f05c5",
+    "exporter": "apps/web/scripts/synthetic_api_fixtures.py"
+  }
+}

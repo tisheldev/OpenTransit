@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/stops/mot:stop:13583/departures",
+    "params": {
+      "from": "2026-10-01T00:10:00+03:00",
+      "horizonMinutes": 60,
+      "limit": 3,
+      "cursor": "eyJ2IjoxLCJnIjoiODU2OTFjZDI3YjUzNmFjZGFiNWNjYWIyM2Q5NDAxOWFkODZkMTVjNWZlZGY0Y2YyNWM1NjM1ZmQwN2Y5MmMxYSIsInEiOiJjNjc2ZjdjMDQ1MjMyNWI1ZTVkM2UwMjM4MzMzNmM2NWVjNGQxYTViOWE2OTRlYzcwYWQzNTI4ZTU2OTI4NGYzIiwicCI6WyIyMDI2LTA5LTMwVDIxOjE1OjAwKzAwOjAwIiwiMjAyNjA5MzBfMjM6NTVfbW90NjBkYXlfNTg0Nzg0NzE3XzMwMDkyNiIsIjEzNTgzIiwyMF19"
+    },
+    "body": null
+  },
+  "status": 422,
+  "body": {
+    "type": "urn:opentransit:problem:invalid-cursor",
+    "title": "Invalid cursor",
+    "status": 422,
+    "code": "INVALID_CURSOR",
+    "detail": "Restart pagination from the first page.",
+    "requestId": "00000000000000000000000000000000"
+  }
+}

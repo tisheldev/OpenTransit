@@ -1,0 +1,45 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/places",
+    "params": {
+      "q": "zzzznotarealstop",
+      "type": "stop",
+      "lang": "en"
+    },
+    "body": null
+  },
+  "status": 200,
+  "body": {
+    "data": [],
+    "meta": {
+      "requestId": "00000000000000000000000000000000",
+      "generationId": "c7b66eee1ad04dddba13f4c5dade5ef2023963a1ac0384857aaf173b9d164aa1",
+      "generatedAt": "2026-09-30T23:10:12.088774Z",
+      "dataBuiltAt": "2026-09-30T19:28:59.565385Z",
+      "mode": "real",
+      "coverage": {
+        "from": "2026-09-30T00:00:00+03:00",
+        "until": "2026-10-31T00:00:00+02:00"
+      },
+      "freshness": "current",
+      "capabilities": {
+        "realtime": "not_enabled",
+        "alerts": "not_enabled"
+      },
+      "attribution": [
+        "Israel Ministry of Transport",
+        "© OpenStreetMap contributors"
+      ],
+      "rankingPolicy": "motis-v2.11.2-feasible-engine-order-v1",
+      "appliedConstraints": {},
+      "warnings": []
+    },
+    "matchedTypes": [
+      "stop"
+    ],
+    "unavailableTypes": [],
+    "partial": false,
+    "rankingPolicy": "alternating-stop-and-geocoder-order-v1"
+  }
+}

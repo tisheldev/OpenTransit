@@ -1,6 +1,6 @@
 # Phase 2 client design
 
-**Proposal, 1 October 2026; interface direction chosen 2 October 2026; not implemented.** Implementation starts under the October 1 [gate revision](../PRD.md): once M2–M4 are accepted locally and the private H-0/H-1 deployment begins. Realtime and alerts remain deferred. The client labels every time as scheduled and shows unavailable live data as unavailable, never as an empty success.
+**Proposal, 1 October 2026; interface direction chosen 2 October 2026; slices S0–S2 implemented in [`apps/web`](../apps/web/README.md) on 31 October 2026 (real-API checks pending); S3 onward not started.** Implementation starts under the October 1 [gate revision](../PRD.md): once M2–M4 are accepted locally and the private H-0/H-1 deployment begins. Realtime and alerts remain deferred. The client labels every time as scheduled and shows unavailable live data as unavailable, never as an empty success.
 
 ## Interface direction (user, 2 October 2026)
 
