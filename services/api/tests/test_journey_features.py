@@ -99,7 +99,7 @@ def test_stop_reference_requires_namespace_and_resolves_full_engine_identity():
     query = request(**{"from": {"kind": "stop", "stopId": "mot:stop:station-7"}})
 
     class Reference:
-        def stop(self, stop_id):
+        def stop_ref(self, stop_id):
             assert stop_id == "mot:stop:station-7"
             return {"source_id": "station-7"}
 
@@ -113,7 +113,7 @@ def test_stop_reference_requires_namespace_and_resolves_full_engine_identity():
     assert (missing_store.value.code, missing_store.value.status) == ("DATA_UNAVAILABLE", 503)
 
     class UnknownReference:
-        def stop(self, stop_id):
+        def stop_ref(self, stop_id):
             return None
 
     with pytest.raises(EngineFailure) as unknown:

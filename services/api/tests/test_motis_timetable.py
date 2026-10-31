@@ -132,7 +132,7 @@ class Ref:
     def __init__(self, profiles):
         self.profiles = profiles
 
-    def stop(self, _stop_id):
+    def stop_ref(self, _stop_id):
         return {"source_id": "board", "platform_code": None, "children": []}
 
     def source_profile(self, source_id):
@@ -484,7 +484,7 @@ def test_parent_scope_expands_deduplicated_same_time_child_platform_calls():
     engine_id = "20261001_08:00_mot60day_platform_trip"
 
     class ParentRef(Ref):
-        def stop(self, stop_ref):
+        def stop_ref(self, stop_ref):
             if stop_ref == "mot:stop:parent":
                 return {
                     "source_id": "parent",

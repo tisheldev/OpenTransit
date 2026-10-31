@@ -8,4 +8,8 @@ COPY src ./src
 RUN uv sync --locked --no-dev --no-editable
 RUN useradd --uid 10001 --create-home api
 USER 10001
+# Keep idle client connections open longer than a load balancer's idle timeout (ALB default
+# 60 s), so the proxy never reuses a connection uvicorn already closed (sporadic 502s). The
+# uvicorn CLI reads it, so it also applies to commands that replace CMD (ECS task definitions).
+ENV UVICORN_TIMEOUT_KEEP_ALIVE=75
 CMD ["/app/.venv/bin/uvicorn", "opentransit.api.app:create_app", "--factory", "--host", "0.0.0.0", "--port", "8000", "--no-access-log", "--log-level", "info"]

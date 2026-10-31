@@ -3,6 +3,10 @@
 The builder consumes stop_times as a stream into a SQLite staging table, so a
 large feed never needs to be retained in Python memory. Query connections are
 read-only and every page cursor is bound to its generation and query.
+
+Serving reuses a few long-lived read-only connections and keeps small per-generation
+indexes in memory (translations, the stop lookup used by departures and journeys, and
+an LRU of detail results); the file is immutable, so none of them can go stale.
 """
 
 from __future__ import annotations
@@ -17,6 +21,7 @@ import math
 import os
 import re
 import sqlite3
+import threading
 import zipfile
 from contextlib import contextmanager
 from dataclasses import dataclass
@@ -32,6 +37,7 @@ from opentransit.core.trip_calls import (
     source_profile_from_rows,
 )
 from opentransit.localities import LocalityDataset, assign_stops
+from opentransit.search_cache import ResultCache
 
 # 3: localities (OSM admin level 8), their names and the stop assignment.
 SCHEMA_VERSION = 3
@@ -66,6 +72,17 @@ COUNT_TABLES = (
     "stop_localities",
 )
 LOCALITY_TABLES = ("localities", "locality_names", "stop_localities")
+# Serving connections (API-PERF 1.11). Idle read-only connections kept for reuse; extra
+# concurrent ones are opened on demand and closed after use. The memory map and page
+# cache are per connection and bounded; the reference is immutable, so mapped pages are
+# clean and reclaimable.
+CONNECTION_POOL_IDLE = 4
+CONNECTION_MMAP_BYTES = 256 * 1024 * 1024
+CONNECTION_CACHE_KIB = 16 * 1024
+# Detail/list results per kind (stop, route, routes, patterns) kept per generation.
+DETAIL_CACHE_ENTRIES = 256
+# The translation pairs served by stop() and route(), indexed once per store (1.1).
+SERVED_TRANSLATIONS = (("stops", "stop_name"), ("routes", "route_long_name"))
 LOCALITY_PROVENANCE_KEY = "localityProvenance"
 
 
@@ -929,6 +946,50 @@ def _cursor_decode(
         raise ValueError("Cursor is invalid or belongs to a different query/generation") from exc
 
 
+class _TranslationIndex:
+    """One (table, field) pair's translations, resolved exactly as the SQL selector does.
+
+    The selector matches ``record_id=?`` or ``record_id='' AND field_value=?``, orders
+    record-id rows first, then by priority (descending, NULL last) and row ID, and keeps
+    the first translation per case-folded language. Record-id rows always precede value
+    rows, so the answer is the record-id dictionary followed by any language only the
+    value dictionary has, in the same order. Built from one ordered scan instead of one
+    full-table scan per request (every row of the national feed has an empty
+    ``record_id``, which the ``(record_id, lang)`` index cannot narrow).
+    """
+
+    def __init__(self, connection: sqlite3.Connection, table_name: str, field_name: str):
+        self.by_record: dict[str, dict[str, str]] = {}
+        self.by_value: dict[str, dict[str, str]] = {}
+        for record_id, field_value, lang, translation in connection.execute(
+            "SELECT record_id, field_value, lang, translation FROM translations "
+            "WHERE table_name=? AND field_name=? "
+            "AND (record_sub_id IS NULL OR record_sub_id='') "
+            "ORDER BY CASE WHEN record_id<>'' THEN 0 ELSE 1 END, "
+            "priority DESC, translation_id",
+            (table_name, field_name),
+        ):
+            lang = lang.casefold()
+            self.by_record.setdefault(record_id, {}).setdefault(lang, translation)
+            if record_id == "" and field_value is not None:
+                self.by_value.setdefault(field_value, {}).setdefault(lang, translation)
+
+    def resolve(self, source_id: str, source_value: str | None) -> dict[str, str]:
+        translations = dict(self.by_record.get(source_id, {}))
+        if source_value is not None:
+            for lang, translation in self.by_value.get(source_value, {}).items():
+                translations.setdefault(lang, translation)
+        return translations
+
+
+@dataclass(frozen=True)
+class _StopRef:
+    stop_id: str
+    source_id: str
+    platform_code: str | None
+    children: tuple[tuple[str, str, str | None], ...]
+
+
 class ReferenceStore:
     """Read-only query interface for one verified generation."""
 
@@ -962,7 +1023,17 @@ class ReferenceStore:
         else:
             self.integrity_verification = "sqlite-integrity-check"
         self._uri = self.path.resolve().as_uri() + "?mode=ro&immutable=1"
-        with self._connect() as connection:
+        self._idle: list[sqlite3.Connection] = []
+        self._pool_lock = threading.Lock()
+        self._closed = False
+        self._details = {
+            kind: ResultCache(DETAIL_CACHE_ENTRIES)
+            for kind in ("stop", "route", "routes", "patterns")
+        }
+        # Verification uses its own connection, closed before the store is returned, so
+        # no handle is held on the file until the first served request.
+        connection = self._open_connection()
+        try:
             if integrity_attested_sha256 is None:
                 result = connection.execute("PRAGMA integrity_check").fetchone()[0]
                 if result != "ok":
@@ -985,6 +1056,12 @@ class ReferenceStore:
             connection.row_factory = None
             if _content_hash(connection, schema_version) != values.get("contentSha256"):
                 raise ValueError("Reference database content verification failed")
+            self._translation_index = {
+                pair: _TranslationIndex(connection, *pair) for pair in SERVED_TRANSLATIONS
+            }
+            self._stop_refs = self._load_stop_refs(connection)
+        finally:
+            connection.close()
         # A composed public generation can reuse these immutable bytes. Verify
         # their embedded component identity above, but scope pagination cursors
         # to the composed public identity so references cannot cross generations.
@@ -1001,15 +1078,90 @@ class ReferenceStore:
             values.get("timingPolicy"),
         )
 
+    def _open_connection(self) -> sqlite3.Connection:
+        # Used by one thread at a time (checked out of the pool), never concurrently.
+        connection = sqlite3.connect(self._uri, uri=True, check_same_thread=False)
+        connection.row_factory = sqlite3.Row
+        connection.execute("PRAGMA query_only=ON")
+        connection.execute(f"PRAGMA mmap_size={CONNECTION_MMAP_BYTES}")
+        connection.execute(f"PRAGMA cache_size=-{CONNECTION_CACHE_KIB}")
+        return connection
+
     @contextmanager
     def _connect(self):
-        connection = sqlite3.connect(self._uri, uri=True)
+        """Check out a long-lived read-only connection; it returns to the pool if healthy."""
+        with self._pool_lock:
+            connection = self._idle.pop() if self._idle else None
+        if connection is None:
+            connection = self._open_connection()
+        reusable = False
         try:
             connection.row_factory = sqlite3.Row
-            connection.execute("PRAGMA query_only=ON")
             yield connection
+            reusable = True
         finally:
+            with self._pool_lock:
+                keep = reusable and not self._closed and len(self._idle) < CONNECTION_POOL_IDLE
+                if keep:
+                    self._idle.append(connection)
+            if not keep:
+                connection.close()
+
+    def close(self) -> None:
+        """Close idle pooled connections; later queries open (and close) their own."""
+        with self._pool_lock:
+            self._closed = True
+            idle, self._idle = self._idle, []
+        for connection in idle:
             connection.close()
+
+    @staticmethod
+    def _load_stop_refs(connection: sqlite3.Connection) -> dict[str, _StopRef]:
+        rows = connection.execute(
+            "SELECT stop_id, source_id, platform_code, parent_station FROM stops ORDER BY stop_id"
+        ).fetchall()
+        children: dict[str, list[tuple[str, str, str | None]]] = {}
+        for stop_id, source_id, platform_code, parent in rows:
+            if parent is not None:
+                children.setdefault(parent, []).append((stop_id, source_id, platform_code))
+        by_stop_id: dict[str, _StopRef] = {}
+        by_source_id: dict[str, _StopRef] = {}
+        for stop_id, source_id, platform_code, _ in rows:
+            ref = _StopRef(stop_id, source_id, platform_code, tuple(children.get(stop_id, ())))
+            by_stop_id[stop_id] = ref
+            by_source_id[source_id] = ref
+        # stop() matches either column; a stop ID wins over another stop's source ID.
+        return {**by_source_id, **by_stop_id}
+
+    def stop_ref(self, stop_id: str) -> dict[str, Any] | None:
+        """The identity fields departures and journeys need, from memory (no SQLite, no I/O).
+
+        Same stop as ``stop(stop_id)``, with the same ``source_id`` and ``platform_code``
+        for it and its children (in ``stop_id`` order); no translations, routes or parent.
+        """
+        ref = self._stop_refs.get(stop_id)
+        if ref is None:
+            return None
+        return {
+            "stop_id": ref.stop_id,
+            "source_id": ref.source_id,
+            "platform_code": ref.platform_code,
+            "children": [
+                {"stop_id": child_id, "source_id": source_id, "platform_code": platform_code}
+                for child_id, source_id, platform_code in ref.children
+            ],
+        }
+
+    def _cached(self, kind: str, key: tuple, compute):
+        """Per-generation LRU of complete results; misses (None) are not cached."""
+        cache = self._details[kind]
+        hit = cache.get(key)
+        if hit is not None:
+            return hit
+        result = compute()
+        if result is not None:
+            cache.put(key, result)
+        return result
 
     def _page(
         self, rows: list[dict[str, Any]], limit: int, query: dict[str, Any], position
@@ -1191,6 +1343,9 @@ class ReferenceStore:
         }
 
     def stop(self, stop_id: str) -> dict[str, Any] | None:
+        return self._cached("stop", (stop_id,), lambda: self._stop(stop_id))
+
+    def _stop(self, stop_id: str) -> dict[str, Any] | None:
         with self._connect() as connection:
             row = connection.execute(
                 "SELECT * FROM stops WHERE stop_id=? OR source_id=?", (stop_id, stop_id)
@@ -1198,8 +1353,8 @@ class ReferenceStore:
             if row is None:
                 return None
             item = self._stop_item(row)
-            item["translations"] = self._translations(
-                connection, "stops", row["source_id"], "stop_name", row["name"]
+            item["translations"] = self._translation_index[("stops", "stop_name")].resolve(
+                row["source_id"], row["name"]
             )
             item["children"] = [
                 self._stop_item(child)
@@ -1327,28 +1482,6 @@ class ReferenceStore:
                 )
             ]
 
-    @staticmethod
-    def _translations(
-        connection: sqlite3.Connection,
-        table_name: str,
-        source_id: str,
-        field_name: str,
-        source_value: str | None = None,
-    ) -> dict[str, str]:
-        translations = {}
-        for row in connection.execute(
-            "SELECT lang, translation FROM translations "
-            "WHERE table_name=? AND field_name=? AND "
-            "((record_id=?) OR "
-            "(record_id='' AND field_value=?)) "
-            "AND (record_sub_id IS NULL OR record_sub_id='') "
-            "ORDER BY CASE WHEN record_id<>'' THEN 0 ELSE 1 END, "
-            "priority DESC, translation_id",
-            (table_name, field_name, source_id, source_value),
-        ):
-            translations.setdefault(row["lang"].casefold(), row["translation"])
-        return translations
-
     def routes(
         self,
         stop_id: str | None = None,
@@ -1357,20 +1490,41 @@ class ReferenceStore:
         limit: int = DEFAULT_PAGE_SIZE,
         cursor: str | None = None,
     ) -> dict[str, Any]:
+        key = (stop_id, agency_id, short_name, limit, cursor)
+        return self._cached(
+            "routes", key, lambda: self._routes(stop_id, agency_id, short_name, limit, cursor)
+        )
+
+    def _routes(
+        self,
+        stop_id: str | None,
+        agency_id: str | None,
+        short_name: str | None,
+        limit: int,
+        cursor: str | None,
+    ) -> dict[str, Any]:
         limit = _page_limit(limit)
         if stop_id is None and agency_id is None and short_name is None:
             raise ValueError("At least one route selector is required")
         query = {"kind": "routes", "stop": stop_id, "agency": agency_id, "short_name": short_name}
         after = _cursor_decode(cursor, self.metadata.generation_id, query)
         clauses, args = [], []
+        sql = "SELECT r.* FROM routes r"
         if stop_id is not None:
-            clauses.append(
-                "EXISTS (SELECT 1 FROM route_stops rs WHERE rs.route_id=r.route_id "
-                "AND (rs.stop_id=? OR rs.stop_id IN "
-                "(SELECT stop_id FROM stops WHERE parent_station=?)))"
-            )
+            # Drive from route_stops_stop_idx with the stop and its children (known from
+            # the in-memory lookup) instead of testing every route; CROSS JOIN fixes
+            # route_stops as the outer loop and INDEXED BY its stop index (API-PERF 1.4).
             normalized_stop = public_stop_id(stop_id.removeprefix(STOP_PREFIX))
-            args.extend((normalized_stop, normalized_stop))
+            ref = self._stop_refs.get(normalized_stop)
+            stop_ids = [normalized_stop]
+            if ref is not None and ref.stop_id == normalized_stop:
+                stop_ids.extend(child_id for child_id, _, _ in ref.children)
+            sql = (
+                "SELECT DISTINCT r.* FROM route_stops rs INDEXED BY route_stops_stop_idx "
+                "CROSS JOIN routes r ON r.route_id=rs.route_id"
+            )
+            clauses.append(f"rs.stop_id IN ({','.join('?' * len(stop_ids))})")
+            args.extend(stop_ids)
         if agency_id is not None:
             clauses.append("r.agency_id=?")
             args.append(agency_id)
@@ -1380,7 +1534,6 @@ class ReferenceStore:
         if after:
             clauses.append("r.route_id > ?")
             args.append(after[0])
-        sql = "SELECT r.* FROM routes r"
         if clauses:
             sql += " WHERE " + " AND ".join(clauses)
         sql += " ORDER BY r.route_id LIMIT ?"
@@ -1394,6 +1547,11 @@ class ReferenceStore:
         route_id: str,
         pattern_limit: int = DEFAULT_PAGE_SIZE,
     ) -> dict[str, Any] | None:
+        return self._cached(
+            "route", (route_id, pattern_limit), lambda: self._route(route_id, pattern_limit)
+        )
+
+    def _route(self, route_id: str, pattern_limit: int) -> dict[str, Any] | None:
         pattern_limit = _page_limit(pattern_limit)
         source_id = route_id.removeprefix(ROUTE_PREFIX)
         with self._connect() as connection:
@@ -1403,8 +1561,8 @@ class ReferenceStore:
             if row is None:
                 return None
             item = dict(row)
-            item["translations"] = self._translations(
-                connection, "routes", row["source_id"], "route_long_name"
+            item["translations"] = self._translation_index[("routes", "route_long_name")].resolve(
+                row["source_id"], None
             )
             item["agency"] = (
                 dict(
@@ -1440,6 +1598,11 @@ class ReferenceStore:
         limit: int = DEFAULT_PAGE_SIZE,
         cursor: str | None = None,
     ) -> dict[str, Any]:
+        return self._cached(
+            "patterns", (route_id, limit, cursor), lambda: self._patterns(route_id, limit, cursor)
+        )
+
+    def _patterns(self, route_id: str, limit: int, cursor: str | None) -> dict[str, Any]:
         limit = _page_limit(limit)
         normalized_route = public_route_id(route_id.removeprefix(ROUTE_PREFIX))
         query = {"kind": "patterns", "route": normalized_route}
