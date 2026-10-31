@@ -284,7 +284,7 @@
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 4px;
+  gap: 3px;
 }
 .option {
   display: grid;
@@ -314,6 +314,7 @@
   min-block-size: 19px;
 }
 .option-times {
+  flex: none;
   display: inline-flex;
   align-items: baseline;
   gap: 4px;
@@ -352,6 +353,10 @@
   font-weight: 700;
   line-height: 1.5;
   white-space: nowrap;
+  /* A long label in a narrow row is cut, never pushes the times out. */
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .pill-quiet {
   background: var(--color-surface-sunken);
