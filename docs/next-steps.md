@@ -169,7 +169,7 @@ After functional coverage, perform consolidated milestone acceptance, finish ref
 
 | ID | Needed | Owner | State on 3 October | Blocks |
 | --- | --- | --- | --- | --- |
-| PRE-1 | Gate: the client is gated on the start of H-0/H-1. Either the [H-0 approval](../PROJECT_STATUS.md#h-0-approval-request) is given and the deployment starts, or the user revises the gate so S0–S6 may start against the local API | User | Open (PRD §10 item 7) | Everything |
+| PRE-1 | Gate: the client is gated on the start of H-0/H-1. Either the H-0 approval is given and the deployment starts, or the user revises the gate so S0–S6 may start against the local API | User | H-0 approved and run 31 October ([result](../PROJECT_STATUS.md#h-0-result-31-october)); H-1 not started (PRD §10 item 7) | Everything |
 | PRE-2 | Review and accept the client PRD 0.3 and the client design (or list changes) | User | Open | Everything |
 | PRE-3 | App identity: display name, Android package and iOS bundle ID; light only or light and dark | User | Open (PRD §10 items 11–13) | S0 |
 | PRE-4 | Approve API-C1 and API-C2 (additive fields on an accepted API) | User | Open (PRD §10 item 8) | S5 details, S6 ride progress |
