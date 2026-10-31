@@ -1,10 +1,11 @@
 import { QueryClientProvider, type QueryClient } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
 import { I18nProvider, useI18n } from "./i18n/I18nProvider";
+import { PlanProvider } from "./plan/PlanProvider";
 import { useRoute } from "./router";
 import { Screen } from "./screens/screens";
 
-function Shell({ fixtureMode }: { fixtureMode: boolean }) {
+function Shell(_props: { fixtureMode: boolean }) {
   const { t } = useI18n();
   const route = useRoute();
   const first = useRef(true);
@@ -34,7 +35,9 @@ function Shell({ fixtureMode }: { fixtureMode: boolean }) {
           {t("app.name")}
         </a>
       </header>
-      <Screen route={route} fixtureMode={fixtureMode} />
+      <main id="main" className="screen" tabIndex={-1}>
+        <Screen route={route} />
+      </main>
     </div>
   );
 }
@@ -43,7 +46,9 @@ export function App({ queryClient, fixtureMode = false }: { queryClient: QueryCl
   return (
     <QueryClientProvider client={queryClient}>
       <I18nProvider>
-        <Shell fixtureMode={fixtureMode} />
+        <PlanProvider>
+          <Shell fixtureMode={fixtureMode} />
+        </PlanProvider>
       </I18nProvider>
     </QueryClientProvider>
   );

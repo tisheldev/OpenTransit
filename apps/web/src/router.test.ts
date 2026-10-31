@@ -5,7 +5,9 @@ describe("hash router", () => {
   it.each<[string, Route]>([
     ["", { name: "home" }],
     ["#/", { name: "home" }],
-    ["#/search", { name: "search" }],
+    ["#/search", { name: "search", field: "to" }],
+    ["#/search/from", { name: "search", field: "from" }],
+    ["#/search/bogus", { name: "notFound", path: "/search/bogus" }],
     ["#/settings", { name: "settings" }],
     ["#/stop/mot%3Astop%3A13583", { name: "stop", stopId: "mot:stop:13583" }],
     ["#/trip/20260930_23%3A50_mot60day_584668860_300926", { name: "trip", tripRef: "20260930_23:50_mot60day_584668860_300926" }],

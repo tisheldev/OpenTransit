@@ -20,12 +20,15 @@
     "fixtures:record": "node scripts/record-fixtures.mjs"
   },
   "dependencies": {
+    "@mapbox/mapbox-gl-rtl-text": "0.3.0",
     "@tanstack/react-query": "5.105.0",
+    "maplibre-gl": "6.14.0",
     "react": "19.3.1",
     "react-dom": "19.3.1",
     "zod": "4.6.7"
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.14.0",
     "@eslint/js": "10.0.1",
     "@playwright/test": "1.64.1",
     "@testing-library/dom": "10.4.1",

@@ -15,6 +15,19 @@ export function respond(found: Fixture, extraHeaders: Record<string, string> = {
 }
 
 const send = (name: string) => respond(fixture(name));
+
+/**
+ * The fixture scenario chosen by a mocked e2e test (e2e/helpers.ts useScenario) or by a
+ * person trying fixture mode: localStorage "ot-fixture-scenario". Null means the default.
+ * Unit tests use server.use() overrides instead.
+ */
+export function scenario(): string | null {
+  try {
+    return globalThis.localStorage?.getItem("ot-fixture-scenario") ?? null;
+  } catch {
+    return null;
+  }
+}
 const decoded = (value: string | readonly string[] | undefined) => decodeURIComponent(String(value ?? ""));
 
 /** Fixtures holding a trip, keyed by trip ref. */

@@ -3,11 +3,14 @@ import { useSyncExternalStore } from "react";
 // Hash routing: the fragment never reaches the server or its logs (design: Stack).
 // No location or coordinates are ever placed in a route.
 
+/** Which field Search fills: a journey end, or a saved place being set. */
+export type SearchField = "from" | "to" | "home" | "work" | "favourite";
+export const SEARCH_FIELDS: readonly SearchField[] = ["from", "to", "home", "work", "favourite"];
+
 export type Route =
   | { name: "home" }
-  | { name: "search" }
+  | { name: "search"; field: SearchField }
   | { name: "compare" }
-  | { name: "route" }
   | { name: "navigate" }
   | { name: "stop"; stopId: string }
   | { name: "trip"; tripRef: string }
@@ -16,17 +19,23 @@ export type Route =
   | { name: "settings" }
   | { name: "notFound"; path: string };
 
-const STATIC = ["search", "compare", "route", "navigate", "nearby", "lines", "settings"] as const;
+const STATIC = ["compare", "navigate", "nearby", "lines", "settings"] as const;
 
 export function parseHash(hash: string): Route {
   const path = hash.replace(/^#/, "") || "/";
   const segments = path.split("/").filter(Boolean);
   if (segments.length === 0) return { name: "home" };
   const [first, second, ...rest] = segments;
-  if (rest.length === 0 && second === undefined && (STATIC as readonly string[]).includes(first!)) {
+  if (rest.length > 0) return { name: "notFound", path };
+  if (second === undefined && (STATIC as readonly string[]).includes(first!)) {
     return { name: first as (typeof STATIC)[number] };
   }
-  if (rest.length === 0 && second !== undefined) {
+  if (first === "search") {
+    if (second === undefined) return { name: "search", field: "to" };
+    if ((SEARCH_FIELDS as readonly string[]).includes(second)) return { name: "search", field: second as SearchField };
+    return { name: "notFound", path };
+  }
+  if (second !== undefined) {
     try {
       if (first === "stop") return { name: "stop", stopId: decodeURIComponent(second) };
       if (first === "trip") return { name: "trip", tripRef: decodeURIComponent(second) };
@@ -41,6 +50,8 @@ export function hrefFor(route: Route): string {
   switch (route.name) {
     case "home":
       return "#/";
+    case "search":
+      return `#/search/${route.field}`;
     case "stop":
       return `#/stop/${encodeURIComponent(route.stopId)}`;
     case "trip":
@@ -52,9 +63,49 @@ export function hrefFor(route: Route): string {
   }
 }
 
+/** Go to a route. `replace` swaps the current history entry (no extra Back step). */
+export function go(route: Route, options: { replace?: boolean } = {}): void {
+  const href = hrefFor(route);
+  if (options.replace) {
+    window.history.replaceState(window.history.state, "", href);
+    window.dispatchEvent(new HashChangeEvent("hashchange"));
+  } else {
+    window.location.hash = href;
+  }
+}
+
+/**
+ * Each history entry this app creates carries its depth, so Back knows whether there is
+ * an in-app screen to return to. A deep link or a reload starts at depth 0.
+ */
+let currentDepth = 0;
+function stampDepth(): void {
+  const state = window.history.state as { otDepth?: unknown } | null;
+  if (typeof state?.otDepth === "number") {
+    currentDepth = state.otDepth;
+    return;
+  }
+  currentDepth += 1;
+  window.history.replaceState({ ...(state ?? {}), otDepth: currentDepth }, "");
+}
+
+/** Back one level (design: Surface; Back never asks). Without an in-app entry, go to `fallback`. */
+export function back(fallback: Route = { name: "home" }): void {
+  if (currentDepth > 0) window.history.back();
+  else go(fallback, { replace: true });
+}
+
 function subscribe(onChange: () => void): () => void {
-  window.addEventListener("hashchange", onChange);
-  return () => window.removeEventListener("hashchange", onChange);
+  const listener = () => {
+    stampDepth();
+    onChange();
+  };
+  window.addEventListener("hashchange", listener);
+  return () => window.removeEventListener("hashchange", listener);
+}
+
+if (typeof window !== "undefined" && typeof window.history.state?.otDepth !== "number") {
+  window.history.replaceState({ ...(window.history.state ?? {}), otDepth: 0 }, "");
 }
 
 export function useRoute(): Route {

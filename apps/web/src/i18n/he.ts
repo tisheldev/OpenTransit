@@ -2,7 +2,14 @@
 // plural imperative (design: Language and layout rules). English mirrors these keys.
 // Placeholders are {name}; both dictionaries must use the same ones.
 
-export const he = {
+import { he_compare } from "./parts/compare.he";
+import { he_map } from "./parts/map.he";
+import { he_nav } from "./parts/nav.he";
+import { he_secondary } from "./parts/secondary.he";
+import { he_shell } from "./parts/shell.he";
+
+// Core strings below; each slice owns its own part file in ./parts (merged at the end).
+const core = {
   "app.name": "OpenTransit",
   "app.tagline": "תכנון וניווט בתחבורה ציבורית",
   "app.skipToContent": "דילוג לתוכן",
@@ -72,5 +79,7 @@ export const he = {
   "place.poi": "מקום",
   "place.address": "כתובת",
 } as const;
+
+export const he = { ...core, ...he_map, ...he_shell, ...he_compare, ...he_nav, ...he_secondary } as const;
 
 export type MessageKey = keyof typeof he;
