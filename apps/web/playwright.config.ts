@@ -2,7 +2,8 @@ import { defineConfig, devices } from "@playwright/test";
 
 // Mocked suite: the dev server in `fixtures` mode answers /v1 with MSW, so no API or
 // Docker is needed. `@real` tests target a running API and skip unless /readyz is 200.
-const port = 5174;
+// OT_E2E_PORT lets parallel worktrees run their own dev servers without sharing one.
+const port = Number(process.env.OT_E2E_PORT ?? 5174);
 
 export default defineConfig({
   testDir: "./e2e",
