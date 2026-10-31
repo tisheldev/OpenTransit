@@ -53,13 +53,18 @@ function useScrollPadding(ref: RefObject<HTMLElement | null>) {
   }, [ref]);
 }
 
-function StartBar({ journey, onStart }: { journey: Journey; onStart: (resume: boolean) => void }) {
+function StartBar({ journey, onStart, disabled }: { journey: Journey; onStart: (resume: boolean) => void; disabled: boolean }) {
   const { t } = useI18n();
   const active = useActiveTrip();
   const resume = active !== null && sameJourney(active.journey, journey);
   return (
     <div className="compare-start">
-      <button type="button" className="button button-primary compare-start-button" onClick={() => onStart(resume)}>
+      <button
+        type="button"
+        className="button button-primary compare-start-button"
+        disabled={disabled}
+        onClick={() => onStart(resume)}
+      >
         {resume ? t("compare.resume") : t("compare.start")}
       </button>
     </div>
@@ -119,9 +124,14 @@ function Suggestions({ exclude, onPick }: { exclude: Endpoint | null; onPick: (e
 }
 
 /** No starting point yet, or "my location" is unavailable: a calm question, not an error. */
-function OriginPrompt({ error, onRetry }: { error: LocationError | null; onRetry: () => void }) {
+function OriginPrompt({ error, onRetry, onPicked }: { error: LocationError | null; onRetry: () => void; onPicked: () => void }) {
   const { t } = useI18n();
   const { draft, setFrom } = usePlan();
+  const pick = (endpoint: Endpoint) => {
+    setFrom(endpoint);
+    // The prompt goes away with the button in it: keep focus on the screen.
+    onPicked();
+  };
   return (
     <div className="compare-prompt" role="status">
       <p className="prompt-title">{t("compare.askFrom")}</p>
@@ -136,7 +146,7 @@ function OriginPrompt({ error, onRetry }: { error: LocationError | null; onRetry
           </button>
         )}
       </div>
-      <Suggestions exclude={draft.to} onPick={setFrom} />
+      <Suggestions exclude={draft.to} onPick={pick} />
     </div>
   );
 }
@@ -198,6 +208,12 @@ export function CompareScreen() {
   const rootRef = useRef<HTMLDivElement>(null);
   useScrollPadding(rootRef);
   const [timeOpen, setTimeOpen] = useState(false);
+  const chipRef = useRef<HTMLButtonElement>(null);
+  /** Close the time panel and give focus back to the chip that opened it. */
+  const closeTime = () => {
+    setTimeOpen(false);
+    chipRef.current?.focus({ preventScroll: true });
+  };
   const [attempt, setAttempt] = useState(0);
   const panelId = "compare-when-panel";
 
@@ -214,6 +230,8 @@ export function CompareScreen() {
   const list = useMemo(() => answer?.response.data.journeys ?? [], [answer]);
   const index = Math.min(selected, Math.max(0, list.length - 1));
   const chosen: Journey | undefined = list[index];
+  // The previous time's answer, shown until the new one arrives (same ends only).
+  const refreshing = built.isPlaceholderData || journeys.isPlaceholderData;
 
   // Trip details for the selected option only, fetched once the options are on screen.
   const refs = useMemo(() => tripRefsOf(chosen), [chosen]);
@@ -263,6 +281,7 @@ export function CompareScreen() {
         }
       : null;
   const openTime = () => setTimeOpen(true);
+  const focusTop = () => rootRef.current?.querySelector<HTMLElement>("h1")?.focus({ preventScroll: true });
 
   const select = (next: number) => {
     setSelected(next);
@@ -285,7 +304,7 @@ export function CompareScreen() {
   if (draft.to === null) {
     body = <DestinationPrompt />;
   } else if (draft.from === null) {
-    body = <OriginPrompt error={null} onRetry={() => setAttempt((n) => n + 1)} />;
+    body = <OriginPrompt error={null} onRetry={() => setAttempt((n) => n + 1)} onPicked={focusTop} />;
   } else if (built.isPending || (planned && journeys.isPending)) {
     body = <OptionsSkeleton />;
   } else if (result && !result.ok) {
@@ -293,9 +312,9 @@ export function CompareScreen() {
       result.reason === "time" ? (
         <TimeProblem result={result} onChangeTime={openTime} />
       ) : result.reason === "location" ? (
-        <OriginPrompt error={result.error} onRetry={() => setAttempt((n) => n + 1)} />
+        <OriginPrompt error={result.error} onRetry={() => setAttempt((n) => n + 1)} onPicked={focusTop} />
       ) : result.reason === "missing_origin" ? (
-        <OriginPrompt error={null} onRetry={() => setAttempt((n) => n + 1)} />
+        <OriginPrompt error={null} onRetry={() => setAttempt((n) => n + 1)} onPicked={focusTop} />
       ) : (
         <DestinationPrompt />
       );
@@ -334,7 +353,10 @@ export function CompareScreen() {
     // Decided from meta.capabilities only (design: Constraints); missing means unavailable.
     const liveOff = !caps || caps.realtime === "not_enabled" || caps.alerts === "not_enabled";
     body = (
-      <>
+      <div className="compare-answer" aria-busy={refreshing} data-refreshing={refreshing || undefined}>
+        <span className="visually-hidden" role="status">
+          {refreshing ? t("compare.loading") : ""}
+        </span>
         {meta.mode === "fixture" && <TestDataBanner />}
         <OptionsChart journeys={list} selected={index} onSelect={select} askedDate={askedDate} />
         <ShiftRow
@@ -348,22 +370,25 @@ export function CompareScreen() {
           trips={trips}
           day={israelDate(chosen.timing.scheduledDeparture) === askedDate ? null : formatShortDay(chosen.timing.scheduledDeparture, lang)}
         />
-      </>
+      </div>
     );
     // While the time is being changed the options are about to change: no Start then
-    // (and the panel's own button is not hidden behind it on the half sheet).
-    footer = timeOpen ? null : <StartBar journey={chosen} onStart={start} />;
+    // (and the panel's own button is not hidden behind it on the half sheet). While a new
+    // time's answer loads, the previous one stays, dimmed, and cannot be started.
+    footer = timeOpen ? null : <StartBar journey={chosen} onStart={start} disabled={refreshing} />;
   } else {
     body = <OptionsSkeleton />;
   }
 
   return (
     <div className="compare" ref={rootRef}>
-      <h1 className="visually-hidden">{t("screen.compare")}</h1>
+      <h1 className="visually-hidden" tabIndex={-1}>
+        {t("screen.compare")}
+      </h1>
       <CompareHeader
-        chip={<WhenChip when={draft.when} open={timeOpen} onToggle={() => setTimeOpen((open) => !open)} panelId={panelId} />}
+        chip={<WhenChip ref={chipRef} when={draft.when} open={timeOpen} onToggle={() => setTimeOpen((open) => !open)} panelId={panelId} />}
       />
-      {timeOpen && <WhenPanel id={panelId} when={draft.when} onChange={changeWhen} onClose={() => setTimeOpen(false)} />}
+      {timeOpen && <WhenPanel id={panelId} when={draft.when} onChange={changeWhen} onClose={closeTime} />}
       <div className="compare-body">{body}</div>
       {footer}
     </div>

@@ -14,6 +14,15 @@ import { daysBetween, formatShortDay, israelDate, optionSpeech, rankKey, transfe
 // and walking. Rank labels are text pills. Selecting a row never sends a request. The
 // list is read as one sentence per option; the drawing is hidden from it.
 
+/** "+1" after a time on the next day (its own left-to-right run, so the sign stays in front). */
+export function NextDay({ days }: { days: number }) {
+  return (
+    <sup className="option-plus">
+      <bdi dir="ltr">{`+${days}`}</bdi>
+    </sup>
+  );
+}
+
 /** A train has no line number: its bar says "רכבת" (an emoji is unreadable on the dark bar). */
 function Segment({ segment, trainLabel }: { segment: ChartSegment; trainLabel: string }) {
   const label = segment.rail ? trainLabel : segment.label;
@@ -73,7 +82,7 @@ export function OptionsChart({
                   <Bdi>{formatClock(row.departure, lang)}</Bdi>
                   <span className="option-dash">–</span>
                   <Bdi>{formatClock(row.arrival, lang)}</Bdi>
-                  {overnight > 0 && <sup className="option-plus">{`+${overnight}`}</sup>}
+                  {overnight > 0 && <NextDay days={overnight} />}
                 </span>
                 {rank && <span className="pill">{t(rankKey[rank])}</span>}
                 {walkOnly && <span className="pill pill-quiet">{t("compare.walkOnly")}</span>}

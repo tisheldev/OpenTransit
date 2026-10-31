@@ -321,6 +321,36 @@ describe("Compare (Hebrew)", () => {
     expect(screen.getByRole("button", { name: /^שינוי השעה: הגעה עד 09:51/ })).toBeInTheDocument();
   });
 
+  it("keeps the previous options, dimmed and not startable, while a new time loads; new ends do not", async () => {
+    let release: () => void = () => {};
+    let calls = 0;
+    server.use(
+      http.post("*/v1/journeys", async () => {
+        calls += 1;
+        if (calls > 1) await new Promise<void>((resolve) => (release = resolve));
+        return respond(fixture("recorded-journey-routes"));
+      }),
+    );
+    const user = userEvent.setup();
+    const { container } = renderCompare();
+    await waitFor(() => expect(options()).toHaveLength(1));
+    const later = screen.getByRole("button", { name: "מאוחר יותר" });
+    await user.click(later);
+    await waitFor(() => expect(calls).toBe(2));
+    // Still on screen, busy, and the button pressed keeps focus.
+    expect(options()).toHaveLength(1);
+    expect(container.querySelector(".compare-answer")).toHaveAttribute("aria-busy", "true");
+    expect(screen.getByRole("button", { name: "התחלת ניווט" })).toBeDisabled();
+    expect(document.activeElement).toBe(later);
+    act(() => release());
+    await waitFor(() => expect(container.querySelector(".compare-answer")).toHaveAttribute("aria-busy", "false"));
+    expect(screen.getByRole("button", { name: "התחלת ניווט" })).toBeEnabled();
+    // Swapping the ends is a different trip: the old answer is not kept.
+    await user.click(screen.getByRole("button", { name: "החלפת מוצא ויעד" }));
+    expect(container.querySelectorAll(".option-placeholder")).toHaveLength(3);
+    act(() => release());
+  });
+
   it("changes the time from the chip: depart, +30, show", async () => {
     const user = userEvent.setup();
     renderCompare();

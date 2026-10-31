@@ -1,4 +1,4 @@
-import { useId, useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState, type Ref } from "react";
 import { useI18n } from "../../i18n/I18nProvider";
 import { formatDuration } from "../../lib/format";
 import { departureInstant, israelWallTime } from "../../lib/time";
@@ -80,16 +80,19 @@ export function WhenChip({
   open,
   onToggle,
   panelId,
+  ref,
 }: {
   when: When;
   open: boolean;
   onToggle: () => void;
   panelId: string;
+  ref?: Ref<HTMLButtonElement>;
 }) {
   const { t, lang } = useI18n();
   const { head, day } = whenSummary(when, t, lang);
   return (
     <button
+      ref={ref}
       type="button"
       className="when-chip"
       aria-expanded={open}
@@ -124,6 +127,15 @@ export interface WhenPanelProps {
 export function WhenPanel({ id, when, onChange, onClose, now = new Date() }: WhenPanelProps) {
   const { t, lang } = useI18n();
   const ids = useId();
+  const formRef = useRef<HTMLFormElement>(null);
+
+  // Opened from anywhere (the chip, or "change time" further down): bring it into view
+  // and put focus on the chosen mode, so keyboard and screen-reader users land in it.
+  useEffect(() => {
+    const form = formRef.current;
+    form?.scrollIntoView?.({ block: "nearest" });
+    form?.querySelector<HTMLInputElement>("input[type=radio]:checked")?.focus({ preventScroll: true });
+  }, []);
   const start = when.mode === "now" ? roundedNow(now) : when.wall;
   const [mode, setMode] = useState<Mode>(when.mode);
   const [day, setDay] = useState(start.slice(0, 10));
@@ -179,9 +191,15 @@ export function WhenPanel({ id, when, onChange, onClose, now = new Date() }: Whe
 
   return (
     <form
+      ref={formRef}
       id={id}
       className="when-panel"
       aria-label={t("compare.when")}
+      onKeyDown={(event) => {
+        if (event.key !== "Escape") return;
+        event.preventDefault();
+        onClose();
+      }}
       onSubmit={(event) => {
         event.preventDefault();
         apply();

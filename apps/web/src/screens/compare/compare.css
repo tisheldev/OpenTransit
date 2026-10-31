@@ -34,6 +34,27 @@
   flex: 1;
 }
 
+.compare-answer {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+/* A new time's answer is on its way: the previous one stays, dimmed, so nothing jumps. */
+.compare-answer .options,
+.compare-answer .route-details {
+  transition: opacity 0.15s ease;
+}
+.compare-answer[data-refreshing] .options,
+.compare-answer[data-refreshing] .route-details {
+  opacity: 0.45;
+}
+@media (prefers-reduced-motion: reduce) {
+  .compare-answer .options,
+  .compare-answer .route-details {
+    transition: none;
+  }
+}
+
 /* Directional glyphs point the reading way ("←" in Hebrew, "→" in English). */
 [dir="ltr"] .compare-flip {
   display: inline-block;
@@ -74,7 +95,9 @@
   overflow: hidden;
 }
 .ends-to {
-  flex-shrink: 1;
+  /* A short destination is never cut; a long one keeps most of the line. */
+  flex-shrink: 0;
+  max-inline-size: 62%;
 }
 .ends-name {
   display: block;

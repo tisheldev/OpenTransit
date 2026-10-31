@@ -7,7 +7,8 @@ import { formatDistance, formatDuration } from "../../lib/format";
 import { formatClock } from "../../lib/time";
 import { isRail, type TransitMode } from "../../plan/chartLayout";
 import { buildItinerary, type ItineraryItem } from "./itinerary";
-import { chipLabel, rideSpeech, rideTitle, stopsRidden, trainNumber, type EndLabels } from "./labels";
+import { chipLabel, daysBetween, israelDate, rideSpeech, rideTitle, stopsRidden, trainNumber, type EndLabels } from "./labels";
+import { NextDay } from "./OptionsChart";
 
 // Route details of the selected option as an itinerary timeline (design: Route details —
 // C04; CU06, CU14): scheduled times on the inline start, a line coloured by mode (solid
@@ -88,6 +89,7 @@ export function RouteDetails({
 }) {
   const { t, lang } = useI18n();
   const items = buildItinerary(journey, ends);
+  const startDate = israelDate(journey.timing.scheduledDeparture);
   return (
     <section className="route-details" aria-labelledby="route-details-title">
       <h2 id="route-details-title" className="route-title">
@@ -106,6 +108,14 @@ export function RouteDetails({
               >
                 <span className="it-time">
                   <Bdi>{formatClock(item.time, lang)}</Bdi>
+                  {daysBetween(startDate, israelDate(item.time)) > 0 && (
+                    <>
+                      <span className="visually-hidden"> ({t("compare.nextDay")})</span>
+                      <span aria-hidden="true">
+                        <NextDay days={daysBetween(startDate, israelDate(item.time))} />
+                      </span>
+                    </>
+                  )}
                 </span>
                 <span className="it-rail" aria-hidden="true">
                   <span className="it-dot" />
