@@ -18,12 +18,17 @@ services:
   api:
     build:
       context: ./services/api
+      # The Dockerfile's Node stage builds the web client from this named context.
+      additional_contexts:
+        web: ./apps/web
     mem_limit: 1g
     ports: ["127.0.0.1:8000:8000"]
     environment:
       OPENTRANSIT_MOTIS_URL: http://motis:8080
       OPENTRANSIT_MANIFEST: /generation/manifest.json
       OPENTRANSIT_PLAYGROUND: "1"
+      # Serve the image's built web client at http://127.0.0.1:8000/app/ (off when unset).
+      OPENTRANSIT_CLIENT_DIR: /app/client
       # Same as the API defaults when unset: limiter on, no trusted proxies. Set
       # OPENTRANSIT_RATE_LIMIT_ENABLED=0 for load/corpus runs; set OPENTRANSIT_TRUSTED_PROXIES
       # (CIDR list) only when a reverse proxy fronts this service.
