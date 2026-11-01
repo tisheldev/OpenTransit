@@ -1,0 +1,114 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/places",
+    "params": {
+      "q": "דיזנגוף 50 תל אביב",
+      "type": "address"
+    },
+    "body": null
+  },
+  "status": 200,
+  "body": {
+    "data": [
+      {
+        "kind": "address",
+        "name": "דיזנגוף 50, Tel Aviv-Yafo",
+        "displayName": "דיזנגוף 50, Tel Aviv-Yafo",
+        "languageUsed": "he",
+        "locality": "Tel Aviv-Yafo",
+        "coordinates": {
+          "latitude": 32.075449,
+          "longitude": 34.7753209
+        },
+        "street": "דיזנגוף",
+        "houseNumber": "50",
+        "addressLevel": "house_number",
+        "precision": "address_node",
+        "osmType": "N",
+        "osmId": "2556121309",
+        "candidateIdentityHash": "aad6690f2ed1edc5d2c41a61b5dc856c4f0afb451559df73d4b6c5b60a707545",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiJhYWQ2NjkwZjJlZDFlZGM1ZDJjNDFhNjFiNWRjODU2YzRmMGFmYjQ1MTU1OWRmNzNkNGI2YzViNjBhNzA3NTQ1IiwiY29vcmRpbmF0ZXMiOlszMi4wNzU0NDksMzQuNzc1MzIwOV0sImdlbmVyYXRpb25JZCI6IjJkOGVjMjc0NmJiNTAwYWJhY2QwZjM4MzMxNmQyMzYxNmZjZjFkYzRiM2UyMDEwNGIxNGMyY2IxMzlhYWQ0NDUiLCJraW5kIjoiYWRkcmVzcyJ9",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiJhYWQ2NjkwZjJlZDFlZGM1ZDJjNDFhNjFiNWRjODU2YzRmMGFmYjQ1MTU1OWRmNzNkNGI2YzViNjBhNzA3NTQ1IiwiY29vcmRpbmF0ZXMiOlszMi4wNzU0NDksMzQuNzc1MzIwOV0sImdlbmVyYXRpb25JZCI6IjJkOGVjMjc0NmJiNTAwYWJhY2QwZjM4MzMxNmQyMzYxNmZjZjFkYzRiM2UyMDEwNGIxNGMyY2IxMzlhYWQ0NDUiLCJraW5kIjoiYWRkcmVzcyJ9"
+        }
+      },
+      {
+        "kind": "address",
+        "name": "דיזנגוף 50, תל־אביב–יפו",
+        "displayName": "דיזנגוף 50, תל־אביב–יפו",
+        "languageUsed": "he",
+        "locality": "תל־אביב–יפו",
+        "coordinates": {
+          "latitude": 32.0756734,
+          "longitude": 34.7744256
+        },
+        "street": "דיזנגוף",
+        "houseNumber": "50",
+        "addressLevel": "house_number",
+        "precision": "address_node",
+        "osmType": "N",
+        "osmId": "4743043522",
+        "candidateIdentityHash": "daa9ee52e3318e54ac7b9ac8c46067d4fa6fe1364d2864f32841e939a03c1893",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiJkYWE5ZWU1MmUzMzE4ZTU0YWM3YjlhYzhjNDYwNjdkNGZhNmZlMTM2NGQyODY0ZjMyODQxZTkzOWEwM2MxODkzIiwiY29vcmRpbmF0ZXMiOlszMi4wNzU2NzM0LDM0Ljc3NDQyNTZdLCJnZW5lcmF0aW9uSWQiOiIyZDhlYzI3NDZiYjUwMGFiYWNkMGYzODMzMTZkMjM2MTZmY2YxZGM0YjNlMjAxMDRiMTRjMmNiMTM5YWFkNDQ1Iiwia2luZCI6ImFkZHJlc3MifQ",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiJkYWE5ZWU1MmUzMzE4ZTU0YWM3YjlhYzhjNDYwNjdkNGZhNmZlMTM2NGQyODY0ZjMyODQxZTkzOWEwM2MxODkzIiwiY29vcmRpbmF0ZXMiOlszMi4wNzU2NzM0LDM0Ljc3NDQyNTZdLCJnZW5lcmF0aW9uSWQiOiIyZDhlYzI3NDZiYjUwMGFiYWNkMGYzODMzMTZkMjM2MTZmY2YxZGM0YjNlMjAxMDRiMTRjMmNiMTM5YWFkNDQ1Iiwia2luZCI6ImFkZHJlc3MifQ"
+        }
+      },
+      {
+        "kind": "address",
+        "name": "דיזנגוף 50, תל־אביב–יפו",
+        "displayName": "דיזנגוף 50, תל־אביב–יפו",
+        "languageUsed": "he",
+        "locality": "תל־אביב–יפו",
+        "coordinates": {
+          "latitude": 32.075215,
+          "longitude": 34.775697
+        },
+        "street": "דיזנגוף",
+        "houseNumber": "50",
+        "addressLevel": "house_number",
+        "precision": "address_node",
+        "osmType": "N",
+        "osmId": "2079192311",
+        "candidateIdentityHash": "71fe21e5993785ffdcd00bdbfe2c197dbdcbc43de8d81a62dfdff4d2d5a79bb9",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiI3MWZlMjFlNTk5Mzc4NWZmZGNkMDBiZGJmZTJjMTk3ZGJkY2JjNDNkZThkODFhNjJkZmRmZjRkMmQ1YTc5YmI5IiwiY29vcmRpbmF0ZXMiOlszMi4wNzUyMTUsMzQuNzc1Njk3XSwiZ2VuZXJhdGlvbklkIjoiMmQ4ZWMyNzQ2YmI1MDBhYmFjZDBmMzgzMzE2ZDIzNjE2ZmNmMWRjNGIzZTIwMTA0YjE0YzJjYjEzOWFhZDQ0NSIsImtpbmQiOiJhZGRyZXNzIn0",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiI3MWZlMjFlNTk5Mzc4NWZmZGNkMDBiZGJmZTJjMTk3ZGJkY2JjNDNkZThkODFhNjJkZmRmZjRkMmQ1YTc5YmI5IiwiY29vcmRpbmF0ZXMiOlszMi4wNzUyMTUsMzQuNzc1Njk3XSwiZ2VuZXJhdGlvbklkIjoiMmQ4ZWMyNzQ2YmI1MDBhYmFjZDBmMzgzMzE2ZDIzNjE2ZmNmMWRjNGIzZTIwMTA0YjE0YzJjYjEzOWFhZDQ0NSIsImtpbmQiOiJhZGRyZXNzIn0"
+        }
+      }
+    ],
+    "meta": {
+      "requestId": "00000000000000000000000000000000",
+      "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+      "generatedAt": "2026-10-31T17:31:08.205885Z",
+      "dataBuiltAt": "2026-10-31T12:18:07.213453Z",
+      "mode": "real",
+      "coverage": {
+        "from": "2026-10-31T00:00:00+02:00",
+        "until": "2026-11-30T00:00:00+02:00"
+      },
+      "freshness": "current",
+      "capabilities": {
+        "realtime": "not_enabled",
+        "alerts": "not_enabled"
+      },
+      "attribution": [
+        "Israel Ministry of Transport",
+        "© OpenStreetMap contributors"
+      ],
+      "rankingPolicy": "motis-v2.11.2-feasible-engine-order-v1",
+      "appliedConstraints": {},
+      "warnings": []
+    },
+    "matchedTypes": [
+      "address"
+    ],
+    "unavailableTypes": [],
+    "partial": false,
+    "rankingPolicy": "alternating-stop-and-geocoder-order-v1"
+  }
+}

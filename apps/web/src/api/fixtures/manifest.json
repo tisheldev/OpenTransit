@@ -39,6 +39,216 @@
     "generationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
     "recordedAt": "2026-09-30T19:16:01.793965+00:00"
   },
+  "recorded-live-departures-page-1": {
+    "provenance": "recorded",
+    "source": "live API via apps/web/scripts/record-fixtures.mjs",
+    "sourceSha256": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+    "case": "departures-page-1",
+    "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+    "originClass": "loopback",
+    "departAt": "2026-11-02T08:00:00+02:00",
+    "recordedAt": "2026-10-31T17:31:10.040Z"
+  },
+  "recorded-live-departures-page-2": {
+    "provenance": "recorded",
+    "source": "live API via apps/web/scripts/record-fixtures.mjs",
+    "sourceSha256": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+    "case": "departures-page-2",
+    "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+    "originClass": "loopback",
+    "departAt": "2026-11-02T08:00:00+02:00",
+    "recordedAt": "2026-10-31T17:31:10.040Z"
+  },
+  "recorded-live-journey-no-route": {
+    "provenance": "recorded",
+    "source": "live API via apps/web/scripts/record-fixtures.mjs",
+    "sourceSha256": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+    "case": "no route: Dizengoff Center -> Technion by light rail only",
+    "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+    "originClass": "loopback",
+    "departAt": "2026-11-02T08:00:00+02:00",
+    "recordedAt": "2026-10-31T17:31:10.040Z"
+  },
+  "recorded-live-journey-routes": {
+    "provenance": "recorded",
+    "source": "live API via apps/web/scripts/record-fixtures.mjs",
+    "sourceSha256": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+    "case": "routes found: Dizengoff Center -> Technion, weekday 08:00 (rail with transfers)",
+    "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+    "originClass": "loopback",
+    "departAt": "2026-11-02T08:00:00+02:00",
+    "recordedAt": "2026-10-31T17:31:10.040Z"
+  },
+  "recorded-live-places-address-he": {
+    "provenance": "recorded",
+    "source": "live API via apps/web/scripts/record-fixtures.mjs",
+    "sourceSha256": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+    "case": "address search, Hebrew",
+    "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+    "originClass": "loopback",
+    "departAt": "2026-11-02T08:00:00+02:00",
+    "recordedAt": "2026-10-31T17:31:10.040Z"
+  },
+  "recorded-live-places-empty": {
+    "provenance": "recorded",
+    "source": "live API via apps/web/scripts/record-fixtures.mjs",
+    "sourceSha256": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+    "case": "valid empty search",
+    "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+    "originClass": "loopback",
+    "departAt": "2026-11-02T08:00:00+02:00",
+    "recordedAt": "2026-10-31T17:31:10.040Z"
+  },
+  "recorded-live-places-mixed-en": {
+    "provenance": "recorded",
+    "source": "live API via apps/web/scripts/record-fixtures.mjs",
+    "sourceSha256": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+    "case": "all categories, English",
+    "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+    "originClass": "loopback",
+    "departAt": "2026-11-02T08:00:00+02:00",
+    "recordedAt": "2026-10-31T17:31:10.040Z"
+  },
+  "recorded-live-places-poi-en": {
+    "provenance": "recorded",
+    "source": "live API via apps/web/scripts/record-fixtures.mjs",
+    "sourceSha256": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+    "case": "POI search, English",
+    "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+    "originClass": "loopback",
+    "departAt": "2026-11-02T08:00:00+02:00",
+    "recordedAt": "2026-10-31T17:31:10.040Z"
+  },
+  "recorded-live-places-poi-he": {
+    "provenance": "recorded",
+    "source": "live API via apps/web/scripts/record-fixtures.mjs",
+    "sourceSha256": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+    "case": "POI search, Hebrew",
+    "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+    "originClass": "loopback",
+    "departAt": "2026-11-02T08:00:00+02:00",
+    "recordedAt": "2026-10-31T17:31:10.040Z"
+  },
+  "recorded-live-places-stop-en": {
+    "provenance": "recorded",
+    "source": "live API via apps/web/scripts/record-fixtures.mjs",
+    "sourceSha256": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+    "case": "stop search, English",
+    "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+    "originClass": "loopback",
+    "departAt": "2026-11-02T08:00:00+02:00",
+    "recordedAt": "2026-10-31T17:31:10.040Z"
+  },
+  "recorded-live-places-stop-he": {
+    "provenance": "recorded",
+    "source": "live API via apps/web/scripts/record-fixtures.mjs",
+    "sourceSha256": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+    "case": "stop search, Hebrew",
+    "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+    "originClass": "loopback",
+    "departAt": "2026-11-02T08:00:00+02:00",
+    "recordedAt": "2026-10-31T17:31:10.040Z"
+  },
+  "recorded-live-problem-outside-window": {
+    "provenance": "recorded",
+    "source": "live API via apps/web/scripts/record-fixtures.mjs",
+    "sourceSha256": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+    "case": "OUTSIDE_SERVICE_WINDOW",
+    "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+    "originClass": "loopback",
+    "departAt": "2026-11-02T08:00:00+02:00",
+    "recordedAt": "2026-10-31T17:31:10.040Z"
+  },
+  "recorded-live-problem-trip-not-found": {
+    "provenance": "recorded",
+    "source": "live API via apps/web/scripts/record-fixtures.mjs",
+    "sourceSha256": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+    "case": "problem-trip-not-found",
+    "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+    "originClass": "loopback",
+    "departAt": "2026-11-02T08:00:00+02:00",
+    "recordedAt": "2026-10-31T17:31:10.040Z"
+  },
+  "recorded-live-route": {
+    "provenance": "recorded",
+    "source": "live API via apps/web/scripts/record-fixtures.mjs",
+    "sourceSha256": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+    "case": "route",
+    "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+    "originClass": "loopback",
+    "departAt": "2026-11-02T08:00:00+02:00",
+    "recordedAt": "2026-10-31T17:31:10.040Z"
+  },
+  "recorded-live-route-patterns": {
+    "provenance": "recorded",
+    "source": "live API via apps/web/scripts/record-fixtures.mjs",
+    "sourceSha256": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+    "case": "route-patterns",
+    "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+    "originClass": "loopback",
+    "departAt": "2026-11-02T08:00:00+02:00",
+    "recordedAt": "2026-10-31T17:31:10.040Z"
+  },
+  "recorded-live-routes": {
+    "provenance": "recorded",
+    "source": "live API via apps/web/scripts/record-fixtures.mjs",
+    "sourceSha256": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+    "case": "routes",
+    "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+    "originClass": "loopback",
+    "departAt": "2026-11-02T08:00:00+02:00",
+    "recordedAt": "2026-10-31T17:31:10.040Z"
+  },
+  "recorded-live-status": {
+    "provenance": "recorded",
+    "source": "live API via apps/web/scripts/record-fixtures.mjs",
+    "sourceSha256": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+    "case": "status",
+    "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+    "originClass": "loopback",
+    "departAt": "2026-11-02T08:00:00+02:00",
+    "recordedAt": "2026-10-31T17:31:10.040Z"
+  },
+  "recorded-live-stop": {
+    "provenance": "recorded",
+    "source": "live API via apps/web/scripts/record-fixtures.mjs",
+    "sourceSha256": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+    "case": "stop",
+    "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+    "originClass": "loopback",
+    "departAt": "2026-11-02T08:00:00+02:00",
+    "recordedAt": "2026-10-31T17:31:10.040Z"
+  },
+  "recorded-live-stops-near": {
+    "provenance": "recorded",
+    "source": "live API via apps/web/scripts/record-fixtures.mjs",
+    "sourceSha256": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+    "case": "stops-near",
+    "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+    "originClass": "loopback",
+    "departAt": "2026-11-02T08:00:00+02:00",
+    "recordedAt": "2026-10-31T17:31:10.040Z"
+  },
+  "recorded-live-trip": {
+    "provenance": "recorded",
+    "source": "live API via apps/web/scripts/record-fixtures.mjs",
+    "sourceSha256": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+    "case": "trip detail of a real engine trip ID containing ':'",
+    "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+    "originClass": "loopback",
+    "departAt": "2026-11-02T08:00:00+02:00",
+    "recordedAt": "2026-10-31T17:31:10.040Z"
+  },
+  "recorded-live-trip-rail": {
+    "provenance": "recorded",
+    "source": "live API via apps/web/scripts/record-fixtures.mjs",
+    "sourceSha256": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+    "case": "rail trip detail",
+    "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+    "originClass": "loopback",
+    "departAt": "2026-11-02T08:00:00+02:00",
+    "recordedAt": "2026-10-31T17:31:10.040Z"
+  },
   "recorded-places-address-he": {
     "provenance": "recorded",
     "source": "services/api/results/m3-m4-functional-http-20260930-01.json",
