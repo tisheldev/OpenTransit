@@ -1,6 +1,6 @@
 #!/bin/bash
 # OpenTransit H-1 build host: first-boot setup (EC2 user data, runs once at launch).
-# Rendered by deploy/aws/tools/build_host.py, which replaces the {{...}} values. It installs the
+# Rendered by deploy/aws/tools/build_host.py, which fills in the double-brace placeholders. It installs the
 # distribution packages (dnf is locked to the AMI's release version), clones the repository at the
 # ref stored in SSM Parameter Store and runs install.sh. Later boots run the daily refresh unit.
 set -euxo pipefail
