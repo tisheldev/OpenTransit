@@ -1,6 +1,6 @@
 # MOT follow-up email — DRAFT, NOT SENT
 
-**DRAFT, NOT SENT.** Prepared 31 October 2026 for the user to review. Nothing has been sent and no terms have been accepted. If you send it, record the send date in the [access record](../data-usage-and-access.md#checkpoint-result--19-october-2026).
+**DRAFT, NOT SENT — superseded.** Prepared 31 October 2026. The user chose instead to send a much shorter follow-up asking only about SIRI access, on 31 October 2026 ([sent record](../data-usage-and-access.md#follow-up-sent--31-october-2026)). The terms questions below were not asked; keep them for reference. No terms have been accepted.
 
 Before sending:
 
