@@ -1,0 +1,2 @@
+# Windows Task Scheduler wrappers run under cmd.exe, which needs CRLF.
+*.cmd text eol=crlf
