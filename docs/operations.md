@@ -6,6 +6,11 @@ staging, dependency ordering, task variants, IAM, ingress and bounded-test clean
 See [development](development.md) for local setup and [policies](policies/privacy.md)
 for the proposed logging contract. Do not infer deployment/spending authorization.
 
+**Operating from another computer:** prerequisites, pinned build tools, AWS sign-in and the
+durable archive (S3 bucket `opentransit-archive-eun1-7c41d2`, `eu-north-1`, versioned) are in
+[continue from another computer](development.md#continue-from-another-computer); what remains
+only on the operator PC is listed in the [portability record](../services/api/results/portability-20261101-01.json).
+
 ## Incident checks and evidence
 
 Record UTC onset, symptom, release/task revision, all image digests, public generation
