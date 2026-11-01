@@ -4,6 +4,7 @@ import { createQueryClient } from "./api/queries";
 import { App } from "./App";
 import "./styles/tokens.css";
 import "./styles/global.css";
+import "./styles/shell.css";
 
 async function start() {
   // Fixture mode exists only in the dev server (`vite --mode fixtures`); the condition

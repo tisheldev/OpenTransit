@@ -69,6 +69,7 @@ JAVA_IMAGE_BASE = "eclipse-temurin:21.0.12.1_1-jre"
 PHOTON_JAR_CONTAINER_PATH = "/opt/photon/photon-1.3.0.jar"
 PHOTON_USER = "10001:10001"
 API_USER = "10001"
+CLIENT_CONTAINER_PATH = "/client"  # --client-dir mount (read-only) for OPENTRANSIT_CLIENT_DIR
 
 # Hard caps (docker run --memory == --memory-swap) and the allowed host port range.
 MEMORY_CAPS = {"motis": "2g", "photon": "1g", "api": "1g", "verifier": "512m", "photon-init": "64m"}
@@ -528,6 +529,7 @@ def api_argv(
     *,
     photon: bool,
     cpus: str | None,
+    client_dir: Path | None = None,
 ) -> list[str]:
     env = [
         "OPENTRANSIT_MANIFEST=/generation/manifest.json",
@@ -541,6 +543,11 @@ def api_argv(
             "OPENTRANSIT_PHOTON_ADMIN_URL=http://127.0.0.1:9201",
             "OPENTRANSIT_PHOTON_URL=http://127.0.0.1:2322",
         ]
+    client = []
+    if client_dir is not None:
+        # A built web client served at /app/, so the real e2e suite runs same-origin.
+        env.append(f"OPENTRANSIT_CLIENT_DIR={CLIENT_CONTAINER_PATH}")
+        client = mount(client_dir, CLIENT_CONTAINER_PATH)
     args = [
         "docker", "run", "--detach", "--name", container_name(run_id, "api"),
         *_caps("api", cpus), "--read-only", "--tmpfs", "/tmp", "--user", API_USER,
@@ -551,7 +558,7 @@ def api_argv(
         args += ["--env", item]
     args += [
         *mount(generation, "/generation"), *mount(src, "/src"), *mount(work, "/run/opentransit"),
-        api_image, "/app/.venv/bin/uvicorn", "opentransit.api.app:create_app", "--factory",
+        *client, api_image, "/app/.venv/bin/uvicorn", "opentransit.api.app:create_app", "--factory",
         "--host", "0.0.0.0", "--port", "8000", "--no-access-log", "--log-level", "info",
         "--timeout-graceful-shutdown", "25",
     ]  # fmt: skip
@@ -572,6 +579,7 @@ class Runner:
     probe_corpus: Path | None = None
     service_date: date | None = None
     cpus: str | None = None
+    client_dir: Path | None = None
     steps: tuple[str, ...] = STEPS
     keep_stack: bool = False
     warm_search: bool = True
@@ -594,6 +602,12 @@ class Runner:
 
     def __post_init__(self) -> None:
         self.generation = Path(self.generation).resolve(strict=True)
+        if self.client_dir is not None:
+            self.client_dir = Path(self.client_dir).resolve(strict=True)
+            if not (self.client_dir / "index.html").is_file():
+                raise ValueError(
+                    f"--client-dir has no index.html (run npm run build): {self.client_dir}"
+                )
         self.run_id = sanitize_run_id(self.run_id)
         self.paths = output_paths(self.prefix)
         self.manifest = json.loads((self.generation / "manifest.json").read_text(encoding="utf-8"))
@@ -866,7 +880,7 @@ class Runner:
         )
         argv = api_argv(
             self.run_id, self.images["api"]["reference"], self.generation, API_SRC, work,
-            photon=photon, cpus=self.cpus,
+            photon=photon, cpus=self.cpus, client_dir=self.client_dir,
         )  # fmt: skip
         self.docker(*argv[1:], timeout=300)
         self.containers_started.append(container_name(self.run_id, "api"))
@@ -890,6 +904,7 @@ class Runner:
             healthzAfterSeconds=healthy_after, firstReadyzOkAfterSeconds=first_ok,
             preReadyFailures=pre_ready[:10], preReadyFailureCount=len(pre_ready),
             photonBound=photon, apiImage=self.images["api"]["id"],
+            clientServed=self.client_dir is not None,
         )  # fmt: skip
 
     def step_readyz(self) -> None:
@@ -1255,6 +1270,11 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     )
     parser.add_argument("--cpus", help="optional docker --cpus value for MOTIS/Photon/API")
     parser.add_argument(
+        "--client-dir",
+        type=Path,
+        help="built web client (apps/web/dist) mounted read-only and served by the API at /app/",
+    )
+    parser.add_argument(
         "--steps", default=",".join(STEPS), help="comma list of: " + ", ".join(STEPS)
     )
     parser.add_argument(
@@ -1286,7 +1306,7 @@ def main(argv: list[str] | None = None) -> int:
             generation=args.generation, run_id=args.run_id, prefix=args.results_prefix,
             port=args.port, api_image=args.api_image, photon_jar=args.photon_jar,
             probe_corpus=args.probe_corpus, service_date=args.service_date, cpus=args.cpus,
-            steps=args.steps, keep_stack=args.keep_stack,
+            client_dir=args.client_dir, steps=args.steps, keep_stack=args.keep_stack,
             warm_search=not args.no_warm_search, attach=args.attach,
             readyz_interval=args.readyz_interval, start_timeout=args.start_timeout,
         )  # fmt: skip
