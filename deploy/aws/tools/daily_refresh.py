@@ -15,16 +15,25 @@ under ``--logs`` (default ``D:/ot/logs``):
 6. ``push --execute-aws --wait``: register, update the service and wait for convergence;
 7. ``alb-probe``: ``/readyz``, ``/v1/status``, the ten probe journeys and the demo through the
    ALB from this machine;
-8. ``retention``: ``opentransit prune --dry-run`` records candidates; nothing is deleted.
+8. ``archive`` (with ``--archive-bucket``): source files content-addressed by SHA-256, the check
+   record, the generation manifest, pipeline record and probe, and the release records;
+9. ``retention``: ``opentransit prune --dry-run`` records candidates; nothing is deleted;
+10. ``host-cleanup`` (cloud build host only, ``--host-cleanup``): frees the host's bounded disk
+    of copies that are archived elsewhere (see ``host_cleanup``).
 
 The serving release is tracked in ``<releases>/current.json`` (``release`` and ``previous``
-paths); it moves only after a converged deployment. Exit 0 only if every step passed.
+paths); it moves only after a converged deployment. When the serving generation is not on this
+machine (the cloud build host's first run), the feed counts as changed and a new generation is
+built ("bootstrap"). Exit 0 only if every step passed; the log's last line is
+``OPENTRANSIT_REFRESH_RESULT outcome=<ok|failed> mode=<built|bootstrap|unchanged|->`` and with
+``--archive-bucket`` a one-line summary goes to ``runs/<stamp>.json``.
 """
 
 from __future__ import annotations
 
 import argparse
 import json
+import shutil
 import subprocess
 import sys
 import time
@@ -74,9 +83,13 @@ class Job:
             stream.write(text if text.endswith("\n") else text + "\n")
 
     def save(self) -> None:
-        self.summary_path.write_text(json.dumps(self.summary, indent=2) + "\n", encoding="utf-8")
+        self.summary_path.write_text(
+            json.dumps(self.summary, indent=2) + "\n", encoding="utf-8"
+        )
 
-    def run(self, name: str, argv: list[str], *, env: dict | None = None, ok=(0,)) -> str:
+    def run(
+        self, name: str, argv: list[str], *, env: dict | None = None, ok=(0,)
+    ) -> str:
         """Run one command, log it, record the step; raise StepFailed on a bad exit code."""
         started = time.monotonic()
         self.log(f"\n=== {now()} {name}: {' '.join(map(str, argv))}")
@@ -104,7 +117,15 @@ class Job:
         self.save()
 
     def opentransit(self, *args) -> list[str]:
-        return ["uv", "run", "--project", REPO / "services/api", "--locked", "opentransit", *args]
+        return [
+            "uv",
+            "run",
+            "--project",
+            REPO / "services/api",
+            "--locked",
+            "opentransit",
+            *args,
+        ]
 
     def publisher(self, *args) -> list[str]:
         script = TOOLS / "publish_generation.py"
@@ -119,6 +140,36 @@ class Job:
             *args,
         ]
 
+    def aws(self, *args) -> list[str]:
+        profile = ["--profile", self.args.profile] if self.args.profile else []
+        return ["aws", *profile, "--region", REGION, *args]
+
+    def s3_has(self, key: str) -> bool:
+        done = subprocess.run(
+            self.aws(
+                "s3api",
+                "head-object",
+                "--bucket",
+                self.args.archive_bucket,
+                "--key",
+                key,
+            ),
+            capture_output=True,
+        )
+        return done.returncode == 0
+
+    def s3_put(self, path: Path, key: str) -> None:
+        argv = self.aws("s3", "cp", "--only-show-errors", str(path), self.s3(key))
+        done = subprocess.run(argv, capture_output=True, text=True)
+        self.log(
+            f"--- s3 cp {path} {key}: exit {done.returncode} {done.stderr.strip()}"
+        )
+        if done.returncode != 0:
+            raise StepFailed(f"archive upload {key} failed")
+
+    def s3(self, key: str) -> str:
+        return f"s3://{self.args.archive_bucket}/{key}"
+
 
 def now() -> str:
     return datetime.now(UTC).isoformat(timespec="seconds")
@@ -128,26 +179,52 @@ def sha_pair(manifest: dict) -> dict:
     return {name: manifest["inputs"][name]["sha256"] for name in (GTFS, TRIPS)}
 
 
+def serving_pair(release: dict, manifest: dict | None) -> dict | None:
+    """The serving pair from its manifest, else from the release's renewing source check."""
+    if manifest is not None:
+        return sha_pair(manifest)
+    sources = (release.get("sourceCheck") or {}).get("sources") or {}
+    if not {"gtfs", "trip_id_to_date"} <= sources.keys():
+        return None
+    return {
+        GTFS: sources["gtfs"]["sha256"],
+        TRIPS: sources["trip_id_to_date"]["sha256"],
+    }
+
+
 def load_current(releases: Path) -> tuple[dict, dict, Path, Path | None]:
     pointer = json.loads((releases / "current.json").read_text(encoding="utf-8"))
     current_path = Path(pointer["release"])
     current = json.loads(current_path.read_text(encoding="utf-8"))
-    plan = json.loads((current_path.parent / "release-plan.json").read_text(encoding="utf-8"))
+    plan = json.loads(
+        (current_path.parent / "release-plan.json").read_text(encoding="utf-8")
+    )
     previous = Path(pointer["previous"]) if pointer.get("previous") else None
     return current, plan, current_path, previous
 
 
 def alb_url(repo: Path) -> str:
     evidence = json.loads(
-        (repo / "services/api/results/h1-preview-20261031-01.json").read_text(encoding="utf-8")
+        (repo / "services/api/results/h1-preview-20261031-01.json").read_text(
+            encoding="utf-8"
+        )
     )
-    lbs = [r for r in evidence["resources"] if r["type"] == "load-balancer" and not r["deletedAt"]]
+    lbs = [
+        r
+        for r in evidence["resources"]
+        if r["type"] == "load-balancer" and not r["deletedAt"]
+    ]
     return "http://" + lbs[-1]["dnsName"]
 
 
 def alb_probe(job: Job, base: str, corpus_path: Path) -> dict:
     """The H-0 probe through the ALB (readiness, status, ten journeys, latency, demo)."""
-    result: dict = {"base": base, "from": "operator machine (Israel)"}
+    origin = (
+        "cloud build host (H-1 VPC)"
+        if job.args.alb_url
+        else "operator machine (Israel)"
+    )
+    result: dict = {"base": base, "from": origin}
     status, ms, payload = h0.http("GET", base + "/readyz")
     result["readyz"] = {"status": status, "ms": round(ms, 1)}
     status, ms, payload = h0.http("GET", base + "/v1/status")
@@ -166,13 +243,21 @@ def alb_probe(job: Job, base: str, corpus_path: Path) -> dict:
             "departAt": case.get("probeTime") or params["time"],
             "results": 1,
         }
-        status, ms, payload = h0.http("POST", base + "/v1/journeys", request, timeout=60)
-        count = len(json.loads(payload)["data"].get("journeys", [])) if status == 200 else None
+        status, ms, payload = h0.http(
+            "POST", base + "/v1/journeys", request, timeout=60
+        )
+        count = (
+            len(json.loads(payload)["data"].get("journeys", []))
+            if status == 200
+            else None
+        )
         expected = case.get("expect", {}).get("outcome")
         passed = status == 200 and (
             expected == "either" or ((count or 0) > 0) == (expected == "route")
         )
-        journeys.append({"id": case["id"], "status": status, "ms": round(ms, 1), "pass": passed})
+        journeys.append(
+            {"id": case["id"], "status": status, "ms": round(ms, 1), "pass": passed}
+        )
     result["journeys"] = journeys
     result["journeysPassed"] = sum(j["pass"] for j in journeys)
     demo = subprocess.run(
@@ -225,7 +310,8 @@ def local_probe(job: Job, generation: Path, corpus: Path) -> None:
         while time.monotonic() < deadline:
             status, _, _ = h0.http(
                 "GET",
-                engine + "/api/v6/plan?fromPlace=32.0836,34.7981&toPlace=32.0838,34.8044",
+                engine
+                + "/api/v6/plan?fromPlace=32.0836,34.7981&toPlace=32.0838,34.8044",
                 timeout=10,
             )
             if status == 200:
@@ -252,18 +338,47 @@ def local_probe(job: Job, generation: Path, corpus: Path) -> None:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     parser.add_argument("--source-root", type=Path, default=Path("D:/ot/src"))
-    parser.add_argument("--generations-root", type=Path, default=Path("D:/ot/generations"))
+    parser.add_argument(
+        "--generations-root", type=Path, default=Path("D:/ot/generations")
+    )
     parser.add_argument("--logs", type=Path, default=Path("D:/ot/logs"))
     parser.add_argument("--releases", type=Path, default=Path("D:/ot/releases"))
     parser.add_argument(
-        "--photon-jar", type=Path, default=CODEX_RT / "m4-photon-spike-20260930/photon-1.3.0.jar"
+        "--photon-jar",
+        type=Path,
+        default=CODEX_RT / "m4-photon-spike-20260930/photon-1.3.0.jar",
     )
-    parser.add_argument("--osm-reader-path", type=Path, default=CODEX_RT / "osm-reader-20260930")
     parser.add_argument(
-        "--corpus", type=Path, default=REPO / "services/api/tools/acceptance-probe-corpus.json"
+        "--osm-reader-path", type=Path, default=CODEX_RT / "osm-reader-20260930"
+    )
+    parser.add_argument(
+        "--corpus",
+        type=Path,
+        default=REPO / "services/api/tools/acceptance-probe-corpus.json",
     )
     parser.add_argument("--probe-port", type=int, default=59380)
-    parser.add_argument("--profile", default=PROFILE)
+    parser.add_argument(
+        "--profile",
+        default=PROFILE,
+        help="AWS CLI profile; '' uses the environment's credentials",
+    )
+    parser.add_argument(
+        "--alb-url", help="post-deploy probe base URL (default: the H-1 evidence)"
+    )
+    parser.add_argument(
+        "--archive-bucket", help="S3 bucket for sources, records and summaries"
+    )
+    parser.add_argument(
+        "--min-free-gib",
+        type=float,
+        default=0,
+        help="refuse to start below this much free disk",
+    )
+    parser.add_argument(
+        "--host-cleanup",
+        action="store_true",
+        help="cloud build host: remove archived local copies after a successful run",
+    )
     args = parser.parse_args(argv)
     job = Job(args)
     code = 1
@@ -278,14 +393,186 @@ def main(argv: list[str] | None = None) -> int:
     job.summary["outcome"] = "ok" if code == 0 else "failed"
     job.save()
     job.log(f"\n=== {now()} outcome {job.summary['outcome']}")
+    job.log(
+        f"OPENTRANSIT_REFRESH_RESULT outcome={job.summary['outcome']} "
+        f"mode={job.summary.get('mode', '-')} stamp={job.stamp}"
+    )
+    if args.archive_bucket:
+        upload_summary(job)
     return code
+
+
+def upload_summary(job: Job) -> None:
+    """One-line summary at ``runs/<stamp>.json``, the full summary and log beside it."""
+    s = job.summary
+    line = {
+        "stamp": job.stamp,
+        "outcome": s["outcome"],
+        "mode": s.get("mode"),
+        "failure": s.get("failure"),
+        "failedStep": next((x["step"] for x in s["steps"] if not x["ok"]), None),
+        "startedAt": s["startedAt"],
+        "finishedAt": s["finishedAt"],
+        "generationId": (s.get("deployed") or {}).get("generationId"),
+        "taskDefinition": (s.get("deployed") or {}).get("taskDefinition"),
+        "sourceSha256": (s.get("source") or {}).get("sha256"),
+    }
+    one = job.work / "run-summary.json"
+    one.write_text(json.dumps(line, separators=(",", ":")) + "\n", encoding="utf-8")
+    for path, key in (
+        (one, f"runs/{job.stamp}.json"),
+        (job.summary_path, f"runs/{job.stamp}/summary.json"),
+        (job.log_path, f"runs/{job.stamp}/daily.log"),
+    ):
+        done = subprocess.run(
+            job.aws("s3", "cp", "--only-show-errors", str(path), job.s3(key)),
+            capture_output=True,
+            text=True,
+        )
+        if done.returncode != 0:  # the run's own outcome is already decided; log loudly
+            job.log(f"!!! summary upload {key} failed: {done.stderr.strip()}")
+
+
+def archive(
+    job: Job, snapshot: Path, check: Path, generation: Path | None, release_dir: Path
+) -> None:
+    """Upload this run's sources and records; source files are keyed by SHA-256, so an
+    unchanged feed is stored once."""
+    started = time.monotonic()
+    provenance = json.loads((snapshot / "provenance.json").read_text(encoding="utf-8"))
+    uploaded, present = [], []
+    for name, item in sorted(provenance["inputs"].items()):
+        key = f"sources/sha256/{item['sha256']}/{name}"
+        if job.s3_has(key):
+            present.append(key)
+        else:
+            job.s3_put(snapshot / name, key)
+            uploaded.append(key)
+    records = [
+        (snapshot / "provenance.json", f"snapshots/{snapshot.name}/provenance.json"),
+        (check, f"checks/{check.name}"),
+    ]
+    if generation is not None:
+        prefix = f"generations/{generation.name}"
+        records += [
+            (generation / "manifest.json", f"{prefix}/manifest.json"),
+            (generation / "pipeline/pipeline.json", f"{prefix}/pipeline.json"),
+            (job.work / "probe.json", f"{prefix}/probe.json"),
+        ]
+    for name in (
+        "release-registered.json",
+        "release-plan.json",
+        "task-definition.registered.json",
+    ):
+        records.append((release_dir / name, f"releases/{release_dir.name}/{name}"))
+    for path, key in records:
+        if path.is_file():
+            job.s3_put(path, key)
+            uploaded.append(key)
+    job.record(
+        "archive",
+        True,
+        seconds=time.monotonic() - started,
+        bucket=job.args.archive_bucket,
+        uploaded=uploaded,
+        alreadyPresent=present,
+    )
+
+
+def host_cleanup(job: Job, keep_releases: list[Path], latest_snapshot: Path) -> dict:
+    """Free the build host's bounded disk after a successful run.
+
+    Only copies that exist elsewhere are removed: generation directories other than the
+    serving and previous ones whose manifest is in the archive (their data images are in ECR
+    by digest), staging trees of older releases, local Docker images other than those two
+    releases' (registry copies stay; ECR is never pruned) and source snapshot copies whose
+    every file is in the archive under its SHA-256, except the newest (the fetch store's own
+    objects, which change detection reads, stay)."""
+    args = job.args
+    keep_dirs, keep_tags = set(), set()
+    for record_path in keep_releases:
+        record_path = Path(record_path)
+        plan_path = record_path.parent / "release-plan.json"
+        if record_path.is_file():
+            record = json.loads(record_path.read_text(encoding="utf-8"))
+            keep_tags |= set(record["localTags"].values())
+        if plan_path.is_file():
+            gen = Path(
+                json.loads(plan_path.read_text(encoding="utf-8"))["verify"][
+                    "generationDir"
+                ]
+            )
+            keep_dirs.add(gen.name)
+    removed: dict = {
+        "generations": [],
+        "stages": [],
+        "images": [],
+        "snapshots": [],
+        "kept": [],
+    }
+    for gen in sorted(p for p in args.generations_root.iterdir() if p.is_dir()):
+        if gen.name in keep_dirs:
+            continue
+        if job.s3_has(f"generations/{gen.name}/manifest.json"):
+            shutil.rmtree(gen)
+            removed["generations"].append(gen.name)
+        else:
+            removed["kept"].append(f"generation {gen.name}: manifest not archived")
+    keep_release_dirs = {Path(p).parent.name for p in keep_releases}
+    for release in sorted(p for p in args.releases.iterdir() if p.is_dir()):
+        if release.name not in keep_release_dirs and (release / "stage").exists():
+            shutil.rmtree(release / "stage")
+            removed["stages"].append(release.name)
+    listing = subprocess.run(
+        ["docker", "image", "ls", "--format", "{{.Repository}}:{{.Tag}}"],
+        capture_output=True,
+        text=True,
+    ).stdout.split()
+    for ref in listing:
+        repo = ref.rsplit(":", 1)[0]
+        ours = repo.startswith("ot-h1-") or ".dkr.ecr." in repo
+        if ours and ref not in keep_tags:
+            subprocess.run(["docker", "rmi", ref], capture_output=True)
+            removed["images"].append(ref)
+    subprocess.run(["docker", "image", "prune", "-f"], capture_output=True)
+    subprocess.run(["docker", "builder", "prune", "-f"], capture_output=True)
+    for snap in sorted((args.source_root / "snapshots").iterdir()):
+        if snap == latest_snapshot or not (snap / "provenance.json").is_file():
+            continue
+        inputs = json.loads((snap / "provenance.json").read_text(encoding="utf-8"))[
+            "inputs"
+        ]
+        keys = [f"sources/sha256/{i['sha256']}/{n}" for n, i in inputs.items()]
+        keys.append(f"snapshots/{snap.name}/provenance.json")
+        if all(job.s3_has(k) for k in keys):
+            shutil.rmtree(snap)
+            removed["snapshots"].append(snap.name)
+        else:
+            removed["kept"].append(f"snapshot {snap.name}: not fully archived")
+    removed["freeGiB"] = round(disk_free_gib(args.generations_root), 1)
+    return removed
+
+
+def disk_free_gib(path: Path) -> float:
+    path.mkdir(parents=True, exist_ok=True)
+    return shutil.disk_usage(path).free / 2**30
 
 
 def refresh(job: Job) -> int:
     args = job.args
+    if args.min_free_gib:
+        free = disk_free_gib(args.generations_root)
+        job.record("disk", free >= args.min_free_gib, freeGiB=round(free, 1))
+        if free < args.min_free_gib:
+            raise StepFailed(f"disk: {free:.1f} GiB free, need {args.min_free_gib:g}")
     current, current_plan, current_path, _ = load_current(args.releases)
     serving_dir = Path(current_plan["verify"]["generationDir"])
-    serving_manifest = json.loads((serving_dir / "manifest.json").read_text(encoding="utf-8"))
+    on_host = (serving_dir / "manifest.json").is_file()
+    serving_manifest = (
+        json.loads((serving_dir / "manifest.json").read_text(encoding="utf-8"))
+        if on_host
+        else None
+    )
     job.summary["serving"] = {
         "generationId": current["generationId"],
         "taskDefinitionArn": current["taskDefinitionArn"].rsplit("/", 1)[-1],
@@ -313,12 +600,19 @@ def refresh(job: Job) -> int:
         GTFS: record["sources"]["gtfs"]["sha256"],
         TRIPS: record["sources"]["trip_id_to_date"]["sha256"],
     }
-    changed = fetched != sha_pair(serving_manifest)
+    if on_host:
+        changed = fetched != sha_pair(serving_manifest)
+        job.summary["mode"] = "built" if changed else "unchanged"
+    else:
+        # The serving generation and its images are not on this machine, so freshness cannot
+        # be renewed from here: build a new generation instead.
+        changed = True
+        job.summary["mode"] = "bootstrap"
     job.summary["source"] = {
         "snapshot": str(snapshot),
         "check": str(check),
         "pairedValidation": record.get("pairedValidation"),
-        "changedFromServing": changed,
+        "changedFromServing": fetched != serving_pair(current, serving_manifest),
         "sha256": {k: v[:12] for k, v in fetched.items()},
     }
     job.save()
@@ -356,7 +650,9 @@ def refresh(job: Job) -> int:
                 args.osm_reader_path,
             ),
         )
-        manifest = json.loads((generation / "manifest.json").read_text(encoding="utf-8"))
+        manifest = json.loads(
+            (generation / "manifest.json").read_text(encoding="utf-8")
+        )
         coverage = manifest["coverage"]
         corpus, _ = redate_probe_corpus(
             json.loads(args.corpus.read_text(encoding="utf-8")),
@@ -383,8 +679,14 @@ def refresh(job: Job) -> int:
         ]
     else:
         # Unchanged pair: renew freshness of the serving generation with today's check.
-        job.record("build-generation", True, skipped="feed pair unchanged since the serving build")
-        job.record("probe", True, skipped="no new generation; the in-task verifier probes it")
+        job.record(
+            "build-generation",
+            True,
+            skipped="feed pair unchanged since the serving build",
+        )
+        job.record(
+            "probe", True, skipped="no new generation; the in-task verifier probes it"
+        )
         corpus_path = Path(current_plan["verify"]["probeQueries"])
         publish = [
             "publish",
@@ -396,13 +698,18 @@ def refresh(job: Job) -> int:
             current_plan["verify"]["photonData"],
             "--source-check",
             check,
-            *[f"--local-image={n}={ref}" for n, ref in sorted(current["localTags"].items())],
+            *[
+                f"--local-image={n}={ref}"
+                for n, ref in sorted(current["localTags"].items())
+            ],
             *common,
         ]
     job.run("publish", job.publisher(*publish))
 
     # 6. push, register, update and wait
-    registry = current["taskDefinitionArn"].split(":")[4] + f".dkr.ecr.{REGION}.amazonaws.com"
+    registry = (
+        current["taskDefinitionArn"].split(":")[4] + f".dkr.ecr.{REGION}.amazonaws.com"
+    )
     role = f"arn:aws:iam::{registry.split('.')[0]}:role/{SERVICE}-execution"
     job.run(
         "push",
@@ -422,8 +729,7 @@ def refresh(job: Job) -> int:
             role,
             "--vpc-cidr",
             VPC_CIDR,
-            "--profile",
-            args.profile,
+            *(["--profile", args.profile] if args.profile else []),
             "--execute-aws",
             "--wait",
         ),
@@ -431,7 +737,8 @@ def refresh(job: Job) -> int:
     registered = output / "release-registered.json"
     (args.releases / "current.json").write_text(
         json.dumps(
-            {"release": str(registered), "previous": str(current_path), "at": now()}, indent=2
+            {"release": str(registered), "previous": str(current_path), "at": now()},
+            indent=2,
         )
         + "\n",
         encoding="utf-8",
@@ -448,13 +755,19 @@ def refresh(job: Job) -> int:
 
     # 7. post-deploy probe through the ALB
     started = time.monotonic()
-    probe = alb_probe(job, alb_url(REPO), corpus_path)
+    probe = alb_probe(job, args.alb_url or alb_url(REPO), corpus_path)
     passed = probe.pop("ok")
     job.record("alb-probe", passed, seconds=time.monotonic() - started, **probe)
     if not passed:
-        raise StepFailed("post-deploy ALB probe failed (previous release: see current.json)")
+        raise StepFailed(
+            "post-deploy ALB probe failed (previous release: see current.json)"
+        )
 
-    # 8. retention: candidates only
+    # 8. archive: sources by content hash, then the records of this run
+    if args.archive_bucket:
+        archive(job, snapshot, check, generation if changed else None, output)
+
+    # 9. retention: candidates only
     job.run(
         "retention",
         job.opentransit(
@@ -472,6 +785,11 @@ def refresh(job: Job) -> int:
     )
     prune = json.loads((job.work / "prune.json").read_text(encoding="utf-8"))
     job.summary["retentionCandidates"] = prune.get("candidates", prune)
+    job.save()
+
+    if args.host_cleanup:
+        keep = [registered, current_path]
+        job.record("host-cleanup", True, **host_cleanup(job, keep, snapshot))
     return 0
 
 

@@ -1,0 +1,6 @@
+[Unit]
+Description=OpenTransit build host power-off backstop (skipped in maintenance mode)
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash -c 'token=$(curl -fsS -X PUT http://169.254.169.254/latest/api/token -H "X-aws-ec2-metadata-token-ttl-seconds: 60"); mode=$(curl -fsS -H "X-aws-ec2-metadata-token: $token" http://169.254.169.254/latest/meta-data/tags/instance/OpenTransitMode || echo refresh); [ "$mode" = maintenance ] || systemctl poweroff'
