@@ -21,8 +21,9 @@ describe("dictionaries", () => {
 
   it("write Hebrew strings in Hebrew", () => {
     const latinOnly = heKeys.filter((key) => !/[֐-׿]/.test(he[key as MessageKey]));
-    // Brand name and the English language label are deliberately Latin.
-    expect(latinOnly).toEqual(["app.name", "settings.language.en"]);
+    // Brand names (the app, the compact map credits) and the English language label are
+    // deliberately Latin.
+    expect(latinOnly).toEqual(["app.name", "map.attribution.osm", "map.attribution.tiles", "settings.language.en"]);
   });
 
   it("have a message for every UI state", () => {

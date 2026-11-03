@@ -28,7 +28,7 @@ beforeAll(async () => {
     logLevel: "silent",
   });
   await vite.listen();
-});
+}, 30_000); // starting Vite is slow when the whole suite runs in parallel
 
 afterAll(async () => {
   await vite?.close();
@@ -43,12 +43,12 @@ describe("vite dev proxy", () => {
     const response = await fetch(new URL("/v1/status?probe=1", base));
     expect(await response.json()).toEqual({ stub: true, path: "/v1/status?probe=1" });
     expect(seen).toEqual(["/v1/status?probe=1"]);
-  });
+  }, 15_000);
 
   it("serves the app itself, not the API, at /", async () => {
     seen = [];
     const response = await fetch(vite.resolvedUrls!.local[0]!);
     expect(await response.text()).toContain('<div id="root">');
     expect(seen).toEqual([]);
-  });
+  }, 15_000);
 });

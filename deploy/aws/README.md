@@ -1,4 +1,9 @@
-# AWS ECS Fargate H-0 (bounded test run 31 October 2026)
+# AWS ECS Fargate: H-0 bounded test and H-1 private preview (31 October 2026)
+
+> **H-1 private preview RUNNING since 31 October 2026** in `eu-north-1` (service `opentransit-h1`,
+> HTTP:80 on the ALB hostname, reviewer CIDR only; [evidence](../../services/api/results/h1-preview-20261031-01.json),
+> [section below](#h-1-private-preview-31-october-2026), operations in
+> [docs/operations.md](../../docs/operations.md#h-1-private-preview-eu-north-1-running-since-31-october-2026)).
 
 > **Bounded private H-0 test RUN AND CLEANED UP on 31 October 2026 in `eu-north-1`**
 > ([evidence](../../services/api/results/h0-fargate-20261031-01.json)). One 1 vCPU / 3 GiB task built from
@@ -29,7 +34,9 @@
 | `tools/stage_bundle.py` | Verifies a generation with `verify_artifacts` and stages the image build context | Tested; staged `oct1b` (155 files, 3.95 GB) |
 | `tools/validate_drafts.py` | Structural validator (see below); `validate_candidate` checks rendered release revisions | Tested |
 | `tools/h0_bounded_test.py` | Bounded H-0 runner: setup, push, register, service, wait-ready, probe, metrics, export-logs, cleanup, inventory; records every resource in the evidence file as it is created ([below](#bounded-h-0-test-31-october-2026)) | Run 31 October; `--dry-run` prints commands only |
-| `tools/publish_generation.py` | H-1 publisher, local part: verify, stage/build, render a digest-pinned revision, retention and rollback plans ([below](#h-1-generation-publisher-local-no-aws-calls)) | Tested; dry run on `oct1b` 2 October; push path never run |
+| `tools/publish_generation.py` | H-1 publisher: verify, stage/build or reuse local images, source-check renewal, render a digest-pinned revision, retention and rollback plans, `push --execute-aws` and `rollback --execute-aws` ([below](#h-1-generation-publisher)) | Tested; push and rollback first run 31 October on H-1 |
+| `tools/h1_preview.py` | H-1 preview runner (the H-0 runner with H-1 names): estimate, setup, adopt-images, register, service, wait-ready, probe, converge, pause/resume, cleanup (with `--dry-run`), inventory | Run 31 October; cleanup dry-run only |
+| `tools/daily_refresh.py`, `scheduler/daily-refresh.cmd` | Daily refresh job for Windows Task Scheduler (06:30 local) | Run end to end once 31 October (manually); scheduled-task registration pending (user runs `register-task.ps1`) |
 
 `{{TOKENS}}` are deliberate placeholders; the validator rejects unknown tokens, literal
 12-digit account IDs and secret-like text. The MOTIS image digest is the one pinned in
@@ -291,22 +298,26 @@ Variants: `render_drafts.py --print-compose no-addresses` (also `1vcpu-4gib`) pr
 Compose cannot enforce a task-wide CPU quota: 1 vCPU variants pin all containers to one core with
 `cpuset`; the 0.5 vCPU variant is uncapped, so its CPU numbers are not comparable.
 
-## H-1 generation publisher (local; no AWS calls)
+## H-1 generation publisher
 
 `tools/publish_generation.py` is the operator-run part of the H-1 builder/publisher
 ([hosting plan](../../docs/next-steps.md#runtime-and-generation-releases)). It starts from a generation
-already built by `opentransit build-generation` and never fetches feeds. **Nothing has been pushed,
-registered or deployed; the AWS path has never been executed.**
+already built by `opentransit build-generation` and never fetches feeds. Its AWS paths (`push
+--execute-aws`, `rollback --execute-aws`) were first executed on 31 October 2026 against the H-1
+service (see [H-1](#h-1-private-preview-31-october-2026)).
 
 | Stage | What it does | Runs when |
 | --- | --- | --- |
 | verify | `verify_artifacts` (manifest, hashes, address composite), slot-free graph (`stage_bundle.check_serving_port`), coverage contains now and source freshness is **current** (the new-candidate rule, `local_operator.currency_reasons`), probe corpus parsed by `opentransit probe`'s own parser with every departure inside coverage, Photon tree equal to the sealed attestation checkpoint, Photon JAR hash | always |
 | stage | `stage_bundle.stage` into `<output>/stage` (hard links where possible, about 4 GB otherwise) | `--build` |
-| build | the H-0 `docker build` commands (API, data with a generation label, Photon), then `docker image inspect` records each local image ID; tags `ot-h1-<image>:gen-<id12>` | `--build` (heavy Docker lane) |
+| build | the H-0 `docker build` commands (API with `--build-context web=apps/web` for the web test client's Node stage, data with a generation label, Photon), then `docker image inspect` records each local image ID; tags `ot-h1-<image>:gen-<id12>` | `--build` (heavy Docker lane) |
 | render | `render_drafts` task definition with every image pinned by digest; tags `generation-id`, `schedule-component-id`, `probe-corpus-sha256`, `verifier-config-sha256` (hash of the rendered verifier container), `source-checked-at`, `coverage-until`, `digest-kind`, `purpose=h1-candidate`; checked by `validate_drafts.validate_candidate` | when digests are known (`--image-id` or `--build`); never renders an unpinned candidate |
 | retention | protected digests: active, previous, MOTIS and `--pin` evidence digests; with an operator-supplied `aws ecr describe-images` listing, everything else is listed for human review only | always; **never deletes**, no lifecycle rule |
 | rollback | given `--previous-release`, whether rolling back to it would be allowed now (registry-pinned, registered revision, coverage contains now, freshness serviceable: current/aging/stale, never expired) | always with a previous release |
-| push | ECR login, MOTIS mirror (`imagetools create`, digest-preserving), tag/push, re-render with registry manifest digests, `register-task-definition`, `update-service` | separate `push` command; prints steps unless `--execute-aws` |
+| existing images | `--local-image name=ref` inspects already-built local images instead of building (mode `existing-images`, pushable) | instead of `--build` |
+| renewal | `--source-check <fetch check record>`: a later successful same-hash paired check renews an unchanged generation (`apply_source_check`); the verifier receives it inline (`OPENTRANSIT_SOURCE_CHECK_RECORD`), writes `/run/opentransit/source-check.json`, and the API reads it (`OPENTRANSIT_SOURCE_CHECK`) | daily, when the feed pair is unchanged |
+| push | ECR login into a throwaway `DOCKER_CONFIG`, MOTIS mirror only if its digest is absent, tag `gen-<id12>-<image id12>` and push only if that tag is absent, digests read back from ECR, re-render under family `opentransit-h1` / log group `/opentransit/h1`, `register-task-definition`, `update-service`, `--wait` for one COMPLETED deployment | separate `push` command; prints steps unless `--execute-aws` |
+| rollback | `rollback --execute-aws` deploys the previous revision the plan allowed, and waits with `--wait` | operator or drill |
 
 ```sh
 P="uv run --project services/api --locked python deploy/aws/tools/publish_generation.py"
@@ -328,12 +339,13 @@ manifest digests: it is reviewable and validator-clean but not deployable. Only 
 `task-definition.registered.json` and `release-registered.json` (registry digests and the
 revision ARN), which later retention and rollback runs take as `--current`/`--previous`.
 
-`push --execute-aws` is implemented as one small function that shells out to `aws` and `docker`
-and has **never been run** (no account, region, cluster, repositories or spending approved). It
-re-checks the local image IDs, never deregisters or deletes anything, and so leaves the current
-revision serving if any step fails; a failed deployment rolls back through the service's circuit
-breaker. It does not create repositories, enable tag immutability, wait for the deployment or
-probe the deployed task; rollback is planned, not executed.
+`push --execute-aws` shells out to `aws` (with `--profile`) and `docker`. It re-checks the local
+image IDs, never deregisters or deletes anything, and so leaves the current revision serving if
+any step fails; a failed deployment rolls back through the service's circuit breaker. It does not
+create repositories or probe the deployed task (the daily job and `h1_preview.py probe` do).
+Fixed on the first run (31 October): the Windows credential store (now a throwaway Docker config,
+as in H-0), `aws` without a profile, the H-0 family/log group, reused tags in immutable
+repositories and image digests read from local `RepoDigests` (now from ECR).
 
 **Dry run, 2 October 2026 (read-only, no Docker):** `oct1b` (`D:/ot/generations/oct1b`, never-served
 Photon checkpoint `photon/`, the acceptance probe corpus, the H-0 local image IDs) verified in 11 s:
@@ -342,13 +354,60 @@ coverage, Photon tree `b5249eef…` equal to the attestation; the candidate rend
 errors. The same run with `--now 2026-10-02T16:00Z` was refused `source_aging`. Plans stayed in the
 session scratchpad, not in Git.
 
-**Still open for H-1 (not done):** the scheduler and where builds run (an operator host, a
-scheduled Fargate/CodeBuild job or other) and its separate build limits; the durable source and
-evidence archive before unattended cloud builds (S3 optional); actual ECR repositories, pushes,
-registration and deployment, with the publisher's IAM permissions; post-deployment candidate
-probing and a recorded rollback drill on ECS; renewing an unchanged generation's freshness in a
-task (`OPENTRANSIT_SOURCE_CHECK` is not wired into the image or verifier, so every refresh
-publishes a newly built generation); and a week of unattended refreshes as the H-1 acceptance.
+**Still open for H-1:** a week of unattended refreshes (the H-1 acceptance), a credential that
+outlives an `aws login` session for unattended pushes, HTTPS (needs a domain), and a cloud build
+host (deferred as a user decision; the operator machine builds for the preview).
+
+## H-1 private preview, 31 October 2026
+
+Running and left running (task from the coordinating session, 31 October; the user decisions of the
+H-0 approval apply: `eu-north-1`, 1 vCPU / 3 GiB with Photon, 8 GiB ceiling on allocated memory,
+reviewer CIDR `93.173.37.36/32`, HTTP only because there is no domain). Spending guard: $30/week
+pre-tax; the recorded projection is about **$18.15/week** (Fargate $9.95, ALB $4.02 + LCU upper bound
+$1.28, three public IPv4 addresses $2.52, rollout overlap ≈ $0.18, ECR ≤ $0.15, logs ≈ $0.06), from
+Price List API rates in the [evidence](../../services/api/results/h1-preview-20261031-01.json).
+
+Built by `tools/h1_preview.py setup` (the H-0 runner with H-1 names; tags `Project=OpenTransit`,
+`Purpose=H1`): VPC `10.80.0.0/16`, internet gateway, route table, two public subnets
+(`eu-north-1a`/`b`, no NAT), ALB security group (HTTP:80 from the reviewer CIDR only, egress 8000 to
+the task group) and task security group (8000 from the ALB group, egress 443), target group with the
+H-0 health check (`/readyz`, 10 s / 2 s / 2 / 2, 30 s deregistration), internet-facing ALB with an
+HTTP:80 listener, cluster `opentransit-h1` (Container Insights off), log group `/opentransit/h1`
+(14 days), execution role `opentransit-h1-execution` (pull the four repositories, write the one log
+group). **No task role**: the serving task needs no AWS API access, so least privilege is none
+(the validator rejects a task role). Service `opentransit-h1`: desired 1, rolling 200/100 with circuit
+breaker rollback, grace 1200 s, so a rollout runs at most two 3 GiB tasks. The four H-0 ECR
+repositories are reused, never created or deleted by these tools.
+
+```sh
+H1="uv run --project services/api --locked python deploy/aws/tools/h1_preview.py"
+$H1 estimate && $H1 setup && $H1 adopt-images --tag h0-20261031
+$H1 register && $H1 service --desired 1 && $H1 wait-ready --label first-deploy
+$H1 probe --label first-deploy --queries services/api/results/h0-fargate-20261031-01/probe-queries.json
+$H1 --dry-run cleanup      # prints the teardown; run without --dry-run only to remove H-1
+```
+
+Measured on 31 October (all in the evidence): task creation → `/readyz` 200 through the ALB in
+**699 s** (image pull 39 s); demo exit 0 and 10/10 probe journeys; from Israel `/healthz` median
+175 ms; the web client's `@real` Playwright tests passed against the ALB (2/2). Publisher runs:
+revision 2 from the H-0 images (`--local-image`, pushes resolved to the H-0 digests, converged
+893 s); revision 3 with this branch's API image and a renewing source check (804 s); rollback drill
+3 → 2 (898 s, probe 10/10) and forward 2 → 3 (813 s), each with at most two tasks; revision 4 from
+the daily job (902 s). Rollouts take 13–15 minutes because the replacement task must pass the
+verifier and API startup before the old one drains. The daily job's clean run (18:42–19:04 UTC) renewed `oct31a` to 18:42 UTC as revision 5 (all pushes skipped; ALB probe 10/10, demo 0).
+
+**Freshness renewal in the task.** `opentransit probe` accepts a later same-hash paired check
+(`--source-check` or the inline `OPENTRANSIT_SOURCE_CHECK_RECORD`), writes it exclusively to
+`source-check.json` beside its report and applies the same `apply_source_check` rule as the API;
+the publisher's `--source-check` adds that record (only the fields the rule reads, < 1 KiB) to the
+verifier and `OPENTRANSIT_SOURCE_CHECK=/run/opentransit/source-check.json` to the API. An unchanged
+generation is therefore renewed by a new revision with the same data image, not by a rebuild; it
+still needs a task replacement (no hot reload).
+
+**Daily refresh** (`tools/daily_refresh.py`, `scheduler/daily-refresh.cmd`, registration
+`scheduler/register-task.ps1`): see [operations](../../docs/operations.md#h-1-private-preview-eu-north-1-running-since-31-october-2026).
+The build host for the preview is this Windows machine (default pending the user's confirmation);
+generations stay on `D:/ot/`, images in ECR, evidence in Git; S3 is deferred.
 
 ## Bounded H-0 test, 31 October 2026
 

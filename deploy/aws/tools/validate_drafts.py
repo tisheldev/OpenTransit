@@ -21,6 +21,8 @@ REPO_ROOT = AWS_DIR.parents[1]
 CEILING_MIB = 8192
 REGION = "eu-north-1"
 LOG_GROUP = "/opentransit/h0"
+# Task definitions may also log to the H-1 preview's pre-created group (render_drafts.retarget).
+TASK_LOG_GROUPS = {LOG_GROUP, "/opentransit/h1"}
 PLACEHOLDER = re.compile(r"\{\{([A-Z_]+)\}\}")
 KNOWN_PLACEHOLDERS = {
     "ACCOUNT_ID",
@@ -275,7 +277,7 @@ def validate_task_definition(
         options = log.get("options", {})
         if (
             log.get("logDriver") != "awslogs"
-            or options.get("awslogs-group") != LOG_GROUP
+            or options.get("awslogs-group") not in TASK_LOG_GROUPS
             or options.get("awslogs-region") != REGION
             or not options.get("awslogs-stream-prefix")
             or options.get("awslogs-create-group", "false") != "false"

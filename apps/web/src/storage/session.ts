@@ -3,7 +3,7 @@ import { SESSION_PREFIX } from "./local";
 // sessionStorage for journey results and the active trip (design: Navigate, Privacy).
 // It ends with the tab; nothing here is written to localStorage.
 
-export type SessionKey = "journeys" | "activeTrip";
+export type SessionKey = "journeys" | "activeTrip" | "plan";
 
 function store(): Storage | null {
   try {

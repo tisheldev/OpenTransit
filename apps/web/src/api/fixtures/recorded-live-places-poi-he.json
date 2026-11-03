@@ -1,0 +1,235 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/places",
+    "params": {
+      "q": "עזריאלי",
+      "type": "poi"
+    },
+    "body": null
+  },
+  "status": 200,
+  "body": {
+    "data": [
+      {
+        "kind": "poi",
+        "name": "מצפה עזריאלי",
+        "displayName": "מצפה עזריאלי",
+        "languageUsed": "he",
+        "locality": "תל־אביב–יפו",
+        "coordinates": {
+          "latitude": 32.0746054,
+          "longitude": 34.791615
+        },
+        "category": "viewpoint_16",
+        "osmId": "node/[4439643391]",
+        "candidateIdentityHash": "403ce0582c9b886306d38d4cc6cdbfe3dfc4b0f337717bacbcf27f61597e6950",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiI0MDNjZTA1ODJjOWI4ODYzMDZkMzhkNGNjNmNkYmZlM2RmYzRiMGYzMzc3MTdiYWNiY2YyN2Y2MTU5N2U2OTUwIiwiY29vcmRpbmF0ZXMiOlszMi4wNzQ2MDU0LDM0Ljc5MTYxNV0sImdlbmVyYXRpb25JZCI6IjJkOGVjMjc0NmJiNTAwYWJhY2QwZjM4MzMxNmQyMzYxNmZjZjFkYzRiM2UyMDEwNGIxNGMyY2IxMzlhYWQ0NDUiLCJraW5kIjoicGxhY2UifQ",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiI0MDNjZTA1ODJjOWI4ODYzMDZkMzhkNGNjNmNkYmZlM2RmYzRiMGYzMzc3MTdiYWNiY2YyN2Y2MTU5N2U2OTUwIiwiY29vcmRpbmF0ZXMiOlszMi4wNzQ2MDU0LDM0Ljc5MTYxNV0sImdlbmVyYXRpb25JZCI6IjJkOGVjMjc0NmJiNTAwYWJhY2QwZjM4MzMxNmQyMzYxNmZjZjFkYzRiM2UyMDEwNGIxNGMyY2IxMzlhYWQ0NDUiLCJraW5kIjoicGxhY2UifQ"
+        }
+      },
+      {
+        "kind": "poi",
+        "name": "מרכז עזריאלי",
+        "displayName": "מרכז עזריאלי",
+        "languageUsed": "he",
+        "locality": "תל־אביב–יפו",
+        "coordinates": {
+          "latitude": 32.0750218,
+          "longitude": 34.791841
+        },
+        "category": "shop_other_16",
+        "osmId": "node/[8157403756]",
+        "candidateIdentityHash": "dac9835a547eb0d765fb0fb47802f66e616078a9e1fac685af6afcbaff9e4ec9",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiJkYWM5ODM1YTU0N2ViMGQ3NjVmYjBmYjQ3ODAyZjY2ZTYxNjA3OGE5ZTFmYWM2ODVhZjZhZmNiYWZmOWU0ZWM5IiwiY29vcmRpbmF0ZXMiOlszMi4wNzUwMjE4LDM0Ljc5MTg0MV0sImdlbmVyYXRpb25JZCI6IjJkOGVjMjc0NmJiNTAwYWJhY2QwZjM4MzMxNmQyMzYxNmZjZjFkYzRiM2UyMDEwNGIxNGMyY2IxMzlhYWQ0NDUiLCJraW5kIjoicGxhY2UifQ",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiJkYWM5ODM1YTU0N2ViMGQ3NjVmYjBmYjQ3ODAyZjY2ZTYxNjA3OGE5ZTFmYWM2ODVhZjZhZmNiYWZmOWU0ZWM5IiwiY29vcmRpbmF0ZXMiOlszMi4wNzUwMjE4LDM0Ljc5MTg0MV0sImdlbmVyYXRpb25JZCI6IjJkOGVjMjc0NmJiNTAwYWJhY2QwZjM4MzMxNmQyMzYxNmZjZjFkYzRiM2UyMDEwNGIxNGMyY2IxMzlhYWQ0NDUiLCJraW5kIjoicGxhY2UifQ"
+        }
+      },
+      {
+        "kind": "poi",
+        "name": "מרכז עזריאלי",
+        "displayName": "מרכז עזריאלי",
+        "languageUsed": "he",
+        "locality": "תל־אביב–יפו",
+        "coordinates": {
+          "latitude": 32.0745567,
+          "longitude": 34.7917049
+        },
+        "category": "shop_other_16",
+        "osmId": "way/[32635200]",
+        "candidateIdentityHash": "dc5c392c321526ab6ae9e77aeaab9ec625aa3a24b4295f6f7f89a06fcac2e232",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiJkYzVjMzkyYzMyMTUyNmFiNmFlOWU3N2FlYWFiOWVjNjI1YWEzYTI0YjQyOTVmNmY3Zjg5YTA2ZmNhYzJlMjMyIiwiY29vcmRpbmF0ZXMiOlszMi4wNzQ1NTY3LDM0Ljc5MTcwNDldLCJnZW5lcmF0aW9uSWQiOiIyZDhlYzI3NDZiYjUwMGFiYWNkMGYzODMzMTZkMjM2MTZmY2YxZGM0YjNlMjAxMDRiMTRjMmNiMTM5YWFkNDQ1Iiwia2luZCI6InBsYWNlIn0",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiJkYzVjMzkyYzMyMTUyNmFiNmFlOWU3N2FlYWFiOWVjNjI1YWEzYTI0YjQyOTVmNmY3Zjg5YTA2ZmNhYzJlMjMyIiwiY29vcmRpbmF0ZXMiOlszMi4wNzQ1NTY3LDM0Ljc5MTcwNDldLCJnZW5lcmF0aW9uSWQiOiIyZDhlYzI3NDZiYjUwMGFiYWNkMGYzODMzMTZkMjM2MTZmY2YxZGM0YjNlMjAxMDRiMTRjMmNiMTM5YWFkNDQ1Iiwia2luZCI6InBsYWNlIn0"
+        }
+      },
+      {
+        "kind": "poi",
+        "name": "עזריאלי אוטלט",
+        "displayName": "עזריאלי אוטלט",
+        "languageUsed": "he",
+        "locality": "אור יהודה",
+        "coordinates": {
+          "latitude": 32.0256836,
+          "longitude": 34.8578341
+        },
+        "category": "shop_other_16",
+        "osmId": "way/[367881120]",
+        "candidateIdentityHash": "7bd36bcca231be102129f6aea344910234309168c3305699777d7354da5e80db",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiI3YmQzNmJjY2EyMzFiZTEwMjEyOWY2YWVhMzQ0OTEwMjM0MzA5MTY4YzMzMDU2OTk3NzdkNzM1NGRhNWU4MGRiIiwiY29vcmRpbmF0ZXMiOlszMi4wMjU2ODM2LDM0Ljg1NzgzNDFdLCJnZW5lcmF0aW9uSWQiOiIyZDhlYzI3NDZiYjUwMGFiYWNkMGYzODMzMTZkMjM2MTZmY2YxZGM0YjNlMjAxMDRiMTRjMmNiMTM5YWFkNDQ1Iiwia2luZCI6InBsYWNlIn0",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiI3YmQzNmJjY2EyMzFiZTEwMjEyOWY2YWVhMzQ0OTEwMjM0MzA5MTY4YzMzMDU2OTk3NzdkNzM1NGRhNWU4MGRiIiwiY29vcmRpbmF0ZXMiOlszMi4wMjU2ODM2LDM0Ljg1NzgzNDFdLCJnZW5lcmF0aW9uSWQiOiIyZDhlYzI3NDZiYjUwMGFiYWNkMGYzODMzMTZkMjM2MTZmY2YxZGM0YjNlMjAxMDRiMTRjMmNiMTM5YWFkNDQ1Iiwia2luZCI6InBsYWNlIn0"
+        }
+      },
+      {
+        "kind": "poi",
+        "name": "עזריאלי ראשונים",
+        "displayName": "עזריאלי ראשונים",
+        "languageUsed": "he",
+        "locality": "ראשון לציון",
+        "coordinates": {
+          "latitude": 31.9495724,
+          "longitude": 34.8026467
+        },
+        "category": "shop_other_16",
+        "osmId": "way/[83910004]",
+        "candidateIdentityHash": "ec513b9e1b991a5dd36a8666ef0347658ed59fb66a17a9378d65368afd649586",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiJlYzUxM2I5ZTFiOTkxYTVkZDM2YTg2NjZlZjAzNDc2NThlZDU5ZmI2NmExN2E5Mzc4ZDY1MzY4YWZkNjQ5NTg2IiwiY29vcmRpbmF0ZXMiOlszMS45NDk1NzI0LDM0LjgwMjY0NjddLCJnZW5lcmF0aW9uSWQiOiIyZDhlYzI3NDZiYjUwMGFiYWNkMGYzODMzMTZkMjM2MTZmY2YxZGM0YjNlMjAxMDRiMTRjMmNiMTM5YWFkNDQ1Iiwia2luZCI6InBsYWNlIn0",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiJlYzUxM2I5ZTFiOTkxYTVkZDM2YTg2NjZlZjAzNDc2NThlZDU5ZmI2NmExN2E5Mzc4ZDY1MzY4YWZkNjQ5NTg2IiwiY29vcmRpbmF0ZXMiOlszMS45NDk1NzI0LDM0LjgwMjY0NjddLCJnZW5lcmF0aW9uSWQiOiIyZDhlYzI3NDZiYjUwMGFiYWNkMGYzODMzMTZkMjM2MTZmY2YxZGM0YjNlMjAxMDRiMTRjMmNiMTM5YWFkNDQ1Iiwia2luZCI6InBsYWNlIn0"
+        }
+      },
+      {
+        "kind": "poi",
+        "name": "עזריאלי",
+        "displayName": "עזריאלי",
+        "languageUsed": "he",
+        "locality": "מודיעין-מכבים-רעות",
+        "coordinates": {
+          "latitude": 31.9023245,
+          "longitude": 35.0088995
+        },
+        "category": "none",
+        "osmId": "way/[1122591117]",
+        "candidateIdentityHash": "1603377bb0fbd2036ea962f24701087a83adb58768c6088767fb7feaa0515896",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiIxNjAzMzc3YmIwZmJkMjAzNmVhOTYyZjI0NzAxMDg3YTgzYWRiNTg3NjhjNjA4ODc2N2ZiN2ZlYWEwNTE1ODk2IiwiY29vcmRpbmF0ZXMiOlszMS45MDIzMjQ1LDM1LjAwODg5OTVdLCJnZW5lcmF0aW9uSWQiOiIyZDhlYzI3NDZiYjUwMGFiYWNkMGYzODMzMTZkMjM2MTZmY2YxZGM0YjNlMjAxMDRiMTRjMmNiMTM5YWFkNDQ1Iiwia2luZCI6InBsYWNlIn0",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiIxNjAzMzc3YmIwZmJkMjAzNmVhOTYyZjI0NzAxMDg3YTgzYWRiNTg3NjhjNjA4ODc2N2ZiN2ZlYWEwNTE1ODk2IiwiY29vcmRpbmF0ZXMiOlszMS45MDIzMjQ1LDM1LjAwODg5OTVdLCJnZW5lcmF0aW9uSWQiOiIyZDhlYzI3NDZiYjUwMGFiYWNkMGYzODMzMTZkMjM2MTZmY2YxZGM0YjNlMjAxMDRiMTRjMmNiMTM5YWFkNDQ1Iiwia2luZCI6InBsYWNlIn0"
+        }
+      },
+      {
+        "kind": "poi",
+        "name": "קניון עזריאלי עכו",
+        "displayName": "קניון עזריאלי עכו",
+        "languageUsed": "he",
+        "locality": "עכו",
+        "coordinates": {
+          "latitude": 32.9232933,
+          "longitude": 35.0820171
+        },
+        "category": "shop_other_16",
+        "osmId": "way/[196672846]",
+        "candidateIdentityHash": "e4564a1527054f77b2b2947930e093ebf3858c449703cf5721690c17a2b9aafb",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiJlNDU2NGExNTI3MDU0Zjc3YjJiMjk0NzkzMGUwOTNlYmYzODU4YzQ0OTcwM2NmNTcyMTY5MGMxN2EyYjlhYWZiIiwiY29vcmRpbmF0ZXMiOlszMi45MjMyOTMzLDM1LjA4MjAxNzFdLCJnZW5lcmF0aW9uSWQiOiIyZDhlYzI3NDZiYjUwMGFiYWNkMGYzODMzMTZkMjM2MTZmY2YxZGM0YjNlMjAxMDRiMTRjMmNiMTM5YWFkNDQ1Iiwia2luZCI6InBsYWNlIn0",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiJlNDU2NGExNTI3MDU0Zjc3YjJiMjk0NzkzMGUwOTNlYmYzODU4YzQ0OTcwM2NmNTcyMTY5MGMxN2EyYjlhYWZiIiwiY29vcmRpbmF0ZXMiOlszMi45MjMyOTMzLDM1LjA4MjAxNzFdLCJnZW5lcmF0aW9uSWQiOiIyZDhlYzI3NDZiYjUwMGFiYWNkMGYzODMzMTZkMjM2MTZmY2YxZGM0YjNlMjAxMDRiMTRjMmNiMTM5YWFkNDQ1Iiwia2luZCI6InBsYWNlIn0"
+        }
+      },
+      {
+        "kind": "poi",
+        "name": "עזריאלי Town",
+        "displayName": "עזריאלי Town",
+        "languageUsed": "he",
+        "locality": "תל־אביב–יפו",
+        "coordinates": {
+          "latitude": 32.0784825,
+          "longitude": 34.7938185
+        },
+        "category": "none",
+        "osmId": "way/[860931325]",
+        "candidateIdentityHash": "7eb4856e314dc55e3fd338658b8d0d75263b3c32d7e70eb97e9abaa86eabcba1",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiI3ZWI0ODU2ZTMxNGRjNTVlM2ZkMzM4NjU4YjhkMGQ3NTI2M2IzYzMyZDdlNzBlYjk3ZTlhYmFhODZlYWJjYmExIiwiY29vcmRpbmF0ZXMiOlszMi4wNzg0ODI1LDM0Ljc5MzgxODVdLCJnZW5lcmF0aW9uSWQiOiIyZDhlYzI3NDZiYjUwMGFiYWNkMGYzODMzMTZkMjM2MTZmY2YxZGM0YjNlMjAxMDRiMTRjMmNiMTM5YWFkNDQ1Iiwia2luZCI6InBsYWNlIn0",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiI3ZWI0ODU2ZTMxNGRjNTVlM2ZkMzM4NjU4YjhkMGQ3NTI2M2IzYzMyZDdlNzBlYjk3ZTlhYmFhODZlYWJjYmExIiwiY29vcmRpbmF0ZXMiOlszMi4wNzg0ODI1LDM0Ljc5MzgxODVdLCJnZW5lcmF0aW9uSWQiOiIyZDhlYzI3NDZiYjUwMGFiYWNkMGYzODMzMTZkMjM2MTZmY2YxZGM0YjNlMjAxMDRiMTRjMmNiMTM5YWFkNDQ1Iiwia2luZCI6InBsYWNlIn0"
+        }
+      },
+      {
+        "kind": "poi",
+        "name": "מרכז עזריאלי החדש",
+        "displayName": "מרכז עזריאלי החדש",
+        "languageUsed": "he",
+        "locality": "מודיעין-מכבים-רעות",
+        "coordinates": {
+          "latitude": 31.9006687,
+          "longitude": 35.0074494
+        },
+        "category": "shop_other_16",
+        "osmId": "way/[1277947631]",
+        "candidateIdentityHash": "a13ee278259d96fb165e7984f02443fe55e39966386262b68d2fbd1073efca7d",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiJhMTNlZTI3ODI1OWQ5NmZiMTY1ZTc5ODRmMDI0NDNmZTU1ZTM5OTY2Mzg2MjYyYjY4ZDJmYmQxMDczZWZjYTdkIiwiY29vcmRpbmF0ZXMiOlszMS45MDA2Njg3LDM1LjAwNzQ0OTRdLCJnZW5lcmF0aW9uSWQiOiIyZDhlYzI3NDZiYjUwMGFiYWNkMGYzODMzMTZkMjM2MTZmY2YxZGM0YjNlMjAxMDRiMTRjMmNiMTM5YWFkNDQ1Iiwia2luZCI6InBsYWNlIn0",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiJhMTNlZTI3ODI1OWQ5NmZiMTY1ZTc5ODRmMDI0NDNmZTU1ZTM5OTY2Mzg2MjYyYjY4ZDJmYmQxMDczZWZjYTdkIiwiY29vcmRpbmF0ZXMiOlszMS45MDA2Njg3LDM1LjAwNzQ0OTRdLCJnZW5lcmF0aW9uSWQiOiIyZDhlYzI3NDZiYjUwMGFiYWNkMGYzODMzMTZkMjM2MTZmY2YxZGM0YjNlMjAxMDRiMTRjMmNiMTM5YWFkNDQ1Iiwia2luZCI6InBsYWNlIn0"
+        }
+      },
+      {
+        "kind": "poi",
+        "name": "גן - עזריאלי",
+        "displayName": "גן - עזריאלי",
+        "languageUsed": "he",
+        "locality": "נפת חדרה",
+        "coordinates": {
+          "latitude": 32.4478559,
+          "longitude": 34.9054236
+        },
+        "category": "none",
+        "osmId": "way/[1510321455]",
+        "candidateIdentityHash": "46064a688a2de602daa6289f6bddb80f541d3e9f71ceb5c84ce0ae9242fe4969",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiI0NjA2NGE2ODhhMmRlNjAyZGFhNjI4OWY2YmRkYjgwZjU0MWQzZTlmNzFjZWI1Yzg0Y2UwYWU5MjQyZmU0OTY5IiwiY29vcmRpbmF0ZXMiOlszMi40NDc4NTU5LDM0LjkwNTQyMzZdLCJnZW5lcmF0aW9uSWQiOiIyZDhlYzI3NDZiYjUwMGFiYWNkMGYzODMzMTZkMjM2MTZmY2YxZGM0YjNlMjAxMDRiMTRjMmNiMTM5YWFkNDQ1Iiwia2luZCI6InBsYWNlIn0",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiI0NjA2NGE2ODhhMmRlNjAyZGFhNjI4OWY2YmRkYjgwZjU0MWQzZTlmNzFjZWI1Yzg0Y2UwYWU5MjQyZmU0OTY5IiwiY29vcmRpbmF0ZXMiOlszMi40NDc4NTU5LDM0LjkwNTQyMzZdLCJnZW5lcmF0aW9uSWQiOiIyZDhlYzI3NDZiYjUwMGFiYWNkMGYzODMzMTZkMjM2MTZmY2YxZGM0YjNlMjAxMDRiMTRjMmNiMTM5YWFkNDQ1Iiwia2luZCI6InBsYWNlIn0"
+        }
+      }
+    ],
+    "meta": {
+      "requestId": "00000000000000000000000000000000",
+      "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+      "generatedAt": "2026-10-31T17:31:08.190169Z",
+      "dataBuiltAt": "2026-10-31T12:18:07.213453Z",
+      "mode": "real",
+      "coverage": {
+        "from": "2026-10-31T00:00:00+02:00",
+        "until": "2026-11-30T00:00:00+02:00"
+      },
+      "freshness": "current",
+      "capabilities": {
+        "realtime": "not_enabled",
+        "alerts": "not_enabled"
+      },
+      "attribution": [
+        "Israel Ministry of Transport",
+        "© OpenStreetMap contributors"
+      ],
+      "rankingPolicy": "motis-v2.11.2-feasible-engine-order-v1",
+      "appliedConstraints": {},
+      "warnings": []
+    },
+    "matchedTypes": [
+      "poi"
+    ],
+    "unavailableTypes": [],
+    "partial": false,
+    "rankingPolicy": "alternating-stop-and-geocoder-order-v1"
+  }
+}

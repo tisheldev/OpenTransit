@@ -1,0 +1,149 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/places",
+    "params": {
+      "q": "דיזנגוף סנטר",
+      "limit": 5
+    },
+    "body": null
+  },
+  "status": 200,
+  "body": {
+    "data": [
+      {
+        "kind": "stop",
+        "id": "mot:stop:13561",
+        "displayName": "דיזנגוף סנטר/דיזנגוף",
+        "languageUsed": "he",
+        "locality": "רחוב: דיזנגוף 53 עיר: תל אביב יפו רציף:  קומה: ",
+        "coordinates": {
+          "latitude": 32.075129,
+          "longitude": 34.77537
+        },
+        "stopCode": "25565",
+        "parentId": null,
+        "platformIds": [],
+        "matchedTypes": [
+          "stop"
+        ],
+        "locationRef": {
+          "kind": "stop",
+          "stopId": "mot:stop:13561"
+        }
+      },
+      {
+        "kind": "poi",
+        "name": "דיזנגוף סנטר",
+        "displayName": "דיזנגוף סנטר",
+        "languageUsed": "he",
+        "locality": "תל־אביב–יפו",
+        "coordinates": {
+          "latitude": 32.075301,
+          "longitude": 34.773702
+        },
+        "category": "shop_other_16",
+        "osmId": "way/[30622051]",
+        "candidateIdentityHash": "2e597494f0d04c0c33a7854fdd3c030be4212630df76e710f2eb99bfacc89094",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiIyZTU5NzQ5NGYwZDA0YzBjMzNhNzg1NGZkZDNjMDMwYmU0MjEyNjMwZGY3NmU3MTBmMmViOTliZmFjYzg5MDk0IiwiY29vcmRpbmF0ZXMiOlszMi4wNzUzMDEsMzQuNzczNzAyXSwiZ2VuZXJhdGlvbklkIjoiMmQ4ZWMyNzQ2YmI1MDBhYmFjZDBmMzgzMzE2ZDIzNjE2ZmNmMWRjNGIzZTIwMTA0YjE0YzJjYjEzOWFhZDQ0NSIsImtpbmQiOiJwbGFjZSJ9",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiIyZTU5NzQ5NGYwZDA0YzBjMzNhNzg1NGZkZDNjMDMwYmU0MjEyNjMwZGY3NmU3MTBmMmViOTliZmFjYzg5MDk0IiwiY29vcmRpbmF0ZXMiOlszMi4wNzUzMDEsMzQuNzczNzAyXSwiZ2VuZXJhdGlvbklkIjoiMmQ4ZWMyNzQ2YmI1MDBhYmFjZDBmMzgzMzE2ZDIzNjE2ZmNmMWRjNGIzZTIwMTA0YjE0YzJjYjEzOWFhZDQ0NSIsImtpbmQiOiJwbGFjZSJ9"
+        }
+      },
+      {
+        "kind": "stop",
+        "id": "mot:stop:13583",
+        "displayName": "דיזנגוף סנטר/דיזנגוף",
+        "languageUsed": "he",
+        "locality": "רחוב: דיזנגוף 50 עיר: תל אביב יפו רציף:  קומה: ",
+        "coordinates": {
+          "latitude": 32.075566,
+          "longitude": 34.77512
+        },
+        "stopCode": "25609",
+        "parentId": null,
+        "platformIds": [],
+        "matchedTypes": [
+          "stop"
+        ],
+        "locationRef": {
+          "kind": "stop",
+          "stopId": "mot:stop:13583"
+        }
+      },
+      {
+        "kind": "poi",
+        "name": "דיזנגוף סנטרל",
+        "displayName": "דיזנגוף סנטרל",
+        "languageUsed": "he",
+        "locality": "נתניה",
+        "coordinates": {
+          "latitude": 32.3291816,
+          "longitude": 34.8528508
+        },
+        "category": "none",
+        "osmId": "way/[664773610]",
+        "candidateIdentityHash": "2559e7f2d8d298adeb6c353e0b83f8a2a16faf0a66451f7cff387b4c60e0a009",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiIyNTU5ZTdmMmQ4ZDI5OGFkZWI2YzM1M2UwYjgzZjhhMmExNmZhZjBhNjY0NTFmN2NmZjM4N2I0YzYwZTBhMDA5IiwiY29vcmRpbmF0ZXMiOlszMi4zMjkxODE2LDM0Ljg1Mjg1MDhdLCJnZW5lcmF0aW9uSWQiOiIyZDhlYzI3NDZiYjUwMGFiYWNkMGYzODMzMTZkMjM2MTZmY2YxZGM0YjNlMjAxMDRiMTRjMmNiMTM5YWFkNDQ1Iiwia2luZCI6InBsYWNlIn0",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiIyNTU5ZTdmMmQ4ZDI5OGFkZWI2YzM1M2UwYjgzZjhhMmExNmZhZjBhNjY0NTFmN2NmZjM4N2I0YzYwZTBhMDA5IiwiY29vcmRpbmF0ZXMiOlszMi4zMjkxODE2LDM0Ljg1Mjg1MDhdLCJnZW5lcmF0aW9uSWQiOiIyZDhlYzI3NDZiYjUwMGFiYWNkMGYzODMzMTZkMjM2MTZmY2YxZGM0YjNlMjAxMDRiMTRjMmNiMTM5YWFkNDQ1Iiwia2luZCI6InBsYWNlIn0"
+        }
+      },
+      {
+        "kind": "stop",
+        "id": "mot:stop:49938",
+        "displayName": "דיזנגוף סנטר/המלך ג'ורג'",
+        "languageUsed": "he",
+        "locality": "רחוב: המלך ג'ורג' 63 עיר: תל אביב יפו רציף:  קומה: ",
+        "coordinates": {
+          "latitude": 32.075397,
+          "longitude": 34.776195
+        },
+        "stopCode": "20784",
+        "parentId": null,
+        "platformIds": [],
+        "matchedTypes": [
+          "stop"
+        ],
+        "locationRef": {
+          "kind": "stop",
+          "stopId": "mot:stop:49938"
+        }
+      }
+    ],
+    "meta": {
+      "requestId": "00000000000000000000000000000000",
+      "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+      "generatedAt": "2026-10-31T17:31:08.133299Z",
+      "dataBuiltAt": "2026-10-31T12:18:07.213453Z",
+      "mode": "real",
+      "coverage": {
+        "from": "2026-10-31T00:00:00+02:00",
+        "until": "2026-11-30T00:00:00+02:00"
+      },
+      "freshness": "current",
+      "capabilities": {
+        "realtime": "not_enabled",
+        "alerts": "not_enabled"
+      },
+      "attribution": [
+        "Israel Ministry of Transport",
+        "© OpenStreetMap contributors"
+      ],
+      "rankingPolicy": "motis-v2.11.2-feasible-engine-order-v1",
+      "appliedConstraints": {},
+      "warnings": []
+    },
+    "matchedTypes": [
+      "stop",
+      "station",
+      "poi",
+      "address"
+    ],
+    "unavailableTypes": [],
+    "partial": false,
+    "rankingPolicy": "alternating-stop-and-geocoder-order-v1"
+  }
+}

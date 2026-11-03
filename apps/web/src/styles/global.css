@@ -15,6 +15,7 @@ html {
 body {
   margin: 0;
   min-block-size: 100dvh;
+  overflow: hidden;
 }
 
 button,
@@ -47,93 +48,6 @@ a {
 }
 .skip-link:focus {
   inset-block-start: var(--space-2);
-}
-
-.app {
-  display: flex;
-  flex-direction: column;
-  min-block-size: 100dvh;
-}
-
-.topbar {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  padding-block: var(--space-3);
-  padding-inline: var(--space-4);
-  background: var(--color-surface);
-  border-block-end: 1px solid var(--color-border);
-}
-
-.brand {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  font-size: var(--text-l);
-  font-weight: 750;
-  color: var(--color-ink-strong);
-  text-decoration: none;
-  min-block-size: var(--target-min);
-}
-
-.brand-mark {
-  display: grid;
-  place-items: center;
-  inline-size: 30px;
-  block-size: 30px;
-  border-radius: var(--radius-s);
-  background: var(--color-brand);
-  color: #fff;
-  font-size: var(--text-s);
-}
-
-.screen {
-  flex: 1;
-  padding: var(--space-4);
-  max-inline-size: 720px;
-  inline-size: 100%;
-  margin-inline: auto;
-}
-
-.screen h1 {
-  font-size: var(--text-xl);
-  line-height: 1.2;
-  margin-block: 0 var(--space-3);
-}
-
-.placeholder-note {
-  color: var(--color-ink-muted);
-}
-
-.link-list {
-  list-style: none;
-  padding: 0;
-  margin: var(--space-4) 0;
-  display: grid;
-  gap: var(--space-2);
-}
-
-.link-list a,
-.button {
-  display: inline-flex;
-  align-items: center;
-  min-block-size: var(--target-min);
-  min-inline-size: var(--target-min);
-  padding-inline: var(--space-4);
-  border: 1px solid var(--color-border-strong);
-  border-radius: var(--radius-s);
-  background: var(--color-surface);
-  color: var(--color-ink-strong);
-  text-decoration: none;
-  cursor: pointer;
-}
-.button:hover,
-.link-list a:hover {
-  background: #ecf4f4;
-}
-.button:disabled {
-  cursor: not-allowed;
-  opacity: 0.65;
 }
 
 .segmented {
@@ -215,9 +129,4 @@ a {
   .spinner {
     animation: none;
   }
-}
-
-.data-status {
-  font-size: var(--text-s);
-  color: var(--color-ink-muted);
 }

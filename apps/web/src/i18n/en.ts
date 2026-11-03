@@ -1,7 +1,12 @@
 import type { MessageKey } from "./he";
+import { en_compare } from "./parts/compare.en";
+import { en_map } from "./parts/map.en";
+import { en_nav } from "./parts/nav.en";
+import { en_secondary } from "./parts/secondary.en";
+import { en_shell } from "./parts/shell.en";
 
 // Mirrors he.ts key for key; the type rejects a missing or extra key.
-export const en: Record<MessageKey, string> = {
+const core = {
   "app.name": "OpenTransit",
   "app.tagline": "Plan and navigate public transport",
   "app.skipToContent": "Skip to content",
@@ -21,7 +26,7 @@ export const en: Record<MessageKey, string> = {
   "screen.backHome": "Back to home",
 
   "nav.back": "Back",
-  "nav.locate": "My location",
+  "nav.locate": "Centre the map on my location",
 
   "settings.language": "Language",
   "settings.language.he": "עברית",
@@ -71,3 +76,5 @@ export const en: Record<MessageKey, string> = {
   "place.poi": "Place",
   "place.address": "Address",
 };
+
+export const en: Record<MessageKey, string> = { ...core, ...en_map, ...en_shell, ...en_compare, ...en_nav, ...en_secondary };

@@ -56,6 +56,10 @@ MOTIS_SOURCE = f"ghcr.io/motis-project/motis@{render_drafts.MOTIS_DIGEST}"
 TAGS = {"Project": "OpenTransit", "Purpose": "H0"}
 MAX_TASKS = 2
 MAX_TASK_SECONDS = 2 * 3600
+# h1_preview.py reuses this runner for the continuous H-1 preview by overriding these.
+RETENTION_DAYS = 7
+CREATE_REPOSITORIES = True
+RENAMES: dict[str, str] = {}  # applied to every draft and to the registered task definition
 
 DRY_RUN = False
 
@@ -186,9 +190,15 @@ def ec2_tags(kind: str, name: str) -> str:
     return f"ResourceType={kind},Tags=[{tags}]"
 
 
+def rename(text: str) -> str:
+    for old, new in RENAMES.items():
+        text = text.replace(old, new)
+    return text
+
+
 def draft(path: str) -> dict:
     text = (AWS_DIR / path).read_text(encoding="utf-8").replace("{{ACCOUNT_ID}}", account())
-    return json.loads(text)
+    return json.loads(rename(text))
 
 
 # --- setup -----------------------------------------------------------------------------------
@@ -200,7 +210,7 @@ def setup(args: argparse.Namespace) -> int:
         raise SystemExit("setup already recorded; run cleanup first or continue with push")
     step(ev, "setup-start", True, reviewerCidr=args.reviewer_cidr)
 
-    for repo in REPOSITORIES:
+    for repo in REPOSITORIES if CREATE_REPOSITORIES else ():
         out = aws(
             "ecr",
             "create-repository",
@@ -222,13 +232,20 @@ def setup(args: argparse.Namespace) -> int:
         "--tags",
         ",".join(f"{k}={v}" for k, v in TAGS.items()),
     )
-    aws("logs", "put-retention-policy", "--log-group-name", LOG_GROUP, "--retention-in-days", "7")
+    aws(
+        "logs",
+        "put-retention-policy",
+        "--log-group-name",
+        LOG_GROUP,
+        "--retention-in-days",
+        str(RETENTION_DAYS),
+    )
     resource(
         ev,
         "log-group",
         LOG_GROUP,
         f"arn:aws:logs:{REGION}:{account()}:log-group:{LOG_GROUP}",
-        retentionDays=7,
+        retentionDays=RETENTION_DAYS,
     )
 
     role = f"{NAME}-execution"
@@ -240,7 +257,7 @@ def setup(args: argparse.Namespace) -> int:
         "--assume-role-policy-document",
         file_arg(draft("iam/execution-role-trust.json"), "t.json"),
         "--description",
-        "OpenTransit H-0 task execution role: pull 4 repos, write 1 log group",
+        f"OpenTransit {TAGS['Purpose']} task execution role: pull 4 repos, write 1 log group",
         "--tags",
         *tag_list(),
     )
@@ -594,7 +611,7 @@ def digest(ev: dict, name: str, tag: str | None) -> str:
 def register(args: argparse.Namespace) -> int:
     ev = load()
     task = render_drafts.render_task_definition(args.variant)
-    text = json.dumps(task)
+    text = rename(json.dumps(task))
     motis = digest(ev, "motis", args.motis_tag) if not DRY_RUN else render_drafts.MOTIS_DIGEST
     if motis != render_drafts.MOTIS_DIGEST:
         raise SystemExit(f"mirrored MOTIS digest {motis} differs from the pinned digest")
@@ -660,7 +677,7 @@ def service(args: argparse.Namespace) -> int:
         )
         step(ev, "service-desired-count", True, desired=args.desired)
         return 0
-    spec = json.loads((AWS_DIR / "ecs/service.json").read_text(encoding="utf-8"))
+    spec = json.loads(rename((AWS_DIR / "ecs/service.json").read_text(encoding="utf-8")))
     td = find(ev, "task-definition")[-1]["arn"] if not DRY_RUN else "arn:td-DRY"
     subnets = [r["id"] for r in find(ev, "subnet")] or ["subnet-DRYa", "subnet-DRYb"]
     groups = {r["name"]: r["id"] for r in find(ev, "security-group")}

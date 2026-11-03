@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/journeys",
+    "params": null,
+    "body": {
+      "from": {
+        "kind": "stop",
+        "stopId": "mot:stop:13583"
+      },
+      "to": {
+        "kind": "coordinate",
+        "latitude": 32.7767,
+        "longitude": 35.0231
+      },
+      "departAt": "2030-01-01T08:00:00+02:00"
+    }
+  },
+  "status": 422,
+  "body": {
+    "type": "urn:opentransit:problem:outside-service-window",
+    "title": "Outside service window",
+    "status": 422,
+    "code": "OUTSIDE_SERVICE_WINDOW",
+    "detail": "Choose a time inside coverage.",
+    "requestId": "00000000000000000000000000000000"
+  }
+}

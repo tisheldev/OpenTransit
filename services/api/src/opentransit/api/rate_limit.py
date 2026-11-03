@@ -19,6 +19,7 @@ from collections.abc import Callable, Iterable, Mapping
 from dataclasses import dataclass
 
 EXEMPT_PATHS = frozenset({"/healthz", "/readyz"})
+CLIENT_PREFIX = "/app"  # the optional built web client (opentransit.api.client)
 # Journey planning and search hit the engine/geocoders; everything else reads local data.
 EXPENSIVE_ROUTES = frozenset({("POST", "/v1/journeys"), ("GET", "/v1/places")})
 STANDARD = "standard"
@@ -106,9 +107,13 @@ class RateLimiter:
 
 
 def classify(method: str, path: str) -> str | None:
-    """Bucket class for a request, or None when it is exempt (health and readiness)."""
+    """Bucket class for a request, or None when exempt (health, readiness, client files)."""
     normalized = path.rstrip("/") or "/"
     if normalized in EXEMPT_PATHS:
+        return None
+    if normalized == CLIENT_PREFIX or normalized.startswith(CLIENT_PREFIX + "/"):
+        # Static web-client files: one page load fetches several, none reaches the engine,
+        # and counting them would spend the API budget the client then needs for /v1.
         return None
     if (method.upper(), normalized) in EXPENSIVE_ROUTES:
         return EXPENSIVE

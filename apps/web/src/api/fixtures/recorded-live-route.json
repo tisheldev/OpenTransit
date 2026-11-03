@@ -1,0 +1,67 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/routes/mot%3Aroute%3A16077",
+    "params": null,
+    "body": null
+  },
+  "status": 200,
+  "body": {
+    "data": {
+      "routeId": "mot:route:16077",
+      "sourceId": "16077",
+      "operatorId": "5",
+      "routeShortName": "8",
+      "routeLongName": "מסוף הטייסים-תל אביב יפו<->מסוף אוניברסיטת ת''א/הורדה-תל אביב יפו-20",
+      "description": "55008-2-0",
+      "routeType": 3,
+      "url": null,
+      "color": null,
+      "textColor": null,
+      "translations": {},
+      "agency": {
+        "operatorId": "5",
+        "sourceId": "5",
+        "name": "דן",
+        "url": "http://www.dan.co.il",
+        "timezone": "Asia/Jerusalem",
+        "lang": "he",
+        "phone": "3456",
+        "fareUrl": null,
+        "email": null
+      },
+      "patterns": [
+        {
+          "patternId": "3028ae2f8036583c80ca9f435a038d8027fa947ae386ef908482c23678c8b223",
+          "directionId": "1",
+          "headsign": "אוניברסיטת ת\"א"
+        }
+      ],
+      "patterns_count": 1,
+      "patterns_truncated": false
+    },
+    "meta": {
+      "requestId": "00000000000000000000000000000000",
+      "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+      "generatedAt": "2026-10-31T17:31:08.684584Z",
+      "dataBuiltAt": "2026-10-31T12:18:07.213453Z",
+      "mode": "real",
+      "coverage": {
+        "from": "2026-10-31T00:00:00+02:00",
+        "until": "2026-11-30T00:00:00+02:00"
+      },
+      "freshness": "current",
+      "capabilities": {
+        "realtime": "not_enabled",
+        "alerts": "not_enabled"
+      },
+      "attribution": [
+        "Israel Ministry of Transport",
+        "© OpenStreetMap contributors"
+      ],
+      "rankingPolicy": "motis-v2.11.2-feasible-engine-order-v1",
+      "appliedConstraints": {},
+      "warnings": []
+    }
+  }
+}

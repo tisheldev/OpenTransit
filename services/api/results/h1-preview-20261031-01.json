@@ -1,0 +1,1258 @@
+{
+  "schemaVersion": 1,
+  "kind": "h1-preview",
+  "label": "H-1 PRIVATE PREVIEW in eu-north-1, left running (task 31 October 2026). Measured values are marked as such; costs are estimates from list prices.",
+  "task": "H-1",
+  "region": "eu-north-1",
+  "accountId": "{{ACCOUNT_ID}}",
+  "resources": [
+    {
+      "type": "log-group",
+      "id": "/opentransit/h1",
+      "arn": "arn:aws:logs:eu-north-1:{{ACCOUNT_ID}}:log-group:/opentransit/h1",
+      "createdAt": "2026-10-31T17:05:22+00:00",
+      "deletedAt": null,
+      "retentionDays": 14
+    },
+    {
+      "type": "iam-role",
+      "id": "opentransit-h1-execution",
+      "arn": "arn:aws:iam::{{ACCOUNT_ID}}:role/opentransit-h1-execution",
+      "createdAt": "2026-10-31T17:05:23+00:00",
+      "deletedAt": null
+    },
+    {
+      "type": "iam-inline-policy",
+      "id": "opentransit-h1-execution/opentransit-h1-execution",
+      "arn": null,
+      "createdAt": "2026-10-31T17:05:25+00:00",
+      "deletedAt": null
+    },
+    {
+      "type": "vpc",
+      "id": "vpc-009f065404ed4cf6f",
+      "arn": null,
+      "createdAt": "2026-10-31T17:05:27+00:00",
+      "deletedAt": null,
+      "cidr": "10.80.0.0/16"
+    },
+    {
+      "type": "internet-gateway",
+      "id": "igw-0ca1d481be563ad01",
+      "arn": null,
+      "createdAt": "2026-10-31T17:05:30+00:00",
+      "deletedAt": null,
+      "vpcId": "vpc-009f065404ed4cf6f"
+    },
+    {
+      "type": "route-table",
+      "id": "rtb-0bd1e8479ac82db59",
+      "arn": null,
+      "createdAt": "2026-10-31T17:05:33+00:00",
+      "deletedAt": null,
+      "vpcId": "vpc-009f065404ed4cf6f"
+    },
+    {
+      "type": "subnet",
+      "id": "subnet-016e2b126f6ff9908",
+      "arn": null,
+      "createdAt": "2026-10-31T17:05:36+00:00",
+      "deletedAt": null,
+      "cidr": "10.80.0.0/24",
+      "zone": "eu-north-1a"
+    },
+    {
+      "type": "route-table-association",
+      "id": "rtbassoc-091e2a1fb057478e6",
+      "arn": null,
+      "createdAt": "2026-10-31T17:05:37+00:00",
+      "deletedAt": null,
+      "routeTableId": "rtb-0bd1e8479ac82db59",
+      "subnetId": "subnet-016e2b126f6ff9908"
+    },
+    {
+      "type": "subnet",
+      "id": "subnet-044fc28c9e3289c4b",
+      "arn": null,
+      "createdAt": "2026-10-31T17:05:39+00:00",
+      "deletedAt": null,
+      "cidr": "10.80.1.0/24",
+      "zone": "eu-north-1b"
+    },
+    {
+      "type": "route-table-association",
+      "id": "rtbassoc-0851762b522bb39c8",
+      "arn": null,
+      "createdAt": "2026-10-31T17:05:41+00:00",
+      "deletedAt": null,
+      "routeTableId": "rtb-0bd1e8479ac82db59",
+      "subnetId": "subnet-044fc28c9e3289c4b"
+    },
+    {
+      "type": "security-group",
+      "id": "sg-040c0e8a8a6a1944a",
+      "arn": null,
+      "createdAt": "2026-10-31T17:05:42+00:00",
+      "deletedAt": null,
+      "name": "opentransit-h1-alb",
+      "vpcId": "vpc-009f065404ed4cf6f"
+    },
+    {
+      "type": "security-group",
+      "id": "sg-0c90e6a6a4c3330b7",
+      "arn": null,
+      "createdAt": "2026-10-31T17:05:45+00:00",
+      "deletedAt": null,
+      "name": "opentransit-h1-task",
+      "vpcId": "vpc-009f065404ed4cf6f"
+    },
+    {
+      "type": "target-group",
+      "id": "opentransit-h1-api",
+      "arn": "arn:aws:elasticloadbalancing:eu-north-1:{{ACCOUNT_ID}}:targetgroup/opentransit-h1-api/a4d6eb1571b6209b",
+      "createdAt": "2026-10-31T17:05:55+00:00",
+      "deletedAt": null
+    },
+    {
+      "type": "load-balancer",
+      "id": "opentransit-h1",
+      "arn": "arn:aws:elasticloadbalancing:eu-north-1:{{ACCOUNT_ID}}:loadbalancer/app/opentransit-h1/d16d3fbe2b4258b1",
+      "createdAt": "2026-10-31T17:05:58+00:00",
+      "deletedAt": null,
+      "dnsName": "opentransit-h1-492730486.eu-north-1.elb.amazonaws.com"
+    },
+    {
+      "type": "listener",
+      "id": "HTTP:80",
+      "arn": "arn:aws:elasticloadbalancing:eu-north-1:{{ACCOUNT_ID}}:listener/app/opentransit-h1/d16d3fbe2b4258b1/a09a7e0ec8b917f1",
+      "createdAt": "2026-10-31T17:06:01+00:00",
+      "deletedAt": null
+    },
+    {
+      "type": "ecs-cluster",
+      "id": "opentransit-h1",
+      "arn": "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:cluster/opentransit-h1",
+      "createdAt": "2026-10-31T17:06:02+00:00",
+      "deletedAt": null
+    },
+    {
+      "type": "ecr-repository",
+      "id": "opentransit-api",
+      "arn": "arn:aws:ecr:eu-north-1:{{ACCOUNT_ID}}:repository/opentransit-api",
+      "createdAt": "2026-10-31T17:06:05+00:00",
+      "deletedAt": null,
+      "keep": true,
+      "preExisting": "H-0"
+    },
+    {
+      "type": "ecr-repository",
+      "id": "opentransit-data",
+      "arn": "arn:aws:ecr:eu-north-1:{{ACCOUNT_ID}}:repository/opentransit-data",
+      "createdAt": "2026-10-31T17:06:07+00:00",
+      "deletedAt": null,
+      "keep": true,
+      "preExisting": "H-0"
+    },
+    {
+      "type": "ecr-repository",
+      "id": "opentransit-photon",
+      "arn": "arn:aws:ecr:eu-north-1:{{ACCOUNT_ID}}:repository/opentransit-photon",
+      "createdAt": "2026-10-31T17:06:10+00:00",
+      "deletedAt": null,
+      "keep": true,
+      "preExisting": "H-0"
+    },
+    {
+      "type": "ecr-repository",
+      "id": "opentransit-motis",
+      "arn": "arn:aws:ecr:eu-north-1:{{ACCOUNT_ID}}:repository/opentransit-motis",
+      "createdAt": "2026-10-31T17:06:12+00:00",
+      "deletedAt": null,
+      "keep": true,
+      "preExisting": "H-0"
+    },
+    {
+      "type": "task-definition",
+      "id": "opentransit-h1:1",
+      "arn": "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:task-definition/opentransit-h1:1",
+      "createdAt": "2026-10-31T17:06:17+00:00",
+      "deletedAt": null,
+      "images": {
+        "init": "{{ACCOUNT_ID}}.dkr.ecr.eu-north-1.amazonaws.com/opentransit-data@sha256:64eb35650eadf73cbb6619d2ad571655afd7ab351f864412698d5f9c87c51059",
+        "motis": "{{ACCOUNT_ID}}.dkr.ecr.eu-north-1.amazonaws.com/opentransit-motis@sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330",
+        "photon": "{{ACCOUNT_ID}}.dkr.ecr.eu-north-1.amazonaws.com/opentransit-photon@sha256:52f94ba3722d73dc06022ffa8a1392ca96bff5418ae3f85ce54c725ab3803e83",
+        "verifier": "{{ACCOUNT_ID}}.dkr.ecr.eu-north-1.amazonaws.com/opentransit-api@sha256:0d501f356ab5a1af6cfd02ea0aa2610e05166e85bf14521a676318358f5a57d8",
+        "api": "{{ACCOUNT_ID}}.dkr.ecr.eu-north-1.amazonaws.com/opentransit-api@sha256:0d501f356ab5a1af6cfd02ea0aa2610e05166e85bf14521a676318358f5a57d8"
+      }
+    },
+    {
+      "type": "ecs-service",
+      "id": "opentransit-h1",
+      "arn": "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:service/opentransit-h1/opentransit-h1",
+      "createdAt": "2026-10-31T17:06:23+00:00",
+      "deletedAt": null
+    }
+  ],
+  "steps": [
+    {
+      "step": "cost-estimate",
+      "at": "2026-10-31T17:05:05+00:00",
+      "ok": true,
+      "basis": "eu-north-1 on-demand list prices (AWS Price List API, 31 Oct 2026), pre-tax",
+      "prices": {
+        "fargateVcpuHour": 0.0445,
+        "fargateGbHour": 0.0049,
+        "albHour": 0.02394,
+        "albLcuHour": 0.0076,
+        "publicIpv4Hour": 0.005,
+        "ecrGbMonth": 0.1,
+        "logsIngestGb": 0.54,
+        "logsStorageGbMonth": 0.028
+      },
+      "weeklyUsd": {
+        "fargateOneTask": 9.95,
+        "alb": 4.02,
+        "albLcuUpperBound": 1.28,
+        "publicIpv4TaskAndTwoAlbNodes": 2.52,
+        "secondTaskDuringRollouts": 0.18,
+        "ecrStorage": 0.15,
+        "logs": 0.06
+      },
+      "weeklyTotalUsd": 18.15,
+      "guardUsd": 30.0,
+      "withinGuard": true,
+      "notIncluded": "data transfer out (small JSON responses, free tier), tax"
+    },
+    {
+      "step": "setup-start",
+      "at": "2026-10-31T17:05:19+00:00",
+      "ok": true,
+      "reviewerCidr": "93.173.37.36/32"
+    },
+    {
+      "step": "setup-complete",
+      "at": "2026-10-31T17:06:02+00:00",
+      "ok": true,
+      "albDns": "opentransit-h1-492730486.eu-north-1.elb.amazonaws.com"
+    },
+    {
+      "step": "push-api",
+      "at": "2026-10-31T17:06:06+00:00",
+      "ok": true,
+      "digest": "sha256:0d501f356ab5a1af6cfd02ea0aa2610e05166e85bf14521a676318358f5a57d8",
+      "compressedBytes": 77364059
+    },
+    {
+      "step": "push-data",
+      "at": "2026-10-31T17:06:09+00:00",
+      "ok": true,
+      "digest": "sha256:64eb35650eadf73cbb6619d2ad571655afd7ab351f864412698d5f9c87c51059",
+      "compressedBytes": 760649241
+    },
+    {
+      "step": "push-photon",
+      "at": "2026-10-31T17:06:11+00:00",
+      "ok": true,
+      "digest": "sha256:52f94ba3722d73dc06022ffa8a1392ca96bff5418ae3f85ce54c725ab3803e83",
+      "compressedBytes": 203741244
+    },
+    {
+      "step": "push-motis",
+      "at": "2026-10-31T17:06:14+00:00",
+      "ok": true,
+      "digest": "sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330",
+      "compressedBytes": 68329952
+    },
+    {
+      "step": "register-task-definition",
+      "at": "2026-10-31T17:06:17+00:00",
+      "ok": true,
+      "arn": "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:task-definition/opentransit-h1:1"
+    },
+    {
+      "step": "service-create",
+      "at": "2026-10-31T17:06:23+00:00",
+      "ok": true,
+      "desired": 1,
+      "taskDefinition": "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:task-definition/opentransit-h1:1"
+    },
+    {
+      "step": "wait-ready-first-deploy",
+      "at": "2026-10-31T17:18:20+00:00",
+      "ok": true,
+      "readyz200At": "2026-10-31T17:18:16+00:00",
+      "targets": {
+        "10.80.0.13": "healthy"
+      }
+    },
+    {
+      "step": "probe-first-deploy",
+      "at": "2026-10-31T17:18:46+00:00",
+      "ok": true,
+      "demoExit": 0,
+      "journeysPassed": 10,
+      "journeysTotal": 10,
+      "healthzMedianMs": 174.6
+    },
+    {
+      "step": "probe-rollback-drill-rev2",
+      "at": "2026-10-31T18:04:19+00:00",
+      "ok": true,
+      "demoExit": 0,
+      "journeysPassed": 10,
+      "journeysTotal": 10,
+      "healthzMedianMs": 172.8
+    }
+  ],
+  "measurements": {
+    "tasks": {
+      "5d3f0de184a74a9bbd504728107caea1": {
+        "createdAt": "2026-10-31T19:06:37.279000+02:00",
+        "pullStartedAt": "2026-10-31T19:06:49.639000+02:00",
+        "pullStoppedAt": "2026-10-31T19:07:28.758000+02:00",
+        "startedAt": "2026-10-31T19:14:38.331000+02:00",
+        "stoppingAt": null,
+        "stoppedAt": null,
+        "lastStatus": "RUNNING",
+        "healthStatus": "UNKNOWN",
+        "stopCode": null,
+        "stoppedReason": null,
+        "taskDefinitionArn": "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:task-definition/opentransit-h1:1",
+        "containers": {
+          "verifier": {
+            "lastStatus": "STOPPED",
+            "exitCode": 0,
+            "reason": null,
+            "healthStatus": "UNKNOWN"
+          },
+          "init": {
+            "lastStatus": "STOPPED",
+            "exitCode": 0,
+            "reason": null,
+            "healthStatus": "UNKNOWN"
+          },
+          "photon": {
+            "lastStatus": "RUNNING",
+            "exitCode": null,
+            "reason": null,
+            "healthStatus": "HEALTHY"
+          },
+          "motis": {
+            "lastStatus": "RUNNING",
+            "exitCode": null,
+            "reason": null,
+            "healthStatus": "HEALTHY"
+          },
+          "api": {
+            "lastStatus": "RUNNING",
+            "exitCode": null,
+            "reason": null,
+            "healthStatus": "UNKNOWN"
+          }
+        }
+      }
+    },
+    "taskRunningSecondsSoFar": 221.7,
+    "readiness": [
+      {
+        "label": "first-deploy",
+        "waitStartedAt": "2026-10-31T17:06:31+00:00",
+        "readyz200At": "2026-10-31T17:18:16+00:00",
+        "targets": {
+          "10.80.0.13": "healthy"
+        },
+        "taskTimes": {
+          "5d3f0de184a74a9bbd504728107caea1": {
+            "createdAt": "2026-10-31T19:06:37.279000+02:00",
+            "pullStartedAt": "2026-10-31T19:06:49.639000+02:00",
+            "pullStoppedAt": "2026-10-31T19:07:28.758000+02:00",
+            "startedAt": "2026-10-31T19:14:38.331000+02:00",
+            "stoppingAt": null,
+            "stoppedAt": null,
+            "lastStatus": "RUNNING",
+            "healthStatus": "UNKNOWN",
+            "stopCode": null,
+            "stoppedReason": null,
+            "taskDefinitionArn": "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:task-definition/opentransit-h1:1",
+            "containers": {
+              "verifier": {
+                "lastStatus": "STOPPED",
+                "exitCode": 0,
+                "reason": null,
+                "healthStatus": "UNKNOWN"
+              },
+              "init": {
+                "lastStatus": "STOPPED",
+                "exitCode": 0,
+                "reason": null,
+                "healthStatus": "UNKNOWN"
+              },
+              "photon": {
+                "lastStatus": "RUNNING",
+                "exitCode": null,
+                "reason": null,
+                "healthStatus": "HEALTHY"
+              },
+              "motis": {
+                "lastStatus": "RUNNING",
+                "exitCode": null,
+                "reason": null,
+                "healthStatus": "HEALTHY"
+              },
+              "api": {
+                "lastStatus": "RUNNING",
+                "exitCode": null,
+                "reason": null,
+                "healthStatus": "UNKNOWN"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "probes": [
+      {
+        "label": "first-deploy",
+        "startedAt": "2026-10-31T17:18:34+00:00",
+        "from": "developer machine (Israel)",
+        "readyz": {
+          "status": 200,
+          "ms": 247.3,
+          "body": {
+            "status": "ready",
+            "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445"
+          }
+        },
+        "status": {
+          "status": 200,
+          "ms": 209.7,
+          "body": {
+            "data": {
+              "ready": true,
+              "staticData": "available",
+              "routing": "available",
+              "reference": "available",
+              "realtime": "not_enabled",
+              "alerts": "not_enabled",
+              "lastValidatedAt": "2026-10-31T12:00:20.906984+00:00"
+            },
+            "meta": {
+              "requestId": "8030b06e87c54309a64d5056d35d54de",
+              "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+              "generatedAt": "2026-10-31T17:18:34.563785Z",
+              "dataBuiltAt": "2026-10-31T12:18:07.213453Z",
+              "mode": "real",
+              "coverage": {
+                "from": "2026-10-31T00:00:00+02:00",
+                "until": "2026-11-30T00:00:00+02:00"
+              },
+              "freshness": "current",
+              "capabilities": {
+                "realtime": "not_enabled",
+                "alerts": "not_enabled"
+              },
+              "attribution": [
+                "Israel Ministry of Transport",
+                "© OpenStreetMap contributors"
+              ],
+              "rankingPolicy": "motis-v2.11.2-feasible-engine-order-v1",
+              "appliedConstraints": {},
+              "warnings": []
+            }
+          }
+        },
+        "demo": {
+          "exit": 0,
+          "stdoutTail": "]\n    08:26-08:28  walk       START -> ??????? ????/???????  [scheduled]\n    08:28-08:42  bus        ??????? ????/??????? -> ??? ????/????? ????? line 5 to ?? ???? ???_???? ???? (??, service date 2026-11-01)  [scheduled]\n    08:42-08:44  walk       ??? ????/????? ????? -> ??? ????/????? ?????  [scheduled]\n    08:44-09:09  bus        ??? ????/????? ????? -> ???? ????? line 650 to ?????_???? ??? ????? (?????????, service date 2026-11-01)  [scheduled]\n    09:11-09:13  walk       ???? ????? -> ???? ?????  [scheduled]\n    09:13-10:05  bus        ???? ????? -> ?. ?????? ??? ?????/????? line 947 to ????_?????? ??? ????? (???, service date 2026-11-01)  [scheduled]\n    10:09-10:11  walk       ?. ?????? ??? ?????/????? -> ?. ?????? ??? ?????/?????? ??????  [scheduled]\n    10:11-10:19  bus        ?. ?????? ??? ?????/?????? ?????? -> ???? ?????/???? ???? line 4 to ???? ??????_?????? ?????? (???????, service date 2026-11-01)  [scheduled]\n    10:19-10:21  walk       ???? ?????/???? ???? -> ???? ?????/???? ????  [scheduled]\n    10:25-10:32  bus        ???? ?????/???? ???? -> ??????/?????? ????? line 144 to ????_?????????? (???, service date 2026-11-01)  [scheduled]\n    10:32-10:37  walk       ??????/?????? ????? -> END  [scheduled]\n\n  Constraints: timeMode=departAt, modes=['bus', 'rail', 'light_rail'], maxAccessWalkMinutes=15, maxEgressWalkMinutes=15, maxDirectWalkMinutes=30, engineWalkCapConformance=unverified, transferWalkLimit=not_enforced\n  Warnings:    TRANSFER_STREET_PATH_UNAVAILABLE\n",
+          "stderrTail": ""
+        },
+        "journeys": [
+          {
+            "id": "J01",
+            "status": 200,
+            "ms": 191.5,
+            "journeys": 1,
+            "outcome": "routes_found",
+            "expected": "route",
+            "pass": true
+          },
+          {
+            "id": "J04",
+            "status": 200,
+            "ms": 196.8,
+            "journeys": 1,
+            "outcome": "routes_found",
+            "expected": "route",
+            "pass": true
+          },
+          {
+            "id": "J11",
+            "status": 200,
+            "ms": 196.3,
+            "journeys": 1,
+            "outcome": "routes_found",
+            "expected": "route",
+            "pass": true
+          },
+          {
+            "id": "J12",
+            "status": 200,
+            "ms": 209.8,
+            "journeys": 1,
+            "outcome": "routes_found",
+            "expected": "route",
+            "pass": true
+          },
+          {
+            "id": "J15",
+            "status": 200,
+            "ms": 307.4,
+            "journeys": 1,
+            "outcome": "routes_found",
+            "expected": "route",
+            "pass": true
+          },
+          {
+            "id": "J16",
+            "status": 200,
+            "ms": 215.5,
+            "journeys": 1,
+            "outcome": "routes_found",
+            "expected": "route",
+            "pass": true
+          },
+          {
+            "id": "J19",
+            "status": 200,
+            "ms": 318.8,
+            "journeys": 1,
+            "outcome": "routes_found",
+            "expected": "route",
+            "pass": true
+          },
+          {
+            "id": "J21",
+            "status": 200,
+            "ms": 195.7,
+            "journeys": 1,
+            "outcome": "routes_found",
+            "expected": "route",
+            "pass": true
+          },
+          {
+            "id": "J22",
+            "status": 200,
+            "ms": 297.2,
+            "journeys": 1,
+            "outcome": "routes_found",
+            "expected": "either",
+            "pass": true
+          },
+          {
+            "id": "J23",
+            "status": 200,
+            "ms": 175.9,
+            "journeys": 0,
+            "outcome": "no_route",
+            "expected": "no_route",
+            "pass": true
+          }
+        ],
+        "healthzLatencyMs": {
+          "n": 50,
+          "min": 168.7,
+          "median": 174.6,
+          "p95": 189.7,
+          "max": 201.0,
+          "note": "HTTP round trip from this machine through the ALB (new connection each)"
+        },
+        "journeyLatencyMs": {
+          "n": 10,
+          "median": 203.3,
+          "max": 318.8
+        },
+        "finishedAt": "2026-10-31T17:18:46+00:00"
+      },
+      {
+        "label": "rollback-drill-rev2",
+        "startedAt": "2026-10-31T18:04:13+00:00",
+        "from": "developer machine (Israel)",
+        "readyz": {
+          "status": 200,
+          "ms": 254.9,
+          "body": {
+            "status": "ready",
+            "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445"
+          }
+        },
+        "status": {
+          "status": 200,
+          "ms": 221.7,
+          "body": {
+            "data": {
+              "ready": true,
+              "staticData": "available",
+              "routing": "available",
+              "reference": "available",
+              "realtime": "not_enabled",
+              "alerts": "not_enabled",
+              "lastValidatedAt": "2026-10-31T12:00:20.906984+00:00"
+            },
+            "meta": {
+              "requestId": "8ce7ebbf96e04b0faa08b6bb7e20deaf",
+              "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+              "generatedAt": "2026-10-31T18:04:13.640553Z",
+              "dataBuiltAt": "2026-10-31T12:18:07.213453Z",
+              "mode": "real",
+              "coverage": {
+                "from": "2026-10-31T00:00:00+02:00",
+                "until": "2026-11-30T00:00:00+02:00"
+              },
+              "freshness": "current",
+              "capabilities": {
+                "realtime": "not_enabled",
+                "alerts": "not_enabled"
+              },
+              "attribution": [
+                "Israel Ministry of Transport",
+                "© OpenStreetMap contributors"
+              ],
+              "rankingPolicy": "motis-v2.11.2-feasible-engine-order-v1",
+              "appliedConstraints": {},
+              "warnings": []
+            }
+          }
+        },
+        "demo": {
+          "exit": 0,
+          "stdoutTail": "]\n    08:26-08:28  walk       START -> ??????? ????/???????  [scheduled]\n    08:28-08:42  bus        ??????? ????/??????? -> ??? ????/????? ????? line 5 to ?? ???? ???_???? ???? (??, service date 2026-11-01)  [scheduled]\n    08:42-08:44  walk       ??? ????/????? ????? -> ??? ????/????? ?????  [scheduled]\n    08:44-09:09  bus        ??? ????/????? ????? -> ???? ????? line 650 to ?????_???? ??? ????? (?????????, service date 2026-11-01)  [scheduled]\n    09:11-09:13  walk       ???? ????? -> ???? ?????  [scheduled]\n    09:13-10:05  bus        ???? ????? -> ?. ?????? ??? ?????/????? line 947 to ????_?????? ??? ????? (???, service date 2026-11-01)  [scheduled]\n    10:09-10:11  walk       ?. ?????? ??? ?????/????? -> ?. ?????? ??? ?????/?????? ??????  [scheduled]\n    10:11-10:19  bus        ?. ?????? ??? ?????/?????? ?????? -> ???? ?????/???? ???? line 4 to ???? ??????_?????? ?????? (???????, service date 2026-11-01)  [scheduled]\n    10:19-10:21  walk       ???? ?????/???? ???? -> ???? ?????/???? ????  [scheduled]\n    10:25-10:32  bus        ???? ?????/???? ???? -> ??????/?????? ????? line 144 to ????_?????????? (???, service date 2026-11-01)  [scheduled]\n    10:32-10:37  walk       ??????/?????? ????? -> END  [scheduled]\n\n  Constraints: timeMode=departAt, modes=['bus', 'rail', 'light_rail'], maxAccessWalkMinutes=15, maxEgressWalkMinutes=15, maxDirectWalkMinutes=30, engineWalkCapConformance=unverified, transferWalkLimit=not_enforced\n  Warnings:    TRANSFER_STREET_PATH_UNAVAILABLE\n",
+          "stderrTail": ""
+        },
+        "journeys": [
+          {
+            "id": "J01",
+            "status": 200,
+            "ms": 201.0,
+            "journeys": 1,
+            "outcome": "routes_found",
+            "expected": "route",
+            "pass": true
+          },
+          {
+            "id": "J04",
+            "status": 200,
+            "ms": 221.1,
+            "journeys": 1,
+            "outcome": "routes_found",
+            "expected": "route",
+            "pass": true
+          },
+          {
+            "id": "J11",
+            "status": 200,
+            "ms": 209.9,
+            "journeys": 1,
+            "outcome": "routes_found",
+            "expected": "route",
+            "pass": true
+          },
+          {
+            "id": "J12",
+            "status": 200,
+            "ms": 221.1,
+            "journeys": 1,
+            "outcome": "routes_found",
+            "expected": "route",
+            "pass": true
+          },
+          {
+            "id": "J15",
+            "status": 200,
+            "ms": 336.6,
+            "journeys": 1,
+            "outcome": "routes_found",
+            "expected": "route",
+            "pass": true
+          },
+          {
+            "id": "J16",
+            "status": 200,
+            "ms": 216.0,
+            "journeys": 1,
+            "outcome": "routes_found",
+            "expected": "route",
+            "pass": true
+          },
+          {
+            "id": "J19",
+            "status": 200,
+            "ms": 361.4,
+            "journeys": 1,
+            "outcome": "routes_found",
+            "expected": "route",
+            "pass": true
+          },
+          {
+            "id": "J21",
+            "status": 200,
+            "ms": 202.3,
+            "journeys": 1,
+            "outcome": "routes_found",
+            "expected": "route",
+            "pass": true
+          },
+          {
+            "id": "J22",
+            "status": 200,
+            "ms": 322.8,
+            "journeys": 1,
+            "outcome": "routes_found",
+            "expected": "either",
+            "pass": true
+          },
+          {
+            "id": "J23",
+            "status": 200,
+            "ms": 191.8,
+            "journeys": 0,
+            "outcome": "no_route",
+            "expected": "no_route",
+            "pass": true
+          }
+        ],
+        "healthzLatencyMs": {
+          "n": 10,
+          "min": 170.0,
+          "median": 172.8,
+          "p95": 184.3,
+          "max": 188.4,
+          "note": "HTTP round trip from this machine through the ALB (new connection each)"
+        },
+        "journeyLatencyMs": {
+          "n": 10,
+          "median": 218.6,
+          "max": 361.4
+        },
+        "finishedAt": "2026-10-31T18:04:19+00:00"
+      }
+    ],
+    "webClientRealE2e": {
+      "at": "2026-10-31T17:20Z",
+      "command": "cd apps/web && OPENTRANSIT_API_ORIGIN=http://<alb> npx playwright test e2e/real.spec.ts",
+      "result": "2 passed (4.1 s): dev proxy /v1/status ready+real+realtime not_enabled; real engine trip ID opens through the encoded /v1/trips path with matching tripRef",
+      "project": "mobile-chromium (Pixel 7, 360x640)",
+      "notRun": "npm run fixtures:record (writes apps/web fixtures owned by the CLIENT task)"
+    },
+    "publisher": {
+      "note": "First executions of publish_generation.py push --execute-aws (operator machine, 31 Oct). Release records kept in D:/ot/releases (not in Git).",
+      "r2ExistingImages": {
+        "plan": "publish --local-image api=ot-h0-api:local data=ot-h0-data:local photon=ot-t5-photon:local (no build)",
+        "result": "MOTIS mirror skipped (digest present); api/data/photon pushed under new gen-<id12>-<image12> tags in 3.3-3.4 s each, resolving to the same registry digests as H-0 (no-op by digest); revision 2 registered; update-service converged with one task",
+        "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+        "taskDefinitionArn": "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:task-definition/opentransit-h1:2",
+        "images": {
+          "api": "sha256:0d501f356ab5a1af6cfd02ea0aa2610e05166e85bf14521a676318358f5a57d8",
+          "data": "sha256:64eb35650eadf73cbb6619d2ad571655afd7ab351f864412698d5f9c87c51059",
+          "photon": "sha256:52f94ba3722d73dc06022ffa8a1392ca96bff5418ae3f85ce54c725ab3803e83"
+        },
+        "localImageIds": {
+          "api": "sha256:fa1914fda8d9c8467a739dfba18e82a9bbec7a0039399bd8268f3fb2eb0d80e1",
+          "data": "sha256:70f33ec4af6721e974597caa4d52e60fe469b669a068d413e9037f2ed0c95778",
+          "photon": "sha256:96aadfab3ee73434d5f0d6e826355d95760588021b46b4152a95aa8b3bc93b93"
+        },
+        "pushes": {
+          "motis": {
+            "digest": "sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330",
+            "pushed": false
+          },
+          "api": {
+            "tag": "gen-2d8ec2746bb5-fa1914fda8d9",
+            "digest": "sha256:0d501f356ab5a1af6cfd02ea0aa2610e05166e85bf14521a676318358f5a57d8",
+            "pushed": true,
+            "seconds": 3.4
+          },
+          "data": {
+            "tag": "gen-2d8ec2746bb5-70f33ec4af67",
+            "digest": "sha256:64eb35650eadf73cbb6619d2ad571655afd7ab351f864412698d5f9c87c51059",
+            "pushed": true,
+            "seconds": 3.3
+          },
+          "photon": {
+            "tag": "gen-2d8ec2746bb5-96aadfab3ee7",
+            "digest": "sha256:52f94ba3722d73dc06022ffa8a1392ca96bff5418ae3f85ce54c725ab3803e83",
+            "pushed": true,
+            "seconds": 3.4
+          }
+        },
+        "sourceCheckedAt": "2026-10-31T12:00:20.906984+00:00",
+        "registeredAt": "2026-10-31T17:19:46+00:00",
+        "deployment": {
+          "startedAt": "2026-10-31T17:19:48+00:00",
+          "seconds": 892.6,
+          "deployments": 1,
+          "rolloutState": "COMPLETED",
+          "taskDefinition": "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:task-definition/opentransit-h1:2",
+          "runningCount": 1,
+          "desiredCount": 1,
+          "converged": true
+        },
+        "sourceCheck": null
+      },
+      "r3Renewal": {
+        "plan": "publish --local-image api=ot-h1-api:20261031a (this branch: probe source-check support) + H-0 data/photon --source-check D:/ot/src/checks/20261031T172006Z-673a7d51.json (unchanged GTFS 147d0860/TripIdToDate 2537dcb9, paired validation passed)",
+        "result": "verifier exit 0 with the inline record; API started with OPENTRANSIT_SOURCE_CHECK; /v1/status freshness current",
+        "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+        "taskDefinitionArn": "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:task-definition/opentransit-h1:3",
+        "images": {
+          "api": "sha256:114fc4977595e7c9dc0e4002324c857abbf53950b0b0f90b829acaed43544287",
+          "data": "sha256:64eb35650eadf73cbb6619d2ad571655afd7ab351f864412698d5f9c87c51059",
+          "photon": "sha256:52f94ba3722d73dc06022ffa8a1392ca96bff5418ae3f85ce54c725ab3803e83"
+        },
+        "localImageIds": {
+          "api": "sha256:33be0e2d508581d0f3a2df13d509c09d38368b8b3b558493c6fb147e4ff037e5",
+          "data": "sha256:70f33ec4af6721e974597caa4d52e60fe469b669a068d413e9037f2ed0c95778",
+          "photon": "sha256:96aadfab3ee73434d5f0d6e826355d95760588021b46b4152a95aa8b3bc93b93"
+        },
+        "pushes": {
+          "motis": {
+            "digest": "sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330",
+            "pushed": false
+          },
+          "api": {
+            "tag": "gen-2d8ec2746bb5-33be0e2d5085",
+            "digest": "sha256:114fc4977595e7c9dc0e4002324c857abbf53950b0b0f90b829acaed43544287",
+            "pushed": true,
+            "seconds": 9.6
+          },
+          "data": {
+            "tag": "gen-2d8ec2746bb5-70f33ec4af67",
+            "digest": "sha256:64eb35650eadf73cbb6619d2ad571655afd7ab351f864412698d5f9c87c51059",
+            "pushed": false,
+            "seconds": 1.5
+          },
+          "photon": {
+            "tag": "gen-2d8ec2746bb5-96aadfab3ee7",
+            "digest": "sha256:52f94ba3722d73dc06022ffa8a1392ca96bff5418ae3f85ce54c725ab3803e83",
+            "pushed": false,
+            "seconds": 1.6
+          }
+        },
+        "sourceCheckedAt": "2026-10-31T17:20:01.268427+00:00",
+        "registeredAt": "2026-10-31T17:35:17+00:00",
+        "deployment": {
+          "startedAt": "2026-10-31T17:35:19+00:00",
+          "seconds": 804.4,
+          "deployments": 1,
+          "rolloutState": "COMPLETED",
+          "taskDefinition": "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:task-definition/opentransit-h1:3",
+          "runningCount": 1,
+          "desiredCount": 1,
+          "converged": true
+        },
+        "sourceCheck": {
+          "pairedValidation": "passed",
+          "record": {
+            "name": "20261031T172006Z-673a7d51.json",
+            "sha256": "58db71b68e6b2534bb7c0dad00c20d86b445f0b93c5f5be127ba11166130c512"
+          },
+          "sources": {
+            "gtfs": {
+              "checkedAt": "2026-10-31T17:20:01.268427+00:00",
+              "sha256": "147d086084c3df0c6ccf4197126b91bf00a91e9c658b6016e647a3802b3735be",
+              "status": "unchanged"
+            },
+            "trip_id_to_date": {
+              "checkedAt": "2026-10-31T17:20:01.268427+00:00",
+              "sha256": "2537dcb9b690421b7bf0cc4428542e5b5218a90315a2943582662c9ecad63a4d",
+              "status": "unchanged"
+            }
+          },
+          "validatedAt": "2026-10-31T17:23:48.216018+00:00",
+          "validation": {
+            "valid": true
+          }
+        }
+      },
+      "fixesFromReality": [
+        "Windows Docker credential store rejects ECR tokens: throwaway DOCKER_CONFIG",
+        "aws calls without --profile: --profile option",
+        "H-0 family and log group: render_drafts.retarget to opentransit-h1 and /opentransit/h1",
+        "immutable repositories and reused tags: tag gen-<generation12>-<local image12>, skip push when the tag exists",
+        "registry digest from local RepoDigests could pick the H-0 entry: read the digest from ECR describe-images",
+        "no wait or executable rollback: --wait and rollback --execute-aws",
+        "push accepted only --build plans: existing-images mode"
+      ]
+    },
+    "rollbackDrill": {
+      "from": "opentransit-h1:3 (R3)",
+      "to": "opentransit-h1:2 (R2) via rollback plan",
+      "rollback": {
+        "startedAt": "2026-10-31T17:49:05+00:00",
+        "allowed": true,
+        "freshness": "current",
+        "seconds": 898.3,
+        "deployments": 1,
+        "rolloutState": "COMPLETED",
+        "taskDefinition": "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:task-definition/opentransit-h1:2",
+        "runningCount": 1,
+        "desiredCount": 1,
+        "converged": true
+      },
+      "probeAfterRollback": "see probes[label=rollback-drill-rev2]",
+      "rollForward": {
+        "to": "opentransit-h1:3",
+        "startedAt": "2026-10-31T18:04:22+00:00",
+        "seconds": 813.3,
+        "deployments": 1,
+        "rolloutState": "COMPLETED",
+        "taskDefinition": "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:task-definition/opentransit-h1:3",
+        "runningCount": 1,
+        "desiredCount": 1,
+        "converged": true
+      },
+      "maxTasksObserved": 2,
+      "note": "Both directions used publish_generation.py rollback --execute-aws --wait; ECS rolling 200/100 kept at most two tasks (6 GiB allocated)"
+    },
+    "dailyRefresh": {
+      "wrapper": "D:/ot/src-<commit>/deploy/aws/scheduler/daily-refresh.cmd, run manually via cmd (Task Scheduler registration was blocked for the agent; deploy/aws/scheduler/register-task.ps1 is for the user)",
+      "runs": [
+        {
+          "log": "D:/ot/logs/daily-20261031T1818Z.log",
+          "outcome": "failed",
+          "failure": "TypeError: Job.record() got multiple values for argument 'ok'",
+          "startedAt": "2026-10-31T18:18:11+00:00",
+          "finishedAt": "2026-10-31T18:41:29+00:00",
+          "source": {
+            "pairedValidation": "passed",
+            "changedFromServing": false,
+            "sha256": {
+              "israel-public-transportation.zip": "147d086084c3",
+              "TripIdToDate.zip": "2537dcb9b690"
+            }
+          },
+          "steps": [
+            {
+              "step": "fetch",
+              "at": "2026-10-31T18:22:17+00:00",
+              "ok": true,
+              "seconds": 246.0
+            },
+            {
+              "step": "validate",
+              "at": "2026-10-31T18:25:59+00:00",
+              "ok": true,
+              "seconds": 222.0
+            },
+            {
+              "step": "build-generation",
+              "at": "2026-10-31T18:25:59+00:00",
+              "ok": true,
+              "skipped": "feed pair unchanged since the serving build"
+            },
+            {
+              "step": "probe",
+              "at": "2026-10-31T18:25:59+00:00",
+              "ok": true,
+              "skipped": "no new generation; the in-task verifier probes it"
+            },
+            {
+              "step": "publish",
+              "at": "2026-10-31T18:26:08+00:00",
+              "ok": true,
+              "seconds": 9.0
+            },
+            {
+              "step": "push",
+              "at": "2026-10-31T18:41:25+00:00",
+              "ok": true,
+              "seconds": 917.1
+            }
+          ],
+          "deployed": {
+            "taskDefinition": "opentransit-h1:4",
+            "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+            "sourceCheckedAt": "2026-10-31T18:18:12.369861+00:00",
+            "deployment": {
+              "startedAt": "2026-10-31T18:26:23+00:00",
+              "seconds": 902.1,
+              "deployments": 1,
+              "rolloutState": "COMPLETED",
+              "taskDefinition": "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:task-definition/opentransit-h1:4",
+              "runningCount": 1,
+              "desiredCount": 1,
+              "converged": true
+            },
+            "pushes": {
+              "motis": {
+                "digest": "sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330",
+                "pushed": false
+              },
+              "api": {
+                "tag": "gen-2d8ec2746bb5-33be0e2d5085",
+                "digest": "sha256:114fc4977595e7c9dc0e4002324c857abbf53950b0b0f90b829acaed43544287",
+                "pushed": false,
+                "seconds": 1.3
+              },
+              "data": {
+                "tag": "gen-2d8ec2746bb5-70f33ec4af67",
+                "digest": "sha256:64eb35650eadf73cbb6619d2ad571655afd7ab351f864412698d5f9c87c51059",
+                "pushed": false,
+                "seconds": 1.3
+              },
+              "photon": {
+                "tag": "gen-2d8ec2746bb5-96aadfab3ee7",
+                "digest": "sha256:52f94ba3722d73dc06022ffa8a1392ca96bff5418ae3f85ce54c725ab3803e83",
+                "pushed": false,
+                "seconds": 1.2
+              }
+            }
+          },
+          "retentionCandidates": [],
+          "note": "Deployed revision 4 (converged), then crashed recording the ALB probe (duplicate 'ok' keyword); fixed in daily_refresh.py and the whole job re-run"
+        },
+        {
+          "log": "D:/ot/logs/daily-20261031T1842Z.log",
+          "outcome": "ok",
+          "failure": null,
+          "startedAt": "2026-10-31T18:42:41+00:00",
+          "finishedAt": "2026-10-31T19:04:27+00:00",
+          "source": {
+            "pairedValidation": "passed",
+            "changedFromServing": false,
+            "sha256": {
+              "israel-public-transportation.zip": "147d086084c3",
+              "TripIdToDate.zip": "2537dcb9b690"
+            }
+          },
+          "steps": [
+            {
+              "step": "fetch",
+              "at": "2026-10-31T18:46:21+00:00",
+              "ok": true,
+              "seconds": 220.6
+            },
+            {
+              "step": "validate",
+              "at": "2026-10-31T18:49:59+00:00",
+              "ok": true,
+              "seconds": 217.6
+            },
+            {
+              "step": "build-generation",
+              "at": "2026-10-31T18:49:59+00:00",
+              "ok": true,
+              "skipped": "feed pair unchanged since the serving build"
+            },
+            {
+              "step": "probe",
+              "at": "2026-10-31T18:49:59+00:00",
+              "ok": true,
+              "skipped": "no new generation; the in-task verifier probes it"
+            },
+            {
+              "step": "publish",
+              "at": "2026-10-31T18:50:04+00:00",
+              "ok": true,
+              "seconds": 4.8
+            },
+            {
+              "step": "push",
+              "at": "2026-10-31T19:04:00+00:00",
+              "ok": true,
+              "seconds": 836.2
+            },
+            {
+              "step": "alb-probe",
+              "at": "2026-10-31T19:04:04+00:00",
+              "ok": true,
+              "seconds": 4.0,
+              "readyz": {
+                "status": 200,
+                "ms": 208.7
+              },
+              "journeys": [
+                {
+                  "id": "J01",
+                  "status": 200,
+                  "ms": 216.9,
+                  "pass": true
+                },
+                {
+                  "id": "J04",
+                  "status": 200,
+                  "ms": 204.8,
+                  "pass": true
+                },
+                {
+                  "id": "J11",
+                  "status": 200,
+                  "ms": 217.5,
+                  "pass": true
+                },
+                {
+                  "id": "J12",
+                  "status": 200,
+                  "ms": 203.9,
+                  "pass": true
+                },
+                {
+                  "id": "J15",
+                  "status": 200,
+                  "ms": 324.7,
+                  "pass": true
+                },
+                {
+                  "id": "J16",
+                  "status": 200,
+                  "ms": 215.6,
+                  "pass": true
+                },
+                {
+                  "id": "J19",
+                  "status": 200,
+                  "ms": 339.0,
+                  "pass": true
+                },
+                {
+                  "id": "J21",
+                  "status": 200,
+                  "ms": 198.5,
+                  "pass": true
+                },
+                {
+                  "id": "J22",
+                  "status": 200,
+                  "ms": 296.0,
+                  "pass": true
+                },
+                {
+                  "id": "J23",
+                  "status": 200,
+                  "ms": 182.5,
+                  "pass": true
+                }
+              ],
+              "journeysPassed": 10,
+              "demoExit": 0
+            },
+            {
+              "step": "retention",
+              "at": "2026-10-31T19:04:27+00:00",
+              "ok": true,
+              "seconds": 22.5
+            }
+          ],
+          "deployed": {
+            "taskDefinition": "opentransit-h1:5",
+            "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+            "sourceCheckedAt": "2026-10-31T18:42:42.027547+00:00",
+            "deployment": {
+              "startedAt": "2026-10-31T18:50:19+00:00",
+              "seconds": 820.8,
+              "deployments": 1,
+              "rolloutState": "COMPLETED",
+              "taskDefinition": "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:task-definition/opentransit-h1:5",
+              "runningCount": 1,
+              "desiredCount": 1,
+              "converged": true
+            },
+            "pushes": {
+              "motis": {
+                "digest": "sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330",
+                "pushed": false
+              },
+              "api": {
+                "tag": "gen-2d8ec2746bb5-33be0e2d5085",
+                "digest": "sha256:114fc4977595e7c9dc0e4002324c857abbf53950b0b0f90b829acaed43544287",
+                "pushed": false,
+                "seconds": 1.3
+              },
+              "data": {
+                "tag": "gen-2d8ec2746bb5-70f33ec4af67",
+                "digest": "sha256:64eb35650eadf73cbb6619d2ad571655afd7ab351f864412698d5f9c87c51059",
+                "pushed": false,
+                "seconds": 1.3
+              },
+              "photon": {
+                "tag": "gen-2d8ec2746bb5-96aadfab3ee7",
+                "digest": "sha256:52f94ba3722d73dc06022ffa8a1392ca96bff5418ae3f85ce54c725ab3803e83",
+                "pushed": false,
+                "seconds": 1.3
+              }
+            }
+          },
+          "retentionCandidates": [
+            "D:\\ot\\generations\\oct1a",
+            "D:\\ot\\generations\\oct1b"
+          ]
+        }
+      ],
+      "freshness": "oct31a renewed in-task to sourceCheckedAt 2026-10-31T18:42:42Z (revision 5): serviceable until 2026-11-07T18:42Z without a further renewal"
+    }
+  },
+  "costEstimate": {
+    "basis": "eu-north-1 on-demand list prices (AWS Price List API, 31 Oct 2026), pre-tax",
+    "prices": {
+      "fargateVcpuHour": 0.0445,
+      "fargateGbHour": 0.0049,
+      "albHour": 0.02394,
+      "albLcuHour": 0.0076,
+      "publicIpv4Hour": 0.005,
+      "ecrGbMonth": 0.1,
+      "logsIngestGb": 0.54,
+      "logsStorageGbMonth": 0.028
+    },
+    "weeklyUsd": {
+      "fargateOneTask": 9.95,
+      "alb": 4.02,
+      "albLcuUpperBound": 1.28,
+      "publicIpv4TaskAndTwoAlbNodes": 2.52,
+      "secondTaskDuringRollouts": 0.18,
+      "ecrStorage": 0.15,
+      "logs": 0.06
+    },
+    "weeklyTotalUsd": 18.15,
+    "guardUsd": 30.0,
+    "withinGuard": true,
+    "notIncluded": "data transfer out (small JSON responses, free tier), tax"
+  },
+  "images": [
+    {
+      "repository": "opentransit-api",
+      "tag": "h0-20261031",
+      "digest": "sha256:0d501f356ab5a1af6cfd02ea0aa2610e05166e85bf14521a676318358f5a57d8",
+      "compressedBytes": 77364059,
+      "pushedAt": "2026-10-31T17:06:06+00:00",
+      "source": "pushed in H-0"
+    },
+    {
+      "repository": "opentransit-data",
+      "tag": "h0-20261031",
+      "digest": "sha256:64eb35650eadf73cbb6619d2ad571655afd7ab351f864412698d5f9c87c51059",
+      "compressedBytes": 760649241,
+      "pushedAt": "2026-10-31T17:06:09+00:00",
+      "source": "pushed in H-0"
+    },
+    {
+      "repository": "opentransit-photon",
+      "tag": "h0-20261031",
+      "digest": "sha256:52f94ba3722d73dc06022ffa8a1392ca96bff5418ae3f85ce54c725ab3803e83",
+      "compressedBytes": 203741244,
+      "pushedAt": "2026-10-31T17:06:11+00:00",
+      "source": "pushed in H-0"
+    },
+    {
+      "repository": "opentransit-motis",
+      "tag": "h0-20261031",
+      "digest": "sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330",
+      "compressedBytes": 68329952,
+      "pushedAt": "2026-10-31T17:06:14+00:00",
+      "source": "pushed in H-0"
+    }
+  ],
+  "measuredCost": {
+    "checkedAt": "2026-10-31T19:00Z",
+    "source": "Cost Explorer get-cost-and-usage, daily by service, 30-31 Oct",
+    "result": "no charges reported yet for 31 Oct (Cost Explorer lags up to 24 h); re-check on 1-2 November"
+  }
+}

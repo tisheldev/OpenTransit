@@ -1,0 +1,66 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/stops/mot:stop:13583/departures",
+    "params": {
+      "from": "2026-11-02T08:00:00+02:00",
+      "horizonMinutes": 60,
+      "limit": 2,
+      "cursor": "eyJ2IjoxLCJnIjoiMmQ4ZWMyNzQ2YmI1MDBhYmFjZDBmMzgzMzE2ZDIzNjE2ZmNmMWRjNGIzZTIwMTA0YjE0YzJjYjEzOWFhZDQ0NSIsInEiOiI4YjM2MmJiNDk5MDU3ZDcxOWFjYzc4NThjMTRmNjA5ODcyNDRhMDY2N2M1NTA5OGEyMzRlZDExYjY3NDFiMDZlIiwicCI6WyIyMDI2LTExLTAyVDA2OjAzOjAwKzAwOjAwIiwiMjAyNjExMDJfMDc6MjVfbW90NjBkYXlfNTg2MDI3NDcxXzAxMTEyNiIsIjEzNTgzIiwyNV19"
+    },
+    "body": null
+  },
+  "status": 200,
+  "body": {
+    "data": [
+      {
+        "scheduledDeparture": "2026-11-02T06:03:00Z",
+        "stopId": "mot:stop:13583",
+        "routeId": "mot:route:16077",
+        "routeShortName": "8",
+        "headsign": "אוניברסיטת ת\"א",
+        "platformCode": null,
+        "pickupType": 0,
+        "tripRef": "20261102_07:41_mot60day_585169392_011126",
+        "callSequence": 23
+      },
+      {
+        "scheduledDeparture": "2026-11-02T06:04:00Z",
+        "stopId": "mot:stop:13583",
+        "routeId": "mot:route:2261",
+        "routeShortName": "5",
+        "headsign": "תל אביב יפו_רכבת מרכז",
+        "platformCode": null,
+        "pickupType": 0,
+        "tripRef": "20261102_07:40_mot60day_4058243_011126",
+        "callSequence": 23
+      }
+    ],
+    "page": {
+      "nextCursor": "eyJ2IjoxLCJnIjoiMmQ4ZWMyNzQ2YmI1MDBhYmFjZDBmMzgzMzE2ZDIzNjE2ZmNmMWRjNGIzZTIwMTA0YjE0YzJjYjEzOWFhZDQ0NSIsInEiOiI4YjM2MmJiNDk5MDU3ZDcxOWFjYzc4NThjMTRmNjA5ODcyNDRhMDY2N2M1NTA5OGEyMzRlZDExYjY3NDFiMDZlIiwicCI6WyIyMDI2LTExLTAyVDA2OjA0OjAwKzAwOjAwIiwiMjAyNjExMDJfMDc6NDBfbW90NjBkYXlfNDA1ODI0M18wMTExMjYiLCIxMzU4MyIsMjNdfQ"
+    },
+    "meta": {
+      "requestId": "00000000000000000000000000000000",
+      "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+      "generatedAt": "2026-10-31T17:31:08.643388Z",
+      "dataBuiltAt": "2026-10-31T12:18:07.213453Z",
+      "mode": "real",
+      "coverage": {
+        "from": "2026-10-31T00:00:00+02:00",
+        "until": "2026-11-30T00:00:00+02:00"
+      },
+      "freshness": "current",
+      "capabilities": {
+        "realtime": "not_enabled",
+        "alerts": "not_enabled"
+      },
+      "attribution": [
+        "Israel Ministry of Transport",
+        "© OpenStreetMap contributors"
+      ],
+      "rankingPolicy": "motis-v2.11.2-feasible-engine-order-v1",
+      "appliedConstraints": {},
+      "warnings": []
+    }
+  }
+}

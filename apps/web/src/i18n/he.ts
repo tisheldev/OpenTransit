@@ -2,7 +2,14 @@
 // plural imperative (design: Language and layout rules). English mirrors these keys.
 // Placeholders are {name}; both dictionaries must use the same ones.
 
-export const he = {
+import { he_compare } from "./parts/compare.he";
+import { he_map } from "./parts/map.he";
+import { he_nav } from "./parts/nav.he";
+import { he_secondary } from "./parts/secondary.he";
+import { he_shell } from "./parts/shell.he";
+
+// Core strings below; each slice owns its own part file in ./parts (merged at the end).
+const core = {
   "app.name": "OpenTransit",
   "app.tagline": "תכנון וניווט בתחבורה ציבורית",
   "app.skipToContent": "דילוג לתוכן",
@@ -22,12 +29,12 @@ export const he = {
   "screen.backHome": "חזרה לבית",
 
   "nav.back": "חזרה",
-  "nav.locate": "המיקום שלי",
+  "nav.locate": "מרכוז המפה על המיקום שלי",
 
   "settings.language": "שפה",
   "settings.language.he": "עברית",
   "settings.language.en": "English",
-  "settings.clearData": "מחיקת כל הנתונים המקומיים",
+  "settings.clearData": "מחיקת כל הנתונים במכשיר",
   "settings.clearData.confirm": "למחוק את המקומות השמורים, החיפושים האחרונים וההגדרות מהמכשיר הזה?",
   "settings.clearData.done": "הנתונים המקומיים נמחקו.",
 
@@ -46,7 +53,7 @@ export const he = {
   "time.arriveBy": "הגעה עד",
 
   "state.loading": "טוענים…",
-  "state.retry": "לנסות שוב",
+  "state.retry": "נסו שוב",
   "state.retryIn": "אפשר לנסות שוב בעוד {seconds} שנ׳",
   "state.empty.noRoute": "לא נמצא מסלול בשעה הזאת. נסו שעה אחרת או נקודה קרובה.",
   "state.empty.noDepartures": "אין יציאות מתוכננות בטווח הזה.",
@@ -72,5 +79,7 @@ export const he = {
   "place.poi": "מקום",
   "place.address": "כתובת",
 } as const;
+
+export const he = { ...core, ...he_map, ...he_shell, ...he_compare, ...he_nav, ...he_secondary } as const;
 
 export type MessageKey = keyof typeof he;

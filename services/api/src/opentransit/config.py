@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from urllib.parse import urlsplit
 
+from opentransit.api.client import validate_client_dir
 from opentransit.api.rate_limit import BucketPolicy, parse_trusted_proxies
 
 
@@ -37,6 +38,8 @@ class Settings:
     # readiness can lag the engine by at most this much. 0 checks on every request.
     engine_health_cache_seconds: float = 2.0
     playground_enabled: bool = False
+    # Built web client served at /app/ (S8); None serves nothing there.
+    client_dir: Path | None = None
     source_check_path: Path | None = None
     probe_path: Path | None = None
     current_binding_path: Path | None = None
@@ -64,6 +67,8 @@ class Settings:
         if not 100 <= self.rate_limit_max_clients <= 1_000_000:
             raise ValueError("Rate-limit client table must hold 100-1000000 entries")
         parse_trusted_proxies(self.trusted_proxies)
+        if self.client_dir is not None:
+            validate_client_dir(self.client_dir)
         if (
             not 1 <= self.warmup_attempts <= 20
             or not 0 <= self.warmup_retry_seconds <= 10
@@ -133,6 +138,9 @@ class Settings:
             manifest_path=Path(os.getenv("OPENTRANSIT_MANIFEST", ".runtime/m1/manifest.json")),
             motis_url=os.getenv("OPENTRANSIT_MOTIS_URL", "http://127.0.0.1:58081"),
             playground_enabled=os.getenv("OPENTRANSIT_PLAYGROUND", "0") == "1",
+            client_dir=Path(os.environ["OPENTRANSIT_CLIENT_DIR"])
+            if os.getenv("OPENTRANSIT_CLIENT_DIR")
+            else None,
             source_check_path=Path(os.environ["OPENTRANSIT_SOURCE_CHECK"])
             if os.getenv("OPENTRANSIT_SOURCE_CHECK")
             else None,

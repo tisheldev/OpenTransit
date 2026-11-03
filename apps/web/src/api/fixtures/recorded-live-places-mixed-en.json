@@ -1,0 +1,256 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/places",
+    "params": {
+      "q": "Technion",
+      "lang": "en"
+    },
+    "body": null
+  },
+  "status": 200,
+  "body": {
+    "data": [
+      {
+        "kind": "stop",
+        "id": "mot:stop:3938",
+        "displayName": "Technion/Agricultural Engineering",
+        "languageUsed": "en",
+        "locality": "רחוב: שדרות דוד רוז עיר: חיפה רציף:  קומה: ",
+        "coordinates": {
+          "latitude": 32.780193,
+          "longitude": 35.02467
+        },
+        "stopCode": "43076",
+        "parentId": null,
+        "platformIds": [],
+        "matchedTypes": [
+          "stop"
+        ],
+        "locationRef": {
+          "kind": "stop",
+          "stopId": "mot:stop:3938"
+        }
+      },
+      {
+        "kind": "address",
+        "name": "Technion Central Gate Bridge",
+        "displayName": "Technion Central Gate Bridge",
+        "languageUsed": "en",
+        "locality": "חיפה",
+        "coordinates": {
+          "latitude": 32.778503388880104,
+          "longitude": 35.01584801722264
+        },
+        "street": "גשר הכניסה הראשית לטכניון",
+        "houseNumber": null,
+        "addressLevel": "street",
+        "precision": "street_way_midpoint",
+        "osmType": "W",
+        "osmId": "1066989325",
+        "candidateIdentityHash": "ba2841dfab6f4c2ba5950c81d1c2805a88fc1f904e07a5d92620b83a6ae8ea9d",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiJiYTI4NDFkZmFiNmY0YzJiYTU5NTBjODFkMWMyODA1YTg4ZmMxZjkwNGUwN2E1ZDkyNjIwYjgzYTZhZThlYTlkIiwiY29vcmRpbmF0ZXMiOlszMi43Nzg1MDMzODg4ODAxMDQsMzUuMDE1ODQ4MDE3MjIyNjRdLCJnZW5lcmF0aW9uSWQiOiIyZDhlYzI3NDZiYjUwMGFiYWNkMGYzODMzMTZkMjM2MTZmY2YxZGM0YjNlMjAxMDRiMTRjMmNiMTM5YWFkNDQ1Iiwia2luZCI6ImFkZHJlc3MifQ",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiJiYTI4NDFkZmFiNmY0YzJiYTU5NTBjODFkMWMyODA1YTg4ZmMxZjkwNGUwN2E1ZDkyNjIwYjgzYTZhZThlYTlkIiwiY29vcmRpbmF0ZXMiOlszMi43Nzg1MDMzODg4ODAxMDQsMzUuMDE1ODQ4MDE3MjIyNjRdLCJnZW5lcmF0aW9uSWQiOiIyZDhlYzI3NDZiYjUwMGFiYWNkMGYzODMzMTZkMjM2MTZmY2YxZGM0YjNlMjAxMDRiMTRjMmNiMTM5YWFkNDQ1Iiwia2luZCI6ImFkZHJlc3MifQ"
+        }
+      },
+      {
+        "kind": "stop",
+        "id": "mot:stop:3935",
+        "displayName": "Technion/Biotechnology and Food",
+        "languageUsed": "en",
+        "locality": "רחוב: שדרות דוד רוז עיר: חיפה רציף:  קומה: ",
+        "coordinates": {
+          "latitude": 32.777223,
+          "longitude": 35.028477
+        },
+        "stopCode": "43073",
+        "parentId": null,
+        "platformIds": [],
+        "matchedTypes": [
+          "stop"
+        ],
+        "locationRef": {
+          "kind": "stop",
+          "stopId": "mot:stop:3935"
+        }
+      },
+      {
+        "kind": "address",
+        "name": "Derech Ha'technion",
+        "displayName": "Derech Ha'technion",
+        "languageUsed": "en",
+        "locality": "נשר",
+        "coordinates": {
+          "latitude": 32.77718095,
+          "longitude": 35.03020885
+        },
+        "street": "דרך הטכניון",
+        "houseNumber": null,
+        "addressLevel": "street",
+        "precision": "street_way_midpoint",
+        "osmType": "W",
+        "osmId": "1202408923",
+        "candidateIdentityHash": "ee81c8364dc0eebbc3a444960e00d203dcb2af10525d5a4046495a498c59afb1",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiJlZTgxYzgzNjRkYzBlZWJiYzNhNDQ0OTYwZTAwZDIwM2RjYjJhZjEwNTI1ZDVhNDA0NjQ5NWE0OThjNTlhZmIxIiwiY29vcmRpbmF0ZXMiOlszMi43NzcxODA5NSwzNS4wMzAyMDg4NV0sImdlbmVyYXRpb25JZCI6IjJkOGVjMjc0NmJiNTAwYWJhY2QwZjM4MzMxNmQyMzYxNmZjZjFkYzRiM2UyMDEwNGIxNGMyY2IxMzlhYWQ0NDUiLCJraW5kIjoiYWRkcmVzcyJ9",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiJlZTgxYzgzNjRkYzBlZWJiYzNhNDQ0OTYwZTAwZDIwM2RjYjJhZjEwNTI1ZDVhNDA0NjQ5NWE0OThjNTlhZmIxIiwiY29vcmRpbmF0ZXMiOlszMi43NzcxODA5NSwzNS4wMzAyMDg4NV0sImdlbmVyYXRpb25JZCI6IjJkOGVjMjc0NmJiNTAwYWJhY2QwZjM4MzMxNmQyMzYxNmZjZjFkYzRiM2UyMDEwNGIxNGMyY2IxMzlhYWQ0NDUiLCJraW5kIjoiYWRkcmVzcyJ9"
+        }
+      },
+      {
+        "kind": "stop",
+        "id": "mot:stop:44795",
+        "displayName": "Technion Center",
+        "languageUsed": "en",
+        "locality": "רחוב: רכבל עילי עיר: חיפה רציף:  קומה: ",
+        "coordinates": {
+          "latitude": 32.773845,
+          "longitude": 35.026632
+        },
+        "stopCode": "17310",
+        "parentId": null,
+        "platformIds": [],
+        "matchedTypes": [
+          "stop"
+        ],
+        "locationRef": {
+          "kind": "stop",
+          "stopId": "mot:stop:44795"
+        }
+      },
+      {
+        "kind": "poi",
+        "name": "Technion Obelisk",
+        "displayName": "Technion Obelisk",
+        "languageUsed": "en",
+        "locality": "Haifa",
+        "coordinates": {
+          "latitude": 32.7769672,
+          "longitude": 35.0228674
+        },
+        "category": "artwork_14",
+        "osmId": "way/[194197832]",
+        "candidateIdentityHash": "3ae252459dc4b98b6c5ff304384ab1de54c6727381e831839119c2d0ad27b8da",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiIzYWUyNTI0NTlkYzRiOThiNmM1ZmYzMDQzODRhYjFkZTU0YzY3MjczODFlODMxODM5MTE5YzJkMGFkMjdiOGRhIiwiY29vcmRpbmF0ZXMiOlszMi43NzY5NjcyLDM1LjAyMjg2NzRdLCJnZW5lcmF0aW9uSWQiOiIyZDhlYzI3NDZiYjUwMGFiYWNkMGYzODMzMTZkMjM2MTZmY2YxZGM0YjNlMjAxMDRiMTRjMmNiMTM5YWFkNDQ1Iiwia2luZCI6InBsYWNlIn0",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiIzYWUyNTI0NTlkYzRiOThiNmM1ZmYzMDQzODRhYjFkZTU0YzY3MjczODFlODMxODM5MTE5YzJkMGFkMjdiOGRhIiwiY29vcmRpbmF0ZXMiOlszMi43NzY5NjcyLDM1LjAyMjg2NzRdLCJnZW5lcmF0aW9uSWQiOiIyZDhlYzI3NDZiYjUwMGFiYWNkMGYzODMzMTZkMjM2MTZmY2YxZGM0YjNlMjAxMDRiMTRjMmNiMTM5YWFkNDQ1Iiwia2luZCI6InBsYWNlIn0"
+        }
+      },
+      {
+        "kind": "stop",
+        "id": "mot:stop:48738",
+        "displayName": "Technion Center",
+        "languageUsed": "en",
+        "locality": "רחוב: רכבל עילי עיר: חיפה רציף:  קומה: ",
+        "coordinates": {
+          "latitude": 32.773845,
+          "longitude": 35.026522
+        },
+        "stopCode": "17314",
+        "parentId": null,
+        "platformIds": [],
+        "matchedTypes": [
+          "stop"
+        ],
+        "locationRef": {
+          "kind": "stop",
+          "stopId": "mot:stop:48738"
+        }
+      },
+      {
+        "kind": "poi",
+        "name": "Technion International Office",
+        "displayName": "Technion International Office",
+        "languageUsed": "en",
+        "locality": "Haifa",
+        "coordinates": {
+          "latitude": 32.7784311,
+          "longitude": 35.0237529
+        },
+        "category": "office_16",
+        "osmId": "node/[6008463376]",
+        "candidateIdentityHash": "77940fcc45e66ff25601fa2eaba95ff7451b7bce41f09b68d768bdcc601e38ef",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiI3Nzk0MGZjYzQ1ZTY2ZmYyNTYwMWZhMmVhYmE5NWZmNzQ1MWI3YmNlNDFmMDliNjhkNzY4YmRjYzYwMWUzOGVmIiwiY29vcmRpbmF0ZXMiOlszMi43Nzg0MzExLDM1LjAyMzc1MjldLCJnZW5lcmF0aW9uSWQiOiIyZDhlYzI3NDZiYjUwMGFiYWNkMGYzODMzMTZkMjM2MTZmY2YxZGM0YjNlMjAxMDRiMTRjMmNiMTM5YWFkNDQ1Iiwia2luZCI6InBsYWNlIn0",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiI3Nzk0MGZjYzQ1ZTY2ZmYyNTYwMWZhMmVhYmE5NWZmNzQ1MWI3YmNlNDFmMDliNjhkNzY4YmRjYzYwMWUzOGVmIiwiY29vcmRpbmF0ZXMiOlszMi43Nzg0MzExLDM1LjAyMzc1MjldLCJnZW5lcmF0aW9uSWQiOiIyZDhlYzI3NDZiYjUwMGFiYWNkMGYzODMzMTZkMjM2MTZmY2YxZGM0YjNlMjAxMDRiMTRjMmNiMTM5YWFkNDQ1Iiwia2luZCI6InBsYWNlIn0"
+        }
+      },
+      {
+        "kind": "stop",
+        "id": "mot:stop:48899",
+        "displayName": "Technion Center",
+        "languageUsed": "en",
+        "locality": "רחוב: רכבל עילי עיר: חיפה רציף:  קומה: ",
+        "coordinates": {
+          "latitude": 32.773846,
+          "longitude": 35.026578
+        },
+        "stopCode": "43709",
+        "parentId": null,
+        "platformIds": [],
+        "matchedTypes": [
+          "stop"
+        ],
+        "locationRef": {
+          "kind": "stop",
+          "stopId": "mot:stop:48899"
+        }
+      },
+      {
+        "kind": "poi",
+        "name": "Technion Swimming pool",
+        "displayName": "Technion Swimming pool",
+        "languageUsed": "en",
+        "locality": "Haifa",
+        "coordinates": {
+          "latitude": 32.7799463,
+          "longitude": 35.0198973
+        },
+        "category": "none",
+        "osmId": "way/[98221331]",
+        "candidateIdentityHash": "91703bbd740cee998d108fc6883dae54936885d0851022c0b1f27bd5c9878fbc",
+        "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiI5MTcwM2JiZDc0MGNlZTk5OGQxMDhmYzY4ODNkYWU1NDkzNjg4NWQwODUxMDIyYzBiMWYyN2JkNWM5ODc4ZmJjIiwiY29vcmRpbmF0ZXMiOlszMi43Nzk5NDYzLDM1LjAxOTg5NzNdLCJnZW5lcmF0aW9uSWQiOiIyZDhlYzI3NDZiYjUwMGFiYWNkMGYzODMzMTZkMjM2MTZmY2YxZGM0YjNlMjAxMDRiMTRjMmNiMTM5YWFkNDQ1Iiwia2luZCI6InBsYWNlIn0",
+        "locationRef": {
+          "kind": "place",
+          "placeRef": "mot:place:v1:eyJjYW5kaWRhdGVJZGVudGl0eUhhc2giOiI5MTcwM2JiZDc0MGNlZTk5OGQxMDhmYzY4ODNkYWU1NDkzNjg4NWQwODUxMDIyYzBiMWYyN2JkNWM5ODc4ZmJjIiwiY29vcmRpbmF0ZXMiOlszMi43Nzk5NDYzLDM1LjAxOTg5NzNdLCJnZW5lcmF0aW9uSWQiOiIyZDhlYzI3NDZiYjUwMGFiYWNkMGYzODMzMTZkMjM2MTZmY2YxZGM0YjNlMjAxMDRiMTRjMmNiMTM5YWFkNDQ1Iiwia2luZCI6InBsYWNlIn0"
+        }
+      }
+    ],
+    "meta": {
+      "requestId": "00000000000000000000000000000000",
+      "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+      "generatedAt": "2026-10-31T17:31:08.208974Z",
+      "dataBuiltAt": "2026-10-31T12:18:07.213453Z",
+      "mode": "real",
+      "coverage": {
+        "from": "2026-10-31T00:00:00+02:00",
+        "until": "2026-11-30T00:00:00+02:00"
+      },
+      "freshness": "current",
+      "capabilities": {
+        "realtime": "not_enabled",
+        "alerts": "not_enabled"
+      },
+      "attribution": [
+        "Israel Ministry of Transport",
+        "© OpenStreetMap contributors"
+      ],
+      "rankingPolicy": "motis-v2.11.2-feasible-engine-order-v1",
+      "appliedConstraints": {},
+      "warnings": []
+    },
+    "matchedTypes": [
+      "stop",
+      "station",
+      "poi",
+      "address"
+    ],
+    "unavailableTypes": [],
+    "partial": false,
+    "rankingPolicy": "alternating-stop-and-geocoder-order-v1"
+  }
+}

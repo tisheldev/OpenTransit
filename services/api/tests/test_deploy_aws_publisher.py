@@ -473,3 +473,140 @@ def test_shared_currency_rule_and_manifest_parsing():
     assert currency_reasons(generation, stale, rollback=False) == ["source_stale"]
     with pytest.raises(ValueError):
         currency_reasons(generation, stale.replace(tzinfo=None), rollback=True)
+
+
+# --- H-1: existing images, freshness renewal, retargeting, push with a fake runner -------------
+
+INPUTS = {
+    "israel-public-transportation.zip": {"sha256": "1" * 64},
+    "TripIdToDate.zip": {"sha256": "2" * 64},
+}
+
+
+def _check(tmp_path, checked_at, gtfs="1" * 64) -> Path:
+    path = tmp_path / "check.json"
+    sources = {
+        "gtfs": {"status": "unchanged", "sha256": gtfs, "checkedAt": checked_at.isoformat()},
+        "trip_id_to_date": {
+            "status": "unchanged",
+            "sha256": "2" * 64,
+            "checkedAt": checked_at.isoformat(),
+        },
+        "osm": {"status": "skipped", "sha256": "3" * 64, "path": "D:/somewhere/osm.pbf"},
+    }
+    record = {
+        "pairedValidation": "passed",
+        "validation": {"valid": True, "checks": [{"id": "E01"}] * 50},
+        "validatedAt": (checked_at + timedelta(minutes=3)).isoformat(),
+        "sources": sources,
+    }
+    path.write_text(json.dumps(record), encoding="utf-8")
+    return path
+
+
+def test_source_check_renews_an_aged_generation_and_reaches_the_task(tmp_path, no_subprocess):
+    later = NOW + timedelta(days=5)  # the manifest check alone would be stale
+    generation = _generation(tmp_path, inputs=INPUTS)
+    code, plan = _publish(
+        tmp_path,
+        generation=generation,
+        now=later,
+        probe_queries=_corpus(tmp_path, "2026-10-20T08:00:00+03:00"),
+        source_check=_check(tmp_path, later - timedelta(hours=1)),
+    )
+    assert code == 0, plan["stages"]
+    assert plan["verify"]["freshness"] == "current"
+    assert plan["verify"]["manifestSourceCheckedAt"] == CHECKED.isoformat()
+    release = plan["release"]
+    assert release["manifestSummary"]["sourceCheckedAt"] == release["sourceCheckedAt"]
+    task = json.loads((tmp_path / "plan" / "task-definition.candidate.json").read_text())
+    verifier_env = {e["name"]: e["value"] for e in _container(task, "verifier")["environment"]}
+    api_env = {e["name"]: e["value"] for e in _container(task, "api")["environment"]}
+    record = json.loads(verifier_env[pub.SOURCE_CHECK_ENV])
+    assert set(record["sources"]) == {"gtfs", "trip_id_to_date"}
+    assert "checks" not in record["validation"] and len(verifier_env[pub.SOURCE_CHECK_ENV]) < 1024
+    assert api_env["OPENTRANSIT_SOURCE_CHECK"] == pub.SOURCE_CHECK_IN_TASK
+    # The rollback rule reads the renewed time from the release summary.
+    assert pub.rollback_plan(
+        None, {**release, "digestKind": "registry-manifest", "taskDefinitionArn": ARN}, later
+    )["allowed"]
+
+
+def test_source_check_for_other_inputs_is_refused(tmp_path, no_subprocess):
+    generation = _generation(tmp_path, inputs=INPUTS)
+    code, plan = _publish(
+        tmp_path, generation=generation, source_check=_check(tmp_path, NOW, gtfs="9" * 64)
+    )
+    assert code == 1
+    assert plan["stages"]["verify"]["reasons"][0].startswith("source_check_invalid")
+
+
+def test_existing_local_images_are_inspected_not_built(tmp_path):
+    calls = []
+
+    def runner(argv, env=None):
+        calls.append(argv)
+        return IDS[argv[-1].split(":")[0]]
+
+    code, plan = _publish(
+        tmp_path,
+        image_ids=None,
+        local_images={"api": "api:local", "data": "data:local"},
+        runner=runner,
+    )
+    assert code == 0, plan["stages"]
+    assert plan["mode"] == "existing-images"
+    assert all(argv[:3] == ["docker", "image", "inspect"] for argv in calls)
+    assert plan["release"]["localTags"] == {"api": "api:local", "data": "data:local"}
+    assert plan["release"]["images"] == {"api": IDS["api"], "data": IDS["data"]}
+
+
+def test_push_skips_present_tags_and_registers_under_the_h1_family(tmp_path):
+    def local(argv, env=None):
+        return IDS[argv[-1].split(":")[0]]
+
+    _, plan = _publish(
+        tmp_path,
+        image_ids=None,
+        local_images={"api": "api:local", "data": "data:local"},
+        runner=local,
+    )
+    registry = "111122223333.dkr.ecr.eu-north-1.amazonaws.com"
+    calls = []
+
+    def runner(argv, env=None):
+        calls.append(argv)
+        if argv[:3] == ["docker", "image", "inspect"]:
+            return local(argv)
+        if "get-login-password" in argv:
+            return "token"
+        if "describe-images" in argv:
+            return json.dumps({"imageDetails": [{"imageDigest": "sha256:" + "7" * 64}]})
+        if "register-task-definition" in argv:
+            task = json.loads(Path(argv[-1].removeprefix("file://")).read_text())
+            assert task["family"] == "opentransit-h1"
+            groups = {
+                c["logConfiguration"]["options"]["awslogs-group"]
+                for c in task["containerDefinitions"]
+            }
+            assert groups == {"/opentransit/h1"}
+            return json.dumps({"taskDefinition": {"taskDefinitionArn": ARN}})
+        return ""
+
+    release = pub.execute_push(
+        plan,
+        tmp_path / "plan",
+        region="eu-north-1",
+        registry=registry,
+        cluster="c",
+        service="s",
+        role="arn:aws:iam::111122223333:role/r",
+        vpc_cidr="10.80.0.0/16",
+        profile="p",
+        runner=runner,
+    )
+    assert not any(argv[:2] == ["docker", "push"] for argv in calls)  # tags already present
+    assert all(not p["pushed"] for p in release["pushes"].values())
+    assert release["taskDefinitionArn"] == ARN
+    assert not any(word in " ".join(a) for a in calls for word in ("deregister", "delete"))
+    assert all(a[1:3] == ["--profile", "p"] for a in calls if a[0] == "aws")

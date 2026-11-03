@@ -1,0 +1,656 @@
+/* Shell, sheet and screen styles (S4). Logical properties only, so RTL mirrors. */
+
+.visually-hidden {
+  position: absolute !important;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.muted {
+  color: var(--color-ink-muted);
+}
+.small {
+  font-size: var(--text-s);
+}
+
+.skip-link {
+  z-index: 20;
+}
+
+/* --- surface ---------------------------------------------------------------- */
+
+.shell {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  /* clip also stops programmatic scrolling (focus or scrollIntoView) of the shell itself */
+  overflow: clip;
+}
+
+.map-layer {
+  position: absolute;
+  inset: 0;
+  background: #dfe9e4;
+}
+.map-layer > * {
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+/* The top band: banners, then one row with Back (inline start) and the map attribution
+   (inline end). The full sheet stops below it (--overlay-top-h), so nothing here is ever
+   covered. Only the controls take taps; the rest lets the map be panned. */
+.overlay-top {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-2);
+  pointer-events: none;
+}
+.overlay-top .banners,
+.overlay-top button {
+  pointer-events: auto;
+}
+.top-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.top-row .map-attribution {
+  margin-inline-start: auto;
+}
+
+.banners {
+  align-self: stretch;
+  display: grid;
+  border-radius: var(--radius-s);
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgb(23 45 54 / 18%);
+}
+.banners .banner {
+  border-block-end: 0;
+}
+
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: var(--target-min);
+  min-block-size: var(--target-min);
+  padding: 0;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  color: var(--color-ink-strong);
+  font-size: var(--text-l);
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+}
+.icon-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.icon-button.quiet {
+  border-color: transparent;
+  background: transparent;
+  color: var(--color-ink-muted);
+}
+.floating {
+  box-shadow: 0 2px 8px rgb(23 45 54 / 22%);
+}
+
+/* Directional glyphs point the reading way: "→" is back in Hebrew, flipped in English. */
+.mirror {
+  display: inline-block;
+}
+[dir="ltr"] .mirror {
+  transform: scaleX(-1);
+}
+
+.sheet {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  block-size: var(--sheet-half);
+  background: var(--color-surface);
+  border-start-start-radius: var(--radius-m);
+  border-start-end-radius: var(--radius-m);
+  box-shadow: 0 -4px 16px rgb(23 45 54 / 16%);
+  transition: block-size 0.2s ease;
+}
+.sheet-peek {
+  block-size: var(--sheet-peek);
+}
+.sheet-full {
+  block-size: min(var(--sheet-full), calc(100% - var(--overlay-top-h, 0px)));
+}
+.sheet-dragging {
+  transition: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .sheet {
+    transition: none;
+  }
+}
+
+/* Locate floats just above the sheet at the inline end, clear of Back and the attribution. */
+.sheet-locate {
+  position: absolute;
+  inset-block-end: calc(100% + var(--space-2));
+  inset-inline-end: var(--space-3);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.sheet-locate .spinner {
+  inline-size: 20px;
+  block-size: 20px;
+}
+.locate-note {
+  margin: 0;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font-size: var(--text-s);
+  box-shadow: 0 2px 8px rgb(23 45 54 / 22%);
+}
+
+/* The whole top strip of the sheet is the drag handle (tap: next snap; arrows: step). */
+.sheet-handle-row {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+.sheet-handle {
+  display: grid;
+  place-items: center;
+  inline-size: 100%;
+  min-block-size: var(--target-min);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: grab;
+  touch-action: none;
+}
+.sheet-handle:focus-visible {
+  outline-offset: -3px;
+}
+.sheet-corner {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-end: var(--space-2);
+}
+.sheet-grip {
+  display: block;
+  inline-size: 40px;
+  block-size: 5px;
+  border-radius: var(--radius-pill);
+  background: var(--color-border-strong);
+}
+
+.sheet-content {
+  flex: 1;
+  min-block-size: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-inline: var(--space-4);
+  padding-block-end: var(--space-5);
+  /* A thin scrollbar, no grey band at the inline edge (overlay scrollbars stay as they are). */
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-strong) transparent;
+}
+.sheet-content:focus {
+  outline: none;
+}
+.sheet-content h1 {
+  font-size: var(--text-l);
+  line-height: 1.25;
+  margin-block: 0 var(--space-3);
+}
+.sheet-content h1:focus {
+  outline: none;
+}
+
+/* --- controls ----------------------------------------------------------------- */
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: var(--target-min);
+  min-inline-size: var(--target-min);
+  padding-inline: var(--space-4);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-s);
+  background: var(--color-surface);
+  color: var(--color-ink-strong);
+  text-decoration: none;
+  cursor: pointer;
+}
+/* Hover only where there is a pointer that hovers (a tapped row must not stay grey on a
+   phone); every tap gets an immediate pressed state instead. */
+@media (hover: hover) {
+  .button:hover {
+    background: #ecf4f4;
+  }
+  .button-quiet:hover,
+  .row-button:hover,
+  .from-to-field:hover {
+    background: var(--color-surface-sunken);
+  }
+}
+.button:active,
+.row-button:active,
+.from-to-field:active,
+.chip:active,
+.active-trip:active,
+.icon-button:active {
+  filter: brightness(0.93);
+}
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+.button-primary,
+.button-primary:hover {
+  background: var(--color-brand-strong);
+  border-color: var(--color-brand-strong);
+  color: #fff;
+  font-weight: 650;
+}
+/* A text-only action (still a 44 px target), for rows with several actions. */
+.button-quiet {
+  padding-inline: var(--space-3);
+  border-color: transparent;
+  background: transparent;
+  color: var(--color-link);
+  font-weight: 650;
+}
+.button-danger,
+.button-danger:hover {
+  background: var(--color-error-ink);
+  border-color: var(--color-error-ink);
+  color: #fff;
+  font-weight: 650;
+}
+.block {
+  display: flex;
+  inline-size: 100%;
+  margin-block: var(--space-2);
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-block: var(--space-2);
+}
+
+.text-input {
+  inline-size: 100%;
+  min-block-size: var(--target-min);
+  padding-block: var(--space-2);
+  padding-inline: var(--space-3);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-s);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font-size: var(--text-m);
+}
+.text-input::placeholder {
+  color: var(--color-ink-soft);
+}
+
+.section-title {
+  font-size: var(--text-m);
+  font-weight: 700;
+  margin-block: var(--space-4) var(--space-2);
+  padding: 0;
+}
+
+/* --- From/To card ------------------------------------------------------------- */
+
+.from-to {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin-block: 0 var(--space-3);
+  padding: var(--space-1);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-m);
+  background: var(--color-surface);
+}
+.from-to-fields {
+  flex: 1;
+  min-inline-size: 0;
+  display: grid;
+}
+.from-to-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  inline-size: 100%;
+  min-block-size: var(--target-min);
+  padding-block: var(--space-1);
+  padding-inline: var(--space-3) var(--space-2);
+  border: 0;
+  border-radius: var(--radius-s);
+  background: transparent;
+  color: var(--color-ink);
+  text-align: start;
+  cursor: pointer;
+}
+.from-to-field + .from-to-field::before {
+  content: "";
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: calc(var(--space-3) + 12px + var(--space-3)) 0;
+  border-block-start: 1px solid var(--color-border);
+}
+.from-to-full .from-to-to {
+  min-block-size: 52px;
+}
+.from-to-text {
+  display: flex;
+  flex-direction: column;
+  min-inline-size: 0;
+}
+.from-to-value {
+  font-weight: 650;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.from-to-from .from-to-value {
+  font-weight: 500;
+}
+.from-to-placeholder {
+  color: var(--color-ink-muted);
+  font-weight: 650;
+}
+/* No destination yet: "Where to?" is the card's call to action (G10). */
+.from-to-no-destination .from-to-to {
+  background: var(--color-brand-tint);
+}
+.from-to-no-destination .from-to-to::before {
+  display: none;
+}
+.from-to-no-destination .from-to-to .from-to-placeholder {
+  color: var(--color-brand-strong);
+  font-size: var(--text-l);
+  font-weight: 750;
+}
+.from-to-swap {
+  flex: none;
+}
+/* Origin is a ring, destination a filled square: shape as well as colour. */
+.from-to-dot {
+  flex: none;
+  inline-size: 12px;
+  block-size: 12px;
+}
+.from-to-dot-origin {
+  border: 3px solid var(--color-brand-strong);
+  border-radius: 50%;
+}
+.from-to-dot-destination {
+  background: var(--color-destination);
+  border-radius: 2px;
+}
+
+/* --- Home --------------------------------------------------------------------- */
+
+.chips {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-block: var(--space-2) var(--space-3);
+  padding: 0;
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-block-size: var(--target-min);
+  min-inline-size: var(--target-min);
+  justify-content: center;
+  padding-inline: var(--space-3);
+  border: 1px dashed var(--color-border-strong);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  color: var(--color-ink-strong);
+  cursor: pointer;
+}
+.chip-filled {
+  border-style: solid;
+  border-color: var(--color-brand-strong);
+  background: var(--color-brand-tint);
+  font-weight: 650;
+}
+.chip-add {
+  font-size: var(--text-l);
+}
+
+/* The resume card: first in the sheet, fully visible at half (G8). */
+.active-trip {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  inline-size: 100%;
+  min-block-size: 56px;
+  margin-block: 0 var(--space-3);
+  padding-block: var(--space-2);
+  padding-inline: var(--space-3);
+  border: 0;
+  border-radius: var(--radius-m);
+  background: var(--color-brand-strong);
+  color: #fff;
+  text-align: start;
+  cursor: pointer;
+}
+.active-trip-icon {
+  flex: none;
+  font-size: var(--text-l);
+}
+.active-trip-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-inline-size: 0;
+}
+.active-trip-title {
+  font-weight: 750;
+}
+.active-trip-detail {
+  font-size: var(--text-s);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.active-trip-go {
+  flex: none;
+  font-size: var(--text-xl);
+  line-height: 1;
+}
+
+/* --- rows (recents, search results) ------------------------------------------- */
+
+.rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.row-button,
+.row-skeleton,
+.row-note {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  inline-size: 100%;
+  min-block-size: 56px;
+  padding-block: var(--space-2);
+  padding-inline: var(--space-1);
+  border: 0;
+  border-block-end: 1px solid var(--color-border);
+  background: transparent;
+  color: var(--color-ink);
+  text-align: start;
+}
+.row-button {
+  cursor: pointer;
+}
+.row-note {
+  color: var(--color-notice-ink);
+  background: var(--color-notice-bg);
+  font-size: var(--text-s);
+}
+.row-icon {
+  flex: none;
+  inline-size: 28px;
+  text-align: center;
+  font-size: var(--text-l);
+}
+.row-text {
+  display: flex;
+  flex-direction: column;
+  min-inline-size: 0;
+}
+.row-title {
+  font-weight: 650;
+}
+.row-sub {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 6px;
+  font-size: var(--text-s);
+  color: var(--color-ink-muted);
+}
+.tag {
+  padding-inline: var(--space-1);
+  border: 1px solid var(--color-notice-border);
+  border-radius: var(--radius-s);
+  color: var(--color-notice-ink);
+  font-size: var(--text-xs);
+}
+
+.skeleton-icon,
+.skeleton-line {
+  display: block;
+  border-radius: var(--radius-s);
+  background: var(--color-surface-sunken);
+}
+.skeleton-icon {
+  inline-size: 28px;
+  block-size: 28px;
+}
+.skeleton-lines {
+  flex: 1;
+  display: grid;
+  gap: 6px;
+}
+.skeleton-line {
+  block-size: 14px;
+  inline-size: 70%;
+}
+.skeleton-line.short {
+  inline-size: 40%;
+}
+
+/* One clear button, inside the field at its inline end (the native one is hidden). */
+.search-field {
+  position: relative;
+  margin-block-end: var(--space-2);
+}
+.search-field .text-input {
+  padding-inline-end: calc(var(--target-min) + var(--space-1));
+}
+.search-field input[type="search"]::-webkit-search-cancel-button,
+.search-field input[type="search"]::-webkit-search-decoration {
+  appearance: none;
+  display: none;
+}
+.search-clear {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: 0;
+  margin-block: auto;
+  font-size: var(--text-m);
+}
+.search-hint {
+  margin-block: 0 var(--space-1);
+}
+.rows-stale {
+  opacity: 0.6;
+  transition: opacity 0.15s ease;
+}
+.row-static {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-block-size: 56px;
+  padding-block: var(--space-2);
+  padding-inline: var(--space-1);
+  border-block-end: 1px solid var(--color-border);
+  color: var(--color-ink-muted);
+}
+.row-sep {
+  color: var(--color-ink-soft);
+}
+
+.name-form {
+  display: grid;
+  gap: var(--space-2);
+  margin-block: var(--space-2);
+}
+
+/* --- Settings ----------------------------------------------------------------- */
+
+.settings .segmented {
+  flex-wrap: wrap;
+}
+.saved-list,
+.plain-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+/* Text at the inline start, quiet actions at the inline end of the same row. */
+.saved-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 var(--space-2);
+  padding-block: var(--space-1);
+  border-block-end: 1px solid var(--color-border);
+}
+.saved-item-text {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+.saved-item-actions {
+  flex: none;
+  display: flex;
+}
+.saved-item .name-form {
+  flex-basis: 100%;
+}
+.plain-list li {
+  padding-block: var(--space-1);
+}
