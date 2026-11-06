@@ -1,6 +1,6 @@
 # OpenTransit web client
 
-A Hebrew-first, right-to-left mobile web client for testing and previewing the API during the H-1 private deployment (user, 31 October 2026). It is not the product release: the native Expo / React Native app is the product client, and the pure modules here (API layer, `classify`, i18n, time and format, `plan/*`, `nav/*` logic) are built to be shared with it. Design and acceptance criteria: [docs/client-design.md](../../docs/client-design.md) and the [client tasks](../../docs/next-steps.md#phase-2-client-execution-plan); status: [PROJECT_STATUS.md](../../PROJECT_STATUS.md); latest evidence: [client-s3-s8-20261031-01](../../services/api/results/client-s3-s8-20261031-01.json).
+A Hebrew-first, right-to-left mobile web client for testing and previewing the API during the H-1 private deployment (user, 31 October 2026). It is not the product release: the native Expo / React Native app is the product client, and the pure modules here (API layer, `classify`, i18n, time and format, `plan/*`, `nav/*` logic) are built to be shared with it. Design and acceptance criteria: [docs/client-design.md](../../docs/client-design.md) and the [client tasks](../../docs/next-steps.md#phase-2-client-execution-plan); status: [PROJECT_STATUS.md](../../PROJECT_STATUS.md); latest evidence: [client-s3-s8-20261031-01](../../services/api/results/client-s3-s8-20261031-01.json), design system: [client-design-system-20261106-01](../../services/api/results/client-design-system-20261106-01.json).
 
 Implemented: S0–S2 (scaffold, API layer, foundations), S3 Map, S4 shell + Home, Search, Settings, S5 Compare and route details, S6 Navigate (foreground only), S8 serving by the API at `/app/`. S7 (Stop, Trip, Nearby, Lines) is not built; those routes show placeholders.
 
@@ -8,6 +8,7 @@ Implemented: S0–S2 (scaffold, API layer, foundations), S3 Map, S4 shell + Home
 
 Open `/app/` on a phone (Hebrew by default; English in Settings). A UX pass on 31 October (human-like testing at 360 × 640 against the real timetable) shaped what follows:
 
+- **Look:** the user's design system (6 November): its tokens and components on every screen, dark by default whatever the phone prefers; light is a choice in Settings ("ערכת צבעים"). The map follows the theme.
 - **Home:** "Where to?" first; From is "my location" only where the browser can give it (a secure context), otherwise the last start or empty; Home/Work/favourite chips, recent places, a resume card at the top while a trip is active, banners for test data, ageing/expired timetable, not ready and offline.
 - **Search:** stops, stations, addresses (street-level tagged) and places as you type; "choose on map"; save Home, Work or a named favourite.
 - **Compare:** opens at half with the route on the map: up to three options led by their departure and arrival times, a rank pill and a shared-axis bar of line chips; one time chip (Now / Depart / Arrive, day, time, +15/+30/+60); Earlier / Later under the options. Tap an option for its itinerary timeline (boarding and exit times, stop counts, waits, walks); Start navigation.

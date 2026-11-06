@@ -1,0 +1,130 @@
+{
+  "id": "client-design-system-20261106-01",
+  "recordedAt": "2026-11-06T14:45:00Z",
+  "kind": "mechanical; not human-reviewed",
+  "scope": "User, 6 Nov 2026: the web client is light and does not follow the design; 'default should always be dark'. Visual pass to the design system: tokens, theme, components. Behaviour, routes and test semantics unchanged.",
+  "designSystem": {
+    "artifact": "https://claude.ai/artifact/P3US2NygmWPs1iALn555PU",
+    "version": "1793960704-e716",
+    "tokensSynced": "2026-10-02",
+    "copies": {
+      "apps/web/src/styles/design-system/tokens.json": "sha256 37b3619bc5d03714bef13568f7d5c341322fdac53630b30df274f417d3200410 (identical to the artifact)",
+      "apps/web/src/styles/design-system/bundle.css": "artifact sha256 9df5622c8d135fb2b9de49c5cf74d5d15aa0b123364200156be3844253f88221; line endings normalised to LF"
+    },
+    "generated": [
+      "src/styles/tokens.css",
+      "src/styles/tokens.ts",
+      "public/theme.js"
+    ],
+    "driftCheck": "scripts/design-tokens.test.ts fails when a generated file differs from tokens.json"
+  },
+  "theme": {
+    "default": "dark, whatever prefers-color-scheme says",
+    "light": "choice in Settings (ערכת צבעים: כהה / בהירה), stored as settings.theme in local settings (optional field, version 1 unchanged)",
+    "firstPaint": "public/theme.js (generated) sets data-theme and theme-color before any app script; e2e checks the attribute at document parse after a reload",
+    "followers": [
+      "color-scheme (tokens.css)",
+      "theme-color meta (#0d1618 dark, #f4f7f7 light)",
+      "map style (OpenFreeMap dark / positron, recoloured with map-land, map-water, map-road)"
+    ]
+  },
+  "method": "Coordinator built the foundation (generator, theme, shared Icon / LineBadge / StatusTag, contract); four Opus agents in isolated worktrees restyled shell+Home+Search+Settings, Compare+route details, Navigate, and the map against reference renders of the design system's own previews (both themes, real tokens), three to five screenshot rounds each; coordinator merged, ran every suite, re-captured the five screens and compared them with the App design screens by eye.",
+  "checks": {
+    "lint": "0 problems",
+    "typecheck": "0 errors",
+    "unit": {
+      "passed": 938,
+      "failed": 0,
+      "note": "includes 74 contrast checks over every pair the token notes promise, both themes"
+    },
+    "timeZones": "18 passed in each of America/New_York, Asia/Tokyo, Asia/Jerusalem",
+    "build": {
+      "initialJsGzipKB": 134.17,
+      "cssGzipKB": 9.34,
+      "compareChunkGzipKB": 12.33,
+      "navigateChunkGzipKB": 12.25,
+      "mapChunkGzipKB": 280.06
+    },
+    "e2eMocked": {
+      "windows": {
+        "passed": 75,
+        "failed": 0,
+        "skipped": 6
+      },
+      "linuxPlaywright_1_64_1_noble": {
+        "passed": 75,
+        "failed": 0,
+        "skipped": 6,
+        "workers": 2
+      }
+    },
+    "axe": "no serious or critical violations on every screen and state in the mocked suite in dark (default) and in light (light runs added per screen)",
+    "e2eReal": {
+      "devProxyLocal": {
+        "apiOrigin": "http://127.0.0.1:8590",
+        "generation": "oct31a 2d8ec274",
+        "passed": 4,
+        "skipped": 2,
+        "note": "real-compare planned Monday 2026-11-09 08:00 from coverage"
+      },
+      "servedSecureLocal": {
+        "baseUrl": "http://127.0.0.1:8591/app/",
+        "passed": 6,
+        "failed": 0
+      },
+      "servedPlainHttp": {
+        "baseUrl": "http://ot-insecure.test:8591/app/ (mapped to 127.0.0.1 in Chromium, not a secure context)",
+        "passed": [
+          "real-served (manual start prompt, start chosen by search, axe clean)",
+          "served build under CSP"
+        ],
+        "notApplicable": "two request-context checks cannot resolve the mapped name outside the browser; they pass on the secure origin"
+      },
+      "h1BeforeRestyle": "Against H-1 revision 7 (main build) over HTTP with the date and HTTP fixes: real-served, real-navigate and real.spec passed; real-compare's own dev server then ran the unrestyled dark Compare and failed axe (fixed by the restyle)."
+    }
+  },
+  "screenshots": {
+    "folder": "services/api/results/client-design-system-20261106-01/",
+    "files": [
+      "1-home-dark.jpg",
+      "1-home-light.jpg",
+      "2-search-dark.jpg",
+      "2-search-light.jpg",
+      "3-compare-dark.jpg",
+      "3-compare-light.jpg",
+      "4-route-details-dark.jpg",
+      "4-route-details-light.jpg",
+      "5-navigate-dark.jpg",
+      "5-navigate-light.jpg",
+      "6-navigate-ride-dark.jpg",
+      "6-navigate-ride-light.jpg"
+    ],
+    "conditions": "360 × 640, device scale 2, Hebrew, fixtures mode, browser clock 2026-11-02 08:30 Israel time",
+    "comparedWith": "the design system's App design (Map + timeline, variant B) and component previews, rendered with the same tokens in both themes"
+  },
+  "matches": [
+    "Colour, type, spacing, radii, sizes and shadows are the design's tokens by name in both themes; no hard-coded colours in app stylesheets",
+    "TripFields (origin circle, destination square, dotted link, swap), PlaceChips, PlaceRow with kind icons on mode tints, pill search field at tap-primary",
+    "BottomSheet with radius-xl top corners, shadow-sheet, grabber and scrim at full; Back and Locate as floating round icon buttons",
+    "LegBar chart (ot-chart / ot-crow / ot-lbar, earliest on the right, bus and rail by mode colour, dotted walks), route details (ot-route + StepList with LineBadge), StatusTag מתוכנן",
+    "NavStep hero (hero / on-hero / hero-accent: light card in dark, dark card in light), countdown figure, three fact cells, then-note; StepList with the current step on brand-tint; Banner variants with icons and bold lead phrase",
+    "Map: dark / positron basemap recoloured with map tokens, bus and rail lines by mode, dotted walks, origin circle and destination square, brand puck with halo; attribution passes contrast in both themes"
+  ],
+  "deliberateDifferences": [
+    "Home opens at half with the trip fields inside the sheet (design: peek, fields floating over the map), existing behaviour",
+    "Compare: one-line header; departure and arrival times in every chart row (earlier UX pass); inline time panel with native fields and +15/+30/+60 instead of a wheel in a sheet; rank label in brand-strong (brand on surface-sunken is 4.47:1 in light); no 'leave in N min'; details region not aria-live (the pressed row is announced)",
+    "Navigate: platform shown as — for trains until API-C2; ride progress condensed (boarding, stops between as a count, exit) until API-C1; countdown also on board (to the exit); get-off cues colour the hero with destination / status-late; ✓ / ● marks kept so state is not colour alone; card padding 12 px and 8 px gaps to keep the map visible",
+    "Navigate sheet top can reach 30% of the screen (waiting at a stop with the location-off banner), above the design's ~64% sheet",
+    "Segmented options and the sheet's handle row are 44 px (design 38 px and 22 px) for the 44 px target rule",
+    "Map: transit lines have a 1.5 px land-coloured edge; basemap labels ink-muted on a land halo; passed stops and an exit-stop ring are not drawn yet (no scene data); English credit shortened to 'Israel MoT' to stay on one line",
+    "Data not yet available is not faked: no ETA on chips, no distance on result rows, no lines under a stop, no platforms"
+  ],
+  "related": {
+    "@real dates": "scripts/coverage-dates.mjs derives every @real departure (and the fixture recorder's) from /v1/status coverage; real-served asserts the manual start prompt on plain HTTP and the location path on a secure origin"
+  },
+  "knownGaps": [
+    "Not human-reviewed: the user's verdict on a phone is pending",
+    "Real GPS on phones needs HTTPS on the preview",
+    "S7 screens remain placeholders"
+  ]
+}
