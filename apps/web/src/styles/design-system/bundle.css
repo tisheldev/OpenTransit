@@ -1,0 +1,281 @@
+/* OpenTransit mobile components. Plain CSS over tokens.css; class prefix ot-.
+   Logical properties only (inline-start/end), so every component mirrors under dir="rtl". */
+
+.ot, .ot * { box-sizing: border-box; }
+.ot { font-family: var(--font-sans); color: var(--ink); -webkit-font-smoothing: antialiased; -webkit-tap-highlight-color: transparent; }
+.ot button { font: inherit; color: inherit; }
+.ot :focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+.ot .num, .ot time { font-variant-numeric: tabular-nums; }
+.ot-stage { background: var(--bg); padding: var(--space-4); display: flex; flex-direction: column; gap: var(--space-3); min-height: 100%; }
+.ot-stage--row { flex-direction: row; flex-wrap: wrap; align-items: center; }
+.ot-note { font-size: 12px; line-height: 16px; color: var(--ink-muted); margin: 0; }
+
+/* Icon: a currentColor mask. <span class="ot-i ot-i--bus" aria-hidden="true"></span> */
+.ot-i { display: inline-block; flex: none; width: 20px; height: 20px; background: currentColor; -webkit-mask: var(--ot-i) center / contain no-repeat; mask: var(--ot-i) center / contain no-repeat; }
+.ot-i--sm { width: 16px; height: 16px; }
+.ot-i--lg { width: 24px; height: 24px; }
+[dir="rtl"] .ot-i--chevron, [dir="rtl"] .ot-i--back { transform: scaleX(-1); }
+
+/* Button */
+.ot-btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2); min-height: var(--tap-min); padding: 0 var(--space-4); border-radius: var(--radius-md); border: 1.5px solid transparent; background: transparent; font-size: 14px; line-height: 18px; font-weight: 650; cursor: pointer; text-decoration: none; white-space: nowrap; transition: background-color 120ms ease, transform 120ms ease; }
+.ot-btn:active { transform: scale(.98); }
+.ot-btn--primary { background: var(--brand); color: var(--on-brand); min-height: var(--tap-primary); font-size: 16px; padding: 0 var(--space-5); }
+.ot-btn--primary:active { background: var(--brand-strong); }
+.ot-btn--secondary { background: var(--surface); color: var(--ink); border-color: var(--border-strong); }
+.ot-btn--secondary:active, .ot-btn--ghost:active { background: var(--surface-pressed); }
+.ot-btn--ghost { color: var(--link); padding: 0 var(--space-3); }
+.ot-btn--icon { width: var(--tap-min); padding: 0; border-radius: var(--radius-pill); background: var(--surface); color: var(--ink); box-shadow: var(--shadow-float); }
+.ot-btn--block { display: flex; width: 100%; }
+.ot-btn[disabled] { opacity: .55; cursor: default; }
+
+/* Place chips: one-tap destinations (Home, Work, favourites) with a scheduled ETA hint. */
+.ot-chips { display: flex; gap: var(--space-2); overflow-x: auto; scrollbar-width: none; padding-block: 2px; margin-inline: calc(-1 * var(--space-4)); padding-inline: var(--space-4); scroll-snap-type: x proximity; }
+.ot-chips::-webkit-scrollbar { display: none; }
+.ot-chip { display: inline-flex; align-items: center; gap: var(--space-2); flex: none; min-height: var(--tap-min); padding: 0 var(--space-4) 0 var(--space-3); border-radius: var(--radius-pill); background: var(--surface); border: 1px solid var(--hairline); font-size: 14px; line-height: 18px; font-weight: 650; color: var(--ink); scroll-snap-align: start; cursor: pointer; }
+.ot-chip > .ot-i { color: var(--brand); }
+.ot-chip__meta { font-weight: 500; color: var(--ink-muted); font-variant-numeric: tabular-nums; }
+.ot-chip--selected { background: var(--brand-tint); border-color: var(--brand); }
+.ot-chip--add { color: var(--link); border-style: dashed; border-color: var(--border-strong); }
+.ot-chip--add > .ot-i { color: var(--link); }
+
+/* Segmented control and time chip */
+.ot-seg { display: inline-flex; padding: 3px; gap: 2px; border-radius: var(--radius-pill); background: var(--surface-sunken); }
+.ot-seg__opt { min-height: 38px; padding: 0 var(--space-3); border: 0; border-radius: var(--radius-pill); background: transparent; font-size: 14px; font-weight: 650; color: var(--ink-muted); cursor: pointer; }
+.ot-seg__opt[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: var(--shadow-card); }
+.ot-timebar { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); }
+.ot-timechip { display: inline-flex; align-items: center; gap: var(--space-1); min-height: var(--tap-min); padding: 0 var(--space-3); border-radius: var(--radius-pill); border: 1.5px solid var(--border-strong); background: var(--surface); font-size: 14px; font-weight: 650; font-variant-numeric: tabular-nums; cursor: pointer; }
+
+/* List and rows */
+.ot-list { background: var(--surface); border-radius: var(--radius-lg); overflow: hidden; }
+.ot-list__head { display: flex; align-items: baseline; justify-content: space-between; padding: var(--space-3) var(--space-4) var(--space-1); font-size: 14px; font-weight: 650; color: var(--ink); }
+.ot-list__head a, .ot-list__head button { font-size: 14px; font-weight: 650; color: var(--link); text-decoration: none; background: none; border: 0; padding: 0; }
+.ot-row { display: flex; align-items: center; gap: var(--space-3); width: 100%; min-height: var(--row-height); padding: var(--space-2) var(--space-4); border: 0; background: transparent; text-align: start; cursor: pointer; color: var(--ink); }
+.ot-row + .ot-row { border-top: 1px solid var(--hairline); }
+.ot-row:active { background: var(--surface-pressed); }
+.ot-row__icon { display: grid; place-items: center; flex: none; width: 40px; height: 40px; border-radius: var(--radius-pill); background: var(--surface-sunken); color: var(--ink); }
+.ot-row__icon--saved { background: var(--brand-tint); color: var(--brand-strong); }
+.ot-row__icon--stop { background: var(--mode-bus-tint); color: var(--mode-bus); }
+.ot-row__icon--rail { background: var(--mode-rail-tint); color: var(--mode-rail); }
+.ot-row__body { flex: 1; min-width: 0; }
+.ot-row__title { display: block; font-size: 16px; line-height: 22px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ot-row__sub { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-1) var(--space-2); font-size: 14px; line-height: 20px; color: var(--ink-muted); }
+.ot-row__end { flex: none; display: flex; flex-direction: column; align-items: flex-end; gap: 2px; font-size: 14px; color: var(--ink-muted); font-variant-numeric: tabular-nums; }
+.ot-row__action { flex: none; display: inline-flex; align-items: center; gap: var(--space-1); min-height: 36px; padding: 0 var(--space-3); border-radius: var(--radius-pill); background: var(--brand); color: var(--on-brand); font-size: 14px; font-weight: 650; border: 0; }
+mark.ot-hl { background: none; color: inherit; font-weight: 750; }
+
+/* Line badge. GTFS route_color overrides via style="--line-bg:#…; --line-ink:#…" */
+.ot-line { display: inline-flex; align-items: center; justify-content: center; gap: 3px; flex: none; min-width: 34px; height: var(--badge-height); padding: 0 7px; border-radius: var(--radius-sm); background: var(--line-bg, var(--mode-bus)); color: var(--line-ink, var(--on-brand)); font-size: 15px; line-height: 18px; font-weight: 750; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ot-line .ot-i { width: 15px; height: 15px; }
+.ot-line--rail { --line-bg: var(--mode-rail); }
+.ot-line--walk { background: transparent; color: var(--mode-walk); padding: 0 2px; min-width: 0; font-size: 14px; font-weight: 650; }
+.ot-line--lg { height: 32px; min-width: 42px; font-size: 18px; border-radius: var(--radius-md); }
+.ot-legs { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-1); }
+.ot-legs > .ot-sep { color: var(--ink-subtle); width: 14px; height: 14px; }
+
+/* Status tag: scheduled vs realtime is never left to colour alone. */
+.ot-tag { display: inline-flex; align-items: center; gap: 5px; height: 24px; padding: 0 var(--space-2); border-radius: var(--radius-pill); background: var(--surface-sunken); color: var(--status-scheduled); font-size: 12px; line-height: 16px; font-weight: 650; white-space: nowrap; }
+.ot-tag::before { content: ""; width: 7px; height: 7px; border-radius: 50%; border: 1.5px solid currentColor; }
+.ot-tag--live { color: var(--status-live); }
+.ot-tag--live::before { background: currentColor; animation: ot-pulse 1.6s ease-in-out infinite; }
+.ot-tag--late { color: var(--status-late); }
+.ot-tag--late::before { background: currentColor; border-radius: 1px; }
+.ot-tag--cancelled { color: var(--status-cancelled); }
+.ot-tag--cancelled::before { width: 9px; height: 0; border-width: 1px; border-radius: 0; }
+.ot-tag--unknown { color: var(--ink-muted); }
+.ot-tag--unknown::before { border-style: dashed; }
+@keyframes ot-pulse { 50% { opacity: .35; } }
+
+/* Kicker: short label above a card or step */
+.ot-kicker { display: block; font-size: 13px; line-height: 16px; font-weight: 700; color: var(--brand); margin-bottom: var(--space-1); }
+.ot-caret { display: inline-block; width: 2px; height: 20px; background: var(--brand); vertical-align: middle; margin-inline-start: 1px; }
+
+/* Skeleton: results appear in place, never behind a spinner. */
+.ot-skel { display: block; border-radius: var(--radius-sm); background: var(--surface-sunken); position: relative; overflow: hidden; }
+.ot-skel::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,.35), transparent); transform: translateX(-100%); animation: ot-shimmer 1.2s ease-in-out infinite; }
+[data-theme="dark"] .ot-skel::after { background: linear-gradient(90deg, transparent, rgba(255,255,255,.06), transparent); }
+@keyframes ot-shimmer { to { transform: translateX(100%); } }
+
+/* Banner: data honesty, inline at the top of the content it qualifies. */
+.ot-banner { display: flex; align-items: flex-start; gap: var(--space-3); padding: var(--space-3) var(--space-4); border-radius: var(--radius-lg); background: var(--surface-sunken); color: var(--ink); font-size: 14px; line-height: 20px; }
+.ot-banner > .ot-i { margin-top: 0; }
+.ot-banner__body { flex: 1; min-width: 0; }
+.ot-banner__body b { font-weight: 650; }
+.ot-banner__action { flex: none; align-self: center; min-height: 36px; padding: 0 var(--space-2); border: 0; background: none; color: var(--link); font-size: 14px; font-weight: 650; }
+.ot-banner--warning { background: var(--warning-bg); color: var(--warning-ink); box-shadow: inset 0 0 0 1px var(--warning-edge); }
+.ot-banner--warning .ot-banner__action { color: var(--warning-ink); text-decoration: underline; }
+.ot-banner--error { background: var(--error-bg); color: var(--status-cancelled); }
+.ot-banner--error .ot-banner__body { color: var(--ink); }
+.ot-banner--compact { padding: var(--space-2) var(--space-3); font-size: 13px; line-height: 18px; border-radius: var(--radius-md); align-items: center; }
+
+/* Bottom sheet over the map. Snap points: peek (sheet-peek), half, full. */
+.ot-sheet { position: relative; background: var(--surface); border-radius: var(--radius-xl) var(--radius-xl) 0 0; box-shadow: var(--shadow-sheet); padding: 0 var(--space-4) var(--space-4); }
+.ot-sheet__grab { display: block; width: 100%; height: 22px; border: 0; background: none; padding: 0; cursor: grab; }
+.ot-sheet__grab::before { content: ""; display: block; margin: 9px auto 0; width: 36px; height: 5px; border-radius: 3px; background: var(--border-strong); }
+.ot-sheet__head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); margin-bottom: var(--space-3); }
+.ot-sheet__title { font-size: 22px; line-height: 28px; font-weight: 700; letter-spacing: -.3px; margin: 0; }
+.ot-sheet__sub { font-size: 14px; line-height: 20px; color: var(--ink-muted); margin: 2px 0 0; }
+.ot-section { display: flex; flex-direction: column; gap: var(--space-2); margin-top: var(--space-5); }
+.ot-section__label { display: flex; justify-content: space-between; align-items: baseline; font-size: 14px; font-weight: 650; color: var(--ink); margin: 0; }
+.ot-section__label a { color: var(--link); text-decoration: none; }
+
+/* ---- Showcase only: phone frames, mock maps and tap annotations for the flow pages. ---- */
+.ot-demo { display: flex; gap: 28px; padding: 24px; background: var(--bg); align-items: flex-start; font-family: var(--font-sans); color: var(--ink); }
+.ot-demo__col { display: flex; flex-direction: column; gap: 12px; width: 300px; flex: none; }
+.ot-step { display: flex; align-items: flex-start; gap: 10px; min-height: 58px; }
+.ot-step__n { flex: none; display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--ink); color: var(--bg); font-size: 13px; font-weight: 750; }
+.ot-step__t { font-size: 14px; line-height: 19px; font-weight: 650; }
+.ot-step__t span { display: block; font-size: 13px; font-weight: 400; color: var(--ink-muted); margin-top: 2px; }
+.ot-step__t .ot-taps { display: inline-flex; align-items: center; gap: 4px; margin-top: 4px; padding: 2px 8px; border-radius: var(--radius-pill); background: var(--brand-tint); color: var(--brand-strong); font-size: 12px; font-weight: 750; }
+.ot-phone { position: relative; width: 300px; height: 620px; border-radius: 34px; padding: 8px; background: var(--ink); box-shadow: 0 10px 30px rgba(23,45,54,.18); flex: none; }
+.ot-phone__screen { position: relative; width: 100%; height: 100%; border-radius: 27px; overflow: hidden; background: var(--bg); display: flex; flex-direction: column; }
+.ot-statusbar { flex: none; display: flex; justify-content: space-between; align-items: center; height: 30px; padding: 0 22px; font-size: 12px; font-weight: 650; color: var(--ink); font-variant-numeric: tabular-nums; }
+.ot-statusbar::after { content: ""; width: 34px; height: 11px; border-radius: 3px; border: 1.5px solid currentColor; opacity: .7; }
+.ot-statusbar--overlay { position: absolute; top: 0; inset-inline: 0; z-index: 3; }
+.ot-screen-body { flex: 1; min-height: 0; overflow: hidden; display: flex; flex-direction: column; gap: var(--space-3); padding: var(--space-2) var(--space-4) var(--space-4); }
+.ot-map { position: absolute; inset: 0; background: var(--map-land); }
+.ot-map svg { width: 100%; height: 100%; display: block; }
+.ot-map .road { stroke: var(--map-road); fill: none; stroke-linecap: round; }
+.ot-map .water { fill: var(--map-water); }
+.ot-map .walk { stroke: var(--mode-walk); stroke-width: 3; stroke-dasharray: 2 6; fill: none; stroke-linecap: round; }
+.ot-map .bus { stroke: var(--mode-bus); stroke-width: 5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.ot-map .rail { stroke: var(--mode-rail); stroke-width: 5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.ot-map .stopdot { fill: var(--surface); stroke: var(--mode-bus); stroke-width: 2.5; }
+.ot-map .pin-a { fill: var(--origin); stroke: var(--surface); stroke-width: 2.5; }
+.ot-map .pin-b { fill: var(--destination); stroke: var(--surface); stroke-width: 2.5; }
+.ot-map .puck-halo { fill: var(--brand); opacity: .18; }
+.ot-map .puck { fill: var(--brand); stroke: var(--surface); stroke-width: 3; }
+.ot-map-top { position: absolute; top: 34px; inset-inline: 12px; z-index: 2; display: flex; gap: 8px; }
+.ot-map-fab { position: absolute; inset-inline-end: 12px; z-index: 2; }
+.ot-sheet--frame { position: absolute; inset-inline: 0; bottom: 0; z-index: 2; display: flex; flex-direction: column; gap: 0; overflow: hidden; }
+.ot-kbd { flex: none; height: 168px; background: var(--surface-sunken); border-top: 1px solid var(--hairline); display: grid; grid-template-rows: repeat(4, 1fr); gap: 6px; padding: 8px 4px; }
+.ot-kbd div { display: flex; gap: 5px; justify-content: center; }
+.ot-kbd span { flex: 0 0 24px; border-radius: 5px; background: var(--surface); box-shadow: 0 1px 0 var(--border); }
+.ot-kbd span.w { flex-basis: 140px; }
+.ot-tapdot-unused { position: absolute; z-index: 5; width: 34px; height: 34px; margin: -17px 0 0 -17px; border-radius: 50%; border: 3px solid var(--focus); background: rgba(19,154,148,.18); pointer-events: none; }
+
+/* Trip fields: origin and destination together, always visible, with swap. */
+.ot-trip { position: relative; display: grid; grid-template-columns: 24px 1fr auto; align-items: center; column-gap: var(--space-3); padding: var(--space-1) var(--space-3) var(--space-1) var(--space-2); padding-inline: var(--space-4) var(--space-2); border-radius: var(--radius-lg); background: var(--surface); border: 1.5px solid var(--border-strong); }
+.ot-trip--float { border-color: transparent; box-shadow: var(--shadow-float); }
+.ot-trip__dots { grid-row: 1 / span 2; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.ot-trip__dot { width: 12px; height: 12px; border-radius: 50%; background: var(--origin); }
+.ot-trip__dot--to { background: var(--destination); border-radius: 3px; }
+.ot-trip__link { width: 0; height: 22px; border-inline-start: 2px dotted var(--border-strong); }
+.ot-trip__field { display: flex; align-items: center; min-height: 48px; border: 0; background: none; padding: 0; font-size: 16px; line-height: 24px; color: var(--ink); text-align: start; cursor: text; min-width: 0; }
+.ot-trip__field + .ot-trip__field { border-top: 1px solid var(--hairline); }
+.ot-trip__field--empty { color: var(--ink-muted); }
+.ot-trip__field--active { color: var(--ink); font-weight: 600; }
+.ot-trip__fields { display: flex; flex-direction: column; min-width: 0; }
+.ot-trip__swap { grid-row: 1 / span 2; display: grid; place-items: center; width: var(--tap-min); height: var(--tap-min); border-radius: var(--radius-pill); border: 0; background: var(--surface-sunken); color: var(--ink); cursor: pointer; }
+.ot-trip__swap .ot-i { transform: none; }
+
+/* Leg bar: a journey drawn to scale on a shared time axis, so options compare at a glance. */
+.ot-lbar { display: flex; align-items: center; gap: 2px; height: 22px; }
+.ot-lbar__seg { height: 22px; border-radius: 5px; display: inline-flex; align-items: center; justify-content: center; overflow: hidden; color: var(--on-brand); font-size: 12px; font-weight: 750; font-variant-numeric: tabular-nums; white-space: nowrap; flex: none; }
+.ot-lbar__seg--bus { background: var(--mode-bus); }
+.ot-lbar__seg--rail { background: var(--mode-rail); }
+.ot-lbar__seg--walk { height: 4px; background: repeating-linear-gradient(90deg, var(--mode-walk) 0 3px, transparent 3px 6px); border-radius: 2px; }
+.ot-lbar__seg--wait { height: 2px; background: var(--hairline); }
+.ot-axis { display: flex; justify-content: space-between; font-size: 12px; line-height: 16px; color: var(--ink-muted); font-variant-numeric: tabular-nums; border-bottom: 1px solid var(--hairline); padding-bottom: var(--space-1); }
+
+/* Comparison chart: all options on one time axis; the selected one's route below. */
+.ot-chart { display: flex; flex-direction: column; gap: 2px; padding: 10px 12px 8px; border-radius: var(--radius-lg); background: var(--surface-sunken); }
+.ot-chart__axis { margin-inline: 86px 6px; }
+.ot-crow { display: grid; grid-template-columns: 72px 1fr; align-items: center; gap: 8px; min-height: var(--tap-min); padding: 0 6px; border: 0; border-radius: var(--radius-md); background: transparent; text-align: start; color: var(--ink); cursor: pointer; }
+.ot-crow b { font-size: 16px; line-height: 20px; font-weight: 750; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.ot-crow b small { font-size: 11px; font-weight: 650; color: var(--ink-muted); }
+.ot-crow > span > small { display: block; font-size: 11px; line-height: 14px; font-weight: 700; color: var(--brand); }
+.ot-crow[aria-pressed="true"] { background: var(--surface); box-shadow: var(--shadow-card); }
+.ot-route { display: flex; flex-direction: column; gap: 6px; }
+.ot-route__top { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-2); }
+.ot-route__big { font-size: 24px; line-height: 30px; font-weight: 750; font-variant-numeric: tabular-nums; }
+.ot-route__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; font-size: 13px; line-height: 18px; color: var(--ink-muted); }
+.ot-route__board { font-size: 13px; line-height: 18px; color: var(--ink); }
+.ot-route .ot-steps { border-top: 1px solid var(--hairline); margin-top: var(--space-1); }
+
+/* Navigation sheet header: destination, arrival, manual next step. */
+.ot-navhead { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); margin: var(--space-3) 0 var(--space-1); }
+.ot-navhead b { display: block; font-size: 16px; line-height: 22px; }
+.ot-navhead span { font-size: 13px; color: var(--ink-muted); }
+.ot-navhead .ot-navhead__acts { font-size: 14px; font-weight: 650; color: var(--link); }
+
+/* Nav step: the one thing to do now, with every fact needed for it. */
+.ot-nav { border-radius: var(--radius-lg); background: var(--surface); padding: var(--space-4); color: var(--ink); box-shadow: var(--shadow-card); }
+.ot-nav--hero { background: var(--hero); color: var(--on-hero); box-shadow: none; }
+.ot-nav--hero :focus-visible { outline-color: var(--on-hero); }
+.ot-nav__kicker { display: flex; justify-content: space-between; align-items: center; font-size: 13px; line-height: 16px; font-weight: 700; color: var(--brand); margin-bottom: var(--space-2); }
+.ot-nav--hero .ot-nav__kicker { color: var(--hero-accent); }
+.ot-nav__kicker span:last-child { color: var(--ink-muted); font-weight: 500; }
+.ot-nav--hero .ot-nav__kicker span:last-child { color: var(--on-hero-muted); }
+.ot-nav__main { display: flex; align-items: flex-start; gap: var(--space-3); }
+.ot-nav__what { flex: 1; min-width: 0; }
+.ot-nav__title { margin: 0; font-size: 22px; line-height: 28px; font-weight: 700; }
+.ot-nav__sub { margin: 2px 0 0; font-size: 14px; line-height: 20px; color: var(--ink-muted); }
+.ot-nav--hero .ot-nav__sub { color: var(--on-hero-muted); }
+.ot-nav__count { flex: none; text-align: center; min-width: 64px; }
+.ot-nav__count b { display: block; font-size: 36px; line-height: 38px; font-weight: 750; letter-spacing: -.5px; font-variant-numeric: tabular-nums; color: var(--brand); }
+.ot-nav--hero .ot-nav__count b { color: var(--hero-accent); }
+.ot-nav__count span { font-size: 13px; font-weight: 650; }
+.ot-nav__facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-2); margin-top: var(--space-3); }
+.ot-fact { padding: var(--space-2); border-radius: var(--radius-md); background: var(--surface-sunken); min-width: 0; }
+.ot-nav--hero .ot-fact { background: rgba(255,255,255,.08); }
+[data-theme="dark"] .ot-nav--hero .ot-fact { background: rgba(0,0,0,.07); }
+.ot-fact__k { display: block; font-size: 12px; line-height: 16px; color: var(--ink-muted); }
+.ot-nav--hero .ot-fact__k { color: var(--on-hero-muted); }
+.ot-fact__v { display: block; font-size: 15px; line-height: 20px; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ot-nav__note { display: flex; align-items: center; gap: var(--space-2); margin-top: var(--space-3); font-size: 13px; line-height: 18px; color: var(--ink-muted); }
+.ot-nav--hero .ot-nav__note { color: var(--on-hero-muted); }
+
+/* Ride progress: stops on the current vehicle, the exit stop called out. */
+.ot-ride { list-style: none; margin: 0; padding: 0; }
+.ot-ride__stop { position: relative; display: flex; align-items: center; gap: var(--space-3); min-height: 34px; padding-inline-start: 4px; font-size: 14px; line-height: 18px; color: var(--ink-muted); }
+.ot-ride__stop::before { content: ""; position: absolute; inset-inline-start: 10px; top: 0; bottom: 0; width: 4px; background: var(--rail, var(--mode-bus)); }
+.ot-ride__stop:first-child::before { top: 50%; }
+.ot-ride__stop:last-child::before { bottom: 50%; }
+.ot-ride__dot { position: relative; z-index: 1; width: 16px; height: 16px; flex: none; border-radius: 50%; background: var(--surface); border: 3px solid var(--rail, var(--mode-bus)); }
+.ot-ride__stop--done { color: var(--ink-subtle); }
+.ot-ride__stop--done::before { background: var(--hairline); }
+.ot-ride__stop--done .ot-ride__dot { border-color: var(--hairline); }
+.ot-ride__stop--here .ot-ride__dot { background: var(--brand); border-color: var(--surface); box-shadow: 0 0 0 3px var(--brand); }
+.ot-ride__stop--here { color: var(--ink); font-weight: 650; }
+.ot-ride__stop--exit { color: var(--ink); font-weight: 700; font-size: 15px; }
+.ot-ride__stop--exit .ot-ride__dot { background: var(--destination); border-color: var(--destination); }
+.ot-ride__stop time { margin-inline-start: auto; font-variant-numeric: tabular-nums; font-size: 13px; }
+
+/* Step list: the whole trip, done / now / next. */
+.ot-steps { list-style: none; margin: 0; padding: 0; }
+.ot-steps__item { padding: var(--space-2) 0; font-size: 14px; line-height: 20px; color: var(--ink); }
+.ot-steps__item + .ot-steps__item { border-top: 1px solid var(--hairline); }
+.ot-steps__row { display: flex; align-items: center; gap: var(--space-3); min-height: 32px; }
+.ot-steps__row time { flex: none; width: 44px; font-weight: 650; font-variant-numeric: tabular-nums; }
+.ot-steps__item--done { color: var(--ink-subtle); }
+.ot-steps__item--done .ot-line { opacity: .45; }
+.ot-steps__item--now { margin-inline: calc(-1 * var(--space-4)); padding-inline: var(--space-4); background: var(--brand-tint); font-weight: 650; }
+.ot-steps__item--now + .ot-steps__item, .ot-steps__item + .ot-steps__item--now { border-top-color: transparent; }
+.ot-steps__item--now .ot-steps__text small { color: var(--ink); }
+.ot-steps__text { flex: 1; min-width: 0; }
+.ot-steps__text small { display: block; font-size: 12px; line-height: 16px; font-weight: 400; color: var(--ink-muted); }
+.ot-steps__icon { flex: none; display: grid; place-items: center; min-width: 34px; color: var(--mode-walk); }
+
+/* Showcase: tap highlight on the element the next step taps */
+.is-tapped { outline: 3px solid var(--focus); outline-offset: 2px; box-shadow: 0 0 0 9px rgba(19,154,148,.22); }
+.ot-phone__screen[dir="rtl"] { text-align: start; }
+.ot-i--search{--ot-i:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 width=%2224%22 height=%2224%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%221.9%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Ccircle cx=%2211%22 cy=%2211%22 r=%226.5%22/%3E%3Cpath d=%22M16 16l4.5 4.5%22/%3E%3C/svg%3E")}
+.ot-i--home{--ot-i:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 width=%2224%22 height=%2224%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%221.9%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M3.5 11L12 4l8.5 7%22/%3E%3Cpath d=%22M5.5 9.5V20h13V9.5%22/%3E%3Cpath d=%22M10 20v-5h4v5%22/%3E%3C/svg%3E")}
+.ot-i--work{--ot-i:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 width=%2224%22 height=%2224%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%221.9%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Crect x=%223%22 y=%227.5%22 width=%2218%22 height=%2212.5%22 rx=%222%22/%3E%3Cpath d=%22M8.5 7.5V5.5a1.5 1.5 0 0 1 1.5-1.5h4a1.5 1.5 0 0 1 1.5 1.5v2%22/%3E%3Cpath d=%22M3 13h18%22/%3E%3C/svg%3E")}
+.ot-i--star{--ot-i:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 width=%2224%22 height=%2224%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%221.9%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1.1 5.8L12 16.8l-5.3 2.8 1.1-5.8-4.3-4.1 5.9-.8z%22/%3E%3C/svg%3E")}
+.ot-i--pin{--ot-i:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 width=%2224%22 height=%2224%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%221.9%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M12 21s-6.5-5.8-6.5-11a6.5 6.5 0 0 1 13 0c0 5.2-6.5 11-6.5 11z%22/%3E%3Ccircle cx=%2212%22 cy=%2210%22 r=%222.3%22/%3E%3C/svg%3E")}
+.ot-i--locate{--ot-i:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 width=%2224%22 height=%2224%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%221.9%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Ccircle cx=%2212%22 cy=%2212%22 r=%226.5%22/%3E%3Ccircle cx=%2212%22 cy=%2212%22 r=%221.6%22 fill=%22%23000%22/%3E%3Cpath d=%22M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3%22/%3E%3C/svg%3E")}
+.ot-i--clock{--ot-i:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 width=%2224%22 height=%2224%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%221.9%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Ccircle cx=%2212%22 cy=%2212%22 r=%228.5%22/%3E%3Cpath d=%22M12 7.5V12l3 2%22/%3E%3C/svg%3E")}
+.ot-i--swap{--ot-i:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 width=%2224%22 height=%2224%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%221.9%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M7.5 20V4M3.5 8l4-4 4 4%22/%3E%3Cpath d=%22M16.5 4v16M12.5 16l4 4 4-4%22/%3E%3C/svg%3E")}
+.ot-i--chevron{--ot-i:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 width=%2224%22 height=%2224%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%221.9%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M9.5 6l6 6-6 6%22/%3E%3C/svg%3E")}
+.ot-i--back{--ot-i:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 width=%2224%22 height=%2224%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%221.9%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M19 12H5M11 6l-6 6 6 6%22/%3E%3C/svg%3E")}
+.ot-i--close{--ot-i:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 width=%2224%22 height=%2224%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%221.9%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M6 6l12 12M18 6L6 18%22/%3E%3C/svg%3E")}
+.ot-i--bus{--ot-i:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 width=%2224%22 height=%2224%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%221.9%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Crect x=%225%22 y=%223.5%22 width=%2214%22 height=%2214.5%22 rx=%223%22/%3E%3Cpath d=%22M5 11h14M9.5 6.5h5%22/%3E%3Ccircle cx=%228.5%22 cy=%2214.5%22 r=%22.9%22 fill=%22%23000%22/%3E%3Ccircle cx=%2215.5%22 cy=%2214.5%22 r=%22.9%22 fill=%22%23000%22/%3E%3Cpath d=%22M7.5 18v2.5M16.5 18v2.5%22/%3E%3C/svg%3E")}
+.ot-i--train{--ot-i:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 width=%2224%22 height=%2224%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%221.9%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Crect x=%226%22 y=%223%22 width=%2212%22 height=%2214%22 rx=%224%22/%3E%3Cpath d=%22M6 10h12%22/%3E%3Ccircle cx=%229.5%22 cy=%2213.5%22 r=%22.9%22 fill=%22%23000%22/%3E%3Ccircle cx=%2214.5%22 cy=%2213.5%22 r=%22.9%22 fill=%22%23000%22/%3E%3Cpath d=%22M9 17l-2 4M15 17l2 4%22/%3E%3C/svg%3E")}
+.ot-i--walk{--ot-i:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 width=%2224%22 height=%2224%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%221.9%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Ccircle cx=%2213%22 cy=%224.5%22 r=%221.8%22/%3E%3Cpath d=%22M12.6 8.2L11 14.2l-3 6.3M11 14.2l3.4 2.6.9 3.7M12.4 9.2L9 11.2 8.3 14M12.7 9.6l2.4 2.6 2.6.8%22/%3E%3C/svg%3E")}
+.ot-i--stop{--ot-i:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 width=%2224%22 height=%2224%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%221.9%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Crect x=%226%22 y=%223%22 width=%2212%22 height=%228.5%22 rx=%222%22/%3E%3Cpath d=%22M12 11.5V21M9 21h6%22/%3E%3C/svg%3E")}
+.ot-i--route{--ot-i:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 width=%2224%22 height=%2224%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%221.9%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Ccircle cx=%226%22 cy=%2218.5%22 r=%222%22/%3E%3Ccircle cx=%2218%22 cy=%225.5%22 r=%222%22/%3E%3Cpath d=%22M8 18.5h7.5a3.5 3.5 0 0 0 0-7h-7a3.5 3.5 0 0 1 0-7H16%22/%3E%3C/svg%3E")}
+.ot-i--map{--ot-i:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 width=%2224%22 height=%2224%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%221.9%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M9 4.5L3.5 6.5v13L9 17.5l6 2 5.5-2v-13L15 6.5z%22/%3E%3Cpath d=%22M9 4.5v13M15 6.5v13%22/%3E%3C/svg%3E")}
+.ot-i--info{--ot-i:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 width=%2224%22 height=%2224%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%221.9%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Ccircle cx=%2212%22 cy=%2212%22 r=%228.5%22/%3E%3Cpath d=%22M12 11v5.5%22/%3E%3Ccircle cx=%2212%22 cy=%228%22 r=%22.9%22 fill=%22%23000%22/%3E%3C/svg%3E")}
+.ot-i--alert{--ot-i:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 width=%2224%22 height=%2224%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%221.9%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M12 4l9 15.5H3z%22/%3E%3Cpath d=%22M12 10v4%22/%3E%3Ccircle cx=%2212%22 cy=%2216.8%22 r=%22.9%22 fill=%22%23000%22/%3E%3C/svg%3E")}
+.ot-i--plus{--ot-i:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 width=%2224%22 height=%2224%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%221.9%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M12 5v14M5 12h14%22/%3E%3C/svg%3E")}

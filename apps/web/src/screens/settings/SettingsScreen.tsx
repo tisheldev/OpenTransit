@@ -9,12 +9,14 @@ import { formatDate } from "../../lib/time";
 import { emptyScene, usePublishScene } from "../../map/scene";
 import { endActiveTrip } from "../../nav/activeTrip";
 import { isLocationPossible } from "../../lib/geolocation";
+import { setTheme, useTheme } from "../../lib/theme";
 import { initialDraft, startingOrigin } from "../../plan/draft";
 import { usePlan } from "../../plan/PlanProvider";
 import { go } from "../../router";
 import { generationMeta } from "../../shell/Banners";
 import { deleteSaved, reloadLocalState, renameSaved, useLocalState } from "../../shell/localStore";
 import { clearAllLocalData, type SavedPlace } from "../../storage/local";
+import { DEFAULT_THEME, THEMES } from "../../styles/tokens";
 import { version } from "../../../package.json";
 
 // Settings — C07 (design: Screens 7): a plain list. The one destructive action confirms
@@ -168,6 +170,7 @@ function ClearAll() {
 
   const clear = () => {
     setLang("he");
+    setTheme(DEFAULT_THEME);
     setFrom(startingOrigin(isLocationPossible(), null));
     setTo(initialDraft.to);
     setWhen(initialDraft.when);
@@ -211,6 +214,8 @@ export function SettingsScreen() {
   const { t, lang, setLang } = useI18n();
   const local = useLocalState();
   const groupId = useId();
+  const themeGroupId = useId();
+  const theme = useTheme();
   usePublishScene(emptyScene);
 
   return (
@@ -225,6 +230,18 @@ export function SettingsScreen() {
           <label key={option} lang={option}>
             <input type="radio" name="lang" value={option} checked={lang === option} onChange={() => setLang(option)} />
             {t(`settings.language.${option}`)}
+          </label>
+        ))}
+      </fieldset>
+
+      <fieldset className="segmented" aria-labelledby={themeGroupId}>
+        <legend id={themeGroupId} className="section-title">
+          {t("settings.theme")}
+        </legend>
+        {THEMES.map((option) => (
+          <label key={option}>
+            <input type="radio" name="theme" value={option} checked={theme === option} onChange={() => setTheme(option)} />
+            {t(`settings.theme.${option}`)}
           </label>
         ))}
       </fieldset>
