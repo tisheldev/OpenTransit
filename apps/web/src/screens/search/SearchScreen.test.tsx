@@ -84,8 +84,14 @@ describe("Search requests", () => {
       if (String(resource).includes("/v1/places") && init?.signal) signals.push(init.signal);
       return realFetch(resource, init);
     });
+    // The first answer is held until the next request has started, so it is still in
+    // flight when the text changes (a fixed delay raced the debounce on a loaded machine).
+    let release: () => void = () => {};
+    const held = new Promise<void>((resolve) => (release = resolve));
+    let calls = 0;
     trackPlaces(async () => {
-      await delay(400);
+      calls += 1;
+      if (calls === 1) await held;
       return respond(fixture("recorded-places-stop-he"));
     });
     renderApp("#/search/to");
@@ -95,6 +101,7 @@ describe("Search requests", () => {
     await waitFor(() => expect(signals).toHaveLength(2));
     expect(signals[0]!.aborted).toBe(true);
     expect(signals[1]!.aborted).toBe(false);
+    release();
     await screen.findByTestId("search-results");
   });
 
