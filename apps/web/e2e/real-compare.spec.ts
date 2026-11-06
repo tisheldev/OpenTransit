@@ -85,7 +85,7 @@ test.describe("@real compare", () => {
     await expect(options).toHaveCount(body.data.journeys.length);
     expect(body.data.journeys.length).toBeGreaterThan(0);
     const details = page.getByRole("region", { name: /פרטי מסלול/ });
-    await expect(details.locator(".it").first()).toBeVisible();
+    await expect(details.locator(".ot-steps__item").first()).toBeVisible();
     await expect(details.getByRole("link")).toHaveCount(0);
 
     // Half sheet: every option, with its departure and arrival, above the pinned Start.
@@ -121,8 +121,8 @@ test.describe("@real compare", () => {
         transit: { operatorName: string };
       }[];
       for (const leg of rails) {
-        await expect(details.locator(".it-ride-name", { hasText: leg.transit.operatorName }).first()).toBeVisible();
-        await expect(details.locator(".it-name", { hasText: leg.to.name }).first()).toBeVisible();
+        await expect(details.locator(".compare-ride-name", { hasText: leg.transit.operatorName }).first()).toBeVisible();
+        await expect(details.locator(".compare-place", { hasText: leg.to.name }).first()).toBeVisible();
         await expect(details).not.toContainText(`רכבת ל${leg.to.name}`);
         sawTrain = true;
       }

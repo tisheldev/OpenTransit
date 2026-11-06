@@ -181,3 +181,19 @@ export function optionSpeech(
 export function durationText(seconds: number, lang: Lang): string {
   return formatDuration(seconds, lang);
 }
+
+/**
+ * The design's compact duration (LegBar): "1:45" with the unit שע׳ from an hour on, else
+ * whole minutes with דק׳. Rounded up to whole minutes, like formatDuration.
+ */
+export function compactDuration(seconds: number): { value: string; unit: "h" | "min" } {
+  const minutes = Math.max(0, Math.ceil(seconds / 60));
+  if (minutes < 60) return { value: String(minutes), unit: "min" };
+  return { value: `${Math.floor(minutes / 60)}:${String(minutes % 60).padStart(2, "0")}`, unit: "h" };
+}
+
+/** The first sentence of a message, for a banner's bold opening phrase, and the rest. */
+export function splitFirstSentence(message: string): { first: string; rest: string } {
+  const match = /^(.+?[.!?])\s+(\S[\s\S]*)$/.exec(message);
+  return match ? { first: match[1]!, rest: match[2]! } : { first: message, rest: "" };
+}
