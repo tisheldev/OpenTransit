@@ -610,3 +610,27 @@ def test_push_skips_present_tags_and_registers_under_the_h1_family(tmp_path):
     assert release["taskDefinitionArn"] == ARN
     assert not any(word in " ".join(a) for a in calls for word in ("deregister", "delete"))
     assert all(a[1:3] == ["--profile", "p"] for a in calls if a[0] == "aws")
+
+
+def test_deployment_wait_survives_a_transient_describe_failure(monkeypatch):
+    monkeypatch.setattr(pub.time, "sleep", lambda seconds: None)
+    calls = {"n": 0}
+    steady = {
+        "services": [
+            {
+                "deployments": [{"status": "PRIMARY", "rolloutState": "COMPLETED"}],
+                "runningCount": 1,
+                "desiredCount": 1,
+                "events": [],
+            }
+        ]
+    }
+
+    def runner(argv, env=None):
+        calls["n"] += 1
+        if calls["n"] == 1:
+            raise subprocess.CalledProcessError(255, argv)
+        return json.dumps(steady)
+
+    state = pub.AwsSession("eu-north-1", "p", runner).wait_for_deployment("c", "s", 60)
+    assert state["converged"] and state["describeErrors"] == 1
