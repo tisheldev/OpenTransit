@@ -359,6 +359,10 @@
           "value": "{{VPC_CIDR}}"
         },
         {
+          "name": "OPENTRANSIT_CLIENT_DIR",
+          "value": "/app/client"
+        },
+        {
           "name": "OPENTRANSIT_PHOTON_ADMIN_URL",
           "value": "http://127.0.0.1:9201"
         },

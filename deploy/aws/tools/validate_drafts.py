@@ -376,6 +376,8 @@ def validate_task_definition(
         fail("api: OPENTRANSIT_MANIFEST must be /generation/manifest.json")
     if api_env.get("OPENTRANSIT_PROBE") != "/run/opentransit/probe.json":
         fail("api: OPENTRANSIT_PROBE must be the verifier's output")
+    if api_env.get("OPENTRANSIT_CLIENT_DIR") != "/app/client":
+        fail("api: OPENTRANSIT_CLIENT_DIR must be /app/client (the web client in the API image)")
     if api_env.get("OPENTRANSIT_PLAYGROUND", "0") != "0":
         fail("api: the playground must stay disabled")
     if api_env.get("OPENTRANSIT_RATE_LIMIT_ENABLED") != "1":

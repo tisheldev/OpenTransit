@@ -29,6 +29,7 @@ A=$(aws --profile opentransit sts get-caller-identity --query Account --output t
 TARGET="--region eu-north-1 --cluster opentransit-h1 --service opentransit-h1 --profile opentransit"
 ```
 
+* **Web test client.** Every task serves the built client at `http://<alb>/app/` (`OPENTRANSIT_CLIENT_DIR=/app/client`, set by `render_drafts.py` since 6 November). Over HTTP the browser refuses geolocation, so “my location” is unavailable until there is HTTPS.
 * **Check health.** `curl -s http://<alb>/readyz` (200 or 503 with reason codes) and
   `$H1 probe --label <label> --queries services/api/results/h0-fargate-20261031-01/probe-queries.json`
   (readiness, status, demo, ten journeys, latency; appended to the evidence). `$H1 tasks` lists task
