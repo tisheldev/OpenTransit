@@ -110,7 +110,11 @@ VARIANTS = {
 COMPOSE_FILE = "local/compose.yaml"
 # The local emulation has no ALB: the API sees the real TCP peer, so the proxy-trust token
 # (which only a deployment step can resolve) is left out rather than rendered unparseable.
-LOCAL_OMITTED_ENV = "OPENTRANSIT_TRUSTED_PROXIES"
+# Its API images (built 1 October) predate the web client, so /app/ stays off there.
+LOCAL_OMITTED_ENV = {"OPENTRANSIT_TRUSTED_PROXIES", "OPENTRANSIT_CLIENT_DIR"}
+# The API image ships the built web test client here (services/api/Dockerfile); every task
+# serves it at /app/ (user decision for the H-1 preview, 6 November 2026).
+CLIENT_DIR = "/app/client"
 
 
 def _logging(prefix: str) -> dict:
@@ -291,6 +295,7 @@ def render_task_definition(variant: str) -> dict:
         # trusted for X-Forwarded-For; the deployment step substitutes the real CIDR for the token.
         {"name": "OPENTRANSIT_RATE_LIMIT_ENABLED", "value": "1"},
         {"name": "OPENTRANSIT_TRUSTED_PROXIES", "value": "{{VPC_CIDR}}"},
+        {"name": "OPENTRANSIT_CLIENT_DIR", "value": CLIENT_DIR},
     ]
     api_depends = [
         {"containerName": "verifier", "condition": "SUCCESS"},
@@ -429,7 +434,7 @@ def render_local_compose(variant: str = "recommended") -> str:
         if "environment" in container:
             lines.append("    environment:")
             for item in container["environment"]:
-                if item["name"] == LOCAL_OMITTED_ENV:
+                if item["name"] in LOCAL_OMITTED_ENV:
                     continue
                 lines.append(f"      {item['name']}: {_yaml_scalar(item['value'])}")
         lines.append("    volumes:")

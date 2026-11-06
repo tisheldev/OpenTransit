@@ -634,3 +634,28 @@ def test_deployment_wait_survives_a_transient_describe_failure(monkeypatch):
 
     state = pub.AwsSession("eu-north-1", "p", runner).wait_for_deployment("c", "s", 60)
     assert state["converged"] and state["describeErrors"] == 1
+
+
+def test_every_published_revision_serves_the_web_client(tmp_path, no_subprocess):
+    # User decision (6 November): /app/ stays on in the preview; no publish may drop it.
+    code, plan = _publish(tmp_path)
+    assert code == 0, plan["stages"]
+    task = json.loads((tmp_path / "plan" / "task-definition.candidate.json").read_text())
+    api_env = {e["name"]: e["value"] for e in _container(task, "api")["environment"]}
+    assert api_env["OPENTRANSIT_CLIENT_DIR"] == "/app/client"
+    assert "OPENTRANSIT_CLIENT_DIR" not in json.dumps(_container(task, "verifier"))
+
+    for env in _container(task, "api")["environment"]:
+        if env["name"] == "OPENTRANSIT_CLIENT_DIR":
+            env["value"] = "/tmp/elsewhere"
+    errors, _ = pub.validate_drafts.validate_candidate(task, "t", pub.render_drafts.MOTIS_DIGEST)
+    assert any("OPENTRANSIT_CLIENT_DIR" in e for e in errors)
+    api = _container(task, "api")
+    api["environment"] = [e for e in api["environment"] if e["name"] != "OPENTRANSIT_CLIENT_DIR"]
+    errors, _ = pub.validate_drafts.validate_candidate(task, "t", pub.render_drafts.MOTIS_DIGEST)
+    assert any("OPENTRANSIT_CLIENT_DIR" in e for e in errors)
+
+
+def test_local_emulation_leaves_the_client_off():
+    compose = pub.render_drafts.render_local_compose("recommended")
+    assert "OPENTRANSIT_CLIENT_DIR" not in compose
