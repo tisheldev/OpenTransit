@@ -114,8 +114,14 @@ def h1() -> dict:
     }
 
 
+# The host's first run copies this pointer and the release it names (host paths).
+BOOTSTRAP_POINTER = "releases/build-host-current.json"
+# The portability session's archive bucket (PROJECT_STATUS PORT-01, PR #26); setup adopts it.
+ARCHIVE_BUCKET = "opentransit-archive-eun1-7c41d2"
+
+
 def bucket_name() -> str:
-    return f"opentransit-archive-{h0.account()}"
+    return ARCHIVE_BUCKET
 
 
 def monthly_estimate(hours_per_day: float = 1.5) -> dict:
@@ -734,7 +740,7 @@ def seed(args) -> int:
             "cp",
             "--only-show-errors",
             str(release.parent / file),
-            f"s3://{bucket}/bootstrap/releases/{name}/{file}",
+            f"s3://{bucket}/releases/{name}/{file}",
         )
     current = {
         "release": f"/srv/ot/releases/{name}/release-registered.json",
@@ -749,7 +755,7 @@ def seed(args) -> int:
         "cp",
         "--only-show-errors",
         str(path),
-        f"s3://{bucket}/bootstrap/releases/current.json",
+        f"s3://{bucket}/{BOOTSTRAP_POINTER}",
     )
     h0.step(ev, "seed-release", True, release=name, bucket=bucket)
     return 0
@@ -1012,7 +1018,7 @@ def main(argv: list[str] | None = None) -> int:
     p = sub.add_parser("seed")
     p.add_argument("--releases", type=Path, default=Path("D:/ot/releases"))
     p = sub.add_parser("mode")
-    p.add_argument("mode", choices=["refresh", "maintenance"])
+    p.add_argument("mode", choices=["refresh", "dry-run", "maintenance"])
     p = sub.add_parser("set-ref")
     p.add_argument("ref")
     sub.add_parser("trigger")

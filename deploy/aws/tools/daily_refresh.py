@@ -379,6 +379,11 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="cloud build host: remove archived local copies after a successful run",
     )
+    parser.add_argument(
+        "--stop-before-push",
+        action="store_true",
+        help="dry run: build and stage the release, then stop before ECR/ECS",
+    )
     args = parser.parse_args(argv)
     job = Job(args)
     code = 1
@@ -390,7 +395,9 @@ def main(argv: list[str] | None = None) -> int:
         job.summary["failure"] = f"{type(exc).__name__}: {exc}"
         job.log(f"!!! {job.summary['failure']}")
     job.summary["finishedAt"] = now()
-    job.summary["outcome"] = "ok" if code == 0 else "failed"
+    job.summary["outcome"] = (
+        "failed" if code else "dry-run" if job.summary.get("dryRun") else "ok"
+    )
     job.save()
     job.log(f"\n=== {now()} outcome {job.summary['outcome']}")
     job.log(
@@ -449,15 +456,15 @@ def archive(
             job.s3_put(snapshot / name, key)
             uploaded.append(key)
     records = [
-        (snapshot / "provenance.json", f"snapshots/{snapshot.name}/provenance.json"),
-        (check, f"checks/{check.name}"),
+        (snapshot / "provenance.json", f"sources/snapshots/{snapshot.name}/provenance.json"),
+        (check, f"sources/checks/{check.name}"),
     ]
     if generation is not None:
         prefix = f"generations/{generation.name}"
         records += [
             (generation / "manifest.json", f"{prefix}/manifest.json"),
-            (generation / "pipeline/pipeline.json", f"{prefix}/pipeline.json"),
-            (job.work / "probe.json", f"{prefix}/probe.json"),
+            (generation / "pipeline/pipeline.json", f"{prefix}/pipeline/pipeline.json"),
+            (job.work / "probe.json", f"{prefix}/probe/probe.json"),
         ]
     for name in (
         "release-registered.json",
@@ -543,7 +550,7 @@ def host_cleanup(job: Job, keep_releases: list[Path], latest_snapshot: Path) -> 
             "inputs"
         ]
         keys = [f"sources/sha256/{i['sha256']}/{n}" for n, i in inputs.items()]
-        keys.append(f"snapshots/{snap.name}/provenance.json")
+        keys.append(f"sources/snapshots/{snap.name}/provenance.json")
         if all(job.s3_has(k) for k in keys):
             shutil.rmtree(snap)
             removed["snapshots"].append(snap.name)
@@ -705,6 +712,10 @@ def refresh(job: Job) -> int:
             *common,
         ]
     job.run("publish", job.publisher(*publish))
+    if job.args.stop_before_push:
+        job.summary["dryRun"] = True
+        job.record("push", True, skipped="--stop-before-push: nothing published")
+        return 0
 
     # 6. push, register, update and wait
     registry = (

@@ -4,7 +4,8 @@
 # checkout cannot change this script while it runs) and started by opentransit-refresh.service.
 #
 # Instance tag OpenTransitMode=maintenance skips the refresh and leaves the host running (for SSM
-# sessions); any other value or no tag runs the refresh. Logs: CloudWatch group $OT_LOG_GROUP,
+# sessions); dry-run builds and stages the release but stops before the publisher push; any
+# other value or no tag runs the refresh. Logs: CloudWatch group $OT_LOG_GROUP,
 # streams <stamp>/host (this script) and <stamp>/job (deploy/aws/tools/daily_refresh.py).
 set -uo pipefail
 source /etc/opentransit/build-host.env
@@ -73,8 +74,13 @@ if [ "$(cat /opt/opentransit/installed-ref 2>/dev/null)" != "$ref" ]; then
 fi
 
 # 2. The serving release on first run: the operator machine's record, kept in the archive.
+# releases/build-host-current.json (written by build_host.py seed) names it by host path.
 if [ ! -f /srv/ot/releases/current.json ]; then
-  aws s3 cp --only-show-errors --recursive "s3://$OT_BUCKET/bootstrap/releases/" /srv/ot/releases/ \
+  aws s3 cp --only-show-errors "s3://$OT_BUCKET/releases/build-host-current.json" \
+    /srv/ot/releases/current.json || host_failed bootstrap-release
+  name=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["release"].split("/")[-2])' \
+    /srv/ot/releases/current.json) || host_failed bootstrap-release
+  aws s3 cp --only-show-errors --recursive "s3://$OT_BUCKET/releases/$name/" "/srv/ot/releases/$name/" \
     || host_failed bootstrap-release
 fi
 
@@ -86,12 +92,14 @@ alb_ip=$(aws ec2 describe-network-interfaces \
 echo "ALB private address $alb_ip"
 
 # 4. The refresh itself (3 h cap; the backstop timer powers off at 4.5 h regardless).
+extra=()
+[ "$mode" = dry-run ] && extra=(--stop-before-push)
 timeout 3h uv run --project "$repo/services/api" --locked python \
   "$repo/deploy/aws/tools/daily_refresh.py" \
   --source-root /srv/ot/src --generations-root /srv/ot/generations --logs /srv/ot/logs \
   --releases /srv/ot/releases --photon-jar /opt/opentransit/photon/photon-1.3.0.jar \
   --osm-reader-path /opt/opentransit/osm-reader --profile '' --alb-url "http://$alb_ip" \
-  --archive-bucket "$OT_BUCKET" --min-free-gib 12 --host-cleanup
+  --archive-bucket "$OT_BUCKET" --min-free-gib 12 --host-cleanup "${extra[@]}"
 rc=$?
 [ $rc -eq 124 ] && echo "OPENTRANSIT_REFRESH_RESULT outcome=failed mode=- stamp=$stamp step=timeout"
 df -h /srv/ot | tail -1
