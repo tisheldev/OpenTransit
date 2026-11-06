@@ -47,7 +47,7 @@ function Harness() {
           insetInline: 0,
           insetBlockEnd: 0,
           blockSize: "35dvh",
-          background: "var(--color-surface)",
+          background: "var(--surface)",
           zIndex: 3,
           padding: "var(--space-4)",
         }}

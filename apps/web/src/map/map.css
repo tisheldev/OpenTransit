@@ -33,7 +33,7 @@
   padding-inline: 6px;
   border-radius: 6px;
   background: rgb(255 255 255 / 82%);
-  color: var(--color-ink);
+  color: var(--ink);
   font-size: 11px;
   line-height: 1.35;
   z-index: 2;
@@ -51,10 +51,10 @@
   inset-inline: var(--space-4);
   margin: 0;
   padding: var(--space-2) var(--space-3);
-  border-radius: var(--radius-s);
-  background: var(--color-surface);
-  color: var(--color-ink-muted);
-  font-size: var(--text-s);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--ink-muted);
+  font-size: var(--body-sm-size);
   text-align: center;
   z-index: 1;
 }
@@ -70,8 +70,8 @@
   margin-block-start: -34px; /* centre 20 px above the target: the rotated corner lands on it */
   border-radius: 50% 50% 50% 0;
   transform: rotate(-45deg);
-  background: var(--color-destination);
-  border: 3px solid var(--color-surface);
+  background: var(--destination);
+  border: 3px solid var(--surface);
   box-shadow: 0 1px 4px rgb(0 0 0 / 35%);
   pointer-events: none;
   z-index: 1;
