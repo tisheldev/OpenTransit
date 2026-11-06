@@ -32,3 +32,24 @@ export async function expectNoSeriousAxeViolations(page: Page, label: string): P
 export async function blockExternal(page: Page): Promise<void> {
   await page.route(/^https?:\/\/(?!localhost|127\.0\.0\.1)/, (route) => route.abort());
 }
+
+/**
+ * Colour theme for the page (dark is the default; light is the Settings choice). Register
+ * it after any other init script that writes localStorage["opentransit"]: it merges into it.
+ */
+export async function useTheme(page: Page, theme: "dark" | "light"): Promise<void> {
+  await page.addInitScript((value) => {
+    const key = "opentransit";
+    let state: { settings?: Record<string, unknown> } & Record<string, unknown>;
+    try {
+      state = JSON.parse(localStorage.getItem(key) ?? "null") ?? {};
+    } catch {
+      state = {};
+    }
+    if (!state.version) {
+      state = { version: 1, settings: { lang: "he" }, home: null, work: null, favourites: [], recents: [], ...state };
+    }
+    state.settings = { ...(state.settings ?? { lang: "he" }), theme: value };
+    localStorage.setItem(key, JSON.stringify(state));
+  }, theme);
+}
