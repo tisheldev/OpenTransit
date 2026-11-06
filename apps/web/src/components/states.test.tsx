@@ -7,7 +7,7 @@ import { I18nProvider } from "../i18n/I18nProvider";
 import { en } from "../i18n/en";
 import { he } from "../i18n/he";
 import type { Lang } from "../i18n/messages";
-import { Empty, ErrorState, Loading, StaleDataBanner, TestDataBanner, Unavailable } from "./states";
+import { Empty, ErrorState, leadPhrase, Loading, StaleDataBanner, TestDataBanner, Unavailable } from "./states";
 
 const renderIn = (lang: Lang, ui: ReactNode) => render(<I18nProvider initialLang={lang}>{ui}</I18nProvider>);
 
@@ -75,6 +75,17 @@ describe("state components", () => {
     act(() => vi.advanceTimersByTime(2_500));
     expect(screen.getByRole("button")).toBeEnabled();
     expect(screen.getByRole("button")).toHaveTextContent(en["state.retry"]);
+  });
+
+  it("set a banner's first phrase in bold, keeping the whole message", () => {
+    expect(leadPhrase("אין חיבור. המקומות השמורים זמינים.")).toEqual(["אין חיבור.", " המקומות השמורים זמינים."]);
+    expect(leadPhrase("Test data — not the real timetable")).toEqual(["Test data", " — not the real timetable"]);
+    expect(leadPhrase("The timetable has expired")).toEqual(["The timetable has expired", ""]);
+    renderIn("he", <ErrorState state="network" />);
+    const alert = screen.getByRole("alert");
+    expect(alert).toHaveClass("ot-banner", "ot-banner--error");
+    expect(alert.querySelector("b")).toHaveTextContent(/^אין חיבור ל־OpenTransit\.$/);
+    expect(alert).toHaveTextContent(he["error.network"]);
   });
 
   it("label test data and stale data", () => {

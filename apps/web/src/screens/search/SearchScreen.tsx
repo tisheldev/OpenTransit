@@ -2,7 +2,8 @@ import { useEffect, useId, useMemo, useRef, useState, type FormEvent, type React
 import { usePlaceSearch, PLACES_MIN_CHARS } from "../../api/queries";
 import { ApiFailure } from "../../api/result";
 import type { Meta, PlaceCandidate, Places } from "../../api/schemas";
-import { Empty, ErrorState } from "../../components/states";
+import { Icon, type IconName } from "../../components/ds";
+import { Banner, Empty, ErrorState } from "../../components/states";
 import { useI18n } from "../../i18n/I18nProvider";
 import { DEFAULT_CENTER } from "../../map/layers";
 import { emptyScene, useMapState, usePublishScene, type MapFocus } from "../../map/scene";
@@ -16,9 +17,9 @@ import type { LocalState, SavedPlace } from "../../storage/local";
 import { candidateKey, choiceFromCandidate, choiceFromPin, isStreetLevel, readableLocality } from "./choice";
 import { useNearIfGranted } from "./near";
 
-// Where to / Where from — C02 (design: Screens 2), also used to set Home, Work and a
-// favourite. Place IDs and coordinates never enter the URL: the choice goes to the plan
-// draft (session) or to saved places (local storage).
+// Where to / Where from — C02 (design: Screens 2; PlaceRow), also used to set Home, Work
+// and a favourite. Place IDs and coordinates never enter the URL: the choice goes to the
+// plan draft (session) or to saved places (local storage).
 
 export const SEARCH_DEBOUNCE_MS = 250;
 
@@ -31,21 +32,53 @@ function useDebounced<T>(value: T, ms: number): T {
   return debounced;
 }
 
-const KIND_ICON: Record<PlaceCandidate["kind"], string> = { stop: "🚏", station: "🚉", address: "📍", poi: "⭐" };
+/** A row's kind icon (design: PlaceRow): its glyph and the tint behind it. */
+interface RowIcon {
+  name: IconName;
+  tint?: "stop" | "rail" | "saved";
+}
+
+const KIND_ICON: Record<PlaceCandidate["kind"], RowIcon> = {
+  stop: { name: "stop", tint: "stop" },
+  station: { name: "train", tint: "rail" },
+  address: { name: "pin" },
+  poi: { name: "pin" },
+};
 const SKELETON_ROWS = 4;
 
+function RowIconBadge({ icon }: { icon: RowIcon }) {
+  return (
+    <span className={icon.tint ? `ot-row__icon ot-row__icon--${icon.tint}` : "ot-row__icon"}>
+      <Icon name={icon.name} />
+    </span>
+  );
+}
+
+/** The typed text in bold inside a result's name (design: PlaceRow), first match only. */
+function Highlighted({ text, typed }: { text: string; typed: string }) {
+  const at = typed.length >= PLACES_MIN_CHARS ? text.toLocaleLowerCase().indexOf(typed.toLocaleLowerCase()) : -1;
+  if (at < 0) return <>{text}</>;
+  return (
+    <>
+      {text.slice(0, at)}
+      <mark className="ot-hl">{text.slice(at, at + typed.length)}</mark>
+      {text.slice(at + typed.length)}
+    </>
+  );
+}
+
 /**
- * Parts of a result's second line, joined by a quiet "·" that wraps with the part after
- * it (never left dangling at a line end). A tag needs no separator.
+ * Parts of a result's subtitle, on one line, joined by a quiet "·" that stays with the
+ * part after it. A tag needs no separator.
  */
 function Parts({ children }: { children: Array<{ node: ReactNode; separated: boolean } | null> }) {
   const parts = children.filter((part) => part !== null);
   return (
-    <span className="row-sub">
+    <span className="ot-row__sub place-sub">
       {parts.map((part, index) => (
-        <span key={index} className="row-part">
+        <span key={index} className="place-part">
           {index > 0 && part.separated && (
-            <span className="row-sep" aria-hidden="true">
+            <span className="place-sep" aria-hidden="true">
               ·{" "}
             </span>
           )}
@@ -56,7 +89,17 @@ function Parts({ children }: { children: Array<{ node: ReactNode; separated: boo
   );
 }
 
-function ResultRow({ candidate, meta, onChoose }: { candidate: PlaceCandidate; meta: Meta; onChoose: (choice: PlaceChoice) => void }) {
+function ResultRow({
+  candidate,
+  meta,
+  typed,
+  onChoose,
+}: {
+  candidate: PlaceCandidate;
+  meta: Meta;
+  typed: string;
+  onChoose: (choice: PlaceChoice) => void;
+}) {
   const { t, lang } = useI18n();
   const locality = readableLocality(candidate.locality);
   const other = candidate.languageUsed !== lang && /^[a-z]{2}$/.test(candidate.languageUsed);
@@ -78,18 +121,18 @@ function ResultRow({ candidate, meta, onChoose }: { candidate: PlaceCandidate; m
     );
   return (
     <li>
-      <button type="button" className="row-button" onClick={() => onChoose(choiceFromCandidate(candidate, meta))}>
-        <span className="row-icon" aria-hidden="true">
-          {KIND_ICON[candidate.kind]}
-        </span>
-        <span className="row-text">
-          <span className="row-title">
-            <bdi lang={other ? candidate.languageUsed : undefined}>{candidate.displayName}</bdi>
+      <button type="button" className="ot-row" onClick={() => onChoose(choiceFromCandidate(candidate, meta))}>
+        <RowIconBadge icon={KIND_ICON[candidate.kind]} />
+        <span className="ot-row__body">
+          <span className="ot-row__title">
+            <bdi lang={other ? candidate.languageUsed : undefined}>
+              <Highlighted text={candidate.displayName} typed={typed} />
+            </bdi>
           </span>
           <Parts>
             {[
               { node: kind, separated: true },
-              isStreetLevel(candidate) ? { node: <span className="tag">{t("place.streetLevel")}</span>, separated: false } : null,
+              isStreetLevel(candidate) ? { node: <span className="place-tag">{t("place.streetLevel")}</span>, separated: false } : null,
               locality ? { node: <bdi>{locality}</bdi>, separated: true } : null,
             ]}
           </Parts>
@@ -99,24 +142,36 @@ function ResultRow({ candidate, meta, onChoose }: { candidate: PlaceCandidate; m
   );
 }
 
-function SavedRow({ icon, title, place, onChoose }: { icon: string; title: string; place: SavedPlace; onChoose: (choice: PlaceChoice) => void }) {
+function SavedRow({ icon, title, place, onChoose }: { icon: RowIcon; title: string; place: SavedPlace; onChoose: (choice: PlaceChoice) => void }) {
   return (
     <li>
-      <button type="button" className="row-button" onClick={() => onChoose(choiceFromSaved(place))}>
-        <span className="row-icon" aria-hidden="true">
-          {icon}
-        </span>
-        <span className="row-text">
-          {/* A recent is its label alone: plain weight, as on Home. The block keeps the
-              page's direction; only the name inside is isolated. */}
-          <span className={title === place.label ? undefined : "row-title"}>
+      <button type="button" className="ot-row" onClick={() => onChoose(choiceFromSaved(place))}>
+        <RowIconBadge icon={icon} />
+        <span className="ot-row__body">
+          {/* The block keeps the page's direction; only the name inside is isolated. */}
+          <span className="ot-row__title">
             <bdi>{title}</bdi>
           </span>
           {title !== place.label && (
-            <span className="row-sub">
-              <bdi>{place.label}</bdi>
+            <span className="ot-row__sub place-sub">
+              <bdi className="place-part">{place.label}</bdi>
             </span>
           )}
+        </span>
+      </button>
+    </li>
+  );
+}
+
+/** "Choose on map" is always a row (design: PlaceRow), so map picking is never hidden. */
+function PickOnMapRow({ onPick }: { onPick: () => void }) {
+  const { t } = useI18n();
+  return (
+    <li>
+      <button type="button" className="ot-row" onClick={onPick}>
+        <RowIconBadge icon={{ name: "map" }} />
+        <span className="ot-row__body">
+          <span className="ot-row__title">{t("search.pickOnMap")}</span>
         </span>
       </button>
     </li>
@@ -129,12 +184,12 @@ function PickOnMap({ onConfirm, onCancel }: { onConfirm: (choice: PlaceChoice) =
   const [outside, setOutside] = useState(false);
   return (
     <div className="pick">
-      <p>{t("search.pick.hint")}</p>
-      {center === null && <p className="muted">{t("search.pick.waiting")}</p>}
+      <p className="pick-hint">{t("search.pick.hint")}</p>
+      {center === null && <p className="muted small">{t("search.pick.waiting")}</p>}
       {outside && (
-        <p className="state state-error" role="alert">
+        <Banner tone="error" className="state" role="alert">
           {t("search.pick.outside")}
-        </p>
+        </Banner>
       )}
       <div className="actions">
         <button
@@ -174,11 +229,14 @@ function NameFavourite({ choice, onSave, onCancel }: { choice: PlaceChoice; onSa
   };
   return (
     <form className="name-form" onSubmit={submit}>
-      <label htmlFor={inputId}>{t("search.favourite.name")}</label>
+      <label htmlFor={inputId} className="field-label">
+        {t("search.favourite.name")}
+      </label>
       <input
         ref={inputRef}
         id={inputId}
         className="text-input"
+        dir="auto"
         value={label}
         maxLength={200}
         onChange={(event) => setLabel(event.target.value)}
@@ -194,7 +252,6 @@ function NameFavourite({ choice, onSave, onCancel }: { choice: PlaceChoice; onSa
     </form>
   );
 }
-
 
 /** Where "choose on map" starts: the field's own place, the plan's other end, the last place, Tel Aviv. */
 function pickFocus(field: SearchField, draft: PlanDraft, local: LocalState): MapFocus {
@@ -213,23 +270,23 @@ function MyLocationRow({ onChoose }: { onChoose: () => void }) {
     // Shown, not offered: a one-line reason instead of a choice bound to fail.
     return (
       <li className="row-static" aria-disabled="true">
-        <span className="row-icon" aria-hidden="true">
-          ◎
-        </span>
-        <span className="row-text">
-          <span className="row-title">{t("place.myLocation")}</span>
-          <span className="row-sub">{t(`search.myLocation.${location.reason ?? "unsupported"}`)}</span>
+        <span className="ot-row">
+          <RowIconBadge icon={{ name: "locate" }} />
+          <span className="ot-row__body">
+            <span className="ot-row__title">{t("place.myLocation")}</span>
+            <span className="ot-row__sub row-static-reason">{t(`search.myLocation.${location.reason ?? "unsupported"}`)}</span>
+          </span>
         </span>
       </li>
     );
   }
   return (
     <li>
-      <button type="button" className="row-button" onClick={onChoose}>
-        <span className="row-icon" aria-hidden="true">
-          ◎
+      <button type="button" className="ot-row" onClick={onChoose}>
+        <RowIconBadge icon={{ name: "locate" }} />
+        <span className="ot-row__body">
+          <span className="ot-row__title">{t("place.myLocation")}</span>
         </span>
-        <span className="row-text row-title">{t("place.myLocation")}</span>
       </button>
     </li>
   );
@@ -300,6 +357,12 @@ export function SearchScreen({ field }: { field: SearchField }) {
     else setSaveFailed(true);
   };
 
+  const startPicking = () => {
+    setFocus(pickFocus(field, draft, local));
+    setMode("pick");
+    setSnap("peek");
+  };
+
   const title = t(`search.title.${field}`);
 
   if (naming) {
@@ -315,9 +378,9 @@ export function SearchScreen({ field }: { field: SearchField }) {
           onCancel={() => setNaming(null)}
         />
         {saveFailed && (
-          <p className="state state-error" role="alert">
+          <Banner tone="error" className="state" role="alert">
             {t("search.pick.outside")}
-          </p>
+          </Banner>
         )}
       </div>
     );
@@ -352,11 +415,13 @@ export function SearchScreen({ field }: { field: SearchField }) {
         <label htmlFor={inputId} className="visually-hidden">
           {t("search.input")}
         </label>
+        <Icon name="search" className="search-field-icon" />
         <input
           ref={inputRef}
           id={inputId}
-          className="text-input"
+          className="search-input"
           type="search"
+          dir="auto"
           inputMode="search"
           enterKeyHint="search"
           autoComplete="off"
@@ -369,14 +434,14 @@ export function SearchScreen({ field }: { field: SearchField }) {
         {q !== "" && (
           <button
             type="button"
-            className="icon-button quiet search-clear"
+            className="search-clear"
             aria-label={t("search.clear")}
             onClick={() => {
               setQ("");
               inputRef.current?.focus();
             }}
           >
-            <span aria-hidden="true">✕</span>
+            <Icon name="close" />
           </button>
         )}
       </div>
@@ -386,51 +451,40 @@ export function SearchScreen({ field }: { field: SearchField }) {
       </p>
 
       {saveFailed && (
-        <p className="state state-error" role="alert">
+        <Banner tone="error" className="state" role="alert">
           {t("search.pick.outside")}
-        </p>
+        </Banner>
       )}
 
       {typed.length > 0 && !searching && <p className="muted small search-hint">{t("search.minChars")}</p>}
 
       {!searching && (
-        <ul className="rows">
-          <li>
-            <button
-              type="button"
-              className="row-button"
-              onClick={() => {
-                setFocus(pickFocus(field, draft, local));
-                setMode("pick");
-                setSnap("peek");
-              }}
-            >
-              <span className="row-icon" aria-hidden="true">
-                🗺️
-              </span>
-              <span className="row-text row-title">{t("search.pickOnMap")}</span>
-            </button>
-          </li>
+        <ul className="ot-list place-list">
+          <PickOnMapRow onPick={startPicking} />
           {field === "from" && <MyLocationRow onChoose={() => choose("myLocation")} />}
-          {local.home && field !== "home" && <SavedRow icon="⌂" title={t("place.home")} place={local.home} onChoose={choose} />}
-          {local.work && field !== "work" && <SavedRow icon="▣" title={t("place.work")} place={local.work} onChoose={choose} />}
+          {local.home && field !== "home" && (
+            <SavedRow icon={{ name: "home", tint: "saved" }} title={t("place.home")} place={local.home} onChoose={choose} />
+          )}
+          {local.work && field !== "work" && (
+            <SavedRow icon={{ name: "work", tint: "saved" }} title={t("place.work")} place={local.work} onChoose={choose} />
+          )}
           {local.favourites.map((favourite) => (
-            <SavedRow key={favourite.id} icon="★" title={favourite.label} place={favourite} onChoose={choose} />
+            <SavedRow key={favourite.id} icon={{ name: "star", tint: "saved" }} title={favourite.label} place={favourite} onChoose={choose} />
           ))}
           {local.recents.map((recent) => (
-            <SavedRow key={recent.id} icon="🕘" title={recent.label} place={recent} onChoose={choose} />
+            <SavedRow key={recent.id} icon={{ name: "clock" }} title={recent.label} place={recent} onChoose={choose} />
           ))}
         </ul>
       )}
 
       {skeleton && (
-        <ul className="rows" aria-hidden="true" data-testid="search-skeleton">
+        <ul className="ot-list place-list" aria-hidden="true" data-testid="search-skeleton">
           {Array.from({ length: SKELETON_ROWS }, (_, index) => (
-            <li key={index} className="row-skeleton">
-              <span className="skeleton-icon" />
-              <span className="skeleton-lines">
-                <span className="skeleton-line" />
-                <span className="skeleton-line short" />
+            <li key={index} className="ot-row row-skeleton">
+              <span className="ot-skel skel-icon" />
+              <span className="ot-row__body skel-lines">
+                <span className="ot-skel skel-line" />
+                <span className="ot-skel skel-line skel-short" />
               </span>
             </li>
           ))}
@@ -452,23 +506,28 @@ export function SearchScreen({ field }: { field: SearchField }) {
         <>
           {!stale && shown.data.length === 0 && shown.unavailableTypes.length === 0 && <Empty kind="noMatches" />}
           <ul
-            className={stale ? "rows rows-stale" : "rows"}
+            className={stale ? "ot-list place-list rows-stale" : "ot-list place-list"}
             data-testid={stale ? "search-results-previous" : "search-results"}
             aria-busy={stale || undefined}
           >
             {shown.data.map((candidate, index) => (
-              <ResultRow key={candidateKey(candidate, index)} candidate={candidate} meta={shown.meta} onChoose={choose} />
+              <ResultRow key={candidateKey(candidate, index)} candidate={candidate} meta={shown.meta} typed={typed} onChoose={choose} />
             ))}
             {shown.unavailableTypes.map((type) => (
-              <li key={type} className="row-note" role="note">
-                <span className="row-icon" aria-hidden="true">
-                  ⓘ
-                </span>
-                <span>{t("search.categoryUnavailable", { category: t(`place.${type}`) })}</span>
+              <li key={type} className="place-note">
+                <Banner tone="warning" compact role="note">
+                  {t("search.categoryUnavailable", { category: t(`place.${type}`) })}
+                </Banner>
               </li>
             ))}
           </ul>
         </>
+      )}
+
+      {searching && !skeleton && (
+        <ul className="ot-list place-list place-list-end">
+          <PickOnMapRow onPick={startPicking} />
+        </ul>
       )}
     </div>
   );

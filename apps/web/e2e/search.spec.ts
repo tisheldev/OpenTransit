@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { appPath, blockExternal, expectNoSeriousAxeViolations, useScenario } from "./helpers";
+import { appPath, blockExternal, expectNoSeriousAxeViolations, useScenario, useTheme } from "./helpers";
 
 // Where to / Where from — C02 at 360 × 640, mocked (fixtures mode).
 
@@ -40,7 +40,7 @@ test("one clear button inside the field; a stop reads 'stop code · street, city
   expect(clearBox.x).toBeGreaterThanOrEqual(fieldBox.x - 1);
   expect(clearBox.x + clearBox.width).toBeLessThan(fieldBox.x + fieldBox.width / 2);
   const first = page.getByTestId("search-results").getByRole("button").first();
-  await expect(first.locator(".row-sub")).toHaveText(/^תחנה \d+\s*·\s*\S/);
+  await expect(first.locator(".ot-row__sub")).toHaveText(/^תחנה \d+\s*·\s*\S/);
   await clear.click();
   await expect(field).toHaveValue("");
   await expect(field).toBeFocused();
@@ -126,4 +126,62 @@ test("save mode: setting Home from Search fills the Home chip", async ({ page })
   await page.getByTestId("search-results").getByRole("button").first().click();
   await expect(page).toHaveURL(/#\/$/);
   await expect(page.getByRole("button", { name: "בית", exact: true })).toBeVisible();
+});
+
+test("results end with Choose on map, the typed text in bold", async ({ page }) => {
+  await page.goto(appPath("#/search/to"));
+  await page.getByRole("searchbox").fill("דיזנגוף");
+  const first = page.getByTestId("search-results").getByRole("button").first();
+  await expect(first.locator("mark")).toHaveText("דיזנגוף");
+  const pick = page.getByRole("button", { name: "בחירה במפה" });
+  await expect(pick).toHaveCount(1);
+  const results = (await page.getByTestId("search-results").boundingBox())!;
+  expect((await pick.boundingBox())!.y).toBeGreaterThanOrEqual(results.y + results.height - 1);
+});
+
+// Light theme (dark is the default, and what the tests above run in).
+
+test("light theme: before typing, results, skeleton, empty, partial and error (axe)", async ({ page }) => {
+  await useTheme(page, "light");
+  await page.goto(appPath("#/search/from"));
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  await expect(page.getByRole("button", { name: "בחירה במפה" })).toBeVisible();
+  await expectNoSeriousAxeViolations(page, "Search, before typing, light (he)");
+  await page.getByRole("searchbox").fill("דיזנגוף סנטר");
+  await expect(page.getByTestId("search-results").getByRole("button").first()).toContainText("דיזנגוף סנטר/דיזנגוף");
+  await expectNoSeriousAxeViolations(page, "Search, results, light (he)");
+  await page.getByRole("searchbox").fill("zzzz");
+  await expect(page.getByText("לא נמצאו תוצאות. נסו לכתוב אחרת.")).toBeVisible();
+  await expectNoSeriousAxeViolations(page, "Search, empty, light (he)");
+
+  await useScenario(page, "places-partial");
+  await page.reload();
+  await page.getByRole("searchbox").fill("דיזנגוף");
+  await expect(page.getByRole("note").filter({ hasText: "כתובת: לא זמין כרגע" })).toBeVisible();
+  await expectNoSeriousAxeViolations(page, "Search, partial, light (he)");
+
+  await useScenario(page, "places-unavailable");
+  await page.reload();
+  await page.getByRole("searchbox").fill("דיזנגוף");
+  await expect(page.getByRole("alert")).toContainText("החיפוש בסוג הזה אינו זמין כרגע.");
+  await expectNoSeriousAxeViolations(page, "Search, error, light (he)");
+
+  await useScenario(page, "places-slow");
+  await page.reload();
+  await page.getByRole("searchbox").fill("דיזנגוף");
+  await expect(page.getByTestId("search-skeleton")).toBeVisible();
+  await expectNoSeriousAxeViolations(page, "Search, typing, light (he)");
+});
+
+test("an error and a partial answer pass axe (dark)", async ({ page }) => {
+  await useScenario(page, "places-partial");
+  await page.goto(appPath("#/search/to"));
+  await page.getByRole("searchbox").fill("דיזנגוף");
+  await expect(page.getByRole("note").filter({ hasText: "כתובת: לא זמין כרגע" })).toBeVisible();
+  await expectNoSeriousAxeViolations(page, "Search, partial (he)");
+  await useScenario(page, "places-unavailable");
+  await page.reload();
+  await page.getByRole("searchbox").fill("דיזנגוף");
+  await expect(page.getByRole("alert")).toBeVisible();
+  await expectNoSeriousAxeViolations(page, "Search, error (he)");
 });

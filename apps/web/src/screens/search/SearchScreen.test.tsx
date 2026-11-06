@@ -11,7 +11,7 @@ import { server } from "../../mocks/node";
 import { go } from "../../router";
 import { lastOrigin } from "../../shell/localStore";
 import { loadLocalState } from "../../storage/local";
-import { renderApp, storedDraft } from "../../shell/testUtils";
+import { renderApp, storedDraft, wholeText } from "../../shell/testUtils";
 import { readableLocality } from "./choice";
 
 const input = () => screen.getByRole("searchbox", { name: /חיפוש|Search/ });
@@ -34,7 +34,7 @@ describe("Search before typing", () => {
   it("focuses the field and lists Choose on map first, then My location (From only)", () => {
     renderApp("#/search/from");
     expect(input()).toHaveFocus();
-    const rows = screen.getAllByRole("button").filter((button) => button.classList.contains("row-button"));
+    const rows = screen.getAllByRole("button").filter((button) => button.classList.contains("ot-row"));
     expect(rows[0]).toHaveTextContent(he["search.pickOnMap"]);
     expect(rows[1]).toHaveTextContent(he["place.myLocation"]);
   });
@@ -155,7 +155,7 @@ describe("Search results and states", () => {
     renderApp("#/search/to");
     await userEvent.type(input(), "דיזנגוף");
     const results = await screen.findByTestId("search-results");
-    const sub = within(results).getAllByRole("button")[0]!.querySelector(".row-sub")!;
+    const sub = within(results).getAllByRole("button")[0]!.querySelector(".ot-row__sub")!;
     expect(sub.textContent).toMatch(/^תחנה \d+\s*·\s/);
     expect(sub.querySelector(".kind-label")).toBeNull();
   });
@@ -181,7 +181,7 @@ describe("Search results and states", () => {
   it("shows zero matches as a calm empty success", async () => {
     renderApp("#/search/to");
     await userEvent.type(input(), "zzzz");
-    expect(await screen.findByText(he["state.empty.noMatches"])).toBeInTheDocument();
+    expect(await screen.findByText(wholeText(he["state.empty.noMatches"]))).toBeInTheDocument();
     expect(screen.queryByRole("alert")).toBeNull();
   });
 

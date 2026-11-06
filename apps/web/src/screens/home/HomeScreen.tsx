@@ -1,4 +1,5 @@
 import { useId, useMemo } from "react";
+import { Icon } from "../../components/ds";
 import { useI18n } from "../../i18n/I18nProvider";
 import { formatClock } from "../../lib/time";
 import { DEFAULT_CENTER } from "../../map/layers";
@@ -11,9 +12,9 @@ import { FromTo } from "../../shell/FromTo";
 import { useLocalState } from "../../shell/localStore";
 import type { SavedPlace } from "../../storage/local";
 
-// Home — C01 (design: Screens 1). Renders from storage only; the data status banner is
-// the shell's and arrives after the first paint. Settings is the gear in the sheet's
-// handle row (the shell's), so Home itself holds only the trip being planned.
+// Home — C01 (design: Screens 1; TripFields, PlaceChips, PlaceRow). Renders from storage
+// only; the data status banner is the shell's and arrives after the first paint. Settings
+// is the icon in the sheet's handle row (the shell's), so Home holds only the trip.
 
 /** The engine names coordinate ends "START"/"END": never show those as a place. */
 function journeyEndName(trip: ActiveTrip): string | null {
@@ -23,6 +24,7 @@ function journeyEndName(trip: ActiveTrip): string | null {
   return name && name !== "END" && name !== "START" ? name : null;
 }
 
+/** The trip in progress leads, in the navigation hero's colours (design: NavStep hero). */
 function ActiveTripCard({ trip }: { trip: ActiveTrip }) {
   const { t, lang } = useI18n();
   const detailId = useId();
@@ -38,9 +40,7 @@ function ActiveTripCard({ trip }: { trip: ActiveTrip }) {
       aria-describedby={detail ? detailId : undefined}
       onClick={() => go({ name: "navigate" })}
     >
-      <span className="active-trip-icon" aria-hidden="true">
-        ➤
-      </span>
+      <Icon name="route" className="active-trip-icon" />
       <span className="active-trip-text">
         <span className="active-trip-title">{t("home.activeTrip")}</span>
         {detail && (
@@ -49,9 +49,7 @@ function ActiveTripCard({ trip }: { trip: ActiveTrip }) {
           </span>
         )}
       </span>
-      <span className="active-trip-go mirror" aria-hidden="true">
-        ‹
-      </span>
+      <Icon name="chevron" className="active-trip-go" />
     </button>
   );
 }
@@ -95,7 +93,7 @@ export function HomeScreen() {
 
       {trip && <ActiveTripCard trip={trip} />}
 
-      <FromTo variant="full" />
+      <FromTo />
 
       {draft.to !== null && (
         <button
@@ -107,45 +105,53 @@ export function HomeScreen() {
         </button>
       )}
 
+      {/* PlaceChips: Home, Work, favourites in their order, then Add. An unset Home or Work
+          keeps its slot in the Add style. The row scrolls sideways from the inline start. */}
       <section aria-label={t("home.saved")}>
-        <ul className="chips">
+        <ul className="ot-chips home-chips">
           <li>
             {local.home ? (
-              <button type="button" className="chip chip-filled" onClick={() => travelTo(local.home!)}>
-                <span aria-hidden="true">⌂</span> {t("place.home")}
+              <button type="button" className="ot-chip" onClick={() => travelTo(local.home!)}>
+                <Icon name="home" />
+                {t("place.home")}
               </button>
             ) : (
-              <button type="button" className="chip" onClick={() => go({ name: "search", field: "home" })}>
-                <span aria-hidden="true">⌂</span> {t("home.setHome")}
+              <button type="button" className="ot-chip ot-chip--add" onClick={() => go({ name: "search", field: "home" })}>
+                <Icon name="home" />
+                {t("home.setHome")}
               </button>
             )}
           </li>
           <li>
             {local.work ? (
-              <button type="button" className="chip chip-filled" onClick={() => travelTo(local.work!)}>
-                <span aria-hidden="true">▣</span> {t("place.work")}
+              <button type="button" className="ot-chip" onClick={() => travelTo(local.work!)}>
+                <Icon name="work" />
+                {t("place.work")}
               </button>
             ) : (
-              <button type="button" className="chip" onClick={() => go({ name: "search", field: "work" })}>
-                <span aria-hidden="true">▣</span> {t("home.setWork")}
+              <button type="button" className="ot-chip ot-chip--add" onClick={() => go({ name: "search", field: "work" })}>
+                <Icon name="work" />
+                {t("home.setWork")}
               </button>
             )}
           </li>
           {local.favourites.map((favourite) => (
             <li key={favourite.id}>
-              <button type="button" className="chip chip-filled" onClick={() => travelTo(favourite)}>
-                <span aria-hidden="true">★</span> <bdi>{favourite.label}</bdi>
+              <button type="button" className="ot-chip" onClick={() => travelTo(favourite)}>
+                <Icon name="star" />
+                <bdi>{favourite.label}</bdi>
               </button>
             </li>
           ))}
           <li>
             <button
               type="button"
-              className="chip chip-add"
+              className="ot-chip ot-chip--add"
               aria-label={t("home.addFavourite")}
               onClick={() => go({ name: "search", field: "favourite" })}
             >
-              <span aria-hidden="true">+</span>
+              <Icon name="plus" />
+              {t("home.add")}
             </button>
           </li>
         </ul>
@@ -156,16 +162,18 @@ export function HomeScreen() {
           {t("home.recents")}
         </h2>
         {local.recents.length === 0 ? (
-          <p className="muted">{t("home.noRecents")}</p>
+          <p className="muted small">{t("home.noRecents")}</p>
         ) : (
-          <ul className="rows">
+          <ul className="ot-list place-list">
             {local.recents.slice(0, 10).map((item) => (
               <li key={item.id}>
-                <button type="button" className="row-button" onClick={() => travelTo(item)}>
-                  <span className="row-icon" aria-hidden="true">
-                    🕘
+                <button type="button" className="ot-row" onClick={() => travelTo(item)}>
+                  <span className="ot-row__icon">
+                    <Icon name="clock" />
                   </span>
-                  <bdi className="row-text">{item.label}</bdi>
+                  <span className="ot-row__body">
+                    <bdi className="ot-row__title">{item.label}</bdi>
+                  </span>
                 </button>
               </li>
             ))}
