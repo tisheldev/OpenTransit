@@ -5,7 +5,7 @@ import { queryKeys } from "../../api/queries";
 import { ApiFailure, unwrap } from "../../api/result";
 import type { Journey } from "../../api/types";
 import { Icon, StatusTag, type IconName } from "../../components/ds";
-import { TestDataBanner } from "../../components/states";
+import { ErrorState, TestDataBanner } from "../../components/states";
 import { useI18n } from "../../i18n/I18nProvider";
 import type { LocationError } from "../../lib/geolocation";
 import { journeyToScene } from "../../map/fromJourney";
@@ -25,7 +25,7 @@ import { CompareHeader } from "./CompareHeader";
 import { draftScene } from "./journeyScene";
 import { endpointLabel, formatShortDay, israelDate, splitFirstSentence, type EndLabels } from "./labels";
 import { OptionsChart, OptionsSkeleton } from "./OptionsChart";
-import { Banner, ProblemBanner } from "./ProblemBanner";
+import { Banner } from "./Banner";
 import { RouteDetails, type TripState } from "./RouteDetails";
 import { WhenChip, WhenPanel } from "./TimeControl";
 import "./compare.css";
@@ -332,7 +332,7 @@ export function CompareScreen() {
   } else if (journeys.isError) {
     body = (
       <>
-        <ProblemBanner
+        <ErrorState
           state={failure?.state ?? "unexpected"}
           coverage={coverage}
           retryAfterSeconds={failure?.error.kind === "problem" ? failure.error.retryAfterSeconds : null}
