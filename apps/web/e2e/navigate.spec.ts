@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { expect, test, type Locator, type Page } from "@playwright/test";
-import { appPath, blockExternal, expectNoSeriousAxeViolations } from "./helpers";
+import { appPath, blockExternal, expectNoSeriousAxeViolations, useTheme } from "./helpers";
 
 // Navigate — C05 at 360 × 640, mocked (fixtures mode). The active trip is seeded from the
 // recorded oct31a journeys (src/nav/testdata); positions come from the simulated source.
@@ -13,7 +13,7 @@ const recorded = JSON.parse(
   readFileSync(new URL("../src/nav/testdata/recorded-oct31a-dizengoff-technion.json", import.meta.url), "utf8"),
 ) as Recorded;
 
-function activeTrip(index: number) {
+function activeTrip(index: number, nav: Record<string, unknown> = { stepIndex: 0 }) {
   const journey = recorded.journeys.data.journeys[index]!;
   const refs = journey.legs.flatMap((leg) => (leg.transit ? [leg.transit.engineTripId] : []));
   return {
@@ -22,13 +22,13 @@ function activeTrip(index: number) {
     meta: recorded.journeys.meta,
     trips: Object.fromEntries(refs.map((ref) => [ref, recorded.trips[ref]])),
     startedAt: "2026-10-31T10:00:00.000Z",
-    nav: { stepIndex: 0 },
+    nav,
     labels: { origin: "Dizengoff Center", destination: "Technion" },
   };
 }
 
 /** Seed the trip once per tab (a reload keeps what the app stored since). */
-async function seed(page: Page, index: number, lang: "he" | "en" = "he"): Promise<void> {
+async function seed(page: Page, index: number, lang: "he" | "en" = "he", nav?: Record<string, unknown>): Promise<void> {
   const local = { version: 1, settings: { lang }, home: null, work: null, favourites: [], recents: [] };
   await page.addInitScript(
     ([trip, state]) => {
@@ -37,8 +37,23 @@ async function seed(page: Page, index: number, lang: "he" | "en" = "he"): Promis
       localStorage.setItem("opentransit", state);
       sessionStorage.setItem("e2e-seeded", "1");
     },
-    [JSON.stringify(activeTrip(index)), JSON.stringify(local)] as const,
+    [JSON.stringify(activeTrip(index, nav)), JSON.stringify(local)] as const,
   );
+}
+
+/** A stored engine state on journey 2's first ride with a get-off cue showing (location off). */
+function cueState(cue: "two_stops" | "next_stop") {
+  return {
+    stepIndex: 1,
+    phase: cue === "two_stops" ? "cue_two" : "cue_next",
+    cue,
+    stopsLeft: cue === "two_stops" ? 2 : 1,
+    locationMode: "manual",
+    lastFixAt: null,
+    locationLost: false,
+    nearBoarding: false,
+    autoSince: null,
+  };
 }
 
 const card = (page: Page) => page.locator(".step-card");
@@ -76,10 +91,12 @@ test("half sheet: map above, card with what comes next and Next step at 360 × 6
   await seed(page, 2);
   await page.goto(appPath("#/navigate"));
   await expect(card(page)).toContainText("הליכה אל דיזנגוף סנטר/טשרניחובסקי");
-  // N1: Navigate opens at half; the map (top ~45%) stays visible above the sheet.
+  // N1: Navigate opens at half; the map stays visible above the sheet. The design's
+  // navigation sheet is about 64% of the screen: with the hero step card (and the
+  // location-off banner above it) the half sheet grows to fit, its top at 35% or lower.
   await expect(sheet(page)).toHaveAttribute("data-snap", "half");
   const sheetBox = (await sheet(page).boundingBox())!;
-  expect(sheetBox.y).toBeGreaterThan(page.viewportSize()!.height * 0.4);
+  expect(sheetBox.y).toBeGreaterThanOrEqual(page.viewportSize()!.height * 0.35);
   // Walk card: the bus to catch and its countdown are in the card (the next step).
   await expect(card(page).locator(".step-vehicle")).toContainText("אוטובוס 249");
   await expectCardAndNext(page);
@@ -107,7 +124,8 @@ test("half sheet: map above, card with what comes next and Next step at 360 × 6
   await expect(card(page)).toContainText("אוטובוס 249");
   // N4: the exit leads; stops are counted to the exit (no positions measured yet).
   await expect(card(page).locator(".step-lead")).toHaveText("ירידה ב־ת. רכבת תל אביב - סבידור/דרך נמיר");
-  await expect(card(page)).toContainText("8 תחנות עד הירידה");
+  await expect(card(page).locator(".step-fact-stops dt")).toHaveText("עד הירידה");
+  await expect(card(page).locator(".step-fact-stops dd")).toHaveText("8 תחנות");
   await expect(card(page).locator(".step-then")).toContainText("אחר כך: מעבר לאוטובוס 825");
   await expectCardAndNext(page);
   await expect(page.locator("[aria-live]")).toContainText("שלב 2 מתוך 12");
@@ -166,6 +184,59 @@ test("simulated positions: the sheet drops to half, labelled as simulated, and a
   await expectFullyVisible(page, card(page));
   await expect(rows(page).nth(0)).toHaveAccessibleName(/^הושלם: 08:35 /);
 });
+
+for (const theme of ["dark", "light"] as const) {
+  test(`${theme} theme: walk, on board with ride progress, the full checklist and simulated positions pass axe`, async ({ page }) => {
+    await seed(page, 2);
+    await useTheme(page, theme);
+    await page.goto(appPath("#/navigate"));
+    await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
+    await expect(card(page)).toContainText("הליכה אל דיזנגוף סנטר/טשרניחובסקי");
+    await expectCardAndNext(page);
+    await expectNoSeriousAxeViolations(page, `Navigate, walk to stop, half (${theme})`);
+
+    await nextButton(page).click();
+    await expect(card(page).locator(".step-lead")).toContainText("ירידה ב־");
+    await expectCardAndNext(page);
+    await expectNoSeriousAxeViolations(page, `Navigate, on board, half (${theme})`);
+
+    await page.locator(".sheet-handle").click();
+    await expect(sheet(page)).toHaveAttribute("data-snap", "full");
+    const progress = page.getByRole("list", { name: "התקדמות בנסיעה" });
+    await expect(progress.getByRole("listitem")).toHaveCount(3);
+    await expect(progress.getByRole("listitem").last()).toContainText("ת. רכבת תל אביב - סבידור/דרך נמיר · ירידה");
+    await expectNoSeriousAxeViolations(page, `Navigate, checklist with ride progress, full (${theme})`);
+
+    await page.getByRole("checkbox", { name: "מיקום מדומה (בדיקה)" }).check();
+    await expect(sheet(page)).toHaveAttribute("data-snap", "half");
+    await expect(page.locator(".nav-banner-sim")).toBeVisible();
+    await expectNoSeriousAxeViolations(page, `Navigate, simulated banner (${theme})`);
+  });
+
+  test(`${theme} theme: get-off cues change the card's words and colour and pass axe`, async ({ page }) => {
+    await seed(page, 2, "he", cueState("next_stop"));
+    await useTheme(page, theme);
+    await page.goto(appPath("#/navigate"));
+    await expect(card(page)).toHaveClass(/step-card-next_stop/);
+    await expect(card(page).locator("h2")).toHaveText("רדו בתחנה הבאה");
+    await expect(card(page).locator(".step-fact-stops dd")).toHaveText("תחנה אחת");
+    await expect(page.getByRole("status")).toContainText("השלבים מתקדמים ידנית");
+    const nextStop = await card(page).evaluate((element) => getComputedStyle(element).backgroundColor);
+    await expectCardAndNext(page);
+    await expectNoSeriousAxeViolations(page, `Navigate, cue next stop (${theme})`);
+
+    await page.evaluate((state) => {
+      const trip = JSON.parse(sessionStorage.getItem("opentransit:activeTrip")!);
+      sessionStorage.setItem("opentransit:activeTrip", JSON.stringify({ ...trip, nav: state }));
+    }, cueState("two_stops"));
+    await page.reload();
+    await expect(card(page)).toHaveClass(/step-card-two_stops/);
+    await expect(card(page).locator("h2")).toHaveText("רדו בעוד 2 תחנות");
+    await expect(card(page).locator(".step-fact-stops dt")).toHaveText("נשארו");
+    expect(await card(page).evaluate((element) => getComputedStyle(element).backgroundColor)).not.toBe(nextStop);
+    await expectNoSeriousAxeViolations(page, `Navigate, cue two stops (${theme})`);
+  });
+}
 
 test("English, time-only transfer, no platform guessed; End trip returns Home with no resume row", async ({ page }) => {
   await seed(page, 1, "en");
