@@ -548,7 +548,11 @@ def rollback_plan(current: dict | None, previous: dict | None, now: datetime) ->
         return {"allowed": False, "reasons": ["no_previous_release"], "executed": False}
     reasons = []
     if current is not None and current.get("images") == previous.get("images"):
-        reasons.append("previous_equals_current")
+        # Same images can still be a different revision (6 Nov: only the /app/ setting
+        # changed), which is a valid rollback target; the same revision never is.
+        arns = (current.get("taskDefinitionArn"), previous.get("taskDefinitionArn"))
+        if None in arns or arns[0] == arns[1]:
+            reasons.append("previous_equals_current")
     if previous.get("digestKind") != "registry-manifest":
         reasons.append("previous_not_registry_pinned")
     if not previous.get("taskDefinitionArn"):

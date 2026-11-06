@@ -659,3 +659,10 @@ def test_every_published_revision_serves_the_web_client(tmp_path, no_subprocess)
 def test_local_emulation_leaves_the_client_off():
     compose = pub.render_drafts.render_local_compose("recommended")
     assert "OPENTRANSIT_CLIENT_DIR" not in compose
+
+
+def test_rollback_allows_a_configuration_only_previous_revision():
+    previous = _release(taskDefinitionArn=ARN)
+    current = _release(taskDefinitionArn=ARN.replace(":7", ":8"))
+    assert pub.rollback_plan(current, previous, NOW)["allowed"]
+    assert "previous_equals_current" in pub.rollback_plan(previous, previous, NOW)["reasons"]
