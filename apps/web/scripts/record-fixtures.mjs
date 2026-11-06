@@ -19,6 +19,7 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import ts from "typescript";
+import { departureInCoverage } from "./coverage-dates.mjs";
 import { sanitise, stableJson } from "./sanitise.mjs";
 
 const origin = process.env.OPENTRANSIT_API_ORIGIN ?? "http://localhost:8000";
@@ -63,21 +64,6 @@ async function call(method, path, { params, body } = {}) {
 }
 
 /** Next Sunday-Thursday 08:00 in Israel, with its explicit offset, at least a day away. */
-function nextWeekdayMorning() {
-  const zone = new Intl.DateTimeFormat("en-CA", {
-    timeZone: "Asia/Jerusalem", year: "numeric", month: "2-digit", day: "2-digit", weekday: "short",
-    timeZoneName: "longOffset",
-  });
-  for (let days = 1; days < 8; days += 1) {
-    const day = new Date(Date.now() + days * 24 * 3600_000);
-    const parts = Object.fromEntries(zone.formatToParts(day).map((p) => [p.type, p.value]));
-    if (parts.weekday === "Fri" || parts.weekday === "Sat") continue;
-    const offset = parts.timeZoneName.replace("GMT", "") || "+00:00";
-    return `${parts.year}-${parts.month}-${parts.day}T08:00:00${offset}`;
-  }
-  throw new Error("no weekday found");
-}
-
 const ready = await call("GET", "/readyz").catch((error) => ({ status: 0, body: String(error) }));
 if (ready.status !== 200) {
   console.error(`API at ${origin} is not ready (/readyz ${ready.status}); nothing recorded. Real-API checks remain pending.`);
@@ -103,7 +89,7 @@ async function record(name, method, path, options = {}, label = name) {
 const legsOf = (response) => (response.body?.data?.journeys ?? []).flatMap((item) => item.legs);
 const transitIds = (response) => legsOf(response).flatMap((leg) => (leg.transit ? [leg.transit.engineTripId] : []));
 
-await record("status", "GET", "/v1/status");
+const status = await record("status", "GET", "/v1/status");
 await record("places-stop-he", "GET", "/v1/places", { params: { q: "דיזנגוף סנטר", limit: 5 } }, "stop search, Hebrew");
 await record("places-stop-en", "GET", "/v1/places", { params: { q: "Dizengoff Center", lang: "en", type: "stop" } }, "stop search, English");
 await record("places-poi-en", "GET", "/v1/places", { params: { q: "Technion", lang: "en", type: "poi" } }, "POI search, English");
@@ -111,7 +97,9 @@ await record("places-poi-he", "GET", "/v1/places", { params: { q: "עזריאל�
 await record("places-address-he", "GET", "/v1/places", { params: { q: "דיזנגוף 50 תל אביב", type: "address" } }, "address search, Hebrew");
 await record("places-mixed-en", "GET", "/v1/places", { params: { q: "Technion", lang: "en" } }, "all categories, English");
 await record("places-empty", "GET", "/v1/places", { params: { q: "zzzznotarealstop", lang: "en", type: "stop" } }, "valid empty search");
-const departAt = process.env.OT_RECORD_DEPART_AT ?? nextWeekdayMorning();
+// The next working day at 08:00 inside the API's own coverage (never a literal date).
+const departAt = process.env.OT_RECORD_DEPART_AT ?? departureInCoverage(status.body?.meta?.coverage ?? { from: "", until: "" })?.departAt;
+if (!departAt) throw new Error("no working-day 08:00 departure inside the API's coverage; set OT_RECORD_DEPART_AT");
 const journey = await record("journey-routes", "POST", "/v1/journeys", {
   body: { from: FROM_STOP, to: TECHNION, departAt, results: 3 },
 }, "routes found: Dizengoff Center -> Technion, weekday 08:00 (rail with transfers)");
