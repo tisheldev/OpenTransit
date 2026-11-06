@@ -1,5 +1,7 @@
+import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
-import { appPath, blockExternal, expectNoSeriousAxeViolations } from "./helpers";
+import { THEME_COLORS } from "../src/styles/tokens";
+import { appPath, blockExternal, expectNoSeriousAxeViolations, useTheme } from "./helpers";
 
 // Mocked: fixtures-mode dev server, offline map style, every non-local request blocked.
 // Until the shell renders <MapHost/>, the map is tested on a dev-only harness page
@@ -7,6 +9,51 @@ import { appPath, blockExternal, expectNoSeriousAxeViolations } from "./helpers"
 // covering the bottom 35% (the shell's peek height).
 
 const harness = (query: string) => appPath(`src/map/e2e-harness.html?${query}`);
+
+type Clip = { x: number; y: number; width: number; height: number };
+
+/**
+ * How many of a region's painted pixels (the map canvas included) are within a step or
+ * three of each colour given, and how many there are. The screenshot is decoded in the
+ * page, since WebGL's drawing buffer cannot be read back once presented.
+ */
+async function countColours(page: Page, clip: Clip, colours: string[]): Promise<{ total: number; near: number[] }> {
+  const png = (await page.screenshot({ clip, scale: "css" })).toString("base64");
+  return page.evaluate(
+    async ({ data, hexes }) => {
+      const image = new Image();
+      image.src = `data:image/png;base64,${data}`;
+      await image.decode();
+      const canvas = document.createElement("canvas");
+      canvas.width = image.width;
+      canvas.height = image.height;
+      const context = canvas.getContext("2d")!;
+      context.drawImage(image, 0, 0);
+      const pixels = context.getImageData(0, 0, image.width, image.height).data;
+      const targets = hexes.map((hex) => [1, 3, 5].map((at) => parseInt(hex.slice(at, at + 2), 16)));
+      const near = targets.map(() => 0);
+      for (let at = 0; at < pixels.length; at += 4) {
+        targets.forEach((colour, i) => {
+          if (colour.every((value, c) => Math.abs(pixels[at + c]! - value) <= 3)) near[i] = (near[i] ?? 0) + 1;
+        });
+      }
+      return { total: pixels.length / 4, near };
+    },
+    { data: png, hexes: colours },
+  );
+}
+
+/** The share of a region's pixels that are not the theme's land colour (the drawn scene). */
+async function drawnShare(page: Page, clip: Clip, land: string): Promise<number> {
+  const { total, near } = await countColours(page, clip, [land]);
+  return (total - near[0]!) / total;
+}
+
+/** True when a small patch of map with nothing drawn on it is all the given land colour. */
+async function isLand(page: Page, x: number, y: number, land: string): Promise<boolean> {
+  const { total, near } = await countColours(page, { x, y, width: 2, height: 2 }, [land]);
+  return near[0] === total;
+}
 
 async function trackExternal(page: Page): Promise<string[]> {
   const external: string[] = [];
@@ -68,7 +115,7 @@ test("attribution is visible above the sheet at 360 × 640 in English", async ({
   await trackExternal(page);
   await page.goto(harness("lang=en&scene=journey"));
   await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
-  await expectAttributionVisible(page, ["© OpenStreetMap", "OpenFreeMap", "Ministry of Transport"]);
+  await expectAttributionVisible(page, ["© OpenStreetMap", "OpenFreeMap", "Israel MoT"]);
 });
 
 test("the map is never mirrored: its container is ltr while the page is rtl", async ({ page }) => {
@@ -105,7 +152,66 @@ test("no serious axe violations with the map and a drawn journey", async ({ page
   await trackExternal(page);
   await page.goto(harness("lang=he&scene=journey"));
   await expect(page.locator(".maplibregl-canvas")).toBeVisible();
-  await expectNoSeriousAxeViolations(page, "map harness");
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await expectNoSeriousAxeViolations(page, "map harness, dark");
+});
+
+test("no serious axe violations with the map and a drawn journey, light theme", async ({ page }) => {
+  await useTheme(page, "light");
+  await trackExternal(page);
+  await page.goto(harness("lang=he&scene=journey"));
+  await expect(page.locator(".maplibregl-canvas")).toBeVisible();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  await expectNoSeriousAxeViolations(page, "map harness, light");
+  await page.goto(harness("lang=en&scene=journey"));
+  await expect(page.locator(".maplibregl-canvas")).toBeVisible();
+  await expectNoSeriousAxeViolations(page, "map harness, light (en)");
+});
+
+test("the map is dark by default, light when chosen, and a switch keeps the camera and the pick centre", async ({ page }) => {
+  const external = await trackExternal(page);
+  await page.goto(harness("lang=he&scene=pick"));
+  await expect(page.locator(".maplibregl-canvas")).toBeVisible();
+  const center = page.getByTestId("harness-center");
+  await expect(center).toHaveText(/^34\.78\d*,32\.\d+$/);
+  const before = await center.textContent();
+  // Land beside the pick pin, in the visible map above the sheet.
+  const landIs = (theme: "dark" | "light") => () => isLand(page, 40, 300, THEME_COLORS[theme]["map-land"]);
+  await expect.poll(landIs("dark")).toBe(true);
+
+  await page.getByTestId("harness-theme").click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  await expect.poll(landIs("light")).toBe(true);
+  // Restyled in place: the camera did not move, so the reported centre is unchanged.
+  await expect(center).toHaveText(before!);
+  await expect(page.getByTestId("map-pick-pin")).toBeVisible();
+
+  await page.getByTestId("harness-theme").click();
+  await expect.poll(landIs("dark")).toBe(true);
+  await expect(center).toHaveText(before!);
+  expect(external).toEqual([]);
+});
+
+test("a theme switch keeps the drawn journey", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" }); // the camera fits at once
+  await trackExternal(page);
+  await page.goto(harness("lang=he&scene=journey&active=none"));
+  await expect(page.locator(".maplibregl-canvas")).toBeVisible();
+  // The journey crosses the visible map between the attribution and the fake sheet.
+  const band = { x: 0, y: 40, width: 360, height: 360 };
+  const poll = { timeout: 15_000 };
+  await expect.poll(() => drawnShare(page, band, THEME_COLORS.dark["map-land"]), poll).toBeGreaterThan(0.002);
+  const darkShare = await drawnShare(page, band, THEME_COLORS.dark["map-land"]);
+  expect(darkShare).toBeLessThan(0.2); // mostly land, with the journey drawn on it
+  await page.getByTestId("harness-theme").click();
+  // Light land everywhere the journey is not, none of the dark land left, and about as
+  // much drawn as before.
+  await expect
+    .poll(async () => {
+      const { total, near } = await countColours(page, band, [THEME_COLORS.light["map-land"], THEME_COLORS.dark["map-land"]]);
+      return near[1] === 0 && (total - near[0]!) / total > darkShare / 2 && (total - near[0]!) / total < 0.2;
+    }, poll)
+    .toBe(true);
 });
 
 // The shell renders <MapHost/> behind the sheet on every screen.
@@ -139,7 +245,7 @@ test.describe("in the app shell", () => {
     expect(covered).toBe(false);
     await page.goto(appPath("#/settings"));
     await page.getByLabel("English").check();
-    await expect(attribution).toContainText("Ministry of Transport");
+    await expect(attribution).toContainText("Israel MoT");
   });
 
   test("attribution is one compact line beside Back, never under the full sheet", async ({ page }) => {
@@ -166,6 +272,30 @@ test.describe("in the app shell", () => {
         return !!hit && (element.contains(hit) || hit.contains(element));
       });
       expect(onTop, `${hash}: not covered`).toBe(true);
+    }
+    // English too, in both themes: one line beside Back.
+    await page.goto(appPath("#/settings"));
+    await page.getByLabel("English").check();
+    for (const theme of ["Dark", "Light"]) {
+      await page.getByRole("radio", { name: theme }).check();
+      const attribution = page.getByTestId("map-attribution");
+      await expect(attribution).toContainText("Israel MoT");
+      const box = (await attribution.boundingBox())!;
+      expect(box.height, `English, ${theme}: one line`).toBeLessThan(20);
+      const b = (await page.getByRole("button", { name: "Back" }).boundingBox())!;
+      expect(box.x >= b.x + b.width, `English, ${theme}: beside Back`).toBe(true);
+    }
+  });
+
+  test("the attribution reads in both themes (axe colour contrast) over the app shell", async ({ page }) => {
+    await blockExternal(page);
+    for (const theme of ["dark", "light"] as const) {
+      await page.goto(appPath("#/settings"));
+      await page.getByRole("radio", { name: theme === "dark" ? "כהה" : "בהירה" }).check();
+      await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
+      const results = await new AxeBuilder({ page }).include('[data-testid="map-attribution"]').withRules(["color-contrast"]).analyze();
+      expect(results.violations.map((v) => v.id), theme).toEqual([]);
+      expect(results.passes.map((v) => v.id), theme).toContain("color-contrast");
     }
   });
 
