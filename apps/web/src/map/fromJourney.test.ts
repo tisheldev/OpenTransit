@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { fixture } from "../api/fixtures";
 import type { Journey, JourneyResponse, Leg } from "../api/types";
 import { journeyToScene, legLabel } from "./fromJourney";
-import { routeFeatures } from "./layers";
+import { pinFeatures, routeFeatures } from "./layers";
 
 function journeys(name: string): Journey[] {
   return (fixture(name).body as JourneyResponse).data.journeys;
@@ -55,6 +55,21 @@ describe("journeyToScene", () => {
       routes.legs[4]!.from.name,
     ]);
     expect(pins.at(-1)).toMatchObject({ role: "destination", label: "Technion" });
+  });
+
+  it("gives each boarding pin the API mode of the ride boarded there (its ring's colour)", () => {
+    const { pins, route } = journeyToScene(routes);
+    const transfers = pins.filter((pin) => pin.role === "transfer");
+    expect(transfers.map((pin) => pin.mode)).toEqual([routes.legs[2]!.mode, routes.legs[4]!.mode]);
+    expect(transfers.map((pin) => pin.mode)).toEqual(["rail", "bus"]);
+    expect(pins.find((pin) => pin.role === "origin")!.mode).toBeUndefined();
+    // Drawn as a rail line and a bus line (design: bus in mode-bus, rail in mode-rail).
+    const lines = routeFeatures(route).features.map((f) => f.properties.line);
+    expect(lines).toEqual(["bus", "walk", "rail", "walk", "bus", "walk"]);
+    expect(pinFeatures(pins, route).features.filter((f) => f.properties.role === "transfer").map((f) => f.properties.line)).toEqual([
+      "rail",
+      "bus",
+    ]);
   });
 
   it("never shows the engine's START/END names", () => {

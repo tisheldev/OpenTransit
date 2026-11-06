@@ -88,6 +88,8 @@ export function journeyToScene(journey: Journey, options: JourneySceneOptions = 
       role: rides === 1 ? "stop" : "transfer",
       position,
       label: leg.from.name,
+      // The API mode of the ride boarded here: its ring takes that line's colour.
+      mode: leg.mode,
     });
   });
 

@@ -1,19 +1,38 @@
 import { describe, expect, it } from "vitest";
+import { THEME_COLORS } from "../styles/tokens";
 import {
-  OFFLINE_STYLE,
-  OPENFREEMAP_STYLE,
+  DESTINATION_ICON,
+  MARKER_PIXEL_RATIO,
+  OPENFREEMAP_STYLES,
   accuracyFeatures,
+  basemapRole,
   chooseStyle,
+  destinationMarker,
   isNameTextField,
+  lineMode,
+  mapPalette,
   nameExpression,
+  offlineStyle,
+  overlayLayers,
   pinFeatures,
   routeFeatures,
   sceneBounds,
+  themeBasemap,
   userFeatures,
+  withOverlay,
+  type StyleJson,
+  type StyleLayerJson,
 } from "./layers";
 import { emptyScene, type MapRouteLeg } from "./scene";
 
 const walk: MapRouteLeg = { kind: "walk", mode: "walk", coordinates: null, from: [34.8, 32.1], to: [34.81, 32.11], label: null };
+const walkLine: MapRouteLeg = {
+  ...walk,
+  coordinates: [
+    [34.8, 32.1],
+    [34.81, 32.11],
+  ],
+};
 const bus: MapRouteLeg = {
   kind: "transit",
   mode: "bus",
@@ -26,12 +45,42 @@ const bus: MapRouteLeg = {
   label: "8",
   active: true,
 };
+const train: MapRouteLeg = {
+  kind: "transit",
+  mode: "rail",
+  coordinates: [
+    [34.9, 32.2],
+    [35.0, 32.8],
+  ],
+  from: [34.9, 32.2],
+  to: [35.0, 32.8],
+  label: null,
+};
+
+const layer = (layers: StyleLayerJson[], id: string) => layers.find((l) => l.id === id)!;
 
 describe("scene to GeoJSON", () => {
-  it("draws lines only for legs with geometry", () => {
+  it("draws lines only for legs with geometry, each with its mode's line", () => {
     const { features } = routeFeatures([walk, bus]);
     expect(features).toHaveLength(1);
-    expect(features[0]!.properties).toEqual({ kind: "transit", mode: "bus", active: true, label: "8" });
+    expect(features[0]!.properties).toEqual({ kind: "transit", mode: "bus", line: "bus", active: true, dimmed: false, label: "8" });
+    expect(routeFeatures([walkLine, { ...bus, active: false }, train]).features.map((f) => f.properties.line)).toEqual([
+      "walk",
+      "bus",
+      "rail",
+    ]);
+  });
+
+  it("fades every other leg while one is the current step, and none otherwise", () => {
+    const dimmed = (route: MapRouteLeg[]) => routeFeatures(route).features.map((f) => f.properties.dimmed);
+    expect(dimmed([walkLine, bus, train])).toEqual([true, false, true]);
+    expect(dimmed([walkLine, { ...bus, active: false }, train])).toEqual([false, false, false]);
+  });
+
+  it("classifies API modes: rail, light rail, tram and metro as rail; walking; everything else as bus", () => {
+    expect(["rail", "RAIL", "light_rail", "tram", "subway", "metro", "train"].map(lineMode)).toEqual(Array(7).fill("rail"));
+    expect(["bus", "BUS", "ferry", "coach", "", null].map(lineMode)).toEqual(Array(6).fill("bus"));
+    expect(lineMode("walk")).toBe("walk");
   });
 
   it("makes points for pins and the user, and a ring for accuracy", () => {
@@ -49,6 +98,17 @@ describe("scene to GeoJSON", () => {
     expect(accuracyFeatures({ ...user, accuracyMeters: null }).features).toEqual([]);
   });
 
+  it("gives a stop or transfer its own ride's line, else the drawn ride boarding or ending there", () => {
+    const pins = [
+      { id: "t", role: "transfer" as const, position: [34.9, 32.2] as [number, number], label: "Rail", mode: "light_rail" },
+      { id: "b", role: "stop" as const, position: [34.81, 32.11] as [number, number], label: "Board" },
+      { id: "x", role: "stop" as const, position: [35.0, 32.8] as [number, number], label: "Exit" },
+      { id: "n", role: "stop" as const, position: [30, 30] as [number, number], label: "Nowhere" },
+    ];
+    const lines = pinFeatures(pins, [walk, bus, train]).features.map((f) => f.properties.line);
+    expect(lines).toEqual(["rail", "bus", "rail", "bus"]);
+  });
+
   it("frames route ends, geometry and pins, including a time-only walk's ends", () => {
     expect(sceneBounds(emptyScene)).toBeNull();
     expect(sceneBounds({ ...emptyScene, route: [walk, bus] })).toEqual([
@@ -58,16 +118,208 @@ describe("scene to GeoJSON", () => {
   });
 });
 
-describe("style choice and labels", () => {
-  it("stays offline in fixtures and tests; OpenFreeMap otherwise; env override wins", () => {
-    expect(chooseStyle("fixtures", undefined)).toBe(OFFLINE_STYLE);
-    expect(chooseStyle("test", undefined)).toBe(OFFLINE_STYLE);
-    expect(chooseStyle("production", undefined)).toBe(OPENFREEMAP_STYLE);
-    expect(chooseStyle("production", "offline")).toBe(OFFLINE_STYLE);
-    expect(chooseStyle("fixtures", "/my-style.json")).toBe("/my-style.json");
-    expect(JSON.stringify(OFFLINE_STYLE)).not.toMatch(/https?:/);
+describe("our layers in the theme's colours", () => {
+  it.each(["dark", "light"] as const)("%s: lines by mode, ends, stops and the puck from the tokens", (theme) => {
+    const c = THEME_COLORS[theme];
+    const layers = overlayLayers(theme, { labels: false });
+    expect(layers.map((l) => l.id)).toEqual([
+      "ot-accuracy",
+      "ot-route-casing",
+      "ot-route-walk",
+      "ot-route-transit",
+      "ot-pins",
+      "ot-destination",
+      "ot-user-halo",
+      "ot-user",
+    ]);
+    // Bus and rail 5 px solid in their mode colours; walking 3 px dotted in mode-walk.
+    const transit = layer(layers, "ot-route-transit").paint!;
+    expect(transit["line-width"]).toBe(5);
+    expect(transit["line-color"]).toEqual(["match", ["get", "line"], "rail", c["mode-rail"], "walk", c["mode-walk"], c["mode-bus"]]);
+    expect(transit["line-dasharray"]).toBeUndefined();
+    const walkPaint = layer(layers, "ot-route-walk").paint!;
+    expect(walkPaint).toMatchObject({ "line-color": c["mode-walk"], "line-width": 3 });
+    expect(walkPaint["line-dasharray"]).toEqual([2 / 3, 2]);
+    expect(layer(layers, "ot-route-walk").layout).toMatchObject({ "line-cap": "round" });
+    expect(layer(layers, "ot-route-casing").paint!["line-color"]).toBe(c["map-land"]);
+    // Origin: an origin circle with a surface edge; stops: surface with the line's ring.
+    const pins = layer(layers, "ot-pins").paint!;
+    expect(pins["circle-color"]).toEqual(["match", ["get", "role"], "origin", c.origin, c.surface]);
+    expect(pins["circle-stroke-color"]).toEqual(["match", ["get", "role"], "origin", c.surface, transit["line-color"]]);
+    expect(layer(layers, "ot-pins").filter).toEqual(["!=", ["get", "role"], "destination"]);
+    // Destination: the square image, only for the destination pin.
+    expect(layer(layers, "ot-destination")).toMatchObject({
+      type: "symbol",
+      filter: ["==", ["get", "role"], "destination"],
+      layout: { "icon-image": DESTINATION_ICON, "icon-allow-overlap": true },
+    });
+    // The puck: brand with a surface edge over a brand halo.
+    expect(layer(layers, "ot-user").paint).toMatchObject({ "circle-color": c.brand, "circle-stroke-color": c.surface });
+    expect(layer(layers, "ot-user-halo").paint).toMatchObject({ "circle-color": c.brand, "circle-opacity": 0.18, "circle-radius": 24 });
+    expect(layer(layers, "ot-accuracy").paint!["fill-color"]).toBe(c.brand);
+    // No hard-coded colour anywhere: every colour is one of this theme's tokens.
+    const tokens = new Set(Object.values(c));
+    const colours = JSON.stringify(layers).match(/#[0-9a-f]{6}\b/gi) ?? [];
+    expect(colours.length).toBeGreaterThan(0);
+    for (const colour of colours) expect(tokens, colour).toContain(colour);
   });
 
+  it("fades the other legs to .55, and labels lines only when the style has glyphs", () => {
+    const layers = overlayLayers("dark", { labels: true });
+    for (const id of ["ot-route-casing", "ot-route-walk", "ot-route-transit"]) {
+      expect(layer(layers, id).paint!["line-opacity"]).toEqual(["case", ["get", "dimmed"], 0.55, 1]);
+    }
+    expect(layer(layers, "ot-route-label").paint).toMatchObject({ "text-halo-color": THEME_COLORS.dark.surface });
+    expect(overlayLayers("dark", { labels: false }).some((l) => l.id === "ot-route-label")).toBe(false);
+  });
+
+  it("the two themes differ where their tokens differ", () => {
+    expect(mapPalette("dark")).not.toEqual(mapPalette("light"));
+    expect(mapPalette("light")).toMatchObject({ land: "#e8eff0", road: "#ffffff", water: "#cfe3ea", bus: "#3673ba", rail: "#8656b7" });
+    expect(mapPalette("dark")).toMatchObject({ land: "#111c1f", road: "#22343a", water: "#0f2730", bus: "#7fb0ee", rail: "#bf9ae8" });
+  });
+
+  it("draws the destination as a rounded square in destination with a surface edge", () => {
+    for (const theme of ["dark", "light"] as const) {
+      const image = destinationMarker(theme);
+      expect(image.width).toBe(image.height);
+      expect(image.width).toBe(Math.ceil(19 * MARKER_PIXEL_RATIO) + 2);
+      expect(image.data).toHaveLength(image.width * image.height * 4);
+      const pixel = (x: number, y: number) => Array.from(image.data.slice((y * image.width + x) * 4, (y * image.width + x) * 4 + 4));
+      const hex = (p: number[]) => `#${p.slice(0, 3).map((v) => v.toString(16).padStart(2, "0")).join("")}`;
+      const mid = Math.floor(image.width / 2);
+      expect(hex(pixel(mid, mid))).toBe(THEME_COLORS[theme].destination);
+      expect(pixel(mid, mid)[3]).toBe(255);
+      // The edge (2.5 px at 2x: 5 image px) is surface.
+      expect(hex(pixel(mid, 3))).toBe(THEME_COLORS[theme].surface);
+      expect(pixel(mid, 3)[3]).toBe(255);
+      // Outside, and the rounded corner, are transparent.
+      expect(pixel(0, 0)[3]).toBe(0);
+      expect(pixel(2, 2)[3]).toBe(0);
+    }
+  });
+});
+
+const base: StyleJson = {
+  version: 8,
+  sources: { openmaptiles: { type: "vector", url: "https://tiles.openfreemap.org/planet" } },
+  glyphs: "https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf",
+  layers: [
+    { id: "background", type: "background", paint: { "background-color": "rgb(12,12,12)" } },
+    { id: "water", type: "fill", source: "openmaptiles", "source-layer": "water", paint: { "fill-color": "rgb(27,27,29)" } },
+    { id: "waterway", type: "line", source: "openmaptiles", "source-layer": "waterway", paint: { "line-color": "#123" } },
+    { id: "landuse_park", type: "fill", source: "openmaptiles", "source-layer": "landuse", paint: { "fill-color": "rgb(32,32,32)" } },
+    { id: "road_pier", type: "line", source: "openmaptiles", "source-layer": "transportation", paint: { "line-color": "#000" } },
+    { id: "highway_major_casing", type: "line", source: "openmaptiles", "source-layer": "transportation", paint: { "line-color": "#333" } },
+    { id: "highway_major_inner", type: "line", source: "openmaptiles", "source-layer": "transportation", paint: { "line-color": "#111" } },
+    {
+      id: "highway_motorway_inner",
+      type: "line",
+      source: "openmaptiles",
+      "source-layer": "transportation",
+      paint: { "line-color": ["interpolate", ["linear"], ["zoom"], 5.8, "#ddd", 6, "#000"] },
+    },
+    { id: "railway_transit", type: "line", source: "openmaptiles", "source-layer": "transportation", paint: { "line-color": "#232323" } },
+    {
+      id: "place_city",
+      type: "symbol",
+      source: "openmaptiles",
+      "source-layer": "place",
+      layout: { "text-field": ["case", ["has", "name:nonlatin"], ["get", "name:latin"], ["get", "name"]] },
+      paint: { "text-color": "#656565" },
+    },
+    { id: "highway_ref", type: "symbol", source: "openmaptiles", "source-layer": "transportation_name", layout: { "text-field": ["get", "ref"] } },
+  ],
+};
+
+describe("basemap styles", () => {
+  it("dark uses OpenFreeMap dark, light uses positron; fixtures, tests and 'offline' stay offline", () => {
+    expect(chooseStyle("production", undefined, "dark")).toBe("https://tiles.openfreemap.org/styles/dark");
+    expect(chooseStyle("development", undefined, "light")).toBe("https://tiles.openfreemap.org/styles/positron");
+    expect(OPENFREEMAP_STYLES).toEqual({
+      dark: "https://tiles.openfreemap.org/styles/dark",
+      light: "https://tiles.openfreemap.org/styles/positron",
+    });
+    expect(chooseStyle("fixtures", undefined, "dark")).toEqual(offlineStyle("dark"));
+    expect(chooseStyle("test", undefined, "light")).toEqual(offlineStyle("light"));
+    expect(chooseStyle("production", "offline", "light")).toEqual(offlineStyle("light"));
+    expect(chooseStyle("fixtures", "/my-style.json", "dark")).toBe("/my-style.json");
+    expect(JSON.stringify(offlineStyle("dark"))).not.toMatch(/https?:/);
+  });
+
+  it("the offline style is the theme's land colour", () => {
+    expect(offlineStyle("dark").layers).toEqual([{ id: "background", type: "background", paint: { "background-color": "#111c1f" } }]);
+    expect(offlineStyle("light").layers[0]!.paint!["background-color"]).toBe(THEME_COLORS.light["map-land"]);
+  });
+
+  it("knows land, water and roads in an OpenMapTiles style; leaves rail, parks and labels alone", () => {
+    const roles = Object.fromEntries(base.layers.map((l) => [l.id, basemapRole(l)]));
+    expect(roles).toEqual({
+      background: "land",
+      water: "water",
+      waterway: "water",
+      landuse_park: null,
+      road_pier: "land",
+      highway_major_casing: "land",
+      highway_major_inner: "road",
+      highway_motorway_inner: "road",
+      railway_transit: null,
+      place_city: null,
+      highway_ref: null,
+    });
+  });
+
+  it.each(["dark", "light"] as const)("%s: recolours background, water, roads and labels to the map tokens", (theme) => {
+    const c = THEME_COLORS[theme];
+    const before = JSON.stringify(base);
+    const themed = themeBasemap(base, theme, "he");
+    expect(JSON.stringify(base)).toBe(before); // the input is not changed
+    const paint = (id: string) => layer(themed.layers, id).paint!;
+    expect(paint("background")["background-color"]).toBe(c["map-land"]);
+    expect(paint("water")["fill-color"]).toBe(c["map-water"]);
+    expect(paint("waterway")["line-color"]).toBe(c["map-water"]);
+    expect(paint("highway_major_inner")["line-color"]).toBe(c["map-road"]);
+    expect(paint("highway_motorway_inner")["line-color"]).toBe(c["map-road"]);
+    expect(paint("highway_major_casing")["line-color"]).toBe(c["map-land"]);
+    expect(paint("road_pier")["line-color"]).toBe(c["map-land"]);
+    // Labels read on land in either theme: ink-muted on a land halo.
+    expect(paint("place_city")).toEqual({ "text-color": c["ink-muted"], "text-halo-color": c["map-land"] });
+    expect(paint("highway_ref")).toEqual({ "text-color": c["ink-muted"], "text-halo-color": c["map-land"] });
+    // Everything else keeps the base style's own paint.
+    expect(paint("landuse_park")).toEqual({ "fill-color": "rgb(32,32,32)" });
+    expect(paint("railway_transit")).toEqual({ "line-color": "#232323" });
+    expect(themed.sources).toEqual(base.sources);
+    expect(themed.glyphs).toBe(base.glyphs);
+  });
+
+  it("labels names in the page language and leaves refs alone", () => {
+    const he = themeBasemap(base, "dark", "he");
+    expect(layer(he.layers, "place_city").layout!["text-field"]).toEqual(nameExpression("he"));
+    expect(layer(he.layers, "highway_ref").layout!["text-field"]).toEqual(["get", "ref"]);
+    const en = themeBasemap(base, "light", "en");
+    expect(layer(en.layers, "place_city").layout!["text-field"]).toEqual(nameExpression("en"));
+  });
+
+  it("a theme switch carries our sources (the drawn scene) over and redraws our layers in the new colours", () => {
+    const data = { type: "FeatureCollection", features: [{ type: "Feature", geometry: null, properties: { kind: "transit" } }] };
+    const previous: StyleJson = {
+      ...themeBasemap(base, "dark", "he"),
+      sources: { ...base.sources, "ot-route": { type: "geojson", data } },
+      layers: [...themeBasemap(base, "dark", "he").layers, ...overlayLayers("dark", { labels: true })],
+    };
+    const next = themeBasemap(base, "light", "he");
+    const merged = withOverlay(previous, next, "light");
+    expect(merged.sources["ot-route"]).toEqual({ type: "geojson", data });
+    expect(merged.sources.openmaptiles).toEqual(base.sources.openmaptiles);
+    expect(merged.layers.slice(0, next.layers.length)).toEqual(next.layers);
+    expect(merged.layers.slice(next.layers.length)).toEqual(overlayLayers("light", { labels: true }));
+    // The first load has nothing of ours to carry.
+    expect(withOverlay(undefined, next, "light")).toBe(next);
+    expect(withOverlay(base, next, "light")).toBe(next);
+  });
+});
+
+describe("labels", () => {
   it("prefers Hebrew names in Hebrew and Latin names in English", () => {
     expect(nameExpression("he")).toEqual(["coalesce", ["get", "name:he"], ["get", "name"]]);
     expect(JSON.stringify(nameExpression("en"))).toContain("name:en");
