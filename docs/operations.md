@@ -6,6 +6,11 @@ staging, dependency ordering, task variants, IAM, ingress and bounded-test clean
 See [development](development.md) for local setup and [policies](policies/privacy.md)
 for the proposed logging contract. Do not infer deployment/spending authorization.
 
+**Operating from another computer:** prerequisites, pinned build tools, AWS sign-in and the
+durable archive (S3 bucket `opentransit-archive-eun1-7c41d2`, `eu-north-1`, versioned) are in
+[continue from another computer](development.md#continue-from-another-computer); what remains
+only on the operator PC is listed in the [portability record](../services/api/results/portability-20261101-01.json).
+
 ## H-1 private preview (eu-north-1, running since 31 October 2026)
 
 One ECS service `opentransit-h1` (cluster of the same name) runs one 1 vCPU / 3 GiB task
@@ -66,7 +71,8 @@ day leaves the previous revision serving, and an unchanged generation stays serv
 snapshots, checks, generation records and releases to `s3://opentransit-archive-eun1-7c41d2`
 (the portability session's bucket and layout; below).
 Images stay in ECR (never deleted automatically), evidence in Git; `D:/ot/` keeps the operator
-machine's own generations.
+machine's own generations. The `oct31a` records were archived there first by PORT-01
+([record](../services/api/results/portability-20261101-01.json)).
 
 ## Cloud build host
 

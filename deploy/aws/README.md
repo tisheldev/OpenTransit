@@ -407,7 +407,8 @@ still needs a task replacement (no hot reload).
 **Daily refresh** (`tools/daily_refresh.py`, `scheduler/daily-refresh.cmd`, registration
 `scheduler/register-task.ps1`): see [operations](../../docs/operations.md#h-1-private-preview-eu-north-1-running-since-31-october-2026).
 From 6 November 2026 the scheduled build host is the EC2 instance below; the Windows task remains a
-manual fallback.
+manual fallback. The `oct31a` inputs and release records were archived in S3 on 6 November by
+PORT-01 ([record](../../services/api/results/portability-20261101-01.json)); the host uses the same bucket.
 
 ## H-1 cloud build host, 6 November 2026
 
