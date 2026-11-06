@@ -32,6 +32,7 @@ built ("bootstrap"). Exit 0 only if every step passed; the log's last line is
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import shutil
 import subprocess
@@ -305,6 +306,46 @@ def check_task_env(job: Job, step: str, task_definition: dict) -> None:
     job.record(step, not missing, template=str(TASK_TEMPLATE.relative_to(REPO)), missing=missing)
     if missing:
         raise StepFailed(f"{step}: task definition lacks template environment {missing}")
+
+
+def api_source_tag() -> str:
+    """Local API image tag named by the Git trees it is built from (services/api, apps/web)."""
+    trees = [
+        subprocess.run(
+            ["git", "-C", str(REPO), "rev-parse", f"HEAD:{path}"],
+            capture_output=True,
+            text=True,
+            check=True,
+        ).stdout.strip()
+        for path in ("services/api", "apps/web")
+    ]
+    return "ot-h1-api:src-" + hashlib.sha256(" ".join(trees).encode()).hexdigest()[:12]
+
+
+def api_image(job: Job, serving_tag: str) -> str:
+    """The API image for an unchanged-feed renewal: the serving one while its source is
+    unchanged, else one rebuilt from this checkout (so a new client or API ships without a
+    feed change). The publisher tags the push by image ID, so a rebuild never reuses a tag."""
+    tag = api_source_tag()
+    if serving_tag == tag:
+        job.record("api-image", True, tag=tag, rebuilt=False)
+        return tag
+    exists = subprocess.run(["docker", "image", "inspect", tag], capture_output=True).returncode == 0
+    if not exists:
+        job.run(
+            "api-image",
+            [
+                "docker",
+                "build",
+                "--build-context",
+                f"web={REPO / 'apps/web'}",
+                "-t",
+                tag,
+                str(REPO / "services/api"),
+            ],
+        )
+    job.summary["apiImage"] = {"tag": tag, "replaces": serving_tag, "built": not exists}
+    return tag
 
 
 def local_probe(job: Job, generation: Path, corpus: Path) -> None:
@@ -725,6 +766,8 @@ def refresh(job: Job) -> int:
             "probe", True, skipped="no new generation; the in-task verifier probes it"
         )
         corpus_path = Path(current_plan["verify"]["probeQueries"])
+        local_tags = dict(current["localTags"])
+        local_tags["api"] = api_image(job, local_tags["api"])
         publish = [
             "publish",
             "--generation",
@@ -737,7 +780,7 @@ def refresh(job: Job) -> int:
             check,
             *[
                 f"--local-image={n}={ref}"
-                for n, ref in sorted(current["localTags"].items())
+                for n, ref in sorted(local_tags.items())
             ],
             *common,
         ]

@@ -110,3 +110,24 @@ def test_task_env_check_flags_a_lost_template_variable():
             c["environment"] = [e for e in c["environment"] if e["name"] != lost]
             c["environment"].append({"name": "OPENTRANSIT_SOURCE_CHECK", "value": "x"})
     assert daily.missing_template_env(template, stripped) == {"api": [lost]}
+
+
+def test_unchanged_renewal_rebuilds_the_api_image_only_when_its_source_changed(tmp_path, monkeypatch):
+    tag = daily.api_source_tag()
+    assert tag.startswith("ot-h1-api:src-") and len(tag) == len("ot-h1-api:src-") + 12
+    monkeypatch.setattr(daily, "api_source_tag", lambda: tag)
+    calls = []
+    monkeypatch.setattr(
+        daily.subprocess,
+        "run",
+        lambda argv, **kw: calls.append(argv) or daily.subprocess.CompletedProcess(argv, 1, "", ""),
+    )
+    job = daily.Job.__new__(daily.Job)
+    job.summary = {"steps": []}
+    job.log_path, job.summary_path = tmp_path / "d.log", tmp_path / "d.json"
+    assert daily.api_image(job, tag) == tag and calls == []
+    built = []
+    monkeypatch.setattr(job, "run", lambda name, argv, **kw: built.append(argv), raising=False)
+    assert daily.api_image(job, "ot-h1-api:gen-old") == tag
+    assert built[0][:4] == ["docker", "build", "--build-context", f"web={daily.REPO / 'apps/web'}"]
+    assert job.summary["apiImage"] == {"tag": tag, "replaces": "ot-h1-api:gen-old", "built": True}

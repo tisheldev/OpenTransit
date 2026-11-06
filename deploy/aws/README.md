@@ -442,7 +442,7 @@ One stopped-by-default EC2 instance in `eu-north-1` runs the daily refresh and p
 * **Job**: fetch → validate → (bootstrap or changed pair) build-generation with addresses into a
   dated directory → local probe → publisher push → ALB probe → archive → `prune --dry-run` →
   host cleanup, stopping at the first failure. An unchanged pair is renewed, not rebuilt
-  (`mode=unchanged`). The first run on a fresh host is `mode=bootstrap`: the serving generation is
+  (`mode=unchanged`), rebuilding only the API image when its source trees changed. The first run on a fresh host is `mode=bootstrap`: the serving generation is
   not on its disk, so it rebuilds from the day's sources.
 * **Archive**: the portability session's bucket `opentransit-archive-eun1-7c41d2` (versioned,
   private; PORT-01), in its layout: `generations/<id>/{manifest.json,pipeline/pipeline.json,probe/probe.json}`,

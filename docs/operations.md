@@ -110,7 +110,15 @@ BH="uv run --project services/api --locked python deploy/aws/tools/build_host.py
 * **Pause.** `$BH pause` disables the schedule (`$BH resume` re-enables). Pause it whenever the
   preview service is paused (`$H1 pause`), or the run fails waiting for a deployment.
 * **Update the ref.** Push the commit, then `$BH set-ref <commit>`. The next boot fetches it and
-  reruns `install.sh` (pinned tools, units). Changing `user-data.sh` needs a new instance
+  reruns `install.sh` (pinned tools, units). A run that has already booted keeps the commit it
+  checked out. On a changed feed the publisher rebuilds all images from the checkout; on an
+  unchanged feed the job reuses the serving data and Photon images and rebuilds only the API
+  image, and only when the Git trees of `services/api` or `apps/web` differ from the serving
+  image's (local tag `ot-h1-api:src-<hash>`), so a client or API change ships without a feed
+  change. Example (6 November): the dark-themed client merged as `main` `f5065f0` while a run was
+  building from an older ref, so after that run finished: merge `main` into the deployed branch,
+  push, `$BH set-ref <that commit>`, `$BH trigger && $BH watch`, then check that `/app/` returns
+  200 through the ALB with new hashed asset names. Changing `user-data.sh` needs a new instance
   (teardown and setup).
 * **Tear down.** `$BH teardown` deletes the schedule, instance, security group (and the ALB rule
   for it), roles and instance profile, alarm, topic, metric filter, log group and SSM parameter.
