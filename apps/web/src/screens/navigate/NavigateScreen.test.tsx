@@ -14,6 +14,7 @@ import { simulateJourney } from "../../nav/simulate";
 import { recordedJourneys, recordedTrips } from "../../nav/testdata";
 import recorded from "../../nav/testdata/recorded-oct31a-dizengoff-technion.json";
 import { renderApp } from "../../shell/testUtils";
+import { pinClock, RECORDED_NOW } from "../../test/clock";
 import { go } from "../../router";
 
 const stopPositions = (recorded as unknown as { stopPositions: Record<string, { latitude: number; longitude: number }> }).stopPositions;
@@ -46,6 +47,8 @@ let restoreSource: () => void = () => {};
 let handle: ReturnType<typeof manualSource>["handle"];
 
 beforeEach(() => {
+  // The recorded journeys are dated 2 November 2026; read the wall clock and they expire.
+  pinClock();
   const made = manualSource();
   handle = made.handle;
   restoreSource = setLocationSource(made.source);
@@ -457,6 +460,17 @@ describe("Navigate: restore and expiry", () => {
     renderApp("#/navigate");
     await waitFor(() => expect(window.location.hash).toBe("#/"));
     expect(sessionStorage.getItem(STORAGE_KEY)).toBeNull();
+  });
+
+  it("the same recorded trip a year after its date is expired (guards the pinned clock above)", async () => {
+    pinClock(new Date(RECORDED_NOW.getTime() + 365 * 24 * 3600_000));
+    seed(recordedJourneys[0]!);
+    renderApp("#/navigate");
+    await waitFor(() => expect(window.location.hash).toBe("#/"));
+    expect(sessionStorage.getItem(STORAGE_KEY)).toBeNull();
+    expect(getActiveTrip()).toBeNull();
+    expect(screen.queryByRole("button", { name: he["nav.next"] })).toBeNull();
+    expect(screen.queryByRole("button", { name: he["home.activeTrip"] })).toBeNull();
   });
 });
 
