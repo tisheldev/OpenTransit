@@ -97,3 +97,16 @@ def test_build_host_estimate_within_guard_and_policy_is_scoped(monkeypatch):
     }
     passrole = next(s for s in policy["Statement"] if s["Action"] == "iam:PassRole")
     assert passrole["Resource"] == "arn:role"
+
+
+def test_task_env_check_flags_a_lost_template_variable():
+    template = json.loads(daily.TASK_TEMPLATE.read_text(encoding="utf-8"))
+    assert daily.missing_template_env(template, template) == {}
+    api = next(c for c in template["containerDefinitions"] if c["name"] == "api")
+    lost = api["environment"][0]["name"]
+    stripped = json.loads(json.dumps(template))
+    for c in stripped["containerDefinitions"]:
+        if c["name"] == "api":
+            c["environment"] = [e for e in c["environment"] if e["name"] != lost]
+            c["environment"].append({"name": "OPENTRANSIT_SOURCE_CHECK", "value": "x"})
+    assert daily.missing_template_env(template, stripped) == {"api": [lost]}

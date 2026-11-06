@@ -277,6 +277,36 @@ def alb_probe(job: Job, base: str, corpus_path: Path) -> dict:
     return result
 
 
+# The publisher's default ("recommended") variant, which the H-1 service runs.
+TASK_TEMPLATE = h0.AWS_DIR / h0.render_drafts.VARIANTS["recommended"]["file"]
+
+
+def missing_template_env(template: dict, task_definition: dict) -> dict[str, list[str]]:
+    """Environment names the template sets that a container of ``task_definition`` lacks.
+
+    The publisher only appends variables, so any loss (for example OPENTRANSIT_CLIENT_DIR,
+    which switches the web client on) means a stale template or publisher."""
+    have = {
+        c["name"]: {e["name"] for e in c.get("environment", [])}
+        for c in task_definition.get("containerDefinitions", [])
+    }
+    missing = {}
+    for container in template.get("containerDefinitions", []):
+        names = {e["name"] for e in container.get("environment", [])}
+        lost = sorted(names - have.get(container["name"], set()))
+        if lost:
+            missing[container["name"]] = lost
+    return missing
+
+
+def check_task_env(job: Job, step: str, task_definition: dict) -> None:
+    template = json.loads(TASK_TEMPLATE.read_text(encoding="utf-8"))
+    missing = missing_template_env(template, task_definition)
+    job.record(step, not missing, template=str(TASK_TEMPLATE.relative_to(REPO)), missing=missing)
+    if missing:
+        raise StepFailed(f"{step}: task definition lacks template environment {missing}")
+
+
 def local_probe(job: Job, generation: Path, corpus: Path) -> None:
     """Probe the new generation's MOTIS graph in a local container (own name and port)."""
     name, port = f"ot-daily-motis-{job.stamp.lower()}", job.args.probe_port
@@ -712,6 +742,8 @@ def refresh(job: Job) -> int:
             *common,
         ]
     job.run("publish", job.publisher(*publish))
+    candidate = output / "task-definition.candidate.json"
+    check_task_env(job, "task-env-candidate", json.loads(candidate.read_text(encoding="utf-8")))
     if job.args.stop_before_push:
         job.summary["dryRun"] = True
         job.record("push", True, skipped="--stop-before-push: nothing published")
@@ -755,6 +787,22 @@ def refresh(job: Job) -> int:
         encoding="utf-8",
     )
     new_release = json.loads(registered.read_text(encoding="utf-8"))
+    described = json.loads(
+        subprocess.run(
+            job.aws(
+                "ecs",
+                "describe-task-definition",
+                "--task-definition",
+                new_release["taskDefinitionArn"],
+                "--output",
+                "json",
+            ),
+            capture_output=True,
+            text=True,
+            check=True,
+        ).stdout
+    )
+    check_task_env(job, "task-env-registered", described["taskDefinition"])
     job.summary["deployed"] = {
         "taskDefinition": new_release["taskDefinitionArn"].rsplit("/", 1)[-1],
         "generationId": new_release["generationId"],
