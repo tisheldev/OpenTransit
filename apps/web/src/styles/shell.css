@@ -122,7 +122,13 @@
   z-index: 2;
   display: flex;
   flex-direction: column;
-  block-size: var(--sheet-half);
+  /* Half: 55%, or taller when the screen asks to fit its pinned content (--sheet-fit,
+     Navigate's step card above Next step), never taller than the full sheet. */
+  block-size: min(
+    max(var(--sheet-half), var(--sheet-fit, 0px)),
+    var(--sheet-full),
+    calc(100% - var(--overlay-top-h, 0px))
+  );
   background: var(--color-surface);
   border-start-start-radius: var(--radius-m);
   border-start-end-radius: var(--radius-m);

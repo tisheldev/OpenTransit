@@ -79,7 +79,7 @@ function renderCompare(lang: Lang = "he", draft: PlanDraft = baseDraft, client: 
   const view = render(
     <QueryClientProvider client={client}>
       <I18nProvider initialLang={lang}>
-        <SheetContext.Provider value={{ snap: "half", setSnap: (snap) => snaps.push(snap) }}>
+        <SheetContext.Provider value={{ snap: "half", setSnap: (snap) => snaps.push(snap), fitHalf: () => {} }}>
           <PlanProvider initial={draft}>
             <CompareScreen />
             <DraftProbe />

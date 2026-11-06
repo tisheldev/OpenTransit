@@ -74,7 +74,7 @@ export function NavigateScreen() {
 function Navigating({ trip }: { trip: ActiveTrip }) {
   const { t, lang } = useI18n();
   const { draft } = usePlan();
-  const { snap, setSnap } = useSheet();
+  const { snap, setSnap, fitHalf } = useSheet();
   const [announcement, setAnnouncement] = useState<{ text: string; n: number }>({ text: "", n: 0 });
   const topRef = useRef<HTMLDivElement>(null);
 
@@ -141,24 +141,37 @@ function Navigating({ trip }: { trip: ActiveTrip }) {
 
   // The card (pinned at the full sheet) and the bottom action cover the checklist's
   // edges; their heights become scroll margins so a focused or scrolled-to row is never
-  // hidden beneath them (keyboard focus, scrollIntoView).
+  // hidden beneath them (keyboard focus, scrollIntoView). At the half sheet the card must
+  // also clear the pinned Next step whatever the fonts or the text (a long stop name, a
+  // countdown in hours): the sheet is asked for the height from its top to the card's
+  // end plus the action (fitHalf), so it grows rather than hide the card's last lines.
   const rootRef = useRef<HTMLDivElement>(null);
   const actionsRef = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
     const root = rootRef.current;
     if (!root) return;
     const report = () => {
-      const pinned = getComputedStyle(topRef.current ?? root).position === "sticky";
-      root.style.setProperty("--nav-cover-top", `${pinned ? Math.round(topRef.current?.getBoundingClientRect().height ?? 0) : 0}px`);
-      root.style.setProperty("--nav-cover-bottom", `${Math.round(actionsRef.current?.getBoundingClientRect().height ?? 0)}px`);
+      const top = topRef.current;
+      const pinned = getComputedStyle(top ?? root).position === "sticky";
+      const actions = actionsRef.current?.getBoundingClientRect().height ?? 0;
+      root.style.setProperty("--nav-cover-top", `${pinned ? Math.round(top?.getBoundingClientRect().height ?? 0) : 0}px`);
+      root.style.setProperty("--nav-cover-bottom", `${Math.round(actions)}px`);
+      const sheet = root.closest(".sheet");
+      const scroller = root.closest(".sheet-content");
+      if (snap !== "half" || !top || !sheet || !scroller) return fitHalf(null);
+      const needed = top.getBoundingClientRect().bottom - sheet.getBoundingClientRect().top + scroller.scrollTop + actions;
+      fitHalf(needed > 0 ? needed : null);
     };
     report();
-    if (typeof ResizeObserver === "undefined") return;
+    if (typeof ResizeObserver === "undefined") return () => fitHalf(null);
     const observer = new ResizeObserver(report);
     if (topRef.current) observer.observe(topRef.current);
     if (actionsRef.current) observer.observe(actionsRef.current);
-    return () => observer.disconnect();
-  }, [snap]);
+    return () => {
+      observer.disconnect();
+      fitHalf(null);
+    };
+  }, [snap, fitHalf]);
 
   // Camera: the current leg is framed, and on board it stays framed while the dot moves
   // along it toward the exit (how far is my stop?). On foot, and waiting at the stop, the
