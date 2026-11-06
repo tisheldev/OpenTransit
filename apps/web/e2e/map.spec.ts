@@ -1,7 +1,7 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
 import { THEME_COLORS } from "../src/styles/tokens";
-import { appPath, blockExternal, expectNoSeriousAxeViolations, useTheme } from "./helpers";
+import { appPath, blockExternal, expectNoSeriousAxeViolations, useTheme, useTheme as setPageTheme } from "./helpers";
 
 // Mocked: fixtures-mode dev server, offline map style, every non-local request blocked.
 // Until the shell renders <MapHost/>, the map is tested on a dev-only harness page
@@ -284,6 +284,37 @@ test.describe("in the app shell", () => {
       expect(box.height, `English, ${theme}: one line`).toBeLessThan(20);
       const b = (await page.getByRole("button", { name: "Back" }).boundingBox())!;
       expect(box.x >= b.x + b.width, `English, ${theme}: beside Back`).toBe(true);
+    }
+  });
+
+  test("a wider font never wraps the attribution: map credits stay whole, the timetable credit ends in an ellipsis", async ({ page }) => {
+    await blockExternal(page);
+    for (const theme of ["dark", "light"] as const) {
+      await setPageTheme(page, theme);
+      await page.goto(appPath("#/search/to"));
+      // Stand-in for a wide system font (DejaVu Sans on the Linux CI runner wraps it otherwise).
+      await page.addStyleTag({ content: ".map-attribution { letter-spacing: 1.5px; }" });
+      const attribution = page.getByTestId("map-attribution");
+      await expect(attribution).toBeVisible();
+      const box = (await attribution.boundingBox())!;
+      expect(box.height, `${theme}: one line`).toBeLessThan(20);
+      const b = (await page.getByRole("button", { name: "חזרה" }).boundingBox())!;
+      expect(box.x + box.width <= b.x || box.x >= b.x + b.width, `${theme}: beside Back`).toBe(true);
+      const credits = await attribution.locator(".map-credit").evaluateAll((elements) =>
+        elements.map((element) => ({
+          fit: element.classList.contains("map-credit-fit"),
+          clipped: element.scrollWidth > element.clientWidth + 1,
+          text: element.textContent,
+          title: element.getAttribute("title"),
+        })),
+      );
+      expect(credits.filter((c) => !c.fit).map((c) => [c.text, c.clipped])).toEqual([
+        ["© OpenStreetMap", false],
+        ["OpenFreeMap", false],
+      ]);
+      const mot = credits.find((c) => c.fit)!;
+      expect(mot.clipped, `${theme}: the timetable credit gives way`).toBe(true);
+      expect([mot.text, mot.title]).toEqual(["משרד התחבורה", "משרד התחבורה"]);
     }
   });
 

@@ -25,9 +25,15 @@
 /* Always visible, never collapsed; at the top so the sheet (from the bottom) cannot cover it.
    The shell sets --map-attribution-top to the height of anything it overlays at the top.
    One compact line in caption type: ink-muted on an opaque surface, which reads in both
-   themes whatever the map shows beneath (an AA pair in both). A badge-size radius and a
-   tight inline padding keep it on one line beside Back at 360 px. */
+   themes whatever the map shows beneath (an AA pair in both). It never wraps, whatever
+   the font: the map credits keep their full width and only the timetable credit shrinks,
+   ending in an ellipsis when a wide font (DejaVu Sans on Linux CI) needs more than the
+   row beside Back. */
 .map-attribution {
+  display: flex;
+  align-items: baseline;
+  min-inline-size: 0;
+  white-space: nowrap;
   position: absolute;
   inset-block-start: calc(var(--map-attribution-top, 0px) + var(--space-1));
   inset-inline-end: var(--space-1);
@@ -44,10 +50,24 @@
   font-weight: var(--caption-weight);
   z-index: 2;
 }
+.map-credit,
+.map-credit-sep {
+  flex: none;
+}
+.map-credit-sep {
+  white-space: pre;
+}
+.map-credit-fit {
+  flex: 0 1 auto;
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 /* Placed by the shell's top row (beside Back) instead of floating on the map. */
 .map-attribution-inline {
   position: static;
   max-inline-size: none;
+  flex: 0 1 auto;
   pointer-events: auto;
 }
 
