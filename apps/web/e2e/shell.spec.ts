@@ -1,5 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
-import { appPath, blockExternal, expectNoSeriousAxeViolations } from "./helpers";
+import { appPath, blockExternal, expectNoSeriousAxeViolations, useTheme } from "./helpers";
 
 // Mocked: the dev server runs in fixtures mode, MSW answers /v1 in the browser.
 
@@ -134,6 +134,33 @@ test("touch targets on the core screens are at least 44 px", async ({ page }) =>
       expect(box.height, `${hash} control ${index}`).toBeGreaterThanOrEqual(44);
     }
   }
+});
+
+test("screens not built yet say so, with the way home (axe, dark and light)", async ({ page }) => {
+  await page.goto(appPath("#/stop/mot%3Astop%3A1"));
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("תחנה");
+  await expect(page.locator("#main").getByRole("note")).toHaveText("המסך הזה עוד לא נבנה.");
+  await expectNoSeriousAxeViolations(page, "Stop placeholder (he)");
+  await useTheme(page, "light");
+  await page.goto(appPath("#/no-such-screen"));
+  await page.reload(); // a hash change alone does not run the theme's init script
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("הדף לא נמצא");
+  await expectNoSeriousAxeViolations(page, "Not found, light (he)");
+  await page.getByRole("link", { name: "חזרה לבית" }).click();
+  await expect(page).toHaveURL(/#\/$/);
+});
+
+test("light theme: the full sheet dims the map behind it and takes no taps from it (axe)", async ({ page }) => {
+  await useTheme(page, "light");
+  await page.goto(appPath("#/"));
+  const scrim = page.locator(".sheet-scrim");
+  await expect(scrim).toHaveCSS("opacity", "0");
+  await page.getByRole("button", { name: /גודל הגיליון/ }).click();
+  await expect(page.locator(".sheet")).toHaveAttribute("data-snap", "full");
+  await expect(scrim).toHaveCSS("opacity", "1");
+  await expect(scrim).toHaveCSS("pointer-events", "none");
+  await expectNoSeriousAxeViolations(page, "Home, full sheet, light (he)");
 });
 
 /** Home → Search(to) → a stop → Compare (mocked journeys). */

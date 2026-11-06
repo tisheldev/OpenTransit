@@ -1,11 +1,13 @@
 /* Map layer (S3). Logical properties only. The map itself is never mirrored (.map-host is
-   dir="ltr"); the attribution and note follow the page language. */
+   dir="ltr"); the attribution and note follow the page language. Colours are the active
+   theme's tokens; the canvas takes the same values from THEME_COLORS (layers.ts). */
 
 .map-host {
   position: absolute;
   inset: 0;
   overflow: hidden;
-  background: #e6ecee;
+  /* Land until the style draws (and where WebGL is missing): no flash of another colour. */
+  background: var(--map-land);
   z-index: 0;
 }
 
@@ -21,27 +23,51 @@
 }
 
 /* Always visible, never collapsed; at the top so the sheet (from the bottom) cannot cover it.
-   The shell sets --map-attribution-top to the height of anything it overlays at the top. */
-/* One compact line: small, semi-opaque, still readable (dark ink on near-white). */
+   The shell sets --map-attribution-top to the height of anything it overlays at the top.
+   One compact line in caption type: ink-muted on an opaque surface, which reads in both
+   themes whatever the map shows beneath (an AA pair in both). It never wraps, whatever
+   the font: the map credits keep their full width and only the timetable credit shrinks,
+   ending in an ellipsis when a wide font (DejaVu Sans on Linux CI) needs more than the
+   row beside Back. */
 .map-attribution {
+  display: flex;
+  align-items: baseline;
+  min-inline-size: 0;
+  white-space: nowrap;
   position: absolute;
   inset-block-start: calc(var(--map-attribution-top, 0px) + var(--space-1));
   inset-inline-end: var(--space-1);
   max-inline-size: calc(100% - 2 * var(--space-1));
   margin: 0;
   padding-block: 1px;
-  padding-inline: 6px;
-  border-radius: 6px;
-  background: rgb(255 255 255 / 82%);
-  color: var(--color-ink);
-  font-size: 11px;
-  line-height: 1.35;
+  padding-inline: var(--space-1);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--ink-muted);
+  box-shadow: var(--shadow-float);
+  font-size: var(--caption-size);
+  line-height: var(--caption-line);
+  font-weight: var(--caption-weight);
   z-index: 2;
+}
+.map-credit,
+.map-credit-sep {
+  flex: none;
+}
+.map-credit-sep {
+  white-space: pre;
+}
+.map-credit-fit {
+  flex: 0 1 auto;
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 /* Placed by the shell's top row (beside Back) instead of floating on the map. */
 .map-attribution-inline {
   position: static;
   max-inline-size: none;
+  flex: 0 1 auto;
   pointer-events: auto;
 }
 
@@ -51,10 +77,13 @@
   inset-inline: var(--space-4);
   margin: 0;
   padding: var(--space-2) var(--space-3);
-  border-radius: var(--radius-s);
-  background: var(--color-surface);
-  color: var(--color-ink-muted);
-  font-size: var(--text-s);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--ink-muted);
+  box-shadow: var(--shadow-float);
+  font-size: var(--body-sm-size);
+  line-height: var(--body-sm-line);
+  font-weight: var(--body-sm-weight);
   text-align: center;
   z-index: 1;
 }
@@ -70,9 +99,9 @@
   margin-block-start: -34px; /* centre 20 px above the target: the rotated corner lands on it */
   border-radius: 50% 50% 50% 0;
   transform: rotate(-45deg);
-  background: var(--color-destination);
-  border: 3px solid var(--color-surface);
-  box-shadow: 0 1px 4px rgb(0 0 0 / 35%);
+  background: var(--destination);
+  border: 3px solid var(--surface);
+  box-shadow: var(--shadow-float);
   pointer-events: none;
   z-index: 1;
 }

@@ -2,6 +2,7 @@ import { useId, useState, type FormEvent } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useStatus } from "../../api/queries";
 import { ApiFailure } from "../../api/result";
+import { Icon, type IconName } from "../../components/ds";
 import { Bdi, ErrorState, Loading } from "../../components/states";
 import { useI18n } from "../../i18n/I18nProvider";
 import { LANGS } from "../../i18n/messages";
@@ -9,23 +10,28 @@ import { formatDate } from "../../lib/time";
 import { emptyScene, usePublishScene } from "../../map/scene";
 import { endActiveTrip } from "../../nav/activeTrip";
 import { isLocationPossible } from "../../lib/geolocation";
+import { setTheme, useTheme } from "../../lib/theme";
 import { initialDraft, startingOrigin } from "../../plan/draft";
 import { usePlan } from "../../plan/PlanProvider";
 import { go } from "../../router";
 import { generationMeta } from "../../shell/Banners";
 import { deleteSaved, reloadLocalState, renameSaved, useLocalState } from "../../shell/localStore";
 import { clearAllLocalData, type SavedPlace } from "../../storage/local";
+import { DEFAULT_THEME, THEMES } from "../../styles/tokens";
 import { version } from "../../../package.json";
 
-// Settings — C07 (design: Screens 7): a plain list. The one destructive action confirms
+// Settings — C07 (design: Screens 7): plain lists. Language and theme are real radio
+// groups drawn as the design's segmented control. The one destructive action confirms
 // inline with a second tap; there are no modals.
 
 function SavedItem({
   title,
+  icon,
   place,
   onSet,
 }: {
   title: string;
+  icon: IconName;
   place: SavedPlace | null;
   /** Home and Work are set or replaced through Search (no rename: "Home" is the name); favourites are renamed. */
   onSet?: () => void;
@@ -43,28 +49,34 @@ function SavedItem({
   };
 
   return (
-    <li className="saved-item">
-      <div className="saved-item-text">
+    <li className="settings-row saved-item">
+      <span className={place ? "ot-row__icon ot-row__icon--saved" : "ot-row__icon"}>
+        <Icon name={icon} />
+      </span>
+      <div className="ot-row__body saved-item-text">
         {favourite && place ? (
           <>
-            <span className="row-title">
+            <span className="ot-row__title">
               <bdi>{place.label}</bdi>
             </span>
-            <span className="row-sub">{title}</span>
+            <span className="ot-row__sub">{title}</span>
           </>
         ) : (
           <>
-            <span className="row-title">{title}</span>
-            <span className="row-sub">{place ? <bdi>{place.label}</bdi> : t("settings.notSet")}</span>
+            <span className="ot-row__title">{title}</span>
+            <span className="ot-row__sub">{place ? <bdi>{place.label}</bdi> : t("settings.notSet")}</span>
           </>
         )}
       </div>
       {renaming && place ? (
         <form className="name-form" onSubmit={submit}>
-          <label htmlFor={inputId}>{t("settings.renameField", { place: name })}</label>
+          <label htmlFor={inputId} className="field-label">
+            {t("settings.renameField", { place: name })}
+          </label>
           <input
             id={inputId}
             className="text-input"
+            dir="auto"
             value={label}
             maxLength={200}
             autoFocus
@@ -134,7 +146,7 @@ function DataStatus() {
   const freshnessKey =
     freshness === "current" || freshness === "aging" || freshness === "expired" ? freshness : "other";
   return (
-    <ul className="plain-list">
+    <ul className="ot-list info-list">
       <li>{status.data.data.ready ? t("status.ready") : t("status.notReady")}</li>
       {meta && (
         <>
@@ -168,6 +180,7 @@ function ClearAll() {
 
   const clear = () => {
     setLang("he");
+    setTheme(DEFAULT_THEME);
     setFrom(startingOrigin(isLocationPossible(), null));
     setTo(initialDraft.to);
     setWhen(initialDraft.when);
@@ -200,49 +213,94 @@ function ClearAll() {
           </button>
         )}
       </div>
-      <p role="status" aria-live="polite">
+      <p className="small" role="status" aria-live="polite">
         {cleared ? t("settings.clearData.done") : ""}
       </p>
     </>
   );
 }
 
+/** A radio group drawn as the design's segmented control (ot-seg); still real radios. */
+function Choice<T extends string>({
+  name,
+  label,
+  options,
+  value,
+  onChange,
+  optionLabel,
+  optionLang,
+}: {
+  name: string;
+  label: string;
+  options: readonly T[];
+  value: T;
+  onChange: (option: T) => void;
+  optionLabel: (option: T) => string;
+  optionLang?: (option: T) => string;
+}) {
+  const legendId = useId();
+  return (
+    <fieldset className="settings-choice" aria-labelledby={legendId}>
+      <legend id={legendId} className="section-title">
+        {label}
+      </legend>
+      <div className="ot-seg seg-radios">
+        {options.map((option) => (
+          <label key={option} className="ot-seg__opt" lang={optionLang?.(option)}>
+            <input type="radio" name={name} value={option} checked={value === option} onChange={() => onChange(option)} />
+            {optionLabel(option)}
+          </label>
+        ))}
+      </div>
+    </fieldset>
+  );
+}
+
 export function SettingsScreen() {
   const { t, lang, setLang } = useI18n();
   const local = useLocalState();
-  const groupId = useId();
+  const theme = useTheme();
   usePublishScene(emptyScene);
 
   return (
     <div className="settings">
       <h1>{t("screen.settings")}</h1>
 
-      <fieldset className="segmented" aria-labelledby={groupId}>
-        <legend id={groupId} className="section-title">
-          {t("settings.language")}
-        </legend>
-        {LANGS.map((option) => (
-          <label key={option} lang={option}>
-            <input type="radio" name="lang" value={option} checked={lang === option} onChange={() => setLang(option)} />
-            {t(`settings.language.${option}`)}
-          </label>
-        ))}
-      </fieldset>
+      <div className="settings-choices">
+        <Choice
+          name="lang"
+          label={t("settings.language")}
+          options={LANGS}
+          value={lang}
+          onChange={setLang}
+          optionLabel={(option) => t(`settings.language.${option}`)}
+          optionLang={(option) => option}
+        />
+        <Choice
+          name="theme"
+          label={t("settings.theme")}
+          options={THEMES}
+          value={theme}
+          onChange={setTheme}
+          optionLabel={(option) => t(`settings.theme.${option}`)}
+        />
+      </div>
 
       <section aria-labelledby="settings-saved">
         <h2 id="settings-saved" className="section-title">
           {t("settings.saved")}
         </h2>
-        <ul className="saved-list">
-          <SavedItem title={t("place.home")} place={local.home} onSet={() => go({ name: "search", field: "home" })} />
-          <SavedItem title={t("place.work")} place={local.work} onSet={() => go({ name: "search", field: "work" })} />
+        <ul className="ot-list settings-list">
+          <SavedItem title={t("place.home")} icon="home" place={local.home} onSet={() => go({ name: "search", field: "home" })} />
+          <SavedItem title={t("place.work")} icon="work" place={local.work} onSet={() => go({ name: "search", field: "work" })} />
           {local.favourites.map((favourite) => (
-            <SavedItem key={favourite.id} title={t("place.saved")} place={favourite} />
+            <SavedItem key={favourite.id} title={t("place.saved")} icon="star" place={favourite} />
           ))}
         </ul>
         {local.favourites.length === 0 && <p className="muted small">{t("settings.noFavourites")}</p>}
-        <button type="button" className="button" onClick={() => go({ name: "search", field: "favourite" })}>
-          + {t("settings.addFavourite")}
+        <button type="button" className="button button-quiet add-place" onClick={() => go({ name: "search", field: "favourite" })}>
+          <Icon name="plus" />
+          {t("settings.addFavourite")}
         </button>
       </section>
 
@@ -257,7 +315,7 @@ export function SettingsScreen() {
         <h2 id="settings-credits" className="section-title">
           {t("settings.attribution")}
         </h2>
-        <ul className="plain-list">
+        <ul className="ot-list info-list">
           <li>{t("settings.attribution.mot")}</li>
           <li>{t("settings.attribution.osm")}</li>
           <li>{t("settings.attribution.tiles")}</li>

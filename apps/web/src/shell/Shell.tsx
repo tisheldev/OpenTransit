@@ -11,6 +11,7 @@ import {
   type ReactNode,
 } from "react";
 import { useStatus } from "../api/queries";
+import { Icon } from "../components/ds";
 import { useI18n } from "../i18n/I18nProvider";
 import { locationSource } from "../lib/geolocation";
 import { MapAttribution, MapHost } from "../map/MapHost";
@@ -26,10 +27,11 @@ export function backFallback(route: Route): Route {
   return route.name === "navigate" ? { name: "compare" } : { name: "home" };
 }
 
-// The surface (design: Surface): the map full-bleed behind, one bottom sheet that holds
-// every screen, and only two floating controls, Back and Locate. No tabs, no menus.
-// The top band (banners, Back, the one-line map attribution) is never covered: the full
-// sheet stops below it (--overlay-top-h).
+// The surface (design: Surface; components BottomSheet, Button): the map full-bleed
+// behind, one bottom sheet that holds every screen, and only two floating controls, Back
+// and Locate (round icon buttons). No tabs, no menus. The top band (banners, Back, the
+// one-line map attribution) is never covered: the full sheet stops below it
+// (--overlay-top-h). At full, a scrim dims what is left of the map; it takes no taps.
 
 function viewportHeight(): number {
   return window.visualViewport?.height ?? window.innerHeight;
@@ -210,12 +212,12 @@ function LocateButton() {
       )}
       <button
         type="button"
-        className="icon-button floating"
+        className="ot-btn ot-btn--icon"
         aria-label={t("nav.locate")}
         aria-busy={busy || undefined}
         onClick={() => void locate()}
       >
-        {busy ? <span className="spinner" aria-hidden="true" /> : <span aria-hidden="true">◎</span>}
+        {busy ? <span className="spinner" aria-hidden="true" /> : <Icon name="locate" />}
       </button>
     </div>
   );
@@ -328,14 +330,14 @@ export function Shell({ fixtureMode }: { fixtureMode: boolean }) {
         <div className="map-layer">
           <MapHost attribution={false} />
         </div>
+        <div className={snap === "full" ? "sheet-scrim sheet-scrim-on" : "sheet-scrim"} aria-hidden="true" />
         <div className="overlay-top" ref={topRef}>
           <Banners fixtureMode={fixtureMode} status={status} />
           <div className="top-row">
             {route.name !== "home" && (
-              <button type="button" className="icon-button floating back-button" aria-label={t("nav.back")} onClick={() => back(backFallback(route))}>
-                <span className="mirror" aria-hidden="true">
-                  →
-                </span>
+              <button type="button" className="ot-btn ot-btn--icon back-button" aria-label={t("nav.back")} onClick={() => back(backFallback(route))}>
+                {/* Points the way back: right in Hebrew, mirrored by the icon set under RTL. */}
+                <Icon name="back" />
               </button>
             )}
             <MapAttribution inline />
@@ -349,8 +351,9 @@ export function Shell({ fixtureMode }: { fixtureMode: boolean }) {
           locate={showLocate ? <LocateButton /> : undefined}
           corner={
             route.name === "home" ? (
-              <a className="icon-button quiet settings-link" href={hrefFor({ name: "settings" })} aria-label={t("screen.settings")}>
-                <span aria-hidden="true">⚙</span>
+              <a className="sheet-icon-button settings-link" href={hrefFor({ name: "settings" })} aria-label={t("screen.settings")}>
+                {/* The design's set has no settings icon: a local one in its line style (shell.css). */}
+                <span className="ot-i ot-i--settings" aria-hidden="true" />
               </a>
             ) : undefined
           }

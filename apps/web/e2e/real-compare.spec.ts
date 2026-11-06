@@ -1,6 +1,7 @@
 import { fileURLToPath } from "node:url";
 import { expect, test } from "@playwright/test";
 import type { ViteDevServer } from "vite";
+import { departureInCoverage } from "../scripts/coverage-dates.mjs";
 import { appPath, expectNoSeriousAxeViolations } from "./helpers";
 
 // @real Compare (slice S5.6): Dizengoff Center (mot:stop:13583) → Technion
@@ -17,20 +18,6 @@ const baseURL = `http://localhost:${port}/`;
 let server: ViteDevServer | null = null;
 let wall: string | null = null;
 
-/** The first Monday after today (Israel calendar) at 08:00 that lies inside coverage. */
-function mondayMorning(coverage: { from: string; until: string }): string | null {
-  const day = new Date(`${new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Jerusalem" })}T12:00:00Z`);
-  const from = Date.parse(coverage.from);
-  const until = Date.parse(coverage.until);
-  for (let i = 1; i <= 60; i += 1) {
-    const candidate = new Date(day.getTime() + i * 86_400_000);
-    if (candidate.getUTCDay() !== 1) continue;
-    const at = Date.parse(`${candidate.toISOString().slice(0, 10)}T08:00:00+02:00`);
-    if (at > from && at + 6 * 3600_000 < until) return `${candidate.toISOString().slice(0, 10)}T08:00`;
-  }
-  return null;
-}
-
 test.describe("@real compare", () => {
   test.describe.configure({ mode: "serial" });
 
@@ -38,7 +25,8 @@ test.describe("@real compare", () => {
     const ready = await request.get(`${apiOrigin}/readyz`, { timeout: 5_000 }).catch(() => null);
     test.skip(ready?.status() !== 200, `API at ${apiOrigin} is not ready; real compare pending`);
     const status = await (await request.get(`${apiOrigin}/v1/status`)).json();
-    wall = mondayMorning(status.meta.coverage);
+    // The first Monday after today at 08:00 inside the API's own coverage.
+    wall = departureInCoverage(status.meta.coverage, { weekday: 1 })?.wall ?? null;
     test.skip(wall === null, "no Monday inside the API's coverage");
     process.env.OPENTRANSIT_API_ORIGIN = apiOrigin;
     const { createServer } = await import("vite");
@@ -97,7 +85,7 @@ test.describe("@real compare", () => {
     await expect(options).toHaveCount(body.data.journeys.length);
     expect(body.data.journeys.length).toBeGreaterThan(0);
     const details = page.getByRole("region", { name: /פרטי מסלול/ });
-    await expect(details.locator(".it").first()).toBeVisible();
+    await expect(details.locator(".ot-steps__item").first()).toBeVisible();
     await expect(details.getByRole("link")).toHaveCount(0);
 
     // Half sheet: every option, with its departure and arrival, above the pinned Start.
@@ -133,8 +121,8 @@ test.describe("@real compare", () => {
         transit: { operatorName: string };
       }[];
       for (const leg of rails) {
-        await expect(details.locator(".it-ride-name", { hasText: leg.transit.operatorName }).first()).toBeVisible();
-        await expect(details.locator(".it-name", { hasText: leg.to.name }).first()).toBeVisible();
+        await expect(details.locator(".compare-ride-name", { hasText: leg.transit.operatorName }).first()).toBeVisible();
+        await expect(details.locator(".compare-place", { hasText: leg.to.name }).first()).toBeVisible();
         await expect(details).not.toContainText(`רכבת ל${leg.to.name}`);
         sawTrain = true;
       }

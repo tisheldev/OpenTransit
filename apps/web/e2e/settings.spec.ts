@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { appPath, blockExternal, expectNoSeriousAxeViolations } from "./helpers";
+import { appPath, blockExternal, expectNoSeriousAxeViolations, useTheme } from "./helpers";
 
 // Settings — C07 at 360 × 640, mocked (fixtures mode).
 
@@ -23,7 +23,7 @@ test("Hebrew: data status, unavailable live data, credits and version (axe)", as
 test("English: save a favourite through Search, rename it, delete it (axe)", async ({ page }) => {
   await page.goto(appPath("#/settings"));
   await page.getByLabel("English").check();
-  await page.getByRole("button", { name: "+ Add a saved place" }).click();
+  await page.getByRole("button", { name: "Add a saved place" }).click();
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Add a saved place");
   await page.getByRole("searchbox").fill("Dizengoff");
   await page.getByTestId("search-results").getByRole("button").first().click();
@@ -52,4 +52,60 @@ test("the clear-all button arms on the first tap and can be cancelled", async ({
   await expectNoSeriousAxeViolations(page, "Settings, clear armed (he)");
   await page.getByRole("button", { name: "ביטול" }).click();
   await expect(page.getByRole("button", { name: "מחיקת כל הנתונים במכשיר" })).toBeVisible();
+});
+
+test("dark by default; light chosen in Settings applies before first paint after a reload", async ({ page }) => {
+  await page.emulateMedia({ colorScheme: "light" }); // the phone's preference does not decide
+  await page.goto(appPath("#/settings"));
+  const html = page.locator("html");
+  await expect(html).toHaveAttribute("data-theme", "dark");
+  await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute("content", "#0d1618");
+  expect(await page.evaluate(() => getComputedStyle(document.documentElement).colorScheme)).toBe("dark");
+
+  await page.getByRole("radio", { name: "בהירה" }).check();
+  await expect(html).toHaveAttribute("data-theme", "light");
+  await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute("content", "#f4f7f7");
+
+  // Before any app script runs, theme.js has already applied the stored choice.
+  await page.addInitScript(() => {
+    document.addEventListener("readystatechange", () => {
+      if (document.readyState === "interactive") {
+        (window as unknown as { themeAtParse: string | null }).themeAtParse = document.documentElement.getAttribute("data-theme");
+      }
+    });
+  });
+  await page.reload();
+  expect(await page.evaluate(() => (window as unknown as { themeAtParse: string | null }).themeAtParse)).toBe("light");
+  await expect(html).toHaveAttribute("data-theme", "light");
+  expect(await page.evaluate(() => getComputedStyle(document.documentElement).colorScheme)).toBe("light");
+  await expectNoSeriousAxeViolations(page, "Settings, light (he)");
+});
+
+test("light theme: saved places and the armed clear button (axe)", async ({ page }) => {
+  const place = (id: string, label: string) => ({
+    id,
+    label,
+    latitude: 32.0757,
+    longitude: 34.7748,
+    stopId: null,
+    placeRefHint: null,
+    savedAt: "2026-10-31T10:00:00+02:00",
+  });
+  const state = {
+    version: 1,
+    settings: { lang: "he" },
+    home: place("home", "דיזנגוף 50, תל־אביב–יפו"),
+    work: null,
+    favourites: [place("fav-1", "הטכניון")],
+    recents: [],
+  };
+  await page.addInitScript((value) => localStorage.setItem("opentransit", value), JSON.stringify(state));
+  await useTheme(page, "light");
+  await page.goto(appPath("#/settings"));
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  await expect(page.getByRole("radio", { name: "בהירה" })).toBeChecked();
+  await expect(page.getByRole("button", { name: "מחיקת הטכניון" })).toBeVisible();
+  await page.getByRole("button", { name: "מחיקת כל הנתונים במכשיר" }).click();
+  await expect(page.getByRole("button", { name: "הקישו שוב כדי למחוק הכול" })).toBeVisible();
+  await expectNoSeriousAxeViolations(page, "Settings, saved places and clear armed, light (he)");
 });

@@ -1,4 +1,6 @@
-/* Shell, sheet and screen styles (S4). Logical properties only, so RTL mirrors. */
+/* Shell, sheet and screen styles (S4) in the design system (design-system/bundle.css,
+   components BottomSheet, Button, TripFields, PlaceChips, PlaceRow, Banner). Colours,
+   type, radii and shadows come from tokens only. Logical properties only, so RTL mirrors. */
 
 .visually-hidden {
   position: absolute !important;
@@ -10,14 +12,21 @@
 }
 
 .muted {
-  color: var(--color-ink-muted);
+  color: var(--ink-muted);
 }
 .small {
-  font-size: var(--text-s);
+  font-size: var(--body-sm-size);
+  line-height: var(--body-sm-line);
 }
 
 .skip-link {
   z-index: 20;
+}
+
+/* A settings icon in the design's line style (24 grid, stroke 1.9, round): the set has
+   none. Used as <span class="ot-i ot-i--settings">, a currentColor mask like the others. */
+.ot-i--settings {
+  --ot-i: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 width=%2224%22 height=%2224%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%221.9%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M4 7h8.5M17.5 7H20M4 17h2.5M11.5 17H20%22/%3E%3Ccircle cx=%2215%22 cy=%227%22 r=%222.5%22/%3E%3Ccircle cx=%229%22 cy=%2217%22 r=%222.5%22/%3E%3C/svg%3E");
 }
 
 /* --- surface ---------------------------------------------------------------- */
@@ -33,11 +42,26 @@
 .map-layer {
   position: absolute;
   inset: 0;
-  background: #dfe9e4;
+  background: var(--map-land);
 }
 .map-layer > * {
   inline-size: 100%;
   block-size: 100%;
+}
+
+/* At full the sheet dims what is left of the map (design: BottomSheet, scrim). It takes
+   no taps, so the map stays a map; the top band floats above it. */
+.sheet-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: var(--scrim);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+.sheet-scrim-on {
+  opacity: 1;
 }
 
 /* The top band: banners, then one row with Back (inline start) and the map attribution
@@ -63,58 +87,32 @@
   align-items: center;
   gap: var(--space-2);
 }
+.top-row > button {
+  flex: none;
+}
 .top-row .map-attribution {
   margin-inline-start: auto;
 }
-
+/* Banners float over the map: compact, each with the floating shadow. */
 .banners {
   align-self: stretch;
   display: grid;
-  border-radius: var(--radius-s);
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgb(23 45 54 / 18%);
+  gap: var(--space-1);
 }
-.banners .banner {
-  border-block-end: 0;
+.banners .ot-banner {
+  box-shadow: var(--shadow-float);
 }
-
-.icon-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-inline-size: var(--target-min);
-  min-block-size: var(--target-min);
-  padding: 0;
-  border: 1px solid var(--color-border-strong);
-  border-radius: var(--radius-pill);
-  background: var(--color-surface);
-  color: var(--color-ink-strong);
-  font-size: var(--text-l);
-  line-height: 1;
-  text-decoration: none;
-  cursor: pointer;
-}
-.icon-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-.icon-button.quiet {
-  border-color: transparent;
-  background: transparent;
-  color: var(--color-ink-muted);
-}
-.floating {
-  box-shadow: 0 2px 8px rgb(23 45 54 / 22%);
+.banners .ot-banner--warning {
+  box-shadow: inset 0 0 0 1px var(--warning-edge), var(--shadow-float);
 }
 
-/* Directional glyphs point the reading way: "→" is back in Hebrew, flipped in English. */
-.mirror {
-  display: inline-block;
-}
-[dir="ltr"] .mirror {
-  transform: scaleX(-1);
+/* Half and full snaps (design system BottomSheet: 55% and 92%; peek is the sheet-peek token). */
+:root {
+  --sheet-half: 55dvh;
+  --sheet-full: 92dvh;
 }
 
+/* The sheet (design: BottomSheet, ot-sheet): surface, 22 px top corners, the sheet shadow. */
 .sheet {
   position: absolute;
   inset-inline: 0;
@@ -129,11 +127,12 @@
     var(--sheet-full),
     calc(100% - var(--overlay-top-h, 0px))
   );
-  background: var(--color-surface);
-  border-start-start-radius: var(--radius-m);
-  border-start-end-radius: var(--radius-m);
-  box-shadow: 0 -4px 16px rgb(23 45 54 / 16%);
-  transition: block-size 0.2s ease;
+  background: var(--surface);
+  color: var(--ink);
+  border-start-start-radius: var(--radius-xl);
+  border-start-end-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sheet);
+  transition: block-size 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 .sheet-peek {
   block-size: var(--sheet-peek);
@@ -145,7 +144,8 @@
   transition: none;
 }
 @media (prefers-reduced-motion: reduce) {
-  .sheet {
+  .sheet,
+  .sheet-scrim {
     transition: none;
   }
 }
@@ -167,13 +167,15 @@
   margin: 0;
   padding: var(--space-1) var(--space-3);
   border-radius: var(--radius-pill);
-  background: var(--color-surface);
-  color: var(--color-ink);
-  font-size: var(--text-s);
-  box-shadow: 0 2px 8px rgb(23 45 54 / 22%);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: var(--body-sm-size);
+  line-height: var(--body-sm-line);
+  box-shadow: var(--shadow-float);
 }
 
-/* The whole top strip of the sheet is the drag handle (tap: next snap; arrows: step). */
+/* The whole top strip of the sheet is the drag handle (tap: next snap; arrows: step):
+   44 px for the touch target, with the design's grabber (ot-sheet__grab) in it. */
 .sheet-handle-row {
   position: relative;
   display: flex;
@@ -183,9 +185,10 @@
   display: grid;
   place-items: center;
   inline-size: 100%;
-  min-block-size: var(--target-min);
+  min-block-size: var(--tap-min);
   padding: 0;
   border: 0;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
   background: transparent;
   cursor: grab;
   touch-action: none;
@@ -193,17 +196,30 @@
 .sheet-handle:focus-visible {
   outline-offset: -3px;
 }
+.sheet-grip {
+  display: block;
+  inline-size: 36px;
+  block-size: 5px;
+  border-radius: 3px;
+  background: var(--border-strong);
+}
 .sheet-corner {
   position: absolute;
   inset-block-start: 0;
   inset-inline-end: var(--space-2);
 }
-.sheet-grip {
-  display: block;
-  inline-size: 40px;
-  block-size: 5px;
+/* A quiet icon control inside the sheet (no shadow: it does not float). */
+.sheet-icon-button {
+  display: grid;
+  place-items: center;
+  inline-size: var(--tap-min);
+  block-size: var(--tap-min);
   border-radius: var(--radius-pill);
-  background: var(--color-border-strong);
+  color: var(--ink-muted);
+  text-decoration: none;
+}
+.sheet-icon-button:active {
+  background: var(--surface-pressed);
 }
 
 .sheet-content {
@@ -212,84 +228,106 @@
   overflow-y: auto;
   overscroll-behavior: contain;
   padding-inline: var(--space-4);
-  padding-block-end: var(--space-5);
+  padding-block-end: var(--space-6);
   /* A thin scrollbar, no grey band at the inline edge (overlay scrollbars stay as they are). */
   scrollbar-width: thin;
-  scrollbar-color: var(--color-border-strong) transparent;
+  scrollbar-color: var(--border-strong) transparent;
 }
 .sheet-content:focus {
   outline: none;
 }
 .sheet-content h1 {
-  font-size: var(--text-l);
-  line-height: 1.25;
   margin-block: 0 var(--space-3);
 }
 .sheet-content h1:focus {
   outline: none;
 }
 
-/* --- controls ----------------------------------------------------------------- */
+/* --- controls (design: Button) -------------------------------------------------
+   The .button classes are the ot-btn styles under the names the screens use:
+   .button = secondary, .button-primary = primary (52 px), .button-quiet = ghost,
+   .button-danger = the armed destructive action. */
 
 .button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-block-size: var(--target-min);
-  min-inline-size: var(--target-min);
+  gap: var(--space-2);
+  min-block-size: var(--tap-min);
+  min-inline-size: var(--tap-min);
   padding-inline: var(--space-4);
-  border: 1px solid var(--color-border-strong);
-  border-radius: var(--radius-s);
-  background: var(--color-surface);
-  color: var(--color-ink-strong);
+  border: 1.5px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: var(--label-size);
+  line-height: var(--label-line);
+  font-weight: var(--label-weight);
+  text-align: center;
   text-decoration: none;
   cursor: pointer;
+  transition: background-color 120ms ease, transform 120ms ease;
 }
-/* Hover only where there is a pointer that hovers (a tapped row must not stay grey on a
-   phone); every tap gets an immediate pressed state instead. */
-@media (hover: hover) {
-  .button:hover {
-    background: #ecf4f4;
-  }
-  .button-quiet:hover,
-  .row-button:hover,
-  .from-to-field:hover {
-    background: var(--color-surface-sunken);
-  }
-}
-.button:active,
-.row-button:active,
-.from-to-field:active,
-.chip:active,
-.active-trip:active,
-.icon-button:active {
-  filter: brightness(0.93);
+.button:active {
+  transform: scale(0.98);
+  background: var(--surface-pressed);
 }
 .button:disabled {
-  cursor: not-allowed;
-  opacity: 0.65;
+  opacity: 0.55;
+  cursor: default;
+  transform: none;
 }
-.button-primary,
-.button-primary:hover {
-  background: var(--color-brand-strong);
-  border-color: var(--color-brand-strong);
-  color: #fff;
-  font-weight: 650;
+.button-primary {
+  min-block-size: var(--tap-primary);
+  padding-inline: var(--space-5);
+  border-color: var(--brand);
+  background: var(--brand);
+  color: var(--on-brand);
+  font-size: var(--body-size);
 }
-/* A text-only action (still a 44 px target), for rows with several actions. */
+.button-primary:active {
+  border-color: var(--brand-strong);
+  background: var(--brand-strong);
+}
 .button-quiet {
   padding-inline: var(--space-3);
   border-color: transparent;
   background: transparent;
-  color: var(--color-link);
-  font-weight: 650;
+  color: var(--link);
 }
 .button-danger,
-.button-danger:hover {
-  background: var(--color-error-ink);
-  border-color: var(--color-error-ink);
-  color: #fff;
-  font-weight: 650;
+.button-danger:active {
+  border-color: var(--status-cancelled);
+  background: var(--status-cancelled);
+  color: var(--on-brand);
+}
+/* Hover only where a pointer hovers (a tapped row must not stay highlighted on a phone). */
+@media (hover: hover) {
+  .button:hover,
+  .ot-row:hover {
+    background: var(--surface-pressed);
+  }
+  .button-primary:hover {
+    border-color: var(--brand-strong);
+    background: var(--brand-strong);
+  }
+  .button-quiet:hover {
+    background: var(--surface-sunken);
+  }
+  .button-danger:hover {
+    background: var(--status-cancelled);
+  }
+  .row-skeleton:hover,
+  .row-static .ot-row:hover {
+    background: transparent;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .button,
+  .button:active {
+    transition: none;
+    transform: none;
+  }
 }
 .block {
   display: flex;
@@ -303,173 +341,95 @@
   margin-block: var(--space-2);
 }
 
+/* Fields are pills at the primary height (design: Shape). */
 .text-input {
   inline-size: 100%;
-  min-block-size: var(--target-min);
-  padding-block: var(--space-2);
-  padding-inline: var(--space-3);
-  border: 1px solid var(--color-border-strong);
-  border-radius: var(--radius-s);
-  background: var(--color-surface);
-  color: var(--color-ink);
-  font-size: var(--text-m);
+  min-block-size: var(--tap-primary);
+  padding-block: 0;
+  padding-inline: var(--space-5);
+  border: 1.5px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: var(--body-size);
+  line-height: var(--body-line);
 }
 .text-input::placeholder {
-  color: var(--color-ink-soft);
+  color: var(--ink-muted);
+  opacity: 1;
+}
+.field-label {
+  font-size: var(--label-size);
+  line-height: var(--label-line);
+  font-weight: var(--label-weight);
 }
 
+/* A section's label (design: ot-section__label). */
 .section-title {
-  font-size: var(--text-m);
-  font-weight: 700;
-  margin-block: var(--space-4) var(--space-2);
+  margin-block: var(--space-5) var(--space-2);
   padding: 0;
+  color: var(--ink);
+  font-size: var(--label-size);
+  line-height: var(--label-line);
+  font-weight: var(--label-weight);
 }
 
-/* --- From/To card ------------------------------------------------------------- */
+/* --- From/To (design: TripFields, ot-trip) --------------------------------------- */
 
 .from-to {
-  display: flex;
-  align-items: center;
-  gap: var(--space-1);
   margin-block: 0 var(--space-3);
-  padding: var(--space-1);
-  border: 1px solid var(--color-border-strong);
-  border-radius: var(--radius-m);
-  background: var(--color-surface);
 }
-.from-to-fields {
-  flex: 1;
-  min-inline-size: 0;
-  display: grid;
+/* The fields take the 1fr column, so swap sits at the inline end and each whole field is
+   its tap target (left to auto-placement, ot-trip puts the fields after swap at their
+   text's width). */
+.from-to .ot-trip__fields {
+  grid-column: 2;
+  grid-row: 1 / span 2;
 }
 .from-to-field {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
+  gap: var(--space-1);
   inline-size: 100%;
-  min-block-size: var(--target-min);
-  padding-block: var(--space-1);
-  padding-inline: var(--space-3) var(--space-2);
-  border: 0;
-  border-radius: var(--radius-s);
-  background: transparent;
-  color: var(--color-ink);
-  text-align: start;
   cursor: pointer;
 }
-.from-to-field + .from-to-field::before {
-  content: "";
-  position: absolute;
-  inset-block-start: 0;
-  inset-inline: calc(var(--space-3) + 12px + var(--space-3)) 0;
-  border-block-start: 1px solid var(--color-border);
-}
-.from-to-full .from-to-to {
-  min-block-size: 52px;
-}
-.from-to-text {
-  display: flex;
-  flex-direction: column;
-  min-inline-size: 0;
-}
 .from-to-value {
-  font-weight: 650;
+  min-inline-size: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.from-to-from .from-to-value {
-  font-weight: 500;
+.ot-trip__swap:disabled {
+  opacity: 0.55;
+  cursor: default;
 }
-.from-to-placeholder {
-  color: var(--color-ink-muted);
-  font-weight: 650;
-}
-/* No destination yet: "Where to?" is the card's call to action (G10). */
-.from-to-no-destination .from-to-to {
-  background: var(--color-brand-tint);
-}
-.from-to-no-destination .from-to-to::before {
-  display: none;
-}
-.from-to-no-destination .from-to-to .from-to-placeholder {
-  color: var(--color-brand-strong);
-  font-size: var(--text-l);
-  font-weight: 750;
-}
-.from-to-swap {
-  flex: none;
-}
-/* Origin is a ring, destination a filled square: shape as well as colour. */
-.from-to-dot {
-  flex: none;
-  inline-size: 12px;
-  block-size: 12px;
-}
-.from-to-dot-origin {
-  border: 3px solid var(--color-brand-strong);
-  border-radius: 50%;
-}
-.from-to-dot-destination {
-  background: var(--color-destination);
-  border-radius: 2px;
+.ot-trip__swap:not(:disabled):active {
+  background: var(--surface-pressed);
 }
 
 /* --- Home --------------------------------------------------------------------- */
 
-.chips {
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-  margin-block: var(--space-2) var(--space-3);
-  padding: 0;
-}
-.chip {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-1);
-  min-block-size: var(--target-min);
-  min-inline-size: var(--target-min);
-  justify-content: center;
-  padding-inline: var(--space-3);
-  border: 1px dashed var(--color-border-strong);
-  border-radius: var(--radius-pill);
-  background: var(--color-surface);
-  color: var(--color-ink-strong);
-  cursor: pointer;
-}
-.chip-filled {
-  border-style: solid;
-  border-color: var(--color-brand-strong);
-  background: var(--color-brand-tint);
-  font-weight: 650;
-}
-.chip-add {
-  font-size: var(--text-l);
-}
-
-/* The resume card: first in the sheet, fully visible at half (G8). */
+/* The resume card leads, in the navigation hero's colours (design: NavStep hero),
+   fully visible at half (G8). */
 .active-trip {
   display: flex;
   align-items: center;
   gap: var(--space-3);
   inline-size: 100%;
-  min-block-size: 56px;
+  min-block-size: var(--row-height);
   margin-block: 0 var(--space-3);
   padding-block: var(--space-2);
-  padding-inline: var(--space-3);
+  padding-inline: var(--space-4);
   border: 0;
-  border-radius: var(--radius-m);
-  background: var(--color-brand-strong);
-  color: #fff;
+  border-radius: var(--radius-lg);
+  background: var(--hero);
+  color: var(--on-hero);
   text-align: start;
   cursor: pointer;
 }
+.active-trip:active {
+  transform: scale(0.98);
+}
 .active-trip-icon {
-  flex: none;
-  font-size: var(--text-l);
+  color: var(--hero-accent);
 }
 .active-trip-text {
   flex: 1;
@@ -478,143 +438,190 @@
   min-inline-size: 0;
 }
 .active-trip-title {
-  font-weight: 750;
+  font-size: var(--headline-size);
+  line-height: var(--headline-line);
+  font-weight: var(--title-weight);
 }
 .active-trip-detail {
-  font-size: var(--text-s);
+  color: var(--on-hero-muted);
+  font-size: var(--body-sm-size);
+  line-height: var(--body-sm-line);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 .active-trip-go {
-  flex: none;
-  font-size: var(--text-xl);
-  line-height: 1;
+  color: var(--on-hero-muted);
 }
 
-/* --- rows (recents, search results) ------------------------------------------- */
-
-.rows {
+/* PlaceChips (ot-chips): room above and below for the focus ring inside the scroller, and
+   chips snap to the 16 px gutter rather than to the screen's edge. */
+.home-chips {
   list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.row-button,
-.row-skeleton,
-.row-note {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  inline-size: 100%;
-  min-block-size: 56px;
+  margin-block: calc(-1 * var(--space-1)) 0;
   padding-block: var(--space-2);
-  padding-inline: var(--space-1);
-  border: 0;
-  border-block-end: 1px solid var(--color-border);
-  background: transparent;
-  color: var(--color-ink);
-  text-align: start;
+  scroll-padding-inline: var(--space-4);
 }
-.row-button {
-  cursor: pointer;
-}
-.row-note {
-  color: var(--color-notice-ink);
-  background: var(--color-notice-bg);
-  font-size: var(--text-s);
-}
-.row-icon {
+.home-chips > li {
+  display: flex;
   flex: none;
-  inline-size: 28px;
-  text-align: center;
-  font-size: var(--text-l);
 }
-.row-text {
-  display: flex;
-  flex-direction: column;
+
+/* --- place rows (design: PlaceRow; recents, search results, saved places) -------- */
+
+/* Lists run edge to edge in the sheet, rows separated by hairlines. */
+.place-list,
+.settings-list,
+.info-list {
+  list-style: none;
+  margin-block: 0;
+  margin-inline: calc(-1 * var(--space-4));
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  overflow: visible;
+}
+.place-list > li + li,
+.settings-list > li + li,
+.info-list > li + li,
+.place-list + .place-list {
+  border-block-start: 1px solid var(--hairline);
+}
+/* Rows reach the sheet's edges: their focus ring goes inside. */
+.ot-row:focus-visible {
+  outline-offset: -3px;
+}
+/* One subtitle line: the kind stays, the locality gives way. */
+.place-sub {
+  flex-wrap: nowrap;
+  gap: var(--space-1);
+  white-space: nowrap;
+  overflow: hidden;
+}
+.place-part {
   min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.row-title {
-  font-weight: 650;
+.place-part:first-child {
+  flex: none;
 }
-.row-sub {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 2px 6px;
-  font-size: var(--text-s);
-  color: var(--color-ink-muted);
+.place-sep {
+  color: var(--ink-subtle);
 }
-.tag {
-  padding-inline: var(--space-1);
-  border: 1px solid var(--color-notice-border);
-  border-radius: var(--radius-s);
-  color: var(--color-notice-ink);
-  font-size: var(--text-xs);
+.place-tag {
+  padding-inline: var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--surface-sunken);
+  color: var(--ink-muted);
+  font-size: var(--caption-size);
+  line-height: var(--caption-line);
+  font-weight: var(--caption-weight);
 }
-
-.skeleton-icon,
-.skeleton-line {
-  display: block;
-  border-radius: var(--radius-s);
-  background: var(--color-surface-sunken);
-}
-.skeleton-icon {
-  inline-size: 28px;
-  block-size: 28px;
-}
-.skeleton-lines {
-  flex: 1;
-  display: grid;
-  gap: 6px;
-}
-.skeleton-line {
-  block-size: 14px;
-  inline-size: 70%;
-}
-.skeleton-line.short {
-  inline-size: 40%;
-}
-
-/* One clear button, inside the field at its inline end (the native one is hidden). */
-.search-field {
-  position: relative;
-  margin-block-end: var(--space-2);
-}
-.search-field .text-input {
-  padding-inline-end: calc(var(--target-min) + var(--space-1));
-}
-.search-field input[type="search"]::-webkit-search-cancel-button,
-.search-field input[type="search"]::-webkit-search-decoration {
-  appearance: none;
-  display: none;
-}
-.search-clear {
-  position: absolute;
-  inset-block: 0;
-  inset-inline-end: 0;
-  margin-block: auto;
-  font-size: var(--text-m);
-}
-.search-hint {
-  margin-block: 0 var(--space-1);
+.place-note {
+  padding: var(--space-2) var(--space-4);
 }
 .rows-stale {
   opacity: 0.6;
   transition: opacity 0.15s ease;
 }
-.row-static {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  min-block-size: 56px;
-  padding-block: var(--space-2);
-  padding-inline: var(--space-1);
-  border-block-end: 1px solid var(--color-border);
-  color: var(--color-ink-muted);
+
+/* Shown, not offered (my location without permission), and skeleton rows: no press. */
+.row-static .ot-row,
+.row-skeleton {
+  cursor: default;
 }
-.row-sep {
-  color: var(--color-ink-soft);
+.row-static .ot-row:active,
+.row-skeleton:active {
+  background: transparent;
+}
+.row-static .ot-row__title {
+  color: var(--ink-muted);
+}
+.skel-icon {
+  flex: none;
+  inline-size: 40px;
+  block-size: 40px;
+  border-radius: var(--radius-pill);
+}
+.skel-lines {
+  display: grid;
+  gap: 6px;
+}
+.skel-line {
+  block-size: 14px;
+  inline-size: 70%;
+}
+.skel-short {
+  inline-size: 40%;
+}
+
+/* --- Search (design: Screens 2) ------------------------------------------------ */
+
+/* The field is a pill at the primary height with a strong boundary, the search icon at
+   its inline start and Clear inside at its inline end. The text keeps room on both sides
+   whatever its own direction (dir="auto"). */
+.search-field {
+  position: relative;
+  margin-block-end: var(--space-3);
+}
+.search-input {
+  inline-size: 100%;
+  min-block-size: var(--tap-primary);
+  padding-block: 0;
+  padding-inline: calc(var(--tap-min) + var(--space-1));
+  border: 1.5px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: var(--body-size);
+  line-height: var(--body-line);
+  appearance: none;
+}
+.search-input:focus-visible {
+  outline-offset: 1px;
+}
+.search-input::placeholder {
+  color: var(--ink-muted);
+  opacity: 1;
+}
+.search-input::-webkit-search-cancel-button,
+.search-input::-webkit-search-decoration {
+  appearance: none;
+  display: none;
+}
+.search-field-icon {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: var(--space-4);
+  margin-block: auto;
+  color: var(--ink-muted);
+  pointer-events: none;
+}
+.search-clear {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: var(--space-1);
+  display: grid;
+  place-items: center;
+  inline-size: var(--tap-min);
+  block-size: var(--tap-min);
+  margin-block: auto;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--ink-muted);
+  cursor: pointer;
+}
+.search-clear:active {
+  background: var(--surface-pressed);
+}
+.search-hint {
+  margin-block: 0 var(--space-1);
+}
+.pick-hint {
+  margin-block: 0 var(--space-2);
 }
 
 .name-form {
@@ -625,30 +632,63 @@
 
 /* --- Settings ----------------------------------------------------------------- */
 
-.settings .segmented {
+/* Language and theme: real radios drawn as the segmented control (ot-seg). Each option
+   is a 44 px target; the radio covers its option, invisible, so taps land on it. */
+.settings-choices {
+  display: flex;
   flex-wrap: wrap;
+  gap: var(--space-3) var(--space-6);
 }
-.saved-list,
-.plain-list {
-  list-style: none;
+.settings-choice {
+  min-inline-size: 0;
   margin: 0;
   padding: 0;
+  border: 0;
 }
-/* Text at the inline start, quiet actions at the inline end of the same row. */
-.saved-item {
+.seg-radios .ot-seg__opt {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: var(--tap-min);
+  min-inline-size: 76px;
+  padding-inline: var(--space-4);
+}
+.seg-radios input {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.seg-radios .ot-seg__opt:has(input:checked) {
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: var(--shadow-card);
+}
+.seg-radios .ot-seg__opt:has(input:focus-visible) {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* Saved places: icon, name and what it is, quiet actions at the inline end. */
+.settings-row {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0 var(--space-2);
-  padding-block: var(--space-1);
-  border-block-end: 1px solid var(--color-border);
+  gap: var(--space-2) var(--space-3);
+  min-block-size: var(--row-height);
+  padding-block: var(--space-2);
+  padding-inline: var(--space-4) var(--space-1);
 }
 .saved-item-text {
   flex: 1 1 0;
-  display: flex;
-  flex-direction: column;
-  min-inline-size: 0;
   overflow-wrap: anywhere;
+}
+.saved-item-text .ot-row__title {
+  white-space: normal;
 }
 .saved-item-actions {
   flex: none;
@@ -656,7 +696,23 @@
 }
 .saved-item .name-form {
   flex-basis: 100%;
+  margin-inline-end: var(--space-3);
 }
-.plain-list li {
-  padding-block: var(--space-1);
+.add-place {
+  margin-block-start: var(--space-1);
+  margin-inline-start: calc(-1 * var(--space-3));
+}
+
+/* Plain facts (data status, credits): one per row. */
+.info-list > li {
+  padding-block: var(--space-3);
+  padding-inline: var(--space-4);
+  font-size: var(--body-sm-size);
+  line-height: var(--body-sm-line);
+}
+
+/* --- not built yet / not found ---------------------------------------------------- */
+
+.placeholder .ot-banner {
+  margin-block-end: var(--space-4);
 }

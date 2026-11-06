@@ -4,7 +4,7 @@ import type { he_nav } from "./nav.he";
 export const en_nav: Record<keyof typeof he_nav, string> = {
   "nav.noTrip": "No active trip.",
   "nav.stepOf": "Step {n} of {total}",
-  "nav.scheduled": "scheduled times",
+  "nav.scheduled": "scheduled",
   "nav.origin": "the starting point",
   "nav.destination": "your destination",
 
@@ -47,6 +47,20 @@ export const en_nav: Record<keyof typeof he_nav, string> = {
   "nav.then": "Then: {next}",
   "nav.then.change": "change to {ride} at {time}",
   "nav.then.sameStop": "same stop",
+
+  "nav.kicker": "Now",
+  "nav.count.min": "min",
+  "nav.fact.line": "Line",
+  "nav.fact.train": "Train",
+  "nav.fact.departs": "Departs",
+  "nav.fact.departsTrain": "Departs",
+  "nav.fact.exit": "Get off",
+  "nav.fact.platform": "Platform",
+  "nav.fact.stopsToExit": "To your exit",
+  "nav.fact.stopsLeft": "Left",
+  "nav.unknown": "not known",
+  "nav.ride.progress": "Ride progress",
+  "nav.toward": "To {place} · arrive {time}",
 
   "nav.cueTwo": "Get off in 2 stops",
   "nav.cueNext": "Get off at the next stop",

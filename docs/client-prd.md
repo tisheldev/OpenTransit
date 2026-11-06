@@ -333,6 +333,6 @@ These follow the [client design](client-design.md#cross-cutting-rules) and are r
 8. **API additions for the client (0.3):** approve API-C1 (stop name, coordinates and platform on each trip call) and API-C2 (platform on journey legs). Both are additive; without them route details and the get-off cue are incomplete.
 9. **Local notifications (0.3):** allow a notification permission prompt at the first Start, so the get-off cue reaches a locked phone (iPhone cannot vibrate from the background otherwise; Android 13+ hides the navigation notification without it). No push service is involved.
 10. **Storage module (0.3):** the `expo-sqlite` key-value store instead of the secure store named in SE01.
-11. **Appearance (0.3):** light only for the first preview, or light and dark following the system? Dark doubles the visual checks; the design system must define both.
+11. **Appearance (0.3): decided 6 November 2026 (user): "default should always be dark".** Dark is the default whatever the phone's setting; light stays available as a choice in Settings. Both themes come from the design system's tokens, and every visual check covers both.
 12. **App identifiers (0.3):** the Android package and iOS bundle ID (for example `org.opentransit.app`) are permanent once published; choose them before S0, with the display name.
 13. **Defaults pending from the design:** the name "OpenTransit", system fonts, OpenFreeMap tiles for the preview (the tile host sees IPs and viewports) moving to self-hosted tiles before public release.
