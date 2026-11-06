@@ -47,7 +47,7 @@
     },
     "e2eMocked": {
       "windows": {
-        "passed": 75,
+        "passed": 76,
         "failed": 0,
         "skipped": 6
       },
@@ -55,7 +55,15 @@
         "passed": 75,
         "failed": 0,
         "skipped": 6,
-        "workers": 2
+        "workers": 2,
+        "note": "before the attribution fix"
+      },
+      "linuxPlaywright_1_64_1_noble_withDejaVu": {
+        "passed": 76,
+        "failed": 0,
+        "skipped": 6,
+        "workers": 2,
+        "note": "fonts-dejavu-core added: the GitHub ubuntu-24.04 runner's wide system font; reproduces CI's two-line attribution (34 px) before the fix"
       }
     },
     "axe": "no serious or critical violations on every screen and state in the mocked suite in dark (default) and in light (light runs added per screen)",
@@ -117,7 +125,8 @@
     "Navigate sheet top can reach 30% of the screen (waiting at a stop with the location-off banner), above the design's ~64% sheet",
     "Segmented options and the sheet's handle row are 44 px (design 38 px and 22 px) for the 44 px target rule",
     "Map: transit lines have a 1.5 px land-coloured edge; basemap labels ink-muted on a land halo; passed stops and an exit-stop ring are not drawn yet (no scene data); English credit shortened to 'Israel MoT' to stay on one line",
-    "Data not yet available is not faked: no ETA on chips, no distance on result rows, no lines under a stop, no platforms"
+    "Data not yet available is not faked: no ETA on chips, no distance on result rows, no lines under a stop, no platforms",
+    "Attribution: on a wide font the timetable credit (משרד התחבורה) may end in an ellipsis so the line stays one line beside Back; © OpenStreetMap and OpenFreeMap are never shortened"
   ],
   "related": {
     "@real dates": "scripts/coverage-dates.mjs derives every @real departure (and the fixture recorder's) from /v1/status coverage; real-served asserts the manual start prompt on plain HTTP and the location path on a secure origin"
@@ -126,5 +135,9 @@
     "Not human-reviewed: the user's verdict on a phone is pending",
     "Real GPS on phones needs HTTPS on the preview",
     "S7 screens remain placeholders"
+  ],
+  "ciFixes": [
+    "Map attribution wrapped to two lines beside Back on CI (DejaVu Sans): it no longer wraps; the map credits stay whole and only the timetable credit ends in an ellipsis on a wide font (full name in text, title and Settings). New e2e widens the font in both themes.",
+    "Search 'aborts the previous request' raced the debounce under load: the first answer is now held until the second request starts."
   ]
 }
