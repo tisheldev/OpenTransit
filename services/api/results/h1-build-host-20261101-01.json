@@ -293,6 +293,58 @@
       "removedObjects": 3,
       "adopted": "opentransit-archive-eun1-7c41d2",
       "reason": "coordinator: use the portability session's existing archive bucket, do not create another"
+    },
+    {
+      "step": "set-ref",
+      "at": "2026-11-06T10:33:27+00:00",
+      "ok": true,
+      "ref": "6def16ee7139ab367965151ef786ad358176fb62"
+    },
+    {
+      "step": "seed-release",
+      "at": "2026-11-06T10:33:32+00:00",
+      "ok": true,
+      "release": "20261031T1842Z",
+      "bucket": "opentransit-archive-eun1-7c41d2"
+    },
+    {
+      "step": "mode",
+      "at": "2026-11-06T10:44:17+00:00",
+      "ok": true,
+      "instance": "i-000497b8f64a02ae8",
+      "mode": "dry-run"
+    },
+    {
+      "step": "trigger",
+      "at": "2026-11-06T10:46:52Z",
+      "ok": true,
+      "schedule": "opentransit-build-host-manual-20261106T104652"
+    },
+    {
+      "step": "mode",
+      "at": "2026-11-06T12:30:14+00:00",
+      "ok": true,
+      "instance": "i-000497b8f64a02ae8",
+      "mode": "maintenance"
+    },
+    {
+      "step": "set-ref",
+      "at": "2026-11-06T12:35:16+00:00",
+      "ok": true,
+      "ref": "c44fa795e6376e512274f56294e917c843208114"
+    },
+    {
+      "step": "mode",
+      "at": "2026-11-06T12:35:19+00:00",
+      "ok": true,
+      "instance": "i-000497b8f64a02ae8",
+      "mode": "dry-run"
+    },
+    {
+      "step": "trigger",
+      "at": "2026-11-06T12:37:54Z",
+      "ok": true,
+      "schedule": "opentransit-build-host-manual-20261106T123754"
     }
   ],
   "measurements": {},
