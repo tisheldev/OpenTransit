@@ -407,7 +407,7 @@ still needs a task replacement (no hot reload).
 **Daily refresh** (`tools/daily_refresh.py`, `scheduler/daily-refresh.cmd`, registration
 `scheduler/register-task.ps1`): see [operations](../../docs/operations.md#h-1-private-preview-eu-north-1-running-since-31-october-2026).
 The build host for the preview is this Windows machine (default pending the user's confirmation);
-generations stay on `D:/ot/`, images in ECR, evidence in Git; S3 is deferred.
+generations stay on `D:/ot/`, images in ECR, evidence in Git; since 6 November the `oct31a` inputs and release records are also archived in S3 (`opentransit-archive-eun1-7c41d2`, [record](../../services/api/results/portability-20261101-01.json)).
 
 ## Bounded H-0 test, 31 October 2026
 
