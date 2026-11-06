@@ -203,5 +203,25 @@
       "D:\\ot\\generations\\oct1b"
     ]
   },
-  "albProbe": null
+  "albProbe": null,
+  "postDeployChecksWithoutHttp": {
+    "at": "2026-11-06T11:59Z",
+    "method": "option (c) from the coordinating session: no security-group change; ECS, target group and the task's own CloudWatch logs",
+    "service": {
+      "taskDefinition": "opentransit-h1:6",
+      "desiredCount": 1,
+      "runningCount": 1,
+      "deployments": 1,
+      "rolloutState": "COMPLETED"
+    },
+    "targetHealth": "healthy",
+    "verifierLog": "passed (the in-task probe accepts only serviceable freshness; it does not log the state)",
+    "apiReadyz": {
+      "healthCheckRequests": 84,
+      "status200": 84,
+      "other": 0
+    },
+    "freshness": "not read directly: the API logs no freshness line. Derived: the source check is 2026-11-06T10:20Z, under the 30 h 'current' threshold until 2026-11-07T16:20Z",
+    "pending": "HTTP post-deploy probe and /readyz freshness reading through the ALB once the user decides the allow-list"
+  }
 }
