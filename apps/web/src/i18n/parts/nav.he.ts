@@ -2,7 +2,7 @@
 export const he_nav = {
   "nav.noTrip": "אין נסיעה פעילה.",
   "nav.stepOf": "שלב {n} מתוך {total}",
-  "nav.scheduled": "זמנים מתוכננים",
+  "nav.scheduled": "מתוכנן",
   "nav.origin": "נקודת המוצא",
   "nav.destination": "היעד",
 
@@ -45,6 +45,20 @@ export const he_nav = {
   "nav.then": "אחר כך: {next}",
   "nav.then.change": "מעבר ל{ride} ב־{time}",
   "nav.then.sameStop": "באותה תחנה",
+
+  "nav.kicker": "עכשיו",
+  "nav.count.min": "דק׳",
+  "nav.fact.line": "קו",
+  "nav.fact.train": "רכבת",
+  "nav.fact.departs": "יוצא",
+  "nav.fact.departsTrain": "יוצאת",
+  "nav.fact.exit": "ירידה",
+  "nav.fact.platform": "רציף",
+  "nav.fact.stopsToExit": "עד הירידה",
+  "nav.fact.stopsLeft": "נשארו",
+  "nav.unknown": "לא ידוע",
+  "nav.ride.progress": "התקדמות בנסיעה",
+  "nav.toward": "אל {place} · הגעה {time}",
 
   "nav.cueTwo": "רדו בעוד 2 תחנות",
   "nav.cueNext": "רדו בתחנה הבאה",

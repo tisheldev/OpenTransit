@@ -40,7 +40,26 @@ function modeLabel(mode: string, t: T): string {
 }
 
 const isNumeric = (value: string) => /^\d+$/.test(value);
-const isRail = (step: NavStep) => step.ride?.mode.toLowerCase() === "rail";
+/** Heavy rail (Israel Railways): a train number, a station, a platform once API-C2 gives one. */
+export const isRail = (step: NavStep | undefined): boolean => step?.ride?.mode.toLowerCase() === "rail";
+
+/** The LineBadge colour: rail, light rail and metro in mode-rail; everything else as a bus. */
+export function badgeMode(step: NavStep): "bus" | "rail" {
+  const m = step.ride?.mode.toLowerCase() ?? "";
+  return m === "rail" || m === "light_rail" || m === "tram" || m === "subway" ? "rail" : "bus";
+}
+
+/** The LineBadge label: the line number, or the mode's name when there is none (a train: "רכבת"). */
+export function badgeLabel(step: NavStep, t: T): string {
+  return step.ride?.lineLabel ?? modeLabel(step.ride?.mode ?? "", t);
+}
+
+/** A train's fact: where it goes (a place headsign) or its number; null when neither is known. */
+export function trainName(step: NavStep): string | null {
+  const headsign = step.ride?.headsign?.trim() ?? "";
+  if (!headsign) return null;
+  return isNumeric(headsign) ? headsign : readableHeadsign(headsign);
+}
 
 /** GTFS headsigns separate city and place with "_" ("כפר סבא_תחנה מרכזית"). */
 export function readableHeadsign(headsign: string): string {
@@ -105,12 +124,18 @@ export function stopsLeftText(count: number, t: T): string {
  * pretend to count down. Null without trip detail (the count is hidden, never guessed).
  */
 export function rideStopsText(step: NavStep, state: NavState, t: T): string | null {
+  const stops = rideStops(step, state);
+  if (!stops) return null;
+  if (stops.measured) return stopsLeftText(stops.count, t);
+  return stops.count === 1 ? t("nav.stopsToExitOne") : t("nav.stopsToExit", { count: stops.count });
+}
+
+/** The same count for the card's fact: stops to the exit, or left once progress is measured. */
+export function rideStops(step: NavStep, state: NavState): { count: number; measured: boolean } | null {
   const count = step.ride?.stopCount ?? null;
   if (count === null) return null;
-  const onThisRide = state.stepIndex === step.index;
-  const left = onThisRide ? state.stopsLeft : null;
-  if (left !== null && left < count) return stopsLeftText(left, t);
-  return count === 1 ? t("nav.stopsToExitOne") : t("nav.stopsToExit", { count });
+  const left = state.stepIndex === step.index ? state.stopsLeft : null;
+  return left !== null && left < count ? { count: left, measured: true } : { count, measured: false };
 }
 
 /** Scheduled time to change between two rides: next departure − previous arrival. */
@@ -138,6 +163,17 @@ export function relativeText(at: string, now: number, t: T, lang: Lang, kind: "d
   if (seconds >= 60) return t("nav.in", { duration: formatDuration(seconds, lang) });
   if (seconds > -60) return kind === "departure" ? t("nav.departingNow") : t("nav.now");
   return t("nav.ago", { duration: formatDuration(-seconds, lang) });
+}
+
+/**
+ * The card's countdown figure: whole minutes (rounded up, as relativeText) from one minute
+ * to an hour ahead. Null otherwise (now, past, an hour or more): the card then shows the
+ * relative text itself, which never squeezes "1 h 5 min" or a day into a number.
+ */
+export function countdownMinutes(at: string, now: number): number | null {
+  const seconds = (Date.parse(at) - now) / 1000;
+  if (!Number.isFinite(seconds) || seconds < 60 || seconds >= 3600) return null;
+  return Math.ceil(seconds / 60);
 }
 
 /** One line per step, for announcements and the card's "then" line. */

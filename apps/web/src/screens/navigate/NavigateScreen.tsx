@@ -1,4 +1,6 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { Icon, LineBadge } from "../../components/ds";
+import { Bdi } from "../../components/states";
 import { useI18n } from "../../i18n/I18nProvider";
 import type { MessageKey } from "../../i18n/messages";
 import { formatClock } from "../../lib/time";
@@ -21,8 +23,9 @@ import { usePlan } from "../../plan/PlanProvider";
 import type { Endpoint } from "../../plan/draft";
 import { go, hrefFor } from "../../router";
 import { useSheet } from "../../shell/sheet";
-import { rowText, stepSummary, type EndLabels } from "./describe";
+import { badgeLabel, badgeMode, isolate, isSameStop, placeName, rowText, stepSummary, type EndLabels } from "./describe";
 import { navScene } from "./navScene";
+import { RideProgress } from "./RideProgress";
 import { StepCard } from "./StepCard";
 import "./navigate.css";
 
@@ -55,14 +58,23 @@ function NoTrip() {
     if (wasExpiredOnLoad()) go({ name: "home" }, { replace: true });
   }, []);
   return (
-    <div className="navigate">
+    <div className="navigate navigate-none">
       <h1>{t("screen.navigate")}</h1>
-      <p>{t("nav.noTrip")}</p>
-      <a className="button block" href={hrefFor({ name: "home" })}>
+      <p className="ot-banner nav-none">{t("nav.noTrip")}</p>
+      <a className="ot-btn ot-btn--secondary ot-btn--block" href={hrefFor({ name: "home" })}>
         {t("screen.backHome")}
       </a>
     </div>
   );
+}
+
+/** A checklist row's mode: the line's badge for a ride, an icon for walking and arriving. */
+function RowIcon({ step }: { step: NavStep }) {
+  const { t } = useI18n();
+  if (step.kind === "ride") return <LineBadge mode={badgeMode(step)} label={badgeLabel(step, t)} />;
+  if (step.kind === "arrive") return <Icon name="pin" />;
+  if (step.kind === "transfer_walk" && isSameStop(step)) return <Icon name="stop" />;
+  return <Icon name="walk" />;
 }
 
 export function NavigateScreen() {
@@ -199,71 +211,99 @@ function Navigating({ trip }: { trip: ActiveTrip }) {
   }, [scene, streetLevel]);
 
   const manual = state.locationMode === "manual" && !nav.simulated;
+  // The checklist's head (design: navigation sheet header): where to, and when.
+  const arrival = steps[steps.length - 1]!;
+  const arrivalPlace = placeName(arrival.target, labels, t);
 
   return (
     <div className={`navigate navigate-${snap}`} ref={rootRef}>
       <h1 className="visually-hidden">{t("screen.navigate")}</h1>
       <div className="navigate-top" ref={topRef}>
         {manual && (
-          <p className="nav-banner" role="status">
-            {t(locationReason(nav.locationError))} · {t("nav.manual")}
+          <p className="ot-banner ot-banner--warning ot-banner--compact nav-banner" role="status">
+            <Icon name="alert" />
+            <span className="ot-banner__body">
+              {t(locationReason(nav.locationError))} · {t("nav.manual")}
+            </span>
           </p>
         )}
         {!manual && state.locationLost && (
-          <p className="nav-banner" role="status">
-            {t("nav.lost")} · {t("nav.manual")}
+          <p className="ot-banner ot-banner--warning ot-banner--compact nav-banner" role="status">
+            <Icon name="locate" />
+            <span className="ot-banner__body">
+              {t("nav.lost")} · {t("nav.manual")}
+            </span>
           </p>
         )}
         {nav.simulated && (
-          <p className="nav-banner nav-banner-sim" role="note">
-            <span aria-hidden="true">◌ </span>
-            {t("nav.sim.on", { time: formatClock(new Date(nav.clock), lang), n: nav.simSpeed })}
+          <p className="ot-banner ot-banner--warning ot-banner--compact nav-banner nav-banner-sim" role="note">
+            <Icon name="info" />
+            <span className="ot-banner__body">
+              <Bdi>{t("nav.sim.on", { time: formatClock(new Date(nav.clock), lang), n: nav.simSpeed })}</Bdi>
+            </span>
           </p>
         )}
         <StepCard steps={steps} state={state} fix={fix} clock={nav.clock} labels={labels} onEnd={last ? null : leave} />
       </div>
 
       <section className="nav-checklist" aria-labelledby="nav-checklist-title">
-        <h2 id="nav-checklist-title" className="section-title">
-          {t("nav.checklist")}
-        </h2>
-        <ol className="checklist">
+        <div className="ot-navhead nav-checklist-head">
+          <div>
+            <h2 id="nav-checklist-title" className="nav-section-title">
+              {t("nav.checklist")}
+            </h2>
+            <span>
+              <Bdi>{t("nav.toward", { place: isolate(arrivalPlace, lang), time: formatClock(arrival.scheduledArrival, lang) })}</Bdi>
+            </span>
+          </div>
+        </div>
+        <ol className="ot-steps checklist" aria-labelledby="nav-checklist-title">
           {steps.map((item) => {
             const status = item.index < state.stepIndex ? "done" : item.index === state.stepIndex ? "current" : "pending";
             const row = rowText(item, labels, t, lang, steps[item.index + 1]);
+            const itemClass = status === "done" ? " ot-steps__item--done" : status === "current" ? " ot-steps__item--now" : "";
             return (
-              <li key={item.index}>
+              <li key={item.index} className={`ot-steps__item${itemClass}`}>
                 <button
                   type="button"
-                  className={`checklist-row checklist-${status}`}
+                  className={`ot-steps__row checklist-row checklist-${status}`}
                   aria-current={status === "current" ? "step" : undefined}
                   onClick={() => nav.jump(item.index)}
                 >
                   {/* The name is the visible text with the state in front (not colour alone). */}
                   <span className="visually-hidden">{`${t(`nav.row.${status}`)}:`}</span>{" "}
-                  <span className="checklist-time tabular">{row.time}</span>{" "}
-                  <span className={`checklist-mark checklist-mark-${status}`} aria-hidden="true">
-                    {status === "done" ? "✓" : status === "current" ? "●" : ""}
+                  <time className="checklist-time">{row.time}</time>{" "}
+                  <span className="ot-steps__icon" aria-hidden="true">
+                    <RowIcon step={item} />
                   </span>
-                  <span className="checklist-body">
+                  <span className="ot-steps__text checklist-body">
                     <bdi className="checklist-main">{row.main}</bdi>
                     {row.sub && (
                       <>
                         <span className="visually-hidden">,</span>{" "}
-                        <bdi className="checklist-sub">{row.sub}</bdi>
+                        <small className="checklist-sub">
+                          <bdi>{row.sub}</bdi>
+                        </small>
                       </>
                     )}
                   </span>
+                  <span className={`checklist-mark checklist-mark-${status}`} aria-hidden="true">
+                    {status === "done" ? "✓" : status === "current" ? "●" : ""}
+                  </span>
                 </button>
+                {status === "current" && item.kind === "ride" && <RideProgress step={item} state={state} />}
               </li>
             );
           })}
         </ol>
-        <p className="muted small nav-keep-open">{t("nav.keepOpen")}</p>
+        <p className="ot-banner ot-banner--compact nav-keep-open">
+          <Icon name="info" />
+          <span className="ot-banner__body">{t("nav.keepOpen")}</span>
+        </p>
       </section>
 
       <section className="nav-testing" aria-labelledby="nav-testing-title">
-        <h2 id="nav-testing-title" className="section-title">
+        <h2 id="nav-testing-title" className="nav-section-title">
           {t("nav.testing")}
         </h2>
         <label className="nav-sim-toggle">
@@ -292,7 +332,7 @@ function Navigating({ trip }: { trip: ActiveTrip }) {
       </section>
 
       <div className="navigate-actions" ref={actionsRef}>
-        <button type="button" className="button button-primary nav-next" onClick={last ? leave : nav.next}>
+        <button type="button" className="ot-btn ot-btn--primary ot-btn--block nav-next" onClick={last ? leave : nav.next}>
           {last ? t("nav.finish") : t("nav.next")}
         </button>
       </div>

@@ -1,236 +1,318 @@
-/* Navigate — C05 (S6). Logical properties only. The sheet content is the scroll container:
-   at the full sheet the step card stays pinned at the top while the checklist scrolls; at
-   the half sheet (default) everything scrolls, so the checklist gets the whole height when
-   the passenger scrolls to it. The one primary action is always pinned at the bottom. */
+/* Navigate — C05 (S6), on the design system: NavStep (hero), StepList, RideProgress,
+   Banner and Button from bundle.css; this file adds layout and the states the components
+   do not have. Tokens only; logical properties only. The sheet content is the scroll
+   container: at the full sheet the step card stays pinned at the top while the checklist
+   scrolls; at the half sheet (default) everything scrolls, so the checklist gets the whole
+   height when the passenger scrolls to it. The one primary action is pinned at the bottom. */
 
 .navigate-top {
   position: sticky;
   inset-block-start: 0;
   z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  /* Across the sheet's side padding too, so the checklist's full-width current row
+     scrolls under it, not beside it. */
+  margin-inline: calc(-1 * var(--space-4));
+  padding-inline: var(--space-4);
   background: var(--surface);
   padding-block-end: var(--space-2);
 }
 .navigate-half .navigate-top,
 .navigate-peek .navigate-top {
   position: static;
-  /* At half the card and the next step must both clear the pinned action at 360 × 640. */
+  /* At half the card must clear the pinned action at 360 × 640 (the sheet grows: fitHalf). */
   padding-block-end: var(--space-1);
 }
 
-/* One compact line per state (location off, lost, simulated). */
+/* Location off, lost, simulated: one compact warning line each (design: Banner). */
 .nav-banner {
-  margin: 0 0 var(--space-1);
-  padding: var(--space-1) var(--space-3);
-  border-radius: var(--radius-md);
-  border: 1px solid var(--warning-edge);
-  background: var(--warning-bg);
-  color: var(--warning-ink);
-  font-size: var(--caption-size);
-  line-height: 1.35;
+  margin: 0;
 }
 .nav-banner-sim {
-  border-style: dashed;
   font-weight: 650;
 }
 
+/* --- step card: NavStep hero ---------------------------------------------------- */
+
 .step-card {
-  padding: 0 var(--space-3) var(--space-3);
-  border-radius: var(--radius-lg);
-  background: var(--ink);
-  color: #fff;
-}
-.step-card-cue {
-  border: 3px solid #ffd166;
-}
-.step-card-next_stop {
-  background: #7a1f12;
-}
-.step-card-two_stops {
-  background: #5a3b00;
+  padding-block: var(--space-3);
 }
 
-.step-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-2);
-  min-block-size: 40px;
+/* Kicker row: "Now", step N of M · scheduled, and End trip at the inline end. */
+.step-card .step-head {
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  column-gap: var(--space-2);
+  row-gap: var(--space-1);
+  min-block-size: 24px;
 }
-.step-of {
-  margin: 0;
-  font-size: var(--caption-size);
-  opacity: 0.9;
+.step-head .step-of {
+  flex: 1;
+  min-inline-size: 0;
+  color: var(--on-hero-muted);
+  font-weight: 500;
+  text-align: end;
+}
+
+/* The countdown floats at the inline end; title and sub-line flow around it and use the
+   card's full width below it (long Hebrew stop names would otherwise wrap in a column). */
+.step-card .step-main {
+  display: flow-root;
+}
+.step-card .step-count {
+  float: inline-end;
+  margin-inline-start: var(--space-3);
+  margin-block-end: 0;
+}
+/* 34 + 16 = 50 px: exactly a one-line title with its headsign (28 + 2 + 20), so the
+   sub-line under them clears the figure and gets the full width. */
+.step-card .step-count b {
+  line-height: 34px;
+}
+.step-card .step-count > span > span {
+  display: block;
+  line-height: 16px;
 }
 /* End trip: small and away from the primary action, still a 44 px target (::after). */
 .step-end {
   position: relative;
   z-index: 1;
-  flex: 0 0 auto;
-  min-block-size: 30px;
+  flex: none;
+  block-size: 24px;
   padding-inline: var(--space-3);
-  border: 1px solid rgb(255 255 255 / 55%);
+  border: 1.5px solid currentColor;
   border-radius: var(--radius-pill);
   background: transparent;
-  color: #fff;
+  color: var(--on-hero);
   font: inherit;
   font-size: var(--caption-size);
+  line-height: var(--caption-line);
   font-weight: 650;
   cursor: pointer;
 }
 .step-end::after {
   content: "";
   position: absolute;
-  inset: -8px -4px; /* from the padding box: 28 + 16 = 44 px */
+  /* From the padding box (inside the 1.5 px border): 21 + 2 × 11.5 = 44 px. */
+  inset-block: calc((24px - var(--tap-min)) / 2 - 1.5px);
+  inset-inline: -4px;
 }
-.step-end:focus-visible {
-  outline: 3px solid #ffd166;
-  outline-offset: 2px;
+.step-end:active {
+  transform: scale(0.98);
 }
 
-.step-cue {
-  margin: 0 0 var(--space-1);
-  font-size: var(--title-size);
-  font-weight: 800;
-}
-.step-card .step-title {
-  margin: 0 0 var(--space-1);
-  font-size: var(--title-size);
-  line-height: 1.25;
-}
-.step-toward {
-  font-size: var(--body-sm-size);
-  font-weight: 500;
-}
+/* The headsign is a lighter run under the line, so a long headsign does not shout. */
 .step-title .step-toward {
   display: block;
   margin-block-start: 2px;
-  line-height: 1.3;
-}
-.step-line {
-  margin: 0;
   font-size: var(--body-sm-size);
-  line-height: 1.4;
+  line-height: var(--body-sm-line);
+  font-weight: 500;
+  color: var(--on-hero-muted);
 }
-.step-strong {
-  font-size: var(--body-size);
-  font-weight: 700;
-}
+/* On board the exit leads the sub-line, in full ink (design: the exit is called out). */
 .step-lead {
-  font-size: 18px;
-  font-weight: 700;
-  line-height: 1.3;
+  display: block;
+  color: var(--on-hero);
+  font-size: var(--headline-size);
+  line-height: var(--headline-line);
+  font-weight: var(--headline-weight);
 }
-.step-countdown {
-  color: #ffd166;
-  font-weight: 800;
-}
-.step-vehicle {
-  margin-block-start: var(--space-2);
-  padding-block-start: var(--space-2);
-  border-block-start: 1px solid rgb(255 255 255 / 25%);
-}
-.step-then {
-  margin-block-start: var(--space-1);
-  color: #dbe7ea;
+.step-cue-icon {
+  margin-inline-end: var(--space-2);
+  vertical-align: -3px;
 }
 
-/* --- checklist: time, a state mark (shape, not colour alone), what to do -------- */
+/* The countdown's words ("leaving now", "4 min ago", a day): smaller than a number. */
+.step-count {
+  margin-block-start: 0;
+  max-inline-size: 84px;
+}
+.step-card .step-count .step-count-words {
+  font-size: var(--label-size);
+  line-height: var(--label-line);
+  letter-spacing: 0;
+}
+
+/* Facts as a description list: as many cells as there are facts. A stop name (one line,
+   cut with an ellipsis as the design's facts are) takes the width the line and the time
+   leave; the full name is on the on-board card and in the checklist. */
+.step-card .step-facts {
+  grid-template-columns: none;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  /* space-2 rather than the design's space-3 here and before the note: the half sheet
+     keeps the map's top 35 % with the location banner above the card at 360 × 640. */
+  margin-block: var(--space-2) 0;
+}
+.step-card .step-facts-named {
+  grid-template-columns: auto auto minmax(0, 1fr);
+}
+.step-facts .ot-fact {
+  margin: 0;
+}
+.step-facts dd {
+  margin: 0;
+}
+/* A name takes its own direction (so its ellipsis falls at its end) but lines up with the card. */
+.step-facts dd[dir="auto"] {
+  text-align: match-parent;
+}
+.step-facts .ot-fact__v .ot-line {
+  vertical-align: middle;
+}
+
+.step-card .ot-nav__note {
+  align-items: flex-start;
+  margin-block-start: var(--space-2);
+}
+.step-card .ot-nav__note > .ot-i {
+  margin-block-start: 1px;
+}
+.step-card .ot-nav__note + .ot-nav__note {
+  margin-block-start: var(--space-1);
+}
+
+/* Get-off cues change the card's colour as well as its words: the exit colour (next
+   stop) and the late-status amber (two stops), with surface-coloured text (≥ 4.5:1 in
+   both themes; the facts take the darker overlay so they keep it too). */
+.step-card-cue {
+  --on-hero: var(--surface);
+  --on-hero-muted: var(--surface);
+  --hero-accent: var(--surface);
+}
+.step-card-next_stop {
+  --hero: var(--destination);
+}
+.step-card-two_stops {
+  --hero: var(--status-late);
+}
+.step-card-cue.ot-nav--hero .ot-fact {
+  background: rgba(0, 0, 0, 0.07);
+}
+
+/* --- checklist (design: StepList) -------------------------------------------------- */
 
 .nav-checklist {
   margin-block-start: var(--space-2);
 }
-.checklist {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+.nav-checklist-head {
+  margin-block: var(--space-3) var(--space-1);
 }
+.nav-section-title {
+  margin: 0;
+  font-size: var(--body-size);
+  line-height: 22px;
+  font-weight: 700;
+}
+.checklist .ot-steps__item {
+  padding-block: 0;
+}
+/* Each row is a button that jumps to its step: the whole row, at least 44 px. */
 .checklist-row {
   /* Clear the pinned card and the bottom action when focused or scrolled to (set by the screen). */
   scroll-margin-block: calc(var(--nav-cover-top, 0px) + var(--space-2)) calc(var(--nav-cover-bottom, 0px) + var(--space-2));
-  display: grid;
-  grid-template-columns: 3.1em 20px 1fr;
-  align-items: center;
-  column-gap: var(--space-2);
   inline-size: 100%;
   min-block-size: var(--tap-min);
-  padding-block: var(--space-1);
-  padding-inline: var(--space-1);
+  padding-block: var(--space-2);
+  padding-inline: 0;
   border: 0;
-  border-block-end: 1px solid var(--hairline);
   background: transparent;
-  color: var(--ink);
+  color: inherit;
   font: inherit;
   text-align: start;
   cursor: pointer;
 }
-.checklist-time {
-  font-size: var(--body-sm-size);
-  color: var(--ink-muted);
+.checklist-row:active {
+  background: var(--surface-pressed);
 }
+.ot-steps__item--now .checklist-row:active {
+  background: transparent;
+}
+.checklist-row .ot-steps__icon .ot-i {
+  color: var(--mode-walk);
+}
+.ot-steps__item--done .checklist-row .ot-steps__icon .ot-i {
+  color: var(--ink-subtle);
+}
+/* A done ride's badge goes neutral rather than translucent (the design's opacity .45
+   leaves its number below 4.5:1). */
+.checklist .ot-steps__item--done .ot-line {
+  opacity: 1;
+  --line-bg: var(--surface-sunken);
+  --line-ink: var(--ink-muted);
+}
+/* The state mark: a shape as well as the dimming and the tint (not colour alone). */
 .checklist-mark {
-  display: grid;
-  place-items: center;
-  inline-size: 18px;
-  block-size: 18px;
-  border-radius: 50%;
-  border: 2px solid var(--border-strong);
-  font-size: 11px;
+  flex: none;
+  inline-size: 14px;
+  font-size: var(--caption-size);
   line-height: 1;
-}
-.checklist-mark-done {
-  border-color: var(--brand);
-  background: var(--brand);
-  color: #fff;
+  text-align: center;
 }
 .checklist-mark-current {
-  border-color: var(--brand);
-  color: var(--brand);
-  font-size: 12px;
-}
-.checklist-body {
-  display: flex;
-  flex-direction: column;
-  min-inline-size: 0;
-}
-.checklist-sub {
-  font-size: var(--caption-size);
-  color: var(--ink-muted);
-  font-weight: 400;
-}
-.checklist-done .checklist-main {
-  color: var(--ink-muted);
-}
-.checklist-current {
-  font-weight: 700;
-  background: var(--brand-tint);
-}
-/* Muted ink is below 4.5:1 on the tint: the current row uses full ink throughout. */
-.checklist-current .checklist-time,
-.checklist-current .checklist-sub {
-  color: var(--ink);
-}
-.nav-keep-open {
-  margin-block: var(--space-2) 0;
+  color: var(--brand-strong);
 }
 
+/* Ride progress under the current ride, inside the tinted row: full ink throughout
+   (muted ink is below 4.5:1 on the tint); done and here differ by their dots. */
+.nav-ride {
+  scroll-margin-block: calc(var(--nav-cover-top, 0px) + var(--space-2)) calc(var(--nav-cover-bottom, 0px) + var(--space-2));
+  padding-block: 2px var(--space-2);
+}
+.nav-ride-rail {
+  --rail: var(--mode-rail);
+}
+.checklist .ot-ride__stop,
+.checklist .ot-ride__stop--done {
+  color: var(--ink);
+}
+.nav-ride-name {
+  min-inline-size: 0;
+}
+
+.nav-keep-open {
+  margin-block: var(--space-3) 0;
+}
+
+/* --- testing tools ----------------------------------------------------------------- */
+
 .nav-testing {
-  margin-block: var(--space-4) var(--space-2);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin-block: var(--space-5) var(--space-2);
+}
+.nav-testing .nav-section-title {
+  margin-block-end: var(--space-1);
 }
 .nav-sim-toggle,
 .nav-sim-speed {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: var(--space-3);
   min-block-size: var(--tap-min);
+  font-size: var(--body-sm-size);
 }
 .nav-sim-toggle input {
   inline-size: 22px;
   block-size: 22px;
+  accent-color: var(--brand);
 }
 .nav-sim-speed select {
   min-block-size: var(--tap-min);
+  padding-inline: var(--space-3);
+  border: 1.5px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--ink);
   font: inherit;
+  font-weight: 650;
 }
+
+/* --- the one bottom action (design: Button, primary, 52 px) ----------------------- */
 
 /* Chrome pins a sticky box at the padding edge: offset by the sheet-content padding. */
 .navigate-actions {
@@ -245,6 +327,9 @@
 }
 .nav-next {
   flex: 1;
-  min-block-size: 48px;
-  font-size: var(--body-size);
+}
+
+/* No active trip. */
+.navigate-none .nav-none {
+  margin-block: 0 var(--space-4);
 }
