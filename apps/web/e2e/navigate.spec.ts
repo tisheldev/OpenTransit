@@ -66,6 +66,10 @@ async function expectCardAndNext(page: Page): Promise<void> {
 
 test.beforeEach(async ({ page }) => {
   await blockExternal(page);
+  // The recorded journeys are dated 2 November 2026. With the wall clock the countdowns
+  // drift ("99 hours ago" four days later) and so does the card's height: navigate as a
+  // passenger would, just before journey 2 leaves (08:35). Time still flows from here.
+  await page.clock.install({ time: new Date("2026-11-02T08:30:00+02:00") });
 });
 
 test("half sheet: map above, card with what comes next and Next step at 360 × 640; Next advances; a row jumps; reload restores (he)", async ({ page }) => {
@@ -123,6 +127,24 @@ test("half sheet: map above, card with what comes next and Next step at 360 × 6
   await expect(card(page)).toContainText("מעבר באותה תחנה");
   await expect(sheet(page)).toHaveAttribute("data-snap", "half");
   await expectCardAndNext(page);
+});
+
+test("a taller card (other fonts, long names) grows the half sheet instead of going under Next step", async ({ page }) => {
+  await seed(page, 2);
+  await page.goto(appPath("#/navigate"));
+  await expect(card(page)).toContainText("הליכה אל דיזנגוף סנטר/טשרניחובסקי");
+  const before = (await sheet(page).boundingBox())!;
+  // 120 px more card than any text here makes, the same on every OS and font.
+  await page.addStyleTag({ content: ".step-card::after { content: ''; display: block; block-size: 120px; }" });
+  await expect.poll(async () => (await sheet(page).boundingBox())!.height).toBeGreaterThan(before.height + 60);
+  await expect(sheet(page)).toHaveAttribute("data-snap", "half");
+  await expectCardAndNext(page);
+  // Never beyond the full sheet; the map keeps the band above it.
+  const after = (await sheet(page).boundingBox())!;
+  expect(after.height).toBeLessThanOrEqual(page.viewportSize()!.height * 0.92 + 1);
+  // The checklist (full) is unchanged: the sheet goes back to the full snap's height.
+  await page.locator(".sheet-handle").click();
+  await expect(sheet(page)).toHaveAttribute("data-snap", "full");
 });
 
 test("simulated positions: the sheet drops to half, labelled as simulated, and advance through the first steps", async ({ page }) => {
