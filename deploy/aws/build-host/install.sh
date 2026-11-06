@@ -50,7 +50,7 @@ if [ ! -d "$opt/osm-reader/osmium" ]; then
     --no-deps --require-hashes --only-binary :all: -r "$tmp/osm-reader.txt"
 fi
 "$opt/bin/uv" run --no-project --python "$PYTHON_VERSION" python -I -c \
-  "import sys; sys.path.insert(0, '$opt/osm-reader'); import osmium; print('osmium', osmium.__version__)"
+  "import sys; sys.path.insert(0, '$opt/osm-reader'); import osmium, osmium.version; print('osmium', osmium.version.pyosmium_release)"
 
 install -m 0755 "$here/run-refresh.sh" /usr/local/libexec/opentransit-run-refresh
 install -m 0644 "$here/opentransit-refresh.service" "$here/opentransit-backstop.service" \
