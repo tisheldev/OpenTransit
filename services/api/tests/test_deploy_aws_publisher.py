@@ -610,3 +610,59 @@ def test_push_skips_present_tags_and_registers_under_the_h1_family(tmp_path):
     assert release["taskDefinitionArn"] == ARN
     assert not any(word in " ".join(a) for a in calls for word in ("deregister", "delete"))
     assert all(a[1:3] == ["--profile", "p"] for a in calls if a[0] == "aws")
+
+
+def test_deployment_wait_survives_a_transient_describe_failure(monkeypatch):
+    monkeypatch.setattr(pub.time, "sleep", lambda seconds: None)
+    calls = {"n": 0}
+    steady = {
+        "services": [
+            {
+                "deployments": [{"status": "PRIMARY", "rolloutState": "COMPLETED"}],
+                "runningCount": 1,
+                "desiredCount": 1,
+                "events": [],
+            }
+        ]
+    }
+
+    def runner(argv, env=None):
+        calls["n"] += 1
+        if calls["n"] == 1:
+            raise subprocess.CalledProcessError(255, argv)
+        return json.dumps(steady)
+
+    state = pub.AwsSession("eu-north-1", "p", runner).wait_for_deployment("c", "s", 60)
+    assert state["converged"] and state["describeErrors"] == 1
+
+
+def test_every_published_revision_serves_the_web_client(tmp_path, no_subprocess):
+    # User decision (6 November): /app/ stays on in the preview; no publish may drop it.
+    code, plan = _publish(tmp_path)
+    assert code == 0, plan["stages"]
+    task = json.loads((tmp_path / "plan" / "task-definition.candidate.json").read_text())
+    api_env = {e["name"]: e["value"] for e in _container(task, "api")["environment"]}
+    assert api_env["OPENTRANSIT_CLIENT_DIR"] == "/app/client"
+    assert "OPENTRANSIT_CLIENT_DIR" not in json.dumps(_container(task, "verifier"))
+
+    for env in _container(task, "api")["environment"]:
+        if env["name"] == "OPENTRANSIT_CLIENT_DIR":
+            env["value"] = "/tmp/elsewhere"
+    errors, _ = pub.validate_drafts.validate_candidate(task, "t", pub.render_drafts.MOTIS_DIGEST)
+    assert any("OPENTRANSIT_CLIENT_DIR" in e for e in errors)
+    api = _container(task, "api")
+    api["environment"] = [e for e in api["environment"] if e["name"] != "OPENTRANSIT_CLIENT_DIR"]
+    errors, _ = pub.validate_drafts.validate_candidate(task, "t", pub.render_drafts.MOTIS_DIGEST)
+    assert any("OPENTRANSIT_CLIENT_DIR" in e for e in errors)
+
+
+def test_local_emulation_leaves_the_client_off():
+    compose = pub.render_drafts.render_local_compose("recommended")
+    assert "OPENTRANSIT_CLIENT_DIR" not in compose
+
+
+def test_rollback_allows_a_configuration_only_previous_revision():
+    previous = _release(taskDefinitionArn=ARN)
+    current = _release(taskDefinitionArn=ARN.replace(":7", ":8"))
+    assert pub.rollback_plan(current, previous, NOW)["allowed"]
+    assert "previous_equals_current" in pub.rollback_plan(previous, previous, NOW)["reasons"]

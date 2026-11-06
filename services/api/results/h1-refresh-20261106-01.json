@@ -1,0 +1,420 @@
+{
+  "schemaVersion": 1,
+  "kind": "h1-refresh",
+  "task": "H-1",
+  "label": "H-1 generation refresh on 6 November 2026 (user instruction 'Yes, rebuild now'), run by hand with deploy/aws/tools/daily_refresh.py from frozen main e9dde7f (D:/ot/src-e9dde7f). Structural/mechanical checks only; not human H3/H4 review.",
+  "region": "eu-north-1",
+  "accountId": "{{ACCOUNT_ID}}",
+  "preconditions": {
+    "dFreeGiB": 12,
+    "cFreeGiB": 41,
+    "previousServing": {
+      "taskDefinition": "opentransit-h1:5",
+      "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445",
+      "freshnessAt1020Z": "stale (reported by the coordinating session)",
+      "expiresAt": "2026-11-07T18:42Z"
+    },
+    "h1ScheduledTaskRegistered": false
+  },
+  "source": {
+    "pairedValidation": "passed",
+    "changedFromServing": true,
+    "sha256": {
+      "israel-public-transportation.zip": "b94df3c9e7cb",
+      "TripIdToDate.zip": "daede101f191"
+    },
+    "snapshot": "20261106T102022Z-fbeba284"
+  },
+  "generation": {
+    "dir": "D:/ot/generations/20261106",
+    "generationId": "5e7f51e162a6511c46b92a7e1652bc00659a5c78036c467346ef00505f03080f",
+    "scheduleComponentGenerationId": "489a0e7beda37491440ddcd301bf144344ae4131397e823748e0ad171d397cc4",
+    "coverage": {
+      "from": "2026-11-06T00:00:00+02:00",
+      "until": "2026-12-07T00:00:00+02:00"
+    },
+    "sourceCheckedAt": "2026-11-06T10:20:15.886412+00:00",
+    "expiresWithoutRenewal": "2026-11-13T10:20Z",
+    "sizeGiB": 3.6,
+    "pipelineState": "complete",
+    "stages": [
+      [
+        "osm_context",
+        "passed"
+      ],
+      [
+        "validate",
+        "passed"
+      ],
+      [
+        "reference",
+        "passed"
+      ],
+      [
+        "motis_import",
+        "passed"
+      ],
+      [
+        "motis_export",
+        "passed"
+      ],
+      [
+        "hold_component",
+        "passed"
+      ],
+      [
+        "photon_houses",
+        "passed"
+      ],
+      [
+        "photon_enrich",
+        "passed"
+      ],
+      [
+        "address_catalog",
+        "passed"
+      ],
+      [
+        "photon_import",
+        "passed"
+      ],
+      [
+        "photon_seal",
+        "passed"
+      ],
+      [
+        "attestation",
+        "passed"
+      ],
+      [
+        "compose",
+        "passed"
+      ],
+      [
+        "verify",
+        "passed"
+      ]
+    ],
+    "peakDiskNote": "reference.sqlite reached 4.4 GB before VACUUM (2.7 GB final); D: free fell to 6.5 GB"
+  },
+  "steps": [
+    {
+      "step": "fetch",
+      "ok": true,
+      "seconds": 243.6
+    },
+    {
+      "step": "validate",
+      "ok": true,
+      "seconds": 234.2
+    },
+    {
+      "step": "build-generation",
+      "ok": true,
+      "seconds": 2728.4
+    },
+    {
+      "step": "probe-engine-start",
+      "ok": true,
+      "seconds": 0.5
+    },
+    {
+      "step": "probe",
+      "ok": true,
+      "seconds": 35.3
+    },
+    {
+      "step": "publish",
+      "ok": true,
+      "seconds": 87.9
+    },
+    {
+      "step": "push",
+      "ok": false,
+      "seconds": 644.1
+    }
+  ],
+  "localProbe": {
+    "status": "passed",
+    "journeysPassed": 10,
+    "caseCount": 10,
+    "sourceFreshness": "current",
+    "corpusSha256": "e360e377b5f1f1d4e2a655b387b561962ce359f738914e3a98aa4f45b29af6af",
+    "structuralOnly": true
+  },
+  "release": {
+    "taskDefinition": "opentransit-h1:6",
+    "registeredAt": "2026-11-06T11:19:47+00:00",
+    "images": {
+      "api": "sha256:4cf6c4c21f5ec36485c161e1ba3240fcf9d242913df6b3fa7541f2d5205a2152",
+      "data": "sha256:2c06e8f2e9d1a969edd1bdc1f74ca249c8061d543cc72e7080b717ec8754a7fb",
+      "photon": "sha256:52f94ba3722d73dc06022ffa8a1392ca96bff5418ae3f85ce54c725ab3803e83"
+    },
+    "pushes": {
+      "motis": {
+        "digest": "sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330",
+        "pushed": false
+      },
+      "api": {
+        "tag": "gen-5e7f51e162a6-7765e05a104b",
+        "digest": "sha256:4cf6c4c21f5ec36485c161e1ba3240fcf9d242913df6b3fa7541f2d5205a2152",
+        "pushed": true,
+        "seconds": 12.1
+      },
+      "data": {
+        "tag": "gen-5e7f51e162a6-60041c9e8568",
+        "digest": "sha256:2c06e8f2e9d1a969edd1bdc1f74ca249c8061d543cc72e7080b717ec8754a7fb",
+        "pushed": true,
+        "seconds": 205.9
+      },
+      "photon": {
+        "tag": "gen-5e7f51e162a6-96aadfab3ee7",
+        "digest": "sha256:52f94ba3722d73dc06022ffa8a1392ca96bff5418ae3f85ce54c725ab3803e83",
+        "pushed": true,
+        "seconds": 3.4
+      }
+    }
+  },
+  "deployment": {
+    "strategy": "rolling 200/100 with circuit breaker; at most two tasks (6 GiB allocated)",
+    "newTaskCreatedAt": "2026-11-06T11:20:02Z",
+    "imagePullSeconds": 40.2,
+    "targetRegisteredAt": "2026-11-06T11:28:18Z",
+    "oldTaskStoppedAt": "2026-11-06T11:32:27Z",
+    "deploymentCompletedAt": "2026-11-06T11:33:30Z",
+    "taskCreationToOldTaskStoppedSeconds": 745,
+    "final": {
+      "deployments": 1,
+      "rolloutState": "COMPLETED",
+      "runningCount": 1,
+      "targetHealth": "healthy (target-group health check path /readyz)"
+    },
+    "openTransitClientDirEnabled": false
+  },
+  "issues": [
+    "push --wait aborted at 11:26:40Z: one `aws ecs describe-services` call exited 255 while credentials stayed valid; ECS completed the deployment regardless. Fixed: wait_for_deployment retries up to five failed reads. D:/ot/releases/current.json and prune --dry-run were then done by hand.",
+    "This machine's public IP changed (new address not recorded); the ALB allows only 93.173.37.36/32, so HTTP probes from here time out until the user added it to the allow-list (see allowList)."
+  ],
+  "retention": {
+    "dryRun": true,
+    "deletionPerformed": false,
+    "candidates": [
+      "D:\\ot\\generations\\oct1a",
+      "D:\\ot\\generations\\oct1b"
+    ]
+  },
+  "albProbe": {
+    "at": "2026-11-06T13:06:51+00:00",
+    "from": "operator machine (Israel), allow-listed IP added 6 Nov",
+    "ok": true,
+    "readyz": {
+      "status": 200,
+      "ms": 253.9
+    },
+    "journeysPassed": 10,
+    "journeys": [
+      {
+        "id": "J01",
+        "status": 200,
+        "ms": 222.5,
+        "pass": true
+      },
+      {
+        "id": "J04",
+        "status": 200,
+        "ms": 202.2,
+        "pass": true
+      },
+      {
+        "id": "J11",
+        "status": 200,
+        "ms": 203.2,
+        "pass": true
+      },
+      {
+        "id": "J12",
+        "status": 200,
+        "ms": 210.6,
+        "pass": true
+      },
+      {
+        "id": "J15",
+        "status": 200,
+        "ms": 204.4,
+        "pass": true
+      },
+      {
+        "id": "J16",
+        "status": 200,
+        "ms": 202.8,
+        "pass": true
+      },
+      {
+        "id": "J19",
+        "status": 200,
+        "ms": 326.3,
+        "pass": true
+      },
+      {
+        "id": "J21",
+        "status": 200,
+        "ms": 193.0,
+        "pass": true
+      },
+      {
+        "id": "J22",
+        "status": 200,
+        "ms": 312.0,
+        "pass": true
+      },
+      {
+        "id": "J23",
+        "status": 200,
+        "ms": 176.7,
+        "pass": true
+      }
+    ],
+    "demoExit": 0,
+    "status": {
+      "generationId": "5e7f51e162a6511c46b92a7e1652bc00659a5c78036c467346ef00505f03080f",
+      "freshness": "current",
+      "coverage": {
+        "from": "2026-11-06T00:00:00+02:00",
+        "until": "2026-12-07T00:00:00+02:00"
+      },
+      "dataBuiltAt": "2026-11-06T10:44:29.356595Z",
+      "lastValidatedAt": "2026-11-06T10:20:15.886412+00:00",
+      "ready": true
+    },
+    "healthzMs": {
+      "n": 30,
+      "median": 173.6,
+      "p95": 183.2
+    },
+    "journeyMs": {
+      "median": 203.8,
+      "max": 326.3
+    }
+  },
+  "postDeployChecksWithoutHttp": {
+    "at": "2026-11-06T11:59Z",
+    "method": "option (c) from the coordinating session: no security-group change; ECS, target group and the task's own CloudWatch logs",
+    "service": {
+      "taskDefinition": "opentransit-h1:6",
+      "desiredCount": 1,
+      "runningCount": 1,
+      "deployments": 1,
+      "rolloutState": "COMPLETED"
+    },
+    "targetHealth": "healthy",
+    "verifierLog": "passed (the in-task probe accepts only serviceable freshness; it does not log the state)",
+    "apiReadyz": {
+      "healthCheckRequests": 84,
+      "status200": 84,
+      "other": 0
+    },
+    "freshness": "not read directly: the API logs no freshness line. Derived: the source check is 2026-11-06T10:20Z, under the 30 h 'current' threshold until 2026-11-07T16:20Z",
+    "pending": "HTTP post-deploy probe and /readyz freshness reading through the ALB once the user decides the allow-list"
+  },
+  "allowList": {
+    "decision": "user, 6 November (relayed by the coordinating session): add the new home IP, keep the old one",
+    "securityGroup": "opentransit-h1-alb",
+    "ingressTcp80": [
+      "93.173.37.36/32",
+      "a second /32 for the reviewer's new home IP (address kept out of Git)"
+    ],
+    "addedBy": "the coordinating session under its own permissions at the user's direct instruction (this session's classifier refused a relayed approval); nothing else changed"
+  },
+  "result": {
+    "serving": "opentransit-h1:6, generation 5e7f51e1..., one task",
+    "freshnessMeasured": "current (/v1/status meta.freshness, 2026-11-06T13:06Z)",
+    "expiresWithoutRenewal": "2026-11-13T10:20Z"
+  },
+  "webClientEnabled": {
+    "decision": "user, 6 November (relayed): switch the web client on in the preview so /app/ works",
+    "change": "OPENTRANSIT_CLIENT_DIR=/app/client in the API container of every rendered task definition (deploy/aws/tools/render_drafts.py; validate_drafts requires it; tests in test_deploy_aws_publisher.py). The local Compose emulation leaves it out (its 1 October images have no client).",
+    "revision": "opentransit-h1:7",
+    "images": "unchanged from opentransit-h1:6 (the API image rebuilt from 787d177 is byte-identical: sha256:7765e05a...; it already contained /app/client); no push",
+    "deployment": {
+      "startedAt": "2026-11-06T13:11:40+00:00",
+      "seconds": 847.8,
+      "rolloutState": "COMPLETED",
+      "runningCount": 1,
+      "deployments": 1,
+      "converged": true,
+      "describeErrors": 0
+    },
+    "url": "http://opentransit-h1-492730486.eu-north-1.elb.amazonaws.com/app/",
+    "albChecks": {
+      "at": "2026-11-06T13:2xZ",
+      "app": {
+        "status": 200,
+        "contentType": "text/html; charset=utf-8",
+        "cacheControl": "no-store",
+        "csp": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob: https://tiles.openfreemap.org; font-src 'self'; connect-src 'self' https://tiles.openfreemap.org; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'",
+        "nosniff": "nosniff",
+        "referrerPolicy": "strict-origin-when-cross-origin",
+        "title": "OpenTransit"
+      },
+      "hashedAssets": [
+        {
+          "path": "/app/assets/index-D1kyRdWA.css",
+          "status": 200,
+          "bytes": 14701,
+          "cacheControl": "public, max-age=31536000, immutable",
+          "csp": true
+        },
+        {
+          "path": "/app/assets/index-D4omq5zv.js",
+          "status": 200,
+          "bytes": 435335,
+          "cacheControl": "public, max-age=31536000, immutable",
+          "csp": true
+        }
+      ],
+      "contentTypes": {
+        "js": "text/javascript; charset=utf-8",
+        "css": "text/css; charset=utf-8",
+        "icon.svg": "image/svg+xml (no-cache)",
+        "manifest.webmanifest": "application/manifest+json (no-cache)"
+      },
+      "unknownPath": "/app/no-such-file.js -> 404 no-store",
+      "openapiListsApp": false,
+      "statusFreshness": "current",
+      "probe": {
+        "at": "2026-11-06T13:26:33+00:00",
+        "ok": true,
+        "readyz": {
+          "status": 200,
+          "ms": 231.9
+        },
+        "journeysPassed": 10,
+        "demoExit": 0,
+        "freshness": "current",
+        "journeyMs": {
+          "median": 207.7,
+          "max": 320.0
+        }
+      }
+    },
+    "e2eReal": {
+      "command": "cd apps/web && OPENTRANSIT_API_ORIGIN=<alb> OT_E2E_BASE_URL=<alb>/app/ npx playwright test",
+      "result": "4 passed, 2 failed",
+      "passed": [
+        "real.spec /v1/status on the real API",
+        "real.spec served build loads under the API's CSP and reads the real status",
+        "real.spec real engine trip ID opens through the encoded trips path",
+        "real-compare.spec Dizengoff Center -> Technion options, itinerary, train"
+      ],
+      "failed": {
+        "real-served.spec (whole tester flow)": "known limit, not a deployment fault: over plain HTTP the app reports 'my location unavailable: location only works over https', so the from-my-location step cannot complete",
+        "real-navigate.spec": "test data: hard-coded departAt 2026-11-02 lies before the new coverage (6 Nov-7 Dec); the API correctly answers 422 OUTSIDE_SERVICE_WINDOW. An uncommitted copy redated by one week to 2026-11-09 passed against the ALB (7 steps, 6 automatic, 3 rides)"
+      }
+    },
+    "rollback": "not needed; opentransit-h1:6 stays the retained target (rollback plan allows it now that a same-image, different-revision target is valid)",
+    "knownLimits": [
+      "HTTP only (no domain): phone GPS unavailable in the client",
+      "reachable only from the two allow-listed reviewer addresses"
+    ]
+  }
+}
