@@ -53,3 +53,30 @@ test("the clear-all button arms on the first tap and can be cancelled", async ({
   await page.getByRole("button", { name: "ביטול" }).click();
   await expect(page.getByRole("button", { name: "מחיקת כל הנתונים במכשיר" })).toBeVisible();
 });
+
+test("dark by default; light chosen in Settings applies before first paint after a reload", async ({ page }) => {
+  await page.emulateMedia({ colorScheme: "light" }); // the phone's preference does not decide
+  await page.goto(appPath("#/settings"));
+  const html = page.locator("html");
+  await expect(html).toHaveAttribute("data-theme", "dark");
+  await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute("content", "#0d1618");
+  expect(await page.evaluate(() => getComputedStyle(document.documentElement).colorScheme)).toBe("dark");
+
+  await page.getByRole("radio", { name: "בהירה" }).check();
+  await expect(html).toHaveAttribute("data-theme", "light");
+  await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute("content", "#f4f7f7");
+
+  // Before any app script runs, theme.js has already applied the stored choice.
+  await page.addInitScript(() => {
+    document.addEventListener("readystatechange", () => {
+      if (document.readyState === "interactive") {
+        (window as unknown as { themeAtParse: string | null }).themeAtParse = document.documentElement.getAttribute("data-theme");
+      }
+    });
+  });
+  await page.reload();
+  expect(await page.evaluate(() => (window as unknown as { themeAtParse: string | null }).themeAtParse)).toBe("light");
+  await expect(html).toHaveAttribute("data-theme", "light");
+  expect(await page.evaluate(() => getComputedStyle(document.documentElement).colorScheme)).toBe("light");
+  await expectNoSeriousAxeViolations(page, "Settings, light (he)");
+});

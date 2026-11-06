@@ -13,6 +13,7 @@
     "preview": "vite preview",
     "lint": "eslint . --max-warnings 0",
     "typecheck": "tsc --noEmit",
+    "tokens": "node scripts/design-tokens.mjs",
     "test": "vitest run",
     "test:tz": "node scripts/test-other-tz.mjs",
     "e2e": "playwright test",

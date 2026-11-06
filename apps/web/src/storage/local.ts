@@ -22,7 +22,8 @@ const SavedPlaceSchema = z.object({
 
 const LocalStateSchema = z.object({
   version: z.literal(STORAGE_VERSION),
-  settings: z.object({ lang: z.enum(["he", "en"]) }),
+  // theme: absent means the default (dark); optional so version-1 data stays readable.
+  settings: z.object({ lang: z.enum(["he", "en"]), theme: z.enum(["dark", "light"]).optional() }),
   home: SavedPlaceSchema.nullable(),
   work: SavedPlaceSchema.nullable(),
   favourites: z.array(SavedPlaceSchema).max(50),
