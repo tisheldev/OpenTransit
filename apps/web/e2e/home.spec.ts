@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { expect, test, type Page } from "@playwright/test";
-import { appPath, blockExternal, expectNoSeriousAxeViolations, useScenario } from "./helpers";
+import { appPath, blockExternal, expectNoSeriousAxeViolations, useScenario, useTheme } from "./helpers";
 
 // Home — C01 at 360 × 640, mocked (fixtures mode).
 
@@ -157,4 +157,49 @@ test("offline: Home still renders and says there is no connection", async ({ pag
   await page.goto(appPath("#/"));
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("תכנון נסיעה");
   await expect(page.getByText(/^אין חיבור\./)).toBeVisible();
+  await expectNoSeriousAxeViolations(page, "Home, offline (he)");
+});
+
+// Light theme (dark is the default, and what the tests above run in).
+
+test("light theme: saved places and an active trip (axe)", async ({ page }) => {
+  const recorded = JSON.parse(
+    readFileSync(new URL("../src/nav/testdata/recorded-oct31a-dizengoff-technion.json", import.meta.url), "utf8"),
+  ) as { journeys: { data: { journeys: unknown[] }; meta: unknown } };
+  const trip = {
+    version: 1,
+    journey: recorded.journeys.data.journeys[0],
+    meta: recorded.journeys.meta,
+    trips: {},
+    startedAt: "2026-10-31T10:00:00.000Z",
+    nav: { stepIndex: 0 },
+    labels: { origin: "דיזנגוף סנטר", destination: "טכניון" },
+  };
+  await seed(page, "he", true);
+  await useTheme(page, "light");
+  await page.addInitScript((value) => sessionStorage.setItem("opentransit:activeTrip", value), JSON.stringify(trip));
+  await page.goto(appPath("#/"));
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  await expect(page.getByRole("button", { name: "חזרה לניווט" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "בית", exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Dizengoff Center/Dizengoff" })).toBeVisible();
+  await expectNoSeriousAxeViolations(page, "Home, saved places and active trip, light (he)");
+});
+
+test("light theme: first launch, an expired timetable, offline (axe)", async ({ page }) => {
+  await useTheme(page, "light");
+  await page.goto(appPath("#/"));
+  await expect(page.getByRole("button", { name: /הגדרת בית/ })).toBeVisible();
+  await expect(page.getByText("נתוני בדיקה — לא לוח הזמנים האמיתי")).toBeVisible();
+  await expectNoSeriousAxeViolations(page, "Home, first launch, light (he)");
+
+  await useScenario(page, "status-expired");
+  await page.reload();
+  await expect(page.getByText("לוח הזמנים פג תוקף ואינו זמין לתכנון")).toBeVisible();
+  await expectNoSeriousAxeViolations(page, "Home, expired banner, light (he)");
+
+  await useScenario(page, "status-offline");
+  await page.reload();
+  await expect(page.getByText(/^אין חיבור\./)).toBeVisible();
+  await expectNoSeriousAxeViolations(page, "Home, offline, light (he)");
 });
