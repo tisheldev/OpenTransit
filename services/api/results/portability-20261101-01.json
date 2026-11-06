@@ -1,0 +1,499 @@
+{
+  "schemaVersion": 1,
+  "kind": "portability",
+  "task": "PORT-01",
+  "label": "Machine-local inventory, durable S3 archive of the oct31a inputs and preview independence check. Read-only toward the running preview; nothing deployed.",
+  "recordedAt": "2026-11-06T10:30:00Z",
+  "region": "eu-north-1",
+  "accountId": "{{ACCOUNT_ID}}",
+  "archive": {
+    "bucket": "opentransit-archive-eun1-7c41d2",
+    "createdAt": "2026-11-06T10:19:07Z",
+    "versioning": "Enabled",
+    "publicAccessBlock": "all four settings true",
+    "encryption": "SSE-S3 (AES256, default)",
+    "tags": {
+      "Project": "OpenTransit",
+      "Purpose": "archive"
+    },
+    "upload": "aws s3api put-object --checksum-algorithm SHA256 (S3 verified each body); sha256 also stored as object metadata",
+    "skipped": "nothing: the requested set is 0.27 GB, under the 6 GB limit",
+    "objectCount": 44,
+    "totalBytes": 270896271,
+    "costEstimate": {
+      "basis": "Price List API, S3 Standard eu-north-1, 0.023 USD/GB-month (first 50 TB), read 2026-11-06",
+      "storageUsdPerMonth": 0.0062,
+      "note": "plus about 0.0002 USD for 44 PUTs; overwritten objects keep billing as noncurrent versions"
+    },
+    "objects": [
+      {
+        "key": "generations/oct31a/manifest.json",
+        "bytes": 46220,
+        "sha256": "3bfdd857d89f3107a39bd87db875c0f3f1fdc4d1029b510b72bd5bb30aed1e9c",
+        "etag": "455263126035d6d3a8102db9a9e8e4cc",
+        "versionId": "9Jtmh9Eadjxu7EthWgTwzdwlDMcgEnhs"
+      },
+      {
+        "key": "generations/oct31a/schedule-component-manifest.json",
+        "bytes": 44349,
+        "sha256": "51fa49c81e0c70197ae8048e5d565d6f114cfcbed18a83854ea09e99532f4a32",
+        "etag": "40cd30fdddf45065129d8534e9746206",
+        "versionId": "iT6Vdi7EF6wzV6QdyfHQsP_W2D3droTt"
+      },
+      {
+        "key": "generations/oct31a/config.yml",
+        "bytes": 510,
+        "sha256": "cdf2782d1fbc6e7224836d9466912e12913eaa3b107f1f6d7c844cae1d4a6c06",
+        "etag": "beb69aa30ff19dcb98e2fab32b32fe97",
+        "versionId": "gyblW_mASsVaY3qALXW.2pJeRdQ1rvjf"
+      },
+      {
+        "key": "generations/oct31a/validation.json",
+        "bytes": 73291,
+        "sha256": "a9d184af502747bb9d0bb6ce666242b019d312c286af3fb74f0cb5c3e8441af2",
+        "etag": "0360bd9a08a8b5984b4e2edef26bd9d8",
+        "versionId": "66GGtXFQc5g6sQ.lZh_07K04S3YqRnAf"
+      },
+      {
+        "key": "generations/oct31a/photon-import-attestation.json",
+        "bytes": 1698,
+        "sha256": "9044d1eb44fe901b1d2639e64e40fb20df03adbfb2b078106efb5315c5c5504b",
+        "etag": "565eb7c43f2639a5a555ca0af83cafce",
+        "versionId": "GXSbpfeQlEHId.ku9RrYZa1sYKvoPHD5"
+      },
+      {
+        "key": "generations/oct31a/pipeline/pipeline.json",
+        "bytes": 13913,
+        "sha256": "4c80c0ed41c1ea7c0564ad5839ff5749807d825bd5e3effc5ab3b17901040e0a",
+        "etag": "f7da61ca532f0f3b5dd67d3ebf487f87",
+        "versionId": "J.Qcyv8Imbv04YDV8cdRTSGfMaigroK6"
+      },
+      {
+        "key": "generations/oct31a/probe/acceptance-oct31a-20261031-01-probe-queries.json",
+        "bytes": 5721,
+        "sha256": "5d926e33900abc13ac61dc9a5a66ce07cf6543e8f9b69184e54820ba9192bec4",
+        "etag": "a2018c4bf0a90a697e574a344fd06125",
+        "versionId": "cx._HZ9mc7yWOeSGBXIPGa0efIUWyZ_x"
+      },
+      {
+        "key": "generations/oct31a/probe/acceptance-oct31a-20261031-01-probe.json",
+        "bytes": 11299,
+        "sha256": "6e59f1da56fa5fdc07074cad26d07be21271b665b6016719fd6a973121fb9973",
+        "etag": "cfe6bd2acc8ec9b0432bdfdd8a729f36",
+        "versionId": "4WUni2HbSPj_segVODpYAtVl4iq_qWmC"
+      },
+      {
+        "key": "sources/snapshots/20261031T120038Z-36c39e7e/israel-public-transportation.zip",
+        "bytes": 143135730,
+        "sha256": "147d086084c3df0c6ccf4197126b91bf00a91e9c658b6016e647a3802b3735be",
+        "etag": "b50f872dd0908a44bfbcda046011d6c5",
+        "versionId": "tp.mqz1gkkIRi8PT0fc8rwuW.cwPO9s6"
+      },
+      {
+        "key": "sources/snapshots/20261031T120038Z-36c39e7e/TripIdToDate.zip",
+        "bytes": 5904746,
+        "sha256": "2537dcb9b690421b7bf0cc4428542e5b5218a90315a2943582662c9ecad63a4d",
+        "etag": "f31d556b65cb951c156efa94e7748931",
+        "versionId": "cevtxjGXvYWrQRtb5m8pBFqaziJHXJ_p"
+      },
+      {
+        "key": "sources/snapshots/20261031T120038Z-36c39e7e/israel-and-palestine-latest.osm.pbf",
+        "bytes": 120851761,
+        "sha256": "cfd35e945e2c041052252dede34866dbd202c8ef9aabb4654b0fd61e2e00d925",
+        "etag": "3d9be95a0407ac3d996ddd1ea881172f",
+        "versionId": "CvIESC4a8pfJGsO1kHylc3_h2WxQQVn8"
+      },
+      {
+        "key": "sources/snapshots/20261031T120038Z-36c39e7e/provenance.json",
+        "bytes": 1449,
+        "sha256": "2795ffe9e92e2492ac2117d5dc0c3f39e3ef3f80114c38267314a0c1bbabb628",
+        "etag": "f5dd7768dc9948d2fe05db7ef6bc8053",
+        "versionId": "WCsDpSoTEUCZqgydlM0Qpoa71H2JQc8e"
+      },
+      {
+        "key": "sources/checks/20261031T120038Z-36c39e7e.json",
+        "bytes": 79894,
+        "sha256": "58a0a01ce7e610951e67366b16cd516fc71864d5c2fd0f014289a5efec4fe067",
+        "etag": "73ce0c0f441378a9e8e5f1aafaf22707",
+        "versionId": "LzX2iANGgdSJY9mEcGtJNZT4mQjYWb3g"
+      },
+      {
+        "key": "sources/checks/20261031T184247Z-aa52d8bb.json",
+        "bytes": 79884,
+        "sha256": "b84297b350b666447216a236923f2d36eb68696ccf3673073019f869c39d3a34",
+        "etag": "04dbf1b8f495f015d5c56ee104a3b5a4",
+        "versionId": "fVstvn4SeXmMsbH0dx1LY6pJsoWJKtNn"
+      },
+      {
+        "key": "sources/checks/20261101T043537Z-11aee13f.json",
+        "bytes": 80075,
+        "sha256": "2660d8c01b98975ebc89cdf5026f312c02a30d8f2b1ab370d4e1fda933607888",
+        "etag": "7de24d3ed34b504931093c96d7a30766",
+        "versionId": "msgaH1zQsGyRbtv63HeHgoOIkkPF5HKw"
+      },
+      {
+        "key": "releases/current.json",
+        "bytes": 194,
+        "sha256": "79d176d1d9bebc1884651010a9cce20c25e9f556c05fda4141a8e93f66bf3ad8",
+        "etag": "bd5a66f051f48ca0955ec6e6c2e5c246",
+        "versionId": "fPFWDLEp3jZVkRTd6a9dB7mG.5nFwilF"
+      },
+      {
+        "key": "releases/20261031-drill/forward.err",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "etag": "d41d8cd98f00b204e9800998ecf8427e",
+        "versionId": "zLZZbXMbIY1ppb1.Nff5QGBf6LmQyez0"
+      },
+      {
+        "key": "releases/20261031-drill/forward.json",
+        "bytes": 1580,
+        "sha256": "1dab14d651bb7d1174e4fd9d4e5066c99a4215e81a4855d96bd06b1429ab1e8a",
+        "etag": "228243b8d0245bca9b56e4f2822ad4ab",
+        "versionId": "Kew8yPWrKEs_1LvmdrjkhQ1m8GJxvAkA"
+      },
+      {
+        "key": "releases/20261031-drill/rollback.err",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "etag": "d41d8cd98f00b204e9800998ecf8427e",
+        "versionId": "G_imG9T0nXscGq2nAMYwT.oRPJB13u_X"
+      },
+      {
+        "key": "releases/20261031-drill/rollback.json",
+        "bytes": 1580,
+        "sha256": "3b8724eb3e0558aa03efc281bd2df48cfa5580d22d75ee88dd4b01140cb0541b",
+        "etag": "b519b1e683ef10806030ba403e2122e8",
+        "versionId": "YCvAYmbStYiJjEMx6qc3xF6AiIOr1NSn"
+      },
+      {
+        "key": "releases/20261031-drill/rollback.start",
+        "bytes": 9,
+        "sha256": "4b8037a65ff6a450d8c9d02bd670889780212322845757569672c3786668d028",
+        "etag": "d66b3188cd0e20597c0a804d0657bc2a",
+        "versionId": "QNdrNFZAki38par96ug1WWoOWZ0qI.HE"
+      },
+      {
+        "key": "releases/20261031-r2-existing-images/push.log",
+        "bytes": 4153,
+        "sha256": "19ecd1dfed6cb7e9ae9889fac0676876a3c72887dfa44bf05b29242229e8f986",
+        "etag": "807d3101bbbcff7c5de5c2ba2f7e39c2",
+        "versionId": "O1E7y2Xcgd2hVdP6N5mNXKx4.Dm9Ec_S"
+      },
+      {
+        "key": "releases/20261031-r2-existing-images/release-plan.json",
+        "bytes": 8883,
+        "sha256": "297bd2dc4fb7a587b2c407f21f38c566ae8e8f6adbcaf835b839bc19bafeacc7",
+        "etag": "db98e2a146c859608ebea3056b2c1c26",
+        "versionId": "zAERH89vv8tCEz0JbXETeOBo0zI9Ln2c"
+      },
+      {
+        "key": "releases/20261031-r2-existing-images/release-registered.json",
+        "bytes": 3935,
+        "sha256": "e2789d6c3775fb650c88af06aa7252893a1447e32fca0e36551821819a59852c",
+        "etag": "a99115acc0c35d486c7468b74a8f2777",
+        "versionId": "tPpMJyRb5Q4euOFgEET1r7fUEFLQQ9_E"
+      },
+      {
+        "key": "releases/20261031-r2-existing-images/task-definition.candidate.json",
+        "bytes": 12449,
+        "sha256": "dffa333228299ce4dc7993622412b42c55a1cf3c99f9ae601023ebc89c1495ed",
+        "etag": "3708f323f5cf5d8bf61cc2946e9774c4",
+        "versionId": "e3_H7wwXC6gZCn5jDisweabK7P3xmyYi"
+      },
+      {
+        "key": "releases/20261031-r2-existing-images/task-definition.registered.json",
+        "bytes": 12630,
+        "sha256": "c634c452b32c9c8a9797e4f2c1650d7b00293f21765d95e1d8ee37e6e44543d6",
+        "etag": "e3557a722b83697baa6d1550f59b98f5",
+        "versionId": "yBG67LP88KMf66zZBpATn4PtW.xtHaS9"
+      },
+      {
+        "key": "releases/20261031-r3-renewal/push.log",
+        "bytes": 4945,
+        "sha256": "6541a0ec1d69ce4d01bcb7ec4dbe1ad0919a0546b61c5173e5fce29f631558c2",
+        "etag": "10b95fc22c53823badf33bd132473b1a",
+        "versionId": ".eZlj4HkBnwIjB2si47yQjHjpHzJdl.1"
+      },
+      {
+        "key": "releases/20261031-r3-renewal/release-plan.json",
+        "bytes": 11638,
+        "sha256": "dc57a4189eb86f66704140fc533f96b4a56cb03e0919d3ba2c074500f77d8609",
+        "etag": "f92111011ff107d56149cbea8158c9d6",
+        "versionId": "n.wusf0TwKuR98mDxdLdkxZ4pqgEgMNW"
+      },
+      {
+        "key": "releases/20261031-r3-renewal/release-registered.json",
+        "bytes": 4683,
+        "sha256": "920beec0e347230e7368340c79e0e6b74e2d4e66d33e7b00a5f4bb293329cc23",
+        "etag": "bc0f26dd797e32fc5b16b35eac67e9c9",
+        "versionId": "8jFyNoLg8OshZQ30ZbMx3.n6VGhVhI0D"
+      },
+      {
+        "key": "releases/20261031-r3-renewal/task-definition.candidate.json",
+        "bytes": 13290,
+        "sha256": "c7482b7a2395450bc66fa8cdb9191f4f5326cd4e7428d27fac3015167c6fe3b4",
+        "etag": "7e67629bb1c3f229ee009cdc8c9cc131",
+        "versionId": "ElCjGlCt7IlFTk95hHS8za3DMxUXG_L8"
+      },
+      {
+        "key": "releases/20261031-r3-renewal/task-definition.registered.json",
+        "bytes": 13471,
+        "sha256": "5f4b3247946f5ce83a607d2167cbf89efa1f8d92db40e6861d548e85bc211ca8",
+        "etag": "a6cfbd629622b04da5401be9d905f87d",
+        "versionId": "vmNwheViqJJkLIfhDQswTwM0kfgl6Lc."
+      },
+      {
+        "key": "releases/20261031T1818Z/release-plan.json",
+        "bytes": 11464,
+        "sha256": "c87a7157281fb458cfccec748b887a1397509d7cf377d4590e0eabd7ca9c5b2e",
+        "etag": "9af194f85d6c67811541cdaba8b574cf",
+        "versionId": "FIWNvNJG5fRubG.tAhiS1zp2HIgqt59Z"
+      },
+      {
+        "key": "releases/20261031T1818Z/release-registered.json",
+        "bytes": 4684,
+        "sha256": "38cfbe377a4f4bfac1869e27ebbf90568c0c054ca060c63e1c39395a77ca4e7d",
+        "etag": "dad526891ad1c9e78dd1c3fd17fd86d8",
+        "versionId": "fIliBCKQuj0mflLaPwY2oT1qbEhR91BH"
+      },
+      {
+        "key": "releases/20261031T1818Z/task-definition.candidate.json",
+        "bytes": 13290,
+        "sha256": "ceea36952b4ae7d3715cb8a42172d1b1b67ab14897e84d0775e9bbc97cd3c66b",
+        "etag": "680bbd55dbaf91e7bcf578d2771fda2d",
+        "versionId": "XgjnIeZtwiC4g_NreqHOKVjcvA8GySB0"
+      },
+      {
+        "key": "releases/20261031T1818Z/task-definition.registered.json",
+        "bytes": 13471,
+        "sha256": "922adb91cdc1eb190807bdac6052a340887a265531cd53e574956ea7bbf2fd22",
+        "etag": "e169f98005a7401ec60f86aa382f777c",
+        "versionId": "mNwXw4ndetJf61xa03cfBMzcAy1g2lS_"
+      },
+      {
+        "key": "releases/20261031T1842Z/release-plan.json",
+        "bytes": 11464,
+        "sha256": "9d840645f0a9c37aa0d1edefbc76564695a80bd86f96e1da0a22068c25de9925",
+        "etag": "0204977706d354311cbd2a09a775ee40",
+        "versionId": "T6OqV6FLIkp3nO40iKPKuwj7PvRo.GsC"
+      },
+      {
+        "key": "releases/20261031T1842Z/release-registered.json",
+        "bytes": 4684,
+        "sha256": "6d49ca192c72a43ba8d1ca7b12a754560538b5a12f89e045212f5b56b15ad249",
+        "etag": "72895e71aa024338b5da9e39f8710723",
+        "versionId": "zINbzYJ6FWP7eIM5rdqzLwQsdg1Udcxg"
+      },
+      {
+        "key": "releases/20261031T1842Z/task-definition.candidate.json",
+        "bytes": 13290,
+        "sha256": "c886c86528316ef7444c27251a8dfdf81f47281d75ebed2e5c63991cc5a5d77d",
+        "etag": "4123db3629945309c283ba4331c00982",
+        "versionId": "Vy5ExQ.StVjBomT9E9Qo7gPs1ixBN0y_"
+      },
+      {
+        "key": "releases/20261031T1842Z/task-definition.registered.json",
+        "bytes": 13471,
+        "sha256": "e138ebdf03918dff6a1831e3be78f483b2efcac2bf2161ecf2f12ebac2adc6d9",
+        "etag": "3804277f824e80e61e434e544645047f",
+        "versionId": "orWdRwf8mv.dteNPHtEwQ1IHa7C89.29"
+      },
+      {
+        "key": "sources/checks/20261102T043009Z-26c5d9cc.json",
+        "bytes": 78611,
+        "sha256": "61c72f44c934de4d3a17ffeacb9b32637092f78c47000110e738c9e00b95d39b",
+        "etag": "a8155185eaa93368bd633afe0255cc81",
+        "versionId": "cFy7Cc5SCHxYC1PG_F40m9xzvk4uyjy1"
+      },
+      {
+        "key": "sources/checks/20261103T043009Z-7777e921.json",
+        "bytes": 75326,
+        "sha256": "9867c283eb89e358000eec54eb46c131221268e3f95f0c56c367f7e5ca910ef9",
+        "etag": "42fdfca45d800dfad6c6e3d74bc98005",
+        "versionId": "zRw8E8fz7h7vRUdFuCOEdKSrpglHXycf"
+      },
+      {
+        "key": "sources/checks/20261104T043008Z-b22cf938.json",
+        "bytes": 77596,
+        "sha256": "cfe919025420b4f1c594bf7d162dbe4d74dd66232c0810243d76a782242128e2",
+        "etag": "6df2f253e04479c340e3c011a42a00c9",
+        "versionId": "6d6WHuVvvu8IO3IcPEmn_I9siWF_wFyT"
+      },
+      {
+        "key": "sources/checks/20261105T043009Z-ff06dbcf.json",
+        "bytes": 78842,
+        "sha256": "e336b5cf29b9eb77d25ec0094cd46b4f95c78de1ed2db3297ce7e3bab29cac86",
+        "etag": "55a2886e5e121c77662c142afa561b64",
+        "versionId": "90wLhZcBU5ZwdHfOXSouejYkMccOhFtq"
+      },
+      {
+        "key": "sources/checks/20261106T043008Z-6ded9bad.json",
+        "bytes": 76098,
+        "sha256": "9017b8b4386d5efeb2193fca34eabc14ce84d6eb97f015658000446f099beffd",
+        "etag": "3c7992034ff67c71266928b5e7704589",
+        "versionId": "E5PQrnc1p2mhc_ZWjnt4fOQRJnrYNONe"
+      }
+    ]
+  },
+  "inventory": [
+    {
+      "item": "Source code, docs, evidence, probe corpus",
+      "durable": "Git (GitHub tisheldev/OpenTransit)"
+    },
+    {
+      "item": "Photon 1.3.0 JAR",
+      "localPath": "C:/Users/nhenr/.codex/worktrees/8007/OpenTransit/.runtime/m4-photon-spike-20260930/photon-1.3.0.jar",
+      "durable": "upstream (GitHub release); also inside ECR opentransit-photon",
+      "source": "https://github.com/komoot/photon/releases/download/1.3.0/photon-1.3.0.jar",
+      "bytes": 98219380,
+      "sha256": "a89707c0045e4807b2a1180e132e68e108d998709f48b6c94b98a6e281f571a5",
+      "note": "local copy re-hashed 2026-11-01; matches"
+    },
+    {
+      "item": "OSM reader (pyosmium)",
+      "localPath": "C:/Users/nhenr/.codex/worktrees/8007/OpenTransit/.runtime/osm-reader-20260930",
+      "durable": "upstream (PyPI)",
+      "packages": {
+        "osmium": "4.3.1",
+        "requests": "2.34.2",
+        "urllib3": "2.8.0",
+        "idna": "3.20",
+        "charset-normalizer": "3.5.2",
+        "certifi": "2026.7.22"
+      },
+      "wheelSha256": {
+        "osmium-4.3.1-cp314-cp314-win_amd64.whl": "236783c739a0126f1dbd29791b969b263afc14ca505f375c48c230f64bf47f3f",
+        "osmium-4.3.1-cp314-cp314-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl": "ad0caea456c56b058305967f3bb3037517e0e1357aea5106cefa5b2be660d759"
+      },
+      "install": "uv pip install --python 3.14 --target <dir> osmium==4.3.1"
+    },
+    {
+      "item": "Java runtime for Photon",
+      "durable": "upstream (Docker Hub)",
+      "image": "eclipse-temurin:21.0.12.1_1-jre@sha256:628467024d428251da635661936d6180717b1ac1119d41c76d28a03b7293c43c"
+    },
+    {
+      "item": "MOTIS engine image",
+      "durable": "upstream (ghcr.io) and ECR opentransit-motis",
+      "image": "ghcr.io/motis-project/motis@sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330"
+    },
+    {
+      "item": "Generation oct31a (full directory, 3.5 GB)",
+      "localPath": "D:/ot/generations/oct31a",
+      "durable": "partial",
+      "note": "serving payload (reference, graph, Photon index, small files) is inside ECR opentransit-data@sha256:64eb3565...; manifest, schedule manifest, config, validation, attestation, pipeline.json and probe are in S3; pipeline/work (288 MB) and logs are local-only; rebuildable from the archived snapshot"
+    },
+    {
+      "item": "Generations oct1a, oct1b",
+      "localPath": "D:/ot/generations",
+      "durable": "local-only",
+      "note": "expired; evidence in Git"
+    },
+    {
+      "item": "oct31a source snapshot (GTFS, TripIdToDate, OSM, provenance)",
+      "localPath": "D:/ot/src/snapshots/20261031T120038Z-36c39e7e",
+      "durable": "S3",
+      "note": "MOT replaced the feed on 1 and 2 November, so upstream no longer serves these bytes"
+    },
+    {
+      "item": "Source-check records (31 October, 1-6 November)",
+      "localPath": "D:/ot/src/checks; C:/Projects/OpenTransit/.runtime/sources/checks",
+      "durable": "S3"
+    },
+    {
+      "item": "Daily fetch snapshots 1 October - 6 November (about 11 GB)",
+      "localPath": "C:/Projects/OpenTransit/.runtime/sources",
+      "durable": "local-only",
+      "note": "M2.8 consecutive-pair evidence; not reproducible upstream"
+    },
+    {
+      "item": "Release records (release-plan, release-registered, task definitions, current.json)",
+      "localPath": "D:/ot/releases",
+      "durable": "S3 copy of 2026-11-06; ECS keeps the registered revisions",
+      "note": "publisher rollback and the daily job read these; they contain absolute D:/ and worktree paths"
+    },
+    {
+      "item": "Daily refresh logs",
+      "localPath": "D:/ot/logs",
+      "durable": "local-only",
+      "note": "results summarised in Git evidence"
+    },
+    {
+      "item": "Acceptance frozen sources and venvs",
+      "localPath": "D:/ot/src-<commit>, D:/ot/venv-<commit>",
+      "durable": "Git (re-export the commit, then uv sync --locked)"
+    },
+    {
+      "item": "Container images (api, data, photon, motis)",
+      "durable": "ECR eu-north-1, pinned by digest in opentransit-h1:5"
+    },
+    {
+      "item": "Local Docker tags ot-h1-api:20261031a, ot-h0-data:local, ot-t5-photon:local",
+      "durable": "ECR by digest (pull and retag)",
+      "note": "named in release-registered.json localTags; the publisher's --local-image inspects them"
+    },
+    {
+      "item": "Docker volumes (24: earlier graphs, Photon spikes, PoC Postgres)",
+      "durable": "local-only",
+      "note": "historical; not needed to continue; preserved"
+    },
+    {
+      "item": ".env and local config",
+      "durable": "none needed",
+      "note": "no .env files; settings are environment variables in compose.yaml and the task definition; the M1 compose.env sits in ignored .runtime/m1-20260930"
+    },
+    {
+      "item": "Windows scheduled tasks",
+      "durable": "Git (deploy/aws/scheduler/); .runtime/daily-fetch.cmd is local-only",
+      "note": "'OpenTransit daily feed fetch' runs daily (fetch only, no publish); 'OpenTransit H-1 daily refresh' was never registered"
+    },
+    {
+      "item": "AWS credentials",
+      "durable": "none (aws login browser sign-in, at most 12 h)",
+      "note": "~/.aws/config: [profile opentransit] region = eu-north-1"
+    }
+  ],
+  "previewIndependence": {
+    "checkedAt": "2026-11-06T10:18:30Z",
+    "method": "read-only ecs describe-services, list-tasks, describe-tasks, describe-task-definition; GET /readyz and /v1/status through the ALB from the reviewer IP",
+    "service": "opentransit-h1/opentransit-h1",
+    "taskDefinition": "opentransit-h1:5",
+    "deployment": "PRIMARY, COMPLETED, created 2026-10-31T18:50:19Z",
+    "runningTasks": 1,
+    "taskStartedAt": "2026-10-31T18:58:31Z",
+    "images": {
+      "api": "sha256:114fc4977595e7c9dc0e4002324c857abbf53950b0b0f90b829acaed43544287",
+      "data": "sha256:64eb35650eadf73cbb6619d2ad571655afd7ab351f864412698d5f9c87c51059",
+      "photon": "sha256:52f94ba3722d73dc06022ffa8a1392ca96bff5418ae3f85ce54c725ab3803e83",
+      "motis": "sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330"
+    },
+    "freshnessRenewal": {
+      "active": true,
+      "evidence": "verifier OPENTRANSIT_SOURCE_CHECK_RECORD = check 20261031T184247Z-aa52d8bb.json (same-hash pair); api OPENTRANSIT_SOURCE_CHECK=/run/opentransit/source-check.json; tag source-checked-at 2026-10-31T18:42:42Z; /v1/status lastValidatedAt 2026-10-31T18:42:42.027547Z"
+    },
+    "status20261106": {
+      "readyz": 200,
+      "freshness": "stale",
+      "warnings": [
+        "STATIC_DATA_AGING"
+      ],
+      "generationId": "2d8ec2746bb500abacd0f383316d23616fcf1dc4b3e20104b14c2cb139aad445"
+    },
+    "upstreamFeed": {
+      "lastSameHashCheck": "2026-11-01T04:30:03Z",
+      "changed": [
+        "Last-Modified 2026-11-01T17:32Z, first seen 2026-11-02T04:30Z",
+        "Last-Modified 2026-11-02T17:36Z, first seen 2026-11-03T04:30Z"
+      ],
+      "consequence": "oct31a can no longer be renewed: apply_source_check requires the generation's GTFS/TripIdToDate hashes"
+    },
+    "expiresAt": "2026-11-07T18:42:42Z",
+    "coverageUntil": "2026-11-29T22:00:00Z",
+    "ifNothingRuns": {
+      "feedUnchanged": "expires 2026-11-07T18:42:42Z; a new revision carrying a later same-hash check renews it without a rebuild, up to the end of coverage (2026-11-29T22:00Z)",
+      "feedChanged": "expires 2026-11-07T18:42:42Z; only a new generation built from a current snapshot and published prevents it (the actual case since 2 November)"
+    },
+    "afterExpiry": "/readyz 503 SOURCE_CHECK_EXPIRED and data routes refuse; the ALB marks the target unhealthy; replacement tasks fail the verifier (read from code, not observed)"
+  }
+}

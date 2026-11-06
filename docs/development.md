@@ -2,7 +2,43 @@
 
 Maintainer runbook, updated 1 October 2026. The API implements the scheduled contract through M4: `GET /healthz`, `/readyz`, `/v1/status`, reference routes, `POST /v1/journeys`, dated trips and departures, and `GET /v1/places` with place references. Realtime and alerts report `not_enabled`. Command examples are provisional operator interfaces, not a deployment package. Status and acceptance live in [PROJECT_STATUS.md](../PROJECT_STATUS.md); criteria in the [continuation plan](next-steps.md).
 
-Contents: [machine layout](#machine-layout-and-windows-notes) · [command map](#command-map) · [run an API](#run-an-api) · [demo and test client](#demo-and-test-client) · [fetch and build](#fetch-and-build-a-generation) · [probe, select, activate](#probe-select-activate-and-roll-back) · [retention and ID checks](#retention-and-id-checks) · [acceptance tools](#acceptance-tools) · [checks](#edit-and-check-the-api) · [readiness and errors](#readiness-errors-and-logs) · [request examples](#request-examples) · [preserved evidence](#preserved-development-evidence)
+Contents: [continue from another computer](#continue-from-another-computer) · [machine layout](#machine-layout-and-windows-notes) · [command map](#command-map) · [run an API](#run-an-api) · [demo and test client](#demo-and-test-client) · [fetch and build](#fetch-and-build-a-generation) · [probe, select, activate](#probe-select-activate-and-roll-back) · [retention and ID checks](#retention-and-id-checks) · [acceptance tools](#acceptance-tools) · [checks](#edit-and-check-the-api) · [readiness and errors](#readiness-errors-and-logs) · [request examples](#request-examples) · [preserved evidence](#preserved-development-evidence)
+
+## Continue from another computer
+
+Added 1–6 November 2026 (PORT-01). Code is on GitHub, the preview runs in AWS, and the inputs of the current generation are archived in S3; nothing below needs the original Windows PC. What is still only on that PC is listed in the [portability record](../services/api/results/portability-20261101-01.json).
+
+**Prerequisites** (versions in use on 1 November): Git 2.49; [uv](https://docs.astral.sh/uv/) 0.11.26, which installs CPython 3.14.6 from `services/api/.python-version`; Node 22 (≥ 22.12, `apps/web`); Docker Desktop with the Linux engine (27.4; a generation build needs about 6 GiB memory for Docker and 15 GB free disk); AWS CLI 2 with `aws login` (2.37.9). No local Java: Photon runs in the digest-pinned `eclipse-temurin:21.0.12.1_1-jre` image.
+
+**Pinned build tools** (only for `build-generation --addresses`; keep both outside the repository):
+
+| Tool | Obtain | Check |
+| --- | --- | --- |
+| Photon 1.3.0 JAR | `curl -L -o photon-1.3.0.jar https://github.com/komoot/photon/releases/download/1.3.0/photon-1.3.0.jar` (98,219,380 bytes) | SHA-256 `a89707c0045e4807b2a1180e132e68e108d998709f48b6c94b98a6e281f571a5` (also in each generation's `addressSearch.photonJarSha256`) |
+| OSM reader (pyosmium 4.3.1) | `uv pip install --python 3.14 --target <dir>/osm-reader osmium==4.3.1` (pulls `requests` and its dependencies); pass `<dir>/osm-reader` as `--osm-reader-path` | PyPI wheel SHA-256: Windows x64 `236783c739a0126f1dbd29791b969b263afc14ca505f375c48c230f64bf47f3f`, Linux x86-64 `ad0caea456c56b058305967f3bb3037517e0e1357aea5106cefa5b2be660d759`. The PC's `osm-reader-20260930` holds osmium 4.3.1 (cp314 win_amd64), requests 2.34.2, urllib3 2.8.0, idna 3.20, charset-normalizer 3.5.2, certifi 2026.7.22 |
+
+**Clone to a running local API on a fresh generation** (POSIX shell; on Windows keep the work directory short, see the notes below):
+
+```sh
+git clone https://github.com/tisheldev/OpenTransit.git && cd OpenTransit
+uv sync --project services/api --locked
+W=~/ot                                   # short work directory outside the repository
+# Inputs: a fresh fetch, or the archived 31 October snapshot (`aws s3 cp --recursive s3://opentransit-archive-eun1-7c41d2/sources/snapshots/20261031T120038Z-36c39e7e/ <dir>`; MOT no longer serves those bytes)
+uv run --project services/api --locked opentransit fetch --output $W/src     # prints the snapshot path
+uv run --project services/api --locked opentransit build-generation --snapshot <snapshot> \
+  --output $W/generations/<id> --first-day <today> --days 30 --memory-gib 6 --addresses \
+  --photon-jar $W/tools/photon-1.3.0.jar --photon-memory-gib 2 --osm-reader-path $W/tools/osm-reader
+docker build -t opentransit-api:latest services/api                          # image the acceptance runner uses
+uv run --project services/api --locked python services/api/tools/acceptance_run.py \
+  --generation $W/generations/<id> --run-id <id> --results-prefix $W/acc-<id>/acceptance-<id> \
+  --photon-jar $W/tools/photon-1.3.0.jar --keep-stack
+```
+
+The build takes about 45 minutes (`pipeline/pipeline.json` must end `complete`). `--keep-stack` leaves MOTIS, Photon and the API running on a host port in 8500–8599 (printed in the summary); details in [acceptance tools](#acceptance-tools). Without addresses, drop `--addresses` and its options and run the [Compose stack](#run-an-api) instead.
+
+**AWS.** Add the profile once in `~/.aws/config` (`[profile opentransit]` with `region = eu-north-1`), then `aws login --profile opentransit` (a browser sign-in; `--remote` prints a URL and asks for a code, for signing in from another device; the session lasts up to 12 hours). Inspecting, deploying, rolling back, pausing and cleaning up the preview are in [operations](operations.md#h-1-private-preview-eu-north-1-running-since-31-october-2026); read-only checks are `aws --profile opentransit --region eu-north-1 ecs describe-services --cluster opentransit-h1 --services opentransit-h1` and `logs tail /opentransit/h1`. The publisher's `rollback` takes release records (`release-registered.json`) that the PC kept under `D:/ot/releases/`; copies as of 6 November are under `releases/` in the archive bucket. Without them, roll back by revision: `aws ecs update-service --cluster opentransit-h1 --service opentransit-h1 --task-definition opentransit-h1:<revision>`, after checking that revision's `source-checked-at` and `coverage-until` tags are still serviceable.
+
+**Publisher and daily refresh.** The [publisher](../deploy/aws/README.md#h-1-generation-publisher) needs the generation directory, its Photon checkpoint, the probe corpus (`services/api/results/h0-fargate-20261031-01/probe-queries.json`) and either `--build` or local images. The daily job (`deploy/aws/tools/daily_refresh.py`) is meant to run once a day on an operator machine that stays on, with Docker running and a valid `opentransit` login: fetch, validate, rebuild only if the GTFS/TripIdToDate pair changed, publish and push a new revision (an unchanged pair only renews freshness), ALB probe, `prune --dry-run`. Its defaults are the PC's paths (`D:/ot/…` and the Codex runtime); on another machine pass `--source-root`, `--generations-root`, `--logs`, `--releases`, `--photon-jar` and `--osm-reader-path`, and copy the releases folder first, because the job reads `current.json` to find the serving release. Windows scheduling is `deploy/aws/scheduler/register-task.ps1`; elsewhere use cron or a cloud host (not decided).
 
 ## Machine layout and Windows notes
 

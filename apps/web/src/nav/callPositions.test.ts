@@ -1,7 +1,8 @@
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { Result } from "../api/result";
 import type { StopDetail, Trip } from "../api/schemas";
 import type { Metadata } from "../api/types";
+import { pinClock } from "../test/clock";
 import { endActiveTrip, getActiveTrip, loadActiveTrip, resetActiveTripCache, startActiveTrip } from "./activeTrip";
 import { CALLS_BEFORE_EXIT, callTargets, engineCallPositions, fetchCallPositions, missingTrips, runPool } from "./callPositions";
 import { buildSteps } from "./steps";
@@ -41,7 +42,10 @@ function fakeApi(options: { failStop?: string } = {}) {
   return { api, calls };
 }
 
+// Trips started from the dated recordings must not expire with the calendar.
+beforeEach(() => pinClock());
 afterEach(() => {
+  vi.useRealTimers();
   endActiveTrip();
   resetActiveTripCache();
 });
