@@ -548,7 +548,11 @@ def rollback_plan(current: dict | None, previous: dict | None, now: datetime) ->
         return {"allowed": False, "reasons": ["no_previous_release"], "executed": False}
     reasons = []
     if current is not None and current.get("images") == previous.get("images"):
-        reasons.append("previous_equals_current")
+        # Same images can still be a different revision (6 Nov: only the /app/ setting
+        # changed), which is a valid rollback target; the same revision never is.
+        arns = (current.get("taskDefinitionArn"), previous.get("taskDefinitionArn"))
+        if None in arns or arns[0] == arns[1]:
+            reasons.append("previous_equals_current")
     if previous.get("digestKind") != "registry-manifest":
         reasons.append("previous_not_registry_pinned")
     if not previous.get("taskDefinitionArn"):
@@ -703,8 +707,21 @@ class AwsSession:
         """Poll until the service has one COMPLETED deployment with its desired tasks running."""
         started = time.monotonic()
         state: dict = {}
+        errors = 0
         while time.monotonic() - started < timeout:
-            svc = self.aws("ecs", "describe-services", "--cluster", cluster, "--services", service)
+            try:
+                svc = self.aws(
+                    "ecs", "describe-services", "--cluster", cluster, "--services", service
+                )
+            except subprocess.CalledProcessError:
+                # One failed read (6 Nov: exit 255 mid-rollout) must not abandon a deployment
+                # that ECS keeps running; give up only after repeated failures.
+                errors += 1
+                state["describeErrors"] = errors
+                if errors >= 5:
+                    raise
+                time.sleep(15)
+                continue
             svc = (svc.get("services") or [{}])[0]
             deployments = svc.get("deployments", [])
             primary = next((d for d in deployments if d["status"] == "PRIMARY"), {})
@@ -716,6 +733,7 @@ class AwsSession:
                 "runningCount": svc.get("runningCount"),
                 "desiredCount": svc.get("desiredCount"),
                 "events": [e["message"] for e in svc.get("events", [])[:5]],
+                "describeErrors": errors,
             }
             if state["rolloutState"] == "FAILED":
                 break
