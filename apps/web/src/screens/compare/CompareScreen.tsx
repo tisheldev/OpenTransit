@@ -4,7 +4,8 @@ import { getStatus } from "../../api/endpoints";
 import { queryKeys } from "../../api/queries";
 import { ApiFailure, unwrap } from "../../api/result";
 import type { Journey } from "../../api/types";
-import { ErrorState, TestDataBanner } from "../../components/states";
+import { Icon, StatusTag, type IconName } from "../../components/ds";
+import { TestDataBanner } from "../../components/states";
 import { useI18n } from "../../i18n/I18nProvider";
 import type { LocationError } from "../../lib/geolocation";
 import { journeyToScene } from "../../map/fromJourney";
@@ -14,6 +15,7 @@ import { choiceFromSaved, sameEndpoint, type Endpoint, type When } from "../../p
 import type { BuildResult } from "../../plan/journeyQuery";
 import { usePlan } from "../../plan/PlanProvider";
 import { cachedTrips, MARK_PAINTED, MARK_REQUEST, useJourneyRequest, useJourneys, useTrips } from "../../plan/queries";
+import { rankLabels } from "../../plan/rank";
 import { earlierTime, laterTime, whenFromOverride } from "../../plan/shift";
 import { go, hrefFor } from "../../router";
 import { useLocalState } from "../../shell/localStore";
@@ -21,15 +23,17 @@ import { useSheet } from "../../shell/sheet";
 import type { SavedPlace } from "../../storage/local";
 import { CompareHeader } from "./CompareHeader";
 import { draftScene } from "./journeyScene";
-import { endpointLabel, formatShortDay, israelDate, type EndLabels } from "./labels";
+import { endpointLabel, formatShortDay, israelDate, splitFirstSentence, type EndLabels } from "./labels";
 import { OptionsChart, OptionsSkeleton } from "./OptionsChart";
+import { Banner, ProblemBanner } from "./ProblemBanner";
 import { RouteDetails, type TripState } from "./RouteDetails";
 import { WhenChip, WhenPanel } from "./TimeControl";
 import "./compare.css";
 
-// Compare and Route details — C03, C04. One screen: a one-line header (from ← to, swap,
-// time chip), the options, Earlier / Later right under them with one scheduled note, then
-// the selected option's itinerary, with Start pinned at the bottom. It opens on the half
+// Compare and Route details — C03, C04 (design: LegBar, TimeControl, StepList, Banner,
+// Button). One screen: a one-line header (from › to, swap, time chip), the options chart,
+// Earlier / Later right under it with the one "scheduled" tag, then the selected option's
+// route, with Start pinned at the bottom. It opens on the half
 // sheet (the shell's default) so the route shows on the map above the options; tapping
 // an option raises the sheet to full for its details, and the passenger can drag it down.
 
@@ -59,34 +63,27 @@ function StartBar({ journey, onStart, disabled }: { journey: Journey; onStart: (
   const resume = active !== null && sameJourney(active.journey, journey);
   return (
     <div className="compare-start">
-      <button
-        type="button"
-        className="button button-primary compare-start-button"
-        disabled={disabled}
-        onClick={() => onStart(resume)}
-      >
+      <button type="button" className="ot-btn ot-btn--primary ot-btn--block" disabled={disabled} onClick={() => onStart(resume)}>
         {resume ? t("compare.resume") : t("compare.start")}
+        <Icon name="chevron" />
       </button>
     </div>
   );
 }
 
-function ShiftRow({ onEarlier, onLater, note }: { onEarlier: (() => void) | null; onLater: (() => void) | null; note?: string }) {
+/** Earlier / Later as ghost buttons, with the one "scheduled" tag between them when times show. */
+function ShiftRow({ onEarlier, onLater, scheduled = false }: { onEarlier: (() => void) | null; onLater: (() => void) | null; scheduled?: boolean }) {
   const { t } = useI18n();
   return (
     <div className="compare-shift">
-      <button type="button" className="shift-button" onClick={onEarlier ?? undefined} disabled={!onEarlier}>
-        <span className="compare-flip" aria-hidden="true">
-          →
-        </span>
+      <button type="button" className="ot-btn ot-btn--ghost" onClick={onEarlier ?? undefined} disabled={!onEarlier}>
+        <Icon name="chevron" className="compare-earlier-icon" />
         {t("compare.earlier")}
       </button>
-      {note && <p className="compare-note">{note}</p>}
-      <button type="button" className="shift-button" onClick={onLater ?? undefined} disabled={!onLater}>
+      {scheduled && <StatusTag />}
+      <button type="button" className="ot-btn ot-btn--ghost" onClick={onLater ?? undefined} disabled={!onLater}>
         {t("compare.later")}
-        <span className="compare-flip" aria-hidden="true">
-          ←
-        </span>
+        <Icon name="chevron" />
       </button>
     </div>
   );
@@ -97,24 +94,25 @@ function Suggestions({ exclude, onPick }: { exclude: Endpoint | null; onPick: (e
   const { t } = useI18n();
   const local = useLocalState();
   const seen = new Set<string>();
-  const places: { key: string; label: string; saved: SavedPlace }[] = [];
-  const add = (saved: SavedPlace | null, label?: string) => {
+  const places: { key: string; label: string; saved: SavedPlace; icon: IconName }[] = [];
+  const add = (saved: SavedPlace | null, icon: IconName, label?: string) => {
     if (!saved) return;
     const endpoint: Endpoint = { type: "place", place: choiceFromSaved(saved) };
     const key = `${saved.latitude.toFixed(5)},${saved.longitude.toFixed(5)}`;
     if (seen.has(key) || sameEndpoint(endpoint, exclude)) return;
     seen.add(key);
-    places.push({ key, label: label ?? saved.label, saved });
+    places.push({ key, label: label ?? saved.label, saved, icon });
   };
-  add(local.home, t("place.home"));
-  add(local.work, t("place.work"));
-  local.recents.forEach((recent) => add(recent));
+  add(local.home, "home", t("place.home"));
+  add(local.work, "work", t("place.work"));
+  local.recents.forEach((recent) => add(recent, "clock"));
   if (places.length === 0) return null;
   return (
-    <ul className="prompt-places" aria-label={t("compare.suggested")}>
-      {places.slice(0, 4).map(({ key, label, saved }) => (
+    <ul className="ot-chips compare-places" aria-label={t("compare.suggested")}>
+      {places.slice(0, 4).map(({ key, label, saved, icon }) => (
         <li key={key}>
-          <button type="button" className="prompt-place" onClick={() => onPick({ type: "place", place: choiceFromSaved(saved) })}>
+          <button type="button" className="ot-chip" onClick={() => onPick({ type: "place", place: choiceFromSaved(saved) })}>
+            <Icon name={icon} />
             <bdi>{label}</bdi>
           </button>
         </li>
@@ -134,14 +132,17 @@ function OriginPrompt({ error, onRetry, onPicked }: { error: LocationError | nul
   };
   return (
     <div className="compare-prompt" role="status">
-      <p className="prompt-title">{t("compare.askFrom")}</p>
-      {error && <p className="prompt-hint">{t(error === "denied" ? "compare.location.denied" : "compare.location.unavailable")}</p>}
-      <div className="prompt-actions">
-        <a className="button button-primary" href={hrefFor({ name: "search", field: "from" })}>
+      <Banner
+        icon="pin"
+        title={t("compare.askFrom")}
+        text={error && t(error === "denied" ? "compare.location.denied" : "compare.location.unavailable")}
+      />
+      <div className="compare-actions">
+        <a className="ot-btn ot-btn--primary" href={hrefFor({ name: "search", field: "from" })}>
           {t("compare.chooseFrom")}
         </a>
         {error !== null && error !== "denied" && error !== "unsupported" && (
-          <button type="button" className="button" onClick={onRetry}>
+          <button type="button" className="ot-btn ot-btn--secondary" onClick={onRetry}>
             {t("compare.location.retry")}
           </button>
         )}
@@ -155,12 +156,12 @@ function DestinationPrompt() {
   const { t } = useI18n();
   return (
     <div className="compare-prompt compare-missing" role="status">
-      <p className="prompt-title">{t("compare.askTo")}</p>
-      <div className="prompt-actions">
-        <a className="button button-primary" href={hrefFor({ name: "search", field: "to" })}>
+      <Banner icon="pin" title={t("compare.askTo")} />
+      <div className="compare-actions">
+        <a className="ot-btn ot-btn--primary" href={hrefFor({ name: "search", field: "to" })}>
           {t("compare.chooseTo")}
         </a>
-        <a className="button" href={hrefFor({ name: "home" })}>
+        <a className="ot-btn ot-btn--secondary" href={hrefFor({ name: "home" })}>
           {t("screen.backHome")}
         </a>
       </div>
@@ -168,23 +169,32 @@ function DestinationPrompt() {
   );
 }
 
-function TimeProblem({ result, onChangeTime }: { result: Extract<BuildResult, { reason: "time" }>; onChangeTime: () => void }) {
+function ChangeTime({ onClick }: { onClick: () => void }) {
   const { t } = useI18n();
   return (
-    <div className="state state-error" role="alert">
-      <p>
-        {t(
-          result.problem === "nonexistent"
-            ? "compare.when.nonexistent"
-            : result.problem === "invalid"
-              ? "compare.when.invalid"
-              : "compare.when.ambiguous",
-        )}
-      </p>
-      <button type="button" className="button" onClick={onChangeTime}>
-        {t("compare.changeTime")}
-      </button>
-    </div>
+    <button type="button" className="ot-btn ot-btn--secondary ot-btn--block" onClick={onClick}>
+      <Icon name="clock" />
+      {t("compare.changeTime")}
+    </button>
+  );
+}
+
+function TimeProblem({ result, onChangeTime }: { result: Extract<BuildResult, { reason: "time" }>; onChangeTime: () => void }) {
+  const { t } = useI18n();
+  const { first, rest } = splitFirstSentence(
+    t(
+      result.problem === "nonexistent"
+        ? "compare.when.nonexistent"
+        : result.problem === "invalid"
+          ? "compare.when.invalid"
+          : "compare.when.ambiguous",
+    ),
+  );
+  return (
+    <>
+      <Banner tone="warning" icon="alert" title={first} text={rest} role="alert" />
+      <ChangeTime onClick={onChangeTime} />
+    </>
   );
 }
 
@@ -230,6 +240,7 @@ export function CompareScreen() {
   const list = useMemo(() => answer?.response.data.journeys ?? [], [answer]);
   const index = Math.min(selected, Math.max(0, list.length - 1));
   const chosen: Journey | undefined = list[index];
+  const ranks = useMemo(() => rankLabels(list), [list]);
   // The previous time's answer, shown until the new one arrives (same ends only).
   const refreshing = built.isPlaceholderData || journeys.isPlaceholderData;
 
@@ -321,37 +332,26 @@ export function CompareScreen() {
   } else if (journeys.isError) {
     body = (
       <>
-        <ErrorState
+        <ProblemBanner
           state={failure?.state ?? "unexpected"}
           coverage={coverage}
           retryAfterSeconds={failure?.error.kind === "problem" ? failure.error.retryAfterSeconds : null}
           onRetry={() => void journeys.refetch()}
         />
-        {failure?.state === "outside_window" && (
-          <button type="button" className="button" onClick={openTime}>
-            {t("compare.changeTime")}
-          </button>
-        )}
+        {failure?.state === "outside_window" && <ChangeTime onClick={openTime} />}
       </>
     );
   } else if (answer && list.length === 0) {
     body = (
       <>
-        <div className="compare-prompt compare-no-route" role="status">
-          <p className="prompt-title">{t("compare.noRoute")}</p>
-          <p className="prompt-hint">{t("compare.noRoute.hint")}</p>
-        </div>
+        <Banner icon="info" title={t("compare.noRoute")} text={t("compare.noRoute.hint")} role="status" />
         <ShiftRow onEarlier={shiftTo(earlierTime([], answer.sent))} onLater={shiftTo(laterTime([], answer.sent))} />
-        <button type="button" className="button compare-change-time" onClick={openTime}>
-          {t("compare.changeTime")}
-        </button>
+        <ChangeTime onClick={openTime} />
       </>
     );
   } else if (answer && chosen) {
     const meta = answer.response.meta;
-    const caps = meta.capabilities as { realtime?: string; alerts?: string } | undefined;
-    // Decided from meta.capabilities only (design: Constraints); missing means unavailable.
-    const liveOff = !caps || caps.realtime === "not_enabled" || caps.alerts === "not_enabled";
+    // Realtime is not built yet: every time shown is scheduled, said once by the tag.
     body = (
       <div className="compare-answer" aria-busy={refreshing} data-refreshing={refreshing || undefined}>
         <span className="visually-hidden" role="status">
@@ -359,15 +359,12 @@ export function CompareScreen() {
         </span>
         {meta.mode === "fixture" && <TestDataBanner />}
         <OptionsChart journeys={list} selected={index} onSelect={select} askedDate={askedDate} />
-        <ShiftRow
-          onEarlier={shiftTo(earlierTime(list))}
-          onLater={shiftTo(laterTime(list))}
-          note={t(liveOff ? "compare.scheduled" : "compare.scheduledOnly")}
-        />
+        <ShiftRow onEarlier={shiftTo(earlierTime(list))} onLater={shiftTo(laterTime(list))} scheduled />
         <RouteDetails
           journey={chosen}
           ends={ends}
           trips={trips}
+          rank={ranks[index] ?? null}
           day={israelDate(chosen.timing.scheduledDeparture) === askedDate ? null : formatShortDay(chosen.timing.scheduledDeparture, lang)}
         />
       </div>

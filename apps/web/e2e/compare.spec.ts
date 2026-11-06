@@ -1,8 +1,9 @@
 import { expect, test, type Page } from "@playwright/test";
-import { appPath, blockExternal, expectNoSeriousAxeViolations, useScenario as setScenario } from "./helpers";
+import { appPath, blockExternal, expectNoSeriousAxeViolations, useScenario as setScenario, useTheme as setTheme } from "./helpers";
 
 // Mocked Compare (slice S5): fixtures mode at 360 x 640. The plan draft is written to
-// sessionStorage ("opentransit:plan", the PlanDraft shape) before the app starts.
+// sessionStorage ("opentransit:plan", the PlanDraft shape) before the app starts. Dark is
+// the default theme; the light-theme tests at the end repeat the axe checks.
 
 const draft = {
   from: {
@@ -34,10 +35,16 @@ const draft = {
   when: { mode: "depart_at", wall: "2026-10-01T08:00", offset: "auto" },
 };
 
-async function openCompare(page: Page, scenario: string | null = null, plan: object = draft): Promise<void> {
+async function openCompare(
+  page: Page,
+  scenario: string | null = null,
+  plan: object = draft,
+  theme: "dark" | "light" | null = null,
+): Promise<void> {
   await blockExternal(page);
   await setScenario(page, scenario);
   await page.addInitScript((value) => sessionStorage.setItem("opentransit:plan", value), JSON.stringify(plan));
+  if (theme) await setTheme(page, theme);
   await page.goto(appPath("#/compare"));
 }
 
@@ -89,17 +96,17 @@ test("options: tap the second, details swap without a request, Start opens navig
   // selected route are both on screen.
   await expect(page.locator(".sheet")).toHaveAttribute("data-snap", "full");
   await expect(options.nth(2)).toBeInViewport();
-  await expect(details.locator(".it").first()).toBeInViewport();
+  await expect(details.locator(".ot-steps__item").first()).toBeInViewport();
 
   // Hebrew: the earliest time sits on the right of the bar.
-  const segments = options.first().locator(".bar-seg");
+  const segments = options.first().locator(".ot-lbar__seg");
   const firstBox = await segments.first().boundingBox();
   const lastBox = await segments.last().boundingBox();
   expect(firstBox!.x).toBeGreaterThan(lastBox!.x);
 
   // The whole itinerary scrolls clear of the pinned Start bar.
   await page.locator("main").evaluate((el) => el.scrollTo(0, el.scrollHeight));
-  const last = (await details.locator(".it").last().boundingBox())!;
+  const last = (await details.locator(".ot-steps__item").last().boundingBox())!;
   const bar = (await page.locator(".compare-start").boundingBox())!;
   expect(last.y + last.height).toBeLessThanOrEqual(bar.y + 1);
 
@@ -173,7 +180,39 @@ test("English: left to right, earliest on the left, no serious axe violations", 
   await expect(options).toHaveCount(3);
   await expect(options.first()).toHaveAccessibleName("Option 1, Recommended, 105 minutes, departs 08:07, arrives 09:52, 2 transfers");
   await expect(page.getByRole("region", { name: /Route details/ }).getByText("רכבת ישראל", { exact: true })).toBeVisible();
-  const segments = options.first().locator(".bar-seg");
+  const segments = options.first().locator(".ot-lbar__seg");
   expect((await segments.first().boundingBox())!.x).toBeLessThan((await segments.last().boundingBox())!.x);
   await expectNoSeriousAxeViolations(page, "compare options (en)");
 });
+
+test("light theme: half sheet, route details and time picker pass axe, and the options still fit", async ({ page }) => {
+  await openCompare(page, null, draft, "light");
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  const options = optionList(page).getByRole("button");
+  await expect(options).toHaveCount(3);
+  const bar = (await page.locator(".compare-start").boundingBox())!;
+  for (let i = 0; i < 3; i += 1) {
+    const box = (await options.nth(i).boundingBox())!;
+    expect(box.y + box.height, `option ${i + 1} above Start`).toBeLessThanOrEqual(bar.y + 1);
+  }
+  await expectNoSeriousAxeViolations(page, "compare half sheet (he, light)");
+  await options.nth(1).click();
+  await expect(page.locator(".sheet")).toHaveAttribute("data-snap", "full");
+  await expectNoSeriousAxeViolations(page, "compare route details (he, light)");
+  await page.getByRole("button", { name: /^שינוי השעה: יציאה 08:00/ }).click();
+  await expect(page.getByRole("form", { name: "מתי יוצאים?" })).toBeVisible();
+  await expectNoSeriousAxeViolations(page, "compare time picker (light)");
+});
+
+for (const [label, scenario, plan, shown] of [
+  ["no route", "compare-no-route", draft, "לא נמצא מסלול"],
+  ["unavailable", "compare-unavailable", draft, "השירות אינו זמין זמנית."],
+  ["rate limited", "compare-rate-limited", draft, "יותר מדי בקשות."],
+  ["no start", null, { ...draft, from: null, when: { mode: "now" } }, "מאיפה יוצאים?"],
+] as const) {
+  test(`light theme: ${label} passes axe`, async ({ page }) => {
+    await openCompare(page, scenario, plan, "light");
+    await expect(page.getByText(shown, { exact: true })).toBeVisible();
+    await expectNoSeriousAxeViolations(page, `compare ${label} (light)`);
+  });
+}

@@ -1,14 +1,16 @@
 import { useEffect, useId, useMemo, useRef, useState, type Ref } from "react";
+import { Icon } from "../../components/ds";
 import { useI18n } from "../../i18n/I18nProvider";
 import { formatDuration } from "../../lib/format";
 import { departureInstant, israelWallTime } from "../../lib/time";
 import type { When } from "../../plan/draft";
 import { daysBetween, formatShortDay, israelDate, relativeDay } from "./labels";
 
-// Time control (design: Compare; CU03, CU12). One chip in the header says what is asked
-// ("עכשיו" / "יציאה 08:00" / "הגעה עד 10:00 · מחר"); tapping it opens an inline panel:
-// Now / Depart / Arrive by, a day (today, tomorrow, the next weeks), a time and quick
-// +15 / +30 / +60. "Now" applies at once; the rest apply with one button. Times are
+// Time control (design: TimeControl; CU03, CU12). One chip in the header (`ot-timechip`)
+// says what is asked ("עכשיו" / "יציאה 08:00" / "הגעה עד 10:00 · מחר"); tapping it opens
+// an inline panel: Now / Depart at / Arrive by (`ot-seg`, as radios), a day (today,
+// tomorrow, the next weeks), a time and quick +15 / +30 / +60 pills. "Now" applies at
+// once; the rest apply with one button. Times are
 // Israel wall times: a time skipped by the spring change is refused with a message and a
 // time repeated in autumn asks which offset. Never silently shifted.
 //
@@ -90,27 +92,36 @@ export function WhenChip({
 }) {
   const { t, lang } = useI18n();
   const { head, day } = whenSummary(when, t, lang);
+  // The time inside the head ("יציאה 08:00") is isolated in its own <bdi>.
+  const time = when.mode === "now" ? null : when.wall.slice(11, 16);
+  const [before, ...after] = time ? head.split(time) : [head];
   return (
     <button
       ref={ref}
       type="button"
-      className="when-chip"
+      className="ot-timechip compare-timechip"
       aria-expanded={open}
       aria-controls={panelId}
       onClick={onToggle}
     >
+      <Icon name="clock" size="sm" />
       {/* The name is the visible text with a hidden lead-in: "שינוי השעה: יציאה 08:00, מחר". */}
       <span className="visually-hidden">{t("compare.changeTime")}:</span>{" "}
-      <span className="when-chip-text">
-        <span className="when-chip-head">{head}</span>
+      <span className="compare-timechip__text">
+        <span className="compare-timechip__head">
+          {before}
+          {time && after.length > 0 && (
+            <>
+              <bdi className="num">{time}</bdi>
+              {after.join(time)}
+            </>
+          )}
+        </span>
         {day && (
-          <span className="when-chip-day">
-            <span className="visually-hidden">,</span> {day}
+          <span className="compare-timechip__day">
+            <span className="visually-hidden">,</span> <bdi>{day}</bdi>
           </span>
         )}
-      </span>
-      <span className="when-chip-caret" aria-hidden="true">
-        ▾
       </span>
     </button>
   );
@@ -193,7 +204,7 @@ export function WhenPanel({ id, when, onChange, onClose, now = new Date() }: Whe
     <form
       ref={formRef}
       id={id}
-      className="when-panel"
+      className="compare-when"
       aria-label={t("compare.when")}
       onKeyDown={(event) => {
         if (event.key !== "Escape") return;
@@ -205,10 +216,10 @@ export function WhenPanel({ id, when, onChange, onClose, now = new Date() }: Whe
         apply();
       }}
     >
-      <fieldset className="when-modes">
+      <fieldset className="ot-seg compare-seg">
         <legend className="visually-hidden">{t("compare.when")}</legend>
         {modes.map((option) => (
-          <label key={option.mode} className="when-mode">
+          <label key={option.mode} className="ot-seg__opt compare-seg__opt">
             <input
               type="radio"
               name={`${ids}-mode`}
@@ -230,10 +241,10 @@ export function WhenPanel({ id, when, onChange, onClose, now = new Date() }: Whe
         ))}
       </fieldset>
 
-      <fieldset className="when-fields">
+      <fieldset className="compare-when__fields">
         <legend className="visually-hidden">{t("compare.when.pick")}</legend>
-        <label className="when-field when-field-day">
-          <span className="when-field-label">{t("compare.when.day")}</span>
+        <label className="compare-field">
+          <span className="compare-field__label">{t("compare.when.day")}</span>
           <select value={day} onChange={(event) => edit({ day: event.target.value })}>
             {days.map((date) => (
               <option key={date} value={date}>
@@ -242,8 +253,8 @@ export function WhenPanel({ id, when, onChange, onClose, now = new Date() }: Whe
             ))}
           </select>
         </label>
-        <label className="when-field when-field-time">
-          <span className="when-field-label">{t("compare.when.time")}</span>
+        <label className="compare-field">
+          <span className="compare-field__label">{t("compare.when.time")}</span>
           <input
             type="time"
             step={60}
@@ -254,12 +265,12 @@ export function WhenPanel({ id, when, onChange, onClose, now = new Date() }: Whe
         </label>
       </fieldset>
 
-      <div className="when-quick">
+      <div className="compare-when__quick">
         {QUICK_MINUTES.map((minutes) => (
           <button
             key={minutes}
             type="button"
-            className="when-quick-button"
+            className="ot-chip compare-quick"
             onClick={() => {
               const next = shiftWall(`${day}T${time}`, minutes);
               edit({ day: next.slice(0, 10), time: next.slice(11, 16) });
@@ -271,23 +282,29 @@ export function WhenPanel({ id, when, onChange, onClose, now = new Date() }: Whe
       </div>
 
       {problem && (
-        <div className="when-problem" role="alert">
-          {problem.kind === "ambiguous" ? (
-            <>
-              <p>{t("compare.when.ambiguous")}</p>
-              {problem.candidates.map((offset) => (
-                <button key={offset} type="button" className="button" onClick={() => apply(offset)}>
-                  {t(`compare.when.offset.${offset}`)}
-                </button>
-              ))}
-            </>
-          ) : (
-            <p>{t(problem.kind === "nonexistent" ? "compare.when.nonexistent" : "compare.when.invalid")}</p>
-          )}
+        <div className="compare-when__problem" role="alert">
+          <p className="ot-banner ot-banner--warning ot-banner--compact">
+            <Icon name="alert" />
+            <span className="ot-banner__body">
+              {t(
+                problem.kind === "ambiguous"
+                  ? "compare.when.ambiguous"
+                  : problem.kind === "nonexistent"
+                    ? "compare.when.nonexistent"
+                    : "compare.when.invalid",
+              )}
+            </span>
+          </p>
+          {problem.kind === "ambiguous" &&
+            problem.candidates.map((offset) => (
+              <button key={offset} type="button" className="ot-btn ot-btn--secondary ot-btn--block" onClick={() => apply(offset)}>
+                {t(`compare.when.offset.${offset}`)}
+              </button>
+            ))}
         </div>
       )}
 
-      <button type="submit" className="button button-primary when-apply">
+      <button type="submit" className="ot-btn ot-btn--primary ot-btn--block">
         {t("compare.when.apply")}
       </button>
     </form>

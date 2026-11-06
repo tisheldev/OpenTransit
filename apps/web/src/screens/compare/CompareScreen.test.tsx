@@ -103,7 +103,7 @@ describe("Compare (Hebrew)", () => {
     expect(container.querySelectorAll(".option-placeholder")).toHaveLength(3);
   });
 
-  it("shows three options in the API's order with times, rank labels and one note, the first selected with its itinerary", async () => {
+  it("shows three options in the API's order with times, rank labels and one scheduled tag, the first selected with its route", async () => {
     renderCompare();
     await waitFor(() => expect(options()).toHaveLength(3));
     const [first, second, third] = options();
@@ -111,28 +111,36 @@ describe("Compare (Hebrew)", () => {
     expect(first).toHaveAccessibleName("אפשרות 1, מומלץ, 105 דקות, יציאה 08:07, הגעה 09:52, 2 החלפות");
     expect(second).toHaveAccessibleName(/^אפשרות 2, הכי מהיר, 104 דקות, יציאה 08:27, הגעה 10:11/);
     expect(third).toHaveAccessibleName("אפשרות 3, 133 דקות, יציאה 08:19, הגעה 10:32, 4 החלפות");
-    // Each row leads with its departure – arrival, then duration, transfers and walking.
+    // Each row shows its duration and rank, and its departure – arrival over its bar.
     expect(within(first!).getByText("08:07")).toBeInTheDocument();
     expect(within(first!).getByText("09:52")).toBeInTheDocument();
     expect(within(first!).getByText("מומלץ")).toBeInTheDocument();
-    expect(within(first!).getByText("1 שע׳ 45 דק׳")).toBeInTheDocument();
-    expect(within(first!).getByText("2 החלפות")).toBeInTheDocument();
-    // One short note, not two saying the same thing.
-    expect(screen.getByText("זמנים מתוכננים · לא בזמן אמת")).toBeInTheDocument();
+    expect(within(first!).getByText("1:45")).toBeInTheDocument();
+    expect(within(first!).getByText("שע׳")).toBeInTheDocument();
+    // One "scheduled" tag, not a note per place.
+    expect(screen.getAllByText("מתוכנן")).toHaveLength(1);
     expect(screen.queryByText("זמנים בזמן אמת והתראות אינם זמינים")).toBeNull();
 
     const route = details();
+    // The selected option's head: leave → arrive, rank, duration, transfers, walking, first boarding.
+    expect(route).toHaveTextContent("יציאה 08:07, הגעה 09:52");
+    expect(within(route).getByText("מומלץ")).toBeInTheDocument();
+    expect(within(route).getByText("2 החלפות")).toBeInTheDocument();
+    expect(within(route).getByText("9 דק׳ הליכה")).toBeInTheDocument();
+    expect(route).toHaveTextContent("עולים ב־08:07 · דיזנגוף סנטר/דיזנגוף");
     // A train is Israel Railways with its number, read from where it is boarded to where
     // it is left; never "a train to <exit stop>".
     expect(within(route).getByText("רכבת ישראל")).toBeInTheDocument();
+    expect(within(route).getByText("רכבת 156")).toBeInTheDocument();
     expect(within(route).getByText("רכבת ישראל 156 מ־השלום אל חוף הכרמל.", { exact: false })).toBeInTheDocument();
     expect(route).not.toHaveTextContent("רכבת לחוף הכרמל");
     expect(within(route).getByText("לכיוון מסוף הטייסים")).toBeInTheDocument();
     // Exit stops at their arrival times, the engine's END as the passenger's label.
     const steps = within(route).getByRole("list", { name: "שלבי המסלול" });
-    expect(steps).toHaveTextContent(/09:24ירידה: חוף הכרמל/);
-    expect(steps).toHaveTextContent(/09:52הגעה: טכניון/);
+    expect(steps).toHaveTextContent(/09:24ירידה · חוף הכרמל/);
+    expect(steps).toHaveTextContent(/09:52הגעה · טכניון/);
     expect(within(route).getByText(/^הליכה 5 דק׳ · 330 מ׳$/)).toBeInTheDocument();
+    expect(within(route).getByText("אל ת. רכבת חוף הכרמל")).toBeInTheDocument();
     expect(within(route).getByText("המתנה 7 דק׳")).toBeInTheDocument();
     expect(route).not.toHaveTextContent("END");
     expect(route).not.toHaveTextContent("רציף");
@@ -308,8 +316,11 @@ describe("Compare (Hebrew)", () => {
     const { container } = renderCompare();
     await waitFor(() => expect(options()).toHaveLength(3));
     // Earlier / Later sit between the options and the details.
-    const order = [...container.querySelectorAll(".options, .compare-shift, .route-details")].map((el) => el.className);
-    expect(order).toEqual(["options", "compare-shift", "route-details"]);
+    const parts = ["compare-chart", "compare-shift", "route-details"];
+    const order = [...container.querySelectorAll(parts.map((part) => `.${part}`).join(", "))].map((el) =>
+      parts.find((part) => el.classList.contains(part)),
+    );
+    expect(order).toEqual(parts);
     await user.click(screen.getByRole("button", { name: "מאוחר יותר" }));
     await waitFor(() => expect(journeyPosts()).toHaveLength(2));
     expect(journeyPosts()[1]!.body).toMatchObject({ departAt: "2026-10-01T08:28:00+03:00" });
@@ -497,7 +508,8 @@ describe("Compare (English)", () => {
     // The recorded answer's names are Hebrew; the words around them are English.
     expect(within(details()).getByText("רכבת ישראל")).toBeInTheDocument();
     expect(within(details()).getByText("towards מסוף הטייסים")).toBeInTheDocument();
-    expect(screen.getByText("Scheduled times · not live")).toBeInTheDocument();
+    expect(screen.getAllByText("Scheduled")).toHaveLength(1);
+    expect(within(details()).getByText("Train 156")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Start navigation" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Change time: Depart 08:00, Thu 1 Oct" })).toBeInTheDocument();
     expect(journeyPosts()[0]!.body).toMatchObject({ lang: "en" });
