@@ -62,8 +62,49 @@ The job needs the machine on, Docker Desktop running and a valid `opentransit` l
 day leaves the previous revision serving, and an unchanged generation stays serviceable for
 7 days after its last renewal.
 
-**Archive (decision, 31 October 2026).** Generations stay on `D:/ot/` (`generations/`, `src/`,
-`releases/`, `logs/`), images in ECR (never deleted automatically), evidence in Git. S3 is deferred.
+**Archive.** Since 6 November 2026 the cloud build host archives sources (content-addressed),
+snapshots, checks, generation records and releases to `s3://opentransit-archive-<account>` (below).
+Images stay in ECR (never deleted automatically), evidence in Git; `D:/ot/` keeps the operator
+machine's own generations.
+
+## Cloud build host
+
+The scheduled refresh runs on EC2 instance `opentransit-build-host` (t3.large, `eu-north-1`;
+[design and resources](../deploy/aws/README.md#h-1-cloud-build-host-6-november-2026),
+[evidence](../services/api/results/h1-build-host-20261101-01.json)). The Windows task above is
+the manual fallback; do not run both on the same day (two publishers would race on the service).
+
+```sh
+BH="uv run --project services/api --locked python deploy/aws/tools/build_host.py"
+```
+
+* **How it runs.** EventBridge Scheduler `opentransit-build-host-daily` starts the instance at
+  03:30 UTC. The boot unit runs the same job as the Windows task (fetch → validate →
+  build-generation only for a changed pair or on a fresh host → probe → push → ALB probe →
+  archive → `prune --dry-run`), stops at the first failure and powers off; a backstop timer powers
+  off 4.5 h after boot. A failed day leaves the previous revision serving.
+* **Manual run.** `$BH trigger` (a one-off schedule two minutes out with the daily target, deleted
+  after it fires) then `$BH watch` (tails CloudWatch until the instance has stopped). Do not start
+  the instance by hand in refresh mode unless you want a run.
+* **Logs.** CloudWatch group `/opentransit/build-host`, streams `<UTC stamp>/host` (boot script)
+  and `<UTC stamp>/job` (the job): `aws --profile opentransit --region eu-north-1 logs tail
+  /opentransit/build-host --since 6h`. Each run also writes `s3://opentransit-archive-<account>/runs/<stamp>.json`
+  (one line: outcome, mode, failed step) and `runs/<stamp>/{summary.json,daily.log}`. The line
+  `OPENTRANSIT_REFRESH_RESULT outcome=ok` feeds metric `OpenTransit/BuildHost RefreshSucceeded`;
+  alarm `opentransit-build-host-no-success-26h` goes to SNS topic `opentransit-build-host-alerts`,
+  which has **no subscription** until you add one (`aws sns subscribe --topic-arn <arn> --protocol
+  email --notification-endpoint <address>`).
+* **Shell access.** `$BH mode maintenance`, start the instance, then `aws ssm start-session
+  --target <instance>` (no SSH). Maintenance boots skip the job and stay up; `$BH mode refresh`
+  and stop the instance when done.
+* **Pause.** `$BH pause` disables the schedule (`$BH resume` re-enables). Pause it whenever the
+  preview service is paused (`$H1 pause`), or the run fails waiting for a deployment.
+* **Update the ref.** Push the commit, then `$BH set-ref <commit>`. The next boot fetches it and
+  reruns `install.sh` (pinned tools, units). Changing `user-data.sh` needs a new instance
+  (teardown and setup).
+* **Tear down.** `$BH teardown` deletes the schedule, instance, security group (and the ALB rule
+  for it), roles and instance profile, alarm, topic, metric filter, log group and SSM parameter.
+  The archive bucket and ECR are kept.
 
 ## Incident checks and evidence
 

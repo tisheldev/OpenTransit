@@ -822,7 +822,7 @@ def watch(args) -> int:
     ev = h0.load()
     instance = h0.one(ev, "ec2-instance")["id"]
     started, seen, stamp = time.monotonic(), {}, args.stamp
-    stopped_since = None
+    stopped_since, booted = None, False
     while time.monotonic() - started < args.timeout:
         if stamp is None:
             streams = h0.aws(
@@ -859,7 +859,9 @@ def watch(args) -> int:
                 if out.get("nextForwardToken"):
                     seen[stream] = out["nextForwardToken"]
         state = instance_state(instance)
-        if state == "stopped":
+        booted = booted or state in ("pending", "running")
+        # Before the scheduled start the instance is still stopped from the previous run.
+        if state == "stopped" and booted:
             stopped_since = stopped_since or time.monotonic()
             if time.monotonic() - stopped_since > 30:
                 print(f"instance {instance} stopped", flush=True)
