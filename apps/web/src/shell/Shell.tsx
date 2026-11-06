@@ -5,6 +5,7 @@ import {
   useMemo,
   useRef,
   useState,
+  type CSSProperties,
   type KeyboardEvent,
   type PointerEvent,
   type ReactNode,
@@ -47,6 +48,7 @@ function useAfterFirstPaint(): boolean {
 function Sheet({
   snap,
   setSnap,
+  halfFit,
   topReserved,
   corner,
   locate,
@@ -54,6 +56,8 @@ function Sheet({
 }: {
   snap: Snap;
   setSnap: (snap: Snap) => void;
+  /** The screen's minimum half height in px (fitHalf), or null. */
+  halfFit: number | null;
   /** Height of the top band the full sheet must not cover. */
   topReserved: number;
   /** An optional control in the handle row's inline-end corner (Home: Settings). */
@@ -130,7 +134,13 @@ function Sheet({
     <section
       ref={sheetRef}
       className={`sheet sheet-${snap}${dragHeight === null ? "" : " sheet-dragging"}`}
-      style={dragHeight === null ? undefined : { blockSize: `${dragHeight}px` }}
+      style={
+        dragHeight !== null
+          ? { blockSize: `${dragHeight}px` }
+          : halfFit !== null
+            ? ({ "--sheet-fit": `${halfFit}px` } as CSSProperties)
+            : undefined
+      }
       aria-label={t("shell.sheet")}
       data-snap={snap}
     >
@@ -248,7 +258,11 @@ export function Shell({ fixtureMode }: { fixtureMode: boolean }) {
   }
   // Stable per route: a screen's effect that sets a snap runs once, then the handle rules.
   const setSnap = useCallback((next: Snap) => setSnapState({ key: routeKey, snap: next }), [routeKey]);
-  const sheet = useMemo(() => ({ snap, setSnap }), [snap, setSnap]);
+  // A screen's minimum half height (fitHalf), kept only for the route that asked.
+  const [fit, setFit] = useState<{ key: string; px: number } | null>(null);
+  const fitHalf = useCallback((px: number | null) => setFit(px === null ? null : { key: routeKey, px: Math.ceil(px) }), [routeKey]);
+  const halfFit = fit?.key === routeKey ? fit.px : null;
+  const sheet = useMemo(() => ({ snap, setSnap, fitHalf }), [snap, setSnap, fitHalf]);
 
   // The top band's height: the full sheet stops below it (shell.css --overlay-top-h).
   useLayoutEffect(() => {
@@ -330,6 +344,7 @@ export function Shell({ fixtureMode }: { fixtureMode: boolean }) {
         <Sheet
           snap={snap}
           setSnap={setSnap}
+          halfFit={halfFit}
           topReserved={topReserved}
           locate={showLocate ? <LocateButton /> : undefined}
           corner={

@@ -15,9 +15,16 @@ export interface SheetControl {
    * (Search's "choose on map" drops to peek; Compare may open full for a tapped option).
    */
   setSnap: (snap: Snap) => void;
+  /**
+   * At the half snap, ask for at least this height in px, so content that must stay in
+   * view above a pinned action fits (Navigate: the step card above Next step), whatever
+   * the fonts or the text; never beyond the full snap. `null` drops the request; a route
+   * change drops it too. Stable for a route, like `setSnap`.
+   */
+  fitHalf: (heightPx: number | null) => void;
 }
 
-export const SheetContext = createContext<SheetControl>({ snap: "half", setSnap: () => {} });
+export const SheetContext = createContext<SheetControl>({ snap: "half", setSnap: () => {}, fitHalf: () => {} });
 
 /** Screens read or change the sheet's snap (Search drops it to peek to pick on the map). */
 export function useSheet(): SheetControl {
