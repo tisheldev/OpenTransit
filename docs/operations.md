@@ -63,7 +63,8 @@ day leaves the previous revision serving, and an unchanged generation stays serv
 7 days after its last renewal.
 
 **Archive.** Since 6 November 2026 the cloud build host archives sources (content-addressed),
-snapshots, checks, generation records and releases to `s3://opentransit-archive-<account>` (below).
+snapshots, checks, generation records and releases to `s3://opentransit-archive-eun1-7c41d2`
+(the portability session's bucket and layout; below).
 Images stay in ECR (never deleted automatically), evidence in Git; `D:/ot/` keeps the operator
 machine's own generations.
 
@@ -85,10 +86,12 @@ BH="uv run --project services/api --locked python deploy/aws/tools/build_host.py
   off 4.5 h after boot. A failed day leaves the previous revision serving.
 * **Manual run.** `$BH trigger` (a one-off schedule two minutes out with the daily target, deleted
   after it fires) then `$BH watch` (tails CloudWatch until the instance has stopped). Do not start
-  the instance by hand in refresh mode unless you want a run.
+  the instance by hand in refresh mode unless you want a run. `$BH mode dry-run` first makes the
+  run stop before the publisher push (nothing reaches ECR or ECS; result `outcome=dry-run`, which
+  does not count as a success for the alarm); `$BH mode refresh` afterwards.
 * **Logs.** CloudWatch group `/opentransit/build-host`, streams `<UTC stamp>/host` (boot script)
   and `<UTC stamp>/job` (the job): `aws --profile opentransit --region eu-north-1 logs tail
-  /opentransit/build-host --since 6h`. Each run also writes `s3://opentransit-archive-<account>/runs/<stamp>.json`
+  /opentransit/build-host --since 6h`. Each run also writes `s3://opentransit-archive-eun1-7c41d2/runs/<stamp>.json`
   (one line: outcome, mode, failed step) and `runs/<stamp>/{summary.json,daily.log}`. The line
   `OPENTRANSIT_REFRESH_RESULT outcome=ok` feeds metric `OpenTransit/BuildHost RefreshSucceeded`;
   alarm `opentransit-build-host-no-success-26h` goes to SNS topic `opentransit-build-host-alerts`,

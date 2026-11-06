@@ -431,7 +431,8 @@ One stopped-by-default EC2 instance in `eu-north-1` runs the daily refresh and p
 * **Boot**: `build-host/user-data.sh` (first launch only: packages, swap, clone, `install.sh`).
   Every boot runs `opentransit-refresh.service` → `/usr/local/libexec/opentransit-run-refresh`
   (`build-host/run-refresh.sh`): read instance tag `OpenTransitMode` (`maintenance` = do nothing and
-  stay up), check out the ref in SSM parameter `/opentransit/build-host/repo-ref` (reinstall if it
+  stay up; `dry-run` = build and stage the release, stop before the publisher push, result
+  `outcome=dry-run`), check out the ref in SSM parameter `/opentransit/build-host/repo-ref` (reinstall if it
   moved), find the ALB address, run `daily_refresh.py` under a 3 h timeout, then `poweroff`. A
   backstop timer powers off 4.5 h after boot regardless.
 * **Pins** (`build-host/install.sh`): repository commit (SSM parameter), uv 0.11.26, Python 3.14.6,
@@ -442,9 +443,13 @@ One stopped-by-default EC2 instance in `eu-north-1` runs the daily refresh and p
   host cleanup, stopping at the first failure. An unchanged pair is renewed, not rebuilt
   (`mode=unchanged`). The first run on a fresh host is `mode=bootstrap`: the serving generation is
   not on its disk, so it rebuilds from the day's sources.
-* **Archive** `s3://opentransit-archive-<account>` (versioned, public access blocked):
-  `sources/sha256/<sha>/<file>`, `snapshots/`, `checks/`, `generations/<dir>/{manifest,pipeline,probe}.json`,
-  `releases/<stamp>/`, and `runs/<stamp>.json` (one-line summary) with `runs/<stamp>/` (summary and log).
+* **Archive**: the portability session's bucket `opentransit-archive-eun1-7c41d2` (versioned,
+  private; PORT-01), in its layout: `generations/<id>/{manifest.json,pipeline/pipeline.json,probe/probe.json}`,
+  `sources/snapshots/<stamp>/provenance.json`, `sources/checks/<check>.json`, `releases/<stamp>/`.
+  The host adds `sources/sha256/<sha>/<file>` (source bytes stored once per hash; a snapshot's
+  provenance lists the hashes), `releases/build-host-current.json` (its bootstrap pointer) and
+  `runs/<stamp>.json` (one-line summary) with `runs/<stamp>/` (summary and log). Setup first created
+  its own bucket and deleted it once the shared one existed (evidence step `archive-bucket-switch`).
 * **Logs and alarm**: group `/opentransit/build-host` (90 days), streams `<stamp>/host` and
   `<stamp>/job`; metric filter on `OPENTRANSIT_REFRESH_RESULT outcome=ok` → `OpenTransit/BuildHost`
   `RefreshSucceeded`; alarm `opentransit-build-host-no-success-26h` → SNS topic
@@ -455,8 +460,8 @@ One stopped-by-default EC2 instance in `eu-north-1` runs the daily refresh and p
 BH="uv run --project services/api --locked python deploy/aws/tools/build_host.py"
 $BH estimate                 # refuses setup above the $8/month guard
 $BH setup --ref <commit>     # creates or adopts everything above; instance starts in maintenance
-$BH seed                     # copies the serving release record to s3://.../bootstrap/releases/
-$BH mode refresh             # then stop the instance; the schedule starts it
+$BH seed                     # the serving release record → releases/<stamp>/ + build-host-current.json
+$BH mode refresh             # or dry-run / maintenance; then stop the instance
 $BH trigger && $BH watch     # one manual run now, tailing CloudWatch until the host stops
 $BH set-ref <commit>         # the next boot checks out and installs this commit
 $BH pause | $BH resume       # disable / enable the daily schedule

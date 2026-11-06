@@ -819,7 +819,9 @@ def trigger(args) -> int:
 
 
 def instance_state(instance_id: str) -> str:
-    out = h0.aws("ec2", "describe-instances", "--instance-ids", instance_id)
+    out = h0.aws("ec2", "describe-instances", "--instance-ids", instance_id, check=False)
+    if "_error" in out:  # a transient network or API error; the caller polls again
+        return "unknown"
     return out["Reservations"][0]["Instances"][0]["State"]["Name"]
 
 
@@ -841,6 +843,7 @@ def watch(args) -> int:
                 "--descending",
                 "--max-items",
                 "4",
+                check=False,
             )
             names = [s["logStreamName"] for s in streams.get("logStreams", [])]
             fresh = [n for n in names if n.split("/")[0] >= (args.after or "")]
