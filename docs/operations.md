@@ -68,7 +68,7 @@ day leaves the previous revision serving, and an unchanged generation stays serv
 7 days after its last renewal.
 
 **Archive (decision, 31 October 2026).** Generations stay on `D:/ot/` (`generations/`, `src/`,
-`releases/`, `logs/`), images in ECR (never deleted automatically), evidence in Git. S3 is deferred.
+`releases/`, `logs/`), images in ECR (never deleted automatically), evidence in Git. **Updated 6 November (PORT-01):** the `oct31a` manifests, pipeline record, probe, source snapshot, source checks and release records are also in the versioned S3 bucket `opentransit-archive-eun1-7c41d2` ([record](../services/api/results/portability-20261101-01.json)).
 
 ## Incident checks and evidence
 
