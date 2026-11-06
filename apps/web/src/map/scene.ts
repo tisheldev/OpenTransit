@@ -25,6 +25,11 @@ export interface MapPin {
   role: "origin" | "destination" | "stop" | "transfer";
   position: LonLat;
   label: string;
+  /**
+   * Stops and transfers: the API mode of the ride boarded there, for the ring's colour.
+   * Optional: without it the map uses the drawn ride that boards or ends at the pin.
+   */
+  mode?: string;
 }
 
 export interface MapUser {

@@ -5,6 +5,9 @@ import type { ReactNode } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { I18nProvider } from "../i18n/I18nProvider";
 import type { Lang } from "../i18n/messages";
+import { resetTheme, setTheme } from "../lib/theme";
+import { THEME_COLORS } from "../styles/tokens";
+import { destinationMarker } from "./layers";
 import { MapHost } from "./MapHost";
 import MapView from "./MapView";
 import {
@@ -19,9 +22,14 @@ import {
   type MapScene,
 } from "./scene";
 
-// jsdom has no WebGL: maplibre-gl is replaced by a recording fake.
+// jsdom has no WebGL: maplibre-gl is replaced by a recording fake. finishStyle() does what
+// MapLibre does when a style arrives: run transformStyle(previous, next), replace the
+// style's sources and layers with the result, and fire "style.load".
 const fake = vi.hoisted(() => {
   type Handler = (event?: unknown) => void;
+  type Layer = { id: string; type: string; layout?: Record<string, unknown>; paint?: Record<string, unknown> };
+  type Style = { version: 8; glyphs?: string; sources: Record<string, { type: string; data?: unknown }>; layers: Layer[] };
+  type Transform = (previous: Style | undefined, next: Style) => Style;
   const state = { failNext: false, instances: [] as FakeMap[] };
   class FakeSource {
     data: unknown;
@@ -32,15 +40,30 @@ const fake = vi.hoisted(() => {
       this.data = data;
     }
   }
+  /** A stand-in for an OpenFreeMap style: glyphs, land, water, a road, and two labels. */
+  const remoteStyle = (): Style => ({
+    version: 8,
+    glyphs: "https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf",
+    sources: { openmaptiles: { type: "vector" } },
+    layers: [
+      { id: "background", type: "background", paint: { "background-color": "#0c0c0c" } },
+      { id: "water", type: "fill", "source-layer": "water", paint: { "fill-color": "#1b1b1d" } } as Layer,
+      { id: "highway_minor", type: "line", "source-layer": "transportation", paint: { "line-color": "#181818" } } as Layer,
+      { id: "place_city", type: "symbol", layout: { "text-field": "{name:latin}" } },
+      { id: "housenumber", type: "symbol", layout: { "text-field": "{housenumber}" } },
+    ],
+  });
   class FakeMap {
     options: Record<string, unknown>;
     handlers: Record<string, Handler[]> = {};
     sources = new Map<string, FakeSource>();
-    layers: { id: string; type: string }[] = [];
-    styleLayers = [
-      { id: "place_city", type: "symbol", textField: "{name:latin}" as unknown },
-      { id: "housenumber", type: "symbol", textField: "{housenumber}" as unknown },
-    ];
+    /** The loaded style's own layers (the basemap) and ours (ot-*). */
+    styleLayers: Layer[] = [];
+    layers: Layer[] = [];
+    glyphs: string | undefined;
+    images = new Map<string, { image: { width: number; data: Uint8ClampedArray }; options?: unknown }>();
+    pendingStyle: { style: unknown; options?: { diff?: boolean; transformStyle?: Transform } } | null = null;
+    styled = false;
     center = { lng: 34.78, lat: 32.08 };
     calls: { method: string; args: unknown[] }[] = [];
     touchZoomRotate = { disableRotation: () => {} };
@@ -59,24 +82,63 @@ const fake = vi.hoisted(() => {
     fire(event: string) {
       for (const handler of this.handlers[event] ?? []) handler({});
     }
+    setStyle(style: unknown, options?: { diff?: boolean; transformStyle?: Transform }) {
+      this.calls.push({ method: "setStyle", args: [style, options] });
+      this.pendingStyle = { style, options };
+      return this;
+    }
+    /** The pending style arrives (a URL resolves to `fetched`, else the stand-in). */
+    finishStyle(fetched?: Style) {
+      const { style, options } = this.pendingStyle!;
+      this.pendingStyle = null;
+      const json = structuredClone(fetched ?? (typeof style === "string" ? remoteStyle() : (style as Style)));
+      const previous = this.styled ? (structuredClone(this.getStyle()) as Style) : undefined;
+      const next = options?.transformStyle ? options.transformStyle(previous, json) : json;
+      const ours = (id: string) => id.startsWith("ot-");
+      this.glyphs = next.glyphs;
+      this.styleLayers = next.layers.filter((layer) => !ours(layer.id));
+      this.layers = next.layers.filter((layer) => ours(layer.id));
+      this.sources = new Map(
+        Object.entries(next.sources)
+          .filter(([id]) => ours(id))
+          .map(([id, source]) => [id, new FakeSource(source.data)]),
+      );
+      this.styled = true;
+      this.fire("style.load");
+    }
     addSource(id: string, spec: { data: unknown }) {
       this.sources.set(id, new FakeSource(spec.data));
     }
     getSource(id: string) {
       return this.sources.get(id);
     }
-    addLayer(layer: { id: string; type: string }) {
+    addLayer(layer: Layer) {
       this.layers.push(layer);
     }
-    getStyle() {
-      return { layers: this.styleLayers, glyphs: undefined };
+    getLayer(id: string) {
+      return [...this.styleLayers, ...this.layers].find((layer) => layer.id === id);
     }
-    getLayoutProperty(id: string) {
-      return this.styleLayers.find((layer) => layer.id === id)?.textField;
+    getStyle(): Style {
+      const sources = Object.fromEntries([...this.sources].map(([id, source]) => [id, { type: "geojson", data: source.data }]));
+      return { version: 8, glyphs: this.glyphs, sources, layers: [...this.styleLayers, ...this.layers] };
     }
-    setLayoutProperty(id: string, _name: string, value: unknown) {
-      const layer = this.styleLayers.find((l) => l.id === id);
-      if (layer) layer.textField = value;
+    getLayoutProperty(id: string, name: string) {
+      return this.getLayer(id)?.layout?.[name];
+    }
+    setLayoutProperty(id: string, name: string, value: unknown) {
+      const layer = this.getLayer(id);
+      if (layer) layer.layout = { ...layer.layout, [name]: value };
+    }
+    hasImage(id: string) {
+      return this.images.has(id);
+    }
+    addImage(id: string, image: { width: number; data: Uint8ClampedArray }, options?: unknown) {
+      this.calls.push({ method: "addImage", args: [id, image, options] });
+      this.images.set(id, { image, options });
+    }
+    updateImage(id: string, image: { width: number; data: Uint8ClampedArray }) {
+      this.calls.push({ method: "updateImage", args: [id, image] });
+      this.images.set(id, { image, options: this.images.get(id)?.options });
     }
     getContainer() {
       return { clientHeight: 640, clientWidth: 360 };
@@ -102,7 +164,7 @@ const fake = vi.hoisted(() => {
     }
     remove() {}
   }
-  return { state, FakeMap };
+  return { state, FakeMap, remoteStyle };
 });
 
 vi.mock("maplibre-gl", () => {
@@ -115,12 +177,21 @@ function renderWith(ui: ReactNode, lang: Lang = "he") {
   return render(<I18nProvider initialLang={lang}>{ui}</I18nProvider>);
 }
 
-async function loadedMap(): Promise<FakeMap> {
+/** The map once its first style has arrived (`fetched` stands in for a remote style) and it has loaded. */
+async function loadedMap(fetched?: ReturnType<typeof fake.remoteStyle>): Promise<FakeMap> {
   await waitFor(() => expect(fake.state.instances.length).toBeGreaterThan(0));
   const map = fake.state.instances.at(-1)!;
-  act(() => map.fire("load"));
+  act(() => {
+    map.finishStyle(fetched);
+    map.fire("load");
+  });
   return map;
 }
+
+const paintOf = (map: FakeMap, id: string) => map.getLayer(id)!.paint!;
+const backgroundOf = (map: FakeMap) => paintOf(map, "background")["background-color"];
+const styleCalls = (map: FakeMap) => map.calls.filter((call) => call.method === "setStyle");
+const cameraCalls = (map: FakeMap) => map.calls.filter((call) => call.method === "fitBounds" || call.method === "easeTo");
 
 function lines(map: FakeMap) {
   return (map.getSource("ot-route")!.data as { features: { properties: { kind: string } }[] }).features;
@@ -144,13 +215,19 @@ beforeEach(() => {
   fake.state.instances.length = 0;
   fake.state.failNext = false;
 });
-afterEach(() => resetMapState());
+afterEach(() => {
+  resetMapState();
+  localStorage.clear();
+  resetTheme();
+});
 
 describe("MapView", () => {
   it("creates an offline map with no MapLibre attribution control and adds the scene layers", async () => {
     renderWith(<MapView />);
     const map = await loadedMap();
-    expect(typeof map.options.style).toBe("object");
+    const [style, options] = styleCalls(map)[0]!.args as [unknown, { diff: boolean }];
+    expect(typeof style).toBe("object");
+    expect(options.diff).toBe(false);
     expect(map.options.attributionControl).toBe(false);
     expect(map.layers.map((layer) => layer.id)).toEqual([
       "ot-accuracy",
@@ -158,8 +235,103 @@ describe("MapView", () => {
       "ot-route-walk",
       "ot-route-transit",
       "ot-pins",
+      "ot-destination",
+      "ot-user-halo",
       "ot-user",
     ]);
+  });
+
+  it("is dark by default: land, lines and the destination square in the dark tokens", async () => {
+    renderWith(<MapView />);
+    const map = await loadedMap();
+    const dark = THEME_COLORS.dark;
+    expect(backgroundOf(map)).toBe(dark["map-land"]);
+    expect(JSON.stringify(paintOf(map, "ot-route-transit")["line-color"])).toContain(dark["mode-bus"]);
+    expect(paintOf(map, "ot-user")["circle-color"]).toBe(dark.brand);
+    const icon = map.images.get("ot-destination")!;
+    expect(icon.options).toEqual({ pixelRatio: 2 });
+    expect(Array.from(icon.image.data)).toEqual(Array.from(destinationMarker("dark").data));
+  });
+
+  it("starts light when light is the stored choice, recolouring the real basemap before it is drawn", async () => {
+    setTheme("light");
+    vi.stubEnv("VITE_MAP_STYLE", "https://tiles.openfreemap.org/styles/positron");
+    try {
+      renderWith(<MapView />);
+      const map = await loadedMap(fake.remoteStyle());
+      const light = THEME_COLORS.light;
+      expect(styleCalls(map)[0]!.args[0]).toBe("https://tiles.openfreemap.org/styles/positron");
+      expect(backgroundOf(map)).toBe(light["map-land"]);
+      expect(paintOf(map, "water")["fill-color"]).toBe(light["map-water"]);
+      expect(paintOf(map, "highway_minor")["line-color"]).toBe(light["map-road"]);
+      // With glyphs, lines carry their number in the line's colour.
+      expect(map.getLayer("ot-route-label")).toBeDefined();
+      expect(paintOf(map, "ot-route-label")["text-halo-color"]).toBe(light.surface);
+    } finally {
+      vi.unstubAllEnvs();
+    }
+  });
+
+  it("a theme switch restyles the map in place: the scene, camera and sheet inset are kept", async () => {
+    renderWith(<MapView />);
+    const map = await loadedMap();
+    act(() => setBottomInset(224));
+    const scene: MapScene = {
+      ...emptyScene,
+      route: [bus],
+      pins: [{ id: "destination", role: "destination", position: [34.8, 32.09], label: "B" }],
+      user: { position: [34.79, 32.08], accuracyMeters: 30 },
+      camera: "fit",
+    };
+    act(() => setMapScene(scene));
+    const camera = cameraCalls(map).length;
+    const drawn = map.getSource("ot-route")!.data;
+    expect(lines(map)).toHaveLength(1);
+
+    act(() => setTheme("light"));
+    const [, options] = styleCalls(map).at(-1)!.args as [unknown, { diff: boolean }];
+    expect(styleCalls(map)).toHaveLength(2);
+    expect(options.diff).toBe(true);
+    // The destination square is replaced in place in the new colours.
+    expect(map.calls.filter((c) => c.method === "updateImage")).toHaveLength(1);
+    expect(Array.from(map.images.get("ot-destination")!.image.data)).toEqual(Array.from(destinationMarker("light").data));
+    act(() => map.finishStyle());
+
+    const light = THEME_COLORS.light;
+    expect(backgroundOf(map)).toBe(light["map-land"]);
+    expect(JSON.stringify(paintOf(map, "ot-route-transit")["line-color"])).toContain(light["mode-bus"]);
+    expect(paintOf(map, "ot-route-casing")["line-color"]).toBe(light["map-land"]);
+    expect(paintOf(map, "ot-user")["circle-color"]).toBe(light.brand);
+    // Scene: still drawn, the same features; camera: not moved; inset: unchanged.
+    expect(map.getSource("ot-route")!.data).toEqual(drawn);
+    expect((map.getSource("ot-pins")!.data as { features: unknown[] }).features).toHaveLength(1);
+    expect((map.getSource("ot-user")!.data as { features: unknown[] }).features).toHaveLength(1);
+    expect(cameraCalls(map)).toHaveLength(camera);
+    expect(getMapState().bottomInset).toBe(224);
+    // Our layers are not duplicated.
+    expect(map.layers.map((layer) => layer.id).filter((id) => id === "ot-route-transit")).toHaveLength(1);
+
+    // And back to dark.
+    act(() => setTheme("dark"));
+    act(() => map.finishStyle());
+    expect(backgroundOf(map)).toBe(THEME_COLORS.dark["map-land"]);
+    expect(cameraCalls(map)).toHaveLength(camera);
+    expect(lines(map)).toHaveLength(1);
+  });
+
+  it("a theme chosen before the map has loaded is applied once it loads", async () => {
+    renderWith(<MapView />);
+    await waitFor(() => expect(fake.state.instances.length).toBeGreaterThan(0));
+    const map = fake.state.instances.at(-1)!;
+    act(() => setTheme("light"));
+    expect(styleCalls(map)).toHaveLength(1);
+    act(() => {
+      map.finishStyle();
+      map.fire("load");
+    });
+    expect(styleCalls(map)).toHaveLength(2);
+    act(() => map.finishStyle());
+    expect(backgroundOf(map)).toBe(THEME_COLORS.light["map-land"]);
   });
 
   it("updates sources when the scene changes, and a null-geometry walk adds no line", async () => {
@@ -282,9 +454,9 @@ describe("MapView", () => {
 
   it("switches basemap name labels with the language, leaving other labels alone", async () => {
     renderWith(<MapView />, "en");
-    const map = await loadedMap();
-    expect(JSON.stringify(map.styleLayers[0]!.textField)).toContain("name:en");
-    expect(map.styleLayers[1]!.textField).toBe("{housenumber}");
+    const map = await loadedMap(fake.remoteStyle());
+    expect(JSON.stringify(map.getLayoutProperty("place_city", "text-field"))).toContain("name:en");
+    expect(map.getLayoutProperty("housenumber", "text-field")).toBe("{housenumber}");
   });
 
   it("shows a short note instead of breaking when WebGL is missing", async () => {
@@ -324,7 +496,7 @@ describe("MapHost", () => {
     expect(text).toHaveAttribute("dir", "ltr");
     expect(text).toHaveTextContent("© OpenStreetMap");
     expect(text).toHaveTextContent("OpenFreeMap");
-    expect(text).toHaveTextContent("Ministry of Transport");
+    expect(text).toHaveTextContent("Israel MoT");
   });
 
   it("attribution in Hebrew names the Ministry of Transport", () => {

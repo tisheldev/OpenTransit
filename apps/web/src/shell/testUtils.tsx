@@ -81,6 +81,17 @@ export function renderApp(
   return { ...view, queryClient };
 }
 
+/**
+ * A text matcher for the innermost element whose whole text is `text`. A banner sets its
+ * first phrase in bold, so its message spans two nodes and a plain string never matches.
+ */
+export function wholeText(text: string) {
+  return (_content: string, element: Element | null): boolean =>
+    element !== null &&
+    element.textContent === text &&
+    !Array.from(element.children).some((child) => child.textContent === text);
+}
+
 export function storedDraft(): PlanDraft | null {
   return readSession("plan", (value): value is PlanDraft => typeof value === "object" && value !== null);
 }

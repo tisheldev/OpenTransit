@@ -6,6 +6,9 @@ import { initialNavState, type NavState } from "../../nav/engine";
 import { buildSteps } from "../../nav/steps";
 import { recordedJourneys, recordedTrips } from "../../nav/testdata";
 import {
+  badgeLabel,
+  badgeMode,
+  countdownMinutes,
   isSameStop,
   readableHeadsign,
   relativeText,
@@ -15,6 +18,7 @@ import {
   rowText,
   stopCodeFor,
   thenText,
+  trainName,
   transferWindowSeconds,
   walkTargetName,
   type T,
@@ -134,5 +138,31 @@ describe("checklist rows (N2)", () => {
     expect(rowText(j2[10]!, { origin: null, destination: "הטכניון" }, tEn, "en").main).toBe("Walk to ⁨הטכניון⁩ · 4 min");
     // Hebrew lines are right-to-left already: no marks added.
     expect(rowText(j2[1]!, labels, t, "he").sub).not.toMatch(/[⁨⁩]/);
+  });
+});
+
+describe("step card presentation", () => {
+  it("the countdown figure is whole minutes from one minute to an hour ahead, else none", () => {
+    const at = "2026-11-02T08:38:00+02:00";
+    const now = (iso: string) => Date.parse(iso);
+    expect(countdownMinutes(at, now("2026-11-02T08:26:00+02:00"))).toBe(12);
+    expect(countdownMinutes(at, now("2026-11-02T08:26:30+02:00"))).toBe(12);
+    expect(countdownMinutes(at, now("2026-11-02T08:37:00+02:00"))).toBe(1);
+    expect(countdownMinutes(at, now("2026-11-02T08:37:30+02:00"))).toBeNull();
+    expect(countdownMinutes(at, now("2026-11-02T08:42:00+02:00"))).toBeNull();
+    expect(countdownMinutes(at, now("2026-11-02T07:38:00+02:00"))).toBeNull();
+  });
+
+  it("badges and train facts come from the ride; nothing is guessed", () => {
+    expect(badgeMode(j2[1]!)).toBe("bus");
+    expect(badgeLabel(j2[1]!, t)).toBe("249");
+    expect(badgeMode(j0[2]!)).toBe("rail");
+    expect(badgeLabel(j0[2]!, t)).toBe("רכבת");
+    expect(trainName(j0[2]!)).toBe("156");
+    const toward = structuredClone(j0[2]!);
+    toward.ride!.headsign = "נהריה";
+    expect(trainName(toward)).toBe("נהריה");
+    toward.ride!.headsign = null;
+    expect(trainName(toward)).toBeNull();
   });
 });

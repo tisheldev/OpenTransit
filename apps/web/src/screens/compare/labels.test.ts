@@ -4,6 +4,7 @@ import type { Leg } from "../../api/types";
 import { translate } from "../../i18n/messages";
 import {
   chipLabel,
+  compactDuration,
   daysBetween,
   direction,
   formatShortDay,
@@ -13,6 +14,7 @@ import {
   relativeDay,
   rideSpeech,
   rideTitle,
+  splitFirstSentence,
   stopsRidden,
   trainNumber,
 } from "./labels";
@@ -103,5 +105,26 @@ describe("days", () => {
     expect(relativeDay("2026-11-01", "2026-10-31", "he", t)).toBe("מחר");
     expect(relativeDay("2026-11-07", "2026-10-31", "he", t)).toBe("שבת, 7.11");
     expect(formatShortDay("2026-11-02T08:00:00+02:00", "en")).toBe("Mon 2 Nov");
+  });
+});
+
+describe("design text", () => {
+  it("writes durations compactly: minutes under an hour, then h:mm", () => {
+    expect(compactDuration(47 * 60)).toEqual({ value: "47", unit: "min" });
+    expect(compactDuration(59 * 60 + 1)).toEqual({ value: "1:00", unit: "h" });
+    expect(compactDuration(6300)).toEqual({ value: "1:45", unit: "h" });
+    expect(compactDuration(2 * 3600 + 5 * 60)).toEqual({ value: "2:05", unit: "h" });
+  });
+
+  it("splits a banner message into its bold first sentence and the rest", () => {
+    expect(splitFirstSentence("אין חיבור ל־OpenTransit. בדקו את החיבור לאינטרנט.")).toEqual({
+      first: "אין חיבור ל־OpenTransit.",
+      rest: "בדקו את החיבור לאינטרנט.",
+    });
+    expect(splitFirstSentence("השירות אינו זמין זמנית.")).toEqual({ first: "השירות אינו זמין זמנית.", rest: "" });
+    // A date's dots are not a sentence end.
+    expect(splitFirstSentence("That time is outside the timetable. Choose between 1.10 and 30.10.").rest).toBe(
+      "Choose between 1.10 and 30.10.",
+    );
   });
 });

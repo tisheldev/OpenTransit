@@ -1,6 +1,6 @@
 # OpenTransit web client
 
-A Hebrew-first, right-to-left mobile web client for testing and previewing the API during the H-1 private deployment (user, 31 October 2026). It is not the product release: the native Expo / React Native app is the product client, and the pure modules here (API layer, `classify`, i18n, time and format, `plan/*`, `nav/*` logic) are built to be shared with it. Design and acceptance criteria: [docs/client-design.md](../../docs/client-design.md) and the [client tasks](../../docs/next-steps.md#phase-2-client-execution-plan); status: [PROJECT_STATUS.md](../../PROJECT_STATUS.md); latest evidence: [client-s3-s8-20261031-01](../../services/api/results/client-s3-s8-20261031-01.json).
+A Hebrew-first, right-to-left mobile web client for testing and previewing the API during the H-1 private deployment (user, 31 October 2026). It is not the product release: the native Expo / React Native app is the product client, and the pure modules here (API layer, `classify`, i18n, time and format, `plan/*`, `nav/*` logic) are built to be shared with it. Design and acceptance criteria: [docs/client-design.md](../../docs/client-design.md) and the [client tasks](../../docs/next-steps.md#phase-2-client-execution-plan); status: [PROJECT_STATUS.md](../../PROJECT_STATUS.md); latest evidence: [client-s3-s8-20261031-01](../../services/api/results/client-s3-s8-20261031-01.json), design system: [client-design-system-20261106-01](../../services/api/results/client-design-system-20261106-01.json).
 
 Implemented: S0–S2 (scaffold, API layer, foundations), S3 Map, S4 shell + Home, Search, Settings, S5 Compare and route details, S6 Navigate (foreground only), S8 serving by the API at `/app/`. S7 (Stop, Trip, Nearby, Lines) is not built; those routes show placeholders.
 
@@ -8,6 +8,7 @@ Implemented: S0–S2 (scaffold, API layer, foundations), S3 Map, S4 shell + Home
 
 Open `/app/` on a phone (Hebrew by default; English in Settings). A UX pass on 31 October (human-like testing at 360 × 640 against the real timetable) shaped what follows:
 
+- **Look:** the user's design system (6 November): its tokens and components on every screen, dark by default whatever the phone prefers; light is a choice in Settings ("ערכת צבעים"). The map follows the theme.
 - **Home:** "Where to?" first; From is "my location" only where the browser can give it (a secure context), otherwise the last start or empty; Home/Work/favourite chips, recent places, a resume card at the top while a trip is active, banners for test data, ageing/expired timetable, not ready and offline.
 - **Search:** stops, stations, addresses (street-level tagged) and places as you type; "choose on map"; save Home, Work or a named favourite.
 - **Compare:** opens at half with the route on the map: up to three options led by their departure and arrival times, a rank pill and a shared-axis bar of line chips; one time chip (Now / Depart / Arrive, day, time, +15/+30/+60); Earlier / Later under the options. Tap an option for its itinerary timeline (boarding and exit times, stop counts, waits, walks); Start navigation.
@@ -24,6 +25,7 @@ npm ci
 npm run dev            # http://localhost:5173, /v1 proxied to the API (OPENTRANSIT_API_ORIGIN, default http://localhost:8000)
 npm run dev:fixtures   # same, but MSW answers /v1 from fixtures and a "test data" banner shows
 npm run lint && npm run typecheck
+npm run tokens         # regenerate src/styles/tokens.css, tokens.ts and public/theme.js from the design system's tokens.json
 npm test               # Vitest under a UTC host; npm run test:tz repeats the time tests in other zones
 npm run build          # dist/, base /app/ (served by the API when OPENTRANSIT_CLIENT_DIR is set)
 npm run e2e            # Playwright, 360 × 640, fixtures mode; @real tests skip unless /readyz is 200
@@ -33,6 +35,16 @@ npm run e2e            # Playwright, 360 × 640, fixtures mode; @real tests skip
 - Real end-to-end: `OPENTRANSIT_API_ORIGIN=<api> npx playwright test --grep @real` (dev-server mode), or against a build served by the API: `OPENTRANSIT_API_ORIGIN=<api> OT_E2E_BASE_URL=<api>/app/ npx playwright test`. `OT_E2E_PORT` gives each worktree its own dev server.
 - If Vitest misses newly added fixture files, clear `node_modules/.vite`, `node_modules/.vite-temp` and `node_modules/.vitest-cache`.
 - Serving by the API, the Docker build context and the acceptance-runner `--client-dir` option: [development runbook](../../docs/development.md#serve-the-web-client).
+
+## Design system and themes
+
+The look comes from the user's OpenTransit design system ([artifact](https://claude.ai/artifact/P3US2NygmWPs1iALn555PU), private).
+
+- **Checked-in copies:** `src/styles/design-system/` holds exact copies of its `tokens.json` and its component CSS `bundle.css`, with the `ot-*` classes, icons as `ot-i` masks, and the NavStep, LegBar, LineBadge, StatusTag, Banner and BottomSheet styles. Line endings are normalised to LF.
+- **Generated tokens:** `npm run tokens` generates `src/styles/tokens.css` (both themes, with the design's names: `--bg`, `--ink`, `--hero`, `--mode-bus`, the nine type styles, spacing, radii, sizes, shadows), `src/styles/tokens.ts` (resolved colours for the map and `theme-color`) and `public/theme.js`.
+- **Drift check:** `scripts/design-tokens.test.ts` fails when a generated file no longer matches `tokens.json`.
+- **Updating:** to take a newer design system, replace the two copies, update `DESIGN_SYSTEM` in `scripts/design-tokens.mjs` (URL, version, read date) and run `npm run tokens`.
+- **Themes:** dark is the default whatever the phone prefers (user, 6 November 2026); light is a choice in Settings, stored in local settings. `theme.js` sets `data-theme` before first paint, so there is no flash. `color-scheme`, the `theme-color` meta and the map style follow the active theme. In e2e, `useTheme(page, "light")` switches it.
 
 ## Structure
 
@@ -48,4 +60,4 @@ npm run e2e            # Playwright, 360 × 640, fixtures mode; @real tests skip
 
 ## Rules the code enforces
 
-Times are Asia/Jerusalem with explicit offsets (`src/lib/time.ts`); strings live in typed Hebrew and English dictionaries with key and placeholder parity; CSS uses logical properties and the map is never mirrored; `localStorage` is versioned and holds only settings, saved places and at most 10 recents; the plan draft and the active trip live in `sessionStorage` and never hold a device position; `opentransit:lastOrigin` (outside the versioned key) only points at one of the recents; "clear all" removes all of it.
+Times are Asia/Jerusalem with explicit offsets (`src/lib/time.ts`); strings live in typed Hebrew and English dictionaries with key and placeholder parity; CSS uses logical properties and design-system tokens only (no hard-coded colours) and the map is never mirrored; `localStorage` is versioned and holds only settings, saved places and at most 10 recents; the plan draft and the active trip live in `sessionStorage` and never hold a device position; `opentransit:lastOrigin` (outside the versioned key) only points at one of the recents; "clear all" removes all of it.

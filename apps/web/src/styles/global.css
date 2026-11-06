@@ -1,4 +1,6 @@
-/* Logical properties only (inline/block), so the layout mirrors with dir="rtl". */
+/* Global type, focus and shared states over the design tokens (tokens.css) and the design
+   system's components (design-system/bundle.css, the ot-* classes). Colours come only
+   from tokens. Logical properties only (inline/block), so the layout mirrors with dir="rtl". */
 *,
 *::before,
 *::after {
@@ -7,33 +9,57 @@
 
 html {
   font-family: var(--font-sans);
-  color: var(--color-ink);
-  background: var(--color-bg);
+  color: var(--ink);
+  background: var(--bg);
   -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
 }
 
+/* Body 16/24 (design: Type). Hebrew gets no negative tracking anywhere. */
 body {
   margin: 0;
   min-block-size: 100dvh;
   overflow: hidden;
+  background: var(--bg);
+  color: var(--ink);
+  font-size: var(--body-size);
+  line-height: var(--body-line);
+  font-weight: var(--body-weight);
+}
+
+/* Screen titles are `title`, section and card titles `headline`. */
+h1 {
+  font-size: var(--title-size);
+  line-height: var(--title-line);
+  font-weight: var(--title-weight);
+}
+h2 {
+  font-size: var(--headline-size);
+  line-height: var(--headline-line);
+  font-weight: var(--headline-weight);
 }
 
 button,
 input,
-select {
+select,
+textarea {
   font: inherit;
+  color: inherit;
 }
 
 a {
-  color: var(--color-link);
+  color: var(--link);
 }
 
 :focus-visible {
-  outline: 3px solid var(--color-focus);
+  outline: 3px solid var(--focus);
   outline-offset: 3px;
 }
 
-.tabular {
+/* Every digit, time and line number: tabular figures (in <bdi>). */
+.tabular,
+.num {
   font-variant-numeric: tabular-nums;
 }
 
@@ -42,81 +68,61 @@ a {
   inset-inline-start: var(--space-2);
   inset-block-start: -100px;
   padding: var(--space-2) var(--space-3);
-  background: var(--color-surface);
-  border-radius: var(--radius-s);
+  background: var(--surface);
+  border-radius: var(--radius-md);
   z-index: 10;
 }
 .skip-link:focus {
   inset-block-start: var(--space-2);
 }
 
-.segmented {
-  display: inline-flex;
-  gap: var(--space-2);
-  border: 0;
-  padding: 0;
-  margin: 0;
-}
-.segmented label {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  min-block-size: var(--target-min);
-  padding-inline: var(--space-4);
-  border: 1px solid var(--color-border-strong);
-  border-radius: var(--radius-pill);
-  background: var(--color-surface);
-  cursor: pointer;
-}
-.segmented label:has(input:checked) {
-  background: var(--color-brand-tint);
-  border-color: var(--color-brand-strong);
-}
-
-.banner {
-  padding-block: var(--space-2);
-  padding-inline: var(--space-4);
-  font-size: var(--text-s);
-  border-block-end: 1px solid var(--color-border);
-}
-.banner-test {
-  background: var(--color-surface-sunken);
-  color: var(--color-ink-muted);
-  font-weight: 650;
-}
-.banner-stale {
-  background: var(--color-notice-bg);
-  color: var(--color-notice-ink);
-  border-inline-start: 3px solid var(--color-notice-border);
-}
+/* --- shared states (components/states.tsx) ------------------------------------------
+   Banners are the design's ot-banner; these classes add spacing, the retry action's
+   44 px target, and the error colours for a screen's own raw .state-error box. */
 
 .state {
+  margin-block: var(--space-3);
+}
+.state-loading {
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  padding: var(--space-3) var(--space-4);
-  border-radius: var(--radius-s);
-  margin-block: var(--space-3);
-}
-.state-unavailable {
-  background: var(--color-notice-bg);
-  color: var(--color-notice-ink);
+  min-block-size: var(--tap-min);
+  color: var(--ink-muted);
+  font-size: var(--body-sm-size);
+  line-height: var(--body-sm-line);
 }
 .state-error {
+  display: flex;
   flex-direction: column;
   align-items: flex-start;
-  background: var(--color-error-bg);
-  color: var(--color-error-ink);
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-lg);
+  background: var(--error-bg);
+  color: var(--ink);
+  font-size: var(--body-sm-size);
+  line-height: var(--body-sm-line);
 }
 .state-error p {
   margin: 0;
+}
+.banner-action {
+  min-block-size: var(--tap-min);
+  padding-inline: var(--space-3);
+  cursor: pointer;
+}
+.banner-action:disabled {
+  opacity: 0.55;
+  cursor: default;
 }
 
 .spinner {
   inline-size: 18px;
   block-size: 18px;
-  border: 3px solid var(--color-border);
-  border-block-start-color: var(--color-brand);
+  flex: none;
+  border: 3px solid var(--surface-sunken);
+  border-block-start-color: var(--brand);
   border-radius: 50%;
   animation: spin 0.9s linear infinite;
 }
@@ -125,8 +131,17 @@ a {
     transform: rotate(360deg);
   }
 }
+
+/* Only transform and opacity animate, and nothing does under reduced motion. */
 @media (prefers-reduced-motion: reduce) {
-  .spinner {
+  .spinner,
+  .ot-skel::after,
+  .ot-tag--live::before {
     animation: none;
+  }
+  .ot-btn,
+  .ot-btn:active {
+    transition: none;
+    transform: none;
   }
 }

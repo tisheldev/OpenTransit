@@ -345,6 +345,39 @@
       "at": "2026-11-06T12:37:54Z",
       "ok": true,
       "schedule": "opentransit-build-host-manual-20261106T123754"
+    },
+    {
+      "step": "set-ref",
+      "at": "2026-11-06T14:27:27+00:00",
+      "ok": true,
+      "ref": "837a9a768989c4f2b5d837757cd1c06c934e6acd"
+    },
+    {
+      "step": "seed-release",
+      "at": "2026-11-06T14:27:33+00:00",
+      "ok": true,
+      "release": "20261106-r7-client",
+      "bucket": "opentransit-archive-eun1-7c41d2"
+    },
+    {
+      "step": "mode",
+      "at": "2026-11-06T14:27:46+00:00",
+      "ok": true,
+      "instance": "i-000497b8f64a02ae8",
+      "mode": "maintenance"
+    },
+    {
+      "step": "mode",
+      "at": "2026-11-06T14:28:54+00:00",
+      "ok": true,
+      "instance": "i-000497b8f64a02ae8",
+      "mode": "refresh"
+    },
+    {
+      "step": "trigger",
+      "at": "2026-11-06T14:31:29Z",
+      "ok": true,
+      "schedule": "opentransit-build-host-manual-20261106T143129"
     }
   ],
   "measurements": {},

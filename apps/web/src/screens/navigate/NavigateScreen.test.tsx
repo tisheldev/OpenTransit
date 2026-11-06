@@ -68,7 +68,15 @@ function seed(journey: Journey, trips = recordedTrips, nav?: Record<string, unkn
 }
 
 const card = () => document.querySelector<HTMLElement>(".step-card")!;
-const rows = () => within(screen.getByRole("list")).getAllByRole("button");
+/** The checklist's rows (the current ride's progress is a list of its own, without buttons). */
+const rows = () => within(screen.getByRole("list", { name: /^(כל השלבים|All steps)$/ })).getAllByRole("button");
+/** A fact cell of the step card by its label: its value's text, or null when the card has no such fact. */
+const fact = (label: string): string | null => {
+  const cell = [...card().querySelectorAll(".ot-fact")].find((item) => item.querySelector("dt")?.textContent === label);
+  return cell?.querySelector("dd")?.textContent ?? null;
+};
+/** The countdown figure as drawn (a number, or its words); the full phrase is for screen readers. */
+const figure = () => card().querySelector<HTMLElement>(".step-count [aria-hidden='true']")?.textContent ?? null;
 const live = () => document.querySelector<HTMLElement>("[aria-live]")!;
 
 /** Answer GET /v1/stops/{id} with the recorded positions (other stops: not found). */
@@ -92,10 +100,15 @@ describe("Navigate: step card per kind", () => {
     renderApp("#/navigate");
     // Walk to the stop: instruction, distance and time, the pole's code, the vehicle, its
     // scheduled departure and countdown. Times are scheduled, said once in the header.
-    expect(card()).toHaveTextContent("שלב 1 מתוך 12 · זמנים מתוכננים");
+    expect(card().querySelector(".step-head")).toHaveTextContent("עכשיו");
+    expect(card()).toHaveTextContent("שלב 1 מתוך 12 · מתוכנן");
     expect(card()).toHaveTextContent("הליכה אל דיזנגוף סנטר/טשרניחובסקי");
     expect(card()).toHaveTextContent("170 מ׳ · 3 דק׳ הליכה · תחנה 25564");
     expect(card()).toHaveTextContent("אוטובוס 249 לכיוון כפר סבא · תחנה מרכזית");
+    // Bus facts: the line, its departure and where to get off; the countdown says what it counts.
+    expect(fact("קו")).toBe("249");
+    expect(fact("יוצא")).toBe("08:38");
+    expect(fact("ירידה")).toBe("ת. רכבת תל אביב - סבידור/דרך נמיר");
     expect(card()).toHaveTextContent("יציאה 08:38");
     expect(card()).not.toHaveTextContent("(מתוכנן)");
     // A bus never shows a platform (N3), known or not.
@@ -106,8 +119,17 @@ describe("Navigate: step card per kind", () => {
     expect(card()).toHaveTextContent("לכיוון כפר סבא · תחנה מרכזית");
     expect(card().querySelector(".step-lead")).toHaveTextContent("ירידה ב־ת. רכבת תל אביב - סבידור/דרך נמיר");
     expect(card()).toHaveTextContent(/08:48 · (בעוד|לפני|עכשיו|ביום)/);
-    expect(card()).toHaveTextContent("8 תחנות עד הירידה");
+    expect(fact("ירידה")).toBe("08:48");
+    expect(fact("עד הירידה")).toBe("8 תחנות");
     expect(card()).not.toHaveTextContent("נשארו");
+    // The current ride's progress in the checklist: boarding stop, the stops between as a
+    // count (no intermediate names until API-C1), the exit called out.
+    const progress = screen.getByRole("list", { name: he["nav.ride.progress"] });
+    expect(within(progress).getAllByRole("listitem").map((item) => item.textContent)).toEqual([
+      "דיזנגוף סנטר/טשרניחובסקי08:38",
+      "8 תחנות עד הירידה",
+      "ת. רכבת תל אביב - סבידור/דרך נמיר · ירידה08:48",
+    ]);
     expect(card()).toHaveTextContent("אחר כך: מעבר לאוטובוס 825 ב־08:51 · באותה תחנה · 3 דק׳ למעבר");
     // A zero-length transfer: change at the same stop, with the time to change.
     await userEvent.click(rows()[2]!);
@@ -139,7 +161,8 @@ describe("Navigate: step card per kind", () => {
     expect(card()).toHaveTextContent("אוטובוס 8 לכיוון מסוף הטייסים");
     expect(card()).toHaveTextContent("עלייה ב־דיזנגוף סנטר/דיזנגוף · תחנה 25565");
     expect(card()).toHaveTextContent(/יציאה 08:12 · (בעוד|יוצא עכשיו|לפני|ביום)/);
-    expect(card()).toHaveTextContent("ירידה ב־ת. רכבת השלום · 08:18 · 4 תחנות עד הירידה");
+    expect(fact("ירידה")).toBe("ת. רכבת השלום");
+    expect(card()).toHaveTextContent("ירידה 08:18 · 4 תחנות עד הירידה");
     expect(card()).toHaveTextContent("אחר כך: מעבר לרכבת 156 ב־08:21 · 3 דק׳ למעבר");
   });
 
@@ -151,6 +174,11 @@ describe("Navigate: step card per kind", () => {
     expect(card()).toHaveTextContent("Transfer: walk to השלום station");
     expect(card()).toHaveTextContent("Train 404 · Get off at חיפה מרכז");
     expect(card()).not.toHaveTextContent("stop 17046");
+    // Train facts: its number (no place headsign), the platform not known yet (API-C2: a
+    // dash, never a guess), the departure.
+    expect(fact("Train")).toBe("404");
+    expect(fact("Platform")).toBe("—not known");
+    expect(fact("Departs")).toBe("08:40");
     await userEvent.click(rows()[2]!);
     // Rail: no empty line label and not named after the exit (that reads as its destination).
     expect(card()).toHaveTextContent("Train 404");
@@ -173,7 +201,9 @@ describe("Navigate: step card per kind", () => {
     renderApp("#/navigate");
     expect(card()).not.toHaveTextContent("רציף");
     await userEvent.click(rows()[1]!);
-    expect(card()).toHaveTextContent(/יציאה 08:21 · .* · רציף 3/);
+    expect(card()).toHaveTextContent(/יציאה 08:21 · /);
+    expect(fact("רציף")).toBe("3");
+    expect(fact("יוצאת")).toBe("08:21");
   });
 
   it("a ride without trip detail shows the exit stop and time, no stop count", async () => {
@@ -199,16 +229,26 @@ describe("Navigate: step card per kind", () => {
     seed(journey);
     const view = renderApp("#/navigate");
     expect(card()).toHaveTextContent("יציאה 08:38 · בעוד 12 דק׳");
+    // The figure is the minutes; anything else (now, past, an hour or more) is said in words.
+    expect(figure()).toBe("12דק׳");
     view.unmount();
     vi.setSystemTime(new Date("2026-11-02T08:38:20+02:00"));
-    renderApp("#/navigate").unmount();
+    const now = renderApp("#/navigate");
+    expect(figure()).toBe("יוצא עכשיו");
+    now.unmount();
     vi.setSystemTime(new Date("2026-11-02T08:42:00+02:00"));
     const late = renderApp("#/navigate");
     expect(card()).toHaveTextContent("יציאה 08:38 · לפני 4 דק׳");
+    expect(figure()).toBe("לפני 4 דק׳");
     late.unmount();
+    vi.setSystemTime(new Date("2026-11-02T07:30:00+02:00"));
+    const hour = renderApp("#/navigate");
+    expect(figure()).toBe("בעוד 1 שע׳ 8 דק׳");
+    hour.unmount();
     vi.setSystemTime(new Date("2026-11-01T08:00:00+02:00"));
     renderApp("#/navigate");
     expect(card()).toHaveTextContent("יציאה 08:38 · ביום ב׳, 2.11");
+    expect(figure()).toBe("ביום ב׳, 2.11");
   });
 });
 
@@ -225,6 +265,11 @@ describe("Navigate: checklist", () => {
     // Visible too: the time column and a state mark whose shape differs (not colour alone).
     expect(list[1]!.querySelector(".checklist-time")).toHaveTextContent("08:38");
     expect(list[0]!.querySelector(".checklist-mark")).toHaveTextContent("●");
+    // The mode column: the line's badge for a ride, an icon for a walk (decorative: the
+    // row's text names the line).
+    expect(list[1]!.querySelector(".ot-steps__icon .ot-line")).toHaveTextContent("249");
+    expect(list[0]!.querySelector(".ot-steps__icon .ot-i--walk")).not.toBeNull();
+    expect(list[0]!.closest("li")).toHaveClass("ot-steps__item--now");
   });
 });
 
@@ -384,8 +429,10 @@ describe("Navigate: location", () => {
       if (announced.at(-1) !== text) announced.push(text);
       if (card().textContent?.includes(he["nav.cueTwo"])) {
         sawTwo = true;
+        // The cue changes the card's colour as well as its words.
+        expect(card()).toHaveClass("step-card-two_stops");
         // Progress is measured now: the count says "left" (N4).
-        if (card().textContent?.includes("נשארו 2 תחנות")) sawLeftTwo = true;
+        if (fact("נשארו") === "2 תחנות") sawLeftTwo = true;
       }
     }
     expect(sawTwo).toBe(true);
@@ -412,7 +459,7 @@ describe("Navigate: simulated positions", () => {
     fireEvent.change(screen.getByRole("combobox", { name: he["nav.sim.speed"] }), { target: { value: "600" } });
     fireEvent.click(screen.getByRole("checkbox", { name: he["nav.sim.toggle"] }));
     expect(document.querySelector(".sheet")).toHaveAttribute("data-snap", "half");
-    expect(screen.getByRole("note")).toHaveTextContent(/^◌ מיקום מדומה, לא אמיתי · שעון \d\d:\d\d · פי 600$/);
+    expect(screen.getByRole("note")).toHaveTextContent(/^מיקום מדומה, לא אמיתי · שעון \d\d:\d\d · פי 600$/);
     // Countdowns follow the simulated clock (the device clock is days before the trip):
     // playback starts a minute before the first departure.
     expect(screen.getByRole("note")).toHaveTextContent("שעון 08:11");

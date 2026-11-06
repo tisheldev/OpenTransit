@@ -26,7 +26,9 @@ export const he_shell = {
   "home.title": "תכנון נסיעה",
   "home.setHome": "הגדרת בית",
   "home.setWork": "הגדרת עבודה",
-  "home.addFavourite": "הוספת מקום שמור",
+  // The Add chip's name starts with its visible word ("הוספה"), so speech input finds it.
+  "home.addFavourite": "הוספה של מקום שמור",
+  "home.add": "הוספה",
   "home.saved": "מקומות שמורים",
   "home.recents": "חיפושים אחרונים",
   "home.noRecents": "יעדים שתבחרו יופיעו כאן.",

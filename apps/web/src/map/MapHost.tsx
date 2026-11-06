@@ -65,12 +65,17 @@ export function MapAttribution({ inline = false }: { inline?: boolean }) {
   const { t, dir, lang } = useI18n();
   return (
     <p className={inline ? "map-attribution map-attribution-inline" : "map-attribution"} dir={dir} lang={lang} data-testid="map-attribution">
-      {/* Each credit is isolated, so Latin names keep their order inside a Hebrew line. */}
-      <bdi>{t("map.attribution.osm")}</bdi>
-      <span aria-hidden="true"> · </span>
-      <bdi>{t("map.attribution.tiles")}</bdi>
-      <span aria-hidden="true"> · </span>
-      <bdi>{t("map.attribution.mot")}</bdi>
+      {/* Each credit is isolated, so Latin names keep their order inside a Hebrew line.
+          The line never wraps: the map credits stay whole and only the timetable credit
+          may end in an ellipsis on a wide font; its full name stays in the text, the title
+          and Settings' credits. */}
+      <bdi className="map-credit">{t("map.attribution.osm")}</bdi>
+      <span className="map-credit-sep" aria-hidden="true"> · </span>
+      <bdi className="map-credit">{t("map.attribution.tiles")}</bdi>
+      <span className="map-credit-sep" aria-hidden="true"> · </span>
+      <bdi className="map-credit map-credit-fit" title={t("map.attribution.mot")}>
+        {t("map.attribution.mot")}
+      </bdi>
     </p>
   );
 }

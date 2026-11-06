@@ -11,7 +11,7 @@ import { server } from "../../mocks/node";
 import { go } from "../../router";
 import { lastOrigin } from "../../shell/localStore";
 import { loadLocalState } from "../../storage/local";
-import { renderApp, storedDraft } from "../../shell/testUtils";
+import { renderApp, storedDraft, wholeText } from "../../shell/testUtils";
 import { readableLocality } from "./choice";
 
 const input = () => screen.getByRole("searchbox", { name: /חיפוש|Search/ });
@@ -34,7 +34,7 @@ describe("Search before typing", () => {
   it("focuses the field and lists Choose on map first, then My location (From only)", () => {
     renderApp("#/search/from");
     expect(input()).toHaveFocus();
-    const rows = screen.getAllByRole("button").filter((button) => button.classList.contains("row-button"));
+    const rows = screen.getAllByRole("button").filter((button) => button.classList.contains("ot-row"));
     expect(rows[0]).toHaveTextContent(he["search.pickOnMap"]);
     expect(rows[1]).toHaveTextContent(he["place.myLocation"]);
   });
@@ -84,8 +84,14 @@ describe("Search requests", () => {
       if (String(resource).includes("/v1/places") && init?.signal) signals.push(init.signal);
       return realFetch(resource, init);
     });
+    // The first answer is held until the next request has started, so it is still in
+    // flight when the text changes (a fixed delay raced the debounce on a loaded machine).
+    let release: () => void = () => {};
+    const held = new Promise<void>((resolve) => (release = resolve));
+    let calls = 0;
     trackPlaces(async () => {
-      await delay(400);
+      calls += 1;
+      if (calls === 1) await held;
       return respond(fixture("recorded-places-stop-he"));
     });
     renderApp("#/search/to");
@@ -95,6 +101,7 @@ describe("Search requests", () => {
     await waitFor(() => expect(signals).toHaveLength(2));
     expect(signals[0]!.aborted).toBe(true);
     expect(signals[1]!.aborted).toBe(false);
+    release();
     await screen.findByTestId("search-results");
   });
 
@@ -155,7 +162,7 @@ describe("Search results and states", () => {
     renderApp("#/search/to");
     await userEvent.type(input(), "דיזנגוף");
     const results = await screen.findByTestId("search-results");
-    const sub = within(results).getAllByRole("button")[0]!.querySelector(".row-sub")!;
+    const sub = within(results).getAllByRole("button")[0]!.querySelector(".ot-row__sub")!;
     expect(sub.textContent).toMatch(/^תחנה \d+\s*·\s/);
     expect(sub.querySelector(".kind-label")).toBeNull();
   });
@@ -181,7 +188,7 @@ describe("Search results and states", () => {
   it("shows zero matches as a calm empty success", async () => {
     renderApp("#/search/to");
     await userEvent.type(input(), "zzzz");
-    expect(await screen.findByText(he["state.empty.noMatches"])).toBeInTheDocument();
+    expect(await screen.findByText(wholeText(he["state.empty.noMatches"]))).toBeInTheDocument();
     expect(screen.queryByRole("alert")).toBeNull();
   });
 

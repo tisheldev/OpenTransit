@@ -5,6 +5,7 @@ import type { StopDetail } from "../src/api/schemas";
 import type { Journey } from "../src/api/types";
 import { callTargets, fetchCallPositions } from "../src/nav/callPositions";
 import { buildSteps, type TripDetail } from "../src/nav/steps";
+import { departureInCoverage } from "../scripts/coverage-dates.mjs";
 import { appPath, blockExternal } from "./helpers";
 
 // @real: Dizengoff Center → Technion planned on the real API (no fixtures), seeded as the
@@ -18,8 +19,8 @@ import { appPath, blockExternal } from "./helpers";
 
 const apiOrigin = process.env.OPENTRANSIT_API_ORIGIN ?? "http://localhost:8000";
 const served = !!process.env.OT_E2E_BASE_URL;
-/** A weekday morning inside oct31a coverage (31 Oct – 30 Nov 2026). */
-const DEPART_AT = "2026-11-02T08:00:00+02:00";
+/** The next working day at 08:00 inside the API's own coverage (set in beforeAll). */
+let departAt = "";
 
 async function api<T>(request: APIRequestContext, path: string): Promise<{ status: number; body: T }> {
   const response = await request.get(`${apiOrigin}${path}`);
@@ -43,6 +44,10 @@ test.describe("@real navigate", () => {
   test.beforeAll(async ({ request }) => {
     const ready = await request.get(`${apiOrigin}/readyz`, { timeout: 5_000 }).catch(() => null);
     test.skip(ready?.status() !== 200, `API at ${apiOrigin} is not ready; real checks pending`);
+    const status = await (await request.get(`${apiOrigin}/v1/status`)).json();
+    const departure = departureInCoverage(status.meta.coverage);
+    test.skip(departure === null, "no working-day 08:00 departure inside the API's coverage");
+    departAt = departure!.departAt;
   });
 
   test("Dizengoff Center → Technion replays through every step with simulated positions", async ({ page, request }) => {
@@ -51,7 +56,7 @@ test.describe("@real navigate", () => {
       data: {
         from: { kind: "stop", stopId: "mot:stop:13583" },
         to: { kind: "coordinate", latitude: 32.7767, longitude: 35.0231 },
-        departAt: DEPART_AT,
+        departAt,
       },
     });
     expect(planned.status()).toBe(200);

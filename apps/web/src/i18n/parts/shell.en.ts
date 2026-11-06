@@ -28,6 +28,7 @@ export const en_shell: Record<keyof typeof he_shell, string> = {
   "home.setHome": "Set Home",
   "home.setWork": "Set Work",
   "home.addFavourite": "Add a saved place",
+  "home.add": "Add",
   "home.saved": "Saved places",
   "home.recents": "Recent searches",
   "home.noRecents": "Places you choose will appear here.",

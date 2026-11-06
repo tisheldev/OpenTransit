@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { encodePathRef } from "../src/api/pathRef";
+import { departureInCoverage } from "../scripts/coverage-dates.mjs";
 import { appPath } from "./helpers";
 
 // @real: against a running local API. Skipped unless the API's /readyz returns 200
@@ -28,7 +29,9 @@ test.describe("@real", () => {
   });
 
   test("a real engine trip ID opens through the encoded trips path", async ({ request }) => {
-    const departAt = new Date(Date.now() + 26 * 3600_000).toISOString().replace(/\.\d{3}Z$/, "Z");
+    const status = await (await request.get("/v1/status")).json();
+    const departAt = departureInCoverage(status.meta.coverage)?.departAt;
+    test.skip(!departAt, "no working-day 08:00 departure inside the API's coverage");
     const journey = await request.post("/v1/journeys", {
       data: {
         from: { kind: "stop", stopId: "mot:stop:13583" },

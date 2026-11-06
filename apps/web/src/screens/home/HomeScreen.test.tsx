@@ -14,7 +14,7 @@ import { startActiveTrip } from "../../nav/activeTrip";
 import type { PlaceChoice } from "../../plan/draft";
 import { defaultLocalState, saveLocalState, type SavedPlace } from "../../storage/local";
 import { writeSession } from "../../storage/session";
-import { renderApp, storedDraft } from "../../shell/testUtils";
+import { renderApp, storedDraft, wholeText } from "../../shell/testUtils";
 
 const choice: PlaceChoice = {
   label: "",
@@ -122,7 +122,7 @@ describe("Home", () => {
   it("has no scheduled-times footnote (Compare carries it) and frames the map on the last place", () => {
     saveLocalState({ ...defaultLocalState(), recents: [place("r0", "Recent 0", 32.7767)] });
     renderApp("#/");
-    expect(screen.queryByText(he["banner.liveUnavailable"])).toBeNull();
+    expect(screen.queryByText(wholeText(he["banner.liveUnavailable"]))).toBeNull();
     expect(getMapState().scene).toMatchObject({ camera: "fit", pins: [], focus: { center: [34.7748, 32.7767], zoom: 13 } });
   });
 
@@ -180,21 +180,21 @@ describe("Home", () => {
   it("shows the stale-data banner when the timetable is ageing", async () => {
     server.use(http.get("*/v1/status", () => statusWith((body) => void (body.meta.freshness = "aging"))));
     renderApp("#/");
-    expect(await screen.findByText(he["banner.staleData"])).toBeInTheDocument();
+    expect(await screen.findByText(wholeText(he["banner.staleData"]))).toBeInTheDocument();
   });
 
   it("says the timetable expired, and labels fixture data as test data", async () => {
     server.use(http.get("*/v1/status", () => respond(fixture("synthetic-status-expired"))));
     renderApp("#/", { lang: "en" });
-    expect(await screen.findByText(en["shell.expired"])).toBeInTheDocument();
-    expect(screen.getByText(en["banner.testData"])).toBeInTheDocument();
-    expect(screen.queryByText(en["banner.staleData"])).toBeNull();
+    expect(await screen.findByText(wholeText(en["shell.expired"]))).toBeInTheDocument();
+    expect(screen.getByText(wholeText(en["banner.testData"]))).toBeInTheDocument();
+    expect(screen.queryByText(wholeText(en["banner.staleData"]))).toBeNull();
   });
 
   it("still renders offline, with a no-connection banner", async () => {
     server.use(http.get("*/v1/status", () => HttpResponse.error()));
     renderApp("#/");
-    expect(await screen.findByText(he["shell.offline"])).toBeInTheDocument();
+    expect(await screen.findByText(wholeText(he["shell.offline"]))).toBeInTheDocument();
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(he["home.title"]);
   });
 });

@@ -6,6 +6,7 @@ import { HomeScreen } from "./home/HomeScreen";
 import { SearchScreen } from "./search/SearchScreen";
 import { LinesScreen } from "./secondary/LinesScreen";
 import { NearbyScreen } from "./secondary/NearbyScreen";
+import { Placeholder } from "./secondary/Placeholder";
 import { StopScreen } from "./secondary/StopScreen";
 import { TripScreen } from "./secondary/TripScreen";
 import { SettingsScreen } from "./settings/SettingsScreen";
@@ -72,6 +73,6 @@ export function Screen({ route }: { route: Route }) {
     case "lines":
       return <LinesScreen />;
     case "notFound":
-      return <h1>{t("screen.notFound")}</h1>;
+      return <Placeholder title={t("screen.notFound")} notBuilt={false} />;
   }
 }

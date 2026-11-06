@@ -1,20 +1,34 @@
-import { Map as MapLibreMap, setWorkerUrl, type GeoJSONSource, type StyleSpecification } from "maplibre-gl";
+import {
+  Map as MapLibreMap,
+  setWorkerUrl,
+  type GeoJSONSource,
+  type LayerSpecification,
+  type StyleSpecification,
+} from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import workerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs?url";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { useI18n } from "../i18n/I18nProvider";
+import { useTheme, type ThemeName } from "../lib/theme";
 import {
-  COLORS,
   DEFAULT_CENTER,
   DEFAULT_ZOOM,
+  DESTINATION_ICON,
+  MARKER_PIXEL_RATIO,
+  OVERLAY_SOURCES,
   accuracyFeatures,
   chooseStyle,
+  destinationMarker,
   isNameTextField,
   nameExpression,
+  overlayLayers,
   pinFeatures,
   routeFeatures,
   sceneBounds,
+  themeBasemap,
   userFeatures,
+  withOverlay,
+  type StyleJson,
 } from "./layers";
 import { setMapCenter, useMapState, type MapScene, type MapUser } from "./scene";
 
@@ -29,7 +43,6 @@ import { setMapCenter, useMapState, type MapScene, type MapUser } from "./scene"
 // The worker is a separate module file next to the hashed assets (same origin, no CDN).
 setWorkerUrl(workerUrl);
 
-const SOURCES = ["ot-accuracy", "ot-route", "ot-pins", "ot-user"] as const;
 /** Fit padding around the route; the sheet height is added to the bottom. */
 const FIT_PADDING = { top: 64, bottom: 24, left: 32, right: 32 };
 
@@ -37,88 +50,39 @@ function prefersReducedMotion(): boolean {
   return typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
-function installLayers(map: MapLibreMap): void {
+/**
+ * Loads the base style for a theme, recoloured to the theme's map tokens and labelled in
+ * the page language before it is first drawn. `diff`: a theme switch, applied as a style
+ * diff that carries our sources (the drawn scene) and layers (in the new colours) over, so
+ * nothing is redrawn from scratch and the camera stays where it is.
+ */
+function loadStyle(map: MapLibreMap, theme: ThemeName, lang: () => "he" | "en", diff: boolean, applied: (theme: ThemeName) => void): void {
+  const style = chooseStyle(import.meta.env.MODE, import.meta.env.VITE_MAP_STYLE, theme);
+  map.setStyle(style as string | StyleSpecification, {
+    diff,
+    transformStyle: (previous, next) => {
+      applied(theme);
+      const themed = themeBasemap(next as unknown as StyleJson, theme, lang());
+      return withOverlay(previous as unknown as StyleJson | undefined, themed, theme) as unknown as StyleSpecification;
+    },
+  });
+}
+
+/** The destination square for a theme (replaced in place on a theme switch). */
+function setDestinationIcon(map: MapLibreMap, theme: ThemeName): void {
+  const image = destinationMarker(theme);
+  if (map.hasImage(DESTINATION_ICON)) map.updateImage(DESTINATION_ICON, image);
+  else map.addImage(DESTINATION_ICON, image, { pixelRatio: MARKER_PIXEL_RATIO });
+}
+
+/** Adds whatever of ours the loaded style lacks: everything after the first load, nothing after a switch. */
+function installOverlay(map: MapLibreMap, theme: ThemeName): void {
+  if (!map.hasImage(DESTINATION_ICON)) setDestinationIcon(map, theme);
   const empty = { type: "FeatureCollection" as const, features: [] };
-  for (const id of SOURCES) if (!map.getSource(id)) map.addSource(id, { type: "geojson", data: empty });
-
-  map.addLayer({
-    id: "ot-accuracy",
-    type: "fill",
-    source: "ot-accuracy",
-    paint: { "fill-color": COLORS.user, "fill-opacity": 0.15, "fill-outline-color": COLORS.user },
-  });
-  map.addLayer({
-    id: "ot-route-casing",
-    type: "line",
-    source: "ot-route",
-    filter: ["==", ["get", "kind"], "transit"],
-    layout: { "line-cap": "round", "line-join": "round" },
-    paint: { "line-color": COLORS.halo, "line-width": ["case", ["get", "active"], 11, 8] },
-  });
-  map.addLayer({
-    id: "ot-route-walk",
-    type: "line",
-    source: "ot-route",
-    filter: ["==", ["get", "kind"], "walk"],
-    layout: { "line-cap": "round", "line-join": "round" },
-    paint: {
-      "line-color": ["case", ["get", "active"], COLORS.active, COLORS.walk],
-      "line-width": ["case", ["get", "active"], 5, 3],
-      "line-dasharray": [1, 2],
-    },
-  });
-  map.addLayer({
-    id: "ot-route-transit",
-    type: "line",
-    source: "ot-route",
-    filter: ["==", ["get", "kind"], "transit"],
-    layout: { "line-cap": "round", "line-join": "round" },
-    paint: {
-      "line-color": ["case", ["get", "active"], COLORS.active, COLORS.transit],
-      "line-width": ["case", ["get", "active"], 7, 5],
-    },
-  });
-  map.addLayer({
-    id: "ot-pins",
-    type: "circle",
-    source: "ot-pins",
-    paint: {
-      "circle-radius": ["match", ["get", "role"], "origin", 7, "destination", 8, 5],
-      "circle-color": [
-        "match",
-        ["get", "role"],
-        "origin",
-        COLORS.origin,
-        "destination",
-        COLORS.destination,
-        COLORS.stop,
-      ],
-      "circle-stroke-color": ["match", ["get", "role"], "origin", COLORS.halo, "destination", COLORS.halo, COLORS.transit],
-      "circle-stroke-width": 3,
-    },
-  });
-  map.addLayer({
-    id: "ot-user",
-    type: "circle",
-    source: "ot-user",
-    paint: { "circle-radius": 7, "circle-color": COLORS.user, "circle-stroke-color": COLORS.halo, "circle-stroke-width": 3 },
-  });
-
+  for (const id of OVERLAY_SOURCES) if (!map.getSource(id)) map.addSource(id, { type: "geojson", data: empty });
   // Line labels need glyphs; the offline style has none, so it draws lines only.
-  if (map.getStyle()?.glyphs) {
-    map.addLayer({
-      id: "ot-route-label",
-      type: "symbol",
-      source: "ot-route",
-      filter: ["all", ["==", ["get", "kind"], "transit"], ["!=", ["get", "label"], ""]],
-      layout: {
-        "symbol-placement": "line",
-        "text-field": ["get", "label"],
-        "text-font": ["Noto Sans Bold"],
-        "text-size": 13,
-      },
-      paint: { "text-color": COLORS.active, "text-halo-color": COLORS.halo, "text-halo-width": 2 },
-    });
+  for (const layer of overlayLayers(theme, { labels: !!map.getStyle()?.glyphs })) {
+    if (!map.getLayer(layer.id)) map.addLayer(layer as unknown as LayerSpecification);
   }
 }
 
@@ -132,11 +96,11 @@ function applyLabelLanguage(map: MapLibreMap, lang: "he" | "en"): void {
 }
 
 function drawScene(map: MapLibreMap, scene: MapScene, located: MapUser | null): void {
-  const set = (id: (typeof SOURCES)[number], data: unknown) =>
+  const set = (id: (typeof OVERLAY_SOURCES)[number], data: unknown) =>
     (map.getSource(id) as GeoJSONSource | undefined)?.setData(data as never);
   const user = scene.user ?? located;
   set("ot-route", routeFeatures(scene.route));
-  set("ot-pins", pinFeatures(scene.pins));
+  set("ot-pins", pinFeatures(scene.pins, scene.route));
   set("ot-user", userFeatures(user));
   set("ot-accuracy", accuracyFeatures(user));
 }
@@ -158,6 +122,7 @@ function reportCenter(map: MapLibreMap, inset: number): void {
 
 export default function MapView() {
   const { lang, t } = useI18n();
+  const theme = useTheme();
   const { scene, bottomInset, locateRequest, located } = useMapState();
   const container = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
@@ -165,9 +130,28 @@ export default function MapView() {
   const [failed, setFailed] = useState(false);
   const pickRef = useRef(scene.pick);
   const insetRef = useRef(0);
+  // What a style (re)load needs when it lands: the current scene, fix, language and theme.
+  const sceneRef = useRef(scene);
+  const langRef = useRef(lang);
+  const themeRef = useRef(theme);
+  // After Locate on a scene without a user, the camera stays on that fix until the next scene.
+  const locatedRef = useRef(located);
+  /** The theme last asked for, and the theme of the style actually loaded. */
+  const requestedTheme = useRef<ThemeName | null>(null);
+  const styledTheme = useRef<ThemeName | null>(null);
   useEffect(() => {
     pickRef.current = scene.pick;
-  }, [scene.pick]);
+    sceneRef.current = scene;
+  }, [scene]);
+  useEffect(() => {
+    langRef.current = lang;
+  }, [lang]);
+  useEffect(() => {
+    themeRef.current = theme;
+  }, [theme]);
+  useEffect(() => {
+    locatedRef.current = located;
+  }, [located]);
 
   // Create the map once. Missing WebGL throws here (a short note replaces the map); a
   // failing style or tile only fires "error" and leaves the map area blank. Neither
@@ -178,7 +162,7 @@ export default function MapView() {
     try {
       map = new MapLibreMap({
         container: container.current,
-        style: chooseStyle(import.meta.env.MODE, import.meta.env.VITE_MAP_STYLE) as string | StyleSpecification,
+        // The style is set below, recoloured for the theme before its first frame.
         center: DEFAULT_CENTER,
         zoom: DEFAULT_ZOOM,
         // Our own attribution stays visible above the sheet (MapHost); MapLibre's collapses.
@@ -193,8 +177,14 @@ export default function MapView() {
     }
     mapRef.current = map;
     map.touchZoomRotate.disableRotation();
+    // Every style load (the first, and a theme switch): add what is missing of ours and
+    // draw the current scene into it.
+    map.on("style.load", () => {
+      installOverlay(map, styledTheme.current ?? themeRef.current);
+      applyLabelLanguage(map, langRef.current);
+      drawScene(map, sceneRef.current, locatedRef.current);
+    });
     map.on("load", () => {
-      installLayers(map);
       setLoaded(true);
       if (pickRef.current) reportCenter(map, insetRef.current);
     });
@@ -202,12 +192,24 @@ export default function MapView() {
       if (pickRef.current) reportCenter(map, insetRef.current);
     });
     map.on("error", (event) => console.warn("Map error", event.error));
+    requestedTheme.current = themeRef.current;
+    loadStyle(map, themeRef.current, () => langRef.current, false, (applied) => (styledTheme.current = applied));
     return () => {
       mapRef.current = null;
       setLoaded(false);
       map.remove();
     };
   }, []);
+
+  // A theme chosen in Settings restyles the loaded map in place: the scene, the camera and
+  // the sheet inset are untouched.
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !loaded || theme === requestedTheme.current) return;
+    requestedTheme.current = theme;
+    setDestinationIcon(map, theme);
+    loadStyle(map, theme, () => langRef.current, true, (applied) => (styledTheme.current = applied));
+  }, [theme, loaded]);
 
   useEffect(() => {
     const map = mapRef.current;
@@ -222,16 +224,14 @@ export default function MapView() {
   // The sheet covers the bottom, so fitting, following and the pick centre all use the
   // visible area above it. This is done per camera move (fit padding, centre offset)
   // rather than with map.setPadding: in MapLibre 6.14 a persistent bottom padding left
-  // a band of that height at the top of the canvas undrawn (seen in Chromium).
+  // a band of that height at the top of the canvas undrawn (seen in Chromium). Note that
+  // headless Chromium on its default GPU backend also leaves a band the height of whatever
+  // covers the bottom of the canvas undrawn in screenshots, with no padding at all; with
+  // --use-angle=swiftshader the whole canvas draws. That one is a screenshot artefact.
   const inset = Math.max(0, bottomInset);
   useEffect(() => {
     insetRef.current = inset;
   }, [inset]);
-  // After Locate on a scene without a user, the camera stays on that fix until the next scene.
-  const locatedRef = useRef(located);
-  useEffect(() => {
-    locatedRef.current = located;
-  }, [located]);
   const focusedScene = useRef<{ scene: MapScene | null; at: number }>({ scene: null, at: 0 });
 
   useEffect(() => {

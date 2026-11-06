@@ -3,7 +3,10 @@ import { appPath, expectNoSeriousAxeViolations } from "./helpers";
 
 // @real, served build only (OT_E2E_BASE_URL, e.g. http://127.0.0.1:8590/app/): a tester's
 // whole flow through the UI on a 360 × 640 phone in Hebrew, with axe on every screen.
-// "My location" is granted as Dizengoff Center (a corpus stop, not a personal position).
+// On a secure origin (https, or localhost) "My location" is granted as Dizengoff Center (a
+// corpus stop, not a personal position). Over plain HTTP elsewhere (the H-1 preview) the
+// browser refuses location, so the app asks for the start instead: the spec then checks
+// that prompt and chooses Dizengoff Center by search. Both paths end in the same flow.
 
 const apiOrigin = process.env.OPENTRANSIT_API_ORIGIN ?? "http://localhost:8000";
 const served = !!process.env.OT_E2E_BASE_URL;
@@ -46,8 +49,21 @@ test.describe("@real served", () => {
     await expect(result).toBeVisible();
     await expectPhoneLayout(page, "Search results");
 
+    const secure = await page.evaluate(() => window.isSecureContext);
+    test.info().annotations.push({ type: "origin", description: secure ? "secure: my location" : "not secure: start chosen by search" });
     const journeys = page.waitForResponse((r) => r.request().method() === "POST" && r.url().endsWith("/v1/journeys"));
     await result.click();
+    if (!secure) {
+      // No location over plain HTTP: the destination is kept and the start is asked for.
+      await expect(page).toHaveURL(/#\/search\/from$/);
+      const starts = page.waitForResponse((r) => new URL(r.url()).pathname === "/v1/places" && r.status() === 200);
+      await page.getByRole("searchbox").or(page.getByRole("textbox")).first().fill("דיזנגוף סנטר");
+      await starts;
+      const start = page.locator("main").getByRole("button", { name: /דיזנגוף סנטר/ }).first();
+      await expect(start).toBeVisible();
+      await expectPhoneLayout(page, "Search, start (no location over HTTP)");
+      await start.click();
+    }
     await expect(page).toHaveURL(/#\/compare$/);
     const answer = await journeys;
     expect(answer.status()).toBe(200);

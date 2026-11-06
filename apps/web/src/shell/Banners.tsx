@@ -1,12 +1,14 @@
 import type { UseQueryResult } from "@tanstack/react-query";
 import { ApiFailure } from "../api/result";
 import type { Meta, Status } from "../api/schemas";
-import { StaleDataBanner, TestDataBanner } from "../components/states";
+import { Banner, StaleDataBanner, TestDataBanner } from "../components/states";
 import { useI18n } from "../i18n/I18nProvider";
 import { useOnline } from "./online";
 
-// The shell's banner area (design: Home states, Cross-cutting rules): test data, stale
-// or expired timetable, not ready, offline. At most one data banner plus the test label.
+// The shell's banner area (design: Home states, Cross-cutting rules; component Banner):
+// test data, stale or expired timetable, not ready, offline. At most one data banner plus
+// the test label, compact because they float in the top band over the map. What stops
+// planning (offline, expired, not ready) is an error; an ageing timetable a warning.
 
 /** The status meta when a generation is loaded (without one, meta carries only an id). */
 export function generationMeta(status: Status | undefined): Meta | null {
@@ -31,22 +33,22 @@ export function Banners({ fixtureMode, status }: { fixtureMode: boolean; status:
   if (!testData && !offline && !expired && !stale && !notReady) return null;
   return (
     <div className="banners">
-      {testData && <TestDataBanner />}
+      {testData && <TestDataBanner compact />}
       {offline && (
-        <div className="banner banner-stale" role="status">
+        <Banner tone="error" compact role="status">
           {t("shell.offline")}
-        </div>
+        </Banner>
       )}
       {!offline && expired && (
-        <div className="banner banner-stale" role="note">
+        <Banner tone="error" compact role="note">
           {t("shell.expired")}
-        </div>
+        </Banner>
       )}
-      {!offline && stale && <StaleDataBanner />}
+      {!offline && stale && <StaleDataBanner compact />}
       {notReady && (
-        <div className="banner banner-stale" role="note">
+        <Banner tone="error" compact role="note">
           {t("status.notReady")}
-        </div>
+        </Banner>
       )}
     </div>
   );
