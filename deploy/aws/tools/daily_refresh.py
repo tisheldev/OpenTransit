@@ -557,15 +557,19 @@ def archive(
     )
 
 
-def host_cleanup(job: Job, keep_releases: list[Path], latest_snapshot: Path) -> dict:
-    """Free the build host's bounded disk after a successful run.
+def host_cleanup(
+    job: Job, keep_releases: list[Path], latest_snapshot: Path | None = None
+) -> dict:
+    """Free the build host's bounded disk: after a successful run and before the disk guard.
 
     Only copies that exist elsewhere are removed: generation directories other than the
-    serving and previous ones whose manifest is in the archive (their data images are in ECR
-    by digest), staging trees of older releases, local Docker images other than those two
-    releases' (registry copies stay; ECR is never pruned) and source snapshot copies whose
-    every file is in the archive under its SHA-256, except the newest (the fetch store's own
-    objects, which change detection reads, stay)."""
+    serving one whose manifest is in the archive (their data images are in ECR by digest, and
+    rollback uses those digests, so the previous release needs no local copy), staging trees
+    of other releases, local Docker images other than the serving release's (registry copies
+    stay; ECR is never pruned) and source snapshot copies whose every file is in the archive
+    under its SHA-256, except the newest (the fetch store's own objects, which change
+    detection reads, stay). Keeping two releases' copies left 6.5 GiB of the 30 GiB volume
+    free, under the 12 GiB a build needs (7 November)."""
     args = job.args
     keep_dirs, keep_tags = set(), set()
     for record_path in keep_releases:
@@ -614,7 +618,9 @@ def host_cleanup(job: Job, keep_releases: list[Path], latest_snapshot: Path) -> 
             removed["images"].append(ref)
     subprocess.run(["docker", "image", "prune", "-f"], capture_output=True)
     subprocess.run(["docker", "builder", "prune", "-f"], capture_output=True)
-    for snap in sorted((args.source_root / "snapshots").iterdir()):
+    snapshots = sorted((args.source_root / "snapshots").iterdir())
+    latest_snapshot = latest_snapshot or (snapshots[-1] if snapshots else None)
+    for snap in snapshots:
         if snap == latest_snapshot or not (snap / "provenance.json").is_file():
             continue
         inputs = json.loads((snap / "provenance.json").read_text(encoding="utf-8"))[
@@ -638,12 +644,14 @@ def disk_free_gib(path: Path) -> float:
 
 def refresh(job: Job) -> int:
     args = job.args
+    current, current_plan, current_path, _ = load_current(args.releases)
+    if args.host_cleanup and (args.source_root / "snapshots").is_dir():
+        job.record("host-cleanup-before", True, **host_cleanup(job, [current_path]))
     if args.min_free_gib:
         free = disk_free_gib(args.generations_root)
         job.record("disk", free >= args.min_free_gib, freeGiB=round(free, 1))
         if free < args.min_free_gib:
             raise StepFailed(f"disk: {free:.1f} GiB free, need {args.min_free_gib:g}")
-    current, current_plan, current_path, _ = load_current(args.releases)
     serving_dir = Path(current_plan["verify"]["generationDir"])
     on_host = (serving_dir / "manifest.json").is_file()
     serving_manifest = (
@@ -890,8 +898,7 @@ def refresh(job: Job) -> int:
     job.save()
 
     if args.host_cleanup:
-        keep = [registered, current_path]
-        job.record("host-cleanup", True, **host_cleanup(job, keep, snapshot))
+        job.record("host-cleanup", True, **host_cleanup(job, [registered], snapshot))
     return 0
 
 
