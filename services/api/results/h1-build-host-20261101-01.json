@@ -378,13 +378,38 @@
       "at": "2026-11-06T14:31:29Z",
       "ok": true,
       "schedule": "opentransit-build-host-manual-20261106T143129"
+    },
+    {
+      "step": "set-ref",
+      "at": "2026-11-07T10:47:20+00:00",
+      "ok": true,
+      "ref": "a6b2bfc3595211bd41d9fec746a29e1f8971aa93"
+    },
+    {
+      "step": "trigger",
+      "at": "2026-11-07T10:49:22Z",
+      "ok": true,
+      "schedule": "opentransit-build-host-manual-20261107T104922"
+    },
+    {
+      "step": "set-ref",
+      "at": "2026-11-07T10:52:16+00:00",
+      "ok": true,
+      "ref": "9fbf695e5026ea4ccd5b10ac2d3726ac51a02895"
+    },
+    {
+      "step": "trigger",
+      "at": "2026-11-07T10:54:18Z",
+      "ok": true,
+      "schedule": "opentransit-build-host-manual-20261107T105418"
     }
   ],
   "measurements": {
     "hostVsOperatorPc": "per-stage 1.5-2.4x slower than the operator PC (photon_enrich 3034 s vs 1730 s); single-threaded Python at ~88% of one vCPU, no memory pressure (peak used < 1 GiB of 7.6 GiB outside page cache)",
     "cpuCredits": "unlimited mode; surplus balance 9.6 credits after the first hour of dry-run-1 (~$0.008 per run hour)",
     "fetchFromEuNorth1": "540-745 s for ~270 MB from gtfs.mot.gov.il and Geofabrik (slow MOT origin); reachable, not geo-blocked",
-    "diskAfterProofRun": "30 GiB root; 7.8 GiB free before cleanup of the failed and dry-run outputs, 23 GiB after; the job requires 12 GiB free"
+    "diskAfterProofRun": "30 GiB root; 7.8 GiB free before cleanup of the failed and dry-run outputs, 23 GiB after; the job requires 12 GiB free",
+    "diskPolicy": "since 9fbf695 the host keeps only the serving release's generation and images locally (rollback uses ECR digests) and cleans up before the 12 GiB guard"
   },
   "costEstimate": {
     "basis": "eu-north-1 on-demand list prices (AWS Price List API, 1 Nov 2026), pre-tax",
@@ -504,23 +529,79 @@
     },
     {
       "label": "scheduled-overnight",
-      "trigger": "opentransit-build-host-daily, cron(30 3 * * ? *) UTC, 2026-11-07",
-      "ref": "837a9a768989c4f2b5d837757cd1c06c934e6acd (SSM parameter unchanged since the proof run)",
-      "confirmedFromHostLogs": false,
-      "observedThroughAlb": {
-        "at": "2026-11-07T10:25Z",
-        "readyz": 200,
-        "freshness": "current",
-        "generationId": "6a77b45afefbc73509f1053d21caf1309f880fc99e675fa2ccd80f438b8571f1",
-        "lastValidatedAt": "2026-11-07T03:30:45Z",
-        "dataBuiltAt": "2026-11-07T04:05:20Z",
-        "coverage": "2026-11-07..2026-12-08 (Israel)",
+      "stamp": "20261107T0330Z",
+      "trigger": "opentransit-build-host-daily, cron(30 3 * * ? *) UTC",
+      "ref": "837a9a768989c4f2b5d837757cd1c06c934e6acd",
+      "mode": "built (MOT feed changed)",
+      "outcome": "ok",
+      "registered": "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:task-definition/opentransit-h1:9",
+      "generationId": "6a77b45afefbc73509f1053d21caf1309f880fc99e675fa2ccd80f438b8571f1",
+      "sourceSha256": {
+        "israel-public-transportation.zip": "0200b79e8e49",
+        "TripIdToDate.zip": "cf12fff9ec0f"
+      },
+      "bootAt": "2026-11-07T03:30:39Z",
+      "jobStartedAt": "2026-11-07T03:30:44Z",
+      "jobFinishedAt": "2026-11-07T05:20:35Z",
+      "powerOffAt": "2026-11-07T05:20:38Z",
+      "wallHours": 1.83,
+      "stoppedItself": true,
+      "confirmedFrom": "CloudWatch stream 20261107T0330Z/host and s3://opentransit-archive-eun1-7c41d2/runs/20261107T0330Z.json (read 7 Nov 10:50Z); ALB /v1/status freshness current",
+      "clientNote": "built from 837a9a7, so /app/ kept index-Xi2FW_Oi.js / index-CEYZU9J8.css (pre-dark client)"
+    },
+    {
+      "label": "dark-client-attempt-1",
+      "stamp": "20261107T1050Z",
+      "ref": "a6b2bfc3595211bd41d9fec746a29e1f8971aa93 (main after PR #30)",
+      "trigger": "build_host.py trigger",
+      "outcome": "failed",
+      "failedStep": "disk",
+      "failure": "disk: 6.5 GiB free, need 12",
+      "cause": "host cleanup kept the previous release's generation and images as well as the serving one; fixed in 9fbf695 (keep only the serving copies; clean up before the guard)",
+      "bootAt": "2026-11-07T10:50:13Z",
+      "powerOffAt": "2026-11-07T10:50:25Z",
+      "stoppedItself": true,
+      "published": false
+    },
+    {
+      "label": "dark-client",
+      "stamp": "20261107T1055Z",
+      "ref": "9fbf695e5026ea4ccd5b10ac2d3726ac51a02895 (main a6b2bfc + the cleanup fix)",
+      "trigger": "build_host.py trigger",
+      "mode": "unchanged (feed pair as at 03:30)",
+      "outcome": "ok",
+      "resultLine": "OPENTRANSIT_REFRESH_RESULT outcome=ok mode=unchanged stamp=20261107T1055Z",
+      "steps": {
+        "fetchSeconds": 474.9,
+        "validateSeconds": 468.5,
+        "apiImageBuildSeconds": 40.7,
+        "publishSeconds": 27.0,
+        "pushAndConvergeSeconds": 911.0,
+        "retentionSeconds": 10.3
+      },
+      "apiImage": "ot-h1-api:src-11e81606d215 (rebuilt because the services/api + apps/web trees changed); data and Photon images reused",
+      "registered": "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:task-definition/opentransit-h1:10",
+      "generationId": "6a77b45afefbc73509f1053d21caf1309f880fc99e675fa2ccd80f438b8571f1",
+      "bootAt": "2026-11-07T10:54:51Z",
+      "powerOffAt": "2026-11-07T11:27:41Z",
+      "wallHours": 0.55,
+      "stoppedItself": true,
+      "postDeployChecks": {
+        "serviceTaskDefinition": "opentransit-h1:10",
+        "runningCount": 1,
+        "deployments": 1,
+        "appStatus": 200,
         "appAssets": [
+          "assets/index-BXwKlYW_.js",
+          "assets/index-CMlzBfGV.css"
+        ],
+        "appAssetsBefore": [
           "assets/index-Xi2FW_Oi.js",
           "assets/index-CEYZU9J8.css"
-        ]
-      },
-      "pending": "CloudWatch streams, runs/<stamp>.json, registered revision, run time and the stopped state need a valid `aws login --profile opentransit` (expired 7 November)"
+        ],
+        "darkTokens": "stylesheet has [data-theme=dark] and color-scheme:dark; page loads theme.js",
+        "checkedFrom": "operator PC through the ALB, 2026-11-07 ~11:29Z"
+      }
     }
   ],
   "costMeasured": {
@@ -528,7 +609,8 @@
     "allHostHours6Nov": 6.36,
     "allHostUsd6Nov": 0.63,
     "basis": "list prices (Price List API, 6 Nov 2026), pre-tax; not a bill",
-    "hourlyWhileRunningUsd": 0.0994
+    "hourlyWhileRunningUsd": 0.0994,
+    "runsThrough7NovUsd": 0.87
   },
   "costProjection": {
     "fixedMonthlyUsd": {
@@ -539,14 +621,19 @@
     },
     "fixedTotalUsd": 2.71,
     "builtDayHours": 2.3,
-    "unchangedDayHoursEstimate": 0.75,
-    "unchangedDayNote": "not yet measured: fetch + validate + publish + push/rollout, no build",
+    "unchangedDayHoursEstimate": null,
+    "unchangedDayNote": "measured 7 Nov (includes an API image rebuild; a renewal with no code change skips it)",
     "scenarios": {
-      "feedChangesEveryOtherDay": 7.26,
+      "feedChangesEveryOtherDay": 6.96,
       "feedChangesDaily": 9.57,
-      "feedNeverChanges": 4.95
+      "feedNeverChanges": 4.35
     },
     "guardUsd": 8.0,
-    "verdict": "within the $8 guard unless the MOT feed changes nearly every day; the pre-creation estimate (1.5 h/day, $7.72) underestimated build days and overestimated CPU surplus"
+    "verdict": "within the $8 guard unless the MOT feed changes nearly every day; the pre-creation estimate (1.5 h/day, $7.72) underestimated build days and overestimated CPU surplus",
+    "builtDayHoursMeasured": [
+      2.3,
+      1.83
+    ],
+    "unchangedDayHoursMeasured": 0.55
   }
 }

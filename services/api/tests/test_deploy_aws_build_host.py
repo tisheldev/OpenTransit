@@ -133,3 +133,33 @@ def test_unchanged_renewal_rebuilds_the_api_image_only_when_its_source_changed(
     assert daily.api_image(job, "ot-h1-api:gen-old") == tag
     assert built[0][:4] == ["docker", "build", "--build-context", f"web={daily.REPO / 'apps/web'}"]
     assert job.summary["apiImage"] == {"tag": tag, "replaces": "ot-h1-api:gen-old", "built": True}
+
+
+def test_host_cleanup_keeps_only_the_serving_release_copies(tmp_path, monkeypatch):
+    gens, rels, src = tmp_path / "generations", tmp_path / "releases", tmp_path / "src"
+    for name in ("serving", "previous", "unarchived"):
+        (gens / name).mkdir(parents=True)
+    for name in ("s1", "s2"):
+        snap = src / "snapshots" / name
+        snap.mkdir(parents=True)
+        (snap / "provenance.json").write_text('{"inputs": {"g.zip": {"sha256": "a"}}}')
+    release = rels / "r-serving"
+    release.mkdir(parents=True)
+    (release / "release-registered.json").write_text('{"localTags": {"api": "ot-h1-api:keep"}}')
+    plan = {"verify": {"generationDir": str(gens / "serving")}}
+    (release / "release-plan.json").write_text(json.dumps(plan))
+    monkeypatch.setattr(
+        daily.subprocess,
+        "run",
+        lambda argv, **kw: daily.subprocess.CompletedProcess(
+            argv, 0, "ot-h1-api:keep\not-h1-api:old\nmotis:x\n", ""
+        ),
+    )
+    job = daily.Job.__new__(daily.Job)
+    job.args = daily.argparse.Namespace(generations_root=gens, releases=rels, source_root=src)
+    monkeypatch.setattr(job, "s3_has", lambda key: "unarchived" not in key, raising=False)
+    removed = daily.host_cleanup(job, [release / "release-registered.json"])
+    assert removed["generations"] == ["previous"]
+    assert sorted(p.name for p in gens.iterdir()) == ["serving", "unarchived"]
+    assert removed["images"] == ["ot-h1-api:old"]
+    assert removed["snapshots"] == ["s1"]
