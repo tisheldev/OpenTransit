@@ -469,6 +469,14 @@ $BH pause | $BH resume       # disable / enable the daily schedule
 $BH teardown                 # deletes everything above except the bucket and ECR
 ```
 
+Measured on 6 November ([evidence](../../services/api/results/h1-build-host-20261101-01.json)): the
+proof run (bootstrap build, 14:32–16:50 UTC, 2.30 h) published `opentransit-h1:8` with `:7` as the
+rollback target and powered off; stages run 1.5–2.4× slower than on the operator PC (single-threaded
+Python on one vCPU), fetching from MOT takes 9–12 minutes. Running cost ≈ $0.10/hour; projected
+$7.26/month if the feed changes every other day, $9.57 if daily (over the $8 guard), $4.95 if never.
+The first dry run failed in the Photon import on Linux file permissions (fixed in
+`opentransit.build.photon`); a run needs 12 GiB free of the 30 GiB volume.
+
 Operations (manual trigger, logs, pausing, updating the ref, teardown) are in
 [docs/operations.md](../../docs/operations.md#cloud-build-host).
 
