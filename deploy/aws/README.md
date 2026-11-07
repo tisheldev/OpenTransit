@@ -406,8 +406,79 @@ still needs a task replacement (no hot reload).
 
 **Daily refresh** (`tools/daily_refresh.py`, `scheduler/daily-refresh.cmd`, registration
 `scheduler/register-task.ps1`): see [operations](../../docs/operations.md#h-1-private-preview-eu-north-1-running-since-31-october-2026).
-The build host for the preview is this Windows machine (default pending the user's confirmation);
-generations stay on `D:/ot/`, images in ECR, evidence in Git; since 6 November the `oct31a` inputs and release records are also archived in S3 (`opentransit-archive-eun1-7c41d2`, [record](../../services/api/results/portability-20261101-01.json)).
+From 6 November 2026 the scheduled build host is the EC2 instance below; the Windows task remains a
+manual fallback. The `oct31a` inputs and release records were archived in S3 on 6 November by
+PORT-01 ([record](../../services/api/results/portability-20261101-01.json)); the host uses the same bucket.
+
+## H-1 cloud build host, 6 November 2026
+
+One stopped-by-default EC2 instance in `eu-north-1` runs the daily refresh and powers itself off
+(tags `Project=OpenTransit`, `Purpose=H1-build`; every ARN and measurement in the
+[evidence](../../services/api/results/h1-build-host-20261101-01.json)). Built by
+`tools/build_host.py setup --ref <commit>`:
+
+* **Instance** `opentransit-build-host`: t3.large (2 vCPU, 8 GiB, unlimited credits), AL2023 AMI
+  pinned by ID at setup, 30 GiB encrypted gp3, IMDSv2 only with instance tags in metadata, in an
+  H-1 public subnet with an auto-assigned public IPv4 (released while stopped; no NAT).
+* **Security group** `opentransit-build-host`: no inbound rules, egress 80/443 only; one rule on the
+  ALB group admits it on tcp/80 so the host probes the ALB's private address (the public listener
+  admits only the reviewer CIDR). No SSH key: shell access is SSM Session Manager.
+* **Role** `opentransit-build-host`: ECR push/pull on the four repositories, ECS register/describe
+  task definition and update/describe the `opentransit-h1` service, `iam:PassRole` on the execution
+  role only, read/write on the archive bucket, write to its log group, read its SSM parameter,
+  describe network interfaces, plus `AmazonSSMManagedInstanceCore`.
+* **Schedule** `opentransit-build-host-daily`: EventBridge Scheduler `cron(30 3 * * ? *)` UTC calling
+  `ec2:StartInstances` with role `opentransit-build-host-scheduler` (start that one instance only).
+* **Boot**: `build-host/user-data.sh` (first launch only: packages, swap, clone, `install.sh`).
+  Every boot runs `opentransit-refresh.service` → `/usr/local/libexec/opentransit-run-refresh`
+  (`build-host/run-refresh.sh`): read instance tag `OpenTransitMode` (`maintenance` = do nothing and
+  stay up; `dry-run` = build and stage the release, stop before the publisher push, result
+  `outcome=dry-run`), check out the ref in SSM parameter `/opentransit/build-host/repo-ref` (reinstall if it
+  moved), find the ALB address, run `daily_refresh.py` under a 3 h timeout, then `poweroff`. A
+  backstop timer powers off 4.5 h after boot regardless.
+* **Pins** (`build-host/install.sh`): repository commit (SSM parameter), uv 0.11.26, Python 3.14.6,
+  buildx v0.37.2, Photon 1.3.0 jar and the osmium 4.3.1 wheel, each by SHA-256; the AMI by ID. Node
+  is not installed (no image build needs it).
+* **Job**: fetch → validate → (bootstrap or changed pair) build-generation with addresses into a
+  dated directory → local probe → publisher push → ALB probe → archive → `prune --dry-run` →
+  host cleanup, stopping at the first failure. An unchanged pair is renewed, not rebuilt
+  (`mode=unchanged`), rebuilding only the API image when its source trees changed. The first run on a fresh host is `mode=bootstrap`: the serving generation is
+  not on its disk, so it rebuilds from the day's sources.
+* **Archive**: the portability session's bucket `opentransit-archive-eun1-7c41d2` (versioned,
+  private; PORT-01), in its layout: `generations/<id>/{manifest.json,pipeline/pipeline.json,probe/probe.json}`,
+  `sources/snapshots/<stamp>/provenance.json`, `sources/checks/<check>.json`, `releases/<stamp>/`.
+  The host adds `sources/sha256/<sha>/<file>` (source bytes stored once per hash; a snapshot's
+  provenance lists the hashes), `releases/build-host-current.json` (its bootstrap pointer) and
+  `runs/<stamp>.json` (one-line summary) with `runs/<stamp>/` (summary and log). Setup first created
+  its own bucket and deleted it once the shared one existed (evidence step `archive-bucket-switch`).
+* **Logs and alarm**: group `/opentransit/build-host` (90 days), streams `<stamp>/host` and
+  `<stamp>/job`; metric filter on `OPENTRANSIT_REFRESH_RESULT outcome=ok` → `OpenTransit/BuildHost`
+  `RefreshSucceeded`; alarm `opentransit-build-host-no-success-26h` → SNS topic
+  `opentransit-build-host-alerts` (created with no subscription; add one in the console or with
+  `aws sns subscribe`).
+
+```sh
+BH="uv run --project services/api --locked python deploy/aws/tools/build_host.py"
+$BH estimate                 # refuses setup above the $8/month guard
+$BH setup --ref <commit>     # creates or adopts everything above; instance starts in maintenance
+$BH seed                     # the serving release record → releases/<stamp>/ + build-host-current.json
+$BH mode refresh             # or dry-run / maintenance; then stop the instance
+$BH trigger && $BH watch     # one manual run now, tailing CloudWatch until the host stops
+$BH set-ref <commit>         # the next boot checks out and installs this commit
+$BH pause | $BH resume       # disable / enable the daily schedule
+$BH teardown                 # deletes everything above except the bucket and ECR
+```
+
+Measured on 6 November ([evidence](../../services/api/results/h1-build-host-20261101-01.json)): the
+proof run (bootstrap build, 14:32–16:50 UTC, 2.30 h) published `opentransit-h1:8` with `:7` as the
+rollback target and powered off; stages run 1.5–2.4× slower than on the operator PC (single-threaded
+Python on one vCPU), fetching from MOT takes 9–12 minutes. Running cost ≈ $0.10/hour; projected
+$7.26/month if the feed changes every other day, $9.57 if daily (over the $8 guard), $4.95 if never.
+The first dry run failed in the Photon import on Linux file permissions (fixed in
+`opentransit.build.photon`); a run needs 12 GiB free of the 30 GiB volume.
+
+Operations (manual trigger, logs, pausing, updating the ref, teardown) are in
+[docs/operations.md](../../docs/operations.md#cloud-build-host).
 
 ## Bounded H-0 test, 31 October 2026
 

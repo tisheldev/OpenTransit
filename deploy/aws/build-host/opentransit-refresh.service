@@ -1,0 +1,13 @@
+[Unit]
+Description=OpenTransit H-1 daily refresh, then power off
+Wants=network-online.target
+After=network-online.target docker.service cloud-final.service amazon-ssm-agent.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/libexec/opentransit-run-refresh
+TimeoutStartSec=4h
+
+[Install]
+WantedBy=multi-user.target

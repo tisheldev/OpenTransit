@@ -56,7 +56,7 @@ TARGET="--region eu-north-1 --cluster opentransit-h1 --service opentransit-h1 --
   execution role, then `$H1 inventory --label after`. ECR repositories and images are kept. Also
   disable the scheduled task `OpenTransit H-1 daily refresh`.
 
-**Daily refresh.** Once registered (`powershell -ExecutionPolicy Bypass -File D:/ot/src-<commit>/deploy/aws/scheduler/register-task.ps1`, which also disables the old fetch-only task; not yet done), Windows Task Scheduler on the operator machine runs
+**Daily refresh (manual fallback since 6 November; the [cloud build host](#cloud-build-host) runs it).** Once registered (`powershell -ExecutionPolicy Bypass -File D:/ot/src-<commit>/deploy/aws/scheduler/register-task.ps1`, which also disables the old fetch-only task; not yet done), Windows Task Scheduler on the operator machine runs
 `D:/ot/src-<commit>/deploy/aws/scheduler/daily-refresh.cmd` at 06:30 local (task
 `OpenTransit H-1 daily refresh`): fetch → validate → build-generation (only if the
 GTFS/TripIdToDate pair changed) → local probe (new builds only) → publish/push → ALB probe →
@@ -68,8 +68,61 @@ The job needs the machine on, Docker Desktop running and a valid `opentransit` l
 day leaves the previous revision serving, and an unchanged generation stays serviceable for
 7 days after its last renewal.
 
-**Archive (decision, 31 October 2026).** Generations stay on `D:/ot/` (`generations/`, `src/`,
-`releases/`, `logs/`), images in ECR (never deleted automatically), evidence in Git. **Updated 6 November (PORT-01):** the `oct31a` manifests, pipeline record, probe, source snapshot, source checks and release records are also in the versioned S3 bucket `opentransit-archive-eun1-7c41d2` ([record](../services/api/results/portability-20261101-01.json)).
+**Archive.** Since 6 November 2026 the cloud build host archives sources (content-addressed),
+snapshots, checks, generation records and releases to `s3://opentransit-archive-eun1-7c41d2`
+(the portability session's bucket and layout; below).
+Images stay in ECR (never deleted automatically), evidence in Git; `D:/ot/` keeps the operator
+machine's own generations. The `oct31a` records were archived there first by PORT-01
+([record](../services/api/results/portability-20261101-01.json)).
+
+## Cloud build host
+
+The scheduled refresh runs on EC2 instance `opentransit-build-host` (t3.large, `eu-north-1`;
+[design and resources](../deploy/aws/README.md#h-1-cloud-build-host-6-november-2026),
+[evidence](../services/api/results/h1-build-host-20261101-01.json)). The Windows task above is
+the manual fallback; do not run both on the same day (two publishers would race on the service).
+
+```sh
+BH="uv run --project services/api --locked python deploy/aws/tools/build_host.py"
+```
+
+* **How it runs.** EventBridge Scheduler `opentransit-build-host-daily` starts the instance at
+  03:30 UTC. The boot unit runs the same job as the Windows task (fetch → validate →
+  build-generation only for a changed pair or on a fresh host → probe → push → ALB probe →
+  archive → `prune --dry-run`), stops at the first failure and powers off; a backstop timer powers
+  off 4.5 h after boot. A failed day leaves the previous revision serving.
+* **Manual run.** `$BH trigger` (a one-off schedule two minutes out with the daily target, deleted
+  after it fires) then `$BH watch` (tails CloudWatch until the instance has stopped). Do not start
+  the instance by hand in refresh mode unless you want a run. `$BH mode dry-run` first makes the
+  run stop before the publisher push (nothing reaches ECR or ECS; result `outcome=dry-run`, which
+  does not count as a success for the alarm); `$BH mode refresh` afterwards.
+* **Logs.** CloudWatch group `/opentransit/build-host`, streams `<UTC stamp>/host` (boot script)
+  and `<UTC stamp>/job` (the job): `aws --profile opentransit --region eu-north-1 logs tail
+  /opentransit/build-host --since 6h`. Each run also writes `s3://opentransit-archive-eun1-7c41d2/runs/<stamp>.json`
+  (one line: outcome, mode, failed step) and `runs/<stamp>/{summary.json,daily.log}`. The line
+  `OPENTRANSIT_REFRESH_RESULT outcome=ok` feeds metric `OpenTransit/BuildHost RefreshSucceeded`;
+  alarm `opentransit-build-host-no-success-26h` goes to SNS topic `opentransit-build-host-alerts`,
+  which has **no subscription** until you add one (`aws sns subscribe --topic-arn <arn> --protocol
+  email --notification-endpoint <address>`).
+* **Shell access.** `$BH mode maintenance`, start the instance, then `aws ssm start-session
+  --target <instance>` (no SSH). Maintenance boots skip the job and stay up; `$BH mode refresh`
+  and stop the instance when done.
+* **Pause.** `$BH pause` disables the schedule (`$BH resume` re-enables). Pause it whenever the
+  preview service is paused (`$H1 pause`), or the run fails waiting for a deployment.
+* **Update the ref.** Push the commit, then `$BH set-ref <commit>`. The next boot fetches it and
+  reruns `install.sh` (pinned tools, units). A run that has already booted keeps the commit it
+  checked out. On a changed feed the publisher rebuilds all images from the checkout; on an
+  unchanged feed the job reuses the serving data and Photon images and rebuilds only the API
+  image, and only when the Git trees of `services/api` or `apps/web` differ from the serving
+  image's (local tag `ot-h1-api:src-<hash>`), so a client or API change ships without a feed
+  change. Example (6 November): the dark-themed client merged as `main` `f5065f0` while a run was
+  building from an older ref, so after that run finished: merge `main` into the deployed branch,
+  push, `$BH set-ref <that commit>`, `$BH trigger && $BH watch`, then check that `/app/` returns
+  200 through the ALB with new hashed asset names. Changing `user-data.sh` needs a new instance
+  (teardown and setup).
+* **Tear down.** `$BH teardown` deletes the schedule, instance, security group (and the ALB rule
+  for it), roles and instance profile, alarm, topic, metric filter, log group and SSM parameter.
+  The archive bucket and ECR are kept.
 
 ## Incident checks and evidence
 

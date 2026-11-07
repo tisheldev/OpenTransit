@@ -1,0 +1,8 @@
+[Unit]
+Description=Power the OpenTransit build host off 4.5 h after boot whatever the refresh does
+
+[Timer]
+OnBootSec=4h30min
+
+[Install]
+WantedBy=timers.target

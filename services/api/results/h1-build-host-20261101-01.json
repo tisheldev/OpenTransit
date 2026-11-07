@@ -1,0 +1,552 @@
+{
+  "schemaVersion": 1,
+  "kind": "h1-build-host",
+  "label": "H-1 CLOUD BUILD HOST in eu-north-1 (task 1 November 2026): one EC2 instance started daily by EventBridge Scheduler, stopping itself. Measured values are marked as such; costs are list-price estimates.",
+  "task": "H1-BUILD",
+  "region": "eu-north-1",
+  "accountId": "{{ACCOUNT_ID}}",
+  "resources": [
+    {
+      "type": "s3-bucket",
+      "id": "opentransit-archive-{{ACCOUNT_ID}}",
+      "arn": "arn:aws:s3:::opentransit-archive-{{ACCOUNT_ID}}",
+      "createdAt": "2026-11-06T10:20:39+00:00",
+      "deletedAt": "2026-11-06T10:32:50+00:00",
+      "adopted": false,
+      "keep": true
+    },
+    {
+      "type": "log-group",
+      "id": "/opentransit/build-host",
+      "arn": "arn:aws:logs:eu-north-1:{{ACCOUNT_ID}}:log-group:/opentransit/build-host",
+      "createdAt": "2026-11-06T10:20:41+00:00",
+      "deletedAt": null,
+      "retentionDays": 90
+    },
+    {
+      "type": "metric-filter",
+      "id": "/opentransit/build-host/refresh-succeeded",
+      "arn": null,
+      "createdAt": "2026-11-06T10:20:43+00:00",
+      "deletedAt": null,
+      "metric": "OpenTransit/BuildHost/RefreshSucceeded"
+    },
+    {
+      "type": "sns-topic",
+      "id": "opentransit-build-host-alerts",
+      "arn": "arn:aws:sns:eu-north-1:{{ACCOUNT_ID}}:opentransit-build-host-alerts",
+      "createdAt": "2026-11-06T10:20:44+00:00",
+      "deletedAt": null,
+      "subscriptions": "none (user adds email later)"
+    },
+    {
+      "type": "cloudwatch-alarm",
+      "id": "opentransit-build-host-no-success-26h",
+      "arn": "arn:aws:cloudwatch:eu-north-1:{{ACCOUNT_ID}}:alarm:opentransit-build-host-no-success-26h",
+      "createdAt": "2026-11-06T10:20:46+00:00",
+      "deletedAt": null,
+      "topic": "arn:aws:sns:eu-north-1:{{ACCOUNT_ID}}:opentransit-build-host-alerts"
+    },
+    {
+      "type": "ssm-parameter",
+      "id": "/opentransit/build-host/repo-ref",
+      "arn": "arn:aws:ssm:eu-north-1:{{ACCOUNT_ID}}:parameter/opentransit/build-host/repo-ref",
+      "createdAt": "2026-11-06T10:20:47+00:00",
+      "deletedAt": null,
+      "value": "3462794077cdfa8ad89a30918698e8f2ecffa084"
+    },
+    {
+      "type": "iam-role",
+      "id": "opentransit-build-host",
+      "arn": "arn:aws:iam::{{ACCOUNT_ID}}:role/opentransit-build-host",
+      "createdAt": "2026-11-06T10:20:49+00:00",
+      "deletedAt": null
+    },
+    {
+      "type": "iam-inline-policy",
+      "id": "opentransit-build-host/opentransit-build-host",
+      "arn": null,
+      "createdAt": "2026-11-06T10:21:12+00:00",
+      "deletedAt": null
+    },
+    {
+      "type": "iam-attached-policy",
+      "id": "opentransit-build-host/AmazonSSMManagedInstanceCore",
+      "arn": "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore",
+      "createdAt": "2026-11-06T10:21:13+00:00",
+      "deletedAt": null
+    },
+    {
+      "type": "iam-instance-profile",
+      "id": "opentransit-build-host",
+      "arn": "arn:aws:iam::{{ACCOUNT_ID}}:instance-profile/opentransit-build-host",
+      "createdAt": "2026-11-06T10:21:16+00:00",
+      "deletedAt": null
+    },
+    {
+      "type": "iam-role",
+      "id": "opentransit-build-host-scheduler",
+      "arn": "arn:aws:iam::{{ACCOUNT_ID}}:role/opentransit-build-host-scheduler",
+      "createdAt": "2026-11-06T10:21:18+00:00",
+      "deletedAt": null
+    },
+    {
+      "type": "security-group",
+      "id": "sg-0bc507a273e2c7147",
+      "arn": null,
+      "createdAt": "2026-11-06T10:21:32+00:00",
+      "deletedAt": null,
+      "name": "opentransit-build-host",
+      "inbound": "none"
+    },
+    {
+      "type": "security-group-rule",
+      "id": "sgr-0182d90689d4ac58f",
+      "arn": null,
+      "createdAt": "2026-11-06T10:21:37+00:00",
+      "deletedAt": null,
+      "group": "sg-040c0e8a8a6a1944a",
+      "rule": "ALB tcp/80 from the build host group"
+    },
+    {
+      "type": "ec2-instance",
+      "id": "i-000497b8f64a02ae8",
+      "arn": "arn:aws:ec2:eu-north-1:{{ACCOUNT_ID}}:instance/i-000497b8f64a02ae8",
+      "createdAt": "2026-11-06T10:21:43+00:00",
+      "deletedAt": null,
+      "instanceType": "t3.large",
+      "ami": "ami-0516089d963059a51",
+      "amiName": "al2023-ami-2023.12.20261102.0-kernel-6.18-x86_64",
+      "amiCreated": "2026-10-30T14:07:15.000Z",
+      "rootGiB": 30,
+      "subnet": "subnet-016e2b126f6ff9908"
+    },
+    {
+      "type": "iam-inline-policy",
+      "id": "opentransit-build-host-scheduler/start-build-host",
+      "arn": null,
+      "createdAt": "2026-11-06T10:21:45+00:00",
+      "deletedAt": null
+    },
+    {
+      "type": "scheduler-schedule",
+      "id": "opentransit-build-host-daily",
+      "arn": "arn:aws:scheduler:eu-north-1:{{ACCOUNT_ID}}:schedule/default/opentransit-build-host-daily",
+      "createdAt": "2026-11-06T10:21:46+00:00",
+      "deletedAt": null,
+      "expression": "cron(30 3 * * ? *)",
+      "timezone": "UTC"
+    },
+    {
+      "type": "s3-bucket",
+      "id": "opentransit-archive-eun1-7c41d2",
+      "arn": "arn:aws:s3:::opentransit-archive-eun1-7c41d2",
+      "createdAt": "2026-11-06T10:32:50+00:00",
+      "deletedAt": null,
+      "adopted": true,
+      "keep": true,
+      "owner": "portability session (PORT-01, PR #26)"
+    }
+  ],
+  "steps": [
+    {
+      "step": "cost-estimate",
+      "at": "2026-11-06T10:19:29+00:00",
+      "ok": true,
+      "basis": "eu-north-1 on-demand list prices (AWS Price List API, 1 Nov 2026), pre-tax",
+      "instanceType": "t3.large",
+      "hoursPerDay": 1.5,
+      "prices": {
+        "t3.largeHour": 0.0864,
+        "t3UnlimitedVcpuHour": 0.05,
+        "gp3GbMonth": 0.0836,
+        "snapshotFree": 0.0,
+        "publicIpv4Hour": 0.005,
+        "logsIngestGb": 0.54,
+        "logsStorageGbMonth": 0.028,
+        "s3GbMonth": 0.023,
+        "alarmMonth": 0.1
+      },
+      "monthlyUsd": {
+        "instance": 3.89,
+        "t3UnlimitedSurplus": 0.9,
+        "rootVolume": 2.51,
+        "publicIpv4WhileRunning": 0.23,
+        "logs": 0.04,
+        "s3ArchiveFirstMonth": 0.06,
+        "alarm": 0.1
+      },
+      "monthlyTotalUsd": 7.72,
+      "guardUsd": 8.0,
+      "withinGuard": true,
+      "notIncluded": "ECR storage of new images pushed by the refresh (pipeline cost, ~$0.08 per changed generation per month, never pruned), data transfer in (free), tax; SNS and Scheduler are within their free tiers"
+    },
+    {
+      "step": "cost-estimate",
+      "at": "2026-11-06T10:19:34+00:00",
+      "ok": true,
+      "basis": "eu-north-1 on-demand list prices (AWS Price List API, 1 Nov 2026), pre-tax",
+      "instanceType": "t3.large",
+      "hoursPerDay": 1.5,
+      "prices": {
+        "t3.largeHour": 0.0864,
+        "t3UnlimitedVcpuHour": 0.05,
+        "gp3GbMonth": 0.0836,
+        "snapshotFree": 0.0,
+        "publicIpv4Hour": 0.005,
+        "logsIngestGb": 0.54,
+        "logsStorageGbMonth": 0.028,
+        "s3GbMonth": 0.023,
+        "alarmMonth": 0.1
+      },
+      "monthlyUsd": {
+        "instance": 3.89,
+        "t3UnlimitedSurplus": 0.9,
+        "rootVolume": 2.51,
+        "publicIpv4WhileRunning": 0.23,
+        "logs": 0.04,
+        "s3ArchiveFirstMonth": 0.06,
+        "alarm": 0.1
+      },
+      "monthlyTotalUsd": 7.72,
+      "guardUsd": 8.0,
+      "withinGuard": true,
+      "notIncluded": "ECR storage of new images pushed by the refresh (pipeline cost, ~$0.08 per changed generation per month, never pruned), data transfer in (free), tax; SNS and Scheduler are within their free tiers"
+    },
+    {
+      "step": "cost-estimate",
+      "at": "2026-11-06T10:19:39+00:00",
+      "ok": true,
+      "basis": "eu-north-1 on-demand list prices (AWS Price List API, 1 Nov 2026), pre-tax",
+      "instanceType": "t3.large",
+      "hoursPerDay": 1.5,
+      "prices": {
+        "t3.largeHour": 0.0864,
+        "t3UnlimitedVcpuHour": 0.05,
+        "gp3GbMonth": 0.0836,
+        "snapshotFree": 0.0,
+        "publicIpv4Hour": 0.005,
+        "logsIngestGb": 0.54,
+        "logsStorageGbMonth": 0.028,
+        "s3GbMonth": 0.023,
+        "alarmMonth": 0.1
+      },
+      "monthlyUsd": {
+        "instance": 3.89,
+        "t3UnlimitedSurplus": 0.9,
+        "rootVolume": 2.51,
+        "publicIpv4WhileRunning": 0.23,
+        "logs": 0.04,
+        "s3ArchiveFirstMonth": 0.06,
+        "alarm": 0.1
+      },
+      "monthlyTotalUsd": 7.72,
+      "guardUsd": 8.0,
+      "withinGuard": true,
+      "notIncluded": "ECR storage of new images pushed by the refresh (pipeline cost, ~$0.08 per changed generation per month, never pruned), data transfer in (free), tax; SNS and Scheduler are within their free tiers"
+    },
+    {
+      "step": "setup",
+      "at": "2026-11-06T10:21:46+00:00",
+      "ok": true,
+      "instance": "i-000497b8f64a02ae8",
+      "bucket": "opentransit-archive-{{ACCOUNT_ID}}"
+    },
+    {
+      "step": "seed-release",
+      "at": "2026-11-06T10:22:02+00:00",
+      "ok": true,
+      "release": "20261031T1842Z",
+      "bucket": "opentransit-archive-{{ACCOUNT_ID}}"
+    },
+    {
+      "step": "set-ref",
+      "at": "2026-11-06T10:24:56+00:00",
+      "ok": true,
+      "ref": "fa647fb651494e9d87c59c074963c935de973f75"
+    },
+    {
+      "step": "mode",
+      "at": "2026-11-06T10:25:59+00:00",
+      "ok": true,
+      "instance": "i-000497b8f64a02ae8",
+      "mode": "refresh"
+    },
+    {
+      "step": "trigger",
+      "at": "2026-11-06T10:28:34Z",
+      "ok": true,
+      "schedule": "opentransit-build-host-manual-20261106T102834"
+    },
+    {
+      "step": "mode",
+      "at": "2026-11-06T10:29:10+00:00",
+      "ok": true,
+      "instance": "i-000497b8f64a02ae8",
+      "mode": "maintenance"
+    },
+    {
+      "step": "archive-bucket-switch",
+      "at": "2026-11-06T10:32:52+00:00",
+      "ok": true,
+      "removed": "opentransit-archive-{{ACCOUNT_ID}}",
+      "removedObjects": 3,
+      "adopted": "opentransit-archive-eun1-7c41d2",
+      "reason": "coordinator: use the portability session's existing archive bucket, do not create another"
+    },
+    {
+      "step": "set-ref",
+      "at": "2026-11-06T10:33:27+00:00",
+      "ok": true,
+      "ref": "6def16ee7139ab367965151ef786ad358176fb62"
+    },
+    {
+      "step": "seed-release",
+      "at": "2026-11-06T10:33:32+00:00",
+      "ok": true,
+      "release": "20261031T1842Z",
+      "bucket": "opentransit-archive-eun1-7c41d2"
+    },
+    {
+      "step": "mode",
+      "at": "2026-11-06T10:44:17+00:00",
+      "ok": true,
+      "instance": "i-000497b8f64a02ae8",
+      "mode": "dry-run"
+    },
+    {
+      "step": "trigger",
+      "at": "2026-11-06T10:46:52Z",
+      "ok": true,
+      "schedule": "opentransit-build-host-manual-20261106T104652"
+    },
+    {
+      "step": "mode",
+      "at": "2026-11-06T12:30:14+00:00",
+      "ok": true,
+      "instance": "i-000497b8f64a02ae8",
+      "mode": "maintenance"
+    },
+    {
+      "step": "set-ref",
+      "at": "2026-11-06T12:35:16+00:00",
+      "ok": true,
+      "ref": "c44fa795e6376e512274f56294e917c843208114"
+    },
+    {
+      "step": "mode",
+      "at": "2026-11-06T12:35:19+00:00",
+      "ok": true,
+      "instance": "i-000497b8f64a02ae8",
+      "mode": "dry-run"
+    },
+    {
+      "step": "trigger",
+      "at": "2026-11-06T12:37:54Z",
+      "ok": true,
+      "schedule": "opentransit-build-host-manual-20261106T123754"
+    },
+    {
+      "step": "set-ref",
+      "at": "2026-11-06T14:27:27+00:00",
+      "ok": true,
+      "ref": "837a9a768989c4f2b5d837757cd1c06c934e6acd"
+    },
+    {
+      "step": "seed-release",
+      "at": "2026-11-06T14:27:33+00:00",
+      "ok": true,
+      "release": "20261106-r7-client",
+      "bucket": "opentransit-archive-eun1-7c41d2"
+    },
+    {
+      "step": "mode",
+      "at": "2026-11-06T14:27:46+00:00",
+      "ok": true,
+      "instance": "i-000497b8f64a02ae8",
+      "mode": "maintenance"
+    },
+    {
+      "step": "mode",
+      "at": "2026-11-06T14:28:54+00:00",
+      "ok": true,
+      "instance": "i-000497b8f64a02ae8",
+      "mode": "refresh"
+    },
+    {
+      "step": "trigger",
+      "at": "2026-11-06T14:31:29Z",
+      "ok": true,
+      "schedule": "opentransit-build-host-manual-20261106T143129"
+    }
+  ],
+  "measurements": {
+    "hostVsOperatorPc": "per-stage 1.5-2.4x slower than the operator PC (photon_enrich 3034 s vs 1730 s); single-threaded Python at ~88% of one vCPU, no memory pressure (peak used < 1 GiB of 7.6 GiB outside page cache)",
+    "cpuCredits": "unlimited mode; surplus balance 9.6 credits after the first hour of dry-run-1 (~$0.008 per run hour)",
+    "fetchFromEuNorth1": "540-745 s for ~270 MB from gtfs.mot.gov.il and Geofabrik (slow MOT origin); reachable, not geo-blocked",
+    "diskAfterProofRun": "30 GiB root; 7.8 GiB free before cleanup of the failed and dry-run outputs, 23 GiB after; the job requires 12 GiB free"
+  },
+  "costEstimate": {
+    "basis": "eu-north-1 on-demand list prices (AWS Price List API, 1 Nov 2026), pre-tax",
+    "instanceType": "t3.large",
+    "hoursPerDay": 1.5,
+    "prices": {
+      "t3.largeHour": 0.0864,
+      "t3UnlimitedVcpuHour": 0.05,
+      "gp3GbMonth": 0.0836,
+      "snapshotFree": 0.0,
+      "publicIpv4Hour": 0.005,
+      "logsIngestGb": 0.54,
+      "logsStorageGbMonth": 0.028,
+      "s3GbMonth": 0.023,
+      "alarmMonth": 0.1
+    },
+    "monthlyUsd": {
+      "instance": 3.89,
+      "t3UnlimitedSurplus": 0.9,
+      "rootVolume": 2.51,
+      "publicIpv4WhileRunning": 0.23,
+      "logs": 0.04,
+      "s3ArchiveFirstMonth": 0.06,
+      "alarm": 0.1
+    },
+    "monthlyTotalUsd": 7.72,
+    "guardUsd": 8.0,
+    "withinGuard": true,
+    "notIncluded": "ECR storage of new images pushed by the refresh (pipeline cost, ~$0.08 per changed generation per month, never pruned), data transfer in (free), tax; SNS and Scheduler are within their free tiers"
+  },
+  "runs": [
+    {
+      "label": "dry-run-1",
+      "stamp": "20261106T1047Z",
+      "ref": "6def16ee7139ab367965151ef786ad358176fb62",
+      "mode": "dry-run (bootstrap)",
+      "outcome": "failed",
+      "failedStep": "build-generation (photon_import)",
+      "failure": "Photon import is unverified: fatalMarkers=1; java.io.FileNotFoundException /input/address-enriched.jsonl (Permission denied)",
+      "cause": "the 0600 root-owned dump is unreadable to the container user 10001 on a Linux bind mount (Docker Desktop on Windows hid it); fixed in services/api/src/opentransit/build/photon.py (c44fa79)",
+      "steps": {
+        "fetchSeconds": 742.5,
+        "validateSeconds": 605.3,
+        "buildGenerationSecondsUntilFailure": 4759.6
+      },
+      "bootAt": "2026-11-06T10:47:26Z",
+      "powerOffAt": "2026-11-06T12:29:31Z",
+      "stoppedItself": true,
+      "published": false
+    },
+    {
+      "label": "dry-run-2",
+      "stamp": "20261106T1238Z",
+      "ref": "c44fa795e6376e512274f56294e917c843208114",
+      "mode": "dry-run (bootstrap)",
+      "outcome": "dry-run",
+      "steps": {
+        "fetchSeconds": 657.5,
+        "validateSeconds": 487.3,
+        "buildGenerationSeconds": 5024.9,
+        "probeSeconds": 69.2,
+        "publishSeconds": 197.1
+      },
+      "bootAt": "2026-11-06T12:38:51Z",
+      "powerOffAt": "2026-11-06T14:26:36Z",
+      "wallHours": 1.8,
+      "stoppedItself": true,
+      "published": false,
+      "note": "second attempt at the step that failed; it passed, so the two-failure stop rule was not reached"
+    },
+    {
+      "label": "proof-run",
+      "stamp": "20261106T1432Z",
+      "ref": "837a9a768989c4f2b5d837757cd1c06c934e6acd",
+      "mode": "bootstrap",
+      "trigger": "build_host.py trigger (one-off schedule with the daily target, 14:31:29Z)",
+      "outcome": "ok",
+      "resultLine": "OPENTRANSIT_REFRESH_RESULT outcome=ok mode=bootstrap stamp=20261106T1432Z",
+      "steps": {
+        "fetchSeconds": 542.3,
+        "validateSeconds": 611.3,
+        "buildGenerationSeconds": 5552.5,
+        "probeSeconds": 62.0,
+        "publishSeconds": 199.7,
+        "pushAndConvergeSeconds": 1213.8,
+        "retentionSeconds": 21.5
+      },
+      "stepsAfterPushPassed": [
+        "task-env-registered",
+        "alb-probe",
+        "archive",
+        "retention",
+        "host-cleanup"
+      ],
+      "registered": "arn:aws:ecs:eu-north-1:{{ACCOUNT_ID}}:task-definition/opentransit-h1:8",
+      "previousRelease": "20261106-r7-client (opentransit-h1:7, seeded from the operator PC)",
+      "generationId": "822f8358e200e41028997ea60803a22bad0f1fc2ac80ba971e4bc2192757a0fe",
+      "bootAt": "2026-11-06T14:32:16Z",
+      "powerOffAt": "2026-11-06T16:49:58Z",
+      "wallHours": 2.3,
+      "stoppedItself": true,
+      "postDeployChecks": {
+        "serviceTaskDefinition": "opentransit-h1:8",
+        "runningCount": 1,
+        "appStatus": 200,
+        "appAssets": [
+          "assets/index-Xi2FW_Oi.js",
+          "assets/index-CEYZU9J8.css"
+        ],
+        "appAssetsBefore": [
+          "assets/index-D4omq5zv.js",
+          "assets/index-D1kyRdWA.css"
+        ],
+        "checkedFrom": "operator PC through the ALB (allow-listed IP), 2026-11-06 ~16:51Z"
+      },
+      "clientNote": "built from 837a9a7, which predates the dark-theme client (main f5065f0); the asset names changed because 837a9a7 includes PR #27/#28 client changes"
+    },
+    {
+      "label": "scheduled-overnight",
+      "trigger": "opentransit-build-host-daily, cron(30 3 * * ? *) UTC, 2026-11-07",
+      "ref": "837a9a768989c4f2b5d837757cd1c06c934e6acd (SSM parameter unchanged since the proof run)",
+      "confirmedFromHostLogs": false,
+      "observedThroughAlb": {
+        "at": "2026-11-07T10:25Z",
+        "readyz": 200,
+        "freshness": "current",
+        "generationId": "6a77b45afefbc73509f1053d21caf1309f880fc99e675fa2ccd80f438b8571f1",
+        "lastValidatedAt": "2026-11-07T03:30:45Z",
+        "dataBuiltAt": "2026-11-07T04:05:20Z",
+        "coverage": "2026-11-07..2026-12-08 (Israel)",
+        "appAssets": [
+          "assets/index-Xi2FW_Oi.js",
+          "assets/index-CEYZU9J8.css"
+        ]
+      },
+      "pending": "CloudWatch streams, runs/<stamp>.json, registered revision, run time and the stopped state need a valid `aws login --profile opentransit` (expired 7 November)"
+    }
+  ],
+  "costMeasured": {
+    "proofRunUsd": 0.23,
+    "allHostHours6Nov": 6.36,
+    "allHostUsd6Nov": 0.63,
+    "basis": "list prices (Price List API, 6 Nov 2026), pre-tax; not a bill",
+    "hourlyWhileRunningUsd": 0.0994
+  },
+  "costProjection": {
+    "fixedMonthlyUsd": {
+      "rootVolume": 2.51,
+      "alarm": 0.1,
+      "logs": 0.04,
+      "s3Archive": 0.06
+    },
+    "fixedTotalUsd": 2.71,
+    "builtDayHours": 2.3,
+    "unchangedDayHoursEstimate": 0.75,
+    "unchangedDayNote": "not yet measured: fetch + validate + publish + push/rollout, no build",
+    "scenarios": {
+      "feedChangesEveryOtherDay": 7.26,
+      "feedChangesDaily": 9.57,
+      "feedNeverChanges": 4.95
+    },
+    "guardUsd": 8.0,
+    "verdict": "within the $8 guard unless the MOT feed changes nearly every day; the pre-creation estimate (1.5 h/day, $7.72) underestimated build days and overestimated CPU surplus"
+  }
+}

@@ -124,6 +124,9 @@ def import_photon(
     """Create a new Docker volume and import the enriched dump under a hard memory cap."""
     jar = check_photon_jar(jar_path)
     caps, heap = photon_memory_args(memory_gib)
+    # The import runs as PHOTON_USER. A Linux bind mount keeps the host owner and mode, so the
+    # dump (written 0600 by its producer) must be readable by others; Docker Desktop hid this.
+    Path(dump_path).chmod(0o644)
     logs_dir = Path(logs_dir)
     token = uuid.uuid4().hex[:12]
     volume = f"opentransit-photon-data-{token}"
