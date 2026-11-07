@@ -112,7 +112,9 @@ def test_task_env_check_flags_a_lost_template_variable():
     assert daily.missing_template_env(template, stripped) == {"api": [lost]}
 
 
-def test_unchanged_renewal_rebuilds_the_api_image_only_when_its_source_changed(tmp_path, monkeypatch):
+def test_unchanged_renewal_rebuilds_the_api_image_only_when_its_source_changed(
+    tmp_path, monkeypatch
+):
     tag = daily.api_source_tag()
     assert tag.startswith("ot-h1-api:src-") and len(tag) == len("ot-h1-api:src-") + 12
     monkeypatch.setattr(daily, "api_source_tag", lambda: tag)
