@@ -1,0 +1,30 @@
+/* Home — board 1 (11 November 2026). The field, cards, heading and rows are the shared
+   board pieces (styles/boards.css); this file only places them in the sheet. */
+
+.home {
+  display: flex;
+  flex-direction: column;
+  min-block-size: 100%;
+}
+
+.home .b-field .ot-i {
+  color: var(--ink-muted);
+}
+
+.home-rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.home-rows .b-row:focus-visible {
+  outline-offset: -3px;
+}
+
+.home-none {
+  margin-block: 14px 0;
+}
+
+.home-note {
+  margin-block: auto 0;
+  padding-block-start: var(--space-3);
+}

@@ -1,6 +1,7 @@
 import { delay, http, HttpResponse } from "msw";
 import { fixture, fixtures, type Fixture } from "../api/fixtures";
 import { derivedEngineTimeout, derivedJourneyFixtures, derivedTrip } from "../screens/compare/derivedFixtures";
+import { derivedDepartures, derivedNearbyDepartures, derivedNearbyStop, derivedStopLines, derivedStopsNear } from "./stopFixtures";
 
 // MSW handlers that answer every public endpoint from fixtures. Used by Vitest (node)
 // and by the dev server's `fixtures` mode (browser), so mocked e2e needs no API.
@@ -174,22 +175,31 @@ export const handlers = [
     return found ? respond(found) : send("recorded-problem-trip-not-found");
   }),
 
-  http.get("*/v1/stops/:stopId/departures", ({ request }) => {
-    const cursor = new URL(request.url).searchParams.get("cursor");
-    return send(cursor ? "recorded-departures-page-2" : "recorded-departures-page-1");
+  // Boards 1 and 7 (API PR #35): Home's nearby departures and a stop's lines (stopFixtures.ts).
+  http.get("*/v1/departures/nearby", ({ request }) => respond(derivedNearbyDepartures(new URL(request.url).searchParams.get("from")))),
+  http.get("*/v1/stops/:stopId/lines", ({ params }) => respond(derivedStopLines(decoded(params.stopId)))),
+
+  http.get("*/v1/stops/:stopId/departures", ({ request, params }) => {
+    const url = new URL(request.url);
+    if (url.searchParams.get("cursor")) return send("recorded-departures-page-2");
+    // Re-timed to the request (stopFixtures.ts), so Home and a stop count down.
+    return respond(derivedDepartures(decoded(params.stopId), url.searchParams.get("from"), Number(url.searchParams.get("limit") ?? 20)));
   }),
 
   http.get("*/v1/stops/:stopId", ({ params }) => {
     const stopId = decoded(params.stopId);
     if (stopId === "mot:stop:13583") return send("recorded-stop");
     if (stopId === "mot:stop:station") return send("synthetic-stop-station");
-    return send("synthetic-problem-stop-not-found");
+    const nearby = derivedNearbyStop(stopId);
+    return nearby ? respond(nearby) : send("synthetic-problem-stop-not-found");
   }),
 
   http.get("*/v1/stops", ({ request }) => {
     const url = new URL(request.url);
     if (url.searchParams.has("bbox")) return send("synthetic-stops-bbox");
-    return send(url.searchParams.has("cursor") ? "synthetic-stops-near-page-2" : "synthetic-stops-near-page-1");
+    if (url.searchParams.has("cursor")) return send("synthetic-stops-near-page-2");
+    // Home's nearby stops: the recorded stops around Dizengoff Center, wherever it asks.
+    return respond(derivedStopsNear());
   }),
 
   http.get("*/v1/routes/:routeId/patterns", () => send("synthetic-route-patterns")),

@@ -7,7 +7,7 @@ import { SearchScreen } from "./search/SearchScreen";
 import { LinesScreen } from "./secondary/LinesScreen";
 import { NearbyScreen } from "./secondary/NearbyScreen";
 import { Placeholder } from "./secondary/Placeholder";
-import { StopScreen } from "./secondary/StopScreen";
+import { StopScreen } from "./stop/StopScreen";
 import { TripScreen } from "./secondary/TripScreen";
 import { SettingsScreen } from "./settings/SettingsScreen";
 

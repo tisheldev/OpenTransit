@@ -456,18 +456,6 @@
   color: var(--on-action);
 }
 
-/* PlaceChips (ot-chips): room above and below for the focus ring inside the scroller, and
-   chips snap to the 16 px gutter rather than to the screen's edge. */
-.home-chips {
-  list-style: none;
-  margin-block: calc(-1 * var(--space-1)) 0;
-  padding-block: var(--space-2);
-  scroll-padding-inline: var(--space-4);
-}
-.home-chips > li {
-  display: flex;
-  flex: none;
-}
 
 /* --- place rows (design: PlaceRow; recents, search results, saved places) -------- */
 

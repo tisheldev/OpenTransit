@@ -1,0 +1,3264 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/stops/mot:stop:13583/lines",
+    "params": {
+      "patterns": "serving",
+      "limit": 50
+    },
+    "body": null
+  },
+  "status": 200,
+  "body": {
+    "data": [
+      {
+        "routeId": "mot:route:16077",
+        "routeShortName": "8",
+        "routeLongName": "מסוף הטייסים-תל אביב יפו<->מסוף אוניברסיטת ת''א/הורדה-תל אביב יפו-20",
+        "operatorId": "5",
+        "operatorName": "דן",
+        "mode": "bus",
+        "routeType": 3,
+        "color": null,
+        "textColor": null,
+        "patterns": [
+          {
+            "patternId": "3028ae2f8036583c80ca9f435a038d8027fa947ae386ef908482c23678c8b223",
+            "routeId": "mot:route:16077",
+            "directionId": "1",
+            "headsign": "אוניברסיטת ת\"א",
+            "servesStop": true,
+            "stopIndex": 22,
+            "geometrySource": "stop_sequence",
+            "stops": [
+              {
+                "stopId": "mot:stop:13112",
+                "name": "מסוף הטייסים",
+                "latitude": 32.047685,
+                "longitude": 34.813778,
+                "pickupType": 0,
+                "dropOffType": 1
+              },
+              {
+                "stopId": "mot:stop:12981",
+                "name": "דרך הטייסים/דרך בר לב",
+                "latitude": 32.046202,
+                "longitude": 34.813526,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:12969",
+                "name": "דרך בר לב/דרך הטייסים",
+                "latitude": 32.044958,
+                "longitude": 34.8114,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13082",
+                "name": "דרך בר לב/שד' ששת הימים",
+                "latitude": 32.045205,
+                "longitude": 34.808983,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13161",
+                "name": "דרך בר לב/צביה לובטקין",
+                "latitude": 32.045785,
+                "longitude": 34.805717,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13081",
+                "name": "דרך בר לב/אונטרמן",
+                "latitude": 32.046062,
+                "longitude": 34.804024,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13162",
+                "name": "דרך בר לב/דרך משה דיין",
+                "latitude": 32.046839,
+                "longitude": 34.800032,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13267",
+                "name": "דרך משה דיין/דרך בר לב",
+                "latitude": 32.047976,
+                "longitude": 34.799321,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:12978",
+                "name": "דרך משה דיין/ההגנה",
+                "latitude": 32.051417,
+                "longitude": 34.8,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13773",
+                "name": "דרך משה דיין/צבי נשרי",
+                "latitude": 32.054703,
+                "longitude": 34.800345,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13785",
+                "name": "דרך משה דיין/לה גווארדייה",
+                "latitude": 32.057897,
+                "longitude": 34.800537,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:12988",
+                "name": "לה גווארדייה/הגיבור האלמוני",
+                "latitude": 32.059183,
+                "longitude": 34.798721,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:51355",
+                "name": "לה גווארדייה/לוחמי גליפולי",
+                "latitude": 32.059169,
+                "longitude": 34.79595,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13083",
+                "name": "לה גווארדייה/שער הגיא",
+                "latitude": 32.059214,
+                "longitude": 34.79378,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:12999",
+                "name": "יגאל אלון/לה גווארדייה",
+                "latitude": 32.059696,
+                "longitude": 34.792069,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13095",
+                "name": "היכל הספורט/יגאל אלון",
+                "latitude": 32.061469,
+                "longitude": 34.792128,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13130",
+                "name": "יגאל אלון/יצחק שדה",
+                "latitude": 32.065464,
+                "longitude": 34.792625,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:12987",
+                "name": "אסותא/יגאל אלון",
+                "latitude": 32.069847,
+                "longitude": 34.793808,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:12823",
+                "name": "ת. רכבת השלום",
+                "latitude": 32.073084,
+                "longitude": 34.793059,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:14549",
+                "name": "מתחם שרונה/אליעזר קפלן",
+                "latitude": 32.073491,
+                "longitude": 34.787018,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:42859",
+                "name": "אליעזר קפלן/דובנוב",
+                "latitude": 32.07356,
+                "longitude": 34.783258,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13585",
+                "name": "היכל התרבות/דיזנגוף",
+                "latitude": 32.074359,
+                "longitude": 34.778231,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13583",
+                "name": "דיזנגוף סנטר/דיזנגוף",
+                "latitude": 32.075566,
+                "longitude": 34.77512,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13565",
+                "name": "כיכר דיזנגוף/ריינס",
+                "latitude": 32.07895,
+                "longitude": 34.77495,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13664",
+                "name": "ריינס/גורדון",
+                "latitude": 32.081909,
+                "longitude": 34.775838,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:29490",
+                "name": "דיזנגוף/יודפת",
+                "latitude": 32.085447,
+                "longitude": 34.774625,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13670",
+                "name": "דיזנגוף/ארלוזורוב",
+                "latitude": 32.087957,
+                "longitude": 34.775256,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13683",
+                "name": "דיזנגוף/ז'בוטינסקי",
+                "latitude": 32.089631,
+                "longitude": 34.77566,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13688",
+                "name": "דיזנגוף/שד' נורדאו",
+                "latitude": 32.093287,
+                "longitude": 34.776572,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:14472",
+                "name": "דיזנגוף/בן יהודה",
+                "latitude": 32.096391,
+                "longitude": 34.776059,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13701",
+                "name": "אבן גבירול/שד' רוקח",
+                "latitude": 32.09938,
+                "longitude": 34.782769,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13703",
+                "name": "ש''י עגנון/אבן גבירול",
+                "latitude": 32.101969,
+                "longitude": 34.782974,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13739",
+                "name": "ש''י עגנון/שד' לוי אשכול",
+                "latitude": 32.102523,
+                "longitude": 34.786844,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13743",
+                "name": "שדרות לוי אשכול/ש''י עגנון",
+                "latitude": 32.103923,
+                "longitude": 34.788945,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13744",
+                "name": "שד' לוי אשכול/אפטר",
+                "latitude": 32.10672,
+                "longitude": 34.788583,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13747",
+                "name": "שד' לוי אשכול/דב האוזנר",
+                "latitude": 32.10985,
+                "longitude": 34.789188,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13750",
+                "name": "אינשטיין/שד' לוי אשכול",
+                "latitude": 32.112225,
+                "longitude": 34.790086,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:52652",
+                "name": "איינשטיין/דרך נמיר",
+                "latitude": 32.112547,
+                "longitude": 34.793215,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:14100",
+                "name": "קניון רמת אביב/אינשטיין",
+                "latitude": 32.112891,
+                "longitude": 34.797161,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:14349",
+                "name": "האוניברסיטה/חיים לבנון",
+                "latitude": 32.113879,
+                "longitude": 34.801548,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13145",
+                "name": "קלצ'קין/חיים לבנון",
+                "latitude": 32.118007,
+                "longitude": 34.802148,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:14126",
+                "name": "מסוף אוניברסיטת ת''א/הורדה",
+                "latitude": 32.117233,
+                "longitude": 34.804011,
+                "pickupType": 1,
+                "dropOffType": 0
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "routeId": "mot:route:2261",
+        "routeShortName": "5",
+        "routeLongName": "משרד הרישוי/הלוחמים-חולון<->ת. רכבת תל אביב - סבידור/הורדה-תל אביב יפו-20",
+        "operatorId": "5",
+        "operatorName": "דן",
+        "mode": "bus",
+        "routeType": 3,
+        "color": null,
+        "textColor": null,
+        "patterns": [
+          {
+            "patternId": "3961f345bdc3702fd6067098660e4b7e834814e40f3f0e58aeb0e2947249e499",
+            "routeId": "mot:route:2261",
+            "directionId": "1",
+            "headsign": "תל אביב יפו_רכבת מרכז",
+            "servesStop": true,
+            "stopIndex": 23,
+            "geometrySource": "stop_sequence",
+            "stops": [
+              {
+                "stopId": "mot:stop:24660",
+                "name": "משרד הרישוי/הלוחמים",
+                "latitude": 32.034209,
+                "longitude": 34.770086,
+                "pickupType": 0,
+                "dropOffType": 1
+              },
+              {
+                "stopId": "mot:stop:13419",
+                "name": "תל גיבורים/שז''ר",
+                "latitude": 32.039365,
+                "longitude": 34.769639,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13421",
+                "name": "בנין פנורמה/תיאטרון ניקו ניתאי",
+                "latitude": 32.040375,
+                "longitude": 34.770306,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13256",
+                "name": "בניין פנורמה/דרך בן צבי",
+                "latitude": 32.042069,
+                "longitude": 34.77215,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13431",
+                "name": "שד' ישראל גורי/גיתית",
+                "latitude": 32.041226,
+                "longitude": 34.776024,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13433",
+                "name": "שד' ישראל גורי/דיק",
+                "latitude": 32.041603,
+                "longitude": 34.779157,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13435",
+                "name": "קופ''ח כללית/שד' ישראל גורי",
+                "latitude": 32.04361,
+                "longitude": 34.780795,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:12812",
+                "name": "שד' ישראל גורי/דרך קיבוץ גלויות",
+                "latitude": 32.046386,
+                "longitude": 34.780691,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13520",
+                "name": "מתחם ברנר/קיבוץ גלויות",
+                "latitude": 32.047872,
+                "longitude": 34.778574,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13517",
+                "name": "מסילת ישרים/דרך קיבוץ גלויות",
+                "latitude": 32.049176,
+                "longitude": 34.776124,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13521",
+                "name": "מסילת ישרים/חכמי ישראל",
+                "latitude": 32.051271,
+                "longitude": 34.776791,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13523",
+                "name": "דרך שלמה/מסילת ישרים",
+                "latitude": 32.054745,
+                "longitude": 34.77648,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13150",
+                "name": "שדרות הר ציון/מטלון",
+                "latitude": 32.05754,
+                "longitude": 34.777069,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13357",
+                "name": "ת. מרכזית תל אביב/לוינסקי",
+                "latitude": 32.05693,
+                "longitude": 34.779058,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13601",
+                "name": "ת. רכבת ההגנה/החרש",
+                "latitude": 32.054639,
+                "longitude": 34.783438,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:47432",
+                "name": "הרכבת/המסגר",
+                "latitude": 32.059556,
+                "longitude": 34.783556,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13295",
+                "name": "הרכבת/סלומון",
+                "latitude": 32.062567,
+                "longitude": 34.780103,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:48897",
+                "name": "ת.רק''ל אלנבי/יבנה",
+                "latitude": 32.062901,
+                "longitude": 34.774284,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13569",
+                "name": "שד' רוטשילד/מזא''ה",
+                "latitude": 32.06567,
+                "longitude": 34.777286,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13228",
+                "name": "שד' רוטשילד/שיינקין",
+                "latitude": 32.068653,
+                "longitude": 34.778387,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13574",
+                "name": "הבימה/שד' רוטשילד",
+                "latitude": 32.071059,
+                "longitude": 34.779155,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:42146",
+                "name": "הבימה/שד' תרס''ט",
+                "latitude": 32.072934,
+                "longitude": 34.7788,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13585",
+                "name": "היכל התרבות/דיזנגוף",
+                "latitude": 32.074359,
+                "longitude": 34.778231,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13583",
+                "name": "דיזנגוף סנטר/דיזנגוף",
+                "latitude": 32.075566,
+                "longitude": 34.77512,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13565",
+                "name": "כיכר דיזנגוף/ריינס",
+                "latitude": 32.07895,
+                "longitude": 34.77495,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13664",
+                "name": "ריינס/גורדון",
+                "latitude": 32.081909,
+                "longitude": 34.775838,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:29490",
+                "name": "דיזנגוף/יודפת",
+                "latitude": 32.085447,
+                "longitude": 34.774625,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13670",
+                "name": "דיזנגוף/ארלוזורוב",
+                "latitude": 32.087957,
+                "longitude": 34.775256,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13683",
+                "name": "דיזנגוף/ז'בוטינסקי",
+                "latitude": 32.089631,
+                "longitude": 34.77566,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13687",
+                "name": "שדרות נורדאו/דיזנגוף",
+                "latitude": 32.092224,
+                "longitude": 34.776753,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13691",
+                "name": "שד' נורדאו/יהושע בן נון",
+                "latitude": 32.091847,
+                "longitude": 34.78082,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13718",
+                "name": "כיכר מילאנו/דה האז",
+                "latitude": 32.093673,
+                "longitude": 34.78459,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13723",
+                "name": "ביה''ס עירוני י''א/יהודה המכבי",
+                "latitude": 32.093734,
+                "longitude": 34.78823,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13733",
+                "name": "יהודה המכבי/דרך נמיר",
+                "latitude": 32.094067,
+                "longitude": 34.792836,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:29478",
+                "name": "דרך נמיר/יהודה המכבי",
+                "latitude": 32.093781,
+                "longitude": 34.794543,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13136",
+                "name": "תיכון חדש רבין/דרך נמיר",
+                "latitude": 32.090293,
+                "longitude": 34.795303,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:29479",
+                "name": "דרך נמיר/ז'בוטינסקי",
+                "latitude": 32.085267,
+                "longitude": 34.795006,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:42877",
+                "name": "ת. רכבת תל אביב - סבידור/הורדה",
+                "latitude": 32.082844,
+                "longitude": 34.796637,
+                "pickupType": 1,
+                "dropOffType": 0
+              }
+            ]
+          },
+          {
+            "patternId": "4770b1c197539e61aba66305249c57f115307e5d6e3c7ef986d27a30af48eb66",
+            "routeId": "mot:route:2261",
+            "directionId": "1",
+            "headsign": "תל אביב יפו_רכבת מרכז",
+            "servesStop": true,
+            "stopIndex": 22,
+            "geometrySource": "stop_sequence",
+            "stops": [
+              {
+                "stopId": "mot:stop:24660",
+                "name": "משרד הרישוי/הלוחמים",
+                "latitude": 32.034209,
+                "longitude": 34.770086,
+                "pickupType": 0,
+                "dropOffType": 1
+              },
+              {
+                "stopId": "mot:stop:13419",
+                "name": "תל גיבורים/שז''ר",
+                "latitude": 32.039365,
+                "longitude": 34.769639,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13421",
+                "name": "בנין פנורמה/תיאטרון ניקו ניתאי",
+                "latitude": 32.040375,
+                "longitude": 34.770306,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13256",
+                "name": "בניין פנורמה/דרך בן צבי",
+                "latitude": 32.042069,
+                "longitude": 34.77215,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13431",
+                "name": "שד' ישראל גורי/גיתית",
+                "latitude": 32.041226,
+                "longitude": 34.776024,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13433",
+                "name": "שד' ישראל גורי/דיק",
+                "latitude": 32.041603,
+                "longitude": 34.779157,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13435",
+                "name": "קופ''ח כללית/שד' ישראל גורי",
+                "latitude": 32.04361,
+                "longitude": 34.780795,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:12812",
+                "name": "שד' ישראל גורי/דרך קיבוץ גלויות",
+                "latitude": 32.046386,
+                "longitude": 34.780691,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13520",
+                "name": "מתחם ברנר/קיבוץ גלויות",
+                "latitude": 32.047872,
+                "longitude": 34.778574,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13517",
+                "name": "מסילת ישרים/דרך קיבוץ גלויות",
+                "latitude": 32.049176,
+                "longitude": 34.776124,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13521",
+                "name": "מסילת ישרים/חכמי ישראל",
+                "latitude": 32.051271,
+                "longitude": 34.776791,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13523",
+                "name": "דרך שלמה/מסילת ישרים",
+                "latitude": 32.054745,
+                "longitude": 34.77648,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13150",
+                "name": "שדרות הר ציון/מטלון",
+                "latitude": 32.05754,
+                "longitude": 34.777069,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13357",
+                "name": "ת. מרכזית תל אביב/לוינסקי",
+                "latitude": 32.05693,
+                "longitude": 34.779058,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13109",
+                "name": "הגדוד העברי/שד' הר ציון",
+                "latitude": 32.058694,
+                "longitude": 34.778725,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13167",
+                "name": "סלומון/הרכבת",
+                "latitude": 32.061639,
+                "longitude": 34.780191,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:48897",
+                "name": "ת.רק''ל אלנבי/יבנה",
+                "latitude": 32.062901,
+                "longitude": 34.774284,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13569",
+                "name": "שד' רוטשילד/מזא''ה",
+                "latitude": 32.06567,
+                "longitude": 34.777286,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13228",
+                "name": "שד' רוטשילד/שיינקין",
+                "latitude": 32.068653,
+                "longitude": 34.778387,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13574",
+                "name": "הבימה/שד' רוטשילד",
+                "latitude": 32.071059,
+                "longitude": 34.779155,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:42146",
+                "name": "הבימה/שד' תרס''ט",
+                "latitude": 32.072934,
+                "longitude": 34.7788,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13585",
+                "name": "היכל התרבות/דיזנגוף",
+                "latitude": 32.074359,
+                "longitude": 34.778231,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13583",
+                "name": "דיזנגוף סנטר/דיזנגוף",
+                "latitude": 32.075566,
+                "longitude": 34.77512,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13565",
+                "name": "כיכר דיזנגוף/ריינס",
+                "latitude": 32.07895,
+                "longitude": 34.77495,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13664",
+                "name": "ריינס/גורדון",
+                "latitude": 32.081909,
+                "longitude": 34.775838,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:29490",
+                "name": "דיזנגוף/יודפת",
+                "latitude": 32.085447,
+                "longitude": 34.774625,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13670",
+                "name": "דיזנגוף/ארלוזורוב",
+                "latitude": 32.087957,
+                "longitude": 34.775256,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13683",
+                "name": "דיזנגוף/ז'בוטינסקי",
+                "latitude": 32.089631,
+                "longitude": 34.77566,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13687",
+                "name": "שדרות נורדאו/דיזנגוף",
+                "latitude": 32.092224,
+                "longitude": 34.776753,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13691",
+                "name": "שד' נורדאו/יהושע בן נון",
+                "latitude": 32.091847,
+                "longitude": 34.78082,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13718",
+                "name": "כיכר מילאנו/דה האז",
+                "latitude": 32.093673,
+                "longitude": 34.78459,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13723",
+                "name": "ביה''ס עירוני י''א/יהודה המכבי",
+                "latitude": 32.093734,
+                "longitude": 34.78823,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13733",
+                "name": "יהודה המכבי/דרך נמיר",
+                "latitude": 32.094067,
+                "longitude": 34.792836,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:29478",
+                "name": "דרך נמיר/יהודה המכבי",
+                "latitude": 32.093781,
+                "longitude": 34.794543,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13136",
+                "name": "תיכון חדש רבין/דרך נמיר",
+                "latitude": 32.090293,
+                "longitude": 34.795303,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:29479",
+                "name": "דרך נמיר/ז'בוטינסקי",
+                "latitude": 32.085267,
+                "longitude": 34.795006,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:52253",
+                "name": "ת. רכבת תל אביב - סבידור/הורדה",
+                "latitude": 32.082844,
+                "longitude": 34.796637,
+                "pickupType": 1,
+                "dropOffType": 0
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "routeId": "mot:route:23919",
+        "routeShortName": "62",
+        "routeLongName": "בי''ח שיב''א/שדרות אהרון קציר-רמת גן<->מסוף רדינג/הורדה-תל אביב יפו-20",
+        "operatorId": "5",
+        "operatorName": "דן",
+        "mode": "bus",
+        "routeType": 3,
+        "color": null,
+        "textColor": null,
+        "patterns": [
+          {
+            "patternId": "2c5b9fd60ed3896d9d97f57b005873bda139a168d88da5690345484e518b8d54",
+            "routeId": "mot:route:23919",
+            "directionId": "1",
+            "headsign": "תל אביב יפו_מסוף רדינג",
+            "servesStop": true,
+            "stopIndex": 26,
+            "geometrySource": "stop_sequence",
+            "stops": [
+              {
+                "stopId": "mot:stop:15878",
+                "name": "בי''ח שיב''א/שדרות אהרון קציר",
+                "latitude": 32.051129,
+                "longitude": 34.849018,
+                "pickupType": 0,
+                "dropOffType": 1
+              },
+              {
+                "stopId": "mot:stop:15877",
+                "name": "גילדסגיים/שד' אהרון קציר",
+                "latitude": 32.052848,
+                "longitude": 34.848901,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:15898",
+                "name": "בן גוריון / שלמה המלך",
+                "latitude": 32.053875,
+                "longitude": 34.852848,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:15354",
+                "name": "בן גוריון / הפרדס",
+                "latitude": 32.056036,
+                "longitude": 34.85145,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:24207",
+                "name": "שדרות בן גוריון/הנשיא",
+                "latitude": 32.059195,
+                "longitude": 34.849046,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:15907",
+                "name": "שדרות אהרון קציר/שמחה הולצברג",
+                "latitude": 32.06257,
+                "longitude": 34.846119,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:25091",
+                "name": "אוניברסיטת בר אילן/דרך אשכול",
+                "latitude": 32.065608,
+                "longitude": 34.843957,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:12884",
+                "name": "אלוף שדה/כביש 4",
+                "latitude": 32.057419,
+                "longitude": 34.832771,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:12838",
+                "name": "אלוף שדה/הירדן",
+                "latitude": 32.059276,
+                "longitude": 34.826633,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:52651",
+                "name": "דרך יצחק רבין/אלוף שדה",
+                "latitude": 32.06041,
+                "longitude": 34.82117,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:51811",
+                "name": "קאנטרי/בן גוריון",
+                "latitude": 32.066142,
+                "longitude": 34.816015,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:43748",
+                "name": "דרך בן גוריון/גולומב",
+                "latitude": 32.068832,
+                "longitude": 34.817162,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13877",
+                "name": "דרך בן גוריון/כנפי נשרים",
+                "latitude": 32.071101,
+                "longitude": 34.818075,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13887",
+                "name": "דרך בן גוריון/הרכסים",
+                "latitude": 32.073291,
+                "longitude": 34.818463,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13885",
+                "name": "כצנלסון/דרך בן גוריון",
+                "latitude": 32.07566,
+                "longitude": 34.81724,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13838",
+                "name": "כיכר נח/כצנלסון",
+                "latitude": 32.07702,
+                "longitude": 34.81372,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13835",
+                "name": "כצנלסון/ויצמן",
+                "latitude": 32.075525,
+                "longitude": 34.80926,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:12855",
+                "name": "כצנלסון/קק''ל",
+                "latitude": 32.075287,
+                "longitude": 34.806944,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:12852",
+                "name": "כצנלסון/לכיש",
+                "latitude": 32.075356,
+                "longitude": 34.803222,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13648",
+                "name": "עמק ברכה/בנימיני",
+                "latitude": 32.076216,
+                "longitude": 34.798903,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13057",
+                "name": "יגאל אלון/עמק ברכה",
+                "latitude": 32.07658,
+                "longitude": 34.796208,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:50445",
+                "name": "יגאל אלון/תוצרת הארץ",
+                "latitude": 32.074065,
+                "longitude": 34.79524,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:12823",
+                "name": "ת. רכבת השלום",
+                "latitude": 32.073084,
+                "longitude": 34.793059,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:14549",
+                "name": "מתחם שרונה/אליעזר קפלן",
+                "latitude": 32.073491,
+                "longitude": 34.787018,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:42859",
+                "name": "אליעזר קפלן/דובנוב",
+                "latitude": 32.07356,
+                "longitude": 34.783258,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13585",
+                "name": "היכל התרבות/דיזנגוף",
+                "latitude": 32.074359,
+                "longitude": 34.778231,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13583",
+                "name": "דיזנגוף סנטר/דיזנגוף",
+                "latitude": 32.075566,
+                "longitude": 34.77512,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13565",
+                "name": "כיכר דיזנגוף/ריינס",
+                "latitude": 32.07895,
+                "longitude": 34.77495,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:44461",
+                "name": "פרישמן/דב הוז",
+                "latitude": 32.079849,
+                "longitude": 34.772121,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:44470",
+                "name": "חוף פרישמן",
+                "latitude": 32.080415,
+                "longitude": 34.768444,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:51963",
+                "name": "חוף גורדון",
+                "latitude": 32.081934,
+                "longitude": 34.768527,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:44471",
+                "name": "הירקון/שדרות בן גוריון",
+                "latitude": 32.084191,
+                "longitude": 34.769531,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:12862",
+                "name": "הירקון/ארלוזורוב",
+                "latitude": 32.087939,
+                "longitude": 34.771282,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:12839",
+                "name": "ירקון/ויתקין",
+                "latitude": 32.091854,
+                "longitude": 34.773124,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:12848",
+                "name": "נמל תל אביב/הירקון",
+                "latitude": 32.095145,
+                "longitude": 34.774308,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13700",
+                "name": "מסוף רדינג/הורדה",
+                "latitude": 32.098973,
+                "longitude": 34.778771,
+                "pickupType": 1,
+                "dropOffType": 0
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "routeId": "mot:route:27082",
+        "routeShortName": "2",
+        "routeLongName": "פרופ' ישעיהו ליבוביץ'/הרב יעקב טראב-תל אביב יפו<->משמר הירדן/טורקוב-תל אביב יפו-20",
+        "operatorId": "5",
+        "operatorName": "דן",
+        "mode": "bus",
+        "routeType": 3,
+        "color": null,
+        "textColor": null,
+        "patterns": [
+          {
+            "patternId": "3c852b2ebc1298d1f20336e226d450f8cc9b665addfa56bd84506da34ea0e907",
+            "routeId": "mot:route:27082",
+            "directionId": "1",
+            "headsign": "נווה דן",
+            "servesStop": true,
+            "stopIndex": 19,
+            "geometrySource": "stop_sequence",
+            "stops": [
+              {
+                "stopId": "mot:stop:43787",
+                "name": "פרופ' ישעיהו ליבוביץ'/הרב יעקב טראב",
+                "latitude": 32.044016,
+                "longitude": 34.798023,
+                "pickupType": 0,
+                "dropOffType": 1
+              },
+              {
+                "stopId": "mot:stop:13618",
+                "name": "שכונת הארגזים/לח''י",
+                "latitude": 32.047557,
+                "longitude": 34.79592,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13615",
+                "name": "אצ''ל/לח''י",
+                "latitude": 32.048306,
+                "longitude": 34.793219,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13617",
+                "name": "אצ''ל/חנוך",
+                "latitude": 32.051239,
+                "longitude": 34.791655,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13610",
+                "name": "שוק התקווה/אצ''ל",
+                "latitude": 32.053436,
+                "longitude": 34.791288,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13063",
+                "name": "יגאל אלון/ההגנה",
+                "latitude": 32.054622,
+                "longitude": 34.791709,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13627",
+                "name": "יגאל אלון/שד' החי''ל",
+                "latitude": 32.057022,
+                "longitude": 34.791929,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:12968",
+                "name": "לה גווארדייה/יגאל אלון",
+                "latitude": 32.059304,
+                "longitude": 34.790544,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13328",
+                "name": "לה גווארדייה/המעפילים",
+                "latitude": 32.059392,
+                "longitude": 34.788682,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:12975",
+                "name": "מחלף לה גווארדייה",
+                "latitude": 32.059454,
+                "longitude": 34.786354,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:47432",
+                "name": "הרכבת/המסגר",
+                "latitude": 32.059556,
+                "longitude": 34.783556,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13295",
+                "name": "הרכבת/סלומון",
+                "latitude": 32.062567,
+                "longitude": 34.780103,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:12952",
+                "name": "דרך מנחם בגין/הרכבת",
+                "latitude": 32.063416,
+                "longitude": 34.780072,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13322",
+                "name": "המסגר/ישראל טל",
+                "latitude": 32.063805,
+                "longitude": 34.785694,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:29483",
+                "name": "המסגר/המלאכה",
+                "latitude": 32.066289,
+                "longitude": 34.786744,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:48363",
+                "name": "ת.רק''ל יהודית/דרך מנחם בגין",
+                "latitude": 32.069862,
+                "longitude": 34.788125,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:14549",
+                "name": "מתחם שרונה/אליעזר קפלן",
+                "latitude": 32.073491,
+                "longitude": 34.787018,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:42859",
+                "name": "אליעזר קפלן/דובנוב",
+                "latitude": 32.07356,
+                "longitude": 34.783258,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13585",
+                "name": "היכל התרבות/דיזנגוף",
+                "latitude": 32.074359,
+                "longitude": 34.778231,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13583",
+                "name": "דיזנגוף סנטר/דיזנגוף",
+                "latitude": 32.075566,
+                "longitude": 34.77512,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13565",
+                "name": "כיכר דיזנגוף/ריינס",
+                "latitude": 32.07895,
+                "longitude": 34.77495,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13664",
+                "name": "ריינס/גורדון",
+                "latitude": 32.081909,
+                "longitude": 34.775838,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13659",
+                "name": "דיזנגוף/ארלוזורוב",
+                "latitude": 32.086259,
+                "longitude": 34.774822,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13683",
+                "name": "דיזנגוף/ז'בוטינסקי",
+                "latitude": 32.089631,
+                "longitude": 34.77566,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13688",
+                "name": "דיזנגוף/שד' נורדאו",
+                "latitude": 32.093287,
+                "longitude": 34.776572,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:14472",
+                "name": "דיזנגוף/בן יהודה",
+                "latitude": 32.096391,
+                "longitude": 34.776059,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13740",
+                "name": "ספורטק/שד' רוקח",
+                "latitude": 32.09861,
+                "longitude": 34.78494,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13946",
+                "name": "ת. רכבת האוניברסיטה/שד' רוקח",
+                "latitude": 32.102783,
+                "longitude": 34.80697,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13220",
+                "name": "אקספו תל אביב/שד' רוקח",
+                "latitude": 32.103834,
+                "longitude": 34.809664,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13153",
+                "name": "לונה פארק/שד' רוקח",
+                "latitude": 32.105513,
+                "longitude": 34.81257,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13093",
+                "name": "מגרשי הטניס/בכור שטרית",
+                "latitude": 32.106365,
+                "longitude": 34.816519,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:12899",
+                "name": "מרכז הספורט/בכור שטרית",
+                "latitude": 32.105868,
+                "longitude": 34.820154,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13997",
+                "name": "איצטדיון הדר יוסף/בכור שטרית",
+                "latitude": 32.106236,
+                "longitude": 34.823049,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13030",
+                "name": "ראול ולנברג/משמר הירדן",
+                "latitude": 32.106733,
+                "longitude": 34.830514,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13241",
+                "name": "ראול ולנברג/הברזל",
+                "latitude": 32.107031,
+                "longitude": 34.833789,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13242",
+                "name": "מטה מרחב ירקון/ראול ולנברג",
+                "latitude": 32.108001,
+                "longitude": 34.835243,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13243",
+                "name": "ראול ולנברג/הנחושת",
+                "latitude": 32.1097,
+                "longitude": 34.837166,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13244",
+                "name": "ראול ולנברג/הארד",
+                "latitude": 32.112816,
+                "longitude": 34.839688,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13187",
+                "name": "דבורה הנביאה/ראול ולנברג",
+                "latitude": 32.115126,
+                "longitude": 34.840063,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:14202",
+                "name": "הצנחנים/אח''י דקר",
+                "latitude": 32.118462,
+                "longitude": 34.839229,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:14200",
+                "name": "בית אל/דבורה הנביאה",
+                "latitude": 32.117921,
+                "longitude": 34.838153,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:14197",
+                "name": "דבורה הנביאה/צה''ל",
+                "latitude": 32.118723,
+                "longitude": 34.836676,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:14188",
+                "name": "משמר הירדן/דבורה הנביאה",
+                "latitude": 32.117596,
+                "longitude": 34.834004,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:14182",
+                "name": "מרכוס/משמר הירדן",
+                "latitude": 32.114305,
+                "longitude": 34.83374,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:14185",
+                "name": "מרכוס/עולי הגרדום",
+                "latitude": 32.113713,
+                "longitude": 34.835896,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:14183",
+                "name": "עולי הגרדום/מרכוס",
+                "latitude": 32.113051,
+                "longitude": 34.836287,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13195",
+                "name": "עולי הגרדום/ניסן כהן",
+                "latitude": 32.111576,
+                "longitude": 34.835119,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:14084",
+                "name": "עולי הגרדום/בי''ס ישגב",
+                "latitude": 32.109388,
+                "longitude": 34.83387,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:14010",
+                "name": "הרוגי מלכות/משמר הירדן",
+                "latitude": 32.109992,
+                "longitude": 34.832249,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:14532",
+                "name": "משמר הירדן/טורקוב",
+                "latitude": 32.108637,
+                "longitude": 34.830034,
+                "pickupType": 1,
+                "dropOffType": 0
+              }
+            ]
+          },
+          {
+            "patternId": "452c67b0fd22c41f415a5510ad80d3f41814419c8037a856727a59dce7bacfd8",
+            "routeId": "mot:route:27082",
+            "directionId": "1",
+            "headsign": "נווה דן",
+            "servesStop": true,
+            "stopIndex": 20,
+            "geometrySource": "stop_sequence",
+            "stops": [
+              {
+                "stopId": "mot:stop:43787",
+                "name": "פרופ' ישעיהו ליבוביץ'/הרב יעקב טראב",
+                "latitude": 32.044016,
+                "longitude": 34.798023,
+                "pickupType": 0,
+                "dropOffType": 1
+              },
+              {
+                "stopId": "mot:stop:50391",
+                "name": "פרופ' ישעיהו ליבוביץ/דרך בר לב",
+                "latitude": 32.046367,
+                "longitude": 34.798953,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13618",
+                "name": "שכונת הארגזים/לח''י",
+                "latitude": 32.047557,
+                "longitude": 34.79592,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13615",
+                "name": "אצ''ל/לח''י",
+                "latitude": 32.048306,
+                "longitude": 34.793219,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13617",
+                "name": "אצ''ל/חנוך",
+                "latitude": 32.051239,
+                "longitude": 34.791655,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13610",
+                "name": "שוק התקווה/אצ''ל",
+                "latitude": 32.053436,
+                "longitude": 34.791288,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13063",
+                "name": "יגאל אלון/ההגנה",
+                "latitude": 32.054622,
+                "longitude": 34.791709,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13627",
+                "name": "יגאל אלון/שד' החי''ל",
+                "latitude": 32.057022,
+                "longitude": 34.791929,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:12968",
+                "name": "לה גווארדייה/יגאל אלון",
+                "latitude": 32.059304,
+                "longitude": 34.790544,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13328",
+                "name": "לה גווארדייה/המעפילים",
+                "latitude": 32.059392,
+                "longitude": 34.788682,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:12975",
+                "name": "מחלף לה גווארדייה",
+                "latitude": 32.059454,
+                "longitude": 34.786354,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:47432",
+                "name": "הרכבת/המסגר",
+                "latitude": 32.059556,
+                "longitude": 34.783556,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13295",
+                "name": "הרכבת/סלומון",
+                "latitude": 32.062567,
+                "longitude": 34.780103,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:12952",
+                "name": "דרך מנחם בגין/הרכבת",
+                "latitude": 32.063416,
+                "longitude": 34.780072,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13322",
+                "name": "המסגר/ישראל טל",
+                "latitude": 32.063805,
+                "longitude": 34.785694,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:29483",
+                "name": "המסגר/המלאכה",
+                "latitude": 32.066289,
+                "longitude": 34.786744,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:48363",
+                "name": "ת.רק''ל יהודית/דרך מנחם בגין",
+                "latitude": 32.069862,
+                "longitude": 34.788125,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:14549",
+                "name": "מתחם שרונה/אליעזר קפלן",
+                "latitude": 32.073491,
+                "longitude": 34.787018,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:42859",
+                "name": "אליעזר קפלן/דובנוב",
+                "latitude": 32.07356,
+                "longitude": 34.783258,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13585",
+                "name": "היכל התרבות/דיזנגוף",
+                "latitude": 32.074359,
+                "longitude": 34.778231,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13583",
+                "name": "דיזנגוף סנטר/דיזנגוף",
+                "latitude": 32.075566,
+                "longitude": 34.77512,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13565",
+                "name": "כיכר דיזנגוף/ריינס",
+                "latitude": 32.07895,
+                "longitude": 34.77495,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13664",
+                "name": "ריינס/גורדון",
+                "latitude": 32.081909,
+                "longitude": 34.775838,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13659",
+                "name": "דיזנגוף/ארלוזורוב",
+                "latitude": 32.086259,
+                "longitude": 34.774822,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13683",
+                "name": "דיזנגוף/ז'בוטינסקי",
+                "latitude": 32.089631,
+                "longitude": 34.77566,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13688",
+                "name": "דיזנגוף/שד' נורדאו",
+                "latitude": 32.093287,
+                "longitude": 34.776572,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:14472",
+                "name": "דיזנגוף/בן יהודה",
+                "latitude": 32.096391,
+                "longitude": 34.776059,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13740",
+                "name": "ספורטק/שד' רוקח",
+                "latitude": 32.09861,
+                "longitude": 34.78494,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13946",
+                "name": "ת. רכבת האוניברסיטה/שד' רוקח",
+                "latitude": 32.102783,
+                "longitude": 34.80697,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13220",
+                "name": "אקספו תל אביב/שד' רוקח",
+                "latitude": 32.103834,
+                "longitude": 34.809664,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13153",
+                "name": "לונה פארק/שד' רוקח",
+                "latitude": 32.105513,
+                "longitude": 34.81257,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13093",
+                "name": "מגרשי הטניס/בכור שטרית",
+                "latitude": 32.106365,
+                "longitude": 34.816519,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:12899",
+                "name": "מרכז הספורט/בכור שטרית",
+                "latitude": 32.105868,
+                "longitude": 34.820154,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13997",
+                "name": "איצטדיון הדר יוסף/בכור שטרית",
+                "latitude": 32.106236,
+                "longitude": 34.823049,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13030",
+                "name": "ראול ולנברג/משמר הירדן",
+                "latitude": 32.106733,
+                "longitude": 34.830514,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13241",
+                "name": "ראול ולנברג/הברזל",
+                "latitude": 32.107031,
+                "longitude": 34.833789,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13242",
+                "name": "מטה מרחב ירקון/ראול ולנברג",
+                "latitude": 32.108001,
+                "longitude": 34.835243,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13243",
+                "name": "ראול ולנברג/הנחושת",
+                "latitude": 32.1097,
+                "longitude": 34.837166,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13244",
+                "name": "ראול ולנברג/הארד",
+                "latitude": 32.112816,
+                "longitude": 34.839688,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13187",
+                "name": "דבורה הנביאה/ראול ולנברג",
+                "latitude": 32.115126,
+                "longitude": 34.840063,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:14202",
+                "name": "הצנחנים/אח''י דקר",
+                "latitude": 32.118462,
+                "longitude": 34.839229,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:14200",
+                "name": "בית אל/דבורה הנביאה",
+                "latitude": 32.117921,
+                "longitude": 34.838153,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:14197",
+                "name": "דבורה הנביאה/צה''ל",
+                "latitude": 32.118723,
+                "longitude": 34.836676,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:14188",
+                "name": "משמר הירדן/דבורה הנביאה",
+                "latitude": 32.117596,
+                "longitude": 34.834004,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:14182",
+                "name": "מרכוס/משמר הירדן",
+                "latitude": 32.114305,
+                "longitude": 34.83374,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:14185",
+                "name": "מרכוס/עולי הגרדום",
+                "latitude": 32.113713,
+                "longitude": 34.835896,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:14183",
+                "name": "עולי הגרדום/מרכוס",
+                "latitude": 32.113051,
+                "longitude": 34.836287,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13195",
+                "name": "עולי הגרדום/ניסן כהן",
+                "latitude": 32.111576,
+                "longitude": 34.835119,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:14084",
+                "name": "עולי הגרדום/בי''ס ישגב",
+                "latitude": 32.109388,
+                "longitude": 34.83387,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:14010",
+                "name": "הרוגי מלכות/משמר הירדן",
+                "latitude": 32.109992,
+                "longitude": 34.832249,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:14532",
+                "name": "משמר הירדן/טורקוב",
+                "latitude": 32.108637,
+                "longitude": 34.830034,
+                "pickupType": 1,
+                "dropOffType": 0
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "routeId": "mot:route:27901",
+        "routeShortName": "115",
+        "routeLongName": "מסוף קרית אונו-קרית אונו<->מסוף רדינג/הורדה-תל אביב יפו-10",
+        "operatorId": "15",
+        "operatorName": "מטרופולין",
+        "mode": "bus",
+        "routeType": 3,
+        "color": null,
+        "textColor": null,
+        "patterns": [
+          {
+            "patternId": "9acab03bfbc664ff13ab8822edb5c0f3e1e6b300cc73a669e66949c93fcd22ba",
+            "routeId": "mot:route:27901",
+            "directionId": "0",
+            "headsign": "תל אביב יפו_מסוף רדינג",
+            "servesStop": true,
+            "stopIndex": 24,
+            "geometrySource": "stop_sequence",
+            "stops": [
+              {
+                "stopId": "mot:stop:37716",
+                "name": "מסוף קרית אונו",
+                "latitude": 32.037735,
+                "longitude": 34.866154,
+                "pickupType": 0,
+                "dropOffType": 1
+              },
+              {
+                "stopId": "mot:stop:50468",
+                "name": "דרך אלכסנדרוני/אורה נמיר",
+                "latitude": 32.040386,
+                "longitude": 34.86677,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:44016",
+                "name": "דרך רב אלוף יעקוב דורי/דרך לוי אשכול",
+                "latitude": 32.047441,
+                "longitude": 34.864658,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:15880",
+                "name": "בית ברוש/דרך רב אלוף יעקב דורי",
+                "latitude": 32.048963,
+                "longitude": 34.858611,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:15879",
+                "name": "לשכת גיוס/דרך רב אלוף יעקב דורי",
+                "latitude": 32.05016,
+                "longitude": 34.855289,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:15354",
+                "name": "בן גוריון / הפרדס",
+                "latitude": 32.056036,
+                "longitude": 34.85145,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:24207",
+                "name": "שדרות בן גוריון/הנשיא",
+                "latitude": 32.059195,
+                "longitude": 34.849046,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:15907",
+                "name": "שדרות אהרון קציר/שמחה הולצברג",
+                "latitude": 32.06257,
+                "longitude": 34.846119,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:25091",
+                "name": "אוניברסיטת בר אילן/דרך אשכול",
+                "latitude": 32.065608,
+                "longitude": 34.843957,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:12884",
+                "name": "אלוף שדה/כביש 4",
+                "latitude": 32.057419,
+                "longitude": 34.832771,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:12838",
+                "name": "אלוף שדה/הירדן",
+                "latitude": 32.059276,
+                "longitude": 34.826633,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:12815",
+                "name": "אלוף שדה/דרך יצחק רבין",
+                "latitude": 32.059538,
+                "longitude": 34.820244,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13263",
+                "name": "אלוף שדה/כורזין",
+                "latitude": 32.058559,
+                "longitude": 34.81531,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13810",
+                "name": "אלוף שדה/עודד",
+                "latitude": 32.058589,
+                "longitude": 34.812816,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:12830",
+                "name": "דרך השלום/המאבק",
+                "latitude": 32.059083,
+                "longitude": 34.809867,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13200",
+                "name": "דרך השלום/דרך הטייסים",
+                "latitude": 32.060318,
+                "longitude": 34.806529,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13173",
+                "name": "לה גווארדייה/דרך הטייסים",
+                "latitude": 32.059319,
+                "longitude": 34.80295,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13083",
+                "name": "לה גווארדייה/שער הגיא",
+                "latitude": 32.059214,
+                "longitude": 34.79378,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13095",
+                "name": "היכל הספורט/יגאל אלון",
+                "latitude": 32.061469,
+                "longitude": 34.792128,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13130",
+                "name": "יגאל אלון/יצחק שדה",
+                "latitude": 32.065464,
+                "longitude": 34.792625,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:12987",
+                "name": "אסותא/יגאל אלון",
+                "latitude": 32.069847,
+                "longitude": 34.793808,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:12823",
+                "name": "ת. רכבת השלום",
+                "latitude": 32.073084,
+                "longitude": 34.793059,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:14549",
+                "name": "מתחם שרונה/אליעזר קפלן",
+                "latitude": 32.073491,
+                "longitude": 34.787018,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13585",
+                "name": "היכל התרבות/דיזנגוף",
+                "latitude": 32.074359,
+                "longitude": 34.778231,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13583",
+                "name": "דיזנגוף סנטר/דיזנגוף",
+                "latitude": 32.075566,
+                "longitude": 34.77512,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13565",
+                "name": "כיכר דיזנגוף/ריינס",
+                "latitude": 32.07895,
+                "longitude": 34.77495,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:44461",
+                "name": "פרישמן/דב הוז",
+                "latitude": 32.079849,
+                "longitude": 34.772121,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:44470",
+                "name": "חוף פרישמן",
+                "latitude": 32.080415,
+                "longitude": 34.768444,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:44471",
+                "name": "הירקון/שדרות בן גוריון",
+                "latitude": 32.084191,
+                "longitude": 34.769531,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:12862",
+                "name": "הירקון/ארלוזורוב",
+                "latitude": 32.087939,
+                "longitude": 34.771282,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:12839",
+                "name": "ירקון/ויתקין",
+                "latitude": 32.091854,
+                "longitude": 34.773124,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:12848",
+                "name": "נמל תל אביב/הירקון",
+                "latitude": 32.095145,
+                "longitude": 34.774308,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13700",
+                "name": "מסוף רדינג/הורדה",
+                "latitude": 32.098973,
+                "longitude": 34.778771,
+                "pickupType": 1,
+                "dropOffType": 0
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "routeId": "mot:route:9780",
+        "routeShortName": "39",
+        "routeLongName": "מסוף עמידר-רמת גן<->מסוף רדינג/הורדה-תל אביב יפו-20",
+        "operatorId": "5",
+        "operatorName": "דן",
+        "mode": "bus",
+        "routeType": 3,
+        "color": null,
+        "textColor": null,
+        "patterns": [
+          {
+            "patternId": "9f241cacd59aeb971f51c12c63406ba20edc8957a6120b883dc402a91f3f1bd4",
+            "routeId": "mot:route:9780",
+            "directionId": "1",
+            "headsign": "תל אביב יפו_מסוף רדינג",
+            "servesStop": true,
+            "stopIndex": 28,
+            "geometrySource": "stop_sequence",
+            "stops": [
+              {
+                "stopId": "mot:stop:14022",
+                "name": "מסוף עמידר",
+                "latitude": 32.069212,
+                "longitude": 34.838966,
+                "pickupType": 0,
+                "dropOffType": 1
+              },
+              {
+                "stopId": "mot:stop:14018",
+                "name": "התפוצות/קוממיות",
+                "latitude": 32.067572,
+                "longitude": 34.838128,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:14017",
+                "name": "אצ''ל/המחתרת",
+                "latitude": 32.067346,
+                "longitude": 34.836374,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:14545",
+                "name": "בן אליעזר/אצ''ל",
+                "latitude": 32.067036,
+                "longitude": 34.832924,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:14588",
+                "name": "בית ראסל/אריה בן אליעזר",
+                "latitude": 32.068757,
+                "longitude": 34.832731,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13902",
+                "name": "דרך נגבה/בן אליעזר",
+                "latitude": 32.069979,
+                "longitude": 34.831939,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13002",
+                "name": "הירדן/ נגבה",
+                "latitude": 32.069559,
+                "longitude": 34.828538,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:12906",
+                "name": "הירדן/ אצ''ל",
+                "latitude": 32.066029,
+                "longitude": 34.82832,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13180",
+                "name": "הירדן/ פנחס",
+                "latitude": 32.063113,
+                "longitude": 34.828322,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13868",
+                "name": "משה דיין/הירדן",
+                "latitude": 32.061571,
+                "longitude": 34.827921,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13867",
+                "name": "משה דיין/קרל נטר",
+                "latitude": 32.061796,
+                "longitude": 34.82537,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13863",
+                "name": "הרא''ה/דרך יצחק רבין",
+                "latitude": 32.061914,
+                "longitude": 34.821781,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:14548",
+                "name": "קניון גבעתיים/דרך יצחק רבין",
+                "latitude": 32.065716,
+                "longitude": 34.811659,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13817",
+                "name": "דרך יצחק רבין/אילת",
+                "latitude": 32.066382,
+                "longitude": 34.805715,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:12829",
+                "name": "דרך השלום/דרך יצחק רבין",
+                "latitude": 32.065604,
+                "longitude": 34.802729,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:12886",
+                "name": "דרך השלום/דרך הטייסים",
+                "latitude": 32.062113,
+                "longitude": 34.804298,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13788",
+                "name": "דרך הטייסים/דרך השלום",
+                "latitude": 32.059945,
+                "longitude": 34.803967,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13173",
+                "name": "לה גווארדייה/דרך הטייסים",
+                "latitude": 32.059319,
+                "longitude": 34.80295,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13787",
+                "name": "דרך משה דיין/משה שטינשנידר",
+                "latitude": 32.061547,
+                "longitude": 34.800182,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13630",
+                "name": "דרך משה דיין/הרכבי",
+                "latitude": 32.063125,
+                "longitude": 34.799609,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13638",
+                "name": "ביה''ס ניב/יצחק שדה",
+                "latitude": 32.064025,
+                "longitude": 34.796565,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13166",
+                "name": "סינרמה/יצחק שדה",
+                "latitude": 32.0645,
+                "longitude": 34.791607,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13071",
+                "name": "יצחק שדה/שונצינו",
+                "latitude": 32.065133,
+                "longitude": 34.787835,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:12945",
+                "name": "יצחק שדה/המסגר",
+                "latitude": 32.065676,
+                "longitude": 34.785302,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:48403",
+                "name": "קניון טי.אל.וי/קרליבך",
+                "latitude": 32.068334,
+                "longitude": 34.783206,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13580",
+                "name": "קרליבך/הארבעה",
+                "latitude": 32.070456,
+                "longitude": 34.782571,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13591",
+                "name": "הבימה/שד' בן ציון",
+                "latitude": 32.07188,
+                "longitude": 34.779715,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13581",
+                "name": "דיזנגוף סנטר/שדרות בן ציון",
+                "latitude": 32.073814,
+                "longitude": 34.776007,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13583",
+                "name": "דיזנגוף סנטר/דיזנגוף",
+                "latitude": 32.075566,
+                "longitude": 34.77512,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13565",
+                "name": "כיכר דיזנגוף/ריינס",
+                "latitude": 32.07895,
+                "longitude": 34.77495,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13664",
+                "name": "ריינס/גורדון",
+                "latitude": 32.081909,
+                "longitude": 34.775838,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:29490",
+                "name": "דיזנגוף/יודפת",
+                "latitude": 32.085447,
+                "longitude": 34.774625,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13670",
+                "name": "דיזנגוף/ארלוזורוב",
+                "latitude": 32.087957,
+                "longitude": 34.775256,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13683",
+                "name": "דיזנגוף/ז'בוטינסקי",
+                "latitude": 32.089631,
+                "longitude": 34.77566,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13688",
+                "name": "דיזנגוף/שד' נורדאו",
+                "latitude": 32.093287,
+                "longitude": 34.776572,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:14472",
+                "name": "דיזנגוף/בן יהודה",
+                "latitude": 32.096391,
+                "longitude": 34.776059,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:47456",
+                "name": "מסוף רדינג/הורדה",
+                "latitude": 32.098973,
+                "longitude": 34.778771,
+                "pickupType": 1,
+                "dropOffType": 0
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "routeId": "mot:route:9809",
+        "routeShortName": "172",
+        "routeLongName": "חניון תמנע-חולון<->מסוף רדינג/הורדה-תל אביב יפו-20",
+        "operatorId": "5",
+        "operatorName": "דן",
+        "mode": "bus",
+        "routeType": 3,
+        "color": null,
+        "textColor": null,
+        "patterns": [
+          {
+            "patternId": "9b0ed5883a764a179a6aa66d62eaee127bdde0975a007d377111342a31a7b622",
+            "routeId": "mot:route:9809",
+            "directionId": "1",
+            "headsign": "תל אביב יפו_מסוף רדינג",
+            "servesStop": true,
+            "stopIndex": 46,
+            "geometrySource": "stop_sequence",
+            "stops": [
+              {
+                "stopId": "mot:stop:24166",
+                "name": "חניון תמנע",
+                "latitude": 32.025748,
+                "longitude": 34.797055,
+                "pickupType": 0,
+                "dropOffType": 1
+              },
+              {
+                "stopId": "mot:stop:24163",
+                "name": "הפלד/האופן",
+                "latitude": 32.021133,
+                "longitude": 34.798741,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:24180",
+                "name": "הפלד/המלאכה",
+                "latitude": 32.018981,
+                "longitude": 34.80127,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:24178",
+                "name": "פרימיום סנטר/המלאכה",
+                "latitude": 32.016577,
+                "longitude": 34.801202,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:24129",
+                "name": "האורגים/המלאכה",
+                "latitude": 32.012081,
+                "longitude": 34.797824,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:811",
+                "name": "הרוקמים/הבנאי",
+                "latitude": 32.008484,
+                "longitude": 34.800141,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:812",
+                "name": "הלהב/הרוקמים",
+                "latitude": 32.007227,
+                "longitude": 34.801097,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:23702",
+                "name": "מפרץ שלמה/שדרות ירושלים",
+                "latitude": 32.005594,
+                "longitude": 34.798356,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:52626",
+                "name": "מפרץ שלמה/רמת הגולן",
+                "latitude": 32.004925,
+                "longitude": 34.796031,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:24115",
+                "name": "ימית 2000/מפרץ שלמה",
+                "latitude": 32.004766,
+                "longitude": 34.793927,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:22477",
+                "name": "מפרץ שלמה/גבעת התחמושת",
+                "latitude": 32.005015,
+                "longitude": 34.789176,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:22478",
+                "name": "מפרץ שלמה/קרית שמונה",
+                "latitude": 32.005183,
+                "longitude": 34.786298,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:22756",
+                "name": "דוד אלעזר/בגין",
+                "latitude": 32.005657,
+                "longitude": 34.784607,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:24766",
+                "name": "דוד אלעזר/קרן היסוד",
+                "latitude": 32.007787,
+                "longitude": 34.784891,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:24105",
+                "name": "בית ספר שרת/קרן היסוד",
+                "latitude": 32.008708,
+                "longitude": 34.786729,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:22476",
+                "name": "קרן היסוד/בית לחם",
+                "latitude": 32.00848,
+                "longitude": 34.790098,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:24119",
+                "name": "מרכז קרית שרת",
+                "latitude": 32.008962,
+                "longitude": 34.792329,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:24111",
+                "name": "ההסתדרות/מוצקין",
+                "latitude": 32.011968,
+                "longitude": 34.791429,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:24109",
+                "name": "ההסתדרות/סמולנסקין",
+                "latitude": 32.013129,
+                "longitude": 34.788959,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:21820",
+                "name": "ההסתדרות/דוד אלעזר",
+                "latitude": 32.014378,
+                "longitude": 34.786421,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:24160",
+                "name": "ההסתדרות/גאולים",
+                "latitude": 32.015191,
+                "longitude": 34.784884,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:24151",
+                "name": "ההסתדרות/מוהליבר",
+                "latitude": 32.016495,
+                "longitude": 34.782766,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:24149",
+                "name": "ההסתדרות/ראש פינה",
+                "latitude": 32.017269,
+                "longitude": 34.779875,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:21868",
+                "name": "חנקין/חומה ומגדל",
+                "latitude": 32.019444,
+                "longitude": 34.778833,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:21477",
+                "name": "חנקין/סוקולוב",
+                "latitude": 32.023125,
+                "longitude": 34.779056,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:22405",
+                "name": "חנקין/ז'בוטינסקי",
+                "latitude": 32.025495,
+                "longitude": 34.779202,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:49989",
+                "name": "מקווה ישראל/יהושע חנקין",
+                "latitude": 32.028181,
+                "longitude": 34.778906,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:49988",
+                "name": "מקווה ישראל/אריה שנקר",
+                "latitude": 32.028526,
+                "longitude": 34.776749,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:24155",
+                "name": "קאנטרי חולון/הלוחמים",
+                "latitude": 32.031845,
+                "longitude": 34.77066,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:24660",
+                "name": "משרד הרישוי/הלוחמים",
+                "latitude": 32.034209,
+                "longitude": 34.770086,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13419",
+                "name": "תל גיבורים/שז''ר",
+                "latitude": 32.039365,
+                "longitude": 34.769639,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:33841",
+                "name": "ביה''ס ברנר/מאיר גרוסמן",
+                "latitude": 32.040954,
+                "longitude": 34.767566,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13413",
+                "name": "גרינבוים/מאיר גרוסמן",
+                "latitude": 32.042014,
+                "longitude": 34.765921,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13424",
+                "name": "גרינבוים/דרך בן צבי",
+                "latitude": 32.044757,
+                "longitude": 34.767557,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:29506",
+                "name": "הרצל/דרך בן צבי",
+                "latitude": 32.046238,
+                "longitude": 34.768771,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13119",
+                "name": "הגן הזואולוגי/הרצל",
+                "latitude": 32.048142,
+                "longitude": 34.769184,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:50502",
+                "name": "הרצל/דרך קיבוץ גלויות",
+                "latitude": 32.05191,
+                "longitude": 34.770258,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:50500",
+                "name": "הרצל/דרך שלמה",
+                "latitude": 32.054436,
+                "longitude": 34.770865,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:50501",
+                "name": "הרצל/פלורנטין",
+                "latitude": 32.056033,
+                "longitude": 34.770883,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:50498",
+                "name": "הרצל/וולפסון",
+                "latitude": 32.058222,
+                "longitude": 34.770874,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:50503",
+                "name": "הרצל/דרך יפו",
+                "latitude": 32.060837,
+                "longitude": 34.770478,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13055",
+                "name": "שד' רוטשילד/אלנבי",
+                "latitude": 32.063554,
+                "longitude": 34.773702,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13569",
+                "name": "שד' רוטשילד/מזא''ה",
+                "latitude": 32.06567,
+                "longitude": 34.777286,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13228",
+                "name": "שד' רוטשילד/שיינקין",
+                "latitude": 32.068653,
+                "longitude": 34.778387,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13574",
+                "name": "הבימה/שד' רוטשילד",
+                "latitude": 32.071059,
+                "longitude": 34.779155,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13581",
+                "name": "דיזנגוף סנטר/שדרות בן ציון",
+                "latitude": 32.073814,
+                "longitude": 34.776007,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13583",
+                "name": "דיזנגוף סנטר/דיזנגוף",
+                "latitude": 32.075566,
+                "longitude": 34.77512,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13565",
+                "name": "כיכר דיזנגוף/ריינס",
+                "latitude": 32.07895,
+                "longitude": 34.77495,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13664",
+                "name": "ריינס/גורדון",
+                "latitude": 32.081909,
+                "longitude": 34.775838,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:29490",
+                "name": "דיזנגוף/יודפת",
+                "latitude": 32.085447,
+                "longitude": 34.774625,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13670",
+                "name": "דיזנגוף/ארלוזורוב",
+                "latitude": 32.087957,
+                "longitude": 34.775256,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13683",
+                "name": "דיזנגוף/ז'בוטינסקי",
+                "latitude": 32.089631,
+                "longitude": 34.77566,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:13688",
+                "name": "דיזנגוף/שד' נורדאו",
+                "latitude": 32.093287,
+                "longitude": 34.776572,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:14472",
+                "name": "דיזנגוף/בן יהודה",
+                "latitude": 32.096391,
+                "longitude": 34.776059,
+                "pickupType": 0,
+                "dropOffType": 0
+              },
+              {
+                "stopId": "mot:stop:44660",
+                "name": "מסוף רדינג/הורדה",
+                "latitude": 32.098973,
+                "longitude": 34.778771,
+                "pickupType": 1,
+                "dropOffType": 0
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "meta": {
+      "requestId": "00000000000000000000000000000000",
+      "generationId": "fc11ddbc27cecc78f749d06d9643e2dd9bc6d25b1a755c5548217f103dd58cfb",
+      "generatedAt": "2026-11-11T15:48:06.622857Z",
+      "dataBuiltAt": "2026-11-11T13:01:43.013693Z",
+      "mode": "real",
+      "coverage": {
+        "from": "2026-11-11T00:00:00+02:00",
+        "until": "2026-12-11T00:00:00+02:00"
+      },
+      "freshness": "current",
+      "capabilities": {
+        "realtime": "not_enabled",
+        "alerts": "not_enabled"
+      },
+      "attribution": [
+        "Israel Ministry of Transport",
+        "© OpenStreetMap contributors"
+      ],
+      "rankingPolicy": "motis-v2.11.2-feasible-engine-order-v1",
+      "appliedConstraints": {},
+      "warnings": []
+    },
+    "page": {
+      "nextCursor": null
+    }
+  }
+}

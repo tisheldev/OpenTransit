@@ -244,6 +244,48 @@ export const DeparturesPageSchema = z.looseObject({
   meta: MetaSchema,
 });
 
+// --- boards 1 and 7 (API PR #35, 11 November 2026; optional until every API has them) --
+
+const DepartureItem = DeparturesPageSchema.shape.data.element;
+
+/** /v1/departures/nearby: each nearby stop with the earliest departure of each line. */
+export const NearbyDeparturesSchema = z.looseObject({
+  data: z.array(
+    z.looseObject({
+      stop: StopItem.extend({ distanceMeters: z.number().nullish() }),
+      departuresState: z.string(),
+      departures: z.array(DepartureItem).nullable(),
+    }),
+  ),
+  meta: MetaSchema,
+});
+
+/** /v1/stops/{id}/lines: every line through a stop, with its patterns' stops in order. */
+export const StopLinesSchema = z.looseObject({
+  data: z.array(
+    z.looseObject({
+      routeId: z.string(),
+      routeShortName: z.string().nullable(),
+      operatorId: z.string().nullable(),
+      operatorName: z.string().nullable(),
+      mode: z.string().nullable(),
+      routeType: z.number().int().nullable(),
+      patterns: z.array(
+        z.looseObject({
+          patternId: z.string(),
+          directionId: z.string().nullable(),
+          headsign: z.string().nullable(),
+          servesStop: z.boolean(),
+          stopIndex: z.number().int().nullable(),
+          stops: z.array(z.looseObject({ stopId: z.string(), name: z.string().nullable(), latitude: z.number(), longitude: z.number() })),
+        }),
+      ),
+    }),
+  ),
+  page: PageSchema,
+  meta: MetaSchema,
+});
+
 // --- journeys (typed by OpenAPI; validated here too) --------------------------
 
 const Timing = z.looseObject({
@@ -323,4 +365,6 @@ export type RouteDetail = z.infer<typeof RouteSchema>;
 export type PatternsPage = z.infer<typeof PatternsPageSchema>;
 export type Trip = z.infer<typeof TripSchema>;
 export type DeparturesPage = z.infer<typeof DeparturesPageSchema>;
+export type NearbyDepartures = z.infer<typeof NearbyDeparturesSchema>;
+export type StopLines = z.infer<typeof StopLinesSchema>;
 export type Meta = z.infer<typeof MetaSchema>;

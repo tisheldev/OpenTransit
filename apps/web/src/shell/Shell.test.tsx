@@ -108,16 +108,26 @@ describe("shell", () => {
     expect(screen.queryByRole("link", { name: he["screen.settings"] })).toBeNull();
   });
 
-  it("Locate on Home takes one fix on the tap and shows it on the map", async () => {
+  it("Locate on Home takes one fix on the tap, and Home then draws the passenger and the walking ring", async () => {
+    // Home's own first try (location counts as allowed with a replaced source) gets nothing.
+    let calls = 0;
     const restore = setLocationSource({
-      current: async () => ({ ok: true, fix: { latitude: 32.0753, longitude: 34.7749, accuracyMeters: 20, at: 0 } }),
+      current: async () => {
+        calls += 1;
+        return calls === 1
+          ? { ok: false, error: "timeout" }
+          : { ok: true, fix: { latitude: 32.0753, longitude: 34.7749, accuracyMeters: 20, at: 0 } };
+      },
       watch: () => () => {},
     });
     try {
       renderApp("#/");
+      await waitFor(() => expect(calls).toBe(1));
       expect(getMapState().located).toBeNull();
+      expect(getMapState().scene.user).toBeNull();
       await userEvent.click(screen.getByRole("button", { name: he["nav.locate"] }));
-      await waitFor(() => expect(getMapState().located).toEqual({ position: [34.7749, 32.0753], accuracyMeters: 20 }));
+      await waitFor(() => expect(getMapState().scene.user).toEqual({ position: [34.7749, 32.0753], accuracyMeters: 20 }));
+      expect(getMapState().scene.ring).toEqual({ center: [34.7749, 32.0753], radiusMeters: 400 });
     } finally {
       restore();
     }
@@ -135,25 +145,19 @@ describe("shell", () => {
     }
   });
 
-  it("the From/To card opens Search for each field and swaps ends", async () => {
+  it("Home's search field opens Where to, focused, and a result plans to it", async () => {
     renderApp("#/", { lang: "en" });
-    await userEvent.click(screen.getByRole("button", { name: en["fromTo.to"] }));
+    await userEvent.click(screen.getByRole("button", { name: en["home.search"] }));
     expect(window.location.hash).toBe("#/search/to");
     await waitFor(() => expect(screen.getByRole("searchbox")).toHaveFocus());
     await userEvent.type(screen.getByRole("searchbox"), "Dizengoff");
     const first = (await screen.findByTestId("search-results")).querySelector("button")!;
     await userEvent.click(first);
     await waitFor(() => expect(window.location.hash).toBe("#/compare"));
+    await waitFor(() => expect(storedDraft()?.to).toMatchObject({ type: "place" }));
     act(() => go({ name: "home" }));
-    // hashchange is async: wait for Home, or this finds Compare's own compact From/To swap.
     await screen.findByRole("heading", { level: 1, name: en["home.title"] });
-    const swap = await screen.findByRole("button", { name: en["fromTo.swap"] });
-    expect(swap).toBeEnabled();
-    await userEvent.click(swap);
-    await waitFor(() => expect(storedDraft()?.to).toEqual({ type: "myLocation" }));
-    expect(screen.getByRole("button", { name: /^Where to\?\s*My location$/ })).toBeInTheDocument();
-    await userEvent.click(screen.getByRole("button", { name: /^Where from\?/ }));
-    expect(window.location.hash).toBe("#/search/from");
+    expect(screen.getByRole("button", { name: en["home.search"] })).toBeInTheDocument();
   });
 
   it("the skip link focuses the screen", async () => {
@@ -170,7 +174,7 @@ describe("history (Home → Search → Compare → Search → Compare)", () => {
       await userEvent.type(await screen.findByRole("searchbox"), text);
       await userEvent.click((await screen.findByTestId("search-results")).querySelector("button")!);
     };
-    await userEvent.click(screen.getByRole("button", { name: he["fromTo.to"] }));
+    await userEvent.click(screen.getByRole("button", { name: he["home.search"] }));
     await pick("דיזנגוף");
     await waitFor(() => expect(window.location.hash).toBe("#/compare"));
     // Compare → Search(from) → Back returns to Compare.

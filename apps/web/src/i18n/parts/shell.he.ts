@@ -24,18 +24,21 @@ export const he_shell = {
   "place.stopCode": "תחנה {code}",
 
   "home.title": "תכנון נסיעה",
+  "home.search": "לאן נוסעים?",
+  "home.saved": "מקומות שמורים",
   "home.setHome": "הגדרת בית",
   "home.setWork": "הגדרת עבודה",
-  // The Add chip's name starts with its visible word ("הוספה"), so speech input finds it.
-  "home.addFavourite": "הוספה של מקום שמור",
-  "home.add": "הוספה",
-  "home.saved": "מקומות שמורים",
-  "home.recents": "חיפושים אחרונים",
-  "home.noRecents": "יעדים שתבחרו יופיעו כאן.",
+  // "בעוד 4 דק׳": the number is set large between the two halves.
+  "home.inMinutes": "בעוד {minutes} דק׳",
+  "home.stops": "תחנות קרובות",
+  "home.stops.none": "אין תחנות קרובות למקום הזה.",
+  "home.stop.pin": "תחנה {stop}",
+  "home.stop.pinNext": "תחנה {stop}, קו {line} בעוד {minutes} דק׳",
+  "home.stop.open": "פתיחת התחנה {stop}",
+  "home.departures": "היציאות הבאות מ{stop}",
   "home.activeTrip": "חזרה לניווט",
   "home.activeTrip.detail": "נסיעה פעילה אל {place} · הגעה {time}",
   "home.activeTrip.detailNoPlace": "נסיעה פעילה · הגעה {time}",
-  "home.compare": "הצגת אפשרויות",
 
   "search.title.from": "מאיפה?",
   "search.title.to": "לאן?",
