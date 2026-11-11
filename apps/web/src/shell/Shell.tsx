@@ -15,7 +15,7 @@ import { Icon } from "../components/ds";
 import { useI18n } from "../i18n/I18nProvider";
 import { locationSource } from "../lib/geolocation";
 import { MapAttribution, MapHost } from "../map/MapHost";
-import { getMapState, requestLocate, setBottomInset, showLocated, useMapSelector } from "../map/scene";
+import { getMapState, requestLocate, setBottomInset, setSideInset, showLocated, useMapSelector } from "../map/scene";
 import { back, hrefFor, useRoute, type Route } from "../router";
 import { prefetchScreens, Screen } from "../screens/screens";
 import { Banners } from "./Banners";
@@ -45,6 +45,12 @@ function useAfterFirstPaint(): boolean {
     return () => window.clearTimeout(id);
   }, []);
   return painted;
+}
+
+/** The wide-screen layout (board 8): the panel sits beside the map. Same breakpoint as shell.css. */
+export const WIDE_QUERY = "(min-width: 900px)";
+function isWide(): boolean {
+  return typeof window !== "undefined" && typeof window.matchMedia === "function" && window.matchMedia(WIDE_QUERY).matches;
 }
 
 function Sheet({
@@ -78,7 +84,19 @@ function Sheet({
   useLayoutEffect(() => {
     const element = sheetRef.current;
     if (!element) return;
-    const report = () => setBottomInset(Math.round(element.getBoundingClientRect().height || SNAP_FRACTION[snap] * viewportHeight()));
+    const report = () => {
+      // Wide screen (board 8): the sheet is a full-height panel beside the map, so it
+      // covers one side instead of the bottom.
+      if (isWide()) {
+        const rect = element.getBoundingClientRect();
+        const onLeft = rect.left < window.innerWidth / 2;
+        setBottomInset(0);
+        setSideInset(onLeft ? Math.round(rect.right) : 0, onLeft ? 0 : Math.round(window.innerWidth - rect.left));
+        return;
+      }
+      setSideInset(0, 0);
+      setBottomInset(Math.round(element.getBoundingClientRect().height || SNAP_FRACTION[snap] * viewportHeight()));
+    };
     report();
     if (typeof ResizeObserver === "undefined") return;
     // Next frame: the map reacting inside this callback must not re-trigger observers.

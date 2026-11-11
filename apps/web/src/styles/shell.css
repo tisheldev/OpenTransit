@@ -718,3 +718,43 @@
 .placeholder .ot-banner {
   margin-block-end: var(--space-4);
 }
+
+/* --- wide screen (board 8, user 11 November 2026) ------------------------------------
+   From 900 px the sheet is a full-height panel at the inline start (the right in Hebrew),
+   beside the map; snaps, the handle and the scrim do not apply. The top band and Locate
+   float over the map beside it. Shell.tsx reports the panel as a side inset, so the map
+   frames its content in the part left visible. */
+@media (min-width: 900px) {
+  .sheet,
+  .sheet-peek,
+  .sheet-full {
+    inset-block: 0;
+    inset-inline-start: 0;
+    inset-inline-end: auto;
+    inline-size: 400px;
+    block-size: 100%;
+    border-radius: 0;
+    border-inline-end: 1px solid var(--border);
+    box-shadow: none;
+    transition: none;
+  }
+  .sheet-handle,
+  .sheet-grip {
+    visibility: hidden;
+  }
+  .sheet-content {
+    padding-block-start: var(--space-2);
+  }
+  .sheet-scrim,
+  .sheet-scrim-on {
+    opacity: 0;
+  }
+  .overlay-top {
+    inset-inline-start: 400px;
+  }
+  .sheet-locate {
+    inset-block-end: var(--space-4);
+    inset-inline-end: auto;
+    inset-inline-start: calc(100% + var(--space-3));
+  }
+}

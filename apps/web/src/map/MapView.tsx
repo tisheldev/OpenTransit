@@ -114,25 +114,31 @@ function coveredHeight(map: MapLibreMap, inset: number): number {
   return height > 0 ? Math.min(inset, Math.round(height * 0.75)) : 0;
 }
 
-/** Reports the centre of the visible map (above the sheet), where the pick pin points. */
-function reportCenter(map: MapLibreMap, inset: number): void {
+type Side = { left: number; right: number };
+
+/** Reports the centre of the visible map (above the sheet, beside a side panel), where the pick pin points. */
+function reportCenter(map: MapLibreMap, inset: number, side: Side): void {
   const element = map.getContainer();
   const covered = coveredHeight(map, inset);
+  const sideways = side.left > 0 || side.right > 0;
   const { lng, lat } =
-    covered > 0 ? map.unproject([element.clientWidth / 2, (element.clientHeight - covered) / 2]) : map.getCenter();
+    covered > 0 || sideways
+      ? map.unproject([(side.left + element.clientWidth - side.right) / 2, (element.clientHeight - covered) / 2])
+      : map.getCenter();
   setMapCenter([lng, lat]);
 }
 
 export default function MapView() {
   const { lang, t } = useI18n();
   const theme = useTheme();
-  const { scene, bottomInset, locateRequest, located } = useMapState();
+  const { scene, bottomInset, sideInset, locateRequest, located } = useMapState();
   const container = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
   const [loaded, setLoaded] = useState(false);
   const [failed, setFailed] = useState(false);
   const pickRef = useRef(scene.pick);
   const insetRef = useRef(0);
+  const sideRef = useRef<Side>({ left: 0, right: 0 });
   // What a style (re)load needs when it lands: the current scene, fix, language and theme.
   const sceneRef = useRef(scene);
   const langRef = useRef(lang);
@@ -189,10 +195,10 @@ export default function MapView() {
     });
     map.on("load", () => {
       setLoaded(true);
-      if (pickRef.current) reportCenter(map, insetRef.current);
+      if (pickRef.current) reportCenter(map, insetRef.current, sideRef.current);
     });
     map.on("moveend", () => {
-      if (pickRef.current) reportCenter(map, insetRef.current);
+      if (pickRef.current) reportCenter(map, insetRef.current, sideRef.current);
     });
     map.on("error", (event) => console.warn("Map error", event.error));
     requestedTheme.current = themeRef.current;
@@ -235,6 +241,11 @@ export default function MapView() {
   useEffect(() => {
     insetRef.current = inset;
   }, [inset]);
+  useEffect(() => {
+    sideRef.current = sideInset;
+  }, [sideInset]);
+  /** Horizontal offset that centres content in the part of the map beside a side panel. */
+  const sideOffset = (sideInset.left - sideInset.right) / 2;
   const focusedScene = useRef<{ scene: MapScene | null; at: number }>({ scene: null, at: 0 });
 
   useEffect(() => {
@@ -249,7 +260,12 @@ export default function MapView() {
         const point = bounds[0][0] === bounds[1][0] && bounds[0][1] === bounds[1][1];
         try {
           map.fitBounds(bounds, {
-            padding: { ...FIT_PADDING, bottom: FIT_PADDING.bottom + bottom },
+            padding: {
+              ...FIT_PADDING,
+              bottom: FIT_PADDING.bottom + bottom,
+              left: FIT_PADDING.left + sideInset.left,
+              right: FIT_PADDING.right + sideInset.right,
+            },
             maxZoom: point ? 15 : 16,
             duration,
           });
@@ -265,13 +281,13 @@ export default function MapView() {
         if (fresh) focusedScene.current = { scene, at: Date.now() };
         if (fresh || Date.now() - focusedScene.current.at < 800) {
           const focus = scene.focus ?? { center: DEFAULT_CENTER, zoom: DEFAULT_ZOOM };
-          map.easeTo({ center: focus.center, zoom: focus.zoom, offset: [0, -bottom / 2], duration: fresh ? duration : 0 });
+          map.easeTo({ center: focus.center, zoom: focus.zoom, offset: [sideOffset, -bottom / 2], duration: fresh ? duration : 0 });
         }
       }
     } else if (scene.camera === "follow" && scene.user) {
-      map.easeTo({ center: scene.user.position, offset: [0, -bottom / 2], duration });
+      map.easeTo({ center: scene.user.position, offset: [sideOffset, -bottom / 2], duration });
     }
-  }, [scene, inset, loaded]);
+  }, [scene, inset, sideOffset, sideInset, loaded]);
 
   // requestLocate(): recentre on the user (the scene's, or a one-off fix from Locate). The
   // initial value is not a request.
@@ -285,7 +301,7 @@ export default function MapView() {
     map.easeTo({
       center: target.position,
       zoom: Math.max(map.getZoom(), 15),
-      offset: [0, -coveredHeight(map, insetRef.current) / 2],
+      offset: [(sideRef.current.left - sideRef.current.right) / 2, -coveredHeight(map, insetRef.current) / 2],
       duration: prefersReducedMotion() ? 0 : 400,
     });
   }, [locateRequest, target, loaded]);
@@ -293,8 +309,8 @@ export default function MapView() {
   // Entering pick mode (or the sheet moving) reports the visible centre straight away.
   useEffect(() => {
     const map = mapRef.current;
-    if (map && loaded && scene.pick) reportCenter(map, inset);
-  }, [scene.pick, inset, loaded]);
+    if (map && loaded && scene.pick) reportCenter(map, inset, sideInset);
+  }, [scene.pick, inset, sideInset, loaded]);
 
 
   return (

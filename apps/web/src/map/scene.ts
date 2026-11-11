@@ -129,6 +129,11 @@ interface MapState {
   scene: MapScene;
   /** Pixels at the bottom covered by the sheet, so fitting keeps content visible. */
   bottomInset: number;
+  /**
+   * Pixels covered at the map's left and right edges (physical sides: the map is never
+   * mirrored) by a panel beside it: the wide-screen layout (board 8). Zero on a phone.
+   */
+  sideInset: { left: number; right: number };
   /** Latest map centre (pick mode); null until the map reports one. */
   center: LonLat | null;
   /** Bumped by requestLocate(); the map recentres on the user when it changes. */
@@ -140,7 +145,15 @@ interface MapState {
   located: MapUser | null;
 }
 
-const initialState: MapState = { scene: emptyScene, bottomInset: 0, center: null, locateRequest: 0, located: null };
+const NO_SIDE_INSET = { left: 0, right: 0 };
+const initialState: MapState = {
+  scene: emptyScene,
+  bottomInset: 0,
+  sideInset: NO_SIDE_INSET,
+  center: null,
+  locateRequest: 0,
+  located: null,
+};
 let state: MapState = initialState;
 const listeners = new Set<() => void>();
 
@@ -164,6 +177,12 @@ export function setMapScene(scene: MapScene): void {
 
 export function setBottomInset(px: number): void {
   if (px !== state.bottomInset) update({ bottomInset: px });
+}
+
+export function setSideInset(left: number, right: number): void {
+  if (left !== state.sideInset.left || right !== state.sideInset.right) {
+    update({ sideInset: left === 0 && right === 0 ? NO_SIDE_INSET : { left, right } });
+  }
 }
 
 export function setMapCenter(center: LonLat): void {

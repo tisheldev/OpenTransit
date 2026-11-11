@@ -17,6 +17,7 @@ import {
   resetMapState,
   setBottomInset,
   setMapScene,
+  setSideInset,
   showLocated,
   type MapRouteLeg,
   type MapScene,
@@ -401,6 +402,17 @@ describe("MapView", () => {
     expect(badge.style.getPropertyValue("--line-bg")).toBe("#1565c0");
     act(() => setMapScene(emptyScene));
     expect(screen.queryByTestId("map-overlay")).toBeNull();
+  });
+
+  it("on a wide screen frames the scene beside the side panel (board 8), and a phone layout clears it", async () => {
+    renderWith(<MapView />);
+    const map = await loadedMap();
+    act(() => setSideInset(0, 400));
+    act(() => setMapScene({ ...emptyScene, route: [bus], camera: "fit" }));
+    const fit = map.calls.filter((call) => call.method === "fitBounds").at(-1)!;
+    expect((fit.args[1] as { padding: Record<string, number> }).padding).toMatchObject({ left: 32, right: 432, bottom: 24 });
+    act(() => setSideInset(0, 0));
+    expect(getMapState().sideInset).toEqual({ left: 0, right: 0 });
   });
 
   it("keeps the sheet's height (clamped) out of fitting, and follows / recentres on the user above it", async () => {
