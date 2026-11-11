@@ -1,0 +1,66 @@
+{
+  "id": "client-boards-20261111-01",
+  "recordedAt": "2026-11-11T17:00:00Z",
+  "kind": "mechanical; not human-reviewed",
+  "scope": "User, 11 Nov 2026: \"this is not the exact UI I was planning on in the claude design\", then \"yes, build all eight\". The web test client is rebuilt to the eight approved boards (canvas https://claude.ai/artifact/F7pc3VsqUyEAuj6VKip5Kb, row 'Map as the interface, printed-map look'). The user's go-ahead revises client PRD C01, C03 and C04 to the boards.",
+  "boards": {
+    "1 Home": "src/screens/home/: one 'לאן נוסעים?' field; Home/Work cards with the next ride; the selected stop's departures; map: stops as round pins, next-departure tags, 400 m dashed ring and puck when there is a fix",
+    "2 Choose": "src/screens/compare/CompareScreen.tsx + OptionRow: options as rows (times, countdown tag, legs, duration); map draws every option, others faded with an arrival-time tag that chooses it; 'פרטי המסלול'",
+    "3 Step": "src/screens/compare/RouteScreen.tsx + Timeline at #/route: step timeline; tapping a leg zooms the map (fitTo); 'כל המסלול'; boarding pin 'בצד הזה · לכיוון …' from API boarding.stopSide; star (saves the destination) and 'יוצאים לדרך'",
+    "4 Walking": "src/screens/navigate/: one answer ('הולכים אל', distance, 'מספיקים · לפי הלוח'); map follows; stop pin with line and countdown; close and 'מגיעים' floating; 'לא הגיע?' and 'עליתי'",
+    "5 On board": "remaining stops as vertical rows, 'יורדים בעוד N תחנות', 'אחר כך' row, 'ירדתי'; travelled part grey, framed to what is left, 'יורדים כאן'",
+    "6 Bus didn't come": "MissedPanel: wait here (next departure of the same route) and walk elsewhere (replan excluding the missed trip), each with its arrival; a failed check is said as such",
+    "7 Tap a stop": "src/screens/stop/ at #/stop/<id>: every line through the stop fans out; a chosen line shows its whole route, stops, direction and end",
+    "8 Wide screen": "from 900 px the sheet is a 400 px panel at the inline start beside the map (side inset for framing); Choose opens the chosen option's steps in place with Step's actions"
+  },
+  "method": "Coordinator built the shared foundation (map tags and stop pins over the map, faded/travelled tones, walking ring, fitTo, cameraKey, topControls; boards.css; wide layout) and merged three Opus agents' worktree branches (Home+Stop, Choose+Step, Walking/On board/Missed). API data from PR #35 (branch served live on 127.0.0.1:8520) is read as optional fields with fallbacks for an API without them.",
+  "checks": {
+    "lint": "0 problems",
+    "typecheck": "0 errors",
+    "tokensCheck": "up to date",
+    "unit": { "passed": 1054, "failed": 0 },
+    "e2eMocked": "Windows, Playwright 1.64.1 Chromium, 2 workers, VITE_MAP_STYLE empty (the git-ignored apps/web/.env.fixtures.local turns real tiles on for the local demo and must not apply to e2e): 87 passed, 0 failed, 6 skipped (@real). Includes axe in both themes and the new wide-screen spec. Earlier 4-worker runs on this loaded PC showed single timing failures that passed alone.",
+    "liveWalkthrough": "Browser pane at 375x812 (and 1200x760 for board 8), dark theme, client on Vite dev against the PR #35 API on :8520 (generation nov11a): Home near Dizengoff Center → Search 'רכבת הרצליה' → Choose (3 options) → Step → navigation (at the stop) → 'לא הגיע?' → 'הגיע, עליתי' → On board; then #/stop/mot:stop:13561 with line 8 chosen; then Choose at 1200x760.",
+    "notRun": ["@real e2e specs", "Linux Playwright image", "a phone", "light theme screenshots (axe runs in both themes in the mocked e2e)"]
+  },
+  "screenshots": {
+    "folder": "services/api/results/client-boards-20261111-01/",
+    "files": [
+      "1-home-dark.jpg",
+      "2-choose-dark.jpg",
+      "3-step-dark.jpg",
+      "4-walking-at-stop-dark.jpg",
+      "5-on-board-dark.jpg",
+      "6-bus-didnt-come-dark.jpg",
+      "7-stop-dark.jpg",
+      "7-stop-line-chosen-dark.jpg",
+      "8-wide-dark.jpg"
+    ]
+  },
+  "foundFixedDuringReview": [
+    "Bus didn't come said 'no other option' when the next-bus check had failed (504); it now says which check failed and offers a retry",
+    "Tags near the map's side were clipped (Step's boarding tag); they now open inward",
+    "Fitting failed with NaN bounds on 360x640 under a tall sheet once top padding cleared the floating controls; padding now gives way",
+    "Home re-framed the map every minute as its tags ticked, undoing panning; scenes can now frame once per cameraKey",
+    "'יורדים כאן' landed under the close button; fitting now keeps clear of the top band and floating controls",
+    "Lint: MapView read a ref during render for the overlay; the loaded map is held in state"
+  ],
+  "deliberateDifferences": [
+    "'כל המסלול' and Navigate's close button sit below the shell's top band (Back and the attribution live in it)",
+    "'מתוכנן' is said once on Choose: every time is scheduled until realtime ships",
+    "The star saves the destination as a favourite (labelled so); the client has no saved trips",
+    "Home shows at most two map tags (stops are 30-150 m apart; a tag on every pin buries them); every pin's spoken name carries its next departure",
+    "A tapped stop's line direction is a small arrow tag, not a chevron drawn on the line",
+    "Waiting at a stop (a trip that starts with a ride) shows 'מחכים בתחנה' with a countdown; 'עליתי' boards on the same step",
+    "Long rides name only the next stop and the one before the exit; the rest are one 'N תחנות' row",
+    "The Home card for an active trip ('חזרה לניווט') is kept above the search field"
+  ],
+  "knownGaps": [
+    "Not human-reviewed on a phone",
+    "Platforms: the MOT feed has none, so 'רציף N' never shows",
+    "PR #35 (API) is not merged; on an API without it the screens fall back (more requests, no side of the road, client-side route filter)",
+    "Under load the local API answers 504 when its engine is slow (about 1.5 s); screens say so and offer retry",
+    "Home's stop names stay Hebrew in English (the nearby endpoint returns no translations)",
+    "Not published to H-1 (needs the opentransit AWS profile)"
+  ]
+}
