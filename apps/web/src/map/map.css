@@ -204,3 +204,11 @@ button.map-stop::after {
   position: absolute;
   inset: -9px;
 }
+
+/* Near a side of the map a tag opens inward from its point (MapOverlay EDGE_PX), so it is never clipped. */
+.map-tag--above.map-tag--edge-left { transform: translate(-14px, calc(-100% - 10px)); }
+.map-tag--above.map-tag--edge-right { transform: translate(calc(-100% + 14px), calc(-100% - 10px)); }
+.map-tag--center.map-tag--edge-left { transform: translate(-14px, -50%); }
+.map-tag--center.map-tag--edge-right { transform: translate(calc(-100% + 14px), -50%); }
+.map-tag--below.map-tag--edge-left { transform: translate(-14px, 10px); }
+.map-tag--below.map-tag--edge-right { transform: translate(calc(-100% + 14px), 10px); }

@@ -1,6 +1,6 @@
 import { act, fireEvent, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { http } from "msw";
+import { http, HttpResponse } from "msw";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { fixture } from "../../api/fixtures";
 import type { DeparturesPage } from "../../api/schemas";
@@ -97,13 +97,15 @@ function stopsWithPositions() {
 }
 
 /** Bus didn't come: the derived departures and re-plans (src/mocks/navigateMissed.ts). */
-function missedAnswers(options: { empty?: boolean; olderApi?: boolean } = {}) {
+function missedAnswers(options: { empty?: boolean; olderApi?: boolean; departuresFail?: boolean; walkEmpty?: boolean } = {}) {
   const requests: Array<JourneyRequest & { excludeTripRefs?: string[] }> = [];
   const departureUrls: string[] = [];
   server.use(
     http.get("*/v1/stops/:stopId/departures", ({ params, request }) => {
       departureUrls.push(request.url);
       if (decodeURIComponent(String(params.stopId)) !== MISSED_STOP_ID) return respond(fixture("recorded-departures-last-page"));
+      // The engine was too slow (seen live under load, 11 November): the API answers 504.
+      if (options.departuresFail) return new HttpResponse(null, { status: 504 });
       const found = derivedMissedDepartures();
       if (options.empty) (found.body as DeparturesPage).data = [];
       return respond(found);
@@ -114,7 +116,7 @@ function missedAnswers(options: { empty?: boolean; olderApi?: boolean } = {}) {
       // An API before PR #35 refuses the unknown field (extra="forbid": 422 invalid request).
       if (options.olderApi && body.excludeTripRefs) return respond(fixture("synthetic-problem-invalid-request"));
       const found = derivedMissedJourneys(body);
-      if (options.empty) Object.assign((found.body as JourneyResponse).data, { outcome: "no_route", journeys: [] });
+      if (options.empty || options.walkEmpty) Object.assign((found.body as JourneyResponse).data, { outcome: "no_route", journeys: [] });
       return respond(found);
     }),
   );
@@ -290,6 +292,19 @@ describe("Navigate: bus didn't come (board 6)", () => {
       ["walk", "faded", "3 דק׳ הליכה"],
     ]);
     expect(getMapState().scene.route[0]).toMatchObject({ tone: "faded" });
+  });
+
+  it("a failed next-bus check is said as such, never as 'no other option', and can be retried", async () => {
+    missedAnswers({ departuresFail: true, walkEmpty: true });
+    seed(recordedJourneys[2]!);
+    renderApp("#/navigate");
+    await userEvent.click(button("nav.answer.missed"));
+    expect(await screen.findByText("לא הצלחנו לבדוק מתי יוצא ה־249 הבא.", undefined, { timeout: 8000 })).toBeInTheDocument();
+    expect(screen.queryByText("אין כרגע אפשרות אחרת לפי הלוח.")).toBeNull();
+    // The check answers on a second try.
+    missedAnswers({ walkEmpty: true });
+    await userEvent.click(screen.getByRole("button", { name: "נסו שוב" }));
+    expect(await screen.findByRole("button", { name: /מחכים כאן ל־249/ }, { timeout: 8000 })).toBeInTheDocument();
   });
 
   it("an API before excludeTripRefs refuses the field: the plan is asked again without it", async () => {

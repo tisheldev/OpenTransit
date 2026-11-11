@@ -203,21 +203,34 @@ export function MissedPanel({ trip, ride, fix, clock, labels, onBoarded, onCance
               {t("nav.missed.loading")}
             </p>
           )}
-          {!pending && options.length === 0 && (
+          {/* Nothing to offer: "none" only when both questions were answered; otherwise say what could not be checked. */}
+          {!pending && options.length === 0 && (failed || !(departures.isError || walkAnswer.isError)) && (
             <p className="nav-missed-note" role="status">
               {t(failed ? "nav.missed.failed" : "nav.missed.none")}
             </p>
           )}
-          {/* One question failed, the other answered: say which is missing, never imply there is none. */}
-          {options.length > 0 && departures.isError && (
+          {/* One question failed: say which is missing, never imply there is none. */}
+          {!pending && !failed && departures.isError && (
             <p className="b-mu nav-missed-note" role="status">
               <Bdi>{t("nav.missed.waitFailed", { line })}</Bdi>
             </p>
           )}
-          {options.length > 0 && walkAnswer.isError && (
+          {!pending && !failed && walkAnswer.isError && (
             <p className="b-mu nav-missed-note" role="status">
               {t("nav.missed.walkFailed")}
             </p>
+          )}
+          {!pending && (departures.isError || walkAnswer.isError) && (
+            <button
+              type="button"
+              className="b-link nav-missed-retry"
+              onClick={() => {
+                if (departures.isError) void departures.refetch();
+                if (walkAnswer.isError) void walkAnswer.refetch();
+              }}
+            >
+              {t("state.retry")}
+            </button>
           )}
         </div>
       </section>

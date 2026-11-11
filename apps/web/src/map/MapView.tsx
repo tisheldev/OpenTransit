@@ -276,7 +276,12 @@ export default function MapView() {
         framedKey.current = scene.cameraKey ?? null;
         // Below the top band (banners, Back, attribution), and below floating controls.
         const band = overlayTopHeight(map);
-        const top = Math.max(FIT_PADDING.top, band + 16) + (scene.topControls ? 56 : 0);
+        const wanted = Math.max(FIT_PADDING.top, band + 16) + (scene.topControls ? 56 : 0);
+        // Leave at least 80 px to frame in: on a small screen under a tall sheet the padding
+        // must give way, or MapLibre has no room and fails to fit (NaN bounds).
+        const height = map.getContainer().clientHeight;
+        const below = FIT_PADDING.bottom + bottom;
+        const top = height > 0 ? Math.max(8, Math.min(wanted, height - 80 - below)) : wanted;
         // One point (a single pin) frames at street level rather than the closest zoom.
         const point = bounds[0][0] === bounds[1][0] && bounds[0][1] === bounds[1][1];
         try {

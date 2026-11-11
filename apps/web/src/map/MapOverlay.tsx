@@ -53,8 +53,19 @@ function TagBody({ tag }: { tag: MapTag }) {
   );
 }
 
-function Tag({ tag, dir }: { tag: MapTag; dir: "rtl" | "ltr" }) {
-  const className = `map-tag map-tag--${tag.kind} map-tag--${tag.anchor ?? "above"}`;
+/** Within this many pixels of a side, a tag opens inward from its point instead of centring on it, so it is not clipped. */
+const EDGE_PX = 96;
+
+function edgeOf(map: MapLibreMap, at: [number, number]): "left" | "right" | null {
+  const x = map.project(at).x;
+  const width = map.getContainer().clientWidth;
+  if (x < EDGE_PX) return "left";
+  if (width > 0 && x > width - EDGE_PX) return "right";
+  return null;
+}
+
+function Tag({ tag, dir, edge }: { tag: MapTag; dir: "rtl" | "ltr"; edge: "left" | "right" | null }) {
+  const className = `map-tag map-tag--${tag.kind} map-tag--${tag.anchor ?? "above"}${edge ? ` map-tag--edge-${edge}` : ""}`;
   const style = tag.accent ? ({ "--tag-accent": tag.accent } as CSSProperties) : undefined;
   if (tag.onSelect) {
     return (
@@ -118,7 +129,7 @@ export function MapOverlay({
       ))}
       {tags.map((tag) => (
         <div key={`tag-${tag.id}`} className="map-overlay__item" style={position(map, tag.position)}>
-          <Tag tag={tag} dir={dir} />
+          <Tag tag={tag} dir={dir} edge={edgeOf(map, tag.position)} />
         </div>
       ))}
     </div>
