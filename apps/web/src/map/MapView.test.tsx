@@ -8,6 +8,7 @@ import type { Lang } from "../i18n/messages";
 import { resetTheme, setTheme } from "../lib/theme";
 import { THEME_COLORS } from "../styles/tokens";
 import { destinationMarker } from "./layers";
+import { operatorColour } from "../lib/lines";
 import { MapHost } from "./MapHost";
 import MapView from "./MapView";
 import {
@@ -399,7 +400,7 @@ describe("MapView", () => {
     // A tag without an action is text, not a button; a line badge carries its operator's colour.
     expect(screen.getByText("מרכז הרצליה").closest("button")).toBeNull();
     const badge = screen.getByTestId("map-overlay").querySelector<HTMLElement>(".ot-line")!;
-    expect(badge.style.getPropertyValue("--line-bg")).toBe("#1565c0");
+    expect(badge.style.getPropertyValue("--line-bg")).toBe(operatorColour({ mode: "bus", operatorId: "5" })!.badge.bg);
     act(() => setMapScene(emptyScene));
     expect(screen.queryByTestId("map-overlay")).toBeNull();
   });
