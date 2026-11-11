@@ -71,17 +71,50 @@ The user approved the boards as drawn ("I like this design now") but was not ask
 
 ### Still open
 
-- **Operator colours are not verified.** The boards use example colours. Only Egged's green is checked ([Egged's own history](https://egged.co.il/Days-Article-4492-80-years-of-color.aspx)); the colours used for Dan, Metropoline, Israel Railways and the Red Line are placeholders, and light rail takes the Red Line's colour whoever runs it. Other operators (Superbus, Kavim, Afikim, …) fall back to a neutral bus colour. The web test client's table is [`apps/web/src/lib/lines.ts`](../apps/web/src/lib/lines.ts); build it from the real vehicles and keep it current when an operator repaints.
-- **Operator and mode on every line shown.** Journey legs carry the operator's name in the [domain model](#domain-model); departure items still lack operator and mode (API-C3), so a stop board cannot colour its lines until that lands.
+- **Operator colours: sourced 11 November, three verified.** See [Operator colours](#operator-colours-sourced-11-november-2026). Egged, Dan and the light-rail Red Line are verified; eight more are approximate; the rest fall back to the mode colour. Not checked against photographs of the current fleets by a person.
+- **Operator and mode on every line shown: supplied by the API since 11 November** (API-C3 and the board additions in [Data the boards need](#data-the-boards-need-api-11-november-2026)).
 - **Fonts:** Arimo and Barlow Semi Condensed are in the [licence audit](licence-audit.md#web-test-client-bundled-fonts) (both SIL OFL 1.1). The built client does not yet carry a notices file.
 - **Contrast, measured 11 November in the web test client:** every token text pair (4.5:1) and control boundary (3:1) passes in both themes; every operator badge's text passes 4.5:1; every operator line passes 3:1 on map land in both themes after one change from the boards: Metropoline's orange on the light map is `#c26e00` instead of `#f08a00` (2.2:1). Not measured: line colours against every tile colour on the live basemap.
 - **The map style is a recolouring, not a new style.** The web test client recolours OpenFreeMap's styles (land, streets, water, parks, buildings melted into land, points of interest and house numbers hidden, Hebrew names). A purpose-made style, and the self-hosted tiles planned before release, are still to come.
 - **Design system artifact:** still teal. Bringing it in line with the client's copies (then `npm run tokens` to confirm no drift) is the user's call; the native app's `theme/tokens.ts` follows the same source.
 
+### Operator colours (sourced 11 November 2026)
+
+Researched from the operators' own sites, press and the light-rail authorities (session API-BOARDS); applied in the [web client's table](../apps/web/src/lib/lines.ts). Hex values read from a site's CSS or logo are the operator's brand value; "sampled" means read from an official image. Most Israeli buses are white or silver with the operator's colour as the main graphic; there the colour is the brand colour, not the body paint. Routes are tendered by cluster, but buses carry the operator's livery; after a takeover, buses may run in the previous operator's paint for a while.
+
+| Operator (MOT agency id) | Colour | Source | State |
+| --- | --- | --- | --- |
+| Egged (3) | Green `#008761` | Egged's [80-years article](http://web.archive.org/web/20250122133400/https://www.egged.co.il/Days-Article-4492-80-years-of-color.aspx) (archived; the live page is gone); Walla [3811652](https://cars.walla.co.il/item/3811652) and [3855373](https://cars.walla.co.il/item/3855373) (2026: the rebrand keeps green); hex from egged.co.il | Verified |
+| Dan (5) | Blue `#205cab` | [TheMarker, 27 April 2023](https://www.themarker.com/labels/issuccess/2023-04-27/ty-article-labels/00000187-c27d-d554-a5b7-de7db7210000) (sponsored, with Dan): the fleet repainted blue; hex from dan.co.il `--dan-blue` | Verified |
+| Tel Aviv Red Line, all light rail | Red `#f42434` (badge `#d32f2f` for white text) | [NTA stylesheet, archived 20 December 2022](http://web.archive.org/web/20221220151505/https://www.nta.co.il/sb/neta-css-bundle-ltr.css.v1.); Jerusalem L1 `#ef3d45` from the [j-t.org.il route map](https://j-t.org.il/wp-content/themes/jerusalem-transform/assets/assets/minisite-l3/redesign/route-map-l3.svg) | Line colour verified; vehicle livery not found |
+| Metropoline (15) | Orange `#f78f1e` | [Fleet photo](https://www.metropoline.com/uploads/pictures/333_922026122513.jpg) (silver, large orange logo); metropoline.com `--orange` | Approximate |
+| Israel Railways (2) | Blue `#00458a` | [Official logo](https://web-umbraco.rail.co.il/media/s32bha2f/logo.svg); the train livery was not found | Approximate (brand only) |
+| Kavim (18) | Navy `#003780` | [Official illustration](https://www.kavim-t.com/media/2y2dwy0q/kavim.jpg) (white, navy graphic); kavim-t.com CSS | Approximate |
+| Electra Afikim (25) | Lime `#9aca3c` | [Site photo](https://www.electra-afikim.co.il/wp-content/themes/afikim/img/bus-bg.png) (white, lime roof band); site CSS | Approximate |
+| Tnufa (34) | Teal `#00808d` | Sampled from [tnufa-t.com header](https://www.tnufa-t.com/images/tnufa_headers-2.jpg) (white, teal roof) | Approximate |
+| Extra, Extra Jerusalem (37, 38) | Sky blue `#029acd` | Sampled from [extrapt.co.il bus image](https://extrapt.co.il/images/update_pict_bus.png) (same livery in both clusters) | Approximate |
+| Nateev Express (14) | Orange `#f18a00` | [Official banner](https://nateevexpress.com/wp-content/uploads/2026/06/BANNERS_WEBSITE.jpg) (white, orange); site `--brand-orange` | Approximate |
+| Superbus, Dan BaDarom, Dan Be'er Sheva, Dan Netivim, Electra Afikim Tahbura, Golan, Derech Egged, Galim, NTT, Nazareth (16, 31, 32, 39, 4, 24, 135, 23, 7, 6) | Mode colour | Evidence too thin (one banner, brand colour only, or uncited) | No entry |
+
+Map lines use the colour itself where it passes 3:1 on the light map and 4.5:1 on the dark one; otherwise a darker or lighter shade of it (in the table in `lines.ts`).
+
+## Data the boards need (API, 11 November 2026)
+
+The user's instruction of 11 November ("fix the data gaps" for the eight boards) approved these additive API changes, API-C3 included. Implemented on branch `claude/api-data-gaps-7060da`; mechanically tested, not human-reviewed. Every field is optional for older clients; nothing existing changed shape.
+
+| Board | Need | API |
+| --- | --- | --- |
+| 1 Home | Nearby stops as pins with their next departure | `GET /v1/departures/nearby?near=lat,lon&from=…` (radius ≤ 1 km, default 400 m; stops ≤ 12, default 8; `perStop` ≤ 5, default 3; `horizonMinutes` ≤ 180, default 60): each stop (a platform folded into its station) with the earliest departure of each line (route and headsign), each verified as on the stop board. A stop that could not be read says `departuresState: unavailable` (never an empty board); if none could be read the request fails. Rate-limited as expensive |
+| 3 Step | "On this side, toward …" | Each transit leg's `boarding`: `bearingDegrees` (direction of travel leaving the stop, from the first 30 m of the leg's path, else towards the next stop), `stopSide` (`right`/`left` of the vehicle's path, facing the direction of travel; bus and light rail only, with a reason when it cannot be told), `pathPoint` and `stopOffsetMeters` so the client can test which side the person is on, `towards` (headsign), `nextStop` and `stopCount`. The legs also gain `intermediateStops` and `platformCode` on `from`/`to` (API-C2). The board's "toward" place is the exit stop (`to.name`) |
+| 3, 7 | Colour each line by operator | Departure items and trips carry `operatorId`, `operatorName`, `mode` and `directionId` (API-C3); journey legs already had the operator |
+| 5 On board | The stop list | Journey legs' `intermediateStops`; trip calls gain `name`, `latitude`, `longitude`, `platformCode` (API-C1, from the engine's call and the reference; the name is the feed's, not per language) |
+| 6 Bus didn't come | Wait for the same line, or walk to another stop | Wait: `GET /v1/stops/{id}/departures?routeId=…` gives the next trips of that line here; `GET /v1/trips/{tripRef}` gives the arrival at the exit stop (add the original egress walk). Walk elsewhere: `POST /v1/journeys` from the person's coordinate at "now" with `excludeTripRefs: [<missed engineTripId>]`, so the missed bus is not offered again at a later stop |
+| 7 Stop | Every line through the stop, fanning out; a chosen line's whole route | `GET /v1/stops/{id}/lines`: each route with operator, mode, and its patterns as ordered stops (name, position) with `stopIndex` where the stop sits. `patterns=all` adds the line's other direction (a MOT route is one direction; siblings share operator and line code). Lines are drawn through stops (`geometrySource: stop_sequence`); for the street path of one trip use the trip's `shape` |
+
 ## Constraints from the current API
 
 - `Cache-Control: no-store` on every response; caching is the client's own (TanStack Query). CORS does not apply to a native app.
-- Only `POST /v1/journeys` has typed OpenAPI response models. Places, stops, routes, departures, trips and status are untyped, so validate them with schemas checked against recorded fixtures.
+- `POST /v1/journeys`, departures, nearby departures, a stop's lines and trips have typed OpenAPI response models (11 November). Places, stops, routes and status are untyped, so validate them with schemas checked against recorded fixtures.
 - `placeRef` is bound to one generation and returns `422 INVALID_PLACE_REF` after a refresh. Favourites store coordinates and labels; the ref is only a hint.
 - Unavailable live data is represented inconsistently: journey `alerts: null`, trip `alerts: "not_enabled"`. Decide capability from `meta.capabilities` and `/v1/status` only.
 - `walkingDistanceMeters` and a walk leg's `distanceMeters`/`geometry` can be null: an interior transfer MOTIS cannot street-route keeps its time (`geometryUnavailableReason: street_path_unavailable`, journey warning `TRANSFER_STREET_PATH_UNAVAILABLE`). Render a time-only walk instead of inventing a distance or line.
@@ -97,7 +130,7 @@ The PRD's route details (C04) and navigation (C05) need facts the API does not r
 | --- | --- | --- | --- | --- |
 | G1 Trip calls lack names and positions | A call has `stopId`, `callSequence`, `ordinal`, scheduled times and pickup/drop-off types only | S5 stop names in route details; S6 ride progress, "get off in 2 stops", step advance | **API-C1:** add `name`, `latitude`, `longitude`, `platformCode` to each call of `GET /v1/trips/{tripRef}` (the reference store has them) | One `GET /v1/stops/{id}` per intermediate stop (often 10–30 requests per leg), which breaks SP04/SP07 and the "no server request during navigation" rule |
 | G2 Journey legs lack the platform | `from`/`to` carry `name`, coordinates, `stopId`, `stopCode`; `platformCode` exists only on departures and stop detail | C04, C05 ("which platform") | **API-C2:** add nullable `platformCode` to a transit leg's `from` and `to` | Platform shown only after the trip detail arrives (if API-C1 lands) or never; trains would read "platform unknown" |
-| G3 Departures lack operator and mode | Known follow-up | S7 stop board | **API-C3** (already listed for M7) | Stop board shows line and headsign only |
+| G3 Departures lack operator and mode | **Implemented 11 November** (`operatorId`, `operatorName`, `mode`, `directionId`) | S7 stop board, boards 1 and 7 | **API-C3** | — |
 
 API-C1 and API-C2 are additive (new nullable fields), need no new data source, and are prerequisites for S5/S6 respectively. Until they exist the client treats the fields as optional and renders "unknown" rather than guessing. This replaces the earlier statement that no API change is needed to serve the client.
 
@@ -841,7 +874,7 @@ Each spike is a bounded throwaway check whose result is recorded in the task's P
 
 ## API follow-ups
 
-Blocking for the client: API-C1 (before S5 details are complete and before S6 ride progress), API-C2 (before platform claims in C04/C05). Non-blocking (M7): response models for the non-journey endpoints, one value for unavailable alerts, operator and mode on departure items (API-C3). Details in the [execution plan](next-steps.md#phase-2-client-execution-plan).
+API-C1 (call names and positions; not per language), API-C2 (leg platforms) and API-C3 (operator and mode on departures, response models for departures and trips) were implemented on 11 November with the [board additions](#data-the-boards-need-api-11-november-2026). Still open (M7): response models for places, stops, routes and status, and one value for unavailable alerts. Details in the [execution plan](next-steps.md#phase-2-client-execution-plan).
 
 ## Defaults pending user confirmation
 

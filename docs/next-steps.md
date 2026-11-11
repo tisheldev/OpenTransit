@@ -172,7 +172,7 @@ After functional coverage, perform consolidated milestone acceptance, finish ref
 | PRE-1 | Gate: the client is gated on the start of H-0/H-1. Either the H-0 approval is given and the deployment starts, or the user revises the gate so S0–S6 may start against the local API | User | H-0 approved and run 31 October ([result](../PROJECT_STATUS.md#h-0-result-31-october)); H-1 not started (PRD §10 item 7) | Everything |
 | PRE-2 | Review and accept the client PRD 0.3 and the client design (or list changes) | User | Open | Everything |
 | PRE-3 | App identity: display name, Android package and iOS bundle ID; light only or light and dark | User | Open (PRD §10 items 11–13) | S0 |
-| PRE-4 | Approve API-C1 and API-C2 (additive fields on an accepted API) | User | Open (PRD §10 item 8) | S5 details, S6 ride progress |
+| PRE-4 | Approve API-C1 and API-C2 (additive fields on an accepted API) | User | Taken as approved 11 November with the board additions (PRD §10 item 8); implemented | S5 details, S6 ride progress |
 | PRE-5 | Storage module and local-notification permission | User | Open (PRD §10 items 9–10) | S2, S6 |
 | PRE-6 | Developer machine toolchain: Node 22 (present: v22.17.0); JDK 17, Android Studio with SDK, platform tools and an emulator image, and Maestro are **not installed** (checked 3 October: `java`, `adb`, `maestro` not found, no Android SDK directory). Add two emulator profiles: a current phone and 360 × 640 | Agent prepares the list; user installs (large downloads) | Open | S0 |
 | PRE-7 | A local API answering `/readyz` 200 on a complete generation, for recording fixtures and `@real` checks ([runbook](development.md)) | Agent | Available when Compose runs `oct1b` or a newer generation | S1 fixtures, every `@real` check |
@@ -194,6 +194,7 @@ Small additive changes in `services/api`, each with tests, an updated OpenAPI sn
 | API-C2 | `POST /v1/journeys`: transit legs' `from`/`to` gain nullable `platformCode` | Response model and tests updated; a rail journey shows platforms that match the stop detail | S5.3 |
 | API-C3 | Response models for non-journey endpoints; one value for unavailable alerts; operator and mode on departures (existing M7 follow-ups) | OpenAPI snapshot covers every `/v1` response | S7 (non-blocking) |
 | API-C4 | Preview access for phones, as decided in PRE-12 | Phone on 4G reaches the preview; others do not | S8 |
+| API-C5 | Board data (11 November): nearby departures, a stop's lines, boarding bearing/side, intermediate stops, `routeId` on departures, `excludeTripRefs` on journeys ([design](client-design.md#data-the-boards-need-api-11-november-2026)) | Implemented 11 November with API-C1–C3 (C1 without per-language names); unit tests and a live check on `nov11a` | Boards 1, 3, 5, 6, 7 |
 
 ### Client tasks
 

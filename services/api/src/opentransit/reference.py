@@ -84,6 +84,50 @@ DETAIL_CACHE_ENTRIES = 256
 # The translation pairs served by stop() and route(), indexed once per store (1.1).
 SERVED_TRANSLATIONS = (("stops", "stop_name"), ("routes", "route_long_name"))
 LOCALITY_PROVENANCE_KEY = "localityProvenance"
+# A stop's lines (board 7): routes per page; each carries its patterns' ordered stops.
+MAX_STOP_LINES_PAGE = 50
+_BASIC_ROUTE_TYPE_MODES = {
+    0: "light_rail",
+    1: "light_rail",
+    2: "rail",
+    3: "bus",
+    4: "ferry",
+    5: "cable_car",
+    6: "cable_car",
+    7: "funicular",
+    11: "bus",
+    12: "light_rail",
+}
+_EXTENDED_ROUTE_TYPE_MODES = (
+    (100, 199, "rail"),
+    (200, 299, "bus"),
+    (400, 499, "light_rail"),
+    (700, 899, "bus"),
+    (900, 999, "light_rail"),
+    (1000, 1099, "ferry"),
+    (1300, 1399, "cable_car"),
+    (1400, 1499, "funicular"),
+)
+
+
+def _line_code(description: str | None) -> str | None:
+    """The MOT line code of a route_desc such as "55008-1-0" (None without a direction)."""
+    if not isinstance(description, str) or description.count("-") < 2:
+        return None
+    code = description.split("-", 1)[0]
+    return code if code.isdigit() else None
+
+
+def route_type_mode(route_type: int | None) -> str:
+    """The journey-leg mode string for a GTFS route_type (basic or extended)."""
+    if isinstance(route_type, bool) or not isinstance(route_type, int):
+        return "other"
+    if route_type in _BASIC_ROUTE_TYPE_MODES:
+        return _BASIC_ROUTE_TYPE_MODES[route_type]
+    for low, high, mode in _EXTENDED_ROUTE_TYPE_MODES:
+        if low <= route_type <= high:
+            return mode
+    return "other"
 
 
 def tables_for_schema(schema_version: int) -> tuple[str, ...]:
@@ -1028,7 +1072,7 @@ class ReferenceStore:
         self._closed = False
         self._details = {
             kind: ResultCache(DETAIL_CACHE_ENTRIES)
-            for kind in ("stop", "route", "routes", "patterns")
+            for kind in ("stop", "route", "routes", "patterns", "lines")
         }
         # Verification uses its own connection, closed before the store is returned, so
         # no handle is held on the file until the first served request.
@@ -1626,3 +1670,132 @@ class ReferenceStore:
                 ]
                 found.append(item)
         return self._page(found, limit, query, lambda row: [row["pattern_id"]])
+
+    def stop_lines(
+        self,
+        stop_id: str,
+        limit: int = DEFAULT_PAGE_SIZE,
+        cursor: str | None = None,
+        all_patterns: bool = False,
+    ) -> dict[str, Any] | None:
+        """Every route through a stop (or its platforms), each with its ordered patterns.
+
+        Patterns that call at the stop come with ``stop_index`` (where the line fans out
+        from); with ``all_patterns`` the route's other patterns, such as the opposite
+        direction across the road, are included with ``serves_stop`` false. Paged by route.
+        """
+        key = (stop_id, limit, cursor, all_patterns)
+        return self._cached(
+            "lines", key, lambda: self._stop_lines(stop_id, limit, cursor, all_patterns)
+        )
+
+    def _stop_lines(
+        self, stop_id: str, limit: int, cursor: str | None, all_patterns: bool
+    ) -> dict[str, Any] | None:
+        limit = _page_limit(limit)
+        if limit > MAX_STOP_LINES_PAGE:
+            raise ValueError("Line pages hold at most 50 routes")
+        normalized = public_stop_id(stop_id.removeprefix(STOP_PREFIX))
+        ref = self._stop_refs.get(normalized)
+        if ref is None or ref.stop_id != normalized:
+            return None
+        member_ids = [ref.stop_id, *(child_id for child_id, _, _ in ref.children)]
+        query = {"kind": "lines", "stop": ref.stop_id, "all": all_patterns}
+        after = _cursor_decode(cursor, self.metadata.generation_id, query)
+        marks = ",".join("?" * len(member_ids))
+        with self._connect() as connection:
+            routes = connection.execute(
+                "SELECT DISTINCT r.*, a.name AS agency_name "
+                "FROM route_stops rs INDEXED BY route_stops_stop_idx "
+                "CROSS JOIN routes r ON r.route_id=rs.route_id "
+                "LEFT JOIN agencies a ON a.agency_id=r.agency_id "
+                f"WHERE rs.stop_id IN ({marks}) AND r.route_id > ? "
+                "ORDER BY r.route_id LIMIT ?",
+                (*member_ids, after[0] if after else "", limit + 1),
+            ).fetchall()
+            page_routes = routes[:limit]
+            route_ids = [row["route_id"] for row in page_routes]
+            # A MOT route is one direction; its other directions share the operator and the
+            # line code before the first '-' of route_desc ("55008-1-0", "55008-2-0").
+            owner = {route_id: route_id for route_id in route_ids}
+            if all_patterns:
+                for row in page_routes:
+                    line_code = _line_code(row["description"])
+                    if line_code is None or row["agency_id"] is None:
+                        continue
+                    for (sibling,) in connection.execute(
+                        "SELECT route_id FROM routes INDEXED BY routes_agency_idx "
+                        "WHERE agency_id=? AND description LIKE ? ORDER BY route_id",
+                        (row["agency_id"], line_code + "-%"),
+                    ):
+                        if sibling not in owner:
+                            owner[sibling] = row["route_id"]
+            patterns_by_route: dict[str, list[dict[str, Any]]] = {}
+            if route_ids:
+                pattern_route_ids = list(owner)
+                route_marks = ",".join("?" * len(pattern_route_ids))
+                pattern_rows = connection.execute(
+                    f"SELECT * FROM patterns WHERE route_id IN ({route_marks}) "
+                    "ORDER BY route_id, pattern_id",
+                    pattern_route_ids,
+                ).fetchall()
+                pattern_ids = [row["pattern_id"] for row in pattern_rows]
+                calls: dict[str, list[dict[str, Any]]] = {}
+                for chunk_start in range(0, len(pattern_ids), 500):
+                    chunk = pattern_ids[chunk_start : chunk_start + 500]
+                    for call in connection.execute(
+                        "SELECT ps.pattern_id, ps.sequence, ps.stop_id, s.name, s.latitude, "
+                        "s.longitude, ps.pickup_type, ps.drop_off_type FROM pattern_stops ps "
+                        "JOIN stops s ON s.stop_id=ps.stop_id "
+                        f"WHERE ps.pattern_id IN ({','.join('?' * len(chunk))}) "
+                        "ORDER BY ps.pattern_id, ps.sequence",
+                        chunk,
+                    ):
+                        calls.setdefault(call["pattern_id"], []).append(
+                            {
+                                "stop_id": call["stop_id"],
+                                "name": call["name"],
+                                "latitude": call["latitude"],
+                                "longitude": call["longitude"],
+                                "pickup_type": call["pickup_type"],
+                                "drop_off_type": call["drop_off_type"],
+                            }
+                        )
+                members = set(member_ids)
+                for row in pattern_rows:
+                    stops = calls.get(row["pattern_id"], [])
+                    index = next(
+                        (i for i, call in enumerate(stops) if call["stop_id"] in members), None
+                    )
+                    if index is None and not all_patterns:
+                        continue
+                    patterns_by_route.setdefault(owner[row["route_id"]], []).append(
+                        {
+                            "pattern_id": row["pattern_id"],
+                            "route_id": row["route_id"],
+                            "direction_id": row["direction_id"],
+                            "headsign": row["headsign"],
+                            "serves_stop": index is not None,
+                            "stop_index": index,
+                            "geometry_source": "stop_sequence",
+                            "stops": stops,
+                        }
+                    )
+        found = [
+            {
+                "route_id": row["route_id"],
+                "short_name": row["short_name"],
+                "long_name": row["long_name"],
+                "agency_id": row["agency_id"],
+                "operatorName": row["agency_name"],
+                "mode": route_type_mode(row["route_type"]),
+                "route_type": row["route_type"],
+                "color": row["color"],
+                "text_color": row["text_color"],
+                "patterns": patterns_by_route.get(row["route_id"], []),
+            }
+            for row in page_routes
+        ]
+        if len(routes) > limit:
+            found.append({"route_id": routes[limit]["route_id"]})  # Only signals another page.
+        return self._page(found, limit, query, lambda row: [row["route_id"]])

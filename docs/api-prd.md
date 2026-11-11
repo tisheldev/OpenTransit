@@ -138,9 +138,11 @@ D3 POST journey planning was accepted September 30. POST reduces coordinates in 
 | `GET /v1/routes` | At least one of stop/operator/line filter; cursor | Matching route page | B / US07 |
 | `GET /v1/routes/{routeId}` | Namespaced route reference | Metadata and pattern summaries | B / US07 |
 | `GET /v1/routes/{routeId}/patterns` | Limit/cursor | Patterns with ordered stops | B / US07 |
-| `GET /v1/stops/{stopId}/departures` | `from`, horizon, limit/cursor | Scheduled departure page | B / US04 |
-| `GET /v1/trips/{tripRef}` | Full source trip identity plus service date | Calls and geometry | B / US06 |
-| `POST /v1/journeys` | Typed locations, time and constraints | Journey alternatives | A basic; B complete / US01, US05 |
+| `GET /v1/stops/{stopId}/departures` | `from`, horizon, limit/cursor, optional `routeId` | Scheduled departure page with operator and mode (API-C3) | B / US04 |
+| `GET /v1/stops/{stopId}/lines` | Limit/cursor (routes), `patterns=serving\|all` | Every line through the stop: operator, mode, patterns as ordered stops with the stop's position; `all` adds the other direction | Client boards (11 Nov) |
+| `GET /v1/departures/nearby` | `near`, `from`, radius ≤ 1 km, stops ≤ 12, perStop ≤ 5, horizon ≤ 180 min | Nearest stops, each with the next departure of each line | Client boards (11 Nov) |
+| `GET /v1/trips/{tripRef}` | Full source trip identity plus service date | Calls (with name, position and platform, API-C1), operator, mode and geometry | B / US06 |
+| `POST /v1/journeys` | Typed locations, time and constraints, optional `excludeTripRefs` | Journey alternatives; transit legs carry platforms (API-C2), intermediate stops and boarding direction/side | A basic; B complete / US01, US05 |
 | `GET /v1/places` | `q`, `lang`, optional `near`, types, limit | Place candidates | C / US02 |
 | `GET /metrics` (conditional) | Private operator access | Bounded metrics, only if a collector needs them | C / US10 |
 

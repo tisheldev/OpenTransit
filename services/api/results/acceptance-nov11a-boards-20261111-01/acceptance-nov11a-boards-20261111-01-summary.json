@@ -1,0 +1,727 @@
+{
+  "schemaVersion": 1,
+  "tool": "services/api/tools/acceptance_run.py",
+  "runId": "boards1",
+  "status": "PASS",
+  "runnerError": null,
+  "startedAt": "2026-11-11T15:26:12+00:00",
+  "finishedAt": "2026-11-11T15:34:42+00:00",
+  "wallSeconds": 510.2,
+  "scope": "live acceptance run; structural/mechanical only: no H3 or H4 approval",
+  "humanH3Approval": false,
+  "humanH4Approval": false,
+  "source": {
+    "commit": "619581e00a7f702d09e7e0ad8f98186e50f057e4",
+    "branch": "claude/api-data-gaps-7060da",
+    "dirtyApiSource": true,
+    "treeOfApiSource": "adfe3ad274f64715d3f534b20c6151a792216e60"
+  },
+  "generation": {
+    "dir": "C:\\ot\\generations\\nov11a",
+    "generationId": "fc11ddbc27cecc78f749d06d9643e2dd9bc6d25b1a755c5548217f103dd58cfb",
+    "scheduleComponentGenerationId": "2d8916c176bfe7341ac459b3c9d7454755a38ac3d3fbf89e6cc213f6f4c3cbfd",
+    "manifestSha256": "db11a0b2097457787804cae73591d51e416c56f2850bae2899fca3e0f9118aca",
+    "mode": "real",
+    "coverage": {
+      "from": "2026-11-11T00:00:00+02:00",
+      "until": "2026-12-11T00:00:00+02:00"
+    },
+    "engineDigest": "sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330",
+    "inputs": {
+      "TripIdToDate.zip": "5fbeec970c447ef5bbc400944ba9d7957f77240debeb76bdea4c4c5fe7429beb",
+      "israel-and-palestine-latest.osm.pbf": "a1b48c794dc61e314da757d86b12f4184281970b351b12a856902227948835e8",
+      "israel-public-transportation.zip": "137b00dd8a51dce06ca82abe477312e6e261c1975713e7880bd18e750ffc0829"
+    },
+    "artifacts": {
+      "addressAttestation": "178a295e5498fe6a4793e07b1b705ac26c6e97b195b166d76812e11098bbcb6c",
+      "addressCatalog": "45d9ec422fe14335723dd8ce8569c7c6bfff44f3cb39ff708534933c76440130",
+      "config": "941653d6d7b71c2f1166f3a6c5b701b237900e713dd2d54f0193937b1c64fe24",
+      "motis": "1c0088869c2005c9836a55a9570337bff3882a06cefee45358c2e515cfa5e323",
+      "reference": "b1f9ae23cdfcd8794f049974bf4be8df846ca1880e4b775ea23f052bd06496f4",
+      "scheduleComponentManifest": "004e07952b145e23210b7343ab244feb9cf583c4229cf8eb75482ba2ccf4e6dd"
+    },
+    "addressSearch": true
+  },
+  "images": {
+    "motis": {
+      "reference": "ghcr.io/motis-project/motis@sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330",
+      "present": true,
+      "id": "sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330",
+      "repoDigests": [
+        "ghcr.io/motis-project/motis@sha256:6055f51eec43eeed28524037ca0161b96efe9cd05728eaa9ac04c20c2826d330"
+      ],
+      "created": "2026-08-12T09:07:42.796145338Z"
+    },
+    "api": {
+      "reference": "opentransit-api:latest",
+      "present": true,
+      "id": "sha256:b5b011c806e5ce2e35d3dd280aa7197221724134e62d9a06dab7e56d2f93eee3",
+      "repoDigests": [
+        "opentransit-api@sha256:b5b011c806e5ce2e35d3dd280aa7197221724134e62d9a06dab7e56d2f93eee3"
+      ],
+      "created": "2026-11-11T12:43:39.267699472Z"
+    },
+    "java": {
+      "reference": "eclipse-temurin:21.0.12.1_1-jre@sha256:628467024d428251da635661936d6180717b1ac1119d41c76d28a03b7293c43c",
+      "present": true,
+      "id": "sha256:628467024d428251da635661936d6180717b1ac1119d41c76d28a03b7293c43c",
+      "repoDigests": [
+        "eclipse-temurin@sha256:628467024d428251da635661936d6180717b1ac1119d41c76d28a03b7293c43c"
+      ],
+      "created": "2026-09-25T22:38:04.501987779Z"
+    }
+  },
+  "stack": {
+    "apiUrl": "http://127.0.0.1:8520",
+    "memoryCaps": {
+      "motis": "2g",
+      "photon": "1g",
+      "api": "1g",
+      "verifier": "512m",
+      "photon-init": "64m"
+    },
+    "cpus": null,
+    "departAtUsedForWalkCapsAndDemo": "2026-11-12T08:00:00+02:00",
+    "memorySamplesBytes": {
+      "ot-acc-boards1-motis": 530055168,
+      "ot-acc-boards1-photon": 530160025,
+      "ot-acc-boards1-api": 322017689
+    },
+    "memorySamplingNote": "docker stats snapshots at step boundaries, not true peaks",
+    "logs": {
+      "motis": "services\\api\\results\\acceptance-nov11a-boards-20261111-01\\acceptance-nov11a-boards-20261111-01-motis.log",
+      "photon": "services\\api\\results\\acceptance-nov11a-boards-20261111-01\\acceptance-nov11a-boards-20261111-01-photon.log",
+      "api": "services\\api\\results\\acceptance-nov11a-boards-20261111-01\\acceptance-nov11a-boards-20261111-01-api.log",
+      "verifier": "services\\api\\results\\acceptance-nov11a-boards-20261111-01\\acceptance-nov11a-boards-20261111-01-verifier.log",
+      "photon-init": "services\\api\\results\\acceptance-nov11a-boards-20261111-01\\acceptance-nov11a-boards-20261111-01-photon-init.log"
+    },
+    "finalStates": {
+      "ot-acc-boards1-motis": "running exit=0 oom=false restarts=0",
+      "ot-acc-boards1-photon-init": "exited exit=0 oom=false restarts=0",
+      "ot-acc-boards1-photon": "running exit=0 oom=false restarts=0",
+      "ot-acc-boards1-verifier": "exited exit=0 oom=false restarts=0",
+      "ot-acc-boards1-api": "running exit=0 oom=false restarts=0"
+    },
+    "removed": [],
+    "problems": []
+  },
+  "checks": {
+    "stack": {
+      "status": "PASS",
+      "seconds": 22.5,
+      "finishedAt": "2026-11-11T15:26:38+00:00",
+      "motisHealthExit": 0,
+      "photon": {
+        "jar": "C:\\ot\\photon\\photon-1.3.0.jar",
+        "volume": "ot-acc-boards1-photon"
+      }
+    },
+    "probe": {
+      "status": "PASS",
+      "seconds": 190.7,
+      "finishedAt": "2026-11-11T15:29:49+00:00",
+      "exitCode": 0,
+      "probeStatus": "passed",
+      "failure": null,
+      "cases": 10,
+      "passedJourneys": 10,
+      "failedJourneys": [],
+      "probeCorpusSource": "C:\\ot\\acc-nov11a\\acceptance-nov11a-probe-queries.json",
+      "probeCorpusSourceSha256": "2aeba1329116911711285dbc0de5536edd1faa373fd2b79721f76a4ed1b5dcc3",
+      "probeCorpusUsedSha256": "2aeba1329116911711285dbc0de5536edd1faa373fd2b79721f76a4ed1b5dcc3",
+      "redated": [],
+      "structuralOnly": true,
+      "humanH3Approval": false
+    },
+    "api_start": {
+      "status": "PASS",
+      "seconds": 216.8,
+      "finishedAt": "2026-11-11T15:33:25+00:00",
+      "healthzAfterSeconds": 209.6,
+      "firstReadyzOkAfterSeconds": 214.3,
+      "preReadyFailures": [
+        {
+          "status": 503,
+          "errors": [
+            {
+              "condition": "address_search",
+              "reason": "ADDRESS_PROVIDER_UNAVAILABLE"
+            }
+          ]
+        },
+        {
+          "status": 503,
+          "errors": [
+            {
+              "condition": "address_search",
+              "reason": "ADDRESS_PROVIDER_UNAVAILABLE"
+            }
+          ]
+        },
+        {
+          "status": 503,
+          "errors": [
+            {
+              "condition": "address_search",
+              "reason": "ADDRESS_PROVIDER_UNAVAILABLE"
+            }
+          ]
+        },
+        {
+          "status": 503,
+          "errors": [
+            {
+              "condition": "address_search",
+              "reason": "ADDRESS_PROVIDER_UNAVAILABLE"
+            }
+          ]
+        }
+      ],
+      "preReadyFailureCount": 4,
+      "photonBound": true,
+      "apiImage": "sha256:b5b011c806e5ce2e35d3dd280aa7197221724134e62d9a06dab7e56d2f93eee3",
+      "clientServed": false
+    },
+    "readyz": {
+      "status": "PASS",
+      "seconds": 30.0,
+      "finishedAt": "2026-11-11T15:33:55+00:00",
+      "requests": 50,
+      "ok": 50,
+      "failed": 0,
+      "statuses": [
+        200
+      ],
+      "failureReasons": {},
+      "generationIds": [
+        "fc11ddbc27cecc78f749d06d9643e2dd9bc6d25b1a755c5548217f103dd58cfb"
+      ],
+      "maxMs": 132.9,
+      "expected": 50,
+      "motisVerifyFailDuringReadyz": 0
+    },
+    "walk_caps": {
+      "status": "PASS",
+      "seconds": 8.7,
+      "finishedAt": "2026-11-11T15:34:04+00:00",
+      "exitCode": 0,
+      "departAt": "2026-11-12T08:00:00+02:00",
+      "violationCount": 0,
+      "errors": 0,
+      "cases": 8,
+      "statuses": [
+        200
+      ],
+      "stderr": null
+    },
+    "demo": {
+      "status": "PASS",
+      "seconds": 5.1,
+      "finishedAt": "2026-11-11T15:34:09+00:00",
+      "exitCode": 0,
+      "departAt": "2026-11-12T08:00:00+02:00",
+      "generationId": "fc11ddbc27cecc78f749d06d9643e2dd9bc6d25b1a755c5548217f103dd58cfb",
+      "outcome": "routes_found",
+      "journeyCount": 3,
+      "journeys": [
+        {
+          "number": 1,
+          "depart": "08:09",
+          "arrive": "09:53",
+          "duration": "1h44m",
+          "transfers": 2,
+          "legs": 7
+        },
+        {
+          "number": 2,
+          "depart": "08:23",
+          "arrive": "10:26",
+          "duration": "2h03m",
+          "transfers": 2,
+          "legs": 7
+        },
+        {
+          "number": 3,
+          "depart": "08:35",
+          "arrive": "10:38",
+          "duration": "2h03m",
+          "transfers": 4,
+          "legs": 11
+        }
+      ],
+      "scheduledLabelled": true,
+      "stderr": null
+    },
+    "h3_review": {
+      "status": "PASS",
+      "seconds": 10.3,
+      "finishedAt": "2026-11-11T15:34:19+00:00",
+      "exitCode": 0,
+      "toolOutput": "generation fc11ddbc27cecc78f749d06d9643e2dd9bc6d25b1a755c5548217f103dd58cfb: 29 requests, 5 omitted, 0 errors, 0 mixed-generation\n",
+      "generationId": "fc11ddbc27cecc78f749d06d9643e2dd9bc6d25b1a755c5548217f103dd58cfb",
+      "casesGenerated": 29,
+      "casesErrored": [],
+      "casesNotGenerated": [
+        {
+          "id": "J01-HOL",
+          "reason": "no Israeli holiday date (non-Shabbat) from the holiday table in the usable range 2026-11-11 00:00 .. 2026-12-11 00:00 (Asia/Jerusalem)"
+        },
+        {
+          "id": "J12-HOL",
+          "reason": "no Israeli holiday date (non-Shabbat) from the holiday table in the usable range 2026-11-11 00:00 .. 2026-12-11 00:00 (Asia/Jerusalem)"
+        },
+        {
+          "id": "J01-DST",
+          "reason": "no DST fall-back day in the usable range 2026-11-11 00:00 .. 2026-12-11 00:00 (Asia/Jerusalem)"
+        },
+        {
+          "id": "J22-DST1",
+          "reason": "no repeated-hour instant in the usable range 2026-11-11 00:00 .. 2026-12-11 00:00 (Asia/Jerusalem)"
+        },
+        {
+          "id": "J22-DST2",
+          "reason": "no repeated-hour instant in the usable range 2026-11-11 00:00 .. 2026-12-11 00:00 (Asia/Jerusalem)"
+        }
+      ],
+      "window": [
+        "2026-11-11T00:00:00+02:00",
+        "2026-12-11T00:00:00+02:00"
+      ],
+      "humanH3Approval": false,
+      "stderr": null
+    },
+    "search_cold_start": {
+      "status": "PASS",
+      "seconds": 2.8,
+      "finishedAt": "2026-11-11T15:34:22+00:00",
+      "samples": [
+        {
+          "query": "Jerusalem Central Bus Station",
+          "types": [
+            "stop",
+            "station"
+          ],
+          "status": 200,
+          "ms": 272.8
+        },
+        {
+          "query": "Ben Yehuda Street",
+          "types": [
+            "address"
+          ],
+          "status": 200,
+          "ms": 953.8
+        },
+        {
+          "query": "Ichilov Hospital",
+          "types": [
+            "poi"
+          ],
+          "status": 200,
+          "ms": 99.7
+        },
+        {
+          "query": "Beersheba",
+          "types": [
+            "stop",
+            "station",
+            "poi",
+            "address"
+          ],
+          "status": 200,
+          "ms": 319.9
+        },
+        {
+          "query": "Allenby 10 Tel Aviv",
+          "types": [
+            "stop",
+            "station",
+            "poi",
+            "address"
+          ],
+          "status": 200,
+          "ms": 453.7
+        },
+        {
+          "query": "Haifa Hof HaCarmel",
+          "types": [
+            "stop",
+            "station"
+          ],
+          "status": 200,
+          "ms": 372.1
+        },
+        {
+          "query": "Rothschild Boulevard",
+          "types": [
+            "address"
+          ],
+          "status": 200,
+          "ms": 141.8
+        },
+        {
+          "query": "Azrieli Center",
+          "types": [
+            "stop",
+            "station",
+            "poi",
+            "address"
+          ],
+          "status": 200,
+          "ms": 200.5
+        }
+      ],
+      "requests": 8,
+      "firstMs": 272.8,
+      "maxMs": 953.8,
+      "slowerThanClientTimeout": 0,
+      "nonOk": [],
+      "clean": true,
+      "note": "unscored; requests are in the API log but not in the evaluation"
+    },
+    "search": {
+      "status": "PASS",
+      "seconds": 15.2,
+      "finishedAt": "2026-11-11T15:34:37+00:00",
+      "evaluateExit": 0,
+      "stdout": "captured 183 variants / 732 requests\n",
+      "finalizeExit": 0,
+      "overall": {
+        "top1": 147,
+        "top5": 165,
+        "total": 183
+      },
+      "byCategory": {
+        "address": {
+          "top1": 16,
+          "top5": 16,
+          "total": 22,
+          "unavailable": 0
+        },
+        "misspelling": {
+          "top1": 7,
+          "top5": 9,
+          "total": 10,
+          "unavailable": 0
+        },
+        "near_dependent": {
+          "top1": 4,
+          "top5": 5,
+          "total": 6,
+          "unavailable": 0
+        },
+        "neighborhood": {
+          "top1": 7,
+          "top5": 10,
+          "total": 10,
+          "unavailable": 0
+        },
+        "poi_hospital": {
+          "top1": 4,
+          "top5": 4,
+          "total": 5,
+          "unavailable": 0
+        },
+        "poi_landmark": {
+          "top1": 9,
+          "top5": 11,
+          "total": 12,
+          "unavailable": 0
+        },
+        "poi_mall": {
+          "top1": 4,
+          "top5": 4,
+          "total": 4,
+          "unavailable": 0
+        },
+        "poi_university": {
+          "top1": 7,
+          "top5": 8,
+          "total": 9,
+          "unavailable": 0
+        },
+        "station": {
+          "top1": 20,
+          "top5": 20,
+          "total": 20,
+          "unavailable": 0
+        },
+        "translated_stop": {
+          "top1": 1,
+          "top5": 2,
+          "total": 2,
+          "unavailable": 0
+        },
+        "translit": {
+          "top1": 9,
+          "top5": 9,
+          "total": 9,
+          "unavailable": 0
+        },
+        "venue": {
+          "top1": 59,
+          "top5": 67,
+          "total": 74,
+          "unavailable": 0
+        }
+      },
+      "byLanguage": {
+        "en": {
+          "top1": 85,
+          "top5": 96,
+          "total": 109,
+          "unavailable": 0
+        },
+        "he": {
+          "top1": 62,
+          "top5": 69,
+          "total": 74,
+          "unavailable": 0
+        }
+      },
+      "byCorpus": {
+        "accepted-gtfs-translations": {
+          "top1": 1,
+          "top5": 2,
+          "total": 2,
+          "unavailable": 0
+        },
+        "accepted-osm-addresses": {
+          "top1": 7,
+          "top5": 7,
+          "total": 7,
+          "unavailable": 0
+        },
+        "places-100": {
+          "top1": 80,
+          "top5": 89,
+          "total": 100,
+          "unavailable": 0
+        },
+        "venues-48": {
+          "top1": 39,
+          "top5": 44,
+          "total": 48,
+          "unavailable": 0
+        },
+        "venues-language-variants": {
+          "top1": 20,
+          "top5": 23,
+          "total": 26,
+          "unavailable": 0
+        }
+      },
+      "firstPassOutcomes": {
+        "success": 183
+      },
+      "latencyApiProcess": {
+        "firstPass": {
+          "overall": {
+            "count": 183,
+            "p50Ms": 13.3,
+            "p95Ms": 76.7,
+            "maxMs": 109.8
+          },
+          "byCategory": {
+            "address": {
+              "count": 22,
+              "p50Ms": 25.1,
+              "p95Ms": 78.2,
+              "maxMs": 78.6
+            },
+            "misspelling": {
+              "count": 10,
+              "p50Ms": 37.1,
+              "p95Ms": 65.5,
+              "maxMs": 65.5
+            },
+            "near_dependent": {
+              "count": 6,
+              "p50Ms": 63.8,
+              "p95Ms": 96.8,
+              "maxMs": 96.8
+            },
+            "neighborhood": {
+              "count": 10,
+              "p50Ms": 10.8,
+              "p95Ms": 98.3,
+              "maxMs": 98.3
+            },
+            "poi_hospital": {
+              "count": 5,
+              "p50Ms": 10.7,
+              "p95Ms": 18.1,
+              "maxMs": 18.1
+            },
+            "poi_landmark": {
+              "count": 12,
+              "p50Ms": 9.6,
+              "p95Ms": 87.0,
+              "maxMs": 87.0
+            },
+            "poi_mall": {
+              "count": 4,
+              "p50Ms": 8.5,
+              "p95Ms": 36.9,
+              "maxMs": 36.9
+            },
+            "poi_university": {
+              "count": 9,
+              "p50Ms": 11.1,
+              "p95Ms": 76.7,
+              "maxMs": 76.7
+            },
+            "station": {
+              "count": 20,
+              "p50Ms": 8.5,
+              "p95Ms": 19.6,
+              "maxMs": 47.2
+            },
+            "translated_stop": {
+              "count": 2,
+              "p50Ms": 9.5,
+              "p95Ms": 12.1,
+              "maxMs": 12.1
+            },
+            "translit": {
+              "count": 9,
+              "p50Ms": 37.8,
+              "p95Ms": 54.3,
+              "maxMs": 54.3
+            },
+            "venue": {
+              "count": 74,
+              "p50Ms": 10.7,
+              "p95Ms": 76.6,
+              "maxMs": 109.8
+            }
+          }
+        },
+        "allRequests": {
+          "overall": {
+            "count": 732,
+            "p50Ms": 2.0,
+            "p95Ms": 36.9,
+            "maxMs": 109.8
+          },
+          "byCategory": {
+            "address": {
+              "count": 88,
+              "p50Ms": 1.6,
+              "p95Ms": 29.1,
+              "maxMs": 78.6
+            },
+            "misspelling": {
+              "count": 40,
+              "p50Ms": 3.5,
+              "p95Ms": 51.9,
+              "maxMs": 65.5
+            },
+            "near_dependent": {
+              "count": 24,
+              "p50Ms": 4.5,
+              "p95Ms": 80.5,
+              "maxMs": 96.8
+            },
+            "neighborhood": {
+              "count": 40,
+              "p50Ms": 1.8,
+              "p95Ms": 15.3,
+              "maxMs": 98.3
+            },
+            "poi_hospital": {
+              "count": 20,
+              "p50Ms": 1.8,
+              "p95Ms": 16.4,
+              "maxMs": 18.1
+            },
+            "poi_landmark": {
+              "count": 48,
+              "p50Ms": 1.8,
+              "p95Ms": 11.9,
+              "maxMs": 87.0
+            },
+            "poi_mall": {
+              "count": 16,
+              "p50Ms": 1.9,
+              "p95Ms": 36.9,
+              "maxMs": 36.9
+            },
+            "poi_university": {
+              "count": 36,
+              "p50Ms": 1.9,
+              "p95Ms": 17.6,
+              "maxMs": 76.7
+            },
+            "station": {
+              "count": 80,
+              "p50Ms": 1.8,
+              "p95Ms": 11.5,
+              "maxMs": 47.2
+            },
+            "translated_stop": {
+              "count": 8,
+              "p50Ms": 1.6,
+              "p95Ms": 12.1,
+              "maxMs": 12.1
+            },
+            "translit": {
+              "count": 36,
+              "p50Ms": 3.0,
+              "p95Ms": 41.2,
+              "maxMs": 54.3
+            },
+            "venue": {
+              "count": 296,
+              "p50Ms": 1.9,
+              "p95Ms": 24.4,
+              "maxMs": 109.8
+            }
+          }
+        }
+      },
+      "logCorrelation": {
+        "verified": true,
+        "requestCount": 732,
+        "matchedCount": 732,
+        "unmatchedCount": 0
+      },
+      "targets": {
+        "basis": "mechanical thresholds from PROJECT_STATUS; not an H4 approval",
+        "addressTop1Rate": 0.7272727272727273,
+        "addressTop1Meets80Percent": false,
+        "firstPassP95Meets40Ms": false,
+        "allRequestsP95Meets40Ms": true
+      },
+      "humanH4Approval": false,
+      "firstPassFailures": 0,
+      "warmedUp": true
+    },
+    "motis_verify_fail": {
+      "status": "PASS",
+      "seconds": 0.2,
+      "finishedAt": "2026-11-11T15:34:38+00:00",
+      "count": 0
+    }
+  },
+  "files": {
+    "probe_queries": "services\\api\\results\\acceptance-nov11a-boards-20261111-01\\acceptance-nov11a-boards-20261111-01-probe-queries.json",
+    "probe": "services\\api\\results\\acceptance-nov11a-boards-20261111-01\\acceptance-nov11a-boards-20261111-01-probe.json",
+    "readyz": "services\\api\\results\\acceptance-nov11a-boards-20261111-01\\acceptance-nov11a-boards-20261111-01-readyz.json",
+    "walk_caps": "services\\api\\results\\acceptance-nov11a-boards-20261111-01\\acceptance-nov11a-boards-20261111-01-walk-caps.json",
+    "demo": "services\\api\\results\\acceptance-nov11a-boards-20261111-01\\acceptance-nov11a-boards-20261111-01-demo.txt",
+    "h3_raw": "services\\api\\results\\acceptance-nov11a-boards-20261111-01\\acceptance-nov11a-boards-20261111-01-h3-review-raw.json",
+    "h3_sheet": "services\\api\\results\\acceptance-nov11a-boards-20261111-01\\acceptance-nov11a-boards-20261111-01-h3-review.md",
+    "source_hashes": "services\\api\\results\\acceptance-nov11a-boards-20261111-01\\acceptance-nov11a-boards-20261111-01-source-hashes.json",
+    "runtime": "services\\api\\results\\acceptance-nov11a-boards-20261111-01\\acceptance-nov11a-boards-20261111-01-runtime.json",
+    "search_raw": "services\\api\\results\\acceptance-nov11a-boards-20261111-01\\acceptance-nov11a-boards-20261111-01-search-raw.json",
+    "h4_sheet": "services\\api\\results\\acceptance-nov11a-boards-20261111-01\\acceptance-nov11a-boards-20261111-01-h4-review.md",
+    "search_api_log": "services\\api\\results\\acceptance-nov11a-boards-20261111-01\\acceptance-nov11a-boards-20261111-01-search-api-container.log",
+    "search": "services\\api\\results\\acceptance-nov11a-boards-20261111-01\\acceptance-nov11a-boards-20261111-01-search.json",
+    "log_motis": "services\\api\\results\\acceptance-nov11a-boards-20261111-01\\acceptance-nov11a-boards-20261111-01-motis.log",
+    "log_photon": "services\\api\\results\\acceptance-nov11a-boards-20261111-01\\acceptance-nov11a-boards-20261111-01-photon.log",
+    "log_api": "services\\api\\results\\acceptance-nov11a-boards-20261111-01\\acceptance-nov11a-boards-20261111-01-api.log",
+    "log_verifier": "services\\api\\results\\acceptance-nov11a-boards-20261111-01\\acceptance-nov11a-boards-20261111-01-verifier.log",
+    "log_photon-init": "services\\api\\results\\acceptance-nov11a-boards-20261111-01\\acceptance-nov11a-boards-20261111-01-photon-init.log"
+  }
+}

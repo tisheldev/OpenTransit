@@ -197,7 +197,7 @@ Layouts, copy and interaction details are in the [client design](client-design.m
 ### C04 — Route details
 
 - MUST show, on tapping an option, every step without a further tap: walk distance and time (or time only when distance is unknown), line, operator or mode, headsign or train destination, platform, departure time, stop count, exit stop and transfer waits.
-- 0.3: platform, stop count and stop names depend on two additive API changes (API-C1, API-C2 in the [design](client-design.md#contract-gaps-found-on-3-october-read-from-the-code-not-from-a-running-api)). Until the API supplies a fact the client omits it; it never guesses.
+- 0.3: platform, stop count and stop names depend on two additive API changes (API-C1, API-C2 in the [design](client-design.md#contract-gaps-found-on-3-october-read-from-the-code-not-from-a-running-api)), implemented 11 November. Until the API supplies a fact the client omits it; it never guesses.
 - MUST keep the chart in view while details are shown on the smallest supported screens (SI07).
 - MUST pin "Start navigation" at the bottom of the sheet.
 
@@ -330,7 +330,7 @@ These follow the [client design](client-design.md#cross-cutting-rules) and are r
 5. **Google Play developer account ($25 one-time):** not needed for testing (builds install directly on Android) but needed for Play distribution before public release.
 6. **HC review size:** are 5 personal trips plus one first-time user enough, or should HC require more people?
 7. **Start before H-0?** The dashboard gates the client on the start of the private H-0/H-1 deployment, which waits for the H-0 approval. Slices S0–S6 need only the local API and recorded fixtures. Either revise the gate so they can start now (S8 and field timings still wait for the preview), or keep the gate.
-8. **API additions for the client (0.3):** approve API-C1 (stop name, coordinates and platform on each trip call) and API-C2 (platform on journey legs). Both are additive; without them route details and the get-off cue are incomplete.
+8. **API additions for the client (0.3):** approve API-C1 (stop name, coordinates and platform on each trip call) and API-C2 (platform on journey legs). Both are additive; without them route details and the get-off cue are incomplete. **11 November 2026:** the user's instruction to "fix the data gaps" for the approved boards was taken as approval of the additive API changes those boards need, API-C3 (operator and mode on departures) included; API-C1 and API-C2 were implemented with them because boards 3 and 5 show platforms and the stop list (details in the [design](client-design.md#data-the-boards-need-api-11-november-2026)). The user may still revise this.
 9. **Local notifications (0.3):** allow a notification permission prompt at the first Start, so the get-off cue reaches a locked phone (iPhone cannot vibrate from the background otherwise; Android 13+ hides the navigation notification without it). No push service is involved.
 10. **Storage module (0.3):** the `expo-sqlite` key-value store instead of the secure store named in SE01.
 11. **Appearance (0.3): decided 6 November 2026 (user): "default should always be dark".** Dark is the default whatever the phone's setting; light stays available as a choice in Settings. Both themes come from the design system's tokens, and every visual check covers both.

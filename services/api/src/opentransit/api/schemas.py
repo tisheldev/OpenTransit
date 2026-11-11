@@ -11,6 +11,8 @@ from pydantic import (
     model_validator,
 )
 
+_DATED_TRIP = re.compile(r"\d{8}_\d{2}:\d{2}(?::\d{2})?_mot60day_.+")
+
 
 class Model(BaseModel):
     model_config = ConfigDict(extra="forbid", populate_by_name=True)
@@ -86,6 +88,17 @@ class JourneyRequest(Model):
             "engine as maxPostTransitTime. Does not bound walking between transit legs."
         ),
     )
+    exclude_trip_refs: list[str] = Field(
+        default_factory=list,
+        alias="excludeTripRefs",
+        max_length=5,
+        description=(
+            "Dated trip references (a leg's `transit.engineTripId`) no returned journey may "
+            "ride, for example the bus that did not come. Alternatives using one are omitted "
+            "(warning `EXCLUDED_TRIP_ALTERNATIVES_OMITTED`); the engine is asked for its "
+            "maximum number of alternatives so that others can take their place."
+        ),
+    )
     max_direct_walk_minutes: int = Field(
         default=30,
         alias="maxDirectWalkMinutes",
@@ -108,6 +121,14 @@ class JourneyRequest(Model):
         ):
             raise ValueError("Use an ISO timestamp with an explicit offset")
         return value
+
+    @field_validator("exclude_trip_refs")
+    @classmethod
+    def dated_trip_refs(cls, value: list[str]) -> list[str]:
+        for item in value:
+            if not isinstance(item, str) or len(item) > 512 or not _DATED_TRIP.fullmatch(item):
+                raise ValueError("Use returned dated trip references")
+        return list(dict.fromkeys(value))
 
     @field_validator("modes")
     @classmethod
@@ -147,6 +168,75 @@ class Location(Model):
     longitude: float
     stopId: str | None = None
     stopCode: str | None = None
+    platformCode: str | None = Field(
+        default=None,
+        description=(
+            "Platform or bay at a transit stop, from the generation's reference (API-C2); "
+            "null when the feed gives none."
+        ),
+    )
+
+
+class Stopover(Model):
+    """A stop a transit leg passes between boarding and alighting."""
+
+    name: str
+    stopId: str | None
+    latitude: float
+    longitude: float
+    scheduledArrival: datetime | None
+    scheduledDeparture: datetime | None
+
+
+class Boarding(Model):
+    """Where to wait for a transit leg (board 3: "on this side, toward <place>")."""
+
+    bearingDegrees: float | None = Field(
+        description=(
+            "Direction the vehicle travels as it leaves the boarding stop, degrees clockwise "
+            "from north (0-360); null when neither the leg's path nor its next stop gives one."
+        )
+    )
+    bearingSource: Literal["leg_geometry", "stop_sequence"] | None = Field(
+        description=(
+            "`leg_geometry`: read over the first 30 m of the leg's path after the stop. "
+            "`stop_sequence`: straight towards the next stop (no path)."
+        )
+    )
+    stopSide: Literal["right", "left"] | None = Field(
+        description=(
+            "Which side of the vehicle's path the stop stands on, facing the direction of "
+            "travel. A person is on the stop's side of the road when they are on this side of "
+            "the line through `pathPoint` at `bearingDegrees`. Null with "
+            "`stopSideUnavailableReason` when it cannot be told from the data."
+        )
+    )
+    stopSideUnavailableReason: (
+        Literal[
+            "not_a_street_mode",
+            "path_has_no_shape_at_stop",
+            "stop_on_path",
+            "path_far_from_stop",
+            "no_leg_geometry",
+        ]
+        | None
+    )
+    stopOffsetMeters: float | None = Field(
+        description="Distance from the stop to the nearest point of the vehicle's path."
+    )
+    pathPoint: list[float] | None = Field(
+        description="[longitude, latitude] of the vehicle path's point nearest the stop."
+    )
+    towards: str | None = Field(description="The trip's headsign (where the vehicle is signed to).")
+    nextStop: Location | None = Field(
+        description="The first stop after boarding (the alighting stop on a one-stop ride)."
+    )
+    stopCount: int | None = Field(
+        description=(
+            "Stops travelled until alighting, counting the alighting stop; null when the "
+            "engine's intermediate stops are unreadable."
+        )
+    )
 
 
 class Timing(Model):
@@ -187,6 +277,13 @@ class Leg(Model):
     geometry: Geometry | None
     geometryUnavailableReason: str | None
     transit: Transit | None
+    intermediateStops: list[Stopover] | None = Field(
+        default=None,
+        description="Stops passed between boarding and alighting, in order; null for a walk.",
+    )
+    boarding: Boarding | None = Field(
+        default=None, description="Where and which way to board; null for a walk."
+    )
 
 
 class Journey(Model):

@@ -84,10 +84,10 @@ describe("scene to GeoJSON", () => {
   it("carries the operator's line colour per theme and the vehicle (look of 11 November 2026)", () => {
     const egged = { ...bus, operatorId: "3", operatorName: "אגד" };
     const [eggedLine, trainLine] = routeFeatures([egged, { ...train, operatorId: "2", operatorName: "רכבת ישראל" }]).features;
-    expect(eggedLine!.properties).toMatchObject({ vehicle: "bus", colorDark: "#3fbf7a", colorLight: "#0b8043" });
-    expect(trainLine!.properties).toMatchObject({ vehicle: "train", colorDark: "#9a8fff", colorLight: "#4a3fb0" });
+    expect(eggedLine!.properties).toMatchObject({ vehicle: "bus", colorDark: "#00a073", colorLight: "#008761" });
+    expect(trainLine!.properties).toMatchObject({ vehicle: "train", colorDark: "#158aff", colorLight: "#00458a" });
     const lightRail = routeFeatures([{ ...bus, mode: "light_rail", operatorId: "99" }]).features[0]!;
-    expect(lightRail.properties).toMatchObject({ vehicle: "light-rail", colorDark: "#ff6259", colorLight: "#d32f2f" });
+    expect(lightRail.properties).toMatchObject({ vehicle: "light-rail", colorDark: "#f64b58", colorLight: "#f42434" });
     // An operator the table does not know: no colour of its own, the mode token applies.
     expect(routeFeatures([{ ...bus, operatorId: "16", operatorName: "סופרבוס" }]).features[0]!.properties.colorDark).toBe("");
   });
