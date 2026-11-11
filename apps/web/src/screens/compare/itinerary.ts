@@ -2,10 +2,9 @@ import type { Journey, Leg } from "../../api/types";
 import { transitMode, type TransitMode } from "../../plan/chartLayout";
 import { placeName, platformOf, type EndLabels } from "./labels";
 
-// The selected option as an itinerary timeline (design: Route details — C04): places
-// with their scheduled times, and between them a ride or a walk. Pure; RouteDetails
-// draws it as steps (buildSteps, below). Every time is a returned scheduled time; waits
-// are the gaps between them.
+// The chosen option as an itinerary timeline (board Step): places with their scheduled
+// times, and between them a ride or a walk. Pure; Timeline.tsx draws it. Every time is a
+// returned scheduled time; waits are the gaps between them.
 //
 //   08:12  ● Dizengoff Center/Dizengoff           place (origin, a boarding stop)
 //          ┃ [8] towards Terminal · 4 stops       ride
@@ -105,61 +104,4 @@ export function buildItinerary(journey: Journey, ends: EndLabels): ItineraryItem
 /** The place items only (tests and the screen-reader summary). */
 export function placesOf(items: readonly ItineraryItem[]) {
   return items.flatMap((item) => (item.kind === "place" ? [item] : []));
-}
-
-// The same itinerary as the design's step list (StepList, under the chart): one step per
-// ride (boarding time and line, with its exit stop at its arrival time), per walk and per
-// wait, then the arrival. Origin and boarding places fold into the step that leaves them:
-// the first step carries the departure time, a later boarding stop is the walk's
-// destination or the previous ride's exit.
-//
-//   08:07  [8]   towards Terminal · 3 stops · 7 min      ride
-//   08:14   •    Get off · Shalom station                 its exit
-//          walk  Walk 2 min · 230 m / to HaShalom         walk (+ waits)
-//   09:52  pin   Arrive · Technion                         place
-
-export type Step =
-  | { kind: "ride"; time: string; leg: Leg; mode: TransitMode; exit: { time: string; name: string } | null }
-  | {
-      kind: "walk";
-      /** The departure time when the trip starts with this walk; otherwise null. */
-      time: string | null;
-      seconds: number;
-      distanceMeters: number | null;
-      sameStop: boolean;
-      waitSeconds: number;
-      /** Where the walk leads (a boarding stop), or null when the arrival follows. */
-      to: string | null;
-    }
-  | { kind: "wait"; seconds: number }
-  | { kind: "place"; role: Exclude<PlaceRole, "origin" | "board">; time: string; name: string };
-
-export function buildSteps(journey: Journey, ends: EndLabels): Step[] {
-  const items = buildItinerary(journey, ends);
-  const steps: Step[] = [];
-  for (let index = 0; index < items.length; index += 1) {
-    const item = items[index]!;
-    const next = items[index + 1];
-    if (item.kind === "ride") {
-      const exit = next?.kind === "place" && next.role === "exit" ? { time: next.time, name: next.name } : null;
-      if (exit) index += 1;
-      steps.push({ kind: "ride", time: item.leg.timing.scheduledDeparture, leg: item.leg, mode: item.mode, exit });
-    } else if (item.kind === "walk") {
-      const leg = journey.legs[item.legIndex]!;
-      steps.push({
-        kind: "walk",
-        time: steps.length === 0 ? leg.timing.scheduledDeparture : null,
-        seconds: item.seconds,
-        distanceMeters: item.distanceMeters,
-        sameStop: item.sameStop,
-        waitSeconds: item.waitSeconds,
-        to: next?.kind === "place" && next.role !== "destination" ? next.name : null,
-      });
-    } else if (item.kind === "wait") {
-      steps.push(item);
-    } else if (item.role !== "origin" && item.role !== "board") {
-      steps.push({ kind: "place", role: item.role, time: item.time, name: item.name });
-    }
-  }
-  return steps;
 }

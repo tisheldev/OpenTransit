@@ -85,10 +85,8 @@ test.describe("@real compare", () => {
     await expect(options).toHaveCount(body.data.journeys.length);
     expect(body.data.journeys.length).toBeGreaterThan(0);
     const details = page.getByRole("region", { name: /פרטי מסלול/ });
-    await expect(details.locator(".ot-steps__item").first()).toBeVisible();
-    await expect(details.getByRole("link")).toHaveCount(0);
 
-    // Half sheet: every option, with its departure and arrival, above the pinned Start.
+    // Half sheet (board Choose): every option, with its departure and arrival, above "פרטי המסלול".
     await expect(page.locator(".sheet")).toHaveAttribute("data-snap", "half");
     const bar = (await page.locator(".compare-start").boundingBox())!;
     const clock = (iso: string) =>
@@ -97,24 +95,29 @@ test.describe("@real compare", () => {
       );
     for (let i = 0; i < body.data.journeys.length; i += 1) {
       const box = (await options.nth(i).boundingBox())!;
-      expect(box.y + box.height, `option ${i + 1} above Start`).toBeLessThanOrEqual(bar.y + 1);
+      expect(box.y + box.height, `option ${i + 1} above פרטי המסלול`).toBeLessThanOrEqual(bar.y + 1);
       const { scheduledDeparture, scheduledArrival } = body.data.journeys[i].timing;
       await expect(options.nth(i)).toHaveAccessibleName(new RegExp(`יציאה ${clock(scheduledDeparture)}, הגעה ${clock(scheduledArrival)}`));
     }
-    await expect(details).not.toContainText(/\bSTART\b|\bEND\b/);
 
     // SP04 client work: request sent → chart painted (marks from src/plan/queries.ts).
     const clientMs = await page.evaluate(() => performance.getEntriesByName("ot:journeys:client")[0]?.duration ?? null);
     testInfo.annotations.push({ type: "SP04 client ms", description: String(clientMs) });
 
-    // Every option: a rail leg reads as Israel Railways from its boarding stop to its exit
-    // (never "a train to <exit>"); a walk without a distance reads as time only.
+    // Every option's route details (board Step, #/route): a rail leg reads as Israel Railways
+    // from its boarding stop to its exit (never "a train to <exit>"); a walk without a
+    // distance reads as time only; Back returns to Choose.
     let sawTrain = false;
     let sawTimeOnly = false;
     const summary: string[] = [];
     for (let i = 0; i < body.data.journeys.length; i += 1) {
       await options.nth(i).click();
       await expect(options.nth(i)).toHaveAttribute("aria-pressed", "true");
+      await page.getByRole("button", { name: "פרטי המסלול" }).click();
+      await expect(page).toHaveURL(/#\/route$/);
+      await expect(details.locator(".compare-tl-leg").first()).toBeVisible();
+      await expect(details.getByRole("link")).toHaveCount(0);
+      await expect(details).not.toContainText(/\bSTART\b|\bEND\b/);
       const journey = body.data.journeys[i];
       const rails = journey.legs.filter((leg: { mode: string }) => /rail/i.test(leg.mode)) as {
         to: { name: string };
@@ -128,9 +131,11 @@ test.describe("@real compare", () => {
       }
       const timeOnly = journey.legs.filter((leg: { kind: string; distanceMeters: number | null }) => leg.kind === "walk" && leg.distanceMeters === null);
       if (timeOnly.length > 0) {
-        await expect(details.getByText(/^הליכה כ־/).first()).toBeVisible();
+        await expect(details.locator(".compare-walk", { hasText: /^הליכה כ־/ }).first()).toBeVisible();
         sawTimeOnly = true;
       }
+      await page.getByRole("button", { name: "חזרה" }).click();
+      await expect(page).toHaveURL(/#\/compare$/);
       summary.push(
         `${journey.timing.scheduledDeparture.slice(11, 16)}–${journey.timing.scheduledArrival.slice(11, 16)} ` +
           `${journey.transfers} transfers: ` +
@@ -148,7 +153,9 @@ test.describe("@real compare", () => {
 
     await options.first().click();
     await expectNoSeriousAxeViolations(page, "real compare");
-    await page.getByRole("button", { name: "התחלת ניווט" }).click();
+    await page.getByRole("button", { name: "פרטי המסלול" }).click();
+    await expectNoSeriousAxeViolations(page, "real route details");
+    await page.getByRole("button", { name: "יוצאים לדרך" }).click();
     await expect(page).toHaveURL(/#\/navigate$/);
   });
 });

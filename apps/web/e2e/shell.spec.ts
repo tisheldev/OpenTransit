@@ -197,7 +197,11 @@ test("on Compare (a screen that sets a snap) a tap and a drag on the handle stic
   await expect(sheet).toHaveAttribute("data-snap", "half");
   await page.waitForTimeout(600);
   await expect(sheet).toHaveAttribute("data-snap", "half");
-  await expect.poll(async () => (await sheet.boundingBox())!.height).toBeCloseTo(640 * 0.55, -1);
+  // Choose asks the half sheet to fit every option and its button (fitHalf), so at 640 px
+  // it is at least the 55% snap and never the full one.
+  await expect.poll(async () => (await sheet.boundingBox())!.height).toBeGreaterThanOrEqual(640 * 0.55 - 5);
+  expect((await sheet.boundingBox())!.height).toBeLessThan(640 * 0.92 - 5);
+  await expect(page.getByRole("button", { name: "פרטי המסלול" })).toBeInViewport();
   await expectNoSeriousAxeViolations(page, "Compare at half (he)");
 });
 

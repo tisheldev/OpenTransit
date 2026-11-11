@@ -3,7 +3,9 @@ import type { Trip } from "../../api/schemas";
 import type { Leg } from "../../api/types";
 import { translate } from "../../i18n/messages";
 import {
-  chipLabel,
+  badgeLabel,
+  boardingOf,
+  boardingTag,
   compactDuration,
   daysBetween,
   direction,
@@ -13,10 +15,13 @@ import {
   platformOf,
   relativeDay,
   rideSpeech,
-  rideTitle,
+  rideName,
+  shortBadgeLabel,
+  stopCountOf,
   splitFirstSentence,
   stopsRidden,
   trainNumber,
+  untilText,
 } from "./labels";
 
 const ends = { from: "המיקום שלי", to: "טכניון" };
@@ -43,21 +48,24 @@ describe("route labels", () => {
   });
 
   it("names a train by its operator and number, read from boarding to exit (never by the exit alone)", () => {
-    expect(rideTitle(rail("156"), t)).toBe("רכבת ישראל");
-    expect(chipLabel(rail("156"))).toBe("156");
+    expect(rideName(rail("156"), t)).toBe("רכבת ישראל");
+    expect(badgeLabel(rail("156"), t)).toBe("רכבת 156");
+    expect(shortBadgeLabel(rail("156"), t)).toBe("רכבת");
     expect(trainNumber(rail("156"))).toBe("156");
     expect(trainNumber(rail(null))).toBeNull();
-    expect(chipLabel(rail(null))).toBeNull();
+    expect(badgeLabel(rail(null), t)).toBe("רכבת");
     expect(direction(rail("156"))).toBeNull();
     expect(rideSpeech(rail("156"), ends, t)).toBe("רכבת ישראל 156 מ־השלום אל חוף הכרמל");
     expect(rideSpeech(rail(null), ends, t)).toBe("רכבת ישראל מ־השלום אל חוף הכרמל");
-    expect(rideTitle(rail("156"), t)).not.toContain("חוף הכרמל");
+    expect(rideName(rail("156"), t)).not.toContain("חוף הכרמל");
   });
 
   it("names a bus by number and readable headsign", () => {
-    expect(chipLabel(bus("חיפה_מרכזית חוף הכרמל"))).toBe("947");
-    expect(rideTitle(bus("חיפה_מרכזית חוף הכרמל"), t)).toBe("לכיוון חיפה · מרכזית חוף הכרמל");
-    expect(rideTitle(bus(null), t)).toBe("אגד");
+    expect(badgeLabel(bus("חיפה_מרכזית חוף הכרמל"), t)).toBe("947");
+    expect(shortBadgeLabel(bus("חיפה_מרכזית חוף הכרמל"), t)).toBe("947");
+    // Board Step: the headsign beside the badge, without "לכיוון".
+    expect(rideName(bus("חיפה_מרכזית חוף הכרמל"), t)).toBe("חיפה · מרכזית חוף הכרמל");
+    expect(rideName(bus(null), t)).toBe("אגד");
     expect(rideSpeech(bus("חיפה_מרכזית חוף הכרמל"), ends, t)).toBe(
       "קו 947 לכיוון חיפה · מרכזית חוף הכרמל מ־השלום אל חוף הכרמל",
     );
@@ -126,5 +134,48 @@ describe("design text", () => {
     expect(splitFirstSentence("That time is outside the timetable. Choose between 1.10 and 30.10.").rest).toBe(
       "Choose between 1.10 and 30.10.",
     );
+  });
+});
+
+describe("boarding side and direction", () => {
+  it("says only the direction until the API gives the side of the road", () => {
+    const boarding = boardingOf(bus("מסוף רידינג"));
+    expect(boarding).toEqual({ side: null, direction: "מסוף רידינג", bearing: null });
+    expect(boardingTag(boarding, t)).toBe("לכיוון מסוף רידינג");
+  });
+
+  it("fills in the side and the bearing from the API's boarding, naming the stop ridden to (board Step)", () => {
+    const leg = { ...bus("מסוף רידינג"), to: { name: "סבידור מרכז", stopId: "s:2" }, boarding: { bearingDegrees: 30.8, stopSide: "right", towards: "מסוף רידינג", stopCount: 7 } } as unknown as Leg;
+    const boarding = boardingOf(leg);
+    expect(boarding).toEqual({ side: "right", direction: "סבידור מרכז", bearing: 30.8 });
+    expect(boardingTag(boarding, t)).toBe("בצד הזה · לכיוון סבידור מרכז");
+    // A side the API could not work out: the headsign alone.
+    const unknown = { ...leg, boarding: { stopSide: null, stopSideUnavailableReason: "no_geometry" } } as unknown as Leg;
+    expect(boardingTag(boardingOf(unknown), t)).toBe("לכיוון מסוף רידינג");
+  });
+
+  it("counts stops from the API, else its intermediate stops, else the trip detail", () => {
+    const leg = bus("x");
+    expect(stopCountOf({ ...leg, boarding: { stopCount: 7 } } as unknown as Leg, undefined)).toBe(7);
+    expect(stopCountOf({ ...leg, intermediateStops: [{}, {}] } as unknown as Leg, undefined)).toBe(3);
+    expect(stopCountOf(leg, undefined)).toBeNull();
+  });
+
+  it("says nothing for a train known only by its number", () => {
+    expect(boardingTag(boardingOf(rail("156")), t)).toBeNull();
+  });
+});
+
+describe("how long until an option leaves", () => {
+  const now = new Date("2026-11-02T08:00:00+02:00");
+  it("counts minutes, then hours, on the same Israel day; names another day", () => {
+    expect(untilText("2026-11-02T08:04:20+02:00", now, "he", t)).toBe("בעוד 4 דק׳");
+    expect(untilText("2026-11-02T08:00:20+02:00", now, "he", t)).toBe("עכשיו");
+    expect(untilText("2026-11-02T09:35:00+02:00", now, "he", t)).toBe("בעוד 1:35 שע׳");
+    expect(untilText("2026-11-03T08:10:00+02:00", now, "he", t)).toBe("מחר");
+    expect(untilText("2026-11-02T08:04:20+02:00", now, "en", (key, values) => translate("en", key, values))).toBe("in 4 min");
+  });
+  it("says nothing once it has left", () => {
+    expect(untilText("2026-11-02T07:59:00+02:00", now, "he", t)).toBeNull();
   });
 });

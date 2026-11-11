@@ -1,8 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { Journey, Leg } from "../../api/types";
-import { formatClock } from "../../lib/time";
 import { derivedJourneyFixtures } from "./derivedFixtures";
-import { buildItinerary, buildSteps, placesOf, sameStopTransfer, type Step } from "./itinerary";
+import { buildItinerary, placesOf, sameStopTransfer } from "./itinerary";
 
 const ends = { from: "דיזנגוף סנטר", to: "טכניון" };
 const three = () => (derivedJourneyFixtures["derived-journey-three"]().body as { data: { journeys: Journey[] } }).data.journeys;
@@ -93,46 +92,5 @@ describe("buildItinerary", () => {
     const legs = [leg("transit", "A", "B", "08:00", "08:20", { from: { name: "A", latitude: 32, longitude: 34.8, stopId: "s:A", stopCode: null, platformCode: "3" } as Leg["from"] })];
     expect(placesOf(buildItinerary(journey(legs), ends))[0]!.platform).toBe("3");
     expect(placesOf(buildItinerary(three()[0]!, ends)).every((p) => p.platform === null)).toBe(true);
-  });
-});
-
-describe("buildSteps", () => {
-  // Israel wall clock (the derived fixtures write some instants in UTC).
-  const clock = (instant: string) => formatClock(instant, "he");
-  const summary = (steps: Step[]) =>
-    steps.map((step) => {
-      if (step.kind === "ride") return ["ride", clock(step.time), step.leg.transit?.routeShortName, step.exit && [clock(step.exit.time), step.exit.name]];
-      if (step.kind === "walk") return ["walk", step.time && clock(step.time), step.to, step.waitSeconds];
-      if (step.kind === "wait") return ["wait", step.seconds];
-      return [step.role, clock(step.time), step.name];
-    });
-
-  it("gives each ride its boarding time and its exit stop at its arrival time, then the arrival", () => {
-    expect(summary(buildSteps(three()[0]!, ends))).toEqual([
-      ["ride", "08:07", "8", ["08:14", "ת. רכבת השלום"]],
-      ["walk", null, "השלום", 300],
-      ["ride", "08:21", "", ["09:24", "חוף הכרמל"]],
-      ["walk", null, "ת. רכבת חוף הכרמל", 420],
-      ["ride", "09:33", "1", ["09:47", "טכניון/מעונות העמים"]],
-      // The last walk leads to the arrival, which names the place itself.
-      ["walk", null, null, 0],
-      ["destination", "09:52", "טכניון"],
-    ]);
-  });
-
-  it("puts the departure time on a first walk, and a wait between two rides on its own step", () => {
-    const walkFirst = buildSteps(walkOnly(), ends);
-    expect(summary(walkFirst)).toEqual([
-      ["walk", "08:07", null, 0],
-      ["destination", "08:25", "טכניון"],
-    ]);
-    const legs = [leg("transit", "A", "B", "08:00", "08:20"), leg("transit", "B", "C", "08:26", "08:50")];
-    expect(summary(buildSteps(journey(legs), ends))).toEqual([
-      ["ride", "08:00", "26", ["08:20", "B"]],
-      ["wait", 360],
-      // The last ride's exit is the arrival.
-      ["ride", "08:26", "26", null],
-      ["destination", "08:50", "C"],
-    ]);
   });
 });

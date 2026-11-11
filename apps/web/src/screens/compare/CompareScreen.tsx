@@ -1,78 +1,39 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from "react";
-import { getStatus } from "../../api/endpoints";
-import { queryKeys } from "../../api/queries";
-import { ApiFailure, unwrap } from "../../api/result";
-import type { Journey } from "../../api/types";
-import { Icon, StatusTag, type IconName } from "../../components/ds";
+import { useLayoutEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from "react";
+import { Icon, type IconName } from "../../components/ds";
 import { ErrorState, TestDataBanner } from "../../components/states";
 import { useI18n } from "../../i18n/I18nProvider";
 import type { LocationError } from "../../lib/geolocation";
-import { journeyToScene } from "../../map/fromJourney";
+import { useTheme } from "../../lib/theme";
 import { usePublishScene } from "../../map/scene";
-import { sameJourney, startActiveTrip, useActiveTrip } from "../../nav/activeTrip";
 import { choiceFromSaved, sameEndpoint, type Endpoint, type When } from "../../plan/draft";
 import type { BuildResult } from "../../plan/journeyQuery";
 import { usePlan } from "../../plan/PlanProvider";
-import { cachedTrips, MARK_PAINTED, MARK_REQUEST, useJourneyRequest, useJourneys, useTrips } from "../../plan/queries";
-import { rankLabels } from "../../plan/rank";
 import { earlierTime, laterTime, whenFromOverride } from "../../plan/shift";
 import { go, hrefFor } from "../../router";
 import { useLocalState } from "../../shell/localStore";
 import { useSheet } from "../../shell/sheet";
 import type { SavedPlace } from "../../storage/local";
-import { CompareHeader } from "./CompareHeader";
-import { draftScene } from "./journeyScene";
-import { endpointLabel, formatShortDay, israelDate, splitFirstSentence, type EndLabels } from "./labels";
-import { OptionsChart, OptionsSkeleton } from "./OptionsChart";
 import { Banner } from "./Banner";
-import { RouteDetails, type TripState } from "./RouteDetails";
+import { ChooseHeader } from "./ChooseHeader";
+import { chooseScene, draftScene } from "./journeyScene";
+import { formatShortDay, israelDate, splitFirstSentence, untilText } from "./labels";
+import { OptionRow, OptionsSkeleton } from "./OptionRow";
 import { WhenChip, WhenPanel } from "./TimeControl";
+import { useCompare, useNow, useScrollPadding } from "./useCompare";
 import "./compare.css";
 
-// Compare and Route details — C03, C04 (design: LegBar, TimeControl, StepList, Banner,
-// Button). One screen: a one-line header (from › to, swap, time chip), the options chart,
-// Earlier / Later right under it with the one "scheduled" tag, then the selected option's
-// route, with Start pinned at the bottom. It opens on the half
-// sheet (the shell's default) so the route shows on the map above the options; tapping
-// an option raises the sheet to full for its details, and the passenger can drag it down.
+export { RouteScreen } from "./RouteScreen";
 
-const tripRefsOf = (journey: Journey | undefined) =>
-  journey ? journey.legs.flatMap((leg) => (leg.transit ? [leg.transit.engineTripId] : [])) : [];
+// Compare, step 1: Choose (board 2, approved 11 November 2026; replaces C03's chart). The
+// map draws every option at once (journeyScene.ts chooseScene): the chosen one in colour,
+// the others faded with their arrival time, which chooses them. The panel: the destination
+// as the heading with the start under it and the time tag; one row per option in the API's
+// order (departure ← arrival, how long until it leaves, the walk, the lines, the duration);
+// then "פרטי המסלול", which opens the chosen option's route details (RouteScreen, #/route).
+// Choosing never sends a request.
 
-/**
- * The scroll container's own padding, so the pinned Start bar can reach its edges
- * (full width, flush with the bottom) whatever the sheet's padding is.
- */
-function useScrollPadding(ref: RefObject<HTMLElement | null>) {
-  useLayoutEffect(() => {
-    const element = ref.current;
-    if (!element || typeof getComputedStyle === "undefined") return;
-    let parent = element.parentElement;
-    while (parent && !/(auto|scroll)/.test(getComputedStyle(parent).overflowY)) parent = parent.parentElement;
-    if (!parent) return;
-    const style = getComputedStyle(parent);
-    element.style.setProperty("--compare-pad-end", style.paddingBlockEnd || style.paddingBottom || "0px");
-    element.style.setProperty("--compare-pad-inline", style.paddingInlineStart || style.paddingLeft || "0px");
-  }, [ref]);
-}
-
-function StartBar({ journey, onStart, disabled }: { journey: Journey; onStart: (resume: boolean) => void; disabled: boolean }) {
-  const { t } = useI18n();
-  const active = useActiveTrip();
-  const resume = active !== null && sameJourney(active.journey, journey);
-  return (
-    <div className="compare-start">
-      <button type="button" className="ot-btn ot-btn--primary ot-btn--block" disabled={disabled} onClick={() => onStart(resume)}>
-        {resume ? t("compare.resume") : t("compare.start")}
-        <Icon name="chevron" />
-      </button>
-    </div>
-  );
-}
-
-/** Earlier / Later as ghost buttons, with the one "scheduled" tag between them when times show. */
-function ShiftRow({ onEarlier, onLater, scheduled = false }: { onEarlier: (() => void) | null; onLater: (() => void) | null; scheduled?: boolean }) {
+/** Earlier / Later as ghost buttons (no route: the calm result offers both). */
+function ShiftRow({ onEarlier, onLater }: { onEarlier: (() => void) | null; onLater: (() => void) | null }) {
   const { t } = useI18n();
   return (
     <div className="compare-shift">
@@ -80,7 +41,6 @@ function ShiftRow({ onEarlier, onLater, scheduled = false }: { onEarlier: (() =>
         <Icon name="chevron" className="compare-earlier-icon" />
         {t("compare.earlier")}
       </button>
-      {scheduled && <StatusTag />}
       <button type="button" className="ot-btn ot-btn--ghost" onClick={onLater ?? undefined} disabled={!onLater}>
         {t("compare.later")}
         <Icon name="chevron" />
@@ -198,92 +158,66 @@ function TimeProblem({ result, onChangeTime }: { result: Extract<BuildResult, { 
   );
 }
 
-/** Coverage for OUTSIDE_SERVICE_WINDOW: the problem has none, so it comes from /v1/status. */
-function useCoverage(enabled: boolean) {
-  const status = useQuery({
-    queryKey: queryKeys.status,
-    queryFn: async ({ signal }) => unwrap(await getStatus(signal)),
-    staleTime: 5 * 60_000,
-    enabled,
-  });
-  const meta = status.data?.meta as { coverage?: { from: string; until: string } } | undefined;
-  return meta?.coverage ?? null;
+/**
+ * At the half sheet the options and "פרטי המסלול" must all be in view, whatever the
+ * screen height or the fonts: the sheet is asked for the height from its top to the last
+ * option plus the pinned bar (fitHalf), so it grows rather than hide a row.
+ */
+function useFitOptions(listRef: RefObject<HTMLElement | null>, barRef: RefObject<HTMLElement | null>, active: boolean) {
+  const { snap, fitHalf } = useSheet();
+  useLayoutEffect(() => {
+    const list = listRef.current;
+    if (!active || !list) return;
+    const report = () => {
+      const sheet = list.closest(".sheet");
+      const scroller = list.closest(".sheet-content");
+      if (snap !== "half" || !sheet || !scroller) return fitHalf(null);
+      const bar = barRef.current?.getBoundingClientRect().height ?? 0;
+      const needed = list.getBoundingClientRect().bottom - sheet.getBoundingClientRect().top + scroller.scrollTop + bar + 8;
+      fitHalf(needed > 0 ? needed : null);
+    };
+    report();
+    if (typeof ResizeObserver === "undefined") return () => fitHalf(null);
+    const observer = new ResizeObserver(report);
+    observer.observe(list);
+    if (barRef.current) observer.observe(barRef.current);
+    return () => {
+      observer.disconnect();
+      fitHalf(null);
+    };
+  }, [listRef, barRef, active, snap, fitHalf]);
 }
 
 export function CompareScreen() {
   const { t, lang } = useI18n();
-  const { draft, setWhen, selected, setSelected } = usePlan();
-  const client = useQueryClient();
-  const { setSnap } = useSheet();
+  const theme = useTheme();
+  const compare = useCompare();
+  const { plan, ends, built, result, planned, journeys, answer, list, index, chosen, choose, refreshing, failure, coverage, askedDate } = compare;
+  const { draft, setWhen } = plan;
+  const now = useNow();
   const rootRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLOListElement>(null);
+  const barRef = useRef<HTMLDivElement>(null);
   useScrollPadding(rootRef);
   const [timeOpen, setTimeOpen] = useState(false);
   const chipRef = useRef<HTMLButtonElement>(null);
-  /** Close the time panel and give focus back to the chip that opened it. */
+  /** Close the time panel and give focus back to the tag that opened it. */
   const closeTime = () => {
     setTimeOpen(false);
     chipRef.current?.focus({ preventScroll: true });
   };
-  const [attempt, setAttempt] = useState(0);
   const panelId = "compare-when-panel";
 
-  const ends: EndLabels = useMemo(
-    () => ({ from: endpointLabel(draft.from, t), to: endpointLabel(draft.to, t) }),
-    [draft.from, draft.to, t],
-  );
-
-  const built = useJourneyRequest(draft, lang, null, attempt);
-  const result = built.data;
-  const planned = result?.ok ? result : null;
-  const journeys = useJourneys(planned);
-  const answer = journeys.data;
-  const list = useMemo(() => answer?.response.data.journeys ?? [], [answer]);
-  const index = Math.min(selected, Math.max(0, list.length - 1));
-  const chosen: Journey | undefined = list[index];
-  const ranks = useMemo(() => rankLabels(list), [list]);
-  // The previous time's answer, shown until the new one arrives (same ends only).
-  const refreshing = built.isPlaceholderData || journeys.isPlaceholderData;
-
-  // Trip details for the selected option only, fetched once the options are on screen.
-  const refs = useMemo(() => tripRefsOf(chosen), [chosen]);
-  const tripQueries = useTrips(refs, chosen !== undefined);
-  const trips: Record<string, TripState> = {};
-  refs.forEach((ref, i) => {
-    const query = tripQueries[i];
-    trips[ref] = query?.data ? { status: "ok", trip: query.data.data } : query?.isError ? { status: "error" } : { status: "pending" };
-  });
-
   const scene = useMemo(
-    () =>
-      chosen
-        ? {
-            ...journeyToScene(chosen, { originLabel: ends.from, destinationLabel: ends.to }),
-            user: null,
-            camera: "fit" as const,
-            pick: false,
-          }
-        : draftScene(draft.from, draft.to, ends),
-    [chosen, ends, draft.from, draft.to],
+    () => (list.length > 0 ? chooseScene(list, index, ends, { t, lang, theme }, choose) : draftScene(draft.from, draft.to, ends)),
+    [list, index, ends, t, lang, theme, choose, draft.from, draft.to],
   );
   usePublishScene(scene);
 
-  // SP04 client work: request sent → options painted (read by the @real test).
-  useEffect(() => {
-    if (!answer || typeof performance === "undefined" || !performance.getEntriesByName(MARK_REQUEST).length) return;
-    performance.mark(MARK_PAINTED);
-    try {
-      performance.measure("ot:journeys:client", MARK_REQUEST, MARK_PAINTED);
-    } catch {
-      // marks cleared: nothing to measure
-    }
-  }, [answer]);
+  const answered = answer !== undefined && chosen !== undefined;
+  useFitOptions(listRef, barRef, answered && !timeOpen);
 
-  const failure = journeys.error instanceof ApiFailure ? journeys.error : null;
-  const coverage = useCoverage(failure?.state === "outside_window");
-
-  const changeWhen = (when: When) => {
-    setWhen(when);
-  };
+  const changeWhen = (when: When) => setWhen(when);
   const shiftTo = (time: ReturnType<typeof laterTime>) =>
     time
       ? () => {
@@ -294,28 +228,15 @@ export function CompareScreen() {
   const openTime = () => setTimeOpen(true);
   const focusTop = () => rootRef.current?.querySelector<HTMLElement>("h1")?.focus({ preventScroll: true });
 
-  const select = (next: number) => {
-    setSelected(next);
-    // The details need room: raise the sheet; the passenger can drag it back down.
-    setSnap("full");
-  };
-
-  const start = (resume: boolean) => {
-    if (!chosen || !answer) return;
-    if (!resume) startActiveTrip({ journey: chosen, meta: answer.response.meta, trips: cachedTrips(client, refs) });
-    go({ name: "navigate" });
-  };
-
-  // The day the request asked about: options on another day name it.
-  const asked = answer?.sent.departAt ?? answer?.sent.arriveBy ?? null;
-  const askedDate = asked ? israelDate(asked) : israelDate(new Date());
+  // A time on another day than the one asked carries its day (e.g. Friday night → Saturday).
+  const dayOf = (instant: string): string | null => (israelDate(instant) === askedDate ? null : formatShortDay(instant, lang));
 
   let body: ReactNode;
   let footer: ReactNode = null;
   if (draft.to === null) {
     body = <DestinationPrompt />;
   } else if (draft.from === null) {
-    body = <OriginPrompt error={null} onRetry={() => setAttempt((n) => n + 1)} onPicked={focusTop} />;
+    body = <OriginPrompt error={null} onRetry={compare.retryLocation} onPicked={focusTop} />;
   } else if (built.isPending || (planned && journeys.isPending)) {
     body = <OptionsSkeleton />;
   } else if (result && !result.ok) {
@@ -323,9 +244,9 @@ export function CompareScreen() {
       result.reason === "time" ? (
         <TimeProblem result={result} onChangeTime={openTime} />
       ) : result.reason === "location" ? (
-        <OriginPrompt error={result.error} onRetry={() => setAttempt((n) => n + 1)} onPicked={focusTop} />
+        <OriginPrompt error={result.error} onRetry={compare.retryLocation} onPicked={focusTop} />
       ) : result.reason === "missing_origin" ? (
-        <OriginPrompt error={null} onRetry={() => setAttempt((n) => n + 1)} onPicked={focusTop} />
+        <OriginPrompt error={null} onRetry={compare.retryLocation} onPicked={focusTop} />
       ) : (
         <DestinationPrompt />
       );
@@ -349,40 +270,50 @@ export function CompareScreen() {
         <ChangeTime onClick={openTime} />
       </>
     );
-  } else if (answer && chosen) {
+  } else if (answered) {
     const meta = answer.response.meta;
-    // Realtime is not built yet: every time shown is scheduled, said once by the tag.
     body = (
       <div className="compare-answer" aria-busy={refreshing} data-refreshing={refreshing || undefined}>
         <span className="visually-hidden" role="status">
           {refreshing ? t("compare.loading") : ""}
         </span>
         {meta.mode === "fixture" && <TestDataBanner />}
-        <OptionsChart journeys={list} selected={index} onSelect={select} askedDate={askedDate} />
-        <ShiftRow onEarlier={shiftTo(earlierTime(list))} onLater={shiftTo(laterTime(list))} scheduled />
-        <RouteDetails
-          journey={chosen}
-          ends={ends}
-          trips={trips}
-          rank={ranks[index] ?? null}
-          day={israelDate(chosen.timing.scheduledDeparture) === askedDate ? null : formatShortDay(chosen.timing.scheduledDeparture, lang)}
-        />
+        <ol ref={listRef} className="compare-options" aria-label={t("compare.options")}>
+          {list.map((journey, i) => (
+            <li key={`${i}-${journey.id}`}>
+              <OptionRow
+                journey={journey}
+                index={i}
+                chosen={i === index}
+                until={untilText(journey.timing.scheduledDeparture, now, lang, t)}
+                dayOf={dayOf}
+                onChoose={choose}
+              />
+            </li>
+          ))}
+        </ol>
       </div>
     );
-    // While the time is being changed the options are about to change: no Start then
-    // (and the panel's own button is not hidden behind it on the half sheet). While a new
-    // time's answer loads, the previous one stays, dimmed, and cannot be started.
-    footer = timeOpen ? null : <StartBar journey={chosen} onStart={start} disabled={refreshing} />;
+    // While the time is being changed the options are about to change: no button then.
+    // While a new time's answer loads, the previous one stays, dimmed, and cannot be opened.
+    footer = timeOpen ? null : (
+      <div className="compare-start" ref={barRef}>
+        <button type="button" className="b-btn b-btn--main compare-start__main" disabled={refreshing} onClick={() => go({ name: "route" })}>
+          {t("compare.details")}
+        </button>
+      </div>
+    );
   } else {
     body = <OptionsSkeleton />;
   }
 
   return (
     <div className="compare" ref={rootRef}>
-      <h1 className="visually-hidden" tabIndex={-1}>
-        {t("screen.compare")}
-      </h1>
-      <CompareHeader
+      <ChooseHeader
+        from={draft.from}
+        to={draft.to}
+        // Realtime is not built yet: every time shown is scheduled, said once here.
+        note={answered ? t("time.scheduled") : null}
         chip={<WhenChip ref={chipRef} when={draft.when} open={timeOpen} onToggle={() => setTimeOpen((open) => !open)} panelId={panelId} />}
       />
       {timeOpen && <WhenPanel id={panelId} when={draft.when} onChange={changeWhen} onClose={closeTime} />}
