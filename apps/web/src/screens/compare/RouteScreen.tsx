@@ -6,7 +6,7 @@ import { useI18n } from "../../i18n/I18nProvider";
 import { useTheme } from "../../lib/theme";
 import { formatClock } from "../../lib/time";
 import { usePublishScene } from "../../map/scene";
-import type { PlaceChoice } from "../../plan/draft";
+import type { Endpoint, PlaceChoice } from "../../plan/draft";
 import { hrefFor } from "../../router";
 import { addFavourite, deleteSaved, useLocalState } from "../../shell/localStore";
 import { Banner } from "./Banner";
@@ -105,8 +105,6 @@ export function RouteScreen() {
   const { plan, ends, answer, chosen, trips, refreshing, start, resume, built, planned, journeys } = compare;
   const rootRef = useRef<HTMLDivElement>(null);
   useScrollPadding(rootRef);
-  const destination = plan.draft.to?.type === "place" ? plan.draft.to.place : null;
-  const favourite = useFavourite(destination);
 
   // Without an answer (a deep link still loading, or nothing found) the map shows the ends.
   const fallbackScene = useMemo(() => draftScene(plan.draft.from, plan.draft.to, ends), [plan.draft.from, plan.draft.to, ends]);
@@ -145,35 +143,55 @@ export function RouteScreen() {
     );
   }
 
+  return (
+    <div className="compare route" ref={rootRef}>
+      {!(answer && chosen) && <FallbackScene scene={fallbackScene} />}
+      {body}
+      {answer && chosen && <RouteActions destination={plan.draft.to} refreshing={refreshing} resume={resume} onStart={start} />}
+    </div>
+  );
+}
+
+/**
+ * Board 3's bottom row: save the destination (the client has no saved trips) and start.
+ * Also under the chosen option on a wide screen, where its steps open in place (board 8).
+ */
+export function RouteActions({
+  destination: to,
+  refreshing,
+  resume,
+  onStart,
+}: {
+  destination: Endpoint | null;
+  refreshing: boolean;
+  resume: boolean;
+  onStart: () => void;
+}) {
+  const { t } = useI18n();
+  const destination = to?.type === "place" ? to.place : null;
+  const favourite = useFavourite(destination);
   const toggleFavourite = () => {
     if (!destination) return;
     if (favourite) deleteSaved(favourite.id);
     else addFavourite(destination, destination.label);
   };
-
   return (
-    <div className="compare route" ref={rootRef}>
-      {!(answer && chosen) && <FallbackScene scene={fallbackScene} />}
-      {body}
-      {answer && chosen && (
-        <div className="compare-start">
-          <button
-            type="button"
-            className="b-btn b-btn--icon"
-            aria-label={t("route.save")}
-            aria-pressed={favourite !== null}
-            disabled={!destination}
-            onClick={toggleFavourite}
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill={favourite ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.9" strokeLinejoin="round" aria-hidden="true" focusable="false">
-              <path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1.1 5.8L12 16.8l-5.3 2.8 1.1-5.8-4.3-4.1 5.9-.8z" />
-            </svg>
-          </button>
-          <button type="button" className="b-btn b-btn--main compare-start__main" disabled={refreshing} onClick={start}>
-            {resume ? t("compare.resume") : t("compare.start")}
-          </button>
-        </div>
-      )}
+    <div className="compare-start">
+      <button
+        type="button"
+        className="b-btn b-btn--icon"
+        aria-label={t("route.save")}
+        aria-pressed={favourite !== null}
+        disabled={!destination}
+        onClick={toggleFavourite}
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill={favourite ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.9" strokeLinejoin="round" aria-hidden="true" focusable="false">
+          <path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1.1 5.8L12 16.8l-5.3 2.8 1.1-5.8-4.3-4.1 5.9-.8z" />
+        </svg>
+      </button>
+      <button type="button" className="b-btn b-btn--main compare-start__main" disabled={refreshing} onClick={onStart}>
+        {resume ? t("compare.resume") : t("compare.start")}
+      </button>
     </div>
   );
 }

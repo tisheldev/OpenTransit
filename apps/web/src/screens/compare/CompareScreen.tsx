@@ -3,6 +3,7 @@ import { Icon, type IconName } from "../../components/ds";
 import { ErrorState, TestDataBanner } from "../../components/states";
 import { useI18n } from "../../i18n/I18nProvider";
 import type { LocationError } from "../../lib/geolocation";
+import { useMedia, WIDE_QUERY } from "../../lib/media";
 import { useTheme } from "../../lib/theme";
 import { usePublishScene } from "../../map/scene";
 import { choiceFromSaved, sameEndpoint, type Endpoint, type When } from "../../plan/draft";
@@ -15,9 +16,11 @@ import { useSheet } from "../../shell/sheet";
 import type { SavedPlace } from "../../storage/local";
 import { Banner } from "./Banner";
 import { ChooseHeader } from "./ChooseHeader";
-import { chooseScene, draftScene } from "./journeyScene";
+import { chooseScene, draftScene, stepScene } from "./journeyScene";
 import { formatShortDay, israelDate, splitFirstSentence, untilText } from "./labels";
 import { OptionRow, OptionsSkeleton } from "./OptionRow";
+import { RouteActions } from "./RouteScreen";
+import { Timeline } from "./Timeline";
 import { WhenChip, WhenPanel } from "./TimeControl";
 import { useCompare, useNow, useScrollPadding } from "./useCompare";
 import "./compare.css";
@@ -192,7 +195,11 @@ export function CompareScreen() {
   const { t, lang } = useI18n();
   const theme = useTheme();
   const compare = useCompare();
-  const { plan, ends, built, result, planned, journeys, answer, list, index, chosen, choose, refreshing, failure, coverage, askedDate } = compare;
+  const { plan, ends, built, result, planned, journeys, answer, list, index, chosen, choose, refreshing, failure, coverage, askedDate, trips, start, resume } =
+    compare;
+  // Board 8: on a wide screen the chosen option opens its steps in place, with Step's actions.
+  const wide = useMedia(WIDE_QUERY);
+  const [focusedLeg, setFocusedLeg] = useState<number | null>(null);
   const { draft, setWhen } = plan;
   const now = useNow();
   const rootRef = useRef<HTMLDivElement>(null);
@@ -208,9 +215,16 @@ export function CompareScreen() {
   };
   const panelId = "compare-when-panel";
 
+  // A tapped step on the wide panel zooms the map to its leg, as on board 3; otherwise every option is drawn.
+  const focusedChosen = wide && focusedLeg !== null && chosen !== undefined ? chosen : null;
   const scene = useMemo(
-    () => (list.length > 0 ? chooseScene(list, index, ends, { t, lang, theme }, choose) : draftScene(draft.from, draft.to, ends)),
-    [list, index, ends, t, lang, theme, choose, draft.from, draft.to],
+    () =>
+      focusedChosen
+        ? stepScene(focusedChosen, ends, focusedLeg, { t, lang, theme })
+        : list.length > 0
+          ? chooseScene(list, index, ends, { t, lang, theme }, choose)
+          : draftScene(draft.from, draft.to, ends),
+    [focusedChosen, focusedLeg, list, index, ends, t, lang, theme, choose, draft.from, draft.to],
   );
   usePublishScene(scene);
 
@@ -287,8 +301,16 @@ export function CompareScreen() {
                 chosen={i === index}
                 until={untilText(journey.timing.scheduledDeparture, now, lang, t)}
                 dayOf={dayOf}
-                onChoose={choose}
+                onChoose={(next) => {
+                  setFocusedLeg(null);
+                  choose(next);
+                }}
               />
+              {wide && i === index && (
+                <section className="compare-inline-steps" aria-label={t("screen.route")}>
+                  <Timeline journey={journey} ends={ends} trips={trips} focused={focusedLeg} onFocus={setFocusedLeg} />
+                </section>
+              )}
             </li>
           ))}
         </ol>
@@ -296,7 +318,11 @@ export function CompareScreen() {
     );
     // While the time is being changed the options are about to change: no button then.
     // While a new time's answer loads, the previous one stays, dimmed, and cannot be opened.
-    footer = timeOpen ? null : (
+    footer = timeOpen ? null : wide ? (
+      <div ref={barRef}>
+        <RouteActions destination={draft.to} refreshing={refreshing} resume={resume} onStart={start} />
+      </div>
+    ) : (
       <div className="compare-start" ref={barRef}>
         <button type="button" className="b-btn b-btn--main compare-start__main" disabled={refreshing} onClick={() => go({ name: "route" })}>
           {t("compare.details")}

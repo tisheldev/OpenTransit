@@ -146,7 +146,7 @@ const fake = vi.hoisted(() => {
       this.images.set(id, { image, options: this.images.get(id)?.options });
     }
     getContainer() {
-      return { clientHeight: 640, clientWidth: 360 };
+      return { clientHeight: 640, clientWidth: 360, closest: () => null };
     }
     getCenter() {
       return this.center;
@@ -402,6 +402,18 @@ describe("MapView", () => {
     expect(badge.style.getPropertyValue("--line-bg")).toBe("#1565c0");
     act(() => setMapScene(emptyScene));
     expect(screen.queryByTestId("map-overlay")).toBeNull();
+  });
+
+  it("a keyed scene frames once: republishing it as times tick leaves the passenger's panning alone", async () => {
+    renderWith(<MapView />);
+    const map = await loadedMap();
+    const fits = () => map.calls.filter((call) => call.method === "fitBounds").length;
+    act(() => setMapScene({ ...emptyScene, route: [bus], camera: "fit", cameraKey: "home:a" }));
+    const first = fits();
+    act(() => setMapScene({ ...emptyScene, route: [bus], camera: "fit", cameraKey: "home:a" }));
+    expect(fits()).toBe(first);
+    act(() => setMapScene({ ...emptyScene, route: [bus], camera: "fit", cameraKey: "home:b" }));
+    expect(fits()).toBe(first + 1);
   });
 
   it("on a wide screen frames the scene beside the side panel (board 8), and a phone layout clears it", async () => {

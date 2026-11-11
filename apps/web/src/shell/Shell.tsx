@@ -16,6 +16,7 @@ import { useI18n } from "../i18n/I18nProvider";
 import { locationSource } from "../lib/geolocation";
 import { MapAttribution, MapHost } from "../map/MapHost";
 import { getMapState, requestLocate, setBottomInset, setSideInset, showLocated, useMapSelector } from "../map/scene";
+import { isMedia, WIDE_QUERY } from "../lib/media";
 import { back, hrefFor, useRoute, type Route } from "../router";
 import { prefetchScreens, Screen } from "../screens/screens";
 import { Banners } from "./Banners";
@@ -48,10 +49,8 @@ function useAfterFirstPaint(): boolean {
   return painted;
 }
 
-/** The wide-screen layout (board 8): the panel sits beside the map. Same breakpoint as shell.css. */
-export const WIDE_QUERY = "(min-width: 900px)";
 function isWide(): boolean {
-  return typeof window !== "undefined" && typeof window.matchMedia === "function" && window.matchMedia(WIDE_QUERY).matches;
+  return isMedia(WIDE_QUERY);
 }
 
 function Sheet({

@@ -386,3 +386,11 @@
   opacity: 0.5;
   cursor: default;
 }
+
+/* Board 8: on a wide screen the chosen option's steps open in place under its row. */
+.compare-inline-steps {
+  margin-block: 6px 4px;
+  margin-inline: 12px;
+  padding-block-start: 8px;
+  border-block-start: 1px solid var(--border);
+}

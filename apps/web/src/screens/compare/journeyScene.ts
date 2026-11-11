@@ -161,5 +161,7 @@ export function stepScene(journey: Journey, ends: EndLabels, focused: number | n
     tags,
     stopPins,
     fitTo: legPoints(leg),
+    // "כל המסלול" floats over the top of the map while a leg is zoomed.
+    topControls: true,
   };
 }

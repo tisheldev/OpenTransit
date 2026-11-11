@@ -108,6 +108,14 @@ function drawScene(map: MapLibreMap, scene: MapScene, located: MapUser | null): 
   set("ot-accuracy", accuracyFeatures(user));
 }
 
+/** The top band's height (shell.css --overlay-top-h), 0 outside the shell. */
+function overlayTopHeight(map: MapLibreMap): number {
+  const shell = map.getContainer().closest(".shell");
+  if (!shell) return 0;
+  const value = parseFloat(getComputedStyle(shell).getPropertyValue("--overlay-top-h"));
+  return Number.isFinite(value) ? value : 0;
+}
+
 /** The sheet's height over the map, clamped so a tall sheet still leaves a quarter visible. */
 function coveredHeight(map: MapLibreMap, inset: number): number {
   const height = map.getContainer().clientHeight;
@@ -251,6 +259,8 @@ export default function MapView() {
   /** Horizontal offset that centres content in the part of the map beside a side panel. */
   const sideOffset = (sideInset.left - sideInset.right) / 2;
   const focusedScene = useRef<{ scene: MapScene | null; at: number }>({ scene: null, at: 0 });
+  /** The camera key last framed (MapScene.cameraKey), so a keyed scene frames once. */
+  const framedKey = useRef<string | null>(null);
 
   useEffect(() => {
     const map = mapRef.current;
@@ -259,13 +269,21 @@ export default function MapView() {
     const bottom = coveredHeight(map, inset);
     if (scene.camera === "fit") {
       const bounds = sceneBounds(scene);
-      if (bounds) {
+      const keyed = scene.cameraKey !== undefined;
+      if (bounds && keyed && framedKey.current === scene.cameraKey) {
+        // Already framed for this key: leave the camera where the passenger put it.
+      } else if (bounds) {
+        framedKey.current = scene.cameraKey ?? null;
+        // Below the top band (banners, Back, attribution), and below floating controls.
+        const band = overlayTopHeight(map);
+        const top = Math.max(FIT_PADDING.top, band + 16) + (scene.topControls ? 56 : 0);
         // One point (a single pin) frames at street level rather than the closest zoom.
         const point = bounds[0][0] === bounds[1][0] && bounds[0][1] === bounds[1][1];
         try {
           map.fitBounds(bounds, {
             padding: {
               ...FIT_PADDING,
+              top,
               bottom: FIT_PADDING.bottom + bottom,
               left: FIT_PADDING.left + sideInset.left,
               right: FIT_PADDING.right + sideInset.right,

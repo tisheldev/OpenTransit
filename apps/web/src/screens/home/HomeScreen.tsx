@@ -229,6 +229,9 @@ export function HomeScreen() {
       stopPins,
       tags,
       camera: "fit",
+      // Frame once per set of stops and position: the minutes on the tags tick every minute
+      // and must not undo the passenger's own panning.
+      cameraKey: `home:${stopIds.join(",")}:${fix ? `${fix.latitude.toFixed(4)},${fix.longitude.toFixed(4)}` : "none"}`,
       focus: { center: [centre.longitude, centre.latitude], zoom: 16 },
     };
   }, [stops, stopIds, selectedIndex, names, lines, fix, centre, now, t]);

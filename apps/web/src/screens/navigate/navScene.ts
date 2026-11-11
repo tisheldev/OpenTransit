@@ -112,6 +112,7 @@ function walkScene(input: NavSceneInput, ride: NavStep): MapScene {
     tags,
     user: userOf(fix),
     camera: fix ? "follow" : "fit",
+    topControls: true,
     fitTo: fix ? null : frame,
     pick: false,
   };
@@ -161,6 +162,8 @@ function rideScene(input: NavSceneInput): MapScene {
     camera: "fit",
     fitTo: frame,
     pick: false,
+    // The close button floats over the top of the map: keep "יורדים כאן" clear of it.
+    topControls: true,
   };
 }
 
@@ -174,6 +177,7 @@ function finalWalkScene(input: NavSceneInput): MapScene {
     pins: [destination],
     user: userOf(fix),
     camera: fix ? "follow" : "fit",
+    topControls: true,
     fitTo: fix ? null : [lonLat(leg.from), lonLat(leg.to)],
     pick: false,
   };
@@ -190,7 +194,7 @@ export function navScene(input: NavSceneInput): MapScene {
   if (step.kind === "walk_to_destination" && step.legIndex !== null) return finalWalkScene(input);
   // Arrived (or anything else): the whole journey.
   const base = journeyToScene(journey, { originLabel: labels.origin, destinationLabel: labels.destination });
-  return { ...base, user: userOf(fix), camera: "fit", pick: false };
+  return { ...base, user: userOf(fix), camera: "fit", pick: false, topControls: true };
 }
 
 export interface MissedSceneInput {
@@ -233,5 +237,5 @@ export function missedScene({ journey, ride, fix, waitText, walk, badge }: Misse
     const middle = walkLine.length >= 2 ? pointAlongLine(walkLine, lineLengthMeters(walkLine) / 2) : null;
     if (middle) tags.push({ id: "walk", position: [middle.longitude, middle.latitude], kind: "faded", text: walk.walkText, anchor: "center" });
   }
-  return { route, pins: [], stopPins, tags, user: userOf(fix), camera: "fit", fitTo: frame, pick: false };
+  return { route, pins: [], stopPins, tags, user: userOf(fix), camera: "fit", fitTo: frame, pick: false, topControls: true };
 }

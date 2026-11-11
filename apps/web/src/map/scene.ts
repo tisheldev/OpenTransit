@@ -121,6 +121,14 @@ export interface MapScene {
    * before the exit stop) instead of the whole scene; null or empty frames everything.
    */
   fitTo?: LonLat[] | null;
+  /**
+   * Optional: a "fit" camera frames once per key. A screen that republishes its scene as
+   * times tick (Home's next departures) passes a key that changes only when what it shows
+   * changes, so the passenger's own panning is not undone every minute.
+   */
+  cameraKey?: string;
+  /** Controls float over the top of the map (close, "כל המסלול"): fitting keeps clear of them. */
+  topControls?: boolean;
 }
 
 export const emptyScene: MapScene = { route: [], pins: [], user: null, camera: "keep", pick: false };
