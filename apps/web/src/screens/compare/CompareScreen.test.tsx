@@ -2,13 +2,14 @@ import { QueryClientProvider, type QueryClient } from "@tanstack/react-query";
 import { act, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { http } from "msw";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { useEffect, type ComponentType } from "react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { fixture } from "../../api/fixtures";
 import { createQueryClient } from "../../api/queries";
 import { I18nProvider } from "../../i18n/I18nProvider";
 import type { Lang } from "../../i18n/messages";
 import { setLocationSource } from "../../lib/geolocation";
-import { getMapState, resetMapState } from "../../map/scene";
+import { getMapState, resetMapState, type MapTag } from "../../map/scene";
 import { respond } from "../../mocks/handlers";
 import { server } from "../../mocks/node";
 import { endActiveTrip, getActiveTrip, resetActiveTripCache } from "../../nav/activeTrip";
@@ -16,10 +17,14 @@ import type { PlaceChoice, PlanDraft } from "../../plan/draft";
 import { PlanProvider, usePlan } from "../../plan/PlanProvider";
 import { reloadLocalState } from "../../shell/localStore";
 import { SheetContext, type Snap } from "../../shell/sheet";
-import { CompareScreen } from "./CompareScreen";
+import { CompareScreen, RouteScreen } from "./CompareScreen";
 
-// One fixture-driven test per Compare state (design: Compare "States"), Hebrew first,
-// the key ones again in English. Scenarios are the MSW handlers' (src/mocks/handlers.ts).
+// Compare as the approved boards (11 November 2026): Choose (every option on the map,
+// option rows, "פרטי המסלול") and Step (route details at #/route: the timeline, a tapped
+// leg framed on the map, "כל המסלול", save and "יוצאים לדרך"). Fixture-driven, Hebrew
+// first, the key ones again in English. Scenarios are the MSW handlers'
+// (src/mocks/handlers.ts). The clock is set to 08:03 on the fixtures' day (Date only),
+// so the first option leaves "בעוד 4 דק׳".
 
 const dizengoff: PlaceChoice = {
   label: "דיזנגוף סנטר",
@@ -48,6 +53,7 @@ let sent: Sent[] = [];
 let snaps: Snap[] = [];
 
 beforeEach(() => {
+  vi.useFakeTimers({ toFake: ["Date"], now: new Date("2026-10-01T08:03:00+03:00"), shouldAdvanceTime: true });
   sent = [];
   snaps = [];
   server.events.on("request:start", async ({ request }) => {
@@ -58,10 +64,12 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+  vi.useRealTimers();
   server.events.removeAllListeners();
   endActiveTrip();
   resetActiveTripCache();
   resetMapState();
+  localStorage.removeItem("opentransit");
   reloadLocalState();
   window.location.hash = "";
 });
@@ -75,13 +83,27 @@ function DraftProbe() {
   return <span data-testid="draft-from">{draft.from?.type === "place" ? draft.from.place.label : String(draft.from?.type ?? null)}</span>;
 }
 
-function renderCompare(lang: Lang = "he", draft: PlanDraft = baseDraft, client: QueryClient = createQueryClient()) {
+function renderScreen(
+  Screen: ComponentType,
+  lang: Lang = "he",
+  draft: PlanDraft = baseDraft,
+  client: QueryClient = createQueryClient(),
+  selected = 0,
+) {
+  function Select({ index }: { index: number }) {
+    const { selected: current, setSelected } = usePlan();
+    useEffect(() => {
+      if (current !== index) setSelected(index);
+    }, [current, index, setSelected]);
+    return null;
+  }
   const view = render(
     <QueryClientProvider client={client}>
       <I18nProvider initialLang={lang}>
         <SheetContext.Provider value={{ snap: "half", setSnap: (snap) => snaps.push(snap), fitHalf: () => {} }}>
           <PlanProvider initial={draft}>
-            <CompareScreen />
+            {selected > 0 && <Select index={selected} />}
+            <Screen />
             <DraftProbe />
           </PlanProvider>
         </SheetContext.Provider>
@@ -90,12 +112,23 @@ function renderCompare(lang: Lang = "he", draft: PlanDraft = baseDraft, client: 
   );
   return { ...view, client };
 }
+const renderCompare = (lang: Lang = "he", draft: PlanDraft = baseDraft, client?: QueryClient) => renderScreen(CompareScreen, lang, draft, client);
+const renderRoute = (lang: Lang = "he", draft: PlanDraft = baseDraft, client?: QueryClient, selected = 0) =>
+  renderScreen(RouteScreen, lang, draft, client, selected);
 
 const options = () => within(screen.getByRole("list", { name: /אפשרויות נסיעה|Trip options/ })).getAllByRole("button");
 const details = () => screen.getByRole("region", { name: /פרטי מסלול|Route details/ });
-const stopCounts = () => within(details()).queryAllByText(/^\d+ (תחנות|stops)$/);
+const legButtons = () => within(details()).getAllByRole("button");
+/** Elements whose whole text (digits are in their own <bdi>) matches. */
+const withText = (root: HTMLElement, selector: string, text: string | RegExp) =>
+  [...root.querySelectorAll<HTMLElement>(selector)].filter((el) => (typeof text === "string" ? el.textContent === text : text.test(el.textContent ?? "")));
+const stopCounts = () => withText(details(), ".compare-stops", /^\d+ (תחנות|stops)$/);
+const scene = () => getMapState().scene;
+/** Favourites as stored (storage/local.ts). */
+const storedFavourites = () => (JSON.parse(localStorage.getItem("opentransit") ?? "{}") as { favourites?: unknown[] }).favourites ?? [];
+const tag = (id: string): MapTag | undefined => scene().tags?.find((item) => item.id === id);
 
-describe("Compare (Hebrew)", () => {
+describe("Choose (Hebrew)", () => {
   it("reserves three option rows while loading", () => {
     const { container } = renderCompare();
     expect(screen.getByRole("status")).toHaveAttribute("aria-busy", "true");
@@ -103,51 +136,32 @@ describe("Compare (Hebrew)", () => {
     expect(container.querySelectorAll(".option-placeholder")).toHaveLength(3);
   });
 
-  it("shows three options in the API's order with times, rank labels and one scheduled tag, the first selected with its route", async () => {
+  it("shows the destination, the start and the time tag, then each option as one sentence", async () => {
     renderCompare();
     await waitFor(() => expect(options()).toHaveLength(3));
+    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("טכניון");
+    expect(screen.getByRole("button", { name: /^מוצא: ?מדיזנגוף סנטר$/ })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /^שינוי השעה: יציאה 08:00/ })).toHaveClass("b-tag");
     const [first, second, third] = options();
     expect(first).toHaveAttribute("aria-pressed", "true");
-    expect(first).toHaveAccessibleName("אפשרות 1, מומלץ, 105 דקות, יציאה 08:07, הגעה 09:52, 2 החלפות");
-    expect(second).toHaveAccessibleName(/^אפשרות 2, הכי מהיר, 104 דקות, יציאה 08:27, הגעה 10:11/);
-    expect(third).toHaveAccessibleName("אפשרות 3, 133 דקות, יציאה 08:19, הגעה 10:32, 4 החלפות");
-    // Each row shows its duration and rank, and its departure – arrival over its bar.
-    expect(within(first!).getByText("08:07")).toBeInTheDocument();
-    expect(within(first!).getByText("09:52")).toBeInTheDocument();
-    expect(within(first!).getByText("מומלץ")).toBeInTheDocument();
-    expect(within(first!).getByText("1:45")).toBeInTheDocument();
-    expect(within(first!).getByText("שע׳")).toBeInTheDocument();
-    // One "scheduled" tag, not a note per place.
-    expect(screen.getAllByText("מתוכנן")).toHaveLength(1);
-    expect(screen.queryByText("זמנים בזמן אמת והתראות אינם זמינים")).toBeNull();
-
-    const route = details();
-    // The selected option's head: leave → arrive, rank, duration, transfers, walking, first boarding.
-    expect(route).toHaveTextContent("יציאה 08:07, הגעה 09:52");
-    expect(within(route).getByText("מומלץ")).toBeInTheDocument();
-    expect(within(route).getByText("2 החלפות")).toBeInTheDocument();
-    expect(within(route).getByText("9 דק׳ הליכה")).toBeInTheDocument();
-    expect(route).toHaveTextContent("עולים ב־08:07 · דיזנגוף סנטר/דיזנגוף");
-    // A train is Israel Railways with its number, read from where it is boarded to where
-    // it is left; never "a train to <exit stop>".
-    expect(within(route).getByText("רכבת ישראל")).toBeInTheDocument();
-    expect(within(route).getByText("רכבת 156")).toBeInTheDocument();
-    expect(within(route).getByText("רכבת ישראל 156 מ־השלום אל חוף הכרמל.", { exact: false })).toBeInTheDocument();
-    expect(route).not.toHaveTextContent("רכבת לחוף הכרמל");
-    expect(within(route).getByText("לכיוון מסוף הטייסים")).toBeInTheDocument();
-    // Exit stops at their arrival times, the engine's END as the passenger's label.
-    const steps = within(route).getByRole("list", { name: "שלבי המסלול" });
-    expect(steps).toHaveTextContent(/09:24ירידה · חוף הכרמל/);
-    expect(steps).toHaveTextContent(/09:52הגעה · טכניון/);
-    expect(within(route).getByText(/^הליכה 5 דק׳ · 330 מ׳$/)).toBeInTheDocument();
-    expect(within(route).getByText("אל ת. רכבת חוף הכרמל")).toBeInTheDocument();
-    expect(within(route).getByText("המתנה 7 דק׳")).toBeInTheDocument();
-    expect(route).not.toHaveTextContent("END");
-    expect(route).not.toHaveTextContent("רציף");
-    // No links to the stop and trip screens (not built yet).
-    expect(within(route).queryAllByRole("link")).toHaveLength(0);
-    // Trip details arrive in the background: stop counts.
-    await waitFor(() => expect(stopCounts()).toHaveLength(3));
+    expect(first).toHaveClass("b-op", "b-op--on");
+    expect(first).toHaveAccessibleName("אפשרות 1, 105 דקות, יציאה 08:07, הגעה 09:52, 2 החלפות, קווים: 8, רכבת, 1, בעוד 4 דק׳");
+    expect(second).toHaveAccessibleName(/^אפשרות 2, 104 דקות, יציאה 08:27, הגעה 10:11, .*בעוד 24 דק׳$/);
+    expect(third).toHaveAccessibleName(/^אפשרות 3, 133 דקות, יציאה 08:19, הגעה 10:32, 4 החלפות/);
+    // Line 1: departure ← arrival and the strong countdown on the chosen row, muted on the others.
+    expect(within(first!).getByText("08:07")).toHaveClass("num");
+    expect(within(first!).getByText("09:52")).toHaveClass("num");
+    expect(first!.querySelector(".b-tag--strong")).toHaveTextContent("בעוד 4 דק׳");
+    expect(second!.querySelector(".b-tag--strong")).toBeNull();
+    expect(second!.querySelector(".b-op__l1 .b-mu")).toHaveTextContent("בעוד 24 דק׳");
+    // Line 2: the line badges between chevrons, then the duration.
+    expect([...first!.querySelectorAll(".ot-line")].map((badge) => badge.textContent)).toEqual(["8", "רכבת", "1"]);
+    expect(first!.querySelector(".b-op__dur")).toHaveTextContent("1:45 שע׳");
+    // One "scheduled" note, no chart and no rank labels.
+    expect(screen.getAllByText(/מתוכנן/)).toHaveLength(1);
+    expect(document.querySelector(".ot-lbar, .compare-chart")).toBeNull();
+    expect(screen.queryByText("מומלץ")).toBeNull();
+    expect(screen.getByRole("button", { name: "פרטי המסלול" })).toBeEnabled();
 
     const request = journeyPosts()[0]!.body!;
     expect(request).toMatchObject({
@@ -157,23 +171,33 @@ describe("Compare (Hebrew)", () => {
       results: 3,
       lang: "he",
     });
-
-    const scene = getMapState().scene;
-    expect(scene.camera).toBe("fit");
-    expect(scene.route).toHaveLength(6);
-    expect(scene.pins.find((pin) => pin.role === "destination")?.label).toBe("טכניון");
   });
 
-  it("opens on the sheet the shell chose, and raises it to full for the details when an option is tapped", async () => {
-    const user = userEvent.setup();
+  it("draws every option on the map: the chosen one in colour with its badges, the others faded with their arrival time", async () => {
     renderCompare();
     await waitFor(() => expect(options()).toHaveLength(3));
-    expect(snaps).toEqual([]);
-    await user.click(options()[0]!);
-    expect(snaps).toEqual(["full"]);
+    const drawn = scene();
+    expect(drawn.camera).toBe("fit");
+    const faded = drawn.route.filter((leg) => leg.tone === "faded");
+    const own = drawn.route.filter((leg) => leg.tone !== "faded");
+    expect(own).toHaveLength(6);
+    expect(faded.length).toBeGreaterThan(0);
+    // The chosen option is drawn last (over the faded ones); no leg carries the map's own text label.
+    expect(drawn.route.slice(-6)).toEqual(own);
+    expect(drawn.route.every((leg) => leg.label === null)).toBe(true);
+    // A line badge on each ride of the chosen option.
+    expect(drawn.tags!.filter((item) => item.line).map((item) => item.line!.label)).toEqual(["8", "רכבת", "1"]);
+    // The others: a faded tag with the arrival time that chooses it, outlined in its line colour.
+    expect(tag("option-1")).toMatchObject({ kind: "faded", text: "10:11", ariaLabel: "האפשרות שמגיעה ב־10:11" });
+    expect(tag("option-1")!.accent).toBeTruthy();
+    expect(tag("option-2")).toMatchObject({ kind: "faded", text: "10:32" });
+    expect(tag("option-0")).toBeUndefined();
+    // The destination: a strong tag with its name, and its pin.
+    expect(tag("destination")).toMatchObject({ kind: "strong", text: "טכניון" });
+    expect(drawn.pins.find((pin) => pin.role === "destination")?.label).toBe("טכניון");
   });
 
-  it("swaps the details and the map when another option is tapped, without a request", async () => {
+  it("chooses by row without a request, and the map follows", async () => {
     const user = userEvent.setup();
     renderCompare();
     await waitFor(() => expect(options()).toHaveLength(3));
@@ -181,10 +205,37 @@ describe("Compare (Hebrew)", () => {
     await user.click(options()[1]!);
     expect(options()[1]).toHaveAttribute("aria-pressed", "true");
     expect(options()[0]).toHaveAttribute("aria-pressed", "false");
-    // The derived option's transfer walk has no street path: time only.
-    expect(within(details()).getByText(/^הליכה כ־2 דק׳$/)).toBeInTheDocument();
+    expect(options()[1]!.querySelector(".b-tag--strong")).toHaveTextContent("בעוד 24 דק׳");
     expect(journeyPosts()).toHaveLength(before);
-    expect(getMapState().scene.route[3]!.coordinates).toBeNull();
+    expect(tag("option-1")).toBeUndefined();
+    expect(tag("option-0")).toMatchObject({ text: "09:52" });
+    // The chosen option keeps the sheet where it is (board Choose: half).
+    expect(snaps).toEqual([]);
+  });
+
+  it("chooses by the faded tag on the map", async () => {
+    renderCompare();
+    await waitFor(() => expect(options()).toHaveLength(3));
+    act(() => tag("option-2")!.onSelect!());
+    expect(options()[2]).toHaveAttribute("aria-pressed", "true");
+    expect(options()[0]).toHaveAttribute("aria-pressed", "false");
+    expect(tag("option-2")).toBeUndefined();
+    expect(tag("option-0")).toMatchObject({ kind: "faded", text: "09:52" });
+  });
+
+  it("opens route details with פרטי המסלול", async () => {
+    const user = userEvent.setup();
+    renderCompare();
+    await waitFor(() => expect(options()).toHaveLength(3));
+    await user.click(screen.getByRole("button", { name: "פרטי המסלול" }));
+    expect(window.location.hash).toBe("#/route");
+  });
+
+  it("opens Search for the start from the line under the destination", async () => {
+    const user = userEvent.setup();
+    renderCompare();
+    await user.click(screen.getByRole("button", { name: /^מוצא:/ }));
+    expect(window.location.hash).toBe("#/search/from");
   });
 
   it("collapses to two rows and to one", async () => {
@@ -195,15 +246,22 @@ describe("Compare (Hebrew)", () => {
     useScenario("compare-one");
     renderCompare();
     await waitFor(() => expect(options()).toHaveLength(1));
-    expect(options()[0]).toHaveAccessibleName(/^אפשרות 1, מומלץ/);
+    expect(options()[0]).toHaveAccessibleName(/^אפשרות 1, /);
+    expect(scene().tags!.filter((item) => item.kind === "faded")).toHaveLength(0);
   });
 
   it("names the day of options that leave on another day than the one asked", async () => {
     renderCompare("he", { ...baseDraft, when: { mode: "depart_at", wall: "2026-09-30T23:30", offset: "auto" } });
     await waitFor(() => expect(options()).toHaveLength(3));
     expect(options()[0]).toHaveAccessibleName(/יציאה יום ה׳, 1\.10 08:07, הגעה יום ה׳, 1\.10 09:52/);
-    expect(within(options()[0]!).getByText("יום ה׳, 1.10")).toBeInTheDocument();
-    expect(within(details()).getByRole("heading")).toHaveTextContent("פרטי מסלול · יום ה׳, 1.10");
+  });
+
+  it("labels a walk-only option", async () => {
+    useScenario("compare-walk-only");
+    renderCompare();
+    await waitFor(() => expect(options()).toHaveLength(2));
+    expect(options()[0]).toHaveAccessibleName("אפשרות 1, הליכה בלבד, 18 דקות, יציאה 08:07, הגעה 08:25, בעוד 4 דק׳");
+    expect(options()[0]!.querySelector(".b-op__l2")).toHaveTextContent("הליכה בלבד · 1.4 ק״מ");
   });
 
   it("shows no route calmly with Earlier, Later and change time", async () => {
@@ -213,10 +271,11 @@ describe("Compare (Hebrew)", () => {
     expect(await screen.findByText("לא נמצא מסלול")).toBeInTheDocument();
     expect(screen.queryByRole("alert")).toBeNull();
     expect(screen.getByRole("button", { name: "שינוי השעה" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "פרטי המסלול" })).toBeNull();
     await user.click(screen.getByRole("button", { name: "מאוחר יותר" }));
     await waitFor(() => expect(journeyPosts()).toHaveLength(2));
     expect(journeyPosts()[1]!.body).toMatchObject({ departAt: "2026-10-01T09:00:00+03:00" });
-    // The chip now says what was asked.
+    // The tag now says what was asked.
     expect(screen.getByRole("button", { name: /^שינוי השעה: יציאה 09:00/ })).toBeInTheDocument();
   });
 
@@ -265,16 +324,6 @@ describe("Compare (Hebrew)", () => {
     expect(await screen.findByRole("alert")).toHaveTextContent("אין חיבור ל־OpenTransit");
   });
 
-  it("labels a walk-only option", async () => {
-    useScenario("compare-walk-only");
-    renderCompare();
-    await waitFor(() => expect(options()).toHaveLength(2));
-    expect(options()[0]).toHaveAccessibleName("אפשרות 1, מומלץ, הליכה בלבד, 18 דקות, יציאה 08:07, הגעה 08:25");
-    expect(within(options()[0]!).getByText("הליכה בלבד")).toBeInTheDocument();
-    expect(within(options()[0]!).getByText("1.4 ק״מ")).toBeInTheDocument();
-    expect(within(details()).getByText(/^הליכה 18 דק׳ · 1.4 ק״מ$/)).toBeInTheDocument();
-  });
-
   it("sends a searched place as its coordinate, even with a placeRef", async () => {
     const searched: PlaceChoice = { ...technion, kind: "address", placeRef: "mot:place:v1:old", refGenerationId: "gen-now" };
     renderCompare("he", { ...baseDraft, to: { type: "place", place: searched } });
@@ -282,57 +331,7 @@ describe("Compare (Hebrew)", () => {
     expect(journeyPosts().map((r) => (r.body!.to as { kind: string }).kind)).toEqual(["coordinate"]);
   });
 
-  it("shows the route without stop counts when trip details fail, and Start still works", async () => {
-    useScenario("compare-trip-failed");
-    const user = userEvent.setup();
-    renderCompare();
-    await waitFor(() => expect(options()).toHaveLength(3));
-    await waitFor(() => expect(within(details()).getAllByText(/מספר התחנות לא זמין/)).toHaveLength(3));
-    expect(stopCounts()).toHaveLength(0);
-    await user.click(screen.getByRole("button", { name: "התחלת ניווט" }));
-    expect(window.location.hash).toBe("#/navigate");
-    expect(getActiveTrip()?.trips).toEqual({});
-  });
-
-  it("starts navigation with the trips already fetched, then reads Resume for the active journey", async () => {
-    const user = userEvent.setup();
-    const { unmount, client } = renderCompare();
-    await waitFor(() => expect(options()).toHaveLength(3));
-    await waitFor(() => expect(stopCounts()).toHaveLength(3));
-    await user.click(screen.getByRole("button", { name: "התחלת ניווט" }));
-    expect(window.location.hash).toBe("#/navigate");
-    const trip = getActiveTrip()!;
-    expect(Object.keys(trip.trips)).toHaveLength(3);
-    expect(trip.journey.id).toBe((fixture("recorded-journey-routes").body as { data: { journeys: { id: string }[] } }).data.journeys[0]!.id);
-    unmount();
-    renderCompare("he", baseDraft, client);
-    expect(await screen.findByRole("button", { name: "חזרה לניווט" })).toBeInTheDocument();
-    await user.click(options()[1]!);
-    expect(screen.getByRole("button", { name: "התחלת ניווט" })).toBeInTheDocument();
-  });
-
-  it("Later and Earlier replace the options with a shifted request, right under the rows", async () => {
-    const user = userEvent.setup();
-    const { container } = renderCompare();
-    await waitFor(() => expect(options()).toHaveLength(3));
-    // Earlier / Later sit between the options and the details.
-    const parts = ["compare-chart", "compare-shift", "route-details"];
-    const order = [...container.querySelectorAll(parts.map((part) => `.${part}`).join(", "))].map((el) =>
-      parts.find((part) => el.classList.contains(part)),
-    );
-    expect(order).toEqual(parts);
-    await user.click(screen.getByRole("button", { name: "מאוחר יותר" }));
-    await waitFor(() => expect(journeyPosts()).toHaveLength(2));
-    expect(journeyPosts()[1]!.body).toMatchObject({ departAt: "2026-10-01T08:28:00+03:00" });
-    expect(journeyPosts()[1]!.body!.arriveBy).toBeUndefined();
-    await waitFor(() => expect(options()).toHaveLength(3));
-    await user.click(screen.getByRole("button", { name: "מוקדם יותר" }));
-    await waitFor(() => expect(journeyPosts()).toHaveLength(3));
-    expect(journeyPosts()[2]!.body).toMatchObject({ arriveBy: "2026-10-01T09:51:00+03:00" });
-    expect(screen.getByRole("button", { name: /^שינוי השעה: הגעה עד 09:51/ })).toBeInTheDocument();
-  });
-
-  it("keeps the previous options, dimmed and not startable, while a new time loads; new ends do not", async () => {
+  it("keeps the previous options, dimmed and not openable, while a new time loads", async () => {
     let release: () => void = () => {};
     let calls = 0;
     server.use(
@@ -345,24 +344,19 @@ describe("Compare (Hebrew)", () => {
     const user = userEvent.setup();
     const { container } = renderCompare();
     await waitFor(() => expect(options()).toHaveLength(1));
-    const later = screen.getByRole("button", { name: "מאוחר יותר" });
-    await user.click(later);
+    await user.click(screen.getByRole("button", { name: /^שינוי השעה/ }));
+    await user.click(screen.getByRole("button", { name: "30 דקות מאוחר יותר" }));
+    await user.click(screen.getByRole("button", { name: "הצגת אפשרויות" }));
     await waitFor(() => expect(calls).toBe(2));
-    // Still on screen, busy, and the button pressed keeps focus.
     expect(options()).toHaveLength(1);
     expect(container.querySelector(".compare-answer")).toHaveAttribute("aria-busy", "true");
-    expect(screen.getByRole("button", { name: "התחלת ניווט" })).toBeDisabled();
-    expect(document.activeElement).toBe(later);
+    expect(screen.getByRole("button", { name: "פרטי המסלול" })).toBeDisabled();
     act(() => release());
     await waitFor(() => expect(container.querySelector(".compare-answer")).toHaveAttribute("aria-busy", "false"));
-    expect(screen.getByRole("button", { name: "התחלת ניווט" })).toBeEnabled();
-    // Swapping the ends is a different trip: the old answer is not kept.
-    await user.click(screen.getByRole("button", { name: "החלפת מוצא ויעד" }));
-    expect(container.querySelectorAll(".option-placeholder")).toHaveLength(3);
-    act(() => release());
+    expect(screen.getByRole("button", { name: "פרטי המסלול" })).toBeEnabled();
   });
 
-  it("changes the time from the chip: depart, +30, show", async () => {
+  it("changes the time from the tag: depart, +30, show", async () => {
     const user = userEvent.setup();
     renderCompare();
     await waitFor(() => expect(options()).toHaveLength(3));
@@ -371,8 +365,8 @@ describe("Compare (Hebrew)", () => {
     await user.click(chip);
     expect(chip).toHaveAttribute("aria-expanded", "true");
     const panel = screen.getByRole("form", { name: "מתי יוצאים?" });
-    // While the time is being changed there is no Start under the panel.
-    expect(screen.queryByRole("button", { name: "התחלת ניווט" })).toBeNull();
+    // While the time is being changed there is no button under the panel.
+    expect(screen.queryByRole("button", { name: "פרטי המסלול" })).toBeNull();
     expect(within(panel).getByLabelText("יום")).toHaveValue("2026-10-01");
     expect(within(panel).getByLabelText("שעה")).toHaveValue("08:00");
     await user.click(within(panel).getByRole("radio", { name: "הגעה עד" }));
@@ -499,20 +493,152 @@ describe("Compare (Hebrew)", () => {
   });
 });
 
+describe("Route details (Hebrew)", () => {
+  it("shows the header and the timeline: stops with times, walks with minutes and metres, rides with badge, headsign and stops", async () => {
+    renderRoute();
+    const heading = await screen.findByRole("heading", { level: 1, name: /יציאה 08:07, הגעה 09:52/ });
+    expect(heading).toHaveTextContent("08:07");
+    expect(document.querySelector(".route-head__duration")).toHaveTextContent("1:45 שע׳");
+    expect(document.querySelector(".route-head .b-tag--strong")).toHaveTextContent("בעוד 4 דק׳");
+    const route = details();
+    const timeline = within(route).getByRole("group", { name: "שלבי המסלול" });
+    // Stops: a filled dot at the start, a square at the arrival; the engine's END as the passenger's label.
+    expect(timeline.querySelector(".compare-tl-stop--origin .b-dot--filled")).not.toBeNull();
+    expect(timeline.querySelector(".compare-tl-stop--destination .b-dot--end")).not.toBeNull();
+    expect(timeline.querySelector(".compare-tl-stop--destination")).toHaveTextContent("09:52טכניון");
+    expect(timeline).toHaveTextContent(/09:24חוף הכרמל/);
+    expect(route).not.toHaveTextContent("END");
+    expect(route).not.toHaveTextContent("רציף");
+    // Rides: badge, headsign, a bar in the line colour; a train by its operator and number.
+    expect(within(route).getByText("מסוף הטייסים")).toBeInTheDocument();
+    expect(within(route).getByText("רכבת ישראל")).toBeInTheDocument();
+    expect(within(route).getByText("רכבת 156")).toBeInTheDocument();
+    expect(within(route).getByText("רכבת ישראל 156 מ־השלום אל חוף הכרמל.", { exact: false })).toBeInTheDocument();
+    expect(route).not.toHaveTextContent("רכבת לחוף הכרמל");
+    expect(timeline.querySelectorAll(".b-bar")).toHaveLength(3);
+    // Walks: ink dots, minutes and metres; the wait before the next ride.
+    expect(timeline.querySelectorAll(".b-dots")).toHaveLength(3);
+    expect(withText(route, ".compare-walk", "הליכה 5 דק׳ · 330 מ׳")).toHaveLength(1);
+    expect(withText(route, ".compare-wait", "המתנה 7 דק׳")).toHaveLength(1);
+    // Every leg is a button; no links to the stop and trip screens (not built yet).
+    expect(legButtons()).toHaveLength(6);
+    expect(within(route).queryAllByRole("link")).toHaveLength(0);
+    // Trip details arrive in the background: stop counts.
+    await waitFor(() => expect(stopCounts()).toHaveLength(3));
+  });
+
+  it("opens with the first leg on the map; tapping a leg zooms to it, with the boarding stop pinned", async () => {
+    const user = userEvent.setup();
+    renderRoute();
+    await waitFor(() => expect(legButtons()).toHaveLength(6));
+    const [ride, walk, rail, , , lastWalk] = legButtons();
+    expect(ride).toHaveAttribute("aria-pressed", "true");
+    expect(ride).toHaveClass("b-tl--on");
+    expect(ride).toHaveTextContent("מוצג במפה");
+    const leg = (i: number) => scene().route[i]!;
+    const points = (i: number) => leg(i).coordinates ?? [leg(i).from, leg(i).to];
+    expect(scene().fitTo).toEqual(points(0));
+    // A ride's own boarding stop: a large pin and its strong tag (direction; the side once the API says).
+    expect(scene().stopPins).toEqual([expect.objectContaining({ id: "board", position: leg(0).from, selected: true, ariaLabel: expect.stringMatching(/^תחנת העלייה: /) })]);
+    expect(tag("board")).toMatchObject({ kind: "strong", text: "לכיוון מסוף הטייסים" });
+
+    // A walk to a train: framed, the station pinned; a train known by number only has no direction tag.
+    await user.click(walk!);
+    expect(walk).toHaveAttribute("aria-pressed", "true");
+    expect(ride).toHaveAttribute("aria-pressed", "false");
+    expect(within(details()).getAllByText("מוצג במפה")).toHaveLength(1);
+    expect(scene().fitTo).toEqual(points(1));
+    expect(scene().stopPins?.[0]?.position).toEqual(leg(2).from);
+    expect(tag("board")).toBeUndefined();
+    await user.click(rail!);
+    expect(scene().fitTo).toEqual(points(2));
+    // The last walk leads to the destination: no boarding pin.
+    await user.click(lastWalk!);
+    expect(scene().fitTo).toEqual(points(5));
+    expect(scene().stopPins).toEqual([]);
+    // Each ride keeps its badge on the map.
+    expect(scene().tags!.filter((item) => item.line)).toHaveLength(3);
+  });
+
+  it("כל המסלול zooms back out to the whole route", async () => {
+    const user = userEvent.setup();
+    renderRoute();
+    await waitFor(() => expect(legButtons()).toHaveLength(6));
+    const whole = screen.getByRole("button", { name: "כל המסלול" });
+    await user.click(whole);
+    expect(scene().fitTo).toBeNull();
+    expect(scene().stopPins ?? []).toEqual([]);
+    expect(legButtons().every((button) => button.getAttribute("aria-pressed") === "false")).toBe(true);
+    expect(screen.queryByRole("button", { name: "כל המסלול" })).toBeNull();
+    expect(screen.getByRole("heading", { level: 1 })).toHaveFocus();
+    await user.click(legButtons()[3]!);
+    expect(screen.getByRole("button", { name: "כל המסלול" })).toBeInTheDocument();
+  });
+
+  it("shows the option chosen on Choose, with its time-only walk", async () => {
+    renderRoute("he", baseDraft, undefined, 1);
+    expect(await screen.findByRole("heading", { level: 1, name: /יציאה 08:27, הגעה 10:11/ })).toBeInTheDocument();
+    expect(withText(details(), ".compare-walk", "הליכה כ־2 דק׳")).toHaveLength(1);
+  });
+
+  it("starts navigation with the trips already fetched, then reads Resume for the active journey", async () => {
+    const user = userEvent.setup();
+    const { unmount, client } = renderRoute();
+    await waitFor(() => expect(stopCounts()).toHaveLength(3));
+    await user.click(screen.getByRole("button", { name: "יוצאים לדרך" }));
+    expect(window.location.hash).toBe("#/navigate");
+    const trip = getActiveTrip()!;
+    expect(Object.keys(trip.trips)).toHaveLength(3);
+    expect(trip.journey.legs).toHaveLength(6);
+    unmount();
+    renderRoute("he", baseDraft, client);
+    expect(await screen.findByRole("button", { name: "חזרה לניווט" })).toBeInTheDocument();
+  });
+
+  it("shows the route without stop counts when trip details fail, and starting still works", async () => {
+    useScenario("compare-trip-failed");
+    const user = userEvent.setup();
+    renderRoute();
+    await waitFor(() => expect(within(details()).getAllByText("מספר התחנות לא זמין")).toHaveLength(3));
+    expect(stopCounts()).toHaveLength(0);
+    await user.click(screen.getByRole("button", { name: "יוצאים לדרך" }));
+    expect(window.location.hash).toBe("#/navigate");
+    expect(getActiveTrip()?.trips).toEqual({});
+  });
+
+  it("saves the destination as a favourite with the star, and removes it again", async () => {
+    const user = userEvent.setup();
+    renderRoute();
+    const star = await screen.findByRole("button", { name: "שמירת היעד" });
+    expect(star).toHaveAttribute("aria-pressed", "false");
+    await user.click(star);
+    expect(star).toHaveAttribute("aria-pressed", "true");
+    expect(storedFavourites()).toEqual([expect.objectContaining({ label: "טכניון", latitude: 32.7767, longitude: 35.0231 })]);
+    await user.click(star);
+    expect(star).toHaveAttribute("aria-pressed", "false");
+    expect(storedFavourites()).toEqual([]);
+  });
+});
+
 describe("Compare (English)", () => {
-  it("shows options, ranks and a train by its operator", async () => {
-    renderCompare("en");
+  it("reads each option and the route details in English", async () => {
+    const { unmount } = renderCompare("en");
     await waitFor(() => expect(options()).toHaveLength(3));
-    expect(options()[0]).toHaveAccessibleName("Option 1, Recommended, 105 minutes, departs 08:07, arrives 09:52, 2 transfers");
-    expect(options()[1]).toHaveAccessibleName(/^Option 2, Fastest/);
+    expect(options()[0]).toHaveAccessibleName("Option 1, 105 minutes, departs 08:07, arrives 09:52, 2 transfers, lines: 8, Train, 1, in 4 min");
+    expect(screen.getByRole("button", { name: /^From: ?from דיזנגוף סנטר$/ })).toBeInTheDocument();
+    expect(screen.getAllByText(/Scheduled/)).toHaveLength(1);
+    expect(screen.getByRole("button", { name: "Route details" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Change time: Depart 08:00" })).toBeInTheDocument();
+    expect(journeyPosts()[0]!.body).toMatchObject({ lang: "en" });
+    unmount();
+    renderRoute("en");
+    await waitFor(() => expect(legButtons()).toHaveLength(6));
     // The recorded answer's names are Hebrew; the words around them are English.
     expect(within(details()).getByText("רכבת ישראל")).toBeInTheDocument();
-    expect(within(details()).getByText("towards מסוף הטייסים")).toBeInTheDocument();
-    expect(screen.getAllByText("Scheduled")).toHaveLength(1);
     expect(within(details()).getByText("Train 156")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Start navigation" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Change time: Depart 08:00, Thu 1 Oct" })).toBeInTheDocument();
-    expect(journeyPosts()[0]!.body).toMatchObject({ lang: "en" });
+    expect(screen.getByRole("button", { name: "Whole route" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Let's go" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Save the destination" })).toBeInTheDocument();
   });
 
   it("shows no route and failures in English", async () => {

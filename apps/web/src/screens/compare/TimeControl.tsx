@@ -5,8 +5,10 @@ import { formatDuration } from "../../lib/format";
 import { departureInstant, israelWallTime } from "../../lib/time";
 import type { When } from "../../plan/draft";
 import { daysBetween, formatShortDay, israelDate, relativeDay } from "./labels";
+import { Nums } from "./text";
 
-// Time control (design: TimeControl; CU03, CU12). One chip in the header (`ot-timechip`)
+// Time control (design: TimeControl; CU03, CU12). One tag button in the header (board
+// Choose: "עכשיו ▾", `b-tag`)
 // says what is asked ("עכשיו" / "יציאה 08:00" / "הגעה עד 10:00 · מחר"); tapping it opens
 // an inline panel: Now / Depart at / Arrive by (`ot-seg`, as radios), a day (today,
 // tomorrow, the next weeks), a time and quick +15 / +30 / +60 pills. "Now" applies at
@@ -99,12 +101,11 @@ export function WhenChip({
     <button
       ref={ref}
       type="button"
-      className="ot-timechip compare-timechip"
+      className="b-tag compare-timechip"
       aria-expanded={open}
       aria-controls={panelId}
       onClick={onToggle}
     >
-      <Icon name="clock" size="sm" />
       {/* The name is the visible text with a hidden lead-in: "שינוי השעה: יציאה 08:00, מחר". */}
       <span className="visually-hidden">{t("compare.changeTime")}:</span>{" "}
       <span className="compare-timechip__text">
@@ -119,10 +120,17 @@ export function WhenChip({
         </span>
         {day && (
           <span className="compare-timechip__day">
-            <span className="visually-hidden">,</span> <bdi>{day}</bdi>
+            <span className="visually-hidden">,</span>{" "}
+            <bdi>
+              <Nums text={day} />
+            </bdi>
           </span>
         )}
       </span>
+      {/* ▾: it opens the time control (board Choose: "עכשיו ▾"). */}
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
+        <path d="M6 9.5l6 6 6-6" />
+      </svg>
     </button>
   );
 }

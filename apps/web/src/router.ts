@@ -11,6 +11,8 @@ export type Route =
   | { name: "home" }
   | { name: "search"; field: SearchField }
   | { name: "compare" }
+  /** Route details of the chosen option (board Step); Back returns to Compare. */
+  | { name: "route" }
   | { name: "navigate" }
   | { name: "stop"; stopId: string }
   | { name: "trip"; tripRef: string }
@@ -19,7 +21,7 @@ export type Route =
   | { name: "settings" }
   | { name: "notFound"; path: string };
 
-const STATIC = ["compare", "navigate", "nearby", "lines", "settings"] as const;
+const STATIC = ["compare", "route", "navigate", "nearby", "lines", "settings"] as const;
 
 export function parseHash(hash: string): Route {
   const path = hash.replace(/^#/, "") || "/";
