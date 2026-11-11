@@ -135,6 +135,8 @@ export default function MapView() {
   const container = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
   const [loaded, setLoaded] = useState(false);
+  /** The map once loaded, for the tag and stop-pin overlay (state, not a ref, so render may read it). */
+  const [overlayMap, setOverlayMap] = useState<MapLibreMap | null>(null);
   const [failed, setFailed] = useState(false);
   const pickRef = useRef(scene.pick);
   const insetRef = useRef(0);
@@ -195,6 +197,7 @@ export default function MapView() {
     });
     map.on("load", () => {
       setLoaded(true);
+      setOverlayMap(map);
       if (pickRef.current) reportCenter(map, insetRef.current, sideRef.current);
     });
     map.on("moveend", () => {
@@ -206,6 +209,7 @@ export default function MapView() {
     return () => {
       mapRef.current = null;
       setLoaded(false);
+      setOverlayMap(null);
       map.remove();
     };
   }, []);
@@ -316,8 +320,8 @@ export default function MapView() {
   return (
     <div className="map-view" data-testid="map-view">
       <div ref={container} className="map-canvas" data-testid="map-canvas" />
-      {loaded && mapRef.current && (
-        <MapOverlay map={mapRef.current} tags={scene.tags ?? []} stopPins={scene.stopPins ?? []} dir={lang === "he" ? "rtl" : "ltr"} />
+      {loaded && overlayMap && (
+        <MapOverlay map={overlayMap} tags={scene.tags ?? []} stopPins={scene.stopPins ?? []} dir={lang === "he" ? "rtl" : "ltr"} />
       )}
       {scene.pick && (
         <div
