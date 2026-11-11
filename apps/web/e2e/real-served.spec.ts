@@ -76,7 +76,10 @@ test.describe("@real served", () => {
     await expectPhoneLayout(page, "Compare");
 
     if (body.data.outcome === "routes_found") {
-      await page.getByRole("button", { name: "התחלת ניווט" }).click();
+      // Board 2 → board 3 → navigation (user, 11 November 2026).
+      await page.getByRole("button", { name: "פרטי המסלול" }).click();
+      await expect(page).toHaveURL(/#\/route$/);
+      await page.getByRole("button", { name: "יוצאים לדרך" }).click();
       await expect(page).toHaveURL(/#\/navigate$/);
       await expect(page.getByRole("button", { name: /השלב הבא|סיום/ }).first()).toBeVisible();
       await expectPhoneLayout(page, "Navigate");

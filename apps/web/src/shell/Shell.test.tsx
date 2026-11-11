@@ -211,6 +211,7 @@ describe("the sheet's setSnap", () => {
 describe("backFallback", () => {
   it("returns from Navigate to Compare and from everything else to Home", () => {
     expect(backFallback({ name: "navigate" })).toEqual({ name: "compare" });
+    expect(backFallback({ name: "route" })).toEqual({ name: "compare" });
     expect(backFallback({ name: "compare" })).toEqual({ name: "home" });
     expect(backFallback({ name: "search", field: "to" })).toEqual({ name: "home" });
   });

@@ -24,7 +24,8 @@ import { SheetContext, SNAP_FRACTION, defaultSnap, fullHeight, nearestSnap, step
 
 /** Where Back leads when there is no in-app history entry (a deep link or a reload). */
 export function backFallback(route: Route): Route {
-  return route.name === "navigate" ? { name: "compare" } : { name: "home" };
+  // Route details (board 3) and Navigate both come from Choose.
+  return route.name === "navigate" || route.name === "route" ? { name: "compare" } : { name: "home" };
 }
 
 // The surface (design: Surface; components BottomSheet, Button): the map full-bleed
