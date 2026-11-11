@@ -2,9 +2,9 @@
 
 **Revision, 31 October 2026 (user): web client for testing/preview; native app is the product.** The native Expo / React Native app designed below remains the product client, for the speed and smoothness only an installed app gives; it follows once the API and deployment are stable. A Vite/React web client in [`apps/web`](../apps/web/README.md) (slices S0–S2 exist; real-API checks pending) is a testing and preview tool for the H-1 private deployment only: enough to exercise the API end to end in a phone browser and gather feedback, not a product release and not polished beyond what testing needs. The user widened that scope twice: a UX polish pass with human-like testing (31 October) and the design system's components and tokens with a dark default (6 November). Pure modules (API layer, `classify`, i18n, formatting, plan/nav logic) are built to be shared with the native app. Phase gates are unchanged.
 
-**Native app: proposal; not implemented.** Interface direction chosen 2 October 2026; native platform chosen 3 October 2026; full design (architecture, UML, screens, navigation engine) written 3 October 2026 and awaiting the user's review. Requirements, stories, speed budgets and acceptance are in the [client PRD](client-prd.md). Tasks, their order and what must be ready before coding are in the [client execution plan](next-steps.md#phase-2-client-execution-plan). Implementation starts under the October 1 [gate revision](../PRD.md): once M2–M4 are accepted locally and the private H-0/H-1 deployment begins. Realtime and alerts remain deferred. The client labels every time as scheduled and shows unavailable live data as unavailable, never as an empty success.
+**Native app: proposal; not implemented.** Interface direction chosen 2 October 2026; native platform chosen 3 October 2026; visual direction chosen 11 November 2026 (not yet applied to the design system or to any client); full design (architecture, UML, screens, navigation engine) written 3 October 2026 and awaiting the user's review. Requirements, stories, speed budgets and acceptance are in the [client PRD](client-prd.md). Tasks, their order and what must be ready before coding are in the [client execution plan](next-steps.md#phase-2-client-execution-plan). Implementation starts under the October 1 [gate revision](../PRD.md): once M2–M4 are accepted locally and the private H-0/H-1 deployment begins. Realtime and alerts remain deferred. The client labels every time as scheduled and shows unavailable live data as unavailable, never as an empty success.
 
-Contents: [interface direction](#interface-direction-user-2-october-2026) · [API constraints and gaps](#constraints-from-the-current-api) · [stack](#stack-and-hosting) · [architecture](#architecture) · [domain model](#domain-model) · [app flow](#app-flow) · [screens](#screens) · [sequences](#sequences) · [navigation engine](#navigation-engine) · [storage](#on-device-storage) · [cross-cutting rules](#cross-cutting-rules) · [copy deck](#core-copy-deck) · [testing](#testing) · [risks and spikes](#risks-and-spikes)
+Contents: [interface direction](#interface-direction-user-2-october-2026) · [visual direction](#visual-direction-user-11-november-2026) · [API constraints and gaps](#constraints-from-the-current-api) · [stack](#stack-and-hosting) · [architecture](#architecture) · [domain model](#domain-model) · [app flow](#app-flow) · [screens](#screens) · [sequences](#sequences) · [navigation engine](#navigation-engine) · [storage](#on-device-storage) · [cross-cutting rules](#cross-cutting-rules) · [copy deck](#core-copy-deck) · [testing](#testing) · [risks and spikes](#risks-and-spikes)
 
 ## Interface direction (user, 2 October 2026)
 
@@ -24,6 +24,57 @@ Tokens, components (Hebrew previews), the seven-screen flow and the brand book l
 - The app forces right-to-left layout in Hebrew and left-to-right in English. Time ranges, leg strips, the comparison axis and progress run right to left in Hebrew; digits, times and line numbers are isolated as left-to-right runs with tabular figures. Directional icons mirror; mode icons do not.
 - Trains are named by destination and platform; buses by number and headsign.
 - Primary actions sit at the bottom of the sheet. At 360 × 640, after an option is tapped the chart and the start of its route are both visible, and navigation shows the step card and at least the next step without scrolling.
+
+## Visual direction (user, 11 November 2026)
+
+**Chosen, not applied.** The user chose this look on the private canvas "OpenTransit UX Upgrade" (`https://claude.ai/artifact/F7pc3VsqUyEAuj6VKip5Kb`, row "Map as the interface, printed-map look", eight boards), after comparing six colour directions on a private options page (`https://claude.ai/artifact/9X19SWcFsX3JRZSZz8a3DX`). Both use sample data. The boards are static drawings, were not checked rendered by the session that drew them, and are not implementation evidence. The design system artifact named above, the web test client's generated tokens and the native design below are unchanged.
+
+- **Printed-map look, dark first.** The map is drawn like a printed network map: quiet streets, thick route lines with a pale outline, ringed stations. Dark stays the default (6 November); light is kept.
+- **Lines take their operator's colour**, so the vehicle can be recognised on the street. A route that is not chosen keeps a faded version of its own colour.
+- **Every line badge carries a simple vehicle icon** (bus, train, light rail) beside its number or name. Train lines are also drawn with a dashed centre, so the vehicle type never depends on colour alone.
+- **Typeface: Arimo**, shipped with the client and never fetched from a third party (the privacy rule below). On the boards, times and line numbers use condensed signage numerals (Barlow Semi Condensed); the user chose Arimo and did not comment on the numerals.
+- **The main button is not white.** In dark mode it is a warm dark grey with light text.
+
+These values are read from the boards. They are not tokens yet: the design system keeps its token names, and its values change only when the user updates it.
+
+| On the boards | Dark | Light |
+| --- | --- | --- |
+| Map land / street | `#242321` / `#2f2d2a` | `#f2f2ee` / `#e2e1db` |
+| Map water / park | `#1c2b33` / `#262d22` | `#cfe0ea` / `#dbe6d3` |
+| Route outline | `#f4f1ea` | `#ffffff` |
+| Panel / selected row / hairline | `#1a1917` / `#2b2926` / `#383531` | `#ffffff` / `#f1f0ec` / `#dddbd4` |
+| Text / muted text | `#f4f1ea` / `#b0a99d` | `#1b1a17` / `#5a564e` |
+| Main button / its text | `#4d483f` / `#f4f1ea` | `#1b1a17` / `#ffffff` |
+
+### What the chosen boards show
+
+| # | Board | The map's job |
+| --- | --- | --- |
+| 1 | Home | Nearby stops and stations are pins that carry their next departure; a dashed ring marks a 5-minute walk |
+| 2 | Choose | Every option is drawn at once: the chosen one in colour with its line badges on the route, the others faded with their arrival time; tapping a line or its row chooses it |
+| 3 | Step | Tapping a step zooms the map to that leg; the stop pin says which side of the road and which direction |
+| 4 | Walking | The map follows the person; the stop pin carries the countdown; the panel shrinks to one answer |
+| 5 | On board | The travelled part turns grey and the map zooms in as the exit stop nears; the stop list stays vertical |
+| 6 | Bus didn't come | The choices (wait, or walk to another stop) are drawn from where the person stands |
+| 7 | Stop | Every line through a tapped stop fans out; a chosen line shows its whole route and direction |
+| 8 | Wide screen | The panel sits beside the map, and the chosen option's steps open in place |
+
+### Where the boards depart from the requirements
+
+The user approved the boards as drawn ("I like this design now") but was not asked about each requirement they depart from. The [client PRD](client-prd.md#6-functional-requirements) and the sections of this design stand for behaviour until the user revises them; this section governs appearance only.
+
+1. **C03 Compare:** the PRD requires up to three options on one shared time axis with a rank label. The boards show the options as rows with times and line badges, without the axis or rank labels.
+2. **C04 Route details:** the PRD requires every step on tapping an option, without a further tap, with the chart still in view. On the phone boards, route details open as their own step; the wide-screen board keeps them in place.
+3. **C01 Home:** the PRD requires From and To at once, then Home, Work and favourite chips and recents. The boards show one search field, the saved places and the nearest stop's departures.
+
+### Open before the look is built
+
+- **Operator colours are not verified.** The boards use example colours. Only Egged's green is checked ([Egged's own history](https://egged.co.il/Days-Article-4492-80-years-of-color.aspx)); the colours used for Dan, Metropoline, Israel Railways and the Red Line are placeholders. Build the table from the real vehicles and keep it current when an operator repaints.
+- **Operator and mode on every line shown.** Journey legs carry the operator's name in the [domain model](#domain-model); departure items still lack operator and mode (API-C3), so a stop board cannot colour its lines until that lands.
+- **Fonts:** add Arimo and Barlow Semi Condensed to the [licence audit](licence-audit.md) before they are bundled.
+- **Contrast is not measured.** Check text, badges and line colours in both themes, and each operator colour against both map backgrounds.
+- **The map needs a matching style** (quiet streets, few labels, Hebrew names). None exists yet.
+- **Applying it:** update the design system artifact first, then replace the web test client's checked-in copies and run `npm run tokens`; the native app's `theme/tokens.ts` follows the same source. Whether the web test client takes the look at all is the user's call, since it is a testing tool.
 
 ## Constraints from the current API
 
@@ -725,7 +776,7 @@ Versioned keys in one key-value store with a synchronous read (proposed: `expo-s
   | Any other 4xx | `unavailable` | Generic message; the request ID is shown in the timing panel only |
 
 - **Time:** always Asia/Jerusalem with an explicit offset and a "מתוכנן" (scheduled) label. Port the playground's DST handling (`time.mjs`) and its tests; they must pass with the host clock in UTC.
-- **Appearance (user, 6 November 2026):** dark is the default whatever the phone's setting; light is a choice in Settings, stored locally and applied before first paint (web: `data-theme` set by a generated `theme.js`). `color-scheme`, the `theme-color` and the map style follow the active theme. Every colour, type style, spacing step, radius, size and shadow comes from the design system's tokens for both themes; the NavStep hero uses `hero` / `on-hero` / `hero-accent`, which keep it the highest-contrast surface in either theme.
+- **Appearance (user, 6 November 2026):** dark is the default whatever the phone's setting; light is a choice in Settings, stored locally and applied before first paint (web: `data-theme` set by a generated `theme.js`). `color-scheme`, the `theme-color` and the map style follow the active theme. Every colour, type style, spacing step, radius, size and shadow comes from the design system's tokens for both themes; the NavStep hero uses `hero` / `on-hero` / `hero-accent`, which keep it the highest-contrast surface in either theme. The [visual direction](#visual-direction-user-11-november-2026) of 11 November changes the palette, the typeface and how lines are coloured; until the design system carries it, the tokens described here are what is built.
 - **i18n/RTL:** typed Hebrew and English dictionaries with key parity, Intl formatters, logical (start/end) layout only, left-to-right isolation for line numbers, times and mixed-language names.
 - **Accessibility:** VoiceOver and TalkBack labels on every control, system text size without clipping on core screens, announcements when the step or cue changes, 44 pt targets, nothing conveyed by colour alone, every map fact also present as text. The chart is read as a list ("אפשרות 1, מומלץ, 47 דקות, יציאה 08:41, החלפה אחת").
 - **Privacy:** no analytics, tracking or crash-reporting SDKs and no third-party fonts. Location only after a tap, never stored beyond the active trip's own start point; background location only during an active navigation.
@@ -792,8 +843,8 @@ Blocking for the client: API-C1 (before S5 details are complete and before S6 ri
 
 ## Defaults pending user confirmation
 
-- Name "OpenTransit", with the teal palette from the playground as set out in the design system.
-- System fonts (no third-party fonts), drawn line icons with the option of switching to a licensed open set.
+- Name "OpenTransit". The palette is no longer pending: the user chose the [visual direction](#visual-direction-user-11-november-2026) on 11 November, to replace the teal palette once the design system is updated.
+- Typeface and line icons: decided on 11 November (Arimo shipped with the client; a simple solid vehicle icon on every line). The other icons stay drawn by us, with the option of switching to a licensed open set.
 - OpenFreeMap vector tiles for the preview, moving to a self-hosted Protomaps Israel extract before public release. The tile host sees user IPs and viewports.
 - Native app first (decided 3 October); the iOS Live Activity may follow the first preview.
 - New on 3 October, listed in the [PRD's open decisions](client-prd.md#10-open-decisions-for-the-user): the API additions, local notifications for the locked-phone cue, the storage module and the app identifiers. Appearance was decided on 6 November: dark by default, light selectable.
