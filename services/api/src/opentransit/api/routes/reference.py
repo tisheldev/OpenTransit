@@ -2,13 +2,15 @@
 
 import math
 import sqlite3
-from typing import Annotated
+from typing import Annotated, Literal
 
 from fastapi import APIRouter, Query, Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 
+from opentransit.api.docs import STOP_LINES_DOC
 from opentransit.api.responses import metadata
+from opentransit.reference import MAX_STOP_LINES_PAGE
 from opentransit.runtime import capture_snapshot
 
 PageLimit = Annotated[int, Query(ge=1, le=100)]
@@ -37,6 +39,9 @@ def _public(value):
         "text_color": "textColor",
         "fare_url": "fareUrl",
         "zone_id": "zoneId",
+        "serves_stop": "servesStop",
+        "stop_index": "stopIndex",
+        "geometry_source": "geometrySource",
     }
     if isinstance(value, dict):
         return {names.get(key, key): _public(item) for key, item in value.items()}
@@ -115,6 +120,32 @@ def reference_router(clock, problem) -> APIRouter:
         if not stop_id.startswith("mot:stop:") or len(stop_id) > 250:
             return problem(request, 422, "INVALID_REQUEST", "Use a returned stop reference.")
         return serve(request, lambda ref: ref.stop(stop_id))
+
+    @router.get("/v1/stops/{stop_id}/lines", responses=STOP_LINES_DOC)
+    def stop_lines(
+        stop_id: str,
+        request: Request,
+        limit: Annotated[int, Query(ge=1, le=MAX_STOP_LINES_PAGE)] = 20,
+        cursor: Cursor = None,
+        patterns: Annotated[
+            Literal["serving", "all"],
+            Query(
+                description=(
+                    "`serving` (default): only patterns that call at this stop. `all`: "
+                    "also the route's other patterns, such as the opposite direction."
+                )
+            ),
+        ] = "serving",
+    ):
+        """Every line through a stop with its ordered stops, operator and mode (board 7)."""
+        if not stop_id.startswith("mot:stop:") or len(stop_id) > 250:
+            return problem(request, 422, "INVALID_REQUEST", "Use a returned stop reference.")
+        return serve(
+            request,
+            lambda ref: ref.stop_lines(stop_id, limit, cursor, patterns == "all"),
+            paginated=True,
+            cursor=cursor,
+        )
 
     @router.get("/v1/routes")
     def routes(

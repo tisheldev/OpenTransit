@@ -38,6 +38,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/stops/{stop_id}/lines": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Stop Lines
+         * @description Every line through a stop with its ordered stops, operator and mode (board 7).
+         */
+        get: operations["stop_lines_v1_stops__stop_id__lines_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/routes": {
         parameters: {
             query?: never;
@@ -115,6 +135,30 @@ export interface paths {
         };
         /** Stop Departures */
         get: operations["stop_departures_v1_stops__stop_id__departures_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/departures/nearby": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Nearby Departures
+         * @description Nearby stops, each with the next departure of each of its lines (Home, board 1).
+         *
+         *     A platform is folded into its station. Each departure is verified exactly as on the
+         *     stop board. A stop whose departures could not be read says so
+         *     (`departuresState: unavailable`); if no stop could be read the request fails.
+         */
+        get: operations["nearby_departures_v1_departures_nearby_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -212,6 +256,51 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /**
+         * Boarding
+         * @description Where to wait for a transit leg (board 3: "on this side, toward <place>").
+         */
+        Boarding: {
+            /**
+             * Bearingdegrees
+             * @description Direction the vehicle travels as it leaves the boarding stop, degrees clockwise from north (0-360); null when neither the leg's path nor its next stop gives one.
+             */
+            bearingDegrees: number | null;
+            /**
+             * Bearingsource
+             * @description `leg_geometry`: read over the first 30 m of the leg's path after the stop. `stop_sequence`: straight towards the next stop (no path).
+             */
+            bearingSource: ("leg_geometry" | "stop_sequence") | null;
+            /**
+             * Stopside
+             * @description Which side of the vehicle's path the stop stands on, facing the direction of travel. A person is on the stop's side of the road when they are on this side of the line through `pathPoint` at `bearingDegrees`. Null with `stopSideUnavailableReason` when it cannot be told from the data.
+             */
+            stopSide: ("right" | "left") | null;
+            /** Stopsideunavailablereason */
+            stopSideUnavailableReason: ("not_a_street_mode" | "path_has_no_shape_at_stop" | "stop_on_path" | "path_far_from_stop" | "no_leg_geometry") | null;
+            /**
+             * Stopoffsetmeters
+             * @description Distance from the stop to the nearest point of the vehicle's path.
+             */
+            stopOffsetMeters: number | null;
+            /**
+             * Pathpoint
+             * @description [longitude, latitude] of the vehicle path's point nearest the stop.
+             */
+            pathPoint: number[] | null;
+            /**
+             * Towards
+             * @description The trip's headsign (where the vehicle is signed to).
+             */
+            towards: string | null;
+            /** @description The first stop after boarding (the alighting stop on a one-stop ride). */
+            nextStop: components["schemas"]["Location"] | null;
+            /**
+             * Stopcount
+             * @description Stops travelled until alighting, counting the alighting stop; null when the engine's intermediate stops are unreadable.
+             */
+            stopCount: number | null;
+        };
         /** Capabilities */
         Capabilities: {
             /**
@@ -251,6 +340,63 @@ export interface components {
              * Format: date-time
              */
             until: string;
+        };
+        /** DepartureItem */
+        DepartureItem: {
+            /**
+             * Scheduleddeparture
+             * Format: date-time
+             */
+            scheduledDeparture: string;
+            /**
+             * Stopid
+             * @description The platform or stop the vehicle leaves from.
+             */
+            stopId: string;
+            /** Routeid */
+            routeId: string;
+            /** Routeshortname */
+            routeShortName: string;
+            /** Headsign */
+            headsign: string | null;
+            /**
+             * Operatorid
+             * @description GTFS agency ID (API-C3); null when the engine omits it.
+             */
+            operatorId: string | null;
+            /**
+             * Operatorname
+             * @description Operator name as in the feed (API-C3).
+             */
+            operatorName: string | null;
+            /**
+             * Mode
+             * @description The same mode strings journey legs use (`bus`, `rail`, `light_rail`; rarer engine modes as `cable_car`, `funicular`, `ferry`, else `other`); null when the engine omits it.
+             */
+            mode: ("bus" | "rail" | "light_rail" | "cable_car" | "funicular" | "ferry" | "other") | null;
+            /**
+             * Directionid
+             * @description GTFS direction_id of the trip, if any.
+             */
+            directionId: string | null;
+            /** Platformcode */
+            platformCode: string | null;
+            /** Pickuptype */
+            pickupType: number;
+            /**
+             * Tripref
+             * @description Dated trip reference for `GET /v1/trips/{tripRef}`.
+             */
+            tripRef: string;
+            /** Callsequence */
+            callSequence: number;
+        };
+        /** DeparturesResponse */
+        DeparturesResponse: {
+            /** Data */
+            data: components["schemas"]["DepartureItem"][];
+            page: components["schemas"]["Page"];
+            meta: components["schemas"]["Metadata"];
         };
         /** Geometry */
         Geometry: {
@@ -345,6 +491,11 @@ export interface components {
              */
             maxEgressWalkMinutes?: number;
             /**
+             * Excludetriprefs
+             * @description Dated trip references (a leg's `transit.engineTripId`) no returned journey may ride, for example the bus that did not come. Alternatives using one are omitted (warning `EXCLUDED_TRIP_ALTERNATIVES_OMITTED`); the engine is asked for its maximum number of alternatives so that others can take their place.
+             */
+            excludeTripRefs?: string[];
+            /**
              * Maxdirectwalkminutes
              * @description Cap on a walk-only alternative, in whole minutes (1-30). Sent to the engine as maxDirectTime.
              * @default 30
@@ -376,6 +527,60 @@ export interface components {
             /** Geometryunavailablereason */
             geometryUnavailableReason: string | null;
             transit: components["schemas"]["Transit"] | null;
+            /**
+             * Intermediatestops
+             * @description Stops passed between boarding and alighting, in order; null for a walk.
+             */
+            intermediateStops?: components["schemas"]["Stopover"][] | null;
+            /** @description Where and which way to board; null for a walk. */
+            boarding?: components["schemas"]["Boarding"] | null;
+        };
+        /** LinePattern */
+        LinePattern: {
+            /** Patternid */
+            patternId: string;
+            /**
+             * Routeid
+             * @description The route this pattern belongs to. A MOT route is one direction, so with `patterns=all` the line's other directions (same operator and line code) appear here under their own route IDs, with `servesStop` false unless they also stop here.
+             */
+            routeId: string;
+            /** Directionid */
+            directionId: string | null;
+            /** Headsign */
+            headsign: string | null;
+            /**
+             * Servesstop
+             * @description True when the tapped stop or one of its platforms is on it.
+             */
+            servesStop: boolean;
+            /**
+             * Stopindex
+             * @description Index in `stops` of the first call at the tapped stop (or its platform); the line fans out from here in its direction of travel. Null when not served.
+             */
+            stopIndex: number | null;
+            /**
+             * Geometrysource
+             * @description `stops` is the ordered stop sequence, not the street path. For the street path of one trip use `GET /v1/trips/{tripRef}` (`shape`).
+             * @constant
+             */
+            geometrySource: "stop_sequence";
+            /** Stops */
+            stops: components["schemas"]["LineStop"][];
+        };
+        /** LineStop */
+        LineStop: {
+            /** Stopid */
+            stopId: string;
+            /** Name */
+            name: string | null;
+            /** Latitude */
+            latitude: number | null;
+            /** Longitude */
+            longitude: number | null;
+            /** Pickuptype */
+            pickupType: number;
+            /** Dropofftype */
+            dropOffType: number;
         };
         /** Location */
         Location: {
@@ -389,6 +594,11 @@ export interface components {
             stopId?: string | null;
             /** Stopcode */
             stopCode?: string | null;
+            /**
+             * Platformcode
+             * @description Platform or bay at a transit stop, from the generation's reference (API-C2); null when the feed gives none.
+             */
+            platformCode?: string | null;
         };
         /** Metadata */
         Metadata: {
@@ -432,6 +642,72 @@ export interface components {
             /** Warnings */
             warnings?: string[];
         };
+        /** NearbyCoordinate */
+        NearbyCoordinate: {
+            /** Latitude */
+            latitude: number;
+            /** Longitude */
+            longitude: number;
+        };
+        /** NearbyDeparturesResponse */
+        NearbyDeparturesResponse: {
+            /**
+             * Data
+             * @description Nearest stop first.
+             */
+            data: components["schemas"]["NearbyStopDepartures"][];
+            query: components["schemas"]["NearbyQuery"];
+            meta: components["schemas"]["Metadata"];
+        };
+        /** NearbyQuery */
+        NearbyQuery: {
+            near: components["schemas"]["NearbyCoordinate"];
+            /** Radiusmeters */
+            radiusMeters: number;
+            /** Stops */
+            stops: number;
+            /** Perstop */
+            perStop: number;
+            /**
+             * From
+             * Format: date-time
+             */
+            from: string;
+            /**
+             * Until
+             * Format: date-time
+             */
+            until: string;
+        };
+        /** NearbyStopDepartures */
+        NearbyStopDepartures: {
+            stop: components["schemas"]["StopSummary"];
+            /**
+             * Departuresstate
+             * @enum {string}
+             */
+            departuresState: "available" | "unavailable";
+            /**
+             * Unavailablereason
+             * @description Problem code when this stop's departures could not be read.
+             */
+            unavailableReason: string | null;
+            /**
+             * Complete
+             * @description False when the per-stop lookup bound stopped before `perStop` lines were found, or the stop is unavailable. True means every line departing in the window was considered.
+             */
+            complete: boolean;
+            /**
+             * Departures
+             * @description Earliest departure of each line (route and headsign), in time order, at most `perStop`; null when unavailable. An empty list means no boardable departure in the window.
+             */
+            departures: components["schemas"]["DepartureItem"][] | null;
+        };
+        /** Page */
+        Page: {
+            /** Nextcursor */
+            nextCursor: string | null;
+        };
         /** PlaceLocation */
         PlaceLocation: {
             /**
@@ -442,6 +718,40 @@ export interface components {
             /** Placeref */
             placeRef: string;
         };
+        /** StopLine */
+        StopLine: {
+            /** Routeid */
+            routeId: string;
+            /** Routeshortname */
+            routeShortName: string | null;
+            /** Routelongname */
+            routeLongName: string | null;
+            /** Operatorid */
+            operatorId: string | null;
+            /** Operatorname */
+            operatorName: string | null;
+            /**
+             * Mode
+             * @description The same mode strings journey legs use (`bus`, `rail`, `light_rail`; rarer engine modes as `cable_car`, `funicular`, `ferry`, else `other`); null when the engine omits it. Derived from the GTFS route_type.
+             * @enum {string}
+             */
+            mode: "bus" | "rail" | "light_rail" | "cable_car" | "funicular" | "ferry" | "other";
+            /** Routetype */
+            routeType: number | null;
+            /** Color */
+            color: string | null;
+            /** Textcolor */
+            textColor: string | null;
+            /** Patterns */
+            patterns: components["schemas"]["LinePattern"][];
+        };
+        /** StopLinesResponse */
+        StopLinesResponse: {
+            /** Data */
+            data: components["schemas"]["StopLine"][];
+            page: components["schemas"]["Page"];
+            meta: components["schemas"]["Metadata"];
+        };
         /** StopLocation */
         StopLocation: {
             /**
@@ -451,6 +761,54 @@ export interface components {
             kind: "stop";
             /** Stopid */
             stopId: string;
+        };
+        /** StopSummary */
+        StopSummary: {
+            /** Stopid */
+            stopId: string;
+            /** Sourceid */
+            sourceId: string;
+            /** Code */
+            code: string | null;
+            /** Name */
+            name: string | null;
+            /** Description */
+            description: string | null;
+            /** Latitude */
+            latitude: number | null;
+            /** Longitude */
+            longitude: number | null;
+            /** Locationtype */
+            locationType: number | null;
+            /** Parentstationid */
+            parentStationId: string | null;
+            /** Wheelchairboarding */
+            wheelchairBoarding: number | null;
+            /** Platformcode */
+            platformCode: string | null;
+            /**
+             * Distancemeters
+             * @description From `near`; for a station, the distance to its nearest platform.
+             */
+            distanceMeters: number;
+        };
+        /**
+         * Stopover
+         * @description A stop a transit leg passes between boarding and alighting.
+         */
+        Stopover: {
+            /** Name */
+            name: string;
+            /** Stopid */
+            stopId: string | null;
+            /** Latitude */
+            latitude: number;
+            /** Longitude */
+            longitude: number;
+            /** Scheduledarrival */
+            scheduledArrival: string | null;
+            /** Scheduleddeparture */
+            scheduledDeparture: string | null;
         };
         /** Timing */
         Timing: {
@@ -502,6 +860,99 @@ export interface components {
             serviceDate: string;
             /** Starttime */
             startTime: string;
+        };
+        /** Trip */
+        Trip: {
+            /** Tripref */
+            tripRef: string;
+            /** Sourcetripid */
+            sourceTripId: string;
+            /**
+             * Servicedate
+             * Format: date
+             */
+            serviceDate: string;
+            /** Starttime */
+            startTime: string;
+            /** Routeid */
+            routeId: string;
+            /** Routeshortname */
+            routeShortName: string;
+            /** Headsign */
+            headsign: string | null;
+            /** Operatorid */
+            operatorId: string | null;
+            /** Operatorname */
+            operatorName: string | null;
+            /**
+             * Mode
+             * @description The same mode strings journey legs use (`bus`, `rail`, `light_rail`; rarer engine modes as `cable_car`, `funicular`, `ferry`, else `other`); null when the engine omits it.
+             */
+            mode: ("bus" | "rail" | "light_rail" | "cable_car" | "funicular" | "ferry" | "other") | null;
+            /** Directionid */
+            directionId: string | null;
+            /** @description The whole trip's path, first to last stop. */
+            shape: components["schemas"]["Geometry"] | null;
+            /** Calls */
+            calls: components["schemas"]["TripCall"][];
+            /**
+             * Timingstate
+             * @constant
+             */
+            timingState: "scheduled";
+            /** Expectedarrival */
+            expectedArrival: null;
+            /** Expecteddeparture */
+            expectedDeparture: null;
+            /** Delayseconds */
+            delaySeconds: null;
+            /**
+             * Alerts
+             * @constant
+             */
+            alerts: "not_enabled";
+        };
+        /** TripCall */
+        TripCall: {
+            /** Callsequence */
+            callSequence: number;
+            /** Ordinal */
+            ordinal: number;
+            /** Stopid */
+            stopId: string;
+            /**
+             * Name
+             * @description Stop name from the feed (API-C1).
+             */
+            name: string | null;
+            /**
+             * Latitude
+             * @description API-C1
+             */
+            latitude: number | null;
+            /**
+             * Longitude
+             * @description API-C1
+             */
+            longitude: number | null;
+            /**
+             * Platformcode
+             * @description API-C1
+             */
+            platformCode: string | null;
+            /** Scheduledarrival */
+            scheduledArrival: string | null;
+            /** Scheduleddeparture */
+            scheduledDeparture: string | null;
+            /** Pickuptype */
+            pickupType: number;
+            /** Dropofftype */
+            dropOffType: number;
+        };
+        /** TripResponse */
+        TripResponse: {
+            data: components["schemas"]["Trip"];
+            meta: components["schemas"]["Metadata"];
         };
         /** ValidationError */
         ValidationError: {
@@ -645,6 +1096,142 @@ export interface operations {
                          * Errors
                          * @default null
                          */
+                        errors?: {
+                            [key: string]: string;
+                        }[] | null;
+                    };
+                };
+            };
+        };
+    };
+    stop_lines_v1_stops__stop_id__lines_get: {
+        parameters: {
+            query?: {
+                limit?: number;
+                cursor?: string | null;
+                /** @description `serving` (default): only patterns that call at this stop. `all`: also the route's other patterns, such as the opposite direction. */
+                patterns?: "serving" | "all";
+            };
+            header?: never;
+            path: {
+                stop_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StopLinesResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": {
+                        /** Type */
+                        type: string;
+                        /** Title */
+                        title: string;
+                        /** Status */
+                        status: number;
+                        /** Code */
+                        code: string;
+                        /** Detail */
+                        detail: string;
+                        /** Requestid */
+                        requestId: string;
+                        /** Errors */
+                        errors?: {
+                            [key: string]: string;
+                        }[] | null;
+                    };
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": {
+                        /** Type */
+                        type: string;
+                        /** Title */
+                        title: string;
+                        /** Status */
+                        status: number;
+                        /** Code */
+                        code: string;
+                        /** Detail */
+                        detail: string;
+                        /** Requestid */
+                        requestId: string;
+                        /** Errors */
+                        errors?: {
+                            [key: string]: string;
+                        }[] | null;
+                    };
+                };
+            };
+            /** @description Per-client rate limit exceeded (`RATE_LIMITED`) */
+            429: {
+                headers: {
+                    /** @description Whole seconds until this client may retry */
+                    "Retry-After"?: number;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": {
+                        /** Type */
+                        type: string;
+                        /** Title */
+                        title: string;
+                        /** Status */
+                        status: number;
+                        /** Code */
+                        code: string;
+                        /** Detail */
+                        detail: string;
+                        /** Requestid */
+                        requestId: string;
+                        /**
+                         * Errors
+                         * @default null
+                         */
+                        errors?: {
+                            [key: string]: string;
+                        }[] | null;
+                    };
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": {
+                        /** Type */
+                        type: string;
+                        /** Title */
+                        title: string;
+                        /** Status */
+                        status: number;
+                        /** Code */
+                        code: string;
+                        /** Detail */
+                        detail: string;
+                        /** Requestid */
+                        requestId: string;
+                        /** Errors */
                         errors?: {
                             [key: string]: string;
                         }[] | null;
@@ -863,16 +1450,59 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": components["schemas"]["TripResponse"];
                 };
             };
-            /** @description Validation Error */
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": {
+                        /** Type */
+                        type: string;
+                        /** Title */
+                        title: string;
+                        /** Status */
+                        status: number;
+                        /** Code */
+                        code: string;
+                        /** Detail */
+                        detail: string;
+                        /** Requestid */
+                        requestId: string;
+                        /** Errors */
+                        errors?: {
+                            [key: string]: string;
+                        }[] | null;
+                    };
+                };
+            };
+            /** @description Unprocessable Content */
             422: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
+                    "application/problem+json": {
+                        /** Type */
+                        type: string;
+                        /** Title */
+                        title: string;
+                        /** Status */
+                        status: number;
+                        /** Code */
+                        code: string;
+                        /** Detail */
+                        detail: string;
+                        /** Requestid */
+                        requestId: string;
+                        /** Errors */
+                        errors?: {
+                            [key: string]: string;
+                        }[] | null;
+                    };
                 };
             };
             /** @description Per-client rate limit exceeded (`RATE_LIMITED`) */
@@ -906,6 +1536,58 @@ export interface operations {
                     };
                 };
             };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": {
+                        /** Type */
+                        type: string;
+                        /** Title */
+                        title: string;
+                        /** Status */
+                        status: number;
+                        /** Code */
+                        code: string;
+                        /** Detail */
+                        detail: string;
+                        /** Requestid */
+                        requestId: string;
+                        /** Errors */
+                        errors?: {
+                            [key: string]: string;
+                        }[] | null;
+                    };
+                };
+            };
+            /** @description Gateway Timeout */
+            504: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": {
+                        /** Type */
+                        type: string;
+                        /** Title */
+                        title: string;
+                        /** Status */
+                        status: number;
+                        /** Code */
+                        code: string;
+                        /** Detail */
+                        detail: string;
+                        /** Requestid */
+                        requestId: string;
+                        /** Errors */
+                        errors?: {
+                            [key: string]: string;
+                        }[] | null;
+                    };
+                };
+            };
         };
     };
     stop_departures_v1_stops__stop_id__departures_get: {
@@ -915,6 +1597,8 @@ export interface operations {
                 horizonMinutes?: number;
                 limit?: number;
                 cursor?: string | null;
+                /** @description Only this line's departures (a returned `mot:route:` reference). */
+                routeId?: string | null;
             };
             header?: never;
             path: {
@@ -930,16 +1614,59 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": components["schemas"]["DeparturesResponse"];
                 };
             };
-            /** @description Validation Error */
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": {
+                        /** Type */
+                        type: string;
+                        /** Title */
+                        title: string;
+                        /** Status */
+                        status: number;
+                        /** Code */
+                        code: string;
+                        /** Detail */
+                        detail: string;
+                        /** Requestid */
+                        requestId: string;
+                        /** Errors */
+                        errors?: {
+                            [key: string]: string;
+                        }[] | null;
+                    };
+                };
+            };
+            /** @description Unprocessable Content */
             422: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
+                    "application/problem+json": {
+                        /** Type */
+                        type: string;
+                        /** Title */
+                        title: string;
+                        /** Status */
+                        status: number;
+                        /** Code */
+                        code: string;
+                        /** Detail */
+                        detail: string;
+                        /** Requestid */
+                        requestId: string;
+                        /** Errors */
+                        errors?: {
+                            [key: string]: string;
+                        }[] | null;
+                    };
                 };
             };
             /** @description Per-client rate limit exceeded (`RATE_LIMITED`) */
@@ -967,6 +1694,195 @@ export interface operations {
                          * Errors
                          * @default null
                          */
+                        errors?: {
+                            [key: string]: string;
+                        }[] | null;
+                    };
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": {
+                        /** Type */
+                        type: string;
+                        /** Title */
+                        title: string;
+                        /** Status */
+                        status: number;
+                        /** Code */
+                        code: string;
+                        /** Detail */
+                        detail: string;
+                        /** Requestid */
+                        requestId: string;
+                        /** Errors */
+                        errors?: {
+                            [key: string]: string;
+                        }[] | null;
+                    };
+                };
+            };
+            /** @description Gateway Timeout */
+            504: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": {
+                        /** Type */
+                        type: string;
+                        /** Title */
+                        title: string;
+                        /** Status */
+                        status: number;
+                        /** Code */
+                        code: string;
+                        /** Detail */
+                        detail: string;
+                        /** Requestid */
+                        requestId: string;
+                        /** Errors */
+                        errors?: {
+                            [key: string]: string;
+                        }[] | null;
+                    };
+                };
+            };
+        };
+    };
+    nearby_departures_v1_departures_nearby_get: {
+        parameters: {
+            query: {
+                /** @description lat,lon of the person */
+                near: string;
+                from: string;
+                radius?: number;
+                stops?: number;
+                perStop?: number;
+                horizonMinutes?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NearbyDeparturesResponse"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": {
+                        /** Type */
+                        type: string;
+                        /** Title */
+                        title: string;
+                        /** Status */
+                        status: number;
+                        /** Code */
+                        code: string;
+                        /** Detail */
+                        detail: string;
+                        /** Requestid */
+                        requestId: string;
+                        /** Errors */
+                        errors?: {
+                            [key: string]: string;
+                        }[] | null;
+                    };
+                };
+            };
+            /** @description Per-client rate limit exceeded (`RATE_LIMITED`) */
+            429: {
+                headers: {
+                    /** @description Whole seconds until this client may retry */
+                    "Retry-After"?: number;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": {
+                        /** Type */
+                        type: string;
+                        /** Title */
+                        title: string;
+                        /** Status */
+                        status: number;
+                        /** Code */
+                        code: string;
+                        /** Detail */
+                        detail: string;
+                        /** Requestid */
+                        requestId: string;
+                        /**
+                         * Errors
+                         * @default null
+                         */
+                        errors?: {
+                            [key: string]: string;
+                        }[] | null;
+                    };
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": {
+                        /** Type */
+                        type: string;
+                        /** Title */
+                        title: string;
+                        /** Status */
+                        status: number;
+                        /** Code */
+                        code: string;
+                        /** Detail */
+                        detail: string;
+                        /** Requestid */
+                        requestId: string;
+                        /** Errors */
+                        errors?: {
+                            [key: string]: string;
+                        }[] | null;
+                    };
+                };
+            };
+            /** @description Gateway Timeout */
+            504: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": {
+                        /** Type */
+                        type: string;
+                        /** Title */
+                        title: string;
+                        /** Status */
+                        status: number;
+                        /** Code */
+                        code: string;
+                        /** Detail */
+                        detail: string;
+                        /** Requestid */
+                        requestId: string;
+                        /** Errors */
                         errors?: {
                             [key: string]: string;
                         }[] | null;

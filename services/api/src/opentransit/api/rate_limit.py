@@ -21,7 +21,9 @@ from dataclasses import dataclass
 EXEMPT_PATHS = frozenset({"/healthz", "/readyz"})
 CLIENT_PREFIX = "/app"  # the optional built web client (opentransit.api.client)
 # Journey planning and search hit the engine/geocoders; everything else reads local data.
-EXPENSIVE_ROUTES = frozenset({("POST", "/v1/journeys"), ("GET", "/v1/places")})
+EXPENSIVE_ROUTES = frozenset(
+    {("POST", "/v1/journeys"), ("GET", "/v1/places"), ("GET", "/v1/departures/nearby")}
+)
 STANDARD = "standard"
 EXPENSIVE = "expensive"
 _EPSILON = 1e-9

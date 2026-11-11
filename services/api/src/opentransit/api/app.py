@@ -130,6 +130,7 @@ def create_app(
             "maxAccessWalkMinutes",
             "maxEgressWalkMinutes",
             "maxDirectWalkMinutes",
+            "excludeTripRefs",
         }
         fields = [
             {

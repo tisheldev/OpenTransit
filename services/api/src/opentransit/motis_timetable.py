@@ -5,6 +5,7 @@ from __future__ import annotations
 import base64
 import hashlib
 import json
+import math
 import re
 import sqlite3
 import threading
@@ -22,7 +23,7 @@ from opentransit.core.trip_calls import (
     ReconciliationError,
     reconcile_profile,
 )
-from opentransit.motis import geometry
+from opentransit.motis import MODE_MAP, geometry
 from opentransit.reference import SourceProfileLimitError
 
 _TRIP_ID = re.compile(r"(\d{8})_(\d{2}:\d{2}(?::\d{2})?)_mot60day_(.+)\Z")
@@ -184,6 +185,11 @@ def hydrate_trip(profile, engine_id: str, body: object) -> dict:
                 "callSequence": source.sequence,
                 "ordinal": source.ordinal,
                 "stopId": f"mot:stop:{source.stop_id}",
+                # API-C1: the engine's call carries the feed's stop name and position.
+                "name": _text_or_none(engine.get("name")),
+                "latitude": _coordinate_or_none(engine.get("lat"), -90, 90),
+                "longitude": _coordinate_or_none(engine.get("lon"), -180, 180),
+                "platformCode": None,
                 "scheduledArrival": (
                     expected_by_kind.get("arrival").isoformat().replace("+00:00", "Z")
                     if "arrival" in expected_by_kind
@@ -221,6 +227,10 @@ def hydrate_trip(profile, engine_id: str, body: object) -> dict:
         "routeId": _public_route(leg.get("routeId")),
         "routeShortName": leg.get("routeShortName", ""),
         "headsign": leg.get("headsign"),
+        "operatorId": _text_or_none(leg.get("agencyId")),
+        "operatorName": _text_or_none(leg.get("agencyName")),
+        "mode": public_mode(leg.get("mode")),
+        "directionId": _text_or_none(leg.get("directionId")),
         "shape": shape.model_dump(mode="json") if shape else None,
         "calls": result_calls,
         "timingState": "scheduled",
@@ -231,6 +241,26 @@ def hydrate_trip(profile, engine_id: str, body: object) -> dict:
         "_reconciliation": result,
         "_engineCallPickupTypes": engine_pickup_types,
     }
+
+
+def _coordinate_or_none(value: object, low: float, high: float) -> float | None:
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        return None
+    value = float(value)
+    return value if math.isfinite(value) and low <= value <= high else None
+
+
+def _with_platforms(reference, trip: dict) -> dict:
+    """Each call's platform code from the reference's in-memory stop index (API-C1)."""
+    lookup = getattr(reference, "stop_ref", None)
+    if lookup is None:
+        return trip
+    calls = []
+    for call in trip["calls"]:
+        stop = lookup(call["stopId"])
+        code = stop.get("platform_code") if stop else None
+        calls.append({**call, "platformCode": code or None})
+    return {**trip, "calls": calls}
 
 
 def _public_route(value: object) -> str:
@@ -331,7 +361,7 @@ async def trip_detail(snapshot, engine_id: str) -> dict | None:
     expected = _expected_events(profile, service_date)
     if not expected or any(not snapshot.generation.contains(event.at_utc) for event in expected):
         raise TimetableFailure("OUTSIDE_SERVICE_WINDOW", 422)
-    return await _fetch_trip(snapshot, profile, engine_id)
+    return _with_platforms(snapshot.reference, await _fetch_trip(snapshot, profile, engine_id))
 
 
 def _pickup_allowed(value: object) -> bool:
@@ -397,18 +427,19 @@ def _decode_departure_cursor(cursor: str | None, generation_id: str, query: dict
         raise InvalidDepartureCursor("Invalid departure cursor") from exc
 
 
-async def departures(
-    snapshot, stop_ref: str, start: datetime, horizon: int, limit: int, cursor: str | None
-):
-    """Return a replayable exact-window page; any incomplete upstream page fails closed."""
-    if snapshot.reference is None or not snapshot.routing_verified:
-        raise TimetableFailure()
-    start_utc = as_utc_instant(start)
-    end_utc = start_utc + timedelta(minutes=horizon)
-    if not snapshot.generation.contains(start_utc) or end_utc > as_utc_instant(
-        snapshot.generation.coverage_until
-    ):
-        raise TimetableFailure("OUTSIDE_SERVICE_WINDOW", 422)
+def public_mode(value: object) -> str | None:
+    """The journey-leg mode string for an engine mode; "other" when unmapped, None when absent."""
+    if not isinstance(value, str) or not value:
+        return None
+    return MODE_MAP.get(value, "other")
+
+
+def _text_or_none(value: object) -> str | None:
+    return value if isinstance(value, str) and value else None
+
+
+def _stop_scope(snapshot, stop_ref: str) -> tuple[list[str], dict[str, str | None]] | None:
+    """A stop and its children's source IDs and platform codes (departures fold children)."""
     stop = snapshot.reference.stop_ref(stop_ref)
     if stop is None:
         return None
@@ -417,112 +448,120 @@ async def departures(
     stop_ids = list(dict.fromkeys(stop_ids))
     platform_codes = {stop["source_id"]: stop.get("platform_code")}
     platform_codes.update({child["source_id"]: child.get("platform_code") for child in children})
-    query = {
-        "stop": stop_ref,
-        "stopIds": stop_ids,
-        "from": start_utc.isoformat(),
-        "until": end_utc.isoformat(),
-        "horizonMinutes": horizon,
-        "limit": limit,
-    }
-    after = _decode_departure_cursor(cursor, snapshot.generation.id, query)
-    if after is not None and len(after) != 4:
-        raise InvalidDepartureCursor("Invalid departure cursor position")
-    events: dict[tuple, dict] = {}
-    profiles: dict[str, tuple[object, dict]] = {}
-    wire_event_count = 0
-    byte_budget = {"bytes": 0}
-    for source_stop_id in stop_ids:
-        body = await _request_json(
-            snapshot,
-            "/api/v6/stoptimes",
-            {
-                "stopId": f"mot60day_{source_stop_id}",
-                "time": engine_time(start_utc),
-                "arriveBy": "false",
-                "direction": "LATER",
-                "window": str(horizon * 60),
-                "n": "1",
-                "exactRadius": "true",
-                "radius": "0",
-                "withScheduledSkippedStops": "true",
-                "realtimeMode": "OFF",
-                "withAlerts": "false",
-            },
-            byte_budget=byte_budget,
-        )
-        if not isinstance(body, dict) or not isinstance(body.get("stopTimes"), list):
-            raise TimetableFailure("ENGINE_INVALID_RESPONSE", 503)
-        wire_items = body["stopTimes"]
-        wire_event_count += len(wire_items)
-        if wire_event_count > _DEPARTURES_MAX_EVENTS:
+    return stop_ids, platform_codes
+
+
+async def _stop_times(snapshot, source_stop_id: str, start_utc: datetime, horizon: int, budget):
+    body = await _request_json(
+        snapshot,
+        "/api/v6/stoptimes",
+        {
+            "stopId": f"mot60day_{source_stop_id}",
+            "time": engine_time(start_utc),
+            "arriveBy": "false",
+            "direction": "LATER",
+            "window": str(horizon * 60),
+            "n": "1",
+            "exactRadius": "true",
+            "radius": "0",
+            "withScheduledSkippedStops": "true",
+            "realtimeMode": "OFF",
+            "withAlerts": "false",
+        },
+        byte_budget=budget,
+    )
+    if not isinstance(body, dict) or not isinstance(body.get("stopTimes"), list):
+        raise TimetableFailure("ENGINE_INVALID_RESPONSE", 503)
+    return body["stopTimes"]
+
+
+def _wire_event(item: object, start_utc: datetime, end_utc: datetime):
+    """Validate one engine stop-time; (time, trip ID, wire stop) or None outside the window."""
+    if not isinstance(item, dict) or item.get("realTime") is not False or item.get("cancelled"):
+        raise TimetableFailure("ENGINE_INVALID_RESPONSE", 503)
+    place = item.get("place")
+    if not isinstance(place, dict) or place.get("cancelled") not in (False, None):
+        raise TimetableFailure("ENGINE_INVALID_RESPONSE", 503)
+    wire_stop = _stop_source_id(place.get("stopId"))
+    try:
+        at = _scheduled_clock(place.get("scheduledDeparture"))
+    except ValueError:
+        raise TimetableFailure("ENGINE_INVALID_RESPONSE", 503) from None
+    if at is None or at < start_utc or at >= end_utc:
+        return None
+    engine_id = item.get("tripId")
+    if not isinstance(engine_id, str):
+        raise TimetableFailure("ENGINE_INVALID_RESPONSE", 503)
+    try:
+        parse_dated_trip_id(engine_id)
+    except ValueError:
+        raise TimetableFailure("ENGINE_INVALID_RESPONSE", 503) from None
+    if item.get("tripCancelled"):
+        raise TimetableFailure("ENGINE_INVALID_RESPONSE", 503)
+    return at, engine_id, wire_stop
+
+
+def _wire_route(item: dict) -> str | None:
+    try:
+        return _public_route(item.get("routeId"))
+    except ValueError:
+        return None
+
+
+async def _resolve_event(snapshot, item, wire, stop_ids, platform_codes, profiles, budget):
+    """Hydrate the event's dated trip and return its boardable (key, departure) calls here."""
+    at, engine_id, wire_stop = wire
+    place = item["place"]
+    if engine_id not in profiles:
+        service_date, _, source_trip = parse_dated_trip_id(engine_id)
+        profile = _source_profile(snapshot.reference, source_trip)
+        if profile is None:
             raise TimetableFailure("DATA_UNAVAILABLE", 503)
-        for item in wire_items:
-            if (
-                not isinstance(item, dict)
-                or item.get("realTime") is not False
-                or item.get("cancelled")
-            ):
-                raise TimetableFailure("ENGINE_INVALID_RESPONSE", 503)
-            place = item.get("place")
-            if not isinstance(place, dict) or place.get("cancelled") not in (False, None):
-                raise TimetableFailure("ENGINE_INVALID_RESPONSE", 503)
-            wire_stop = _stop_source_id(place.get("stopId"))
-            clock_text = place.get("scheduledDeparture")
-            try:
-                at = _scheduled_clock(clock_text)
-            except ValueError:
-                raise TimetableFailure("ENGINE_INVALID_RESPONSE", 503) from None
-            if at is None or at < start_utc or at >= end_utc:
-                continue
-            engine_id = item.get("tripId")
-            if not isinstance(engine_id, str):
-                raise TimetableFailure("ENGINE_INVALID_RESPONSE", 503)
-            try:
-                service_date, _, source_trip = parse_dated_trip_id(engine_id)
-            except ValueError:
-                raise TimetableFailure("ENGINE_INVALID_RESPONSE", 503) from None
-            if item.get("tripCancelled"):
-                raise TimetableFailure("ENGINE_INVALID_RESPONSE", 503)
-            if engine_id not in profiles:
-                profile = _source_profile(snapshot.reference, source_trip)
-                if profile is None:
-                    raise TimetableFailure("DATA_UNAVAILABLE", 503)
-                active = _service_active(snapshot.reference, profile.service_id, service_date)
-                if active is None:
-                    raise TimetableFailure("DATA_UNAVAILABLE", 503)
-                if not active:
-                    raise TimetableFailure("ENGINE_INVALID_RESPONSE", 503)
-                trip = await _fetch_trip(snapshot, profile, engine_id, byte_budget=byte_budget)
-                profiles[engine_id] = (profile, trip)
-            profile, trip = profiles[engine_id]
-            wire_call_matches = [
-                call
-                for call in trip["calls"]
-                if call["stopId"] == f"mot:stop:{wire_stop}"
-                and _scheduled_clock(call["scheduledDeparture"]) == at
-            ]
-            if not wire_call_matches:
-                raise TimetableFailure("ENGINE_INVALID_RESPONSE", 503)
-            matched_calls = [
-                call
-                for call in trip["calls"]
-                if call["stopId"].removeprefix("mot:stop:") in stop_ids
-                and _scheduled_clock(call["scheduledDeparture"]) == at
-            ]
-            for call in matched_calls:
-                source = profile.calls[call["ordinal"]]
-                engine_pickup = trip["_engineCallPickupTypes"][call["ordinal"]]
-                if not _pickup_allowed(source.pickup_type) or not _engine_boardable(engine_pickup):
-                    continue
-                call_stop_id = source.stop_id
-                exact = (at.isoformat(), engine_id, call_stop_id, source.sequence)
-                events[exact] = {
+        active = _service_active(snapshot.reference, profile.service_id, service_date)
+        if active is None:
+            raise TimetableFailure("DATA_UNAVAILABLE", 503)
+        if not active:
+            raise TimetableFailure("ENGINE_INVALID_RESPONSE", 503)
+        trip = await _fetch_trip(snapshot, profile, engine_id, byte_budget=budget)
+        profiles[engine_id] = (profile, trip)
+    profile, trip = profiles[engine_id]
+    wire_call_matches = [
+        call
+        for call in trip["calls"]
+        if call["stopId"] == f"mot:stop:{wire_stop}"
+        and _scheduled_clock(call["scheduledDeparture"]) == at
+    ]
+    if not wire_call_matches:
+        raise TimetableFailure("ENGINE_INVALID_RESPONSE", 503)
+    matched_calls = [
+        call
+        for call in trip["calls"]
+        if call["stopId"].removeprefix("mot:stop:") in stop_ids
+        and _scheduled_clock(call["scheduledDeparture"]) == at
+    ]
+    resolved = []
+    for call in matched_calls:
+        source = profile.calls[call["ordinal"]]
+        engine_pickup = trip["_engineCallPickupTypes"][call["ordinal"]]
+        if not _pickup_allowed(source.pickup_type) or not _engine_boardable(engine_pickup):
+            continue
+        call_stop_id = source.stop_id
+        exact = (at.isoformat(), engine_id, call_stop_id, source.sequence)
+        resolved.append(
+            (
+                exact,
+                {
                     "scheduledDeparture": at.isoformat().replace("+00:00", "Z"),
                     "stopId": f"mot:stop:{call_stop_id}",
                     "routeId": trip["routeId"],
                     "routeShortName": trip["routeShortName"],
                     "headsign": item.get("headsign") or trip.get("headsign"),
+                    "operatorId": _text_or_none(item.get("agencyId")) or trip.get("operatorId"),
+                    "operatorName": (
+                        _text_or_none(item.get("agencyName")) or trip.get("operatorName")
+                    ),
+                    "mode": public_mode(item.get("mode")) or trip.get("mode"),
+                    "directionId": _text_or_none(item.get("directionId")),
                     "platformCode": (
                         place.get("platformCode")
                         if call_stop_id == wire_stop
@@ -532,7 +571,70 @@ async def departures(
                     "pickupType": source.pickup_type,
                     "tripRef": engine_id,
                     "callSequence": source.sequence,
-                }
+                },
+            )
+        )
+    return resolved
+
+
+async def departures(
+    snapshot,
+    stop_ref: str,
+    start: datetime,
+    horizon: int,
+    limit: int,
+    cursor: str | None,
+    route_id: str | None = None,
+):
+    """Return a replayable exact-window page; any incomplete upstream page fails closed.
+
+    ``route_id`` keeps only that line's departures (filtered before any trip is hydrated).
+    """
+    if snapshot.reference is None or not snapshot.routing_verified:
+        raise TimetableFailure()
+    start_utc = as_utc_instant(start)
+    end_utc = start_utc + timedelta(minutes=horizon)
+    if not snapshot.generation.contains(start_utc) or end_utc > as_utc_instant(
+        snapshot.generation.coverage_until
+    ):
+        raise TimetableFailure("OUTSIDE_SERVICE_WINDOW", 422)
+    scope = _stop_scope(snapshot, stop_ref)
+    if scope is None:
+        return None
+    stop_ids, platform_codes = scope
+    query = {
+        "stop": stop_ref,
+        "stopIds": stop_ids,
+        "from": start_utc.isoformat(),
+        "until": end_utc.isoformat(),
+        "horizonMinutes": horizon,
+        "limit": limit,
+    }
+    if route_id is not None:
+        # Only when filtered, so cursors issued before the filter existed stay valid.
+        query["routeId"] = route_id
+    after = _decode_departure_cursor(cursor, snapshot.generation.id, query)
+    if after is not None and len(after) != 4:
+        raise InvalidDepartureCursor("Invalid departure cursor position")
+    events: dict[tuple, dict] = {}
+    profiles: dict[str, tuple[object, dict]] = {}
+    wire_event_count = 0
+    byte_budget = {"bytes": 0}
+    for source_stop_id in stop_ids:
+        wire_items = await _stop_times(snapshot, source_stop_id, start_utc, horizon, byte_budget)
+        wire_event_count += len(wire_items)
+        if wire_event_count > _DEPARTURES_MAX_EVENTS:
+            raise TimetableFailure("DATA_UNAVAILABLE", 503)
+        for item in wire_items:
+            wire = _wire_event(item, start_utc, end_utc)
+            if wire is None:
+                continue
+            if route_id is not None and _wire_route(item) != route_id:
+                continue
+            for exact, event in await _resolve_event(
+                snapshot, item, wire, stop_ids, platform_codes, profiles, byte_budget
+            ):
+                events[exact] = event
     ordered = sorted(events.items(), key=lambda pair: pair[0])
     if after is not None:
         ordered = [entry for entry in ordered if list(entry[0]) > after]
@@ -541,3 +643,68 @@ async def departures(
     if len(ordered) > limit and page:
         next_cursor = _departure_cursor(snapshot.generation.id, query, list(page[-1][0]))
     return {"items": [item for _, item in page], "nextCursor": next_cursor}
+
+
+# Nearby summary (board 1, Home): a few stops, a few lines each, hydrated lazily in time
+# order so a busy stop costs as many trip lookups as lines shown, not one per event.
+NEARBY_MAX_STOPS = 12
+NEARBY_MAX_PER_STOP = 5
+NEARBY_TRIP_LOOKUPS_PER_STOP = 24
+NEARBY_ENGINE_CONCURRENCY = 4
+
+
+async def next_departures(
+    snapshot, stop_ref: str, start: datetime, horizon: int, per_stop: int, budget=None
+) -> dict:
+    """The earliest boardable departure of each line (route and headsign) at one stop.
+
+    Every returned departure is verified exactly as on the stop board. ``complete`` is false
+    when the per-stop trip-lookup bound stopped the scan before ``per_stop`` lines were found
+    or the window was exhausted, so "fewer lines" is never presented as "no more lines".
+    """
+    start_utc = as_utc_instant(start)
+    end_utc = start_utc + timedelta(minutes=horizon)
+    scope = _stop_scope(snapshot, stop_ref)
+    if scope is None:
+        raise TimetableFailure("NOT_FOUND", 404)
+    stop_ids, platform_codes = scope
+    budget = {"bytes": 0} if budget is None else budget
+    wire_events = []
+    for source_stop_id in stop_ids:
+        wire_items = await _stop_times(snapshot, source_stop_id, start_utc, horizon, budget)
+        if len(wire_items) > _DEPARTURES_MAX_EVENTS:
+            raise TimetableFailure("DATA_UNAVAILABLE", 503)
+        for item in wire_items:
+            wire = _wire_event(item, start_utc, end_utc)
+            if wire is None:
+                continue
+            if item["place"].get("pickupType") == "NOT_ALLOWED":
+                continue  # The engine itself says no boarding here; no lookup needed.
+            wire_events.append((wire, item))
+    wire_events.sort(key=lambda pair: (pair[0][0].isoformat(), pair[0][1], pair[0][2]))
+    profiles: dict[str, tuple[object, dict]] = {}
+    lines: dict[tuple, dict] = {}
+    lookups = 0
+    complete = True
+    for wire, item in wire_events:
+        if len(lines) >= per_stop:
+            break
+        line_key = (_wire_route(item), item.get("headsign"))
+        if line_key in lines:
+            continue
+        if wire[1] not in profiles:
+            if lookups >= NEARBY_TRIP_LOOKUPS_PER_STOP:
+                complete = False
+                break
+            lookups += 1
+        resolved = await _resolve_event(
+            snapshot, item, wire, stop_ids, platform_codes, profiles, budget
+        )
+        for _, event in sorted(resolved, key=lambda pair: pair[0]):
+            key = (event["routeId"], event["headsign"])
+            if key not in lines and len(lines) < per_stop:
+                lines[key] = event
+    items = sorted(
+        lines.values(), key=lambda event: (event["scheduledDeparture"], event["tripRef"])
+    )
+    return {"departures": items, "complete": complete}

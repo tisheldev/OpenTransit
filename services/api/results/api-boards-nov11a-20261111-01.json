@@ -1,0 +1,559 @@
+{
+  "recordedAt": "2026-11-11T15:35:16.983461+00:00",
+  "purpose": "Live mechanical check of the API additions for the eight approved client boards (API-BOARDS). Structural only: not human review of any screen.",
+  "api": "http://127.0.0.1:8520",
+  "generationId": "fc11ddbc27cecc78f749d06d9643e2dd9bc6d25b1a755c5548217f103dd58cfb",
+  "coverage": {
+    "from": "2026-11-11T00:00:00+02:00",
+    "until": "2026-12-11T00:00:00+02:00"
+  },
+  "queryTime": "2026-11-12T08:00:00+02:00",
+  "checks": [
+    {
+      "check": "departures carry operator and mode (API-C3)",
+      "status": "PASS",
+      "stop": "mot:stop:13583",
+      "items": 20,
+      "ms": 715.4,
+      "operators": [
+        [
+          "דן",
+          18
+        ],
+        [
+          "מטרופולין",
+          2
+        ]
+      ],
+      "modes": [
+        [
+          "bus",
+          20
+        ]
+      ]
+    },
+    {
+      "check": "departures routeId filter",
+      "status": "PASS",
+      "routeId": "mot:route:9809",
+      "items": 5,
+      "ms": 20.5
+    },
+    {
+      "check": "rail departures say rail",
+      "status": "PASS",
+      "stop": "mot:stop:37358",
+      "operators": [
+        "רכבת ישראל"
+      ],
+      "ms": 329.5
+    },
+    {
+      "check": "trip calls carry name and position (API-C1); trip carries operator and mode",
+      "status": "PASS",
+      "calls": 55,
+      "ms": 10.2
+    },
+    {
+      "check": "nearby departures (dizengoff-center)",
+      "status": "PASS",
+      "msColdThenWarm": [
+        178.9,
+        54.9,
+        56.2
+      ],
+      "bytes": 12517,
+      "stops": [
+        {
+          "stopId": "mot:stop:13583",
+          "name": "דיזנגוף סנטר/דיזנגוף",
+          "distanceMeters": 8,
+          "complete": true,
+          "lines": [
+            [
+              "172",
+              "דן",
+              "bus",
+              "תל אביב יפו_מסוף רדינג"
+            ],
+            [
+              "115",
+              "מטרופולין",
+              "bus",
+              "תל אביב יפו_מסוף רדינג"
+            ],
+            [
+              "8",
+              "דן",
+              "bus",
+              "אוניברסיטת ת\"א"
+            ]
+          ]
+        },
+        {
+          "stopId": "mot:stop:13561",
+          "name": "דיזנגוף סנטר/דיזנגוף",
+          "distanceMeters": 48,
+          "complete": true,
+          "lines": [
+            [
+              "39",
+              "דן",
+              "bus",
+              "רמת גן_מסוף עמידר"
+            ],
+            [
+              "8",
+              "דן",
+              "bus",
+              "מסוף הטייסים"
+            ],
+            [
+              "5",
+              "דן",
+              "bus",
+              "מסוף הלוחמים"
+            ]
+          ]
+        },
+        {
+          "stopId": "mot:stop:49938",
+          "name": "דיזנגוף סנטר/המלך ג'ורג'",
+          "distanceMeters": 104,
+          "complete": true,
+          "lines": [
+            [
+              "125",
+              "דן",
+              "bus",
+              "בת ים_מרכז הספורט"
+            ],
+            [
+              "14",
+              "דן",
+              "bus",
+              "מסוף הלוחמים"
+            ],
+            [
+              "25",
+              "דן",
+              "bus",
+              "חולון_מוזיאון אגד"
+            ]
+          ]
+        },
+        {
+          "stopId": "mot:stop:13560",
+          "name": "דיזנגוף סנטר/טשרניחובסקי",
+          "distanceMeters": 115,
+          "complete": true,
+          "lines": [
+            [
+              "66",
+              "דן",
+              "bus",
+              "פתח תקווה_מסוף משה ארנס"
+            ],
+            [
+              "128",
+              "דן",
+              "bus",
+              "פתח תקווה_פארק עסקים ירקון"
+            ],
+            [
+              "18",
+              "דן",
+              "bus",
+              "תל אביב יפו_רכבת מרכז"
+            ]
+          ]
+        },
+        {
+          "stopId": "mot:stop:49952",
+          "name": "דיזנגוף סנטר/המלך ג'ורג'",
+          "distanceMeters": 123,
+          "complete": true,
+          "lines": [
+            [
+              "125",
+              "דן",
+              "bus",
+              "תל אביב יפו_מכללת לוינסקי"
+            ],
+            [
+              "72",
+              "דן",
+              "bus",
+              "תל אביב יפו_רכבת האוניברסיטה"
+            ],
+            [
+              "14",
+              "דן",
+              "bus",
+              "תל אביב יפו_בבלי"
+            ]
+          ]
+        },
+        {
+          "stopId": "mot:stop:13582",
+          "name": "דיזנגוף סנטר/שדרות בן ציון",
+          "distanceMeters": 199,
+          "complete": true,
+          "lines": [
+            [
+              "125",
+              "דן",
+              "bus",
+              "בת ים_מרכז הספורט"
+            ],
+            [
+              "39",
+              "דן",
+              "bus",
+              "רמת גן_מסוף עמידר"
+            ],
+            [
+              "14",
+              "דן",
+              "bus",
+              "מסוף הלוחמים"
+            ]
+          ]
+        },
+        {
+          "stopId": "mot:stop:13581",
+          "name": "דיזנגוף סנטר/שדרות בן ציון",
+          "distanceMeters": 206,
+          "complete": true,
+          "lines": [
+            [
+              "125",
+              "דן",
+              "bus",
+              "תל אביב יפו_מכללת לוינסקי"
+            ],
+            [
+              "63",
+              "דן",
+              "bus",
+              "תל אביב יפו_מסוף כרמלית"
+            ],
+            [
+              "72",
+              "דן",
+              "bus",
+              "תל אביב יפו_רכבת האוניברסיטה"
+            ]
+          ]
+        },
+        {
+          "stopId": "mot:stop:13557",
+          "name": "בוגרשוב/בר כוכבא",
+          "distanceMeters": 207,
+          "complete": true,
+          "lines": [
+            [
+              "63",
+              "דן",
+              "bus",
+              "תל אביב יפו_מסוף כרמלית"
+            ],
+            [
+              "238",
+              "דן",
+              "bus",
+              "תל אביב יפו_מסוף כרמלית"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "check": "nearby departures (savidor-center)",
+      "status": "PASS",
+      "msColdThenWarm": [
+        140.5,
+        116.9,
+        234.4
+      ],
+      "bytes": 7728,
+      "stops": [
+        {
+          "stopId": "mot:stop:37358",
+          "name": "תל אביב מרכז",
+          "distanceMeters": 28,
+          "complete": true,
+          "lines": [
+            [
+              "",
+              "רכבת ישראל",
+              "rail",
+              "230"
+            ],
+            [
+              "",
+              "רכבת ישראל",
+              "rail",
+              "723"
+            ],
+            [
+              "",
+              "רכבת ישראל",
+              "rail",
+              "621"
+            ]
+          ]
+        },
+        {
+          "stopId": "mot:stop:43264",
+          "name": "תחנת מוניות תל אביב רכבת מרכז",
+          "distanceMeters": 105,
+          "complete": true,
+          "lines": []
+        },
+        {
+          "stopId": "mot:stop:14537",
+          "name": "דרך מנחם בגין/זיסמן שלום",
+          "distanceMeters": 119,
+          "complete": true,
+          "lines": [
+            [
+              "11",
+              "דן",
+              "bus",
+              "מסוף הטייסים"
+            ],
+            [
+              "58",
+              "דן",
+              "bus",
+              "גבעתיים_כורזין"
+            ]
+          ]
+        },
+        {
+          "stopId": "mot:stop:42877",
+          "name": "ת. רכבת תל אביב - סבידור/הורדה",
+          "distanceMeters": 156,
+          "complete": true,
+          "lines": []
+        },
+        {
+          "stopId": "mot:stop:42858",
+          "name": "תחנת רכבת סבידור מרכז/גשר מודעי",
+          "distanceMeters": 174,
+          "complete": true,
+          "lines": [
+            [
+              "58",
+              "דן",
+              "bus",
+              "רמת גן_קניון איילון"
+            ],
+            [
+              "11",
+              "דן",
+              "bus",
+              "מסוף הטייסים"
+            ],
+            [
+              "267",
+              "דן",
+              "bus",
+              "רמת גן_מסוף עמידר"
+            ]
+          ]
+        },
+        {
+          "stopId": "mot:stop:29309",
+          "name": "ת. רכבת תל אביב- סבידור/רציפים A",
+          "distanceMeters": 193,
+          "complete": true,
+          "lines": []
+        },
+        {
+          "stopId": "mot:stop:42707",
+          "name": "רכבת סבידור מרכז/גשר מודעי",
+          "distanceMeters": 200,
+          "complete": true,
+          "lines": [
+            [
+              "11",
+              "דן",
+              "bus",
+              "אוניברסיטת ת\"א"
+            ]
+          ]
+        },
+        {
+          "stopId": "mot:stop:29311",
+          "name": "זיסמן/דרך בגין",
+          "distanceMeters": 214,
+          "complete": true,
+          "lines": [
+            [
+              "58",
+              "דן",
+              "bus",
+              "רמת גן_קניון איילון"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "check": "stop lines mot:stop:13583 patterns=serving",
+      "status": "PASS",
+      "ms": 31.3,
+      "bytes": 60433,
+      "routes": 7,
+      "patterns": 9,
+      "oppositeDirectionPatterns": 0,
+      "morePages": false
+    },
+    {
+      "check": "stop lines mot:stop:13583 patterns=all",
+      "status": "PASS",
+      "ms": 28.3,
+      "bytes": 104351,
+      "routes": 7,
+      "patterns": 16,
+      "oppositeDirectionPatterns": 7,
+      "morePages": false
+    },
+    {
+      "check": "stop lines mot:stop:37358 patterns=serving",
+      "status": "PASS",
+      "ms": 17.9,
+      "bytes": 55119,
+      "routes": 20,
+      "patterns": 20,
+      "oppositeDirectionPatterns": 0,
+      "morePages": true
+    },
+    {
+      "check": "stop lines mot:stop:37358 patterns=all",
+      "status": "PASS",
+      "ms": 18.1,
+      "bytes": 55119,
+      "routes": 20,
+      "patterns": 20,
+      "oppositeDirectionPatterns": 0,
+      "morePages": true
+    },
+    {
+      "check": "boarding bearing and side on journey legs (board 3)",
+      "status": "PASS",
+      "cases": 10,
+      "journeyMsMedian": 39.5,
+      "bearingSources": {
+        "leg_geometry": 49
+      },
+      "sideByMode": {
+        "bus:right": 31,
+        "light_rail:stop_on_path": 4,
+        "rail:not_a_street_mode": 14
+      },
+      "busStopOffsetMetersMedian": 5.0,
+      "originPlatformKnownByMode": {
+        "bus:False": 31,
+        "light_rail:False": 4,
+        "rail:False": 14
+      }
+    },
+    {
+      "check": "excludeTripRefs removes the missed trip (board 6)",
+      "status": "PASS",
+      "replans": [
+        {
+          "case": "J01",
+          "status": 200,
+          "excludedAbsent": true,
+          "journeys": 3,
+          "warnings": [
+            "EXCLUDED_TRIP_ALTERNATIVES_OMITTED"
+          ]
+        },
+        {
+          "case": "J04",
+          "status": 200,
+          "excludedAbsent": true,
+          "journeys": 3,
+          "warnings": [
+            "EXCLUDED_TRIP_ALTERNATIVES_OMITTED"
+          ]
+        },
+        {
+          "case": "J11",
+          "status": 200,
+          "excludedAbsent": true,
+          "journeys": 3,
+          "warnings": [
+            "EXCLUDED_TRIP_ALTERNATIVES_OMITTED",
+            "TRANSFER_STREET_PATH_UNAVAILABLE"
+          ]
+        },
+        {
+          "case": "J12",
+          "status": 200,
+          "excludedAbsent": true,
+          "journeys": 3,
+          "warnings": [
+            "EXCLUDED_TRIP_ALTERNATIVES_OMITTED"
+          ]
+        },
+        {
+          "case": "J15",
+          "status": 200,
+          "excludedAbsent": true,
+          "journeys": 3,
+          "warnings": [
+            "EXCLUDED_TRIP_ALTERNATIVES_OMITTED",
+            "TRANSFER_STREET_PATH_UNAVAILABLE"
+          ]
+        },
+        {
+          "case": "J16",
+          "status": 200,
+          "excludedAbsent": true,
+          "journeys": 3,
+          "warnings": [
+            "EXCLUDED_TRIP_ALTERNATIVES_OMITTED",
+            "TRANSFER_STREET_PATH_UNAVAILABLE"
+          ]
+        },
+        {
+          "case": "J19",
+          "status": 200,
+          "excludedAbsent": true,
+          "journeys": 3,
+          "warnings": [
+            "EXCLUDED_TRIP_ALTERNATIVES_OMITTED"
+          ]
+        },
+        {
+          "case": "J21",
+          "status": 200,
+          "excludedAbsent": true,
+          "journeys": 3,
+          "warnings": [
+            "EXCLUDED_TRIP_ALTERNATIVES_OMITTED"
+          ]
+        },
+        {
+          "case": "J22",
+          "status": 200,
+          "excludedAbsent": true,
+          "journeys": 3,
+          "warnings": [
+            "EXCLUDED_TRIP_ALTERNATIVES_OMITTED"
+          ]
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "pass": 12,
+    "fail": 0
+  }
+}

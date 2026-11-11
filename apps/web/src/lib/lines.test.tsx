@@ -26,8 +26,8 @@ describe("line look (11 November 2026)", () => {
   it("finds the operator by MOT agency id or by the name the API returns, never by a partial name", () => {
     expect(operatorColour({ mode: "bus", operatorId: "3" })?.verified).toBe(true);
     expect(operatorColour({ mode: "bus", operatorName: "אגד" })).toBe(operatorColour({ mode: "bus", operatorId: "3" }));
-    expect(operatorColour({ mode: "bus", operatorId: "5", operatorName: "דן" })?.badge.bg).toBe("#1565c0");
-    expect(operatorColour({ mode: "rail", operatorId: "2" })?.badge.bg).toBe("#4a3fb0");
+    expect(operatorColour({ mode: "bus", operatorId: "5", operatorName: "דן" })?.badge.bg).toBe("#205cab");
+    expect(operatorColour({ mode: "rail", operatorId: "2" })?.badge.bg).toBe("#00458a");
     // Other operators with similar names are not Dan or Egged.
     expect(operatorColour({ mode: "bus", operatorId: "32", operatorName: "דן באר שבע" })).toBeNull();
     expect(operatorColour({ mode: "bus", operatorId: "4", operatorName: "אגד תעבורה" })).toBeNull();
@@ -36,8 +36,8 @@ describe("line look (11 November 2026)", () => {
     expect(operatorColour({ mode: "light_rail", operatorId: "3" })?.badge.bg).toBe("#d32f2f");
   });
 
-  it("only Egged's colour is marked verified (the others are the boards' examples)", () => {
-    expect(OPERATOR_COLOURS.filter((c) => c.verified)).toHaveLength(1);
+  it("only colours a reliable source states are marked verified (Egged, Dan, the Red Line)", () => {
+    expect(OPERATOR_COLOURS.filter((c) => c.verified)).toHaveLength(3);
   });
 
   it.each(OPERATOR_COLOURS.map((c) => [c.badge.bg, c] as const))("badge %s: its text ≥ 4.5:1", (_bg, colour) => {
@@ -63,7 +63,7 @@ describe("line look (11 November 2026)", () => {
     );
     const [dan, train, lightRail, other, walk] = Array.from(container.querySelectorAll<HTMLElement>(".ot-line"));
     expect(dan!.dataset.vehicle).toBe("bus");
-    expect(dan!.style.getPropertyValue("--line-bg")).toBe("#1565c0");
+    expect(dan!.style.getPropertyValue("--line-bg")).toBe("#205cab");
     expect(dan!.querySelector("svg.ot-vehicle[aria-hidden='true']")).not.toBeNull();
     expect(dan!.querySelector("bdi.num")).toHaveTextContent("61");
     expect(train!.dataset.vehicle).toBe("train");
