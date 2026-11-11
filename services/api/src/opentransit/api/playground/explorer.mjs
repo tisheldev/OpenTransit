@@ -639,6 +639,8 @@ const examples = [
   ["Invalid: unknown stop (404)", "GET", "/v1/stops/mot:stop:does-not-exist"],
   ["Invalid: departures without offset (422)", "GET", "/v1/stops/mot:stop:1/departures?from=2026-10-02T08:00:00"],
   ["Invalid: bad trip reference (422)", "GET", "/v1/trips/not-a-trip"],
+  ["Lines through Dizengoff Center, both directions", "GET", "/v1/stops/mot:stop:13583/lines?patterns=all&limit=5"],
+  ["Nearby stops with next departures (Dizengoff Center)", "GET", () => `/v1/departures/nearby?near=32.0755,34.7751&radius=300&stops=4&perStop=3&from=${encodeURIComponent(departureInstant(tomorrowMorning()))}`],
   ["Journey (arrive-by, rail only)", "POST", "/v1/journeys", () => ({
     from: { kind: "coordinate", latitude: 32.0838, longitude: 34.7983 },
     to: { kind: "coordinate", latitude: 32.7934, longitude: 34.9577 },
@@ -773,7 +775,7 @@ function wire() {
     if (!example) return;
     const form = panel("raw");
     field(form, "method").value = example[1];
-    field(form, "path").value = example[2];
+    field(form, "path").value = typeof example[2] === "function" ? example[2]() : example[2];
     field(form, "body").value = example[3] ? JSON.stringify(example[3](), null, 2) : "";
   });
 

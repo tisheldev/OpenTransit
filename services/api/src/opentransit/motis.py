@@ -11,15 +11,18 @@ from datetime import datetime
 import httpx
 
 from opentransit.api.schemas import (
+    Boarding,
     Coordinate,
     Geometry,
     Journey,
     Leg,
     Location,
     StopLocation,
+    Stopover,
     Timing,
     Transit,
 )
+from opentransit.boarding import boarding_geometry
 from opentransit.core.generation import Generation, instant
 from opentransit.core.time import (
     checked_duration_seconds,
@@ -172,6 +175,80 @@ def transit(value: dict) -> Transit:
 STREET_PATH_UNAVAILABLE = "street_path_unavailable"
 
 
+def _optional_clock(value: object) -> datetime | None:
+    if value is None:
+        return None
+    return to_local_display(instant(value))
+
+
+def stopovers(value: object) -> list[Stopover] | None:
+    """Stops a transit leg calls at between boarding and alighting; None when unreadable.
+
+    A scheduled-skipped stop (neither boarding nor alighting allowed) is not a stop for the
+    rider and is left out, so the list length is the stops the vehicle serves.
+    """
+    if not isinstance(value, list):
+        return None
+    result = []
+    try:
+        for item in value:
+            if not isinstance(item, dict):
+                return None
+            if item.get("pickupType") == "NOT_ALLOWED" and item.get("dropoffType") == "NOT_ALLOWED":
+                continue
+            place = location(item)
+            result.append(
+                Stopover(
+                    name=place.name,
+                    stopId=place.stopId,
+                    latitude=place.latitude,
+                    longitude=place.longitude,
+                    scheduledArrival=_optional_clock(item.get("scheduledArrival")),
+                    scheduledDeparture=_optional_clock(item.get("scheduledDeparture")),
+                )
+            )
+    except ValueError, KeyError, TypeError, OverflowError:
+        return None
+    return result
+
+
+def boarding(
+    mode: str,
+    start: Location,
+    end: Location,
+    shape: Geometry | None,
+    middle: list[Stopover] | None,
+    headsign: str | None,
+) -> Boarding:
+    following = (
+        Location(
+            name=middle[0].name,
+            latitude=middle[0].latitude,
+            longitude=middle[0].longitude,
+            stopId=middle[0].stopId,
+        )
+        if middle
+        else end
+    )
+    found = boarding_geometry(
+        (start.longitude, start.latitude),
+        shape.coordinates if shape else None,
+        (following.longitude, following.latitude),
+        mode,
+    )
+    return Boarding(
+        bearingDegrees=found.bearing_degrees,
+        bearingSource=found.bearing_source,
+        stopSide=found.stop_side,
+        stopSideUnavailableReason=found.side_unavailable_reason,
+        stopOffsetMeters=found.stop_offset_meters,
+        pathPoint=list(found.path_point) if found.path_point else None,
+        towards=headsign,
+        nextStop=following,
+        stopCount=None if middle is None else len(middle) + 1,
+    )
+
+
 def _is_unrouted_transfer(legs: list, index: int) -> bool:
     """A timetable transfer between two transit legs whose street path MOTIS could not build.
 
@@ -247,6 +324,8 @@ def normalize(
             unavailable = STREET_PATH_UNAVAILABLE
         else:
             unavailable = None if shape else "not_provided_by_engine"
+        ride = None if mode == "walk" else transit(item)
+        middle = None if mode == "walk" else stopovers(item.get("intermediateStops"))
         legs.append(
             Leg(
                 kind="walk" if mode == "walk" else "transit",
@@ -260,7 +339,13 @@ def normalize(
                 distanceMeters=distance,
                 geometry=shape,
                 geometryUnavailableReason=unavailable,
-                transit=None if mode == "walk" else transit(item),
+                transit=ride,
+                intermediateStops=middle,
+                boarding=(
+                    None
+                    if ride is None
+                    else boarding(mode, start, end, shape, middle, ride.headsign)
+                ),
             )
         )
     if not legs:
@@ -307,6 +392,26 @@ def _journey_fingerprint(journey: Journey) -> str:
     ]
     stable = json.dumps(identity, sort_keys=True, separators=(",", ":"), ensure_ascii=True)
     return "journey-" + hashlib.sha256(stable.encode("utf-8")).hexdigest()[:20]
+
+
+def _with_platforms(journey: Journey, reference) -> Journey:
+    """API-C2: a transit leg's ends carry the platform from the reference's stop index."""
+    lookup = getattr(reference, "stop_ref", None)
+    if lookup is None:
+        return journey
+    legs = []
+    for leg in journey.legs:
+        if leg.transit is None:
+            legs.append(leg)
+            continue
+        ends = {}
+        for field in ("origin", "destination"):
+            place = getattr(leg, field)
+            stop = lookup(place.stopId) if place.stopId else None
+            code = stop.get("platform_code") if stop else None
+            ends[field] = place.model_copy(update={"platformCode": code or None})
+        legs.append(leg.model_copy(update=ends))
+    return journey.model_copy(update={"legs": legs})
 
 
 def _engine_place(value: Coordinate | StopLocation, reference) -> str:
@@ -387,7 +492,8 @@ class MotisClient:
             "toPlace": destination,
             "time": engine_time(query.time_anchor),
             "arriveBy": str(query.is_arrive_by).lower(),
-            "numItineraries": str(query.results),
+            # With exclusions, ask for the most the engine gives so others can replace them.
+            "numItineraries": str(5 if query.exclude_trip_refs else query.results),
             "maxItineraries": "5",
             "timetableView": "true",
             "realtimeMode": "OFF",
@@ -413,6 +519,9 @@ class MotisClient:
             "engineWalkCapConformance": "unverified",
             "transferWalkLimit": "not_enforced",
         }
+        if query.exclude_trip_refs:
+            constraints["excludeTripRefs"] = list(query.exclude_trip_refs)
+        excluded = set(query.exclude_trip_refs)
         warnings: list[str] = []
         try:
             response = await self.client.get("/api/v6/plan", params=params)
@@ -447,6 +556,13 @@ class MotisClient:
                     if "INVALID_ENGINE_ALTERNATIVE_OMITTED" not in warnings:
                         warnings.append("INVALID_ENGINE_ALTERNATIVE_OMITTED")
                     continue
+                if excluded and any(
+                    leg.transit is not None and leg.transit.engineTripId in excluded
+                    for leg in journey.legs
+                ):
+                    if "EXCLUDED_TRIP_ALTERNATIVES_OMITTED" not in warnings:
+                        warnings.append("EXCLUDED_TRIP_ALTERNATIVES_OMITTED")
+                    continue
                 fingerprint = _journey_fingerprint(journey)
                 if fingerprint in seen:
                     if "DUPLICATE_ALTERNATIVES_OMITTED" not in warnings:
@@ -457,11 +573,20 @@ class MotisClient:
                     leg.geometryUnavailableReason == STREET_PATH_UNAVAILABLE for leg in journey.legs
                 ) and ("TRANSFER_STREET_PATH_UNAVAILABLE" not in warnings):
                     warnings.append("TRANSFER_STREET_PATH_UNAVAILABLE")
-                journeys.append(journey.model_copy(update={"id": fingerprint}))
+                journeys.append(
+                    _with_platforms(journey, reference).model_copy(update={"id": fingerprint})
+                )
                 if len(journeys) >= query.results:
                     break
             if raw_alternatives and not journeys:
-                if warnings == ["INFEASIBLE_STREET_ALTERNATIVES_OMITTED"]:
+                if (
+                    set(warnings)
+                    <= {
+                        "INFEASIBLE_STREET_ALTERNATIVES_OMITTED",
+                        "EXCLUDED_TRIP_ALTERNATIVES_OMITTED",
+                    }
+                    and warnings
+                ):
                     # Every alternative lacked a street path: an empty search with the
                     # disclosure, not a malformed engine response.
                     return PlanResult([], warnings, RANKING_POLICY, constraints)
