@@ -83,8 +83,9 @@ export async function fetchCallPositions(
       if (options.signal?.aborted || (result && !result.ok && result.error.kind === "aborted")) return { stopId, kind: "aborted" as const };
       if (!result || !result.ok) return { stopId, kind: "failed" as const };
       const { latitude, longitude } = result.value.data;
+      const name = typeof result.value.data.name === "string" ? result.value.data.name.trim() : "";
       return Number.isFinite(latitude) && Number.isFinite(longitude)
-        ? { stopId, kind: "ok" as const, latitude, longitude }
+        ? { stopId, kind: "ok" as const, latitude, longitude, name }
         : { stopId, kind: "failed" as const };
     }),
     options.concurrency ?? PREFETCH_CONCURRENCY,
@@ -101,8 +102,9 @@ export async function fetchCallPositions(
     out[stepIndex] = {
       status: "ok",
       positions: found.map(({ call, answer }) => {
-        const ok = answer as { latitude: number; longitude: number };
-        return { ordinal: call.ordinal, latitude: ok.latitude, longitude: ok.longitude };
+        const ok = answer as { latitude: number; longitude: number; name: string };
+        // The name comes with the position (On board names these stops); kept only when given.
+        return { ordinal: call.ordinal, latitude: ok.latitude, longitude: ok.longitude, ...(ok.name ? { name: ok.name } : {}) };
       }),
     };
   }

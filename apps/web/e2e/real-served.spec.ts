@@ -78,9 +78,10 @@ test.describe("@real served", () => {
     if (body.data.outcome === "routes_found") {
       await page.getByRole("button", { name: "התחלת ניווט" }).click();
       await expect(page).toHaveURL(/#\/navigate$/);
-      await expect(page.getByRole("button", { name: /השלב הבא|סיום/ }).first()).toBeVisible();
+      // Navigate's one action (boards 4–5: "עליתי", "ירדתי", "הגעתי" or "סיום").
+      await expect(page.locator(".nav-primary")).toBeVisible();
       await expectPhoneLayout(page, "Navigate");
-      await page.getByRole("button", { name: "סיום הנסיעה" }).click();
+      await page.getByRole("button", { name: "יציאה מהניווט" }).click();
       await expect(page).toHaveURL(/#\/$/);
     }
 

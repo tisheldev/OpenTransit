@@ -14,6 +14,7 @@ import {
   wasExpiredOnLoad,
   type ActiveTrip,
 } from "../../nav/activeTrip";
+import { engineCallPositions } from "../../nav/callPositions";
 import type { NavEffect } from "../../nav/engine";
 import { SIM_SPEEDS } from "../../nav/simulatedSource";
 import { useTripPrefetch } from "../../nav/usePrefetch";
@@ -22,25 +23,28 @@ import type { NavStep } from "../../nav/steps";
 import { usePlan } from "../../plan/PlanProvider";
 import type { Endpoint } from "../../plan/draft";
 import { go, hrefFor } from "../../router";
-import { useSheet } from "../../shell/sheet";
-import { badgeLabel, badgeMode, isolate, rideLine, isSameStop, placeName, rowText, stepSummary, type EndLabels } from "./describe";
+import { SNAP_FRACTION, useSheet } from "../../shell/sheet";
+import { Answer } from "./Answer";
+import { badgeLabel, badgeMode, countdownText, isolate, rideLine, isSameStop, placeName, rowText, rideName, stepSummary, type EndLabels } from "./describe";
+import { missedRide } from "./missed";
+import { MissedPanel } from "./MissedPanel";
 import { navScene } from "./navScene";
-import { RideProgress } from "./RideProgress";
-import { StepCard } from "./StepCard";
+import { rideRemaining } from "./rideRows";
 import "./navigate.css";
 
-// Navigate — C05 (design: Screens 5). Reads the active trip only; the engine advances on
-// location fixes, Next step or a checklist tap. The web client cannot follow location
+// Navigate — C05, as the approved boards 4–6 (user, 11 November 2026): the map is the
+// interface and the panel at its foot gives one answer. Walking, the map follows the
+// passenger and the panel says where to, how far, and whether the bus will be caught
+// ("עליתי" when on board); on board it counts the stops to the exit and lists them
+// ("ירדתי"); "לא הגיע?" offers the choices from where the passenger stands. A close
+// button (end navigation) and the arrival time float over the map. Drag the sheet up for
+// every step (the checklist) and the testing tools. The web client cannot follow location
 // with the screen locked (design S6.5 is native-only), so it says "keep this page open".
-//
-// Layout at the half sheet (the shell's default for Navigate): the step card, with what
-// comes next in it, above one primary action, and the map (your position, the active leg)
-// above the sheet. Drag the sheet up for every step and the testing tools.
 
-/** Street-level recentring at most this often (real time), so each camera move finishes. */
-const LOCATE_EVERY_MS = 500;
-/** One more recentre this long after the last fix (the lazy map may not have been there). */
+/** One more recentre this long after the step starts following (the lazy map may not have been there). */
 const LOCATE_SETTLE_MS = 2_000;
+/** Room kept under the panel's actions when the sheet is sized to it. */
+const PANEL_GAP_PX = 8;
 
 const endpointLabel = (endpoint: Endpoint | null): string | null =>
   endpoint?.type === "place" ? endpoint.place.label : null;
@@ -77,6 +81,12 @@ function RowIcon({ step }: { step: NavStep }) {
   return <Icon name="walk" />;
 }
 
+/** Publishes the map while mounted (Bus didn't come publishes its own instead). */
+function NavMap({ scene }: { scene: MapScene }) {
+  usePublishScene(scene);
+  return null;
+}
+
 export function NavigateScreen() {
   const trip = useActiveTrip();
   if (!trip) return <NoTrip />;
@@ -88,7 +98,9 @@ function Navigating({ trip }: { trip: ActiveTrip }) {
   const { draft } = usePlan();
   const { snap, setSnap, fitHalf } = useSheet();
   const [announcement, setAnnouncement] = useState<{ text: string; n: number }>({ text: "", n: 0 });
-  const topRef = useRef<HTMLDivElement>(null);
+  const announce = (text: string) => setAnnouncement((a) => ({ text, n: a.n + 1 }));
+  /** The step "לא הגיע?" was opened on; it closes by itself when the step changes. */
+  const [missedAt, setMissedAt] = useState<number | null>(null);
 
   // The plan's end labels at Start: coordinate ends are "START"/"END" in the journey.
   const labels: EndLabels = trip.labels ?? { origin: endpointLabel(draft.from), destination: endpointLabel(draft.to) };
@@ -111,13 +123,15 @@ function Navigating({ trip }: { trip: ActiveTrip }) {
         parts.push(t(effect.cue === "next_stop" ? "nav.cueNext" : "nav.cueTwo"));
       }
     }
-    if (parts.length > 0) setAnnouncement((a) => ({ text: parts.join(". "), n: a.n + 1 }));
+    if (parts.length > 0) announce(parts.join(". "));
     if (cue && typeof navigator !== "undefined" && typeof navigator.vibrate === "function") navigator.vibrate([200, 100, 200]);
   };
   const nav = useNavigation(trip, onEffects);
   const { steps, state, fix } = nav;
   const step = steps[state.stepIndex]!;
   const last = step.kind === "arrive";
+  const missed = missedRide(steps, state.stepIndex, state.phase);
+  const showMissed = missedAt === state.stepIndex && missed !== null;
 
   useWakeLock(state.phase !== "arrived");
 
@@ -125,6 +139,12 @@ function Navigating({ trip }: { trip: ActiveTrip }) {
     nav.stop();
     endActiveTrip();
     go({ name: "home" }, { replace: true });
+  };
+  const board = () => {
+    // Waiting at the stop, boarding keeps the step: say so (a new step announces itself).
+    if (step.kind === "ride" && state.phase === "waiting") announce(t("nav.announce.boarded", { ride: rideName(step, t) }));
+    setMissedAt(null);
+    nav.board();
   };
 
   // Expiry while open (two hours after the scheduled arrival): cleared, back Home.
@@ -140,85 +160,115 @@ function Navigating({ trip }: { trip: ActiveTrip }) {
     return () => clearInterval(id);
   }, [trip]);
 
-  // A new step (a checklist tap, Next, or the engine) or a smaller sheet brings the card
-  // (and the banners above it: "simulated" must stay in view) back into view when the
-  // passenger had scrolled down to the checklist or the tools.
-  const seen = useRef({ stepIndex: state.stepIndex, snap });
-  useEffect(() => {
-    if (seen.current.stepIndex === state.stepIndex && seen.current.snap === snap) return;
-    seen.current = { stepIndex: state.stepIndex, snap };
-    const top = topRef.current;
-    if (top && typeof top.scrollIntoView === "function") top.scrollIntoView({ block: "nearest" });
-  }, [state.stepIndex, snap]);
+  // The map (boards 4–6). Countdown and stop words change at most once a minute, so the
+  // scene (and a fitted camera) does not move with every clock tick.
+  const callPositions = useMemo(() => engineCallPositions(trip.callPositions), [trip.callPositions]);
+  const ridePositions = callPositions[step.index];
+  const riding = step.kind === "ride" && state.phase !== "waiting";
+  const passed = riding ? rideRemaining(step, state, step.ride ? trip.trips[step.ride.tripRef] : undefined, ridePositions, nav.clock).passed : null;
+  const boarding = step.kind === "ride" ? step : steps[step.index + 1]?.kind === "ride" ? steps[step.index + 1]! : null;
+  const countdown = boarding ? countdownText(boarding.scheduledDeparture, nav.clock, t, lang, "departure") : null;
+  const badge = boarding ? badgeLabel(boarding, t) : "";
+  const exitHere = t("nav.answer.exitHere");
+  const waiting = state.phase === "waiting";
+  const scene = useMemo<MapScene>(
+    () =>
+      navScene({
+        journey: trip.journey,
+        steps,
+        step,
+        waiting,
+        labels,
+        fix,
+        callPositions: ridePositions,
+        passedOrdinal: passed,
+        words: { badge, countdown, exitHere },
+      }),
+    // labels: its two strings, not the object (rebuilt on every render)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [trip.journey, steps, step, waiting, labels.origin, labels.destination, fix, ridePositions, passed, badge, countdown, exitHere],
+  );
 
-  // The card (pinned at the full sheet) and the bottom action cover the checklist's
-  // edges; their heights become scroll margins so a focused or scrolled-to row is never
-  // hidden beneath them (keyboard focus, scrollIntoView). At the half sheet the card must
-  // also clear the pinned Next step whatever the fonts or the text (a long stop name, a
-  // countdown in hours): the sheet is asked for the height from its top to the card's
-  // end plus the action (fitHalf), so it grows rather than hide the card's last lines.
+  // Walking (and waiting at the stop) the map follows the passenger at street level: one
+  // recentre (the map's Locate: zoom 15 or closer) when following starts, once more after
+  // the lazy map has had time to load; the scene's "follow" camera keeps them centred.
+  const following = !!fix && !riding && !last && !showMissed;
+  useEffect(() => {
+    if (!following) return;
+    requestLocate();
+    const id = setTimeout(requestLocate, LOCATE_SETTLE_MS);
+    return () => clearTimeout(id);
+  }, [following, state.stepIndex]);
+
+  // The sheet holds one answer (the boards' collapsed panel): sized to the panel when the
+  // view changes, at the peek when it fits there, else the half grown to fit (fitHalf),
+  // never beyond the full sheet. The passenger's own drag rules until the view changes.
   const rootRef = useRef<HTMLDivElement>(null);
-  const actionsRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const view = `${state.stepIndex}|${riding ? "ride" : waiting ? "wait" : "walk"}|${showMissed ? "missed" : ""}`;
+  const seenView = useRef<string | null>(null);
   useLayoutEffect(() => {
     const root = rootRef.current;
-    if (!root) return;
-    const report = () => {
-      const top = topRef.current;
-      const pinned = getComputedStyle(top ?? root).position === "sticky";
-      const actions = actionsRef.current?.getBoundingClientRect().height ?? 0;
-      root.style.setProperty("--nav-cover-top", `${pinned ? Math.round(top?.getBoundingClientRect().height ?? 0) : 0}px`);
-      root.style.setProperty("--nav-cover-bottom", `${Math.round(actions)}px`);
-      const sheet = root.closest(".sheet");
-      const scroller = root.closest(".sheet-content");
-      if (snap !== "half" || !top || !sheet || !scroller) return fitHalf(null);
-      const needed = top.getBoundingClientRect().bottom - sheet.getBoundingClientRect().top + scroller.scrollTop + actions;
-      fitHalf(needed > 0 ? needed : null);
+    const panel = panelRef.current;
+    if (!root || !panel) return;
+    const sheet = root.closest(".sheet");
+    const scroller = root.closest(".sheet-content");
+    const needed = () => {
+      if (!sheet || !scroller) return 0;
+      return panel.getBoundingClientRect().bottom - sheet.getBoundingClientRect().top + scroller.scrollTop + PANEL_GAP_PX;
     };
-    report();
+    const peekPx = () => SNAP_FRACTION.peek * (root.closest(".shell")?.getBoundingClientRect().height || window.innerHeight);
+    const changed = seenView.current !== view;
+    seenView.current = view;
+    if (changed && scroller) scroller.scrollTop = 0;
+    const report = (choose: boolean) => {
+      // No layout (jsdom, a hidden page): nothing to size; the shell's snap stays.
+      if (panel.getBoundingClientRect().height <= 0) return fitHalf(null);
+      const px = needed();
+      if (choose && snap !== "full") {
+        const want = px <= peekPx() ? "peek" : "half";
+        if (want !== snap) setSnap(want);
+      } else if (snap === "peek" && px > peekPx()) {
+        // Fonts or a banner made the panel taller than the peek: the half, sized to it.
+        setSnap("half");
+      }
+      fitHalf(snap === "half" ? px : null);
+    };
+    report(changed);
     if (typeof ResizeObserver === "undefined") return () => fitHalf(null);
-    const observer = new ResizeObserver(report);
-    if (topRef.current) observer.observe(topRef.current);
-    if (actionsRef.current) observer.observe(actionsRef.current);
+    const observer = new ResizeObserver(() => report(false));
+    observer.observe(panel);
     return () => {
       observer.disconnect();
       fitHalf(null);
     };
-  }, [snap, fitHalf]);
-
-  // Camera: the current leg is framed, and on board it stays framed while the dot moves
-  // along it toward the exit (how far is my stop?). On foot, and waiting at the stop, the
-  // map recentres on the passenger at street level (the map's Locate: zoom 15 or closer),
-  // at most twice a second so each move finishes, also at simulated speed-ups.
-  const streetLevel = !!fix && (step.kind !== "ride" || state.phase === "waiting");
-  const { origin, destination } = labels;
-  const scene = useMemo<MapScene>(
-    () => navScene(trip.journey, step, { origin, destination }, fix, streetLevel ? "keep" : "fit"),
-    [trip.journey, step, origin, destination, fix, streetLevel],
-  );
-  usePublishScene(scene);
-  const lastLocate = useRef(-Infinity);
-  useEffect(() => {
-    if (!streetLevel) return;
-    const locate = () => {
-      lastLocate.current = performance.now();
-      requestLocate();
-    };
-    if (performance.now() - lastLocate.current >= LOCATE_EVERY_MS) locate();
-    // The map loads lazily and ignores a request made before it mounted, and a passenger
-    // standing still gets few fixes: recentre once more after the map has had time to load.
-    const id = setTimeout(locate, LOCATE_SETTLE_MS);
-    return () => clearTimeout(id);
-  }, [scene, streetLevel]);
+  }, [view, snap, setSnap, fitHalf]);
 
   const manual = state.locationMode === "manual" && !nav.simulated;
   // The checklist's head (design: navigation sheet header): where to, and when.
   const arrival = steps[steps.length - 1]!;
   const arrivalPlace = placeName(arrival.target, labels, t);
+  const arrivalTime = formatClock(arrival.scheduledArrival, lang);
 
   return (
     <div className={`navigate navigate-${snap}`} ref={rootRef}>
-      <h1 className="visually-hidden">{t("screen.navigate")}</h1>
-      <div className="navigate-top" ref={topRef}>
+      {/* Over the map (boards 4–5): end navigation at the inline start, the arrival time at the end. */}
+      {snap !== "full" && (
+        <div className="nav-floats">
+          {!last && (
+            <button type="button" className="b-close nav-float nav-float--start" aria-label={t("nav.end")} onClick={leave}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true" focusable="false">
+                <path d="M6 6l12 12M18 6L6 18" />
+              </svg>
+            </button>
+          )}
+          <span className="b-tag nav-float nav-float--end">
+            <Bdi>{t("nav.answer.arriving", { time: arrivalTime })}</Bdi>
+          </span>
+        </div>
+      )}
+
+      <div className="nav-panel" ref={panelRef}>
         {manual && (
           <p className="ot-banner ot-banner--warning ot-banner--compact nav-banner" role="status">
             <Icon name="alert" />
@@ -243,8 +293,25 @@ function Navigating({ trip }: { trip: ActiveTrip }) {
             </span>
           </p>
         )}
-        <StepCard steps={steps} state={state} fix={fix} clock={nav.clock} labels={labels} onEnd={last ? null : leave} />
+        {showMissed && missed ? (
+          <MissedPanel trip={trip} ride={missed} fix={fix} clock={nav.clock} labels={labels} onBoarded={board} onCancel={() => setMissedAt(null)} />
+        ) : (
+          <Answer
+            steps={steps}
+            state={state}
+            fix={fix}
+            clock={nav.clock}
+            labels={labels}
+            trips={trip.trips}
+            callPositions={ridePositions}
+            onBoard={board}
+            onNext={nav.next}
+            onMissed={missed ? () => setMissedAt(state.stepIndex) : null}
+            onFinish={leave}
+          />
+        )}
       </div>
+      {!showMissed && <NavMap scene={scene} />}
 
       <section className="nav-checklist" aria-labelledby="nav-checklist-title">
         <div className="ot-navhead nav-checklist-head">
@@ -253,7 +320,7 @@ function Navigating({ trip }: { trip: ActiveTrip }) {
               {t("nav.checklist")}
             </h2>
             <span>
-              <Bdi>{t("nav.toward", { place: isolate(arrivalPlace, lang), time: formatClock(arrival.scheduledArrival, lang) })}</Bdi>
+              <Bdi>{t("nav.toward", { place: isolate(arrivalPlace, lang), time: arrivalTime })}</Bdi>
             </span>
           </div>
         </div>
@@ -291,7 +358,6 @@ function Navigating({ trip }: { trip: ActiveTrip }) {
                     {status === "done" ? "✓" : status === "current" ? "●" : ""}
                   </span>
                 </button>
-                {status === "current" && item.kind === "ride" && <RideProgress step={item} state={state} />}
               </li>
             );
           })}
@@ -300,6 +366,11 @@ function Navigating({ trip }: { trip: ActiveTrip }) {
           <Icon name="info" />
           <span className="ot-banner__body">{t("nav.keepOpen")}</span>
         </p>
+        {snap === "full" && !last && (
+          <button type="button" className="b-btn nav-end-full" onClick={leave}>
+            {t("nav.end")}
+          </button>
+        )}
       </section>
 
       <section className="nav-testing" aria-labelledby="nav-testing-title">
@@ -330,12 +401,6 @@ function Navigating({ trip }: { trip: ActiveTrip }) {
           </select>
         </label>
       </section>
-
-      <div className="navigate-actions" ref={actionsRef}>
-        <button type="button" className="ot-btn ot-btn--primary ot-btn--block nav-next" onClick={last ? leave : nav.next}>
-          {last ? t("nav.finish") : t("nav.next")}
-        </button>
-      </div>
 
       <div className="visually-hidden" aria-live="polite" aria-atomic="true">
         {announcement.text && <p key={announcement.n}>{announcement.text}</p>}

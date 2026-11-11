@@ -53,6 +53,8 @@ export interface Navigation {
   setSimSpeed: (speed: number) => void;
   next: () => void;
   jump: (stepIndex: number) => void;
+  /** "עליתי": the ride begins (from the walk to its stop, or waiting at it). */
+  board: () => void;
   /** Stop location (Finish, End trip) before the trip is cleared. */
   stop: () => void;
 }
@@ -188,6 +190,7 @@ export function useNavigation(trip: ActiveTrip, onEffects: (effects: NavEffect[]
     setSimSpeed,
     next: () => dispatch({ type: "next" }, simulated ? (simClock.current ?? Date.now()) : Date.now()),
     jump: (stepIndex) => dispatch({ type: "jump", stepIndex }, simulated ? (simClock.current ?? Date.now()) : Date.now()),
+    board: () => dispatch({ type: "board" }, simulated ? (simClock.current ?? Date.now()) : Date.now()),
     stop: () => {
       stopRef.current?.();
       stopRef.current = null;

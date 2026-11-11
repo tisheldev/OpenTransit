@@ -1,7 +1,7 @@
 import type { MessageKey } from "../../i18n/messages";
-import { formatDuration } from "../../lib/format";
+import { formatDistance, formatDuration } from "../../lib/format";
 import { formatClock, ZONE, type Lang } from "../../lib/time";
-import type { NavState } from "../../nav/engine";
+import { haversineMeters } from "../../nav/geo";
 import type { NavPlace, NavStep } from "../../nav/steps";
 
 // Text for steps (card, checklist, announcements). Pure; every fact comes from the step
@@ -59,13 +59,6 @@ export function badgeLabel(step: NavStep, t: T): string {
   return step.ride?.lineLabel ?? modeLabel(step.ride?.mode ?? "", t);
 }
 
-/** A train's fact: where it goes (a place headsign) or its number; null when neither is known. */
-export function trainName(step: NavStep): string | null {
-  const headsign = step.ride?.headsign?.trim() ?? "";
-  if (!headsign) return null;
-  return isNumeric(headsign) ? headsign : readableHeadsign(headsign);
-}
-
 /** GTFS headsigns separate city and place with "_" ("כפר סבא_תחנה מרכזית"). */
 export function readableHeadsign(headsign: string): string {
   return headsign.replace(/\s*_\s*/g, " · ").trim();
@@ -117,30 +110,6 @@ export function isSameStop(step: NavStep): boolean {
 
 export function stopsText(count: number, t: T): string {
   return count === 1 ? t("nav.stopCountOne") : t("nav.stopCount", { count });
-}
-
-export function stopsLeftText(count: number, t: T): string {
-  return count === 1 ? t("nav.stopsLeftOne") : t("nav.stopsLeft", { count });
-}
-
-/**
- * Stops on the current ride. "N stops left" only once the engine has measured progress
- * (a passed call lowered stopsLeft); before that "N stops to your exit", which does not
- * pretend to count down. Null without trip detail (the count is hidden, never guessed).
- */
-export function rideStopsText(step: NavStep, state: NavState, t: T): string | null {
-  const stops = rideStops(step, state);
-  if (!stops) return null;
-  if (stops.measured) return stopsLeftText(stops.count, t);
-  return stops.count === 1 ? t("nav.stopsToExitOne") : t("nav.stopsToExit", { count: stops.count });
-}
-
-/** The same count for the card's fact: stops to the exit, or left once progress is measured. */
-export function rideStops(step: NavStep, state: NavState): { count: number; measured: boolean } | null {
-  const count = step.ride?.stopCount ?? null;
-  if (count === null) return null;
-  const left = state.stepIndex === step.index ? state.stopsLeft : null;
-  return left !== null && left < count ? { count: left, measured: true } : { count, measured: false };
 }
 
 /** Scheduled time to change between two rides: next departure − previous arrival. */
@@ -230,24 +199,51 @@ export function rowText(step: NavStep, labels: EndLabels, t: T, lang: Lang, foll
   }
 }
 
-/** What follows the current step, for the ride card ("Then: change, 3 min · Bus 825 08:51"). */
-export function thenText(steps: readonly NavStep[], index: number, labels: EndLabels, t: T, lang: Lang): string | null {
-  const following = steps[index + 1];
-  if (!following) return null;
-  if (following.kind === "transfer_walk") {
-    const ride = steps[following.index + 1];
-    if (ride?.kind !== "ride") return t("nav.then", { next: stepSummary(following, labels, t, lang) });
-    const window = transferWindowSeconds(steps, following.index);
-    const parts = [t("nav.then.change", { ride: rideName(ride, t), time: formatClock(ride.scheduledDeparture, lang) })];
-    if (isSameStop(following)) parts.push(t("nav.then.sameStop"));
-    if (window !== null) parts.push(t("nav.transferWindow", { duration: formatDuration(window, lang) }));
-    return t("nav.then", { next: parts.join(" · ") });
+/** A typical walking pace when a walk has no distance to derive its own from. */
+const WALK_METERS_PER_SECOND = 1.3;
+
+export interface WalkLeft {
+  /** Metres still to walk; null when the journey gives no distance and there is no fix. */
+  meters: number | null;
+  seconds: number;
+  /** From a fix (what is left), or the whole step as planned. */
+  measured: boolean;
+}
+
+/**
+ * What is left of a walk (board 4, "2 דק׳ הליכה · 150 מ׳"): with a fix, the straight
+ * distance to the target at the step's own pace; without one, the step as planned.
+ */
+export function walkLeft(step: NavStep, fix: { latitude: number; longitude: number } | null): WalkLeft {
+  const planned = step.distanceMeters;
+  if (fix && Number.isFinite(step.target.latitude) && Number.isFinite(step.target.longitude)) {
+    const meters = haversineMeters(fix, step.target);
+    const pace = planned && planned > 0 && step.durationSeconds > 0 ? planned / step.durationSeconds : WALK_METERS_PER_SECOND;
+    return { meters, seconds: meters / pace, measured: true };
   }
-  if (following.kind === "ride") {
-    return t("nav.then", { next: t("nav.then.change", { ride: rideName(following, t), time: formatClock(following.scheduledDeparture, lang) }) });
-  }
-  if (following.kind === "arrive") {
-    return t("nav.then", { next: t("nav.arrival", { time: formatClock(following.scheduledArrival, lang) }) });
-  }
-  return t("nav.then", { next: stepSummary(following, labels, t, lang) });
+  return { meters: planned, seconds: step.durationSeconds, measured: false };
+}
+
+/** "2 דק׳ הליכה · 150 מ׳"; a walk without a street path says so instead of a distance. */
+export function walkLeftText(left: WalkLeft, t: T, lang: Lang): string {
+  const duration = formatDuration(left.seconds, lang);
+  const distance = formatDistance(left.meters, lang);
+  if (!distance) return t("nav.walkTimeOnly", { duration });
+  return `${t("nav.answer.walkFor", { duration })} · ${distance}`;
+}
+
+/** Board 4's check: by the timetable, does the rest of the walk end before the ride leaves? */
+export function makesIt(walkSeconds: number, ride: NavStep, clock: number): boolean {
+  return clock + walkSeconds * 1000 <= Date.parse(ride.scheduledDeparture);
+}
+
+/** A countdown for a map tag or a figure: "4 דק׳" from one minute to an hour, else its words. */
+export function countdownText(at: string, clock: number, t: T, lang: Lang, kind: "departure" | "arrival"): string {
+  const minutes = countdownMinutes(at, clock);
+  return minutes === null ? relativeText(at, clock, t, lang, kind) : t("nav.minutes", { n: minutes });
+}
+
+/** On board without trip detail: the time to the exit instead of a stop count. */
+export function arrivalCountdown(at: string, clock: number, t: T, lang: Lang): string {
+  return countdownText(at, clock, t, lang, "arrival");
 }

@@ -137,3 +137,25 @@ export function pointAlongLine(line: readonly Position[], meters: number): LatLo
   }
   return fromPosition(line[line.length - 1]!);
 }
+
+/**
+ * Cut a line `meters` along it (clamped to its ends) into the part before and the part
+ * after; both include the cut point. A cut at either end leaves one part a single point.
+ */
+export function splitLineAt(line: readonly Position[], meters: number): { before: Position[]; after: Position[] } {
+  if (line.length < 2) return { before: [...line], after: [...line] };
+  let remaining = Math.max(0, meters);
+  for (let i = 0; i < line.length - 1; i += 1) {
+    const a = line[i]!;
+    const b = line[i + 1]!;
+    const length = haversineMeters(fromPosition(a), fromPosition(b));
+    if (remaining <= length) {
+      const t = length > 0 ? remaining / length : 0;
+      const cut = [a[0]! + (b[0]! - a[0]!) * t, a[1]! + (b[1]! - a[1]!) * t];
+      return { before: [...line.slice(0, i + 1), cut], after: [cut, ...line.slice(i + 1)] };
+    }
+    remaining -= length;
+  }
+  const end = line[line.length - 1]!;
+  return { before: [...line], after: [end] };
+}

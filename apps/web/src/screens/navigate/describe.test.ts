@@ -2,24 +2,24 @@ import { describe, expect, it } from "vitest";
 import { en } from "../../i18n/en";
 import { he } from "../../i18n/he";
 import type { MessageKey } from "../../i18n/messages";
-import { initialNavState, type NavState } from "../../nav/engine";
 import { buildSteps } from "../../nav/steps";
 import { recordedJourneys, recordedTrips } from "../../nav/testdata";
 import {
   badgeLabel,
   badgeMode,
   countdownMinutes,
+  countdownText,
   isSameStop,
+  makesIt,
   readableHeadsign,
   relativeText,
   rideName,
   ridePlatform,
-  rideStopsText,
   rowText,
   stopCodeFor,
-  thenText,
-  trainName,
   transferWindowSeconds,
+  walkLeft,
+  walkLeftText,
   walkTargetName,
   type T,
 } from "./describe";
@@ -60,20 +60,30 @@ describe("ride names", () => {
   });
 });
 
-describe("stops on a ride (N4)", () => {
-  const riding = (step: number, stopsLeft: number | null): NavState => ({ ...initialNavState(j2, 0), stepIndex: step, phase: "riding", stopsLeft });
+describe("walking (board 4)", () => {
+  const walk = j2[0]!; // 172 m in 3 min to דיזנגוף סנטר/טשרניחובסקי, bus 249 at 08:38
+  const ride = j2[1]!;
 
-  it("counts to the exit until progress is measured, then counts down", () => {
-    expect(rideStopsText(j2[1]!, riding(1, 8), t)).toBe("8 תחנות עד הירידה");
-    expect(rideStopsText(j2[1]!, riding(1, 2), t)).toBe("נשארו 2 תחנות");
-    expect(rideStopsText(j2[1]!, riding(1, 1), t)).toBe("נשארה תחנה אחת");
-    // Another step's state never counts this ride down.
-    expect(rideStopsText(j2[1]!, riding(3, 2), t)).toBe("8 תחנות עד הירידה");
+  it("without a fix, the walk as planned; with one, what is left at the step's own pace", () => {
+    expect(walkLeft(walk, null)).toEqual({ meters: 172, seconds: 180, measured: false });
+    expect(walkLeftText(walkLeft(walk, null), t, "he")).toBe("3 דק׳ הליכה · 170 מ׳");
+    const atTarget = walkLeft(walk, { latitude: walk.target.latitude, longitude: walk.target.longitude });
+    expect(atTarget).toMatchObject({ meters: 0, seconds: 0, measured: true });
+    // A walk the journey gives no street path for says so, never a distance.
+    expect(walkLeftText(walkLeft(j1[3]!, null), tEn, "en")).toBe("About 4 min walk · no street path available");
   });
 
-  it("is hidden without trip detail (never guessed)", () => {
-    const noDetail = buildSteps(recordedJourneys[0]!, {});
-    expect(rideStopsText(noDetail[2]!, riding(2, null), t)).toBeNull();
+  it("makes it only when the rest of the walk ends by the scheduled departure", () => {
+    const departs = Date.parse(ride.scheduledDeparture);
+    expect(makesIt(180, ride, departs - 180_000)).toBe(true);
+    expect(makesIt(180, ride, departs - 179_000)).toBe(false);
+  });
+
+  it("the stop pin's countdown: minutes up to an hour, words otherwise", () => {
+    const departs = Date.parse(ride.scheduledDeparture);
+    expect(countdownText(ride.scheduledDeparture, departs - 4 * 60_000, t, "he", "departure")).toBe("4 דק׳");
+    expect(countdownText(ride.scheduledDeparture, departs, t, "he", "departure")).toBe("יוצא עכשיו");
+    expect(countdownText(ride.scheduledDeparture, departs + 3 * 60_000, t, "he", "departure")).toBe("לפני 3 דק׳");
   });
 });
 
@@ -92,12 +102,6 @@ describe("transfers", () => {
     expect(transferWindowSeconds(j2, 1)).toBeNull(); // a ride
   });
 
-  it("the ride card says what follows", () => {
-    expect(thenText(j2, 1, labels, t, "he")).toBe("אחר כך: מעבר לאוטובוס 825 ב־08:51 · באותה תחנה · 3 דק׳ למעבר");
-    expect(thenText(j0, 0, labels, t, "he")).toBe("אחר כך: מעבר לרכבת 156 ב־08:21 · 3 דק׳ למעבר");
-    expect(thenText(j2, 9, labels, t, "he")).toBe("אחר כך: הליכה אל הטכניון · 4 דק׳");
-    expect(thenText(j2, 11, labels, t, "he")).toBeNull();
-  });
 });
 
 describe("countdowns", () => {
@@ -141,7 +145,7 @@ describe("checklist rows (N2)", () => {
   });
 });
 
-describe("step card presentation", () => {
+describe("countdown and badges", () => {
   it("the countdown figure is whole minutes from one minute to an hour ahead, else none", () => {
     const at = "2026-11-02T08:38:00+02:00";
     const now = (iso: string) => Date.parse(iso);
@@ -153,16 +157,10 @@ describe("step card presentation", () => {
     expect(countdownMinutes(at, now("2026-11-02T07:38:00+02:00"))).toBeNull();
   });
 
-  it("badges and train facts come from the ride; nothing is guessed", () => {
+  it("badges come from the ride; nothing is guessed", () => {
     expect(badgeMode(j2[1]!)).toBe("bus");
     expect(badgeLabel(j2[1]!, t)).toBe("249");
     expect(badgeMode(j0[2]!)).toBe("rail");
     expect(badgeLabel(j0[2]!, t)).toBe("רכבת");
-    expect(trainName(j0[2]!)).toBe("156");
-    const toward = structuredClone(j0[2]!);
-    toward.ride!.headsign = "נהריה";
-    expect(trainName(toward)).toBe("נהריה");
-    toward.ride!.headsign = null;
-    expect(trainName(toward)).toBeNull();
   });
 });
