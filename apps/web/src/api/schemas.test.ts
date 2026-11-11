@@ -4,12 +4,14 @@ import { fixtureManifest, fixtures } from "./fixtures";
 import {
   DeparturesPageSchema,
   JourneyResponseSchema,
+  NearbyDeparturesSchema,
   PatternsPageSchema,
   PlacesSchema,
   ProblemSchema,
   RouteSchema,
   RoutesPageSchema,
   StatusSchema,
+  StopLinesSchema,
   StopSchema,
   StopsPageSchema,
   TripSchema,
@@ -27,7 +29,9 @@ function schemaFor(name: string): z.ZodType {
   if (path === "/v1/places") return PlacesSchema;
   if (path === "/v1/journeys") return JourneyResponseSchema;
   if (path.startsWith("/v1/trips/")) return TripSchema;
+  if (path === "/v1/departures/nearby") return NearbyDeparturesSchema;
   if (path.endsWith("/departures")) return DeparturesPageSchema;
+  if (path.startsWith("/v1/stops/") && path.endsWith("/lines")) return StopLinesSchema;
   if (path === "/v1/stops") return StopsPageSchema;
   if (path.startsWith("/v1/stops/")) return StopSchema;
   if (path.endsWith("/patterns")) return PatternsPageSchema;
@@ -52,6 +56,8 @@ describe("fixtures", () => {
       RoutesPageSchema,
       RouteSchema,
       PatternsPageSchema,
+      NearbyDeparturesSchema,
+      StopLinesSchema,
       ProblemSchema,
     ]) {
       expect(schemas.has(schema)).toBe(true);

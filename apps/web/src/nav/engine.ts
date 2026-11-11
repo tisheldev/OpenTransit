@@ -35,6 +35,12 @@ export type NavEvent =
   | { type: "tick" }
   | { type: "next" }
   | { type: "jump"; stepIndex: number }
+  /**
+   * The passenger says they boarded ("עליתי"): walking to a ride's stop, the ride begins
+   * (as Next does); waiting at the current ride's stop, it begins on the same step.
+   * Anywhere else it does nothing.
+   */
+  | { type: "board" }
   | { type: "locationMode"; mode: LocationMode };
 
 /** A call position (from `GET /v1/stops/{id}` until API-C1 puts them in the trip). */
@@ -42,6 +48,8 @@ export interface CallPosition {
   ordinal: number;
   latitude: number;
   longitude: number;
+  /** The stop's name from the same answer, when it gave one (On board lists these stops). */
+  name?: string;
 }
 
 export interface NavContext {
@@ -313,6 +321,17 @@ export function advance(state: NavState, event: NavEvent, ctx: NavContext): NavR
       }
       const effects: NavEffect[] = [];
       return { state: moveTo(state, ctx, index, "manual", effects), effects };
+    }
+    case "board": {
+      const step = ctx.steps[state.stepIndex];
+      if (step?.kind === "ride" && state.phase === "waiting") {
+        return { state: { ...state, phase: "riding", nearBoarding: false }, effects: [] };
+      }
+      if (isWalk(step) && ctx.steps[state.stepIndex + 1]?.kind === "ride") {
+        const effects: NavEffect[] = [];
+        return { state: moveTo(state, ctx, state.stepIndex + 1, "manual", effects), effects };
+      }
+      return { state, effects: [] };
     }
     case "locationMode": {
       if (event.mode === state.locationMode) return { state, effects: [] };

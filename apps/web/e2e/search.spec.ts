@@ -9,7 +9,7 @@ test.beforeEach(async ({ page }) => {
 
 test("Hebrew: To opens focused, results arrive, and a stop opens Compare without IDs in the URL", async ({ page }) => {
   await page.goto(appPath("#/"));
-  await page.getByRole("button", { name: "לאן?" }).click();
+  await page.getByRole("button", { name: "לאן נוסעים?" }).click();
   await expect(page).toHaveURL(/#\/search\/to$/);
   const field = page.getByRole("searchbox", { name: "חיפוש כתובת, תחנה או מקום" });
   await expect(field).toBeFocused();

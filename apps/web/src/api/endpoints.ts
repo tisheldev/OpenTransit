@@ -4,15 +4,19 @@ import { failure, type Result } from "./result";
 import {
   DeparturesPageSchema,
   JourneyResponseSchema,
+  NearbyDeparturesSchema,
   PatternsPageSchema,
   PlacesSchema,
   RouteSchema,
   RoutesPageSchema,
   StatusSchema,
   StopSchema,
+  StopLinesSchema,
   StopsPageSchema,
   TripSchema,
   type DeparturesPage,
+  type NearbyDepartures,
+  type StopLines,
   type PatternsPage,
   type Places,
   type RouteDetail,
@@ -103,6 +107,41 @@ export function getStopDepartures(
       },
       DeparturesPageSchema,
     ),
+  );
+}
+
+export interface NearbyDeparturesQuery {
+  near: { latitude: number; longitude: number };
+  from: string; // ISO instant with an explicit offset
+  radiusMeters?: number;
+  stops?: number;
+  perStop?: number;
+  horizonMinutes?: number;
+}
+
+/** Board 1: the stops around a point, each with the earliest departure of each line. */
+export function getNearbyDepartures(query: NearbyDeparturesQuery, signal?: AbortSignal): Promise<Result<NearbyDepartures>> {
+  return apiFetch(
+    {
+      path: "/v1/departures/nearby",
+      query: {
+        near: latLon(query.near),
+        from: query.from,
+        radius: query.radiusMeters,
+        stops: query.stops,
+        perStop: query.perStop,
+        horizonMinutes: query.horizonMinutes,
+      },
+      signal,
+    },
+    NearbyDeparturesSchema,
+  );
+}
+
+/** Board 7: every line through a stop with the patterns serving it (their stops in order). */
+export function getStopLines(stopId: string, signal?: AbortSignal): Promise<Result<StopLines>> {
+  return withRef(stopId, (segment) =>
+    apiFetch({ path: `/v1/stops/${segment}/lines`, query: { patterns: "serving", limit: 50 }, signal }, StopLinesSchema),
   );
 }
 

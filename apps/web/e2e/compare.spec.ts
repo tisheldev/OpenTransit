@@ -1,7 +1,7 @@
 import { expect, test, type Page } from "@playwright/test";
 import { appPath, blockExternal, expectNoSeriousAxeViolations, useScenario as setScenario, useTheme as setTheme } from "./helpers";
 
-// Mocked Compare (slice S5): fixtures mode at 360 x 640. The plan draft is written to
+// Mocked Compare (boards Choose and Step, 11 November 2026): fixtures mode at 360 x 640. The plan draft is written to
 // sessionStorage ("opentransit:plan", the PlanDraft shape) before the app starts. Dark is
 // the default theme; the light-theme tests at the end repeat the axe checks.
 
@@ -46,32 +46,42 @@ async function openCompare(
   await page.addInitScript((value) => sessionStorage.setItem("opentransit:plan", value), JSON.stringify(plan));
   if (theme) await setTheme(page, theme);
   await page.goto(appPath("#/compare"));
+  // A cold dev server compiles the Compare chunk on first request (seen with parallel
+  // workers): wait for the screen itself before the 5 s assertions start counting.
+  await expect(page.locator(".compare")).toBeVisible({ timeout: 20_000 });
 }
 
 const optionList = (page: Page) => page.getByRole("list", { name: /אפשרויות נסיעה|Trip options/ });
 
-test("half sheet: header, time chip and every option fit above the pinned Start", async ({ page }) => {
+const detailsButton = (page: Page) => page.getByRole("button", { name: "פרטי המסלול" });
+const legButtons = (page: Page) => page.getByRole("region", { name: /פרטי מסלול|Route details/ }).getByRole("button");
+
+test("Choose at the half sheet: the destination, the start, the time tag, every option and פרטי המסלול in view", async ({ page }) => {
   await openCompare(page);
   const options = optionList(page).getByRole("button");
   await expect(options).toHaveCount(3);
   await expect(page.locator(".sheet")).toHaveAttribute("data-snap", "half");
-  const start = page.getByRole("button", { name: "התחלת ניווט" });
-  await expect(start).toBeInViewport();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("טכניון");
+  await expect(page.getByRole("button", { name: /^מוצא: ?מדיזנגוף סנטר$/ })).toBeInViewport();
+  await expect(page.getByRole("button", { name: /^שינוי השעה: יציאה 08:00/ })).toBeInViewport();
+  const main = detailsButton(page);
+  await expect(main).toBeInViewport();
   const bar = (await page.locator(".compare-start").boundingBox())!;
-  // Opaque and full width: nothing shows beside or below it.
+  // Opaque and full width, flush with the bottom.
   expect(bar.width).toBeGreaterThanOrEqual(359);
   expect(bar.y + bar.height).toBeGreaterThanOrEqual(639);
-  await expect(page.getByRole("group", { name: "מוצא ויעד" })).toBeInViewport();
-  await expect(page.getByRole("button", { name: /^שינוי השעה: יציאה 08:00/ })).toBeInViewport();
   for (let i = 0; i < 3; i += 1) {
     const box = (await options.nth(i).boundingBox())!;
-    expect(box.y).toBeGreaterThan(640 * 0.45 - 1);
-    expect(box.y + box.height, `option ${i + 1} above Start`).toBeLessThanOrEqual(bar.y + 1);
+    expect(box.y + box.height, `option ${i + 1} above פרטי המסלול`).toBeLessThanOrEqual(bar.y + 1);
   }
-  await expectNoSeriousAxeViolations(page, "compare half sheet (he)");
+  await expect(options.first()).toHaveAccessibleName(/^אפשרות 1, 105 דקות, יציאה 08:07, הגעה 09:52, 2 החלפות, קווים: 8, רכבת, 1/);
+  // Hebrew: the departure sits on the right of the arrival.
+  const times = options.first().locator(".b-op__time bdi");
+  expect((await times.first().boundingBox())!.x).toBeGreaterThan((await times.last().boundingBox())!.x);
+  await expectNoSeriousAxeViolations(page, "compare choose (he)");
 });
 
-test("options: tap the second, details swap without a request, Start opens navigation", async ({ page }) => {
+test("choosing by row swaps the chosen option without a request and keeps the half sheet", async ({ page }) => {
   const journeyRequests: string[] = [];
   page.on("request", (request) => {
     if (request.method() === "POST" && new URL(request.url()).pathname === "/v1/journeys") journeyRequests.push(request.url());
@@ -80,39 +90,60 @@ test("options: tap the second, details swap without a request, Start opens navig
   const options = optionList(page).getByRole("button");
   await expect(options).toHaveCount(3);
   await expect(options.first()).toHaveAttribute("aria-pressed", "true");
-  await expect(options.first()).toHaveAccessibleName("אפשרות 1, מומלץ, 105 דקות, יציאה 08:07, הגעה 09:52, 2 החלפות");
-  const details = page.getByRole("region", { name: /פרטי מסלול/ });
-  await expect(details.getByText("רכבת ישראל", { exact: true })).toBeVisible();
-  await expect(details).not.toContainText("רכבת לחוף הכרמל");
-  await expect(details.getByRole("link")).toHaveCount(0);
   const before = journeyRequests.length;
-
   await options.nth(1).click();
   await expect(options.nth(1)).toHaveAttribute("aria-pressed", "true");
-  await expect(details.getByText(/^הליכה כ־2 דק׳$/)).toBeVisible();
+  await expect(options.first()).toHaveAttribute("aria-pressed", "false");
   expect(journeyRequests.length).toBe(before);
+  await expect(page.locator(".sheet")).toHaveAttribute("data-snap", "half");
+  await expectNoSeriousAxeViolations(page, "compare choose, second option (he)");
+});
 
-  // Tapping an option raises the sheet; at 360 x 640 the options and the start of the
-  // selected route are both on screen.
-  await expect(page.locator(".sheet")).toHaveAttribute("data-snap", "full");
-  await expect(options.nth(2)).toBeInViewport();
-  await expect(details.locator(".ot-steps__item").first()).toBeInViewport();
+test("route details: a tapped leg is shown on the map, כל המסלול zooms out, Back returns to Choose", async ({ page }) => {
+  await openCompare(page);
+  await optionList(page).getByRole("button").nth(1).click();
+  await detailsButton(page).click();
+  await expect(page).toHaveURL(/#\/route$/);
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("08:27");
+  const legs = legButtons(page);
+  await expect(legs.first()).toHaveAttribute("aria-pressed", "true");
+  await expect(legs.first()).toContainText("מוצג במפה");
+  const whole = page.getByRole("button", { name: "כל המסלול" });
+  await expect(whole).toBeVisible();
+  // It floats over the map, above the sheet.
+  const sheetTop = (await page.locator(".sheet").boundingBox())!.y;
+  const wholeBox = (await whole.boundingBox())!;
+  expect(wholeBox.y + wholeBox.height).toBeLessThanOrEqual(sheetTop);
+  await expectNoSeriousAxeViolations(page, "compare route details (he)");
 
-  // Hebrew: the earliest time sits on the right of the bar.
-  const segments = options.first().locator(".ot-lbar__seg");
-  const firstBox = await segments.first().boundingBox();
-  const lastBox = await segments.last().boundingBox();
-  expect(firstBox!.x).toBeGreaterThan(lastBox!.x);
+  await legs.nth(2).click();
+  await expect(legs.nth(2)).toHaveAttribute("aria-pressed", "true");
+  await expect(legs.first()).toHaveAttribute("aria-pressed", "false");
+  await whole.click();
+  await expect(whole).toBeHidden();
+  await expect(legs.nth(2)).toHaveAttribute("aria-pressed", "false");
 
-  // The whole itinerary scrolls clear of the pinned Start bar.
+  await page.getByRole("button", { name: "חזרה" }).click();
+  await expect(page).toHaveURL(/#\/compare$/);
+  await expect(optionList(page).getByRole("button").nth(1)).toHaveAttribute("aria-pressed", "true");
+});
+
+test("route details: the star saves the destination, יוצאים לדרך opens navigation", async ({ page }) => {
+  await openCompare(page);
+  await expect(optionList(page).getByRole("button")).toHaveCount(3);
+  await detailsButton(page).click();
+  const star = page.getByRole("button", { name: "שמירת היעד" });
+  await expect(star).toHaveAttribute("aria-pressed", "false");
+  await star.click();
+  await expect(star).toHaveAttribute("aria-pressed", "true");
+  const start = page.getByRole("button", { name: "יוצאים לדרך" });
+  await expect(start).toBeInViewport();
+  // The whole timeline scrolls clear of the pinned bar.
   await page.locator("main").evaluate((el) => el.scrollTo(0, el.scrollHeight));
-  const last = (await details.locator(".ot-steps__item").last().boundingBox())!;
+  const last = (await page.locator(".compare-timeline > *").last().boundingBox())!;
   const bar = (await page.locator(".compare-start").boundingBox())!;
   expect(last.y + last.height).toBeLessThanOrEqual(bar.y + 1);
-
-  await expectNoSeriousAxeViolations(page, "compare options (he)");
-
-  await page.getByRole("button", { name: "התחלת ניווט" }).click();
+  await start.click();
   await expect(page).toHaveURL(/#\/navigate$/);
 });
 
@@ -169,7 +200,7 @@ test("unavailable offers a retry that replaces the error with options", async ({
   await expect(page.getByRole("alert")).toHaveCount(0);
 });
 
-test("English: left to right, earliest on the left, no serious axe violations", async ({ page }) => {
+test("English: left to right, no serious axe violations", async ({ page }) => {
   await blockExternal(page);
   await page.goto(appPath("#/settings"));
   await page.getByLabel("English").check();
@@ -178,14 +209,16 @@ test("English: left to right, earliest on the left, no serious axe violations", 
   await page.reload();
   const options = optionList(page).getByRole("button");
   await expect(options).toHaveCount(3);
-  await expect(options.first()).toHaveAccessibleName("Option 1, Recommended, 105 minutes, departs 08:07, arrives 09:52, 2 transfers");
+  await expect(options.first()).toHaveAccessibleName(/^Option 1, 105 minutes, departs 08:07, arrives 09:52, 2 transfers, lines: 8, Train, 1/);
+  const times = options.first().locator(".b-op__time bdi");
+  expect((await times.first().boundingBox())!.x).toBeLessThan((await times.last().boundingBox())!.x);
+  await expectNoSeriousAxeViolations(page, "compare choose (en)");
+  await page.getByRole("button", { name: "Route details" }).click();
   await expect(page.getByRole("region", { name: /Route details/ }).getByText("רכבת ישראל", { exact: true })).toBeVisible();
-  const segments = options.first().locator(".ot-lbar__seg");
-  expect((await segments.first().boundingBox())!.x).toBeLessThan((await segments.last().boundingBox())!.x);
-  await expectNoSeriousAxeViolations(page, "compare options (en)");
+  await expectNoSeriousAxeViolations(page, "compare route details (en)");
 });
 
-test("light theme: half sheet, route details and time picker pass axe, and the options still fit", async ({ page }) => {
+test("light theme: Choose, route details and the time picker pass axe, and the options still fit", async ({ page }) => {
   await openCompare(page, null, draft, "light");
   await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
   const options = optionList(page).getByRole("button");
@@ -193,15 +226,17 @@ test("light theme: half sheet, route details and time picker pass axe, and the o
   const bar = (await page.locator(".compare-start").boundingBox())!;
   for (let i = 0; i < 3; i += 1) {
     const box = (await options.nth(i).boundingBox())!;
-    expect(box.y + box.height, `option ${i + 1} above Start`).toBeLessThanOrEqual(bar.y + 1);
+    expect(box.y + box.height, `option ${i + 1} above פרטי המסלול`).toBeLessThanOrEqual(bar.y + 1);
   }
-  await expectNoSeriousAxeViolations(page, "compare half sheet (he, light)");
-  await options.nth(1).click();
-  await expect(page.locator(".sheet")).toHaveAttribute("data-snap", "full");
-  await expectNoSeriousAxeViolations(page, "compare route details (he, light)");
-  await page.getByRole("button", { name: /^שינוי השעה: יציאה 08:00/ }).click();
+  await expectNoSeriousAxeViolations(page, "compare choose (he, light)");
+  const chip = page.getByRole("button", { name: /^שינוי השעה: יציאה 08:00/ });
+  await chip.click();
   await expect(page.getByRole("form", { name: "מתי יוצאים?" })).toBeVisible();
   await expectNoSeriousAxeViolations(page, "compare time picker (light)");
+  await chip.click();
+  await detailsButton(page).click();
+  await expect(legButtons(page).first()).toBeVisible();
+  await expectNoSeriousAxeViolations(page, "compare route details (he, light)");
 });
 
 for (const [label, scenario, plan, shown] of [

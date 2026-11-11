@@ -63,7 +63,7 @@ These values are read from the boards. They are not tokens yet: the design syste
 
 ### Where the boards depart from the requirements
 
-The user approved the boards as drawn ("I like this design now") but was not asked about each requirement they depart from. The [client PRD](client-prd.md#6-functional-requirements) and the sections of this design stand for behaviour until the user revises them; this section governs appearance only.
+The user approved the boards as drawn ("I like this design now"). After seeing the look applied without the boards' layouts, the user revised these requirements the same day: "build all eight". The boards now govern layout and behaviour for C01, C03 and C04, and the web test client is rebuilt to match all eight boards; the [client PRD](client-prd.md#6-functional-requirements) keeps the earlier text for history. The data the boards need that the API lacks (departure operators, nearby stops with their next departure, side of the road, "bus didn't come" alternatives, line shapes through a stop, verified operator colours) is a separate API task the user asked for the same day.
 
 1. **C03 Compare:** the PRD requires up to three options on one shared time axis with a rank label. The boards show the options as rows with times and line badges, without the axis or rank labels.
 2. **C04 Route details:** the PRD requires every step on tapping an option, without a further tap, with the chart still in view. On the phone boards, route details open as their own step; the wide-screen board keeps them in place.

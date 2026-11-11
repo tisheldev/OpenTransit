@@ -23,6 +23,7 @@ import {
   nameExpression,
   overlayLayers,
   pinFeatures,
+  ringFeatures,
   routeFeatures,
   sceneBounds,
   themeBasemap,
@@ -30,6 +31,7 @@ import {
   withOverlay,
   type StyleJson,
 } from "./layers";
+import { MapOverlay } from "./MapOverlay";
 import { setMapCenter, useMapState, type MapScene, type MapUser } from "./scene";
 
 // The lazy map chunk: everything that imports MapLibre lives here (MapHost loads it after
@@ -100,9 +102,18 @@ function drawScene(map: MapLibreMap, scene: MapScene, located: MapUser | null): 
     (map.getSource(id) as GeoJSONSource | undefined)?.setData(data as never);
   const user = scene.user ?? located;
   set("ot-route", routeFeatures(scene.route));
+  set("ot-ring", ringFeatures(scene.ring));
   set("ot-pins", pinFeatures(scene.pins, scene.route));
   set("ot-user", userFeatures(user));
   set("ot-accuracy", accuracyFeatures(user));
+}
+
+/** The top band's height (shell.css --overlay-top-h), 0 outside the shell. */
+function overlayTopHeight(map: MapLibreMap): number {
+  const shell = map.getContainer().closest(".shell");
+  if (!shell) return 0;
+  const value = parseFloat(getComputedStyle(shell).getPropertyValue("--overlay-top-h"));
+  return Number.isFinite(value) ? value : 0;
 }
 
 /** The sheet's height over the map, clamped so a tall sheet still leaves a quarter visible. */
@@ -111,25 +122,33 @@ function coveredHeight(map: MapLibreMap, inset: number): number {
   return height > 0 ? Math.min(inset, Math.round(height * 0.75)) : 0;
 }
 
-/** Reports the centre of the visible map (above the sheet), where the pick pin points. */
-function reportCenter(map: MapLibreMap, inset: number): void {
+type Side = { left: number; right: number };
+
+/** Reports the centre of the visible map (above the sheet, beside a side panel), where the pick pin points. */
+function reportCenter(map: MapLibreMap, inset: number, side: Side): void {
   const element = map.getContainer();
   const covered = coveredHeight(map, inset);
+  const sideways = side.left > 0 || side.right > 0;
   const { lng, lat } =
-    covered > 0 ? map.unproject([element.clientWidth / 2, (element.clientHeight - covered) / 2]) : map.getCenter();
+    covered > 0 || sideways
+      ? map.unproject([(side.left + element.clientWidth - side.right) / 2, (element.clientHeight - covered) / 2])
+      : map.getCenter();
   setMapCenter([lng, lat]);
 }
 
 export default function MapView() {
   const { lang, t } = useI18n();
   const theme = useTheme();
-  const { scene, bottomInset, locateRequest, located } = useMapState();
+  const { scene, bottomInset, sideInset, locateRequest, located } = useMapState();
   const container = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
   const [loaded, setLoaded] = useState(false);
+  /** The map once loaded, for the tag and stop-pin overlay (state, not a ref, so render may read it). */
+  const [overlayMap, setOverlayMap] = useState<MapLibreMap | null>(null);
   const [failed, setFailed] = useState(false);
   const pickRef = useRef(scene.pick);
   const insetRef = useRef(0);
+  const sideRef = useRef<Side>({ left: 0, right: 0 });
   // What a style (re)load needs when it lands: the current scene, fix, language and theme.
   const sceneRef = useRef(scene);
   const langRef = useRef(lang);
@@ -186,10 +205,11 @@ export default function MapView() {
     });
     map.on("load", () => {
       setLoaded(true);
-      if (pickRef.current) reportCenter(map, insetRef.current);
+      setOverlayMap(map);
+      if (pickRef.current) reportCenter(map, insetRef.current, sideRef.current);
     });
     map.on("moveend", () => {
-      if (pickRef.current) reportCenter(map, insetRef.current);
+      if (pickRef.current) reportCenter(map, insetRef.current, sideRef.current);
     });
     map.on("error", (event) => console.warn("Map error", event.error));
     requestedTheme.current = themeRef.current;
@@ -197,6 +217,7 @@ export default function MapView() {
     return () => {
       mapRef.current = null;
       setLoaded(false);
+      setOverlayMap(null);
       map.remove();
     };
   }, []);
@@ -232,7 +253,14 @@ export default function MapView() {
   useEffect(() => {
     insetRef.current = inset;
   }, [inset]);
+  useEffect(() => {
+    sideRef.current = sideInset;
+  }, [sideInset]);
+  /** Horizontal offset that centres content in the part of the map beside a side panel. */
+  const sideOffset = (sideInset.left - sideInset.right) / 2;
   const focusedScene = useRef<{ scene: MapScene | null; at: number }>({ scene: null, at: 0 });
+  /** The camera key last framed (MapScene.cameraKey), so a keyed scene frames once. */
+  const framedKey = useRef<string | null>(null);
 
   useEffect(() => {
     const map = mapRef.current;
@@ -241,12 +269,30 @@ export default function MapView() {
     const bottom = coveredHeight(map, inset);
     if (scene.camera === "fit") {
       const bounds = sceneBounds(scene);
-      if (bounds) {
+      const keyed = scene.cameraKey !== undefined;
+      if (bounds && keyed && framedKey.current === scene.cameraKey) {
+        // Already framed for this key: leave the camera where the passenger put it.
+      } else if (bounds) {
+        framedKey.current = scene.cameraKey ?? null;
+        // Below the top band (banners, Back, attribution), and below floating controls.
+        const band = overlayTopHeight(map);
+        const wanted = Math.max(FIT_PADDING.top, band + 16) + (scene.topControls ? 56 : 0);
+        // Leave at least 80 px to frame in: on a small screen under a tall sheet the padding
+        // must give way, or MapLibre has no room and fails to fit (NaN bounds).
+        const height = map.getContainer().clientHeight;
+        const below = FIT_PADDING.bottom + bottom;
+        const top = height > 0 ? Math.max(8, Math.min(wanted, height - 80 - below)) : wanted;
         // One point (a single pin) frames at street level rather than the closest zoom.
         const point = bounds[0][0] === bounds[1][0] && bounds[0][1] === bounds[1][1];
         try {
           map.fitBounds(bounds, {
-            padding: { ...FIT_PADDING, bottom: FIT_PADDING.bottom + bottom },
+            padding: {
+              ...FIT_PADDING,
+              top,
+              bottom: FIT_PADDING.bottom + bottom,
+              left: FIT_PADDING.left + sideInset.left,
+              right: FIT_PADDING.right + sideInset.right,
+            },
             maxZoom: point ? 15 : 16,
             duration,
           });
@@ -262,13 +308,13 @@ export default function MapView() {
         if (fresh) focusedScene.current = { scene, at: Date.now() };
         if (fresh || Date.now() - focusedScene.current.at < 800) {
           const focus = scene.focus ?? { center: DEFAULT_CENTER, zoom: DEFAULT_ZOOM };
-          map.easeTo({ center: focus.center, zoom: focus.zoom, offset: [0, -bottom / 2], duration: fresh ? duration : 0 });
+          map.easeTo({ center: focus.center, zoom: focus.zoom, offset: [sideOffset, -bottom / 2], duration: fresh ? duration : 0 });
         }
       }
     } else if (scene.camera === "follow" && scene.user) {
-      map.easeTo({ center: scene.user.position, offset: [0, -bottom / 2], duration });
+      map.easeTo({ center: scene.user.position, offset: [sideOffset, -bottom / 2], duration });
     }
-  }, [scene, inset, loaded]);
+  }, [scene, inset, sideOffset, sideInset, loaded]);
 
   // requestLocate(): recentre on the user (the scene's, or a one-off fix from Locate). The
   // initial value is not a request.
@@ -282,7 +328,7 @@ export default function MapView() {
     map.easeTo({
       center: target.position,
       zoom: Math.max(map.getZoom(), 15),
-      offset: [0, -coveredHeight(map, insetRef.current) / 2],
+      offset: [(sideRef.current.left - sideRef.current.right) / 2, -coveredHeight(map, insetRef.current) / 2],
       duration: prefersReducedMotion() ? 0 : 400,
     });
   }, [locateRequest, target, loaded]);
@@ -290,13 +336,16 @@ export default function MapView() {
   // Entering pick mode (or the sheet moving) reports the visible centre straight away.
   useEffect(() => {
     const map = mapRef.current;
-    if (map && loaded && scene.pick) reportCenter(map, inset);
-  }, [scene.pick, inset, loaded]);
+    if (map && loaded && scene.pick) reportCenter(map, inset, sideInset);
+  }, [scene.pick, inset, sideInset, loaded]);
 
 
   return (
     <div className="map-view" data-testid="map-view">
       <div ref={container} className="map-canvas" data-testid="map-canvas" />
+      {loaded && overlayMap && (
+        <MapOverlay map={overlayMap} tags={scene.tags ?? []} stopPins={scene.stopPins ?? []} dir={lang === "he" ? "rtl" : "ltr"} />
+      )}
       {scene.pick && (
         <div
           className="map-pick-pin"

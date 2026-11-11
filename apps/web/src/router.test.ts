@@ -24,6 +24,19 @@ describe("history entries", () => {
     await waitFor(() => expect(result.current).toEqual({ name: "compare" }));
     expect(openerRoute()).toEqual({ name: "home" });
   });
+
+  it("Back from route details returns to Compare (Choose)", async () => {
+    window.history.replaceState({ otDepth: 0 }, "", "/#/compare");
+    const { result } = renderHook(() => useRoute());
+    act(() => {
+      window.dispatchEvent(new HashChangeEvent("hashchange"));
+    });
+    act(() => go({ name: "route" }));
+    await waitFor(() => expect(result.current).toEqual({ name: "route" }));
+    expect(openerRoute()).toEqual({ name: "compare" });
+    act(() => back());
+    await waitFor(() => expect(result.current).toEqual({ name: "compare" }));
+  });
 });
 
 describe("hash router", () => {
@@ -34,6 +47,7 @@ describe("hash router", () => {
     ["#/search/from", { name: "search", field: "from" }],
     ["#/search/bogus", { name: "notFound", path: "/search/bogus" }],
     ["#/settings", { name: "settings" }],
+    ["#/route", { name: "route" }],
     ["#/stop/mot%3Astop%3A13583", { name: "stop", stopId: "mot:stop:13583" }],
     ["#/trip/20260930_23%3A50_mot60day_584668860_300926", { name: "trip", tripRef: "20260930_23:50_mot60day_584668860_300926" }],
     ["#/nope", { name: "notFound", path: "/nope" }],
@@ -47,6 +61,7 @@ describe("hash router", () => {
     const routes: Route[] = [
       { name: "home" },
       { name: "compare" },
+      { name: "route" },
       { name: "stop", stopId: "mot:stop:13583" },
       { name: "trip", tripRef: "20261025_00:00_mot60day_463093_081026" },
     ];

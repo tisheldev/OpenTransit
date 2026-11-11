@@ -173,6 +173,9 @@ Layouts, copy and interaction details are in the [client design](client-design.m
 
 ### C01 — Home
 
+**Revised 11 November 2026 (user: "build all eight").** The approved boards govern this screen's layout; see the [client design](client-design.md#where-the-boards-depart-from-the-requirements). The text below is the earlier requirement, kept for history.
+
+
 - MUST show From and To at once. From defaults to "my location" when location permission was already granted, otherwise the last origin; it never prompts on launch.
 - MUST show Home, Work and favourite chips, then recents. Tapping one sets To and goes straight to Compare.
 - MUST show a data-status banner only when data is stale, expired or a capability is unavailable; nothing when everything is normal.
@@ -187,6 +190,9 @@ Layouts, copy and interaction details are in the [client design](client-design.m
 
 ### C03 — Compare
 
+**Revised 11 November 2026 (user: "build all eight").** The approved boards govern this screen's layout; see the [client design](client-design.md#where-the-boards-depart-from-the-requirements). The text below is the earlier requirement, kept for history.
+
+
 - MUST request journeys immediately when both ends are known, with "now" sent as an explicit time.
 - MUST offer Now / Depart at / Arrive by inline, without a separate screen.
 - MUST show up to three options on one shared time axis with duration, leave and arrive times, transfers and walking, and a rank label (recommended / fastest / fewest transfers).
@@ -195,6 +201,9 @@ Layouts, copy and interaction details are in the [client design](client-design.m
 - MUST distinguish no route, outside the service window (showing coverage dates) and service unavailable.
 
 ### C04 — Route details
+
+**Revised 11 November 2026 (user: "build all eight").** The approved boards govern this screen's layout; see the [client design](client-design.md#where-the-boards-depart-from-the-requirements). The text below is the earlier requirement, kept for history.
+
 
 - MUST show, on tapping an option, every step without a further tap: walk distance and time (or time only when distance is unknown), line, operator or mode, headsign or train destination, platform, departure time, stop count, exit stop and transfer waits.
 - 0.3: platform, stop count and stop names depend on two additive API changes (API-C1, API-C2 in the [design](client-design.md#contract-gaps-found-on-3-october-read-from-the-code-not-from-a-running-api)), implemented 11 November. Until the API supplies a fact the client omits it; it never guesses.
@@ -336,4 +345,4 @@ These follow the [client design](client-design.md#cross-cutting-rules) and are r
 11. **Appearance (0.3): decided 6 November 2026 (user): "default should always be dark".** Dark is the default whatever the phone's setting; light stays available as a choice in Settings. Both themes come from the design system's tokens, and every visual check covers both.
 12. **App identifiers (0.3):** the Android package and iOS bundle ID (for example `org.opentransit.app`) are permanent once published; choose them before S0, with the display name.
 13. **Defaults pending from the design:** the name "OpenTransit", system fonts (superseded by decision 14), OpenFreeMap tiles for the preview (the tile host sees IPs and viewports) moving to self-hosted tiles before public release.
-14. **Look: decided 11 November 2026 (user); applied to the web test client the same day (appearance only), not yet to the design system artifact.** A printed-map look, dark first; lines in their operator's colour; a simple vehicle icon on every line; Arimo, shipped with the client so that §2.4 still holds; a main button that is not white. Details, colour values and what is open are in the [design](client-design.md#visual-direction-user-11-november-2026). The boards the user approved also depart from C01, C03 and C04; those requirements stand until the user revises them.
+14. **Look: decided 11 November 2026 (user); applied to the web test client the same day (appearance only), not yet to the design system artifact.** A printed-map look, dark first; lines in their operator's colour; a simple vehicle icon on every line; Arimo, shipped with the client so that §2.4 still holds; a main button that is not white. Details, colour values and what is open are in the [design](client-design.md#visual-direction-user-11-november-2026). The user revised C01, C03 and C04 to the boards the same day ("build all eight"), and the web test client is being rebuilt to match all eight boards.

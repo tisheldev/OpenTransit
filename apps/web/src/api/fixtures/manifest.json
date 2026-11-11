@@ -39,6 +39,16 @@
     "generationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
     "recordedAt": "2026-09-30T19:16:01.793965+00:00"
   },
+  "recorded-live-departures-nearby": {
+    "provenance": "recorded",
+    "source": "live API (PR #35 build) via a one-off run of the two record() calls added to apps/web/scripts/record-fixtures.mjs",
+    "sourceSha256": "fc11ddbc27cecc78f749d06d9643e2dd9bc6d25b1a755c5548217f103dd58cfb",
+    "case": "board 1: departures near Dizengoff Center, weekday 08:00",
+    "generationId": "fc11ddbc27cecc78f749d06d9643e2dd9bc6d25b1a755c5548217f103dd58cfb",
+    "originClass": "loopback",
+    "departAt": "2026-11-12T08:00:00+02:00",
+    "recordedAt": "2026-11-11T15:48:06.621Z"
+  },
   "recorded-live-departures-page-1": {
     "provenance": "recorded",
     "source": "live API via apps/web/scripts/record-fixtures.mjs",
@@ -218,6 +228,16 @@
     "originClass": "loopback",
     "departAt": "2026-11-02T08:00:00+02:00",
     "recordedAt": "2026-10-31T17:31:10.040Z"
+  },
+  "recorded-live-stop-lines": {
+    "provenance": "recorded",
+    "source": "live API (PR #35 build) via a one-off run of the two record() calls added to apps/web/scripts/record-fixtures.mjs",
+    "sourceSha256": "fc11ddbc27cecc78f749d06d9643e2dd9bc6d25b1a755c5548217f103dd58cfb",
+    "case": "board 7: the lines through Dizengoff Center with their serving patterns",
+    "generationId": "fc11ddbc27cecc78f749d06d9643e2dd9bc6d25b1a755c5548217f103dd58cfb",
+    "originClass": "loopback",
+    "departAt": "2026-11-12T08:00:00+02:00",
+    "recordedAt": "2026-11-11T15:48:06.645Z"
   },
   "recorded-live-stops-near": {
     "provenance": "recorded",

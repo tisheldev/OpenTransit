@@ -7,7 +7,7 @@ import { SearchScreen } from "./search/SearchScreen";
 import { LinesScreen } from "./secondary/LinesScreen";
 import { NearbyScreen } from "./secondary/NearbyScreen";
 import { Placeholder } from "./secondary/Placeholder";
-import { StopScreen } from "./secondary/StopScreen";
+import { StopScreen } from "./stop/StopScreen";
 import { TripScreen } from "./secondary/TripScreen";
 import { SettingsScreen } from "./settings/SettingsScreen";
 
@@ -30,13 +30,16 @@ function preloadable<P extends object>(load: () => Promise<ComponentType<P>>) {
 }
 
 const compare = preloadable(() => import("./compare/CompareScreen").then((m) => m.CompareScreen));
+// Route details share Compare's chunk (same module graph: one more export, no extra request).
+const routeDetails = preloadable(() => import("./compare/CompareScreen").then((m) => m.RouteScreen));
 const navigate = preloadable(() => import("./navigate/NavigateScreen").then((m) => m.NavigateScreen));
 const CompareScreen = compare.Component;
+const RouteScreen = routeDetails.Component;
 const NavigateScreen = navigate.Component;
 
 /** Warm the Compare and Navigate chunks (after first paint; in tests before rendering). */
 export function prefetchScreens(): Promise<unknown> {
-  return Promise.all([compare.preload(), navigate.preload()]);
+  return Promise.all([compare.preload(), routeDetails.preload(), navigate.preload()]);
 }
 
 // The sheet's content for each route (design: Surface). Each screen owns its folder,
@@ -54,6 +57,12 @@ export function Screen({ route }: { route: Route }) {
       return (
         <Suspense fallback={<Loading />}>
           <CompareScreen />
+        </Suspense>
+      );
+    case "route":
+      return (
+        <Suspense fallback={<Loading />}>
+          <RouteScreen />
         </Suspense>
       );
     case "navigate":

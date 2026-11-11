@@ -1,0 +1,44 @@
+/* A stop — board 7 (11 November 2026). The rows and heading are the shared board pieces
+   (styles/boards.css: b-head, b-row, b-mu); this file only places them. */
+
+.stop {
+  display: flex;
+  flex-direction: column;
+  min-block-size: 100%;
+}
+
+/* The board's stop name is the screen's title: 18 px, and the panel starts with it.
+   (Scoped under .stop: boards.css loads after this file and sets .b-head's own.) */
+.stop .stop-head {
+  margin-block-start: 0;
+}
+.stop .stop-head > .stop-title {
+  font-size: 18px;
+  line-height: 24px;
+}
+
+.stop-lines {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.stop-lines .b-row {
+  min-block-size: 46px;
+  padding-inline: var(--space-2);
+}
+.stop-lines .b-row:focus-visible {
+  outline-offset: -3px;
+}
+/* The row after the chosen one keeps no hairline against the chosen row's fill. */
+.stop-lines li:has(.b-row--on) + li .b-row {
+  border-block-start-color: transparent;
+}
+
+.b-due {
+  flex: none;
+}
+
+.stop-note {
+  margin-block: auto 0;
+  padding-block-start: var(--space-3);
+}

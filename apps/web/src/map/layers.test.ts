@@ -15,6 +15,7 @@ import {
   offlineStyle,
   overlayLayers,
   pinFeatures,
+  ringFeatures,
   routeFeatures,
   sceneBounds,
   themeBasemap,
@@ -70,6 +71,7 @@ describe("scene to GeoJSON", () => {
       active: true,
       dimmed: false,
       label: "8",
+      travelled: false,
       vehicle: "bus",
       colorDark: "",
       colorLight: "",
@@ -145,6 +147,7 @@ describe("our layers in the theme's colours", () => {
     const layers = overlayLayers(theme, { labels: false });
     expect(layers.map((l) => l.id)).toEqual([
       "ot-accuracy",
+      "ot-ring",
       "ot-route-casing",
       "ot-route-walk",
       "ot-route-transit",
@@ -157,25 +160,35 @@ describe("our layers in the theme's colours", () => {
     // Rides 7.5 px (5 px faded) in the operator's colour for this theme, else the mode token.
     const own = theme === "dark" ? "colorDark" : "colorLight";
     const transit = layer(layers, "ot-route-transit").paint!;
-    expect(transit["line-width"]).toEqual(["case", ["get", "dimmed"], 5, 7.5]);
+    const faint = ["any", ["get", "dimmed"], ["==", ["get", "travelled"], true]];
+    expect(transit["line-width"]).toEqual(["case", faint, 5, 7.5]);
+    // A travelled stretch is grey (boards: On board); otherwise the operator's colour, else the mode's.
     expect(transit["line-color"]).toEqual([
       "case",
-      ["!=", ["coalesce", ["get", own], ""], ""],
-      ["get", own],
-      ["match", ["get", "line"], "rail", c["mode-rail"], "walk", c.ink, c["mode-bus"]],
+      ["==", ["get", "travelled"], true],
+      c["border-strong"],
+      [
+        "case",
+        ["!=", ["coalesce", ["get", own], ""], ""],
+        ["get", own],
+        ["match", ["get", "line"], "rail", c["mode-rail"], "walk", c.ink, c["mode-bus"]],
+      ],
     ]);
     expect(transit["line-dasharray"]).toBeUndefined();
     // The pale outline (a land-coloured edge on a faded leg) and the train's dashed centre.
     expect(layer(layers, "ot-route-casing").paint).toEqual({
-      "line-color": ["case", ["get", "dimmed"], c["map-land"], c["map-casing"]],
-      "line-width": ["case", ["get", "dimmed"], 7, 11.5],
+      "line-color": ["case", faint, c["map-land"], c["map-casing"]],
+      "line-width": ["case", faint, 7, 11.5],
     });
+    // Home's walking ring: thin, dashed, muted ink.
+    expect(layer(layers, "ot-ring").paint).toEqual({ "line-color": c["ink-muted"], "line-width": 1.5, "line-dasharray": [2, 4] });
     const trainCentre = layer(layers, "ot-route-train");
     expect(trainCentre.filter).toEqual([
       "all",
       ["==", ["get", "kind"], "transit"],
       ["==", ["get", "vehicle"], "train"],
       ["!", ["get", "dimmed"]],
+      ["!=", ["get", "travelled"], true],
     ]);
     expect(trainCentre.paint).toMatchObject({ "line-color": c["map-casing"], "line-width": 3.6 });
     // Walking: round ink dots.
@@ -381,5 +394,46 @@ describe("labels", () => {
     expect(isNameTextField("{housenumber}")).toBe(false);
     expect(isNameTextField(["get", "ref"])).toBe(false);
     expect(isNameTextField(undefined)).toBe(false);
+  });
+});
+
+describe("board additions (11 November 2026)", () => {
+  it("draws options not chosen faded and a travelled stretch grey", () => {
+    const [faded, travelled, normal] = routeFeatures([
+      { ...bus, active: false, tone: "faded" },
+      { ...bus, active: false, tone: "travelled" },
+      { ...bus, active: false },
+    ]).features;
+    expect(faded!.properties).toMatchObject({ dimmed: true, travelled: false });
+    expect(travelled!.properties).toMatchObject({ dimmed: false, travelled: true });
+    expect(normal!.properties).toMatchObject({ dimmed: false, travelled: false });
+  });
+
+  it("makes a closed ring of the given radius and frames it", () => {
+    const ring = { center: [34.78, 32.08] as [number, number], radiusMeters: 400 };
+    const line = ringFeatures(ring).features[0]!.geometry.coordinates;
+    expect(line[0]).toEqual(line.at(-1));
+    // 400 m north is ~0.0036 degrees of latitude.
+    expect(Math.max(...line.map((p) => p[1])) - 32.08).toBeCloseTo(0.0036, 3);
+    expect(ringFeatures(null).features).toEqual([]);
+    const bounds = sceneBounds({ ...emptyScene, ring })!;
+    expect(bounds[1][1] - bounds[0][1]).toBeCloseTo(0.0072, 3);
+  });
+
+  it("fitTo frames only the given points (a tapped step), else everything including tags and stop pins", () => {
+    const scene = {
+      ...emptyScene,
+      route: [bus, train],
+      tags: [{ id: "t", position: [35.5, 33] as [number, number], kind: "plain" as const, text: "x" }],
+    };
+    expect(sceneBounds(scene)![1]).toEqual([35.5, 33]);
+    expect(sceneBounds({ ...scene, fitTo: bus.coordinates })).toEqual([
+      [34.81, 32.11],
+      [34.9, 32.2],
+    ]);
+    expect(sceneBounds({ ...emptyScene, stopPins: [{ id: "s", position: [34.7, 32], ariaLabel: "s" }] })).toEqual([
+      [34.7, 32],
+      [34.7, 32],
+    ]);
   });
 });

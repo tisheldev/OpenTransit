@@ -1,13 +1,15 @@
 import { act, fireEvent, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { http } from "msw";
+import { http, HttpResponse } from "msw";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { fixture } from "../../api/fixtures";
-import type { Journey, Metadata } from "../../api/types";
+import type { DeparturesPage } from "../../api/schemas";
+import type { Journey, JourneyRequest, JourneyResponse, Metadata } from "../../api/types";
 import { he } from "../../i18n/he";
 import { setLocationSource, type Fix, type LocationError, type LocationSource } from "../../lib/geolocation";
 import { getMapState } from "../../map/scene";
 import { respond } from "../../mocks/handlers";
+import { derivedMissedDepartures, derivedMissedJourneys, MISSED_STOP_ID } from "../../mocks/navigateMissed";
 import { server } from "../../mocks/node";
 import { getActiveTrip, startActiveTrip } from "../../nav/activeTrip";
 import { simulateJourney } from "../../nav/simulate";
@@ -67,17 +69,17 @@ function seed(journey: Journey, trips = recordedTrips, nav?: Record<string, unkn
   }
 }
 
-const card = () => document.querySelector<HTMLElement>(".step-card")!;
-/** The checklist's rows (the current ride's progress is a list of its own, without buttons). */
+/** The one answer in the panel (or Bus didn't come). */
+const answer = () => document.querySelector<HTMLElement>(".nav-answer, .nav-missed")!;
+const title = () => screen.getByRole("heading", { level: 1 });
+const kicker = () => answer().querySelector(".nav-kicker")?.textContent ?? null;
+const check = () => answer().querySelector(".nav-check")?.textContent ?? null;
+const button = (key: keyof typeof he) => screen.getByRole("button", { name: he[key] });
+/** The checklist's rows. */
 const rows = () => within(screen.getByRole("list", { name: /^(כל השלבים|All steps)$/ })).getAllByRole("button");
-/** A fact cell of the step card by its label: its value's text, or null when the card has no such fact. */
-const fact = (label: string): string | null => {
-  const cell = [...card().querySelectorAll(".ot-fact")].find((item) => item.querySelector("dt")?.textContent === label);
-  return cell?.querySelector("dd")?.textContent ?? null;
-};
-/** The countdown figure as drawn (a number, or its words); the full phrase is for screen readers. */
-const figure = () => card().querySelector<HTMLElement>(".step-count [aria-hidden='true']")?.textContent ?? null;
+const current = () => rows().findIndex((row) => row.getAttribute("aria-current") === "step");
 const live = () => document.querySelector<HTMLElement>("[aria-live]")!;
+const stopRows = () => within(screen.getByRole("list", { name: he["nav.answer.stops"] })).getAllByRole("listitem").map((item) => item.textContent);
 
 /** Answer GET /v1/stops/{id} with the recorded positions (other stops: not found). */
 function stopsWithPositions() {
@@ -94,119 +96,147 @@ function stopsWithPositions() {
   );
 }
 
-describe("Navigate: step card per kind", () => {
-  it("walk to stop, ride, same-stop transfer, walk to destination and arrive (journey 2)", async () => {
+/** Bus didn't come: the derived departures and re-plans (src/mocks/navigateMissed.ts). */
+function missedAnswers(options: { empty?: boolean; olderApi?: boolean; departuresFail?: boolean; walkEmpty?: boolean } = {}) {
+  const requests: Array<JourneyRequest & { excludeTripRefs?: string[] }> = [];
+  const departureUrls: string[] = [];
+  server.use(
+    http.get("*/v1/stops/:stopId/departures", ({ params, request }) => {
+      departureUrls.push(request.url);
+      if (decodeURIComponent(String(params.stopId)) !== MISSED_STOP_ID) return respond(fixture("recorded-departures-last-page"));
+      // The engine was too slow (seen live under load, 11 November): the API answers 504.
+      if (options.departuresFail) return new HttpResponse(null, { status: 504 });
+      const found = derivedMissedDepartures();
+      if (options.empty) (found.body as DeparturesPage).data = [];
+      return respond(found);
+    }),
+    http.post("*/v1/journeys", async ({ request }) => {
+      const body = (await request.json()) as JourneyRequest & { excludeTripRefs?: string[] };
+      requests.push(body);
+      // An API before PR #35 refuses the unknown field (extra="forbid": 422 invalid request).
+      if (options.olderApi && body.excludeTripRefs) return respond(fixture("synthetic-problem-invalid-request"));
+      const found = derivedMissedJourneys(body);
+      if (options.empty || options.walkEmpty) Object.assign((found.body as JourneyResponse).data, { outcome: "no_route", journeys: [] });
+      return respond(found);
+    }),
+  );
+  return Object.assign(requests, { departureUrls });
+}
+
+describe("Navigate: walking to the stop (board 4)", () => {
+  it("where to, how far, and whether the bus is caught; the stop pin carries the line and countdown", () => {
     seed(recordedJourneys[2]!);
     renderApp("#/navigate");
-    // Walk to the stop: instruction, distance and time, the pole's code, the vehicle, its
-    // scheduled departure and countdown. Times are scheduled, said once in the header.
-    expect(card().querySelector(".step-head")).toHaveTextContent("עכשיו");
-    expect(card()).toHaveTextContent("שלב 1 מתוך 12 · מתוכנן");
-    expect(card()).toHaveTextContent("הליכה אל דיזנגוף סנטר/טשרניחובסקי");
-    expect(card()).toHaveTextContent("170 מ׳ · 3 דק׳ הליכה · תחנה 25564");
-    expect(card()).toHaveTextContent("אוטובוס 249 לכיוון כפר סבא · תחנה מרכזית");
-    // Bus facts: the line, its departure and where to get off; the countdown says what it counts.
-    expect(fact("קו")).toBe("249");
-    expect(fact("יוצא")).toBe("08:38");
-    expect(fact("ירידה")).toBe("ת. רכבת תל אביב - סבידור/דרך נמיר");
-    expect(card()).toHaveTextContent("יציאה 08:38");
-    expect(card()).not.toHaveTextContent("(מתוכנן)");
-    // A bus never shows a platform (N3), known or not.
-    expect(card()).not.toHaveTextContent("רציף");
-    // Ride: the exit leads, with its time and a countdown; stops "to your exit", not "left".
-    await userEvent.click(rows()[1]!);
-    expect(card()).toHaveTextContent("אוטובוס 249");
-    expect(card()).toHaveTextContent("לכיוון כפר סבא · תחנה מרכזית");
-    expect(card().querySelector(".step-lead")).toHaveTextContent("ירידה ב־ת. רכבת תל אביב - סבידור/דרך נמיר");
-    expect(card()).toHaveTextContent(/08:48 · (בעוד|לפני|עכשיו|ביום)/);
-    expect(fact("ירידה")).toBe("08:48");
-    expect(fact("עד הירידה")).toBe("8 תחנות");
-    expect(card()).not.toHaveTextContent("נשארו");
-    // The current ride's progress in the checklist: boarding stop, the stops between as a
-    // count (no intermediate names until API-C1), the exit called out.
-    const progress = screen.getByRole("list", { name: he["nav.ride.progress"] });
-    expect(within(progress).getAllByRole("listitem").map((item) => item.textContent)).toEqual([
-      "דיזנגוף סנטר/טשרניחובסקי08:38",
-      "8 תחנות עד הירידה",
-      "ת. רכבת תל אביב - סבידור/דרך נמיר · ירידה08:48",
-    ]);
-    expect(card()).toHaveTextContent("אחר כך: מעבר לאוטובוס 825 ב־08:51 · באותה תחנה · 3 דק׳ למעבר");
-    // A zero-length transfer: change at the same stop, with the time to change.
-    await userEvent.click(rows()[2]!);
-    expect(card()).toHaveTextContent("מעבר באותה תחנה");
-    expect(card()).toHaveTextContent("ת. רכבת תל אביב - סבידור/דרך נמיר · תחנה 24068 · 3 דק׳ למעבר");
-    expect(card()).not.toHaveTextContent("10 מ׳");
-    expect(card()).toHaveTextContent("אוטובוס 825");
-    expect(card()).toHaveTextContent(/יציאה 08:51 · (בעוד|יוצא עכשיו|לפני|ביום)/);
-    // A walking transfer between two stops of the same name: the stop code tells them apart.
-    await userEvent.click(rows()[8]!);
-    expect(card()).toHaveTextContent("מעבר: הליכה אל גרנד קניון/שמחה גולן");
-    expect(card()).toHaveTextContent("230 מ׳ · 2 דק׳ הליכה · תחנה 42571 · 6 דק׳ למעבר");
-    // Walk to the destination: the END placeholder is never shown.
-    await userEvent.click(rows()[10]!);
-    expect(card()).toHaveTextContent("הליכה אל היעד");
-    expect(card()).toHaveTextContent("הגעה 10:37");
-    expect(card()).not.toHaveTextContent("END");
-    // Arrive: arrival time and Finish; End trip is gone (Finish does it).
-    await userEvent.click(rows()[11]!);
-    expect(card()).toHaveTextContent("הגעתם אל היעד");
-    expect(card()).toHaveTextContent("הגעה 10:37");
-    expect(screen.getByRole("button", { name: he["nav.finish"] })).toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: he["nav.end"] })).toBeNull();
+    expect(kicker()).toBe("הולכים אל");
+    expect(title()).toHaveTextContent("דיזנגוף סנטר/טשרניחובסקי");
+    expect(answer().querySelector(".nav-sub")).toHaveTextContent("3 דק׳ הליכה · 170 מ׳ · תחנה 25564");
+    expect(check()).toBe("מספיקיםלפי הלוח 08:38");
+    // The map tag's facts are in the panel for whoever does not see the map.
+    expect(answer()).toHaveTextContent("אוטובוס 249 לכיוון כפר סבא · תחנה מרכזית · יציאה 08:38 · בעוד 38 דק׳");
+    // Over the map: end navigation and the arrival time.
+    expect(button("nav.end")).toHaveClass("b-close");
+    expect(document.querySelector(".nav-float--end")).toHaveTextContent("מגיעים 10:37");
+    // Actions: "לא הגיע?" then "עליתי"; nothing else.
+    const actions = document.querySelector<HTMLElement>(".nav-actions")!;
+    expect(within(actions).getAllByRole("button").map((b) => b.textContent)).toEqual(["לא הגיע?", "עליתי"]);
+    // The map: the walk and the bus ahead, the stop as a large selected pin, its tag.
+    const scene = getMapState().scene;
+    expect(scene.stopPins).toEqual([expect.objectContaining({ selected: true, ariaLabel: "דיזנגוף סנטר/טשרניחובסקי" })]);
+    expect(scene.tags).toEqual([expect.objectContaining({ kind: "strong", text: "38 דק׳", line: expect.objectContaining({ label: "249" }) })]);
+  }, 15_000); // the file's first render loads the screen chunks; a loaded runner needs more than 5 s
+
+  it("says honestly when the walk will not make it by the timetable", () => {
+    pinClock(new Date("2026-11-02T08:36:00+02:00"));
+    seed(recordedJourneys[2]!);
+    renderApp("#/navigate");
+    expect(check()).toBe("לא מספיקיםלפי הלוח 08:38");
+    expect(answer().querySelector(".nav-check--late")).not.toBeNull();
   });
 
-  it("a journey that starts on board: where to board, when it leaves, where to get off", () => {
+  it("a ride that starts the journey: waiting at its stop, the countdown, then 'עליתי' boards on the same step", async () => {
+    pinClock(new Date("2026-11-02T08:00:00+02:00"));
     seed(recordedJourneys[0]!);
     renderApp("#/navigate");
-    expect(card()).toHaveTextContent("אוטובוס 8 לכיוון מסוף הטייסים");
-    expect(card()).toHaveTextContent("עלייה ב־דיזנגוף סנטר/דיזנגוף · תחנה 25565");
-    expect(card()).toHaveTextContent(/יציאה 08:12 · (בעוד|יוצא עכשיו|לפני|ביום)/);
-    expect(fact("ירידה")).toBe("ת. רכבת השלום");
-    expect(card()).toHaveTextContent("ירידה 08:18 · 4 תחנות עד הירידה");
-    expect(card()).toHaveTextContent("אחר כך: מעבר לרכבת 156 ב־08:21 · 3 דק׳ למעבר");
+    expect(kicker()).toBe("מחכים בתחנה");
+    expect(title()).toHaveTextContent("דיזנגוף סנטר/דיזנגוף");
+    expect(answer()).toHaveTextContent("אוטובוס 8 לכיוון מסוף הטייסים · תחנה 25565");
+    expect(check()).toBe("בעוד 12 דק׳לפי הלוח 08:12");
+    await userEvent.click(button("nav.answer.boarded"));
+    expect(current()).toBe(0);
+    expect(answer()).toHaveAttribute("data-answer", "riding");
+    expect(live()).toHaveTextContent("עליתם לאוטובוס 8");
+    expect(JSON.parse(sessionStorage.getItem(STORAGE_KEY)!).nav.phase).toBe("riding");
   });
 
-  it("a time-only transfer and a train (journey 1, English)", async () => {
-    seed(recordedJourneys[1]!);
-    renderApp("#/navigate", { lang: "en" });
-    await userEvent.click(rows()[1]!);
-    // Walking to a train: the station is named as one; its code is not shown.
-    expect(card()).toHaveTextContent("Transfer: walk to השלום station");
-    expect(card()).toHaveTextContent("Train 404 · Get off at חיפה מרכז");
-    expect(card()).not.toHaveTextContent("stop 17046");
-    // Train facts: its number (no place headsign), the platform not known yet (API-C2: a
-    // dash, never a guess), the departure.
-    expect(fact("Train")).toBe("404");
-    expect(fact("Platform")).toBe("—not known");
-    expect(fact("Departs")).toBe("08:40");
-    await userEvent.click(rows()[2]!);
-    // Rail: no empty line label and not named after the exit (that reads as its destination).
-    expect(card()).toHaveTextContent("Train 404");
-    expect(card()).not.toHaveTextContent("Train to");
-    expect(card()).not.toHaveTextContent("towards 404");
-    expect(card().querySelector(".step-lead")).toHaveTextContent("Get off at חיפה מרכז");
-    // Platform unknown (API-C2): omitted, never "platform unknown".
-    expect(card()).not.toHaveTextContent(/platform/i);
-    await userEvent.click(rows()[3]!);
-    expect(card()).toHaveTextContent("Transfer: walk to תחנת רכבת חיפה מרכז השמונה");
-    expect(card()).toHaveTextContent("About 4 min walk · no street path available · stop 41540 · 4 min to change");
-    expect(card()).toHaveTextContent("Bus 17");
-  });
-
-  it("a rail platform is shown only when the API gives one (N3)", async () => {
-    const journey = structuredClone(recordedJourneys[0]!);
-    Object.assign(journey.legs[2]!.from, { platformCode: "3" });
-    Object.assign(journey.legs[0]!.from, { platformCode: "B" });
+  it("the waiting countdown: minutes, leaving now, ago, and the day when far ahead", () => {
+    const journey = recordedJourneys[0]!;
     seed(journey);
+    for (const [at, text] of [
+      ["2026-11-02T08:12:20+02:00", "יוצא עכשיו"],
+      ["2026-11-02T08:16:00+02:00", "לפני 4 דק׳"],
+      ["2026-11-01T08:00:00+02:00", "ביום ב׳, 2.11"],
+    ] as const) {
+      vi.setSystemTime(new Date(at));
+      const view = renderApp("#/navigate");
+      expect(check()).toBe(`${text}לפי הלוח 08:12`);
+      view.unmount();
+    }
+  });
+});
+
+describe("Navigate: on board (board 5)", () => {
+  it("walking → 'עליתי' → on board: stops to the exit and the stops; 'ירדתי' goes on", async () => {
+    seed(recordedJourneys[2]!);
     renderApp("#/navigate");
-    expect(card()).not.toHaveTextContent("רציף");
-    await userEvent.click(rows()[1]!);
-    expect(card()).toHaveTextContent(/יציאה 08:21 · /);
-    expect(fact("רציף")).toBe("3");
-    expect(fact("יוצאת")).toBe("08:21");
+    await userEvent.click(button("nav.answer.boarded"));
+    expect(current()).toBe(1);
+    expect(live()).toHaveTextContent("שלב 2 מתוך 12");
+    expect(answer()).toHaveAttribute("data-answer", "riding");
+    expect(answer().querySelector(".nav-ride-line")).toHaveTextContent("249כפר סבא · תחנה מרכזית");
+    expect(title()).toHaveTextContent("יורדים בעוד 8 תחנות");
+    // Not measured from location: the count is by the timetable, and says so.
+    expect(answer()).toHaveTextContent("לפי הלוח");
+    // The stops: where the passenger is, the unnamed ones as their count (no names until
+    // API-C1), the exit with "יורדים".
+    expect(stopRows()).toEqual(["08:38אתם כאן: דיזנגוף סנטר/טשרניחובסקי", "7 תחנות", "08:48ת. רכבת תל אביב - סבידור/דרך נמיריורדים"]);
+    // What comes after: the next bus, where it goes, when.
+    const after = answer().querySelector<HTMLElement>(".nav-after")!;
+    expect(after).toHaveTextContent(/^אחר כך825/);
+    expect(after.querySelector(".nav-after-time")).toHaveTextContent("08:51");
+    const actions = document.querySelector<HTMLElement>(".nav-actions")!;
+    expect(within(actions).getAllByRole("button").map((b) => b.textContent)).toEqual(["ירדתי"]);
+    // The map: the exit tagged "יורדים כאן", framed on what is left.
+    expect(getMapState().scene.tags).toEqual([expect.objectContaining({ kind: "strong", text: "יורדים כאן" })]);
+    expect(getMapState().scene.camera).toBe("fit");
+    expect(getMapState().scene.fitTo?.length).toBeGreaterThan(1);
+
+    await userEvent.click(button("nav.answer.alighted"));
+    expect(current()).toBe(2);
+    expect(kicker()).toBe("מעבר באותה תחנה");
+    expect(title()).toHaveTextContent("ת. רכבת תל אביב - סבידור/דרך נמיר");
+    expect(answer()).toHaveTextContent("3 דק׳ למעבר");
   });
 
-  it("a ride without trip detail shows the exit stop and time, no stop count", async () => {
+  it("the primary action alone takes the trip through every step to Finish, which clears it and goes Home", async () => {
+    seed(recordedJourneys[0]!);
+    renderApp("#/navigate");
+    const total = rows().length;
+    for (let i = 0; i < 20 && current() < total - 1; i += 1) {
+      await userEvent.click(document.querySelector<HTMLElement>(".nav-primary")!);
+    }
+    expect(current()).toBe(total - 1);
+    expect(kicker()).toBe("הגעתם אל");
+    expect(title()).toHaveTextContent("היעד");
+    expect(JSON.parse(sessionStorage.getItem(STORAGE_KEY)!).nav.stepIndex).toBe(total - 1);
+    // Arrived: Finish ends it; the close button is gone (Finish does it).
+    expect(screen.queryByRole("button", { name: he["nav.end"] })).toBeNull();
+    await userEvent.click(button("nav.finish"));
+    expect(window.location.hash).toBe("#/");
+    expect(sessionStorage.getItem(STORAGE_KEY)).toBeNull();
+    expect(getActiveTrip()).toBeNull();
+  });
+
+  it("a ride without trip detail counts the minutes to the exit instead of stops", async () => {
     const journey = recordedJourneys[0]!;
     const missing = journey.legs[2]!.transit!.engineTripId;
     const trips = { ...recordedTrips };
@@ -214,45 +244,127 @@ describe("Navigate: step card per kind", () => {
     seed(journey, trips);
     renderApp("#/navigate");
     await userEvent.click(rows()[2]!);
-    expect(card()).toHaveTextContent("רכבת 156");
-    expect(card()).not.toHaveTextContent("תחנות");
-    expect(card()).toHaveTextContent("ירידה ב־חוף הכרמל");
-    expect(card()).toHaveTextContent(/09:24 · (בעוד|לפני|עכשיו|ביום)/);
-    // The missing trip was requested once (the fixture API does not know it).
+    expect(title()).toHaveTextContent(/^יורדים בעוד (\d+ דק׳|בעוד .*|ב.*)$/);
+    expect(stopRows()).toEqual(["08:21השלום", "09:24חוף הכרמליורדים"]);
     await waitFor(() => expect(getActiveTrip()?.tripsRequested).toEqual([missing]));
   });
 
-  it("countdowns: minutes ahead, now, ago, and the day when far ahead", () => {
-    const journey = recordedJourneys[2]!;
-    vi.useFakeTimers({ toFake: ["Date"] });
-    vi.setSystemTime(new Date("2026-11-02T08:26:00+02:00"));
+  it("a rail platform is shown only when the API gives one (N3)", async () => {
+    const journey = structuredClone(recordedJourneys[0]!);
+    Object.assign(journey.legs[2]!.from, { platformCode: "3" });
     seed(journey);
-    const view = renderApp("#/navigate");
-    expect(card()).toHaveTextContent("יציאה 08:38 · בעוד 12 דק׳");
-    // The figure is the minutes; anything else (now, past, an hour or more) is said in words.
-    expect(figure()).toBe("12דק׳");
-    view.unmount();
-    vi.setSystemTime(new Date("2026-11-02T08:38:20+02:00"));
-    const now = renderApp("#/navigate");
-    expect(figure()).toBe("יוצא עכשיו");
-    now.unmount();
-    vi.setSystemTime(new Date("2026-11-02T08:42:00+02:00"));
-    const late = renderApp("#/navigate");
-    expect(card()).toHaveTextContent("יציאה 08:38 · לפני 4 דק׳");
-    expect(figure()).toBe("לפני 4 דק׳");
-    late.unmount();
-    vi.setSystemTime(new Date("2026-11-02T07:30:00+02:00"));
-    const hour = renderApp("#/navigate");
-    expect(figure()).toBe("בעוד 1 שע׳ 8 דק׳");
-    hour.unmount();
-    vi.setSystemTime(new Date("2026-11-01T08:00:00+02:00"));
     renderApp("#/navigate");
-    expect(card()).toHaveTextContent("יציאה 08:38 · ביום ב׳, 2.11");
-    expect(figure()).toBe("ביום ב׳, 2.11");
+    await userEvent.click(button("nav.answer.boarded"));
+    expect(answer().querySelector(".nav-after-text")).toHaveTextContent("רציף 3");
   });
 });
 
-describe("Navigate: checklist", () => {
+describe("Navigate: bus didn't come (board 6)", () => {
+  it("'לא הגיע?' shows both choices with their departures and arrival times", async () => {
+    const requests = missedAnswers();
+    seed(recordedJourneys[2]!);
+    renderApp("#/navigate");
+    await userEvent.click(button("nav.answer.missed"));
+    expect(title()).toHaveTextContent("ה־249 עוד לא הגיע");
+    expect(answer()).toHaveTextContent("לפי הלוח 08:38");
+    const walk = await screen.findByRole("button", { name: /הולכים ל־8/ }, { timeout: 5000 });
+    const wait = await screen.findByRole("button", { name: /מחכים כאן ל־249/ }, { timeout: 5000 });
+    expect(walk).toHaveTextContent("הולכים ל־83 דק׳ הליכה · יוצא 08:45מגיעים10:40");
+    expect(wait).toHaveTextContent("מחכים כאן ל־249הבא 08:58מגיעים10:57");
+    // The earlier arrival is marked, in words too (not by its border alone).
+    expect(walk).toHaveClass("b-choice--on");
+    expect(walk).toHaveAccessibleName(/מגיעים הכי מוקדם/);
+    expect(wait).not.toHaveClass("b-choice--on");
+    // Wait here: planned from the stop at the next 249; walk elsewhere: from the stop's place, now (08:00).
+    expect(requests.find((r) => r.from.kind === "stop")).toMatchObject({ from: { stopId: MISSED_STOP_ID }, departAt: "2026-11-02T08:58:00+02:00" });
+    expect(requests.find((r) => r.from.kind === "coordinate")?.departAt).toBe("2026-11-02T08:00:00+02:00");
+    // Without the bus that did not come (excludeTripRefs), and departures asked by route (API PR #35).
+    expect(requests.find((r) => r.from.kind === "coordinate")?.excludeTripRefs).toEqual([recordedJourneys[2]!.legs[1]!.transit!.engineTripId]);
+    expect(new URL(requests.departureUrls.find((url) => url.includes(encodeURIComponent(MISSED_STOP_ID)) || url.includes(MISSED_STOP_ID))!).searchParams.get("routeId")).toBe(
+      recordedJourneys[2]!.legs[1]!.transit!.routeId,
+    );
+    // The map: the missed line faded with its next one, the other stop selected with its departure.
+    await waitFor(() => expect(getMapState().scene.stopPins?.find((pin) => pin.id === "other")?.selected).toBe(true));
+    const tags = getMapState().scene.tags!.map((tag) => [tag.id, tag.kind, tag.text]);
+    expect(tags).toEqual([
+      ["missed", "faded", "הבא 08:58"],
+      ["other", "strong", "08:45"],
+      ["walk", "faded", "3 דק׳ הליכה"],
+    ]);
+    expect(getMapState().scene.route[0]).toMatchObject({ tone: "faded" });
+  });
+
+  it("a failed next-bus check is said as such, never as 'no other option', and can be retried", async () => {
+    missedAnswers({ departuresFail: true, walkEmpty: true });
+    seed(recordedJourneys[2]!);
+    renderApp("#/navigate");
+    await userEvent.click(button("nav.answer.missed"));
+    expect(await screen.findByText("לא הצלחנו לבדוק מתי יוצא ה־249 הבא.", undefined, { timeout: 8000 })).toBeInTheDocument();
+    expect(screen.queryByText("אין כרגע אפשרות אחרת לפי הלוח.")).toBeNull();
+    // The check answers on a second try.
+    missedAnswers({ walkEmpty: true });
+    await userEvent.click(screen.getByRole("button", { name: "נסו שוב" }));
+    expect(await screen.findByRole("button", { name: /מחכים כאן ל־249/ }, { timeout: 8000 })).toBeInTheDocument();
+  });
+
+  it("an API before excludeTripRefs refuses the field: the plan is asked again without it", async () => {
+    const requests = missedAnswers({ olderApi: true });
+    seed(recordedJourneys[2]!);
+    renderApp("#/navigate");
+    await userEvent.click(button("nav.answer.missed"));
+    expect(await screen.findByRole("button", { name: /הולכים ל־8/ }, { timeout: 5000 })).toHaveTextContent("מגיעים10:40");
+    const walks = requests.filter((r) => r.from.kind === "coordinate");
+    expect(walks.map((r) => r.excludeTripRefs !== undefined)).toEqual([true, false]);
+  });
+
+  it("choosing 'walk to another stop' switches the trip to that plan", async () => {
+    missedAnswers();
+    seed(recordedJourneys[2]!);
+    renderApp("#/navigate");
+    await userEvent.click(button("nav.answer.missed"));
+    await userEvent.click(await screen.findByRole("button", { name: /הולכים ל־8/ }, { timeout: 5000 }));
+    await waitFor(() => expect(getActiveTrip()?.journey.id).toBe("derived-missed-walk"));
+    expect(kicker()).toBe("הולכים אל");
+    expect(title()).toHaveTextContent("דיזנגוף סנטר/דיזנגוף");
+    expect(check()).toBe("מספיקיםלפי הלוח 08:45");
+  });
+
+  it("choosing 'wait here' switches to the next 249: waiting at the same stop", async () => {
+    missedAnswers();
+    seed(recordedJourneys[2]!);
+    renderApp("#/navigate");
+    await userEvent.click(button("nav.answer.missed"));
+    await userEvent.click(await screen.findByRole("button", { name: /מחכים כאן ל־249/ }, { timeout: 5000 }));
+    await waitFor(() => expect(getActiveTrip()?.journey.id).toBe("derived-missed-wait"));
+    expect(kicker()).toBe("מחכים בתחנה");
+    expect(title()).toHaveTextContent("דיזנגוף סנטר/טשרניחובסקי");
+    expect(check()).toBe("בעוד 58 דק׳לפי הלוח 08:58");
+  });
+
+  it("'הגיע, עליתי': the bus came after all, on board the planned ride", async () => {
+    missedAnswers();
+    seed(recordedJourneys[2]!);
+    renderApp("#/navigate");
+    await userEvent.click(button("nav.answer.missed"));
+    await userEvent.click(button("nav.missed.came"));
+    expect(current()).toBe(1);
+    expect(answer()).toHaveAttribute("data-answer", "riding");
+    expect(getActiveTrip()?.journey.id).toBe(recordedJourneys[2]!.id);
+  });
+
+  it("no other option in the timetable: an honest empty state, and back to the step", async () => {
+    missedAnswers({ empty: true });
+    seed(recordedJourneys[2]!);
+    renderApp("#/navigate");
+    await userEvent.click(button("nav.answer.missed"));
+    expect(await screen.findByText(he["nav.missed.none"])).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /מחכים כאן/ })).toBeNull();
+    await userEvent.click(button("nav.missed.cancel"));
+    expect(kicker()).toBe("הולכים אל");
+  });
+});
+
+describe("Navigate: checklist (expanded sheet)", () => {
   it("every row has its scheduled time and a state in its name; rides say where to get off (N2)", () => {
     seed(recordedJourneys[2]!);
     renderApp("#/navigate");
@@ -262,65 +374,40 @@ describe("Navigate: checklist", () => {
     expect(list[1]).toHaveAccessibleName("בהמשך: 08:38 אוטובוס 249 · 8 תחנות, ירידה ב־ת. רכבת תל אביב - סבידור/דרך נמיר · 08:48");
     expect(list[2]).toHaveAccessibleName("בהמשך: 08:49 מעבר באותה תחנה");
     expect(list[11]).toHaveAccessibleName("בהמשך: 10:37 הגעה אל היעד");
-    // Visible too: the time column and a state mark whose shape differs (not colour alone).
     expect(list[1]!.querySelector(".checklist-time")).toHaveTextContent("08:38");
     expect(list[0]!.querySelector(".checklist-mark")).toHaveTextContent("●");
-    // The mode column: the line's badge for a ride, an icon for a walk (decorative: the
-    // row's text names the line).
     expect(list[1]!.querySelector(".ot-steps__icon .ot-line")).toHaveTextContent("249");
     expect(list[0]!.querySelector(".ot-steps__icon .ot-i--walk")).not.toBeNull();
-    expect(list[0]!.closest("li")).toHaveClass("ot-steps__item--now");
-  });
-});
-
-describe("Navigate: manual control", () => {
-  it("Next step goes through every step to Finish, which clears the trip and goes Home", async () => {
-    const journey = recordedJourneys[0]!;
-    seed(journey);
-    renderApp("#/navigate");
-    const total = rows().length;
-    for (let i = 1; i < total; i += 1) {
-      await userEvent.click(screen.getByRole("button", { name: he["nav.next"] }));
-      expect(rows()[i]).toHaveAttribute("aria-current", "step");
-      expect(live()).toHaveTextContent(`שלב ${i + 1} מתוך ${total}`);
-    }
-    expect(JSON.parse(sessionStorage.getItem(STORAGE_KEY)!).nav.stepIndex).toBe(total - 1);
-    expect(screen.queryByRole("button", { name: he["nav.next"] })).toBeNull();
-    await userEvent.click(screen.getByRole("button", { name: he["nav.finish"] }));
-    expect(window.location.hash).toBe("#/");
-    expect(sessionStorage.getItem(STORAGE_KEY)).toBeNull();
-    expect(getActiveTrip()).toBeNull();
-    expect(screen.queryByRole("button", { name: he["home.activeTrip"] })).toBeNull();
   });
 
-  it("tapping a checklist row jumps forward and back (corrects a wrong advance)", async () => {
+  it("tapping a row jumps forward and back (corrects a wrong advance)", async () => {
     seed(recordedJourneys[0]!);
     renderApp("#/navigate");
     await userEvent.click(rows()[4]!);
     expect(rows()[4]).toHaveAttribute("aria-current", "step");
     expect(rows()[0]).toHaveAccessibleName(/^הושלם: /);
-    expect(rows()[5]).toHaveAccessibleName(/^בהמשך: /);
     await userEvent.click(rows()[1]!);
-    expect(rows()[1]).toHaveAttribute("aria-current", "step");
-    expect(rows()[1]).toHaveAccessibleName(/^השלב הנוכחי: /);
-    expect(rows()[4]).not.toHaveAttribute("aria-current");
+    expect(current()).toBe(1);
     expect(JSON.parse(sessionStorage.getItem(STORAGE_KEY)!).nav.stepIndex).toBe(1);
   });
 
-  it("Next step is the only bottom action; End trip sits in the card header (N5)", () => {
+  it("at the full sheet the floats give way and End navigation sits under the list", async () => {
     seed(recordedJourneys[0]!);
     renderApp("#/navigate");
-    const actions = document.querySelector<HTMLElement>(".navigate-actions")!;
-    expect(within(actions).getAllByRole("button")).toHaveLength(1);
-    expect(within(actions).getByRole("button", { name: he["nav.next"] })).toBeInTheDocument();
-    expect(within(card()).getByRole("button", { name: he["nav.end"] })).toBeInTheDocument();
+    expect(document.querySelector(".nav-float")).not.toBeNull();
+    fireEvent.click(screen.getByRole("button", { name: /גודל הגיליון|sheet/i }));
+    expect(document.querySelector(".sheet")).toHaveAttribute("data-snap", "full");
+    expect(document.querySelector(".nav-float")).toBeNull();
+    expect(button("nav.end")).toHaveClass("nav-end-full");
   });
+});
 
-  it("End trip clears storage, stops watching and goes Home without a resume row", async () => {
+describe("Navigate: ending and leaving", () => {
+  it("the close button ends navigation: storage cleared, watching stopped, Home without a resume row", async () => {
     seed(recordedJourneys[0]!);
     renderApp("#/navigate");
     expect(handle.watches).toBe(1);
-    await userEvent.click(screen.getByRole("button", { name: he["nav.end"] }));
+    await userEvent.click(button("nav.end"));
     expect(handle.stops).toBeGreaterThanOrEqual(1);
     expect(handle.onFix).toBeNull();
     expect(sessionStorage.getItem(STORAGE_KEY)).toBeNull();
@@ -331,9 +418,8 @@ describe("Navigate: manual control", () => {
   it("Back keeps the trip; Home then offers to resume", async () => {
     seed(recordedJourneys[0]!);
     renderApp("#/navigate");
-    await userEvent.click(screen.getByRole("button", { name: he["nav.back"] }));
+    await userEvent.click(button("nav.back"));
     await waitFor(() => expect(handle.stops).toBe(1));
-    // A deep link has no in-app history: Back falls back to Compare (design: App flow).
     await waitFor(() => expect(window.location.hash).toBe("#/compare"));
     expect(getActiveTrip()).not.toBeNull();
     act(() => go({ name: "home" }));
@@ -348,15 +434,15 @@ describe("Navigate: manual control", () => {
 });
 
 describe("Navigate: location", () => {
-  it("location denied → one short manual banner saying why; steps still advance by hand", async () => {
-    seed(recordedJourneys[0]!);
+  it("location denied → one short manual banner saying why; the actions still advance by hand", async () => {
+    seed(recordedJourneys[2]!);
     renderApp("#/navigate");
     act(() => handle.onError!("denied"));
     expect(screen.getAllByText(new RegExp(he["nav.manual"]))).toHaveLength(1);
     expect(screen.getByRole("status")).toHaveTextContent(`${he["nav.loc.denied"]} · ${he["nav.manual"]}`);
     expect(JSON.parse(sessionStorage.getItem(STORAGE_KEY)!).nav.locationMode).toBe("manual");
-    await userEvent.click(screen.getByRole("button", { name: he["nav.next"] }));
-    expect(rows()[1]).toHaveAttribute("aria-current", "step");
+    await userEvent.click(button("nav.answer.boarded"));
+    expect(current()).toBe(1);
   });
 
   it("over plain HTTP the banner says location needs HTTPS (the browser refuses it there)", () => {
@@ -373,45 +459,42 @@ describe("Navigate: location", () => {
     expect(screen.queryByText(new RegExp(he["nav.lost"]))).toBeNull();
     act(() => vi.advanceTimersByTime(66_000));
     expect(screen.getByText(new RegExp(he["nav.lost"]))).toBeInTheDocument();
-    expect(rows()[0]).toHaveAttribute("aria-current", "step");
+    expect(current()).toBe(0);
   });
 
-  it("the map shows the current leg and you: fit without a fix, street level at the stop, follow on board", () => {
+  it("the map: framed without a fix; at the stop it follows the passenger at street level", () => {
     const journey = recordedJourneys[0]!;
     seed(journey);
     renderApp("#/navigate");
-    // No fix: the current leg (the first ride) and its ends, framed.
     expect(getMapState().scene.camera).toBe("fit");
-    expect(getMapState().scene.route).toHaveLength(1);
-    expect(getMapState().scene.route[0]!.active).toBe(true);
-    expect(getMapState().scene.pins.map((pin) => pin.label)).toEqual(["דיזנגוף סנטר/דיזנגוף", "ת. רכבת השלום"]);
-    // A fix at the stop (waiting): recentre on the passenger at street level (Locate).
+    expect(getMapState().scene.stopPins?.[0]?.ariaLabel).toBe("דיזנגוף סנטר/דיזנגוף");
     const fixes = simulateJourney(journey);
     const before = getMapState().locateRequest;
     act(() => handle.onFix!({ ...fixes[0]!, at: Date.now() }));
-    expect(getMapState().scene.camera).toBe("keep");
+    expect(getMapState().scene.camera).toBe("follow");
     expect(getMapState().locateRequest).toBe(before + 1);
     expect(getMapState().scene.user?.position).toEqual([fixes[0]!.longitude, fixes[0]!.latitude]);
     // The stored state never holds a position.
     expect(JSON.stringify(JSON.parse(sessionStorage.getItem(STORAGE_KEY)!).nav)).not.toContain(String(fixes[0]!.latitude));
   });
 
-  it("on board the ride stays framed while the dot moves along it", async () => {
+  it("on board the travelled part turns grey and the map frames what is left", async () => {
     const journey = recordedJourneys[0]!;
     seed(journey);
     renderApp("#/navigate");
     await userEvent.click(rows()[2]!);
-    const onTrain = simulateJourney(journey).find((fix) => fix.at > Date.parse("2026-11-02T08:40:00+02:00"))!;
+    const onTrain = simulateJourney(journey).find((fix) => fix.at > Date.parse("2026-11-02T08:50:00+02:00"))!;
     const before = getMapState().locateRequest;
     act(() => handle.onFix!({ ...onTrain, at: Date.now() }));
-    expect(getMapState().scene.camera).toBe("fit");
-    expect(getMapState().scene.user?.position).toEqual([onTrain.longitude, onTrain.latitude]);
+    const scene = getMapState().scene;
+    expect(scene.camera).toBe("fit");
+    expect(scene.user?.position).toEqual([onTrain.longitude, onTrain.latitude]);
     expect(getMapState().locateRequest).toBe(before);
-    expect(getMapState().scene.route).toHaveLength(1);
-    expect(getMapState().scene.route[0]!.mode.toLowerCase()).toBe("rail");
+    expect(scene.route.filter((leg) => leg.mode.toLowerCase() === "rail").map((leg) => leg.tone)).toEqual(["travelled", "normal"]);
+    expect(scene.fitTo).toContainEqual([onTrain.longitude, onTrain.latitude]);
   });
 
-  it("cues show in the card, are announced and vibrate (call positions fetched at Start)", async () => {
+  it("cues show in the answer, are announced and vibrate (call positions fetched at Start)", async () => {
     stopsWithPositions();
     const vibrate = vi.fn(() => true);
     Object.defineProperty(navigator, "vibrate", { value: vibrate, configurable: true });
@@ -419,32 +502,34 @@ describe("Navigate: location", () => {
     seed(journey);
     renderApp("#/navigate");
     await waitFor(() => expect(Object.keys(getActiveTrip()?.callPositions ?? {})).toEqual(["0", "2", "4"]));
+    // The two calls before each exit carry their names from the same answer.
+    expect((getActiveTrip()!.callPositions!["2"] as { positions: Array<{ name?: string }> }).positions[0]!.name).toBe("דיזנגוף סנטר/דיזנגוף");
     const announced: string[] = [];
     let sawTwo = false;
-    let sawLeftTwo = false;
+    let sawMeasured = false;
     for (const fix of simulateJourney(journey)) {
       if (!handle.onFix) break; // arrived: watching stopped
       act(() => handle.onFix!(fix));
       const text = live().textContent ?? "";
       if (announced.at(-1) !== text) announced.push(text);
-      if (card().textContent?.includes(he["nav.cueTwo"])) {
+      if (kicker() === he["nav.cueTwo"]) {
         sawTwo = true;
-        // The cue changes the card's colour as well as its words.
-        expect(card()).toHaveClass("step-card-two_stops");
-        // Progress is measured now: the count says "left" (N4).
-        if (fact("נשארו") === "2 תחנות") sawLeftTwo = true;
+        // The cue changes the words (with an icon), not a colour alone.
+        expect(answer()).toHaveAttribute("data-cue", "two_stops");
+        expect(answer().querySelector(".nav-kicker--cue .ot-i")).not.toBeNull();
+        // Measured from location now: no "by the timetable".
+        if (title().textContent?.endsWith("2 תחנות") && !answer().querySelector(".nav-by-timetable")) sawMeasured = true;
       }
     }
     expect(sawTwo).toBe(true);
-    expect(sawLeftTwo).toBe(true);
+    expect(sawMeasured).toBe(true);
     expect(announced.some((text) => text.includes(he["nav.cueTwo"]))).toBe(true);
     expect(announced.some((text) => text.includes(he["nav.cueNext"]))).toBe(true);
     expect(vibrate).toHaveBeenCalled();
-    expect(card()).toHaveTextContent("הגעתם אל היעד");
-    // Arrived: location watching stopped.
+    expect(kicker()).toBe("הגעתם אל");
     expect(handle.onFix).toBeNull();
     delete (navigator as unknown as { vibrate?: unknown }).vibrate;
-  }, 30_000); // plays a whole journey of fixes through the screen; loaded runners need more than 5 s
+  }, 60_000); // plays a whole journey of fixes through the screen (a scene per fix); loaded runners need far more than 5 s
 });
 
 describe("Navigate: simulated positions", () => {
@@ -460,23 +545,18 @@ describe("Navigate: simulated positions", () => {
     fireEvent.click(screen.getByRole("checkbox", { name: he["nav.sim.toggle"] }));
     expect(document.querySelector(".sheet")).toHaveAttribute("data-snap", "half");
     expect(screen.getByRole("note")).toHaveTextContent(/^מיקום מדומה, לא אמיתי · שעון \d\d:\d\d · פי 600$/);
-    // Countdowns follow the simulated clock (the device clock is days before the trip):
-    // playback starts a minute before the first departure.
+    // Countdowns follow the simulated clock: playback starts a minute before the first departure.
     expect(screen.getByRole("note")).toHaveTextContent("שעון 08:11");
-    expect(card()).toHaveTextContent("יציאה 08:12 · בעוד 1 דק׳");
+    expect(check()).toBe("בעוד 1 דק׳לפי הלוח 08:12");
     expect(getMapState().scene.user).not.toBeNull();
-    act(() => vi.advanceTimersByTime(50));
-    expect(card()).toHaveTextContent("יציאה 08:12 · יוצא עכשיו");
     const total = rows().length;
     const seen = new Set<number>();
-    for (let i = 0; i < 1000 && !card().textContent?.includes("הגעתם אל"); i += 1) {
+    for (let i = 0; i < 1000 && kicker() !== "הגעתם אל"; i += 1) {
       act(() => vi.advanceTimersByTime(50));
-      seen.add(rows().findIndex((row) => row.getAttribute("aria-current") === "step"));
+      seen.add(current());
     }
-    expect(card()).toHaveTextContent("הגעתם אל היעד");
-    // Every step was current at some point (walks of two minutes included).
+    expect(kicker()).toBe("הגעתם אל");
     expect([...seen].sort((a, b) => a - b)).toEqual(Array.from({ length: total }, (_, i) => i));
-    // Simulated fixes never reach the device-location source.
     expect(handle.onFix).toBeNull();
   }, 30_000); // plays a whole journey back; slow CI runners need more than the 5 s default
 });
@@ -492,10 +572,10 @@ describe("Navigate: restore and expiry", () => {
     raw.callPositions = { "0": { status: "failed" }, "2": { status: "failed" }, "4": { status: "failed" } };
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify(raw));
     renderApp("#/navigate");
-    expect(rows()[3]).toHaveAttribute("aria-current", "step");
-    expect(card()).toHaveTextContent("מעבר: הליכה אל ת. רכבת חוף הכרמל");
+    expect(current()).toBe(3);
+    expect(kicker()).toBe("הולכים אל");
+    expect(title()).toHaveTextContent("ת. רכבת חוף הכרמל");
     await new Promise((resolve) => setTimeout(resolve, 20));
-    // Only the shell's status request; nothing for the trip.
     expect(requests).toBeLessThanOrEqual(1);
     server.events.removeAllListeners();
   });
@@ -516,20 +596,19 @@ describe("Navigate: restore and expiry", () => {
     await waitFor(() => expect(window.location.hash).toBe("#/"));
     expect(sessionStorage.getItem(STORAGE_KEY)).toBeNull();
     expect(getActiveTrip()).toBeNull();
-    expect(screen.queryByRole("button", { name: he["nav.next"] })).toBeNull();
-    expect(screen.queryByRole("button", { name: he["home.activeTrip"] })).toBeNull();
+    expect(screen.queryByRole("button", { name: he["nav.answer.boarded"] })).toBeNull();
   });
 });
 
 describe("Navigate: wake lock", () => {
-  it("requests a screen wake lock while navigating and releases it at End trip", async () => {
+  it("requests a screen wake lock while navigating and releases it on ending", async () => {
     const release = vi.fn(() => Promise.resolve());
     const request = vi.fn(() => Promise.resolve({ released: false, release }));
     Object.defineProperty(navigator, "wakeLock", { value: { request }, configurable: true });
     seed(recordedJourneys[0]!);
     renderApp("#/navigate");
     await waitFor(() => expect(request).toHaveBeenCalledWith("screen"));
-    await userEvent.click(screen.getByRole("button", { name: he["nav.end"] }));
+    await userEvent.click(button("nav.end"));
     await waitFor(() => expect(release).toHaveBeenCalled());
     delete (navigator as unknown as { wakeLock?: unknown }).wakeLock;
   });

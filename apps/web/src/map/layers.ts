@@ -1,6 +1,6 @@
 import { operatorColour, vehicleOf, type Vehicle } from "../lib/lines";
 import { THEME_COLORS, type ThemeName } from "../styles/tokens";
-import type { LonLat, MapPin, MapRouteLeg, MapScene, MapUser } from "./scene";
+import type { LonLat, MapPin, MapRing, MapRouteLeg, MapScene, MapUser } from "./scene";
 
 // Pure scene → GeoJSON and style helpers (no MapLibre import), so they unit-test in jsdom.
 // The printed-map look chosen by the user on 11 November 2026 (client design, "Visual
@@ -38,8 +38,10 @@ export interface RouteProps {
   mode: string;
   line: LineMode;
   active: boolean;
-  /** Another leg is active (the current step): this one is drawn faded (design: Navigate). */
+  /** Drawn faded: another leg is active (the current step), or the leg is an option not chosen. */
   dimmed: boolean;
+  /** Already travelled: drawn grey (boards: On board). */
+  travelled: boolean;
   label: string;
   /** The vehicle: a train gets a dashed centre. */
   vehicle: Vehicle;
@@ -64,7 +66,8 @@ export function routeFeatures(route: MapRouteLeg[]): FeatureCollection<LineStrin
         mode: leg.mode,
         line: leg.kind === "walk" ? "walk" : lineMode(leg.mode),
         active,
-        dimmed: anyActive && !active,
+        dimmed: (anyActive && !active) || leg.tone === "faded",
+        travelled: leg.tone === "travelled",
         label: leg.label ?? "",
         vehicle: vehicleOf(leg.mode),
         colorDark: colour?.line.dark ?? "",
@@ -128,7 +131,25 @@ export function accuracyFeatures(user: MapUser | null, steps = 48): FeatureColle
   return { type: "FeatureCollection", features: [{ type: "Feature", geometry: { type: "Polygon", coordinates: [ring] }, properties: {} }] };
 }
 
-/** [[west, south], [east, north]] of everything a "fit" camera should frame; null if nothing. */
+/** The ring as a closed line, for its dashed layer. */
+export function ringFeatures(ring: MapRing | null | undefined, steps = 72): FeatureCollection<LineString, Record<string, never>> {
+  if (!ring || ring.radiusMeters <= 0) return { type: "FeatureCollection", features: [] };
+  const [lon, lat] = ring.center;
+  const dLat = (ring.radiusMeters / EARTH_RADIUS_M) * (180 / Math.PI);
+  const dLon = dLat / Math.max(Math.cos((lat * Math.PI) / 180), 1e-6);
+  const coordinates: LonLat[] = [];
+  for (let i = 0; i <= steps; i += 1) {
+    const angle = (i / steps) * 2 * Math.PI;
+    coordinates.push([lon + dLon * Math.cos(angle), lat + dLat * Math.sin(angle)]);
+  }
+  return { type: "FeatureCollection", features: [{ type: "Feature", geometry: { type: "LineString", coordinates }, properties: {} }] };
+}
+
+/**
+ * [[west, south], [east, north]] of everything a "fit" camera should frame; null if nothing.
+ * With `fitTo`, only those points (a tapped step's leg); otherwise the route, pins, stop
+ * pins, tags and the ring.
+ */
 export function sceneBounds(scene: MapScene): [LonLat, LonLat] | null {
   let west = Infinity;
   let south = Infinity;
@@ -140,12 +161,21 @@ export function sceneBounds(scene: MapScene): [LonLat, LonLat] | null {
     south = Math.min(south, lat);
     north = Math.max(north, lat);
   };
-  for (const leg of scene.route) {
-    add(leg.from);
-    add(leg.to);
-    for (const point of leg.coordinates ?? []) add(point);
+  if (!scene.fitTo || scene.fitTo.length === 0) {
+    for (const leg of scene.route) {
+      add(leg.from);
+      add(leg.to);
+      for (const point of leg.coordinates ?? []) add(point);
+    }
   }
-  for (const pin of scene.pins) add(pin.position);
+  if (scene.fitTo && scene.fitTo.length > 0) {
+    for (const point of scene.fitTo) add(point);
+  } else {
+    for (const pin of scene.pins) add(pin.position);
+    for (const pin of scene.stopPins ?? []) add(pin.position);
+    for (const tag of scene.tags ?? []) add(tag.position);
+    for (const point of ringFeatures(scene.ring, 8).features[0]?.geometry.coordinates ?? []) add(point);
+  }
   if (!Number.isFinite(west)) return null;
   return [
     [west, south],
@@ -167,6 +197,10 @@ export interface MapPalette {
   /** Basemap label text (ink-muted; its halo is land). */
   label: string;
   surface: string;
+  /** A ride already travelled (boards: On board). */
+  travelled: string;
+  /** Home's dashed walking ring. */
+  ring: string;
   /** Pale outline around route lines and the dashed centre of a train line. */
   casing: string;
   park: string;
@@ -188,6 +222,8 @@ export function mapPalette(theme: ThemeName): MapPalette {
     water: c["map-water"],
     label: c["ink-muted"],
     surface: c.surface,
+    travelled: c["border-strong"],
+    ring: c["ink-muted"],
     casing: c["map-casing"],
     park: c["map-park"],
     ink: c.ink,
@@ -334,7 +370,7 @@ export function themeBasemap(style: StyleJson, theme: ThemeName, lang: "he" | "e
 // ---------------------------------------------------------------------------------------
 // Our own layers
 
-export const OVERLAY_SOURCES = ["ot-accuracy", "ot-route", "ot-pins", "ot-user"] as const;
+export const OVERLAY_SOURCES = ["ot-accuracy", "ot-ring", "ot-route", "ot-pins", "ot-user"] as const;
 export type OverlaySource = (typeof OVERLAY_SOURCES)[number];
 
 /** The destination square's image id (a symbol: MapLibre circles cannot be square). */
@@ -361,7 +397,9 @@ export function overlayLayers(theme: ThemeName, { labels }: { labels: boolean })
   const byMode = ["match", ["get", "line"], "rail", p.rail, "walk", p.walk, p.bus];
   // The operator's colour for this theme when the table has one, else the mode token.
   const own = theme === "dark" ? "colorDark" : "colorLight";
-  const byLine = ["case", ["!=", ["coalesce", ["get", own], ""], ""], ["get", own], byMode];
+  const ownColour = ["case", ["!=", ["coalesce", ["get", own], ""], ""], ["get", own], byMode];
+  // A travelled stretch is grey whatever its line (boards: On board).
+  const byLine = ["case", ["==", ["get", "travelled"], true], p.travelled, ownColour];
   const transit = ["==", ["get", "kind"], "transit"];
   const layers: StyleLayerJson[] = [
     {
@@ -371,15 +409,23 @@ export function overlayLayers(theme: ThemeName, { labels }: { labels: boolean })
       paint: { "fill-color": p.brand, "fill-opacity": 0.12, "fill-outline-color": p.brand },
     },
     {
-      // The pale outline of a printed network map; a faded leg gets a land-coloured edge.
+      // Home's 5-minute walk: a thin dashed ring (boards: 1.5 px, 3 on 6 off).
+      id: "ot-ring",
+      type: "line",
+      source: "ot-ring",
+      layout: { "line-cap": "round" },
+      paint: { "line-color": p.ring, "line-width": 1.5, "line-dasharray": [2, 4] },
+    },
+    {
+      // The pale outline of a printed network map; a faded or travelled leg gets a land-coloured edge.
       id: "ot-route-casing",
       type: "line",
       source: "ot-route",
       filter: transit,
       layout: { "line-cap": "round", "line-join": "round" },
       paint: {
-        "line-color": ["case", ["get", "dimmed"], p.land, p.casing],
-        "line-width": ["case", ["get", "dimmed"], 7, 11.5],
+        "line-color": ["case", ["any", ["get", "dimmed"], ["==", ["get", "travelled"], true]], p.land, p.casing],
+        "line-width": ["case", ["any", ["get", "dimmed"], ["==", ["get", "travelled"], true]], 7, 11.5],
       },
     },
     {
@@ -397,14 +443,18 @@ export function overlayLayers(theme: ThemeName, { labels }: { labels: boolean })
       source: "ot-route",
       filter: transit,
       layout: { "line-cap": "round", "line-join": "round" },
-      paint: { "line-color": byLine, "line-width": ["case", ["get", "dimmed"], 5, 7.5], "line-opacity": dimmable },
+      paint: {
+        "line-color": byLine,
+        "line-width": ["case", ["any", ["get", "dimmed"], ["==", ["get", "travelled"], true]], 5, 7.5],
+        "line-opacity": dimmable,
+      },
     },
     {
       // Trains also get a dashed pale centre, so the vehicle never depends on colour alone.
       id: "ot-route-train",
       type: "line",
       source: "ot-route",
-      filter: ["all", transit, ["==", ["get", "vehicle"], "train"], ["!", ["get", "dimmed"]]],
+      filter: ["all", transit, ["==", ["get", "vehicle"], "train"], ["!", ["get", "dimmed"]], ["!=", ["get", "travelled"], true]],
       layout: { "line-cap": "butt", "line-join": "round" },
       paint: { "line-color": p.casing, "line-width": 3.6, "line-dasharray": [5 / 3.6, 6 / 3.6] },
     },

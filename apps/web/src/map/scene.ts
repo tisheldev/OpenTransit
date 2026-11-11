@@ -21,6 +21,57 @@ export interface MapRouteLeg {
   /** The ride's operator, for its line colour (look of 11 November 2026). */
   operatorId?: string | null;
   operatorName?: string | null;
+  /**
+   * How the leg is drawn (boards, 11 November 2026): "normal" in its colour with a pale
+   * outline; "faded" thinner at .6 in its own colour (an option not chosen, a line not
+   * picked); "travelled" in grey (the part of a ride already behind the passenger).
+   */
+  tone?: "normal" | "faded" | "travelled";
+}
+
+/** A line badge on a map tag (the operator picks its colour, the mode its vehicle icon). */
+export interface MapTagLine {
+  mode: string;
+  label: string;
+  operatorId?: string | null;
+  operatorName?: string | null;
+}
+
+/**
+ * A label pinned to a place on the map (boards: a stop's next departure, an option's
+ * arrival time, a destination name, "יורדים כאן"). "strong" is ink on the page colour
+ * (the one that matters), "plain" an outlined tag, "faded" a muted one for options not
+ * chosen. With onSelect it is a button (tap a faded option to choose it).
+ */
+export interface MapTag {
+  id: string;
+  position: LonLat;
+  kind: "strong" | "plain" | "faded";
+  text?: string;
+  line?: MapTagLine;
+  /** A CSS colour for the outline (a faded option's own line colour). */
+  accent?: string;
+  /** Spoken name when the visible text alone is not enough. */
+  ariaLabel?: string;
+  onSelect?: () => void;
+  /** Where the tag sits relative to its point: above it (default) or centred on it. */
+  anchor?: "above" | "center" | "below";
+}
+
+/** A stop drawn as a large round pin with a stop sign (boards: Home, Stop, Bus didn't come). */
+export interface MapStopPin {
+  id: string;
+  position: LonLat;
+  /** The stop the panel is about: ink filled; others are outlined. */
+  selected?: boolean;
+  ariaLabel: string;
+  onSelect?: () => void;
+}
+
+/** A dashed circle around a place: Home's 5-minute walk around the passenger. */
+export interface MapRing {
+  center: LonLat;
+  radiusMeters: number;
 }
 
 export interface MapPin {
@@ -59,6 +110,25 @@ export interface MapScene {
   pick: boolean;
   /** Optional: where a "fit" camera goes when there are no route or pins to frame. */
   focus?: MapFocus | null;
+  /** Labels pinned to places (boards); drawn over the map as buttons or text. */
+  tags?: MapTag[];
+  /** Large stop pins (boards: Home's nearby stops, a tapped stop, Bus didn't come). */
+  stopPins?: MapStopPin[];
+  /** A dashed walking ring (Home). */
+  ring?: MapRing | null;
+  /**
+   * Optional: a "fit" camera frames only these points (a tapped step's leg, the stretch
+   * before the exit stop) instead of the whole scene; null or empty frames everything.
+   */
+  fitTo?: LonLat[] | null;
+  /**
+   * Optional: a "fit" camera frames once per key. A screen that republishes its scene as
+   * times tick (Home's next departures) passes a key that changes only when what it shows
+   * changes, so the passenger's own panning is not undone every minute.
+   */
+  cameraKey?: string;
+  /** Controls float over the top of the map (close, "כל המסלול"): fitting keeps clear of them. */
+  topControls?: boolean;
 }
 
 export const emptyScene: MapScene = { route: [], pins: [], user: null, camera: "keep", pick: false };
@@ -67,6 +137,11 @@ interface MapState {
   scene: MapScene;
   /** Pixels at the bottom covered by the sheet, so fitting keeps content visible. */
   bottomInset: number;
+  /**
+   * Pixels covered at the map's left and right edges (physical sides: the map is never
+   * mirrored) by a panel beside it: the wide-screen layout (board 8). Zero on a phone.
+   */
+  sideInset: { left: number; right: number };
   /** Latest map centre (pick mode); null until the map reports one. */
   center: LonLat | null;
   /** Bumped by requestLocate(); the map recentres on the user when it changes. */
@@ -78,7 +153,15 @@ interface MapState {
   located: MapUser | null;
 }
 
-const initialState: MapState = { scene: emptyScene, bottomInset: 0, center: null, locateRequest: 0, located: null };
+const NO_SIDE_INSET = { left: 0, right: 0 };
+const initialState: MapState = {
+  scene: emptyScene,
+  bottomInset: 0,
+  sideInset: NO_SIDE_INSET,
+  center: null,
+  locateRequest: 0,
+  located: null,
+};
 let state: MapState = initialState;
 const listeners = new Set<() => void>();
 
@@ -102,6 +185,12 @@ export function setMapScene(scene: MapScene): void {
 
 export function setBottomInset(px: number): void {
   if (px !== state.bottomInset) update({ bottomInset: px });
+}
+
+export function setSideInset(left: number, right: number): void {
+  if (left !== state.sideInset.left || right !== state.sideInset.right) {
+    update({ sideInset: left === 0 && right === 0 ? NO_SIDE_INSET : { left, right } });
+  }
 }
 
 export function setMapCenter(center: LonLat): void {
