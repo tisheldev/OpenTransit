@@ -293,6 +293,22 @@ describe("manual control", () => {
     const jumped = advance(state, { type: "jump", stepIndex: 1 }, cueCtx(state.lastFixAt!)).state;
     expect(jumped).toMatchObject({ stepIndex: 1, cue: "none", phase: "walking", stopsLeft: null });
   });
+
+  it("board ('עליתי'): waiting at the stop the ride begins on the same step; from a walk to it, the ride is next", () => {
+    let state = initialNavState(steps, now);
+    expect(state).toMatchObject({ stepIndex: 0, phase: "waiting" });
+    let result = advance(state, { type: "board" }, ctx(now));
+    expect(result.state).toMatchObject({ stepIndex: 0, phase: "riding", nearBoarding: false, stopsLeft: steps[0]!.ride!.stopCount });
+    expect(result.effects).toEqual([]);
+    // On board already, or on a walk not to a ride: nothing.
+    expect(advance(result.state, { type: "board" }, ctx(now))).toEqual({ state: result.state, effects: [] });
+    state = advance(result.state, { type: "next" }, ctx(now)).state; // the walk to the train
+    result = advance(state, { type: "board" }, ctx(now));
+    expect(result.state).toMatchObject({ stepIndex: 2, phase: "riding" });
+    expect(result.effects).toEqual([{ type: "step_changed", stepIndex: 2, from: 1, reason: "manual" }]);
+    const last = advance(state, { type: "jump", stepIndex: steps.length - 2 }, ctx(now)).state; // walk to the destination
+    expect(advance(last, { type: "board" }, ctx(now))).toEqual({ state: last, effects: [] });
+  });
 });
 
 describe("boarding", () => {

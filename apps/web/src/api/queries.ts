@@ -1,9 +1,12 @@
 import { QueryClient, useQueries, useQuery } from "@tanstack/react-query";
 import { toIsraelIso } from "../lib/time";
 import { isRetryable } from "./classify";
-import { getNearbyDepartures, getStatus, getStop, getStopDepartures, getStopLines, listStops, searchPlaces, type Lang } from "./endpoints";
+import { getNearbyDepartures, getStatus, getStop, getStopDepartures, getStopLines, listStops, planJourney, searchPlaces, type Lang } from "./endpoints";
+import { apiFetch } from "./http";
+import { encodePathRef } from "./pathRef";
 import { ApiFailure, unwrap } from "./result";
-import type { DeparturesPage, StopDetail } from "./schemas";
+import { DeparturesPageSchema, type DeparturesPage, type StopDetail } from "./schemas";
+import type { JourneyRequest } from "./types";
 
 export const queryKeys = {
   status: ["status"] as const,
@@ -166,6 +169,33 @@ export function useNearbyDepartures(point: { latitude: number; longitude: number
   });
 }
 
+/**
+ * One page of departures from a stop from a fixed instant (Navigate, "Bus didn't come":
+ * the next departure of the same route). The caller fixes `from` when the question is
+ * asked, so the key does not move with the clock; null keeps the query idle. `routeId`
+ * asks the API for that route only (API PR #35); an API without the filter ignores the
+ * unknown parameter and answers every route, so callers still filter by route.
+ */
+export function useDeparturesFrom(
+  stopId: string | null,
+  from: string | null,
+  options: { routeId?: string | null; horizonMinutes?: number; limit?: number } = {},
+) {
+  const { routeId = null, horizonMinutes = 120, limit = 100 } = options;
+  return useQuery({
+    queryKey: ["departuresFrom", stopId, from, routeId, horizonMinutes, limit] as const,
+    queryFn: async ({ signal }) => {
+      const encoded = encodePathRef(stopId!);
+      if (!encoded.ok) return unwrap(await getStopDepartures(stopId!, { from: from!, horizonMinutes, limit }, signal));
+      const query = { from: from!, horizonMinutes, limit, routeId };
+      return unwrap(await apiFetch({ path: `/v1/stops/${encoded.segment}/departures`, query, signal }, DeparturesPageSchema));
+    },
+    enabled: stopId !== null && from !== null,
+    staleTime: 60_000,
+    retry: false,
+  });
+}
+
 /** Board 7: the lines through a stop with their patterns' stops (fixed for a generation). */
 export function useStopLines(stopId: string | null) {
   return useQuery({
@@ -192,5 +222,28 @@ export function useStopDetails(stopIds: readonly string[]) {
       retry: false,
     })),
     combine: stopData,
+  });
+}
+
+/**
+ * A journey plan that leaves out some trips (Navigate, "Bus didn't come": the bus that did
+ * not come). `excludeTripRefs` is newer (API PR #35); an API without it refuses the field
+ * (422 invalid request), so the plan is asked again without it and the caller keeps its
+ * own filter. Null keeps the query idle.
+ */
+export function usePlanExcluding(request: JourneyRequest | null, excludeTripRefs: readonly string[]) {
+  return useQuery({
+    queryKey: ["planExcluding", request, excludeTripRefs] as const,
+    queryFn: async ({ signal }) => {
+      if (excludeTripRefs.length > 0) {
+        const first = await planJourney({ ...request!, excludeTripRefs: excludeTripRefs.slice(0, 5) } as JourneyRequest, signal);
+        const refused = !first.ok && (first.error.kind === "problem" || first.error.kind === "http") && (first.error.status === 400 || first.error.status === 422);
+        if (!refused) return unwrap(first);
+      }
+      return unwrap(await planJourney(request!, signal));
+    },
+    enabled: request !== null,
+    staleTime: 60_000,
+    retry: false,
   });
 }

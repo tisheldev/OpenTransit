@@ -2,6 +2,7 @@ import { delay, http, HttpResponse } from "msw";
 import { fixture, fixtures, type Fixture } from "../api/fixtures";
 import { derivedEngineTimeout, derivedJourneyFixtures, derivedTrip } from "../screens/compare/derivedFixtures";
 import { derivedDepartures, derivedNearbyDepartures, derivedNearbyStop, derivedStopLines, derivedStopsNear } from "./stopFixtures";
+import { derivedMissedDepartures, derivedMissedJourneys, MISSED_STOP_ID } from "./navigateMissed";
 
 // MSW handlers that answer every public endpoint from fixtures. Used by Vitest (node)
 // and by the dev server's `fixtures` mode (browser), so mocked e2e needs no API.
@@ -166,7 +167,14 @@ export const handlers = [
     return send("recorded-places-stop-he");
   }),
 
-  http.post("*/v1/journeys", () => journeyAnswer()),
+  http.post("*/v1/journeys", async ({ request }) => {
+    // Navigate's "Bus didn't come" re-plans (derived, src/mocks/navigateMissed.ts).
+    if (scenario() === "navigate-missed") {
+      const body = (await request.json().catch(() => null)) as Parameters<typeof derivedMissedJourneys>[0];
+      return respond(derivedMissedJourneys(body));
+    }
+    return journeyAnswer();
+  }),
 
   http.get("*/v1/trips/:tripRef", ({ params }) => {
     if (scenario() === "compare-trip-failed") return send("recorded-problem-not-ready");
@@ -180,6 +188,7 @@ export const handlers = [
   http.get("*/v1/stops/:stopId/lines", ({ params }) => respond(derivedStopLines(decoded(params.stopId)))),
 
   http.get("*/v1/stops/:stopId/departures", ({ request, params }) => {
+    if (scenario() === "navigate-missed" && decoded(params.stopId) === MISSED_STOP_ID) return respond(derivedMissedDepartures());
     const url = new URL(request.url);
     if (url.searchParams.get("cursor")) return send("recorded-departures-page-2");
     // Re-timed to the request (stopFixtures.ts), so Home and a stop count down.

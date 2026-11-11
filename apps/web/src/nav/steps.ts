@@ -40,6 +40,21 @@ export interface NavRide {
   stopCount: number | null;
   /** Boarding platform when the API provides one (API-C2, not yet implemented); never guessed. */
   platform: string | null;
+  /**
+   * The stops between boarding and exit, when the journey gives them (`leg.intermediateStops`,
+   * API PR #35); absent from older APIs, which leave the trip detail as the only source.
+   */
+  intermediateStops?: NavCallStop[] | null;
+}
+
+/** A stop the ride passes, as the journey gives it. */
+export interface NavCallStop {
+  name: string;
+  stopId: string | null;
+  latitude: number;
+  longitude: number;
+  scheduledArrival: string | null;
+  scheduledDeparture: string | null;
 }
 
 export interface NavStep {
@@ -104,6 +119,28 @@ function platformOf(leg: Leg): string | null {
   return typeof code === "string" && code.trim() !== "" ? code.trim() : null;
 }
 
+const optionalTime = (value: unknown): string | null => (typeof value === "string" && Number.isFinite(Date.parse(value)) ? value : null);
+
+/** `leg.intermediateStops` once the API gives it (PR #35); null when absent or malformed. */
+function intermediateStopsOf(leg: Leg): NavCallStop[] | null {
+  const raw = (leg as { intermediateStops?: unknown }).intermediateStops;
+  if (!Array.isArray(raw)) return null;
+  const stops: NavCallStop[] = [];
+  for (const item of raw as unknown[]) {
+    const stop = item as Record<string, unknown> | null;
+    if (!stop || typeof stop.name !== "string" || typeof stop.latitude !== "number" || typeof stop.longitude !== "number") return null;
+    stops.push({
+      name: stop.name,
+      stopId: typeof stop.stopId === "string" ? stop.stopId : null,
+      latitude: stop.latitude,
+      longitude: stop.longitude,
+      scheduledArrival: optionalTime(stop.scheduledArrival),
+      scheduledDeparture: optionalTime(stop.scheduledDeparture),
+    });
+  }
+  return stops;
+}
+
 function walkKind(legs: readonly Leg[], index: number): NavStepKind {
   const transitBefore = legs.slice(0, index).some((leg) => leg.kind === "transit");
   const transitAfter = legs.slice(index + 1).some((leg) => leg.kind === "transit");
@@ -146,6 +183,7 @@ export function buildSteps(journey: Journey, trips: Readonly<Record<string, Trip
           routeId: transit.routeId,
           ...rideOrdinals(leg, trips[transit.engineTripId]),
           platform: platformOf(leg),
+          intermediateStops: intermediateStopsOf(leg),
         },
       };
     }

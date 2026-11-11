@@ -95,12 +95,13 @@ test.describe("@real navigate", () => {
       sessionStorage.setItem("e2e-seeded", "1");
     }, JSON.stringify(trip));
     await page.goto(appPath("#/navigate"));
-    await expect(page.locator(".step-card")).toBeVisible();
-    // The first card and the checklist from the real plan: a ride first boards at its stop;
-    // its stops are counted to the exit (no progress measured yet); every row has a time.
+    await expect(page.locator(".nav-answer")).toBeVisible({ timeout: 30_000 });
+    // The first answer and the checklist from the real plan: a ride first is waited for at
+    // its stop (board 4, with the timetable's departure); every row has a time.
     if (steps[0]!.kind === "ride") {
-      await expect(page.locator(".step-card")).toContainText(`עלייה ב־${steps[0]!.from!.name}`);
-      await expect(page.locator(".step-card")).toContainText(/\d+ תחנות עד הירידה|תחנה אחת עד הירידה/);
+      await expect(page.locator(".nav-answer .nav-kicker")).toHaveText("מחכים בתחנה");
+      await expect(page.getByRole("heading", { level: 1 })).toHaveText(steps[0]!.from!.name);
+      await expect(page.locator(".nav-answer .nav-check")).toContainText(/לפי הלוח \d\d:\d\d/);
     }
     await expect(page.locator(".checklist-time")).toHaveCount(steps.length);
     await expect(page.locator(".checklist-time").first()).toHaveText(/^\d\d:\d\d$/);
@@ -108,7 +109,7 @@ test.describe("@real navigate", () => {
     await page.evaluate(() => {
       const log: string[] = [];
       (window as unknown as { navLog: string[] }).navLog = log;
-      const region = document.querySelector("[aria-live]")!;
+      const region = document.querySelector("[aria-live='polite']")!;
       new MutationObserver(() => log.push(region.textContent ?? "")).observe(region, { childList: true, subtree: true, characterData: true });
     });
     if (served) {
@@ -131,12 +132,15 @@ test.describe("@real navigate", () => {
         step = await currentStep(page);
         automatic += step - before;
       } catch {
-        await page.getByRole("button", { name: "השלב הבא" }).click();
-        manual += 1;
+        // The panel's one action ("עליתי", "ירדתי", "הגעתי"): waiting at a stop, "עליתי"
+        // boards on the same step, so only a changed step counts as a manual advance.
+        await page.locator(".nav-primary").click();
         step = await currentStep(page);
+        if (step !== before) manual += step - before;
       }
     }
-    await expect(page.locator(".step-card")).toContainText("הגעתם אל הטכניון");
+    await expect(page.locator(".nav-answer .nav-kicker")).toHaveText("הגעתם אל");
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText("הטכניון");
     const log = await page.evaluate(() => (window as unknown as { navLog: string[] }).navLog);
     const cues = {
       twoStops: log.filter((text) => text.includes("רדו בעוד 2 תחנות")).length,
