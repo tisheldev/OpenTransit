@@ -116,6 +116,13 @@ if (first.body?.page?.nextCursor) {
   });
 }
 await record("stops-near", "GET", "/v1/stops", { params: { near: "32.0757,34.7748", radius: 300, limit: 5 } });
+// Boards 1 and 7 (API PR #35): Home's nearby departures and a stop's lines with their patterns.
+await record("departures-nearby", "GET", "/v1/departures/nearby", {
+  params: { near: "32.0757,34.7748", from: departAt, radius: 400, stops: 4, perStop: 4, horizonMinutes: 60 },
+}, "board 1: departures near Dizengoff Center, weekday 08:00");
+await record("stop-lines", "GET", `/v1/stops/${DIZENGOFF_CENTER}/lines`, {
+  params: { patterns: "serving", limit: 50 },
+}, "board 7: the lines through Dizengoff Center with their serving patterns");
 const routes = await record("routes", "GET", "/v1/routes", { params: { stopId: DIZENGOFF_CENTER, limit: 5 } });
 const routeId = routes.body?.data?.[0]?.routeId;
 if (routeId) {

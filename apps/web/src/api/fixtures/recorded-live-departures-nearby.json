@@ -1,0 +1,378 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/departures/nearby",
+    "params": {
+      "near": "32.0757,34.7748",
+      "from": "2026-11-12T08:00:00+02:00",
+      "radius": 400,
+      "stops": 4,
+      "perStop": 4,
+      "horizonMinutes": 60
+    },
+    "body": null
+  },
+  "status": 200,
+  "body": {
+    "data": [
+      {
+        "stop": {
+          "stopId": "mot:stop:13583",
+          "sourceId": "13583",
+          "code": "25609",
+          "name": "דיזנגוף סנטר/דיזנגוף",
+          "description": "רחוב: דיזנגוף 50 עיר: תל אביב יפו רציף:  קומה: ",
+          "latitude": 32.075566,
+          "longitude": 34.77512,
+          "locationType": 0,
+          "parentStationId": null,
+          "wheelchairBoarding": null,
+          "platformCode": null,
+          "distanceMeters": 33.631508963990385
+        },
+        "departuresState": "available",
+        "unavailableReason": null,
+        "complete": true,
+        "departures": [
+          {
+            "scheduledDeparture": "2026-11-12T06:02:00Z",
+            "stopId": "mot:stop:13583",
+            "routeId": "mot:route:9809",
+            "routeShortName": "172",
+            "headsign": "תל אביב יפו_מסוף רדינג",
+            "operatorId": "5",
+            "operatorName": "דן",
+            "mode": "bus",
+            "directionId": "1",
+            "platformCode": null,
+            "pickupType": 0,
+            "tripRef": "20261112_07:15_mot60day_4086339_111126",
+            "callSequence": 47
+          },
+          {
+            "scheduledDeparture": "2026-11-12T06:03:00Z",
+            "stopId": "mot:stop:13583",
+            "routeId": "mot:route:27901",
+            "routeShortName": "115",
+            "headsign": "תל אביב יפו_מסוף רדינג",
+            "operatorId": "15",
+            "operatorName": "מטרופולין",
+            "mode": "bus",
+            "directionId": "0",
+            "platformCode": null,
+            "pickupType": 0,
+            "tripRef": "20261112_07:25_mot60day_586027482_111126",
+            "callSequence": 25
+          },
+          {
+            "scheduledDeparture": "2026-11-12T06:03:00Z",
+            "stopId": "mot:stop:13583",
+            "routeId": "mot:route:16077",
+            "routeShortName": "8",
+            "headsign": "אוניברסיטת ת\"א",
+            "operatorId": "5",
+            "operatorName": "דן",
+            "mode": "bus",
+            "directionId": "1",
+            "platformCode": null,
+            "pickupType": 0,
+            "tripRef": "20261112_07:41_mot60day_585169402_111126",
+            "callSequence": 23
+          },
+          {
+            "scheduledDeparture": "2026-11-12T06:04:00Z",
+            "stopId": "mot:stop:13583",
+            "routeId": "mot:route:2261",
+            "routeShortName": "5",
+            "headsign": "תל אביב יפו_רכבת מרכז",
+            "operatorId": "5",
+            "operatorName": "דן",
+            "mode": "bus",
+            "directionId": "1",
+            "platformCode": null,
+            "pickupType": 0,
+            "tripRef": "20261112_07:40_mot60day_4058567_111126",
+            "callSequence": 23
+          }
+        ]
+      },
+      {
+        "stop": {
+          "stopId": "mot:stop:13561",
+          "sourceId": "13561",
+          "code": "25565",
+          "name": "דיזנגוף סנטר/דיזנגוף",
+          "description": "רחוב: דיזנגוף 53 עיר: תל אביב יפו רציף:  קומה: ",
+          "latitude": 32.075129,
+          "longitude": 34.77537,
+          "locationType": 0,
+          "parentStationId": null,
+          "wheelchairBoarding": null,
+          "platformCode": null,
+          "distanceMeters": 83.16022635821096
+        },
+        "departuresState": "available",
+        "unavailableReason": null,
+        "complete": true,
+        "departures": [
+          {
+            "scheduledDeparture": "2026-11-12T06:00:00Z",
+            "stopId": "mot:stop:13561",
+            "routeId": "mot:route:9779",
+            "routeShortName": "39",
+            "headsign": "רמת גן_מסוף עמידר",
+            "operatorId": "5",
+            "operatorName": "דן",
+            "mode": "bus",
+            "directionId": "0",
+            "platformCode": null,
+            "pickupType": 0,
+            "tripRef": "20261112_07:50_mot60day_5310873_111126",
+            "callSequence": 9
+          },
+          {
+            "scheduledDeparture": "2026-11-12T06:02:00Z",
+            "stopId": "mot:stop:13561",
+            "routeId": "mot:route:16076",
+            "routeShortName": "8",
+            "headsign": "מסוף הטייסים",
+            "operatorId": "5",
+            "operatorName": "דן",
+            "mode": "bus",
+            "directionId": "0",
+            "platformCode": null,
+            "pickupType": 0,
+            "tripRef": "20261112_07:38_mot60day_584715181_111126",
+            "callSequence": 18
+          },
+          {
+            "scheduledDeparture": "2026-11-12T06:02:00Z",
+            "stopId": "mot:stop:13561",
+            "routeId": "mot:route:2259",
+            "routeShortName": "5",
+            "headsign": "מסוף הלוחמים",
+            "operatorId": "5",
+            "operatorName": "דן",
+            "mode": "bus",
+            "directionId": "0",
+            "platformCode": null,
+            "pickupType": 0,
+            "tripRef": "20261112_07:45_mot60day_461446_111126",
+            "callSequence": 15
+          },
+          {
+            "scheduledDeparture": "2026-11-12T06:06:00Z",
+            "stopId": "mot:stop:13561",
+            "routeId": "mot:route:27081",
+            "routeShortName": "2",
+            "headsign": "הארגזים",
+            "operatorId": "5",
+            "operatorName": "דן",
+            "mode": "bus",
+            "directionId": "0",
+            "platformCode": null,
+            "pickupType": 0,
+            "tripRef": "20261112_07:30_mot60day_46626239_111126",
+            "callSequence": 33
+          }
+        ]
+      },
+      {
+        "stop": {
+          "stopId": "mot:stop:13560",
+          "sourceId": "13560",
+          "code": "25564",
+          "name": "דיזנגוף סנטר/טשרניחובסקי",
+          "description": "רחוב: טשרניחובסקי 53 עיר: תל אביב יפו רציף:  קומה: ",
+          "latitude": 32.075585,
+          "longitude": 34.773887,
+          "locationType": 0,
+          "parentStationId": null,
+          "wheelchairBoarding": null,
+          "platformCode": null,
+          "distanceMeters": 86.9689168075084
+        },
+        "departuresState": "available",
+        "unavailableReason": null,
+        "complete": true,
+        "departures": [
+          {
+            "scheduledDeparture": "2026-11-12T06:02:00Z",
+            "stopId": "mot:stop:13560",
+            "routeId": "mot:route:2533",
+            "routeShortName": "66",
+            "headsign": "פתח תקווה_מסוף משה ארנס",
+            "operatorId": "5",
+            "operatorName": "דן",
+            "mode": "bus",
+            "directionId": "1",
+            "platformCode": null,
+            "pickupType": 0,
+            "tripRef": "20261112_07:55_mot60day_11786760_111126",
+            "callSequence": 6
+          },
+          {
+            "scheduledDeparture": "2026-11-12T06:02:00Z",
+            "stopId": "mot:stop:13560",
+            "routeId": "mot:route:20813",
+            "routeShortName": "128",
+            "headsign": "פתח תקווה_פארק עסקים ירקון",
+            "operatorId": "5",
+            "operatorName": "דן",
+            "mode": "bus",
+            "directionId": "1",
+            "platformCode": null,
+            "pickupType": 0,
+            "tripRef": "20261112_07:55_mot60day_41994912_111126",
+            "callSequence": 6
+          },
+          {
+            "scheduledDeparture": "2026-11-12T06:05:00Z",
+            "stopId": "mot:stop:13560",
+            "routeId": "mot:route:2332",
+            "routeShortName": "18",
+            "headsign": "תל אביב יפו_רכבת מרכז",
+            "operatorId": "5",
+            "operatorName": "דן",
+            "mode": "bus",
+            "directionId": "1",
+            "platformCode": null,
+            "pickupType": 0,
+            "tripRef": "20261112_07:32_mot60day_34530493_111126",
+            "callSequence": 34
+          },
+          {
+            "scheduledDeparture": "2026-11-12T06:05:00Z",
+            "stopId": "mot:stop:13560",
+            "routeId": "mot:route:2511",
+            "routeShortName": "61",
+            "headsign": "רמת גן_מסוף עמידר",
+            "operatorId": "5",
+            "operatorName": "דן",
+            "mode": "bus",
+            "directionId": "0",
+            "platformCode": null,
+            "pickupType": 0,
+            "tripRef": "20261112_08:00_mot60day_17895646_111126",
+            "callSequence": 5
+          }
+        ]
+      },
+      {
+        "stop": {
+          "stopId": "mot:stop:49938",
+          "sourceId": "49938",
+          "code": "20784",
+          "name": "דיזנגוף סנטר/המלך ג'ורג'",
+          "description": "רחוב: המלך ג'ורג' 63 עיר: תל אביב יפו רציף:  קומה: ",
+          "latitude": 32.075397,
+          "longitude": 34.776195,
+          "locationType": 0,
+          "parentStationId": null,
+          "wheelchairBoarding": null,
+          "platformCode": null,
+          "distanceMeters": 135.6878143068237
+        },
+        "departuresState": "available",
+        "unavailableReason": null,
+        "complete": true,
+        "departures": [
+          {
+            "scheduledDeparture": "2026-11-12T06:00:00Z",
+            "stopId": "mot:stop:49938",
+            "routeId": "mot:route:2961",
+            "routeShortName": "125",
+            "headsign": "בת ים_מרכז הספורט",
+            "operatorId": "5",
+            "operatorName": "דן",
+            "mode": "bus",
+            "directionId": "0",
+            "platformCode": null,
+            "pickupType": 0,
+            "tripRef": "20261112_07:31_mot60day_2944483_111126",
+            "callSequence": 24
+          },
+          {
+            "scheduledDeparture": "2026-11-12T06:01:00Z",
+            "stopId": "mot:stop:49938",
+            "routeId": "mot:route:2319",
+            "routeShortName": "14",
+            "headsign": "מסוף הלוחמים",
+            "operatorId": "5",
+            "operatorName": "דן",
+            "mode": "bus",
+            "directionId": "0",
+            "platformCode": null,
+            "pickupType": 0,
+            "tripRef": "20261112_07:43_mot60day_586239433_111126",
+            "callSequence": 15
+          },
+          {
+            "scheduledDeparture": "2026-11-12T06:02:00Z",
+            "stopId": "mot:stop:49938",
+            "routeId": "mot:route:2369",
+            "routeShortName": "25",
+            "headsign": "חולון_מוזיאון אגד",
+            "operatorId": "5",
+            "operatorName": "דן",
+            "mode": "bus",
+            "directionId": "0",
+            "platformCode": null,
+            "pickupType": 0,
+            "tripRef": "20261112_07:35_mot60day_2947697_111126",
+            "callSequence": 28
+          },
+          {
+            "scheduledDeparture": "2026-11-12T06:03:00Z",
+            "stopId": "mot:stop:49938",
+            "routeId": "mot:route:2566",
+            "routeShortName": "82",
+            "headsign": "תל אביב יפו_מסוף כרמלית",
+            "operatorId": "5",
+            "operatorName": "דן",
+            "mode": "bus",
+            "directionId": "0",
+            "platformCode": null,
+            "pickupType": 0,
+            "tripRef": "20261112_07:24_mot60day_502912_111126",
+            "callSequence": 36
+          }
+        ]
+      }
+    ],
+    "query": {
+      "near": {
+        "latitude": 32.0757,
+        "longitude": 34.7748
+      },
+      "radiusMeters": 400,
+      "stops": 4,
+      "perStop": 4,
+      "from": "2026-11-12T06:00:00Z",
+      "until": "2026-11-12T07:00:00Z"
+    },
+    "meta": {
+      "requestId": "00000000000000000000000000000000",
+      "generationId": "fc11ddbc27cecc78f749d06d9643e2dd9bc6d25b1a755c5548217f103dd58cfb",
+      "generatedAt": "2026-11-11T15:48:06.585604Z",
+      "dataBuiltAt": "2026-11-11T13:01:43.013693Z",
+      "mode": "real",
+      "coverage": {
+        "from": "2026-11-11T00:00:00+02:00",
+        "until": "2026-12-11T00:00:00+02:00"
+      },
+      "freshness": "current",
+      "capabilities": {
+        "realtime": "not_enabled",
+        "alerts": "not_enabled"
+      },
+      "attribution": [
+        "Israel Ministry of Transport",
+        "© OpenStreetMap contributors"
+      ],
+      "rankingPolicy": "motis-v2.11.2-feasible-engine-order-v1",
+      "appliedConstraints": {},
+      "warnings": []
+    }
+  }
+}

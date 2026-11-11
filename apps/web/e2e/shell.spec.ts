@@ -137,10 +137,10 @@ test("touch targets on the core screens are at least 44 px", async ({ page }) =>
 });
 
 test("screens not built yet say so, with the way home (axe, dark and light)", async ({ page }) => {
-  await page.goto(appPath("#/stop/mot%3Astop%3A1"));
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("תחנה");
+  await page.goto(appPath("#/nearby"));
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("תחנות בסביבה");
   await expect(page.locator("#main").getByRole("note")).toHaveText("המסך הזה עוד לא נבנה.");
-  await expectNoSeriousAxeViolations(page, "Stop placeholder (he)");
+  await expectNoSeriousAxeViolations(page, "Nearby placeholder (he)");
   await useTheme(page, "light");
   await page.goto(appPath("#/no-such-screen"));
   await page.reload(); // a hash change alone does not run the theme's init script
@@ -170,7 +170,7 @@ async function planToCompare(page: Page): Promise<void> {
   await page.context().grantPermissions(["geolocation"]);
   await page.context().setGeolocation({ latitude: 32.0753, longitude: 34.7749, accuracy: 20 });
   await page.goto(appPath("#/"));
-  await page.getByRole("button", { name: "לאן?" }).click();
+  await page.getByRole("button", { name: "לאן נוסעים?" }).click();
   await page.getByRole("searchbox").fill("דיזנגוף");
   await page.getByTestId("search-results").getByRole("button").first().click();
   await expect(page).toHaveURL(/#\/compare$/);
