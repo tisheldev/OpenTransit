@@ -66,6 +66,17 @@ requirement absent from this lock. Its resolved version and build dependencies n
 an artifact/build inventory before claiming a complete image audit. The API build
 uses `uv sync --no-dev`; a lock entry does not mean it ships in production.
 
+## Web test client: bundled fonts
+
+Added 11 November 2026 with the client look the user chose ([client design](client-design.md#visual-direction-user-11-november-2026)). The fonts ship inside the client build (Hebrew and Latin subsets only, five WOFF2 files, about 100 KB) and are never fetched from a third party. The client's other npm packages are not inventoried here yet.
+
+| Font (npm package) | Locked version | Licence / note |
+| --- | --- | --- |
+| Arimo, variable 400–700 ([`@fontsource-variable/arimo`](https://www.npmjs.com/package/@fontsource-variable/arimo)) | 5.3.0 | SIL OFL 1.1 (package `LICENSE`: "Copyright 2020 The Arimo Project Authors"). OFL allows bundling with software; keep the licence and copyright notice with distributed copies; reserved font names do not apply because the files are unmodified |
+| Barlow Semi Condensed 500/600/700 ([`@fontsource/barlow-semi-condensed`](https://www.npmjs.com/package/@fontsource/barlow-semi-condensed)) | 5.3.0 | SIL OFL 1.1 (package metadata and `LICENSE`); same obligations |
+
+Not done: the built client does not yet carry a third-party notices file with these licences.
+
 ## Container and packaged software inventory
 
 Digest prefixes below identify full pins in the linked Dockerfiles/Compose; all AWS

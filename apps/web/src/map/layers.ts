@@ -1,11 +1,13 @@
+import { operatorColour, vehicleOf, type Vehicle } from "../lib/lines";
 import { THEME_COLORS, type ThemeName } from "../styles/tokens";
 import type { LonLat, MapPin, MapRouteLeg, MapScene, MapUser } from "./scene";
 
 // Pure scene → GeoJSON and style helpers (no MapLibre import), so they unit-test in jsdom.
-// Colours come from the design system's tokens for the active theme (design: Map; the
-// mock maps on the App page): land, roads and water from map-*, lines by mode, origin a
-// circle, destination a square, stops and transfers hollow in their line's colour, and
-// the passenger a brand puck with a halo.
+// The printed-map look chosen by the user on 11 November 2026 (client design, "Visual
+// direction"): quiet streets in map-land / map-road / map-park / map-water, thick route
+// lines in their operator's colour with a pale outline (map-casing), a dashed centre on
+// train lines so the vehicle never depends on colour alone, walking dotted in ink, stops
+// ringed in ink, origin an ink dot, destination an ink square, the passenger an ink puck.
 
 export interface Feature<G, P> {
   type: "Feature";
@@ -39,6 +41,11 @@ export interface RouteProps {
   /** Another leg is active (the current step): this one is drawn faded (design: Navigate). */
   dimmed: boolean;
   label: string;
+  /** The vehicle: a train gets a dashed centre. */
+  vehicle: Vehicle;
+  /** The operator's line colour per theme; "" when the operator table has none (mode tokens). */
+  colorDark: string;
+  colorLight: string;
 }
 
 /** One line per leg that has geometry; a time-only walk (coordinates null) adds nothing. */
@@ -48,6 +55,7 @@ export function routeFeatures(route: MapRouteLeg[]): FeatureCollection<LineStrin
   for (const leg of route) {
     if (!leg.coordinates || leg.coordinates.length < 2) continue;
     const active = leg.active === true;
+    const colour = leg.kind === "transit" ? operatorColour(leg) : null;
     features.push({
       type: "Feature",
       geometry: { type: "LineString", coordinates: leg.coordinates },
@@ -58,6 +66,9 @@ export function routeFeatures(route: MapRouteLeg[]): FeatureCollection<LineStrin
         active,
         dimmed: anyActive && !active,
         label: leg.label ?? "",
+        vehicle: vehicleOf(leg.mode),
+        colorDark: colour?.line.dark ?? "",
+        colorLight: colour?.line.light ?? "",
       },
     });
   }
@@ -156,6 +167,10 @@ export interface MapPalette {
   /** Basemap label text (ink-muted; its halo is land). */
   label: string;
   surface: string;
+  /** Pale outline around route lines and the dashed centre of a train line. */
+  casing: string;
+  park: string;
+  ink: string;
   bus: string;
   rail: string;
   walk: string;
@@ -173,9 +188,13 @@ export function mapPalette(theme: ThemeName): MapPalette {
     water: c["map-water"],
     label: c["ink-muted"],
     surface: c.surface,
+    casing: c["map-casing"],
+    park: c["map-park"],
+    ink: c.ink,
     bus: c["mode-bus"],
     rail: c["mode-rail"],
-    walk: c["mode-walk"],
+    // Walking is dotted in ink on the map (the boards); mode-walk stays for text and icons.
+    walk: c.ink,
     origin: c.origin,
     destination: c.destination,
     brand: c.brand,
@@ -236,12 +255,15 @@ export function chooseStyle(mode: string, override: string | undefined, theme: T
   return OPENFREEMAP_STYLES[theme];
 }
 
-/** What a basemap layer stands for in the design's map: land, water, a road, or none (left as styled). */
-export function basemapRole(layer: StyleLayerJson): "land" | "water" | "road" | null {
+/** What a basemap layer stands for in the design's map: land, water, park, a road, or none (left as styled). */
+export function basemapRole(layer: StyleLayerJson): "land" | "water" | "park" | "road" | null {
   if (layer.type === "background") return "land";
   const sourceLayer = layer["source-layer"];
   if (sourceLayer === "water" && layer.type === "fill") return "water";
   if (sourceLayer === "waterway" && layer.type === "line") return "water";
+  if (layer.type === "fill" && (sourceLayer === "park" || /park|grass|wood|forest|landcover/i.test(layer.id))) return "park";
+  // Buildings and other land use melt into the land, so the streets and the route lead (quiet map).
+  if (layer.type === "fill" && (sourceLayer === "building" || sourceLayer === "landuse")) return "land";
   if (sourceLayer === "transportation" && (layer.type === "line" || layer.type === "fill")) {
     if (/rail|aeroway|ferry|aerialway|cable/i.test(layer.id)) return null;
     // Piers are land; casings take the land colour so roads read as plain strokes (the mock maps).
@@ -267,6 +289,13 @@ export function isNameTextField(field: unknown): boolean {
 
 const isOverlayId = (id: string) => id.startsWith("ot-");
 
+/** Basemap labels the printed-map look leaves out: points of interest, house numbers, mountain peaks. */
+export function isQuietedLabel(layer: StyleLayerJson): boolean {
+  if (layer.type !== "symbol") return false;
+  const sourceLayer = layer["source-layer"];
+  return sourceLayer === "poi" || sourceLayer === "housenumber" || sourceLayer === "mountain_peak" || sourceLayer === "aerodrome_label";
+}
+
 /**
  * The base style in the theme's colours and the page language: background, water and road
  * layers take map-land, map-water and map-road; label text takes ink-muted on a land halo
@@ -276,10 +305,14 @@ const isOverlayId = (id: string) => id.startsWith("ot-");
  */
 export function themeBasemap(style: StyleJson, theme: ThemeName, lang: "he" | "en"): StyleJson {
   const palette = mapPalette(theme);
-  const colour = { land: palette.land, water: palette.water, road: palette.road };
+  const colour = { land: palette.land, water: palette.water, park: palette.park, road: palette.road };
   const layers = style.layers.map((layer) => {
     if (isOverlayId(layer.id)) return layer;
     let next = layer;
+    if (isQuietedLabel(layer)) {
+      // Few labels (printed-map look): points of interest and house numbers are hidden.
+      return { ...layer, layout: { ...(layer.layout ?? {}), visibility: "none" } };
+    }
     const role = basemapRole(layer);
     if (role && (layer.type === "background" || layer.type === "fill" || layer.type === "line")) {
       const paint: Record<string, unknown> = { ...(layer.paint ?? {}), [`${layer.type}-color`]: colour[role] };
@@ -309,20 +342,27 @@ export const DESTINATION_ICON = "ot-destination";
 /** Image pixels per CSS pixel for generated markers (sharp on 2x screens, fine on 1x). */
 export const MARKER_PIXEL_RATIO = 2;
 
-/** Faded legs while another is the current step (design: the next ride at .55). */
-const DIMMED_OPACITY = 0.55;
+/** Faded legs while another is the current step (the boards: a faded line at .6). */
+const DIMMED_OPACITY = 0.6;
 const dimmable = ["case", ["get", "dimmed"], DIMMED_OPACITY, 1];
 
 /**
- * Our layers, bottom to top, in the theme's colours. Sizes follow the mock maps: lines
- * 5 px, walking 3 px dotted (SVG dasharray 2 6, round caps), origin and destination about
- * 20 px with a surface edge, stops a 2.5 px ring in their line's colour, the puck 8 px
- * with a 24 px brand halo. MapLibre draws a circle's stroke outside its radius, so each
- * radius is the SVG radius less half its stroke. Line labels need glyphs (`labels`).
+ * Our layers, bottom to top, in the theme's colours. Sizes follow the approved boards
+ * (11 November 2026): a ride 7.5 px in its operator's colour inside an 11.5 px pale
+ * outline (map-casing); a faded ride 5 px inside a land-coloured 7 px edge; a train's
+ * dashed centre 3.6 px (5 on, 6 off); walking 4.5 px ink dots 9 px apart; stops and
+ * transfers 5.5 px rings in ink on surface; origin an ink dot, destination an ink square,
+ * both with a surface edge; the puck 8 px with a 24 px halo. MapLibre draws a circle's
+ * stroke outside its radius, so each radius is the SVG radius less half its stroke.
+ * Line labels need glyphs (`labels`).
  */
 export function overlayLayers(theme: ThemeName, { labels }: { labels: boolean }): StyleLayerJson[] {
   const p = mapPalette(theme);
-  const byLine = ["match", ["get", "line"], "rail", p.rail, "walk", p.walk, p.bus];
+  const byMode = ["match", ["get", "line"], "rail", p.rail, "walk", p.walk, p.bus];
+  // The operator's colour for this theme when the table has one, else the mode token.
+  const own = theme === "dark" ? "colorDark" : "colorLight";
+  const byLine = ["case", ["!=", ["coalesce", ["get", own], ""], ""], ["get", own], byMode];
+  const transit = ["==", ["get", "kind"], "transit"];
   const layers: StyleLayerJson[] = [
     {
       id: "ot-accuracy",
@@ -331,13 +371,16 @@ export function overlayLayers(theme: ThemeName, { labels }: { labels: boolean })
       paint: { "fill-color": p.brand, "fill-opacity": 0.12, "fill-outline-color": p.brand },
     },
     {
-      // A land-coloured edge, so a line stays legible over roads and labels on real tiles.
+      // The pale outline of a printed network map; a faded leg gets a land-coloured edge.
       id: "ot-route-casing",
       type: "line",
       source: "ot-route",
-      filter: ["==", ["get", "kind"], "transit"],
+      filter: transit,
       layout: { "line-cap": "round", "line-join": "round" },
-      paint: { "line-color": p.land, "line-width": 8, "line-opacity": dimmable },
+      paint: {
+        "line-color": ["case", ["get", "dimmed"], p.land, p.casing],
+        "line-width": ["case", ["get", "dimmed"], 7, 11.5],
+      },
     },
     {
       id: "ot-route-walk",
@@ -345,16 +388,25 @@ export function overlayLayers(theme: ThemeName, { labels }: { labels: boolean })
       source: "ot-route",
       filter: ["==", ["get", "kind"], "walk"],
       layout: { "line-cap": "round", "line-join": "round" },
-      // Dash lengths are in line widths: 2 and 6 px at 3 px wide.
-      paint: { "line-color": p.walk, "line-width": 3, "line-dasharray": [2 / 3, 2], "line-opacity": dimmable },
+      // Round dots: dash lengths are in line widths (a near-zero dash, then 9 px at 4.5 px wide).
+      paint: { "line-color": p.walk, "line-width": 4.5, "line-dasharray": [0.02, 2], "line-opacity": dimmable },
     },
     {
       id: "ot-route-transit",
       type: "line",
       source: "ot-route",
-      filter: ["==", ["get", "kind"], "transit"],
+      filter: transit,
       layout: { "line-cap": "round", "line-join": "round" },
-      paint: { "line-color": byLine, "line-width": 5, "line-opacity": dimmable },
+      paint: { "line-color": byLine, "line-width": ["case", ["get", "dimmed"], 5, 7.5], "line-opacity": dimmable },
+    },
+    {
+      // Trains also get a dashed pale centre, so the vehicle never depends on colour alone.
+      id: "ot-route-train",
+      type: "line",
+      source: "ot-route",
+      filter: ["all", transit, ["==", ["get", "vehicle"], "train"], ["!", ["get", "dimmed"]]],
+      layout: { "line-cap": "butt", "line-join": "round" },
+      paint: { "line-color": p.casing, "line-width": 3.6, "line-dasharray": [5 / 3.6, 6 / 3.6] },
     },
     {
       id: "ot-pins",
@@ -362,10 +414,10 @@ export function overlayLayers(theme: ThemeName, { labels }: { labels: boolean })
       source: "ot-pins",
       filter: ["!=", ["get", "role"], "destination"],
       paint: {
-        "circle-radius": ["match", ["get", "role"], "origin", 8, 4],
+        "circle-radius": ["match", ["get", "role"], "origin", 6.5, 4.25],
         "circle-color": ["match", ["get", "role"], "origin", p.origin, p.surface],
-        "circle-stroke-color": ["match", ["get", "role"], "origin", p.surface, byLine],
-        "circle-stroke-width": 2.5,
+        "circle-stroke-color": ["match", ["get", "role"], "origin", p.surface, p.ink],
+        "circle-stroke-width": ["match", ["get", "role"], "origin", 3, 2.5],
       },
     },
     {

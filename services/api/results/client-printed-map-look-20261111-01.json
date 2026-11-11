@@ -1,0 +1,79 @@
+{
+  "id": "client-printed-map-look-20261111-01",
+  "recordedAt": "2026-11-11T12:45:00Z",
+  "kind": "mechanical; not human-reviewed",
+  "scope": "User, 11 Nov 2026: \"merge the new design, and update the client according to it\" (PR #32 merged as ee9ff42). The web test client takes the look chosen that day (docs/client-design.md#visual-direction-user-11-november-2026). Appearance only: behaviour, routes and the C01/C03/C04 layouts are unchanged.",
+  "source": {
+    "design": "docs/client-design.md, section 'Visual direction (user, 11 November 2026)'",
+    "canvas": "https://claude.ai/artifact/F7pc3VsqUyEAuj6VKip5Kb (private), row 'Map as the interface, printed-map look', version 1794390993-d21d; colour values read from the eight Map*.dc.html boards",
+    "designSystemArtifact": "https://claude.ai/artifact/P3US2NygmWPs1iALn555PU (private), version 1794392080-b0ee read 11 Nov: tokens.json unchanged (still teal). Not updated by this work; the client's copies are now ahead of it (tokens.json meta.look)."
+  },
+  "applied": [
+    "Palette in both themes from the boards, token names kept: bg, surface, sunken, hairline, borders, ink and muted inks, map land/road/water; brand is now the ink (selection, origin, puck, kickers)",
+    "Five added tokens: action, action-pressed, on-action (the main button: #4d483f with #f4f1ea in dark, #1b1a17 with #ffffff in light), map-park, map-casing",
+    "Main button and the Home resume card in action colours: never white in dark",
+    "Arimo (variable 400-700) for all text and Barlow Semi Condensed 500/600/700 for times, counts and line numbers, bundled from pinned @fontsource packages 5.3.0 (Hebrew + Latin subsets, five WOFF2 files, about 100 KB); no third-party font request",
+    "Line badges: operator colour from src/lib/lines.ts (MOT agency id or API operator name), solid vehicle icon (bus, train, light rail), signage numerals, 24 px high, radius 5",
+    "Compare chart ride bars and route-details stop rings in the operator's colour",
+    "Map: rides 7.5 px in the operator's colour inside an 11.5 px pale outline; faded rides 5 px at .6 with a land edge; trains with a 3.6 px dashed pale centre; walking 4.5 px round ink dots; stops ringed in ink; origin an ink dot, destination an ink square; basemap recoloured (land, streets, water, parks; buildings and land use into land; POI, house-number, peak and aerodrome labels hidden; Hebrew names)",
+    "Radii: radius-lg 10 px, radius-xl (sheet top) 16 px; ghost buttons underlined; theme-color, manifest and icon in the new palette"
+  ],
+  "operatorColours": {
+    "table": "apps/web/src/lib/lines.ts",
+    "verified": ["Egged (id 3): badge #0b8043, map line dark #3fbf7a / light #0b8043 (https://egged.co.il/Days-Article-4492-80-years-of-color.aspx)"],
+    "examplesFromBoards": [
+      "Dan (id 5): #1565c0",
+      "Metropoline (id 15): #f08a00 badge with #1a1206 text",
+      "Israel Railways (id 2): #4a3fb0",
+      "Light rail (any operator): #d32f2f"
+    ],
+    "fallback": "Any other operator: mode-bus (#8a8378 dark / #5a564e light) or mode-rail",
+    "changedFromBoards": "Metropoline's light-map line is #c26e00: the boards' #f08a00 measured 2.2:1 on light map land"
+  },
+  "checks": {
+    "node": "22.23.4 portable (this PC has Node 20.20 without npm)",
+    "lint": "0 problems",
+    "typecheck": "0 errors",
+    "tokensCheck": "npm run tokens -- --check: up to date",
+    "unit": {
+      "passed": 962,
+      "failed": 0,
+      "note": "includes token contrast pairs in both themes (new: on-action on action and action-pressed), 19 new line-look tests (badge text 4.5:1 for every operator colour; every operator line 3:1 on map land and 2.8:1 on map road in both themes; id/name matching; badge rendering) and the updated map layer tests"
+    },
+    "timeZones": "test:tz 37 passed in each zone",
+    "build": "vite build passes; the five font files are emitted under assets/",
+    "e2eMocked": {
+      "fullRun": "75 passed, 1 failed, 6 skipped (@real, need a live API). The failure (compare.spec English, options list empty after reload) came while the unit suite ran at the same time; compare.spec alone: 13 passed",
+      "testChanges": "settings.spec theme-color values; map.spec theme switch now allows under 0.2% of pixels near dark land (anti-aliased edges of the light theme's ink dots and pins)",
+      "browser": "Playwright 1.64.1 Chromium installed for this run"
+    },
+    "diffCheck": "git diff --check clean",
+    "notRun": ["@real e2e against a live API", "Linux Playwright image", "a phone"]
+  },
+  "screenshots": {
+    "folder": "services/api/results/client-printed-map-look-20261111-01/",
+    "how": "Vite fixtures mode, 375 x 812 mobile emulation in the desktop app's browser pane; offline basemap (land only), so streets and parks are not shown",
+    "files": [
+      "1-home-dark.jpg",
+      "1-home-light.jpg",
+      "2-compare-dark.jpg",
+      "2-compare-light.jpg",
+      "3-route-details-dark.jpg",
+      "3-route-details-light.jpg",
+      "4-navigate-dark.jpg"
+    ]
+  },
+  "deliberateDifferences": [
+    "The navigation step keeps its hero card in hero/on-hero (ink): near-white in dark, by the 6 November rule that it stays the highest-contrast surface. The boards draw the navigation panel dark; the user's call",
+    "Compare keeps the chart on a shared time axis with rank labels (C03); route details stay in place under the chart (C04); Home keeps From and To (C01): the requirements stand until the user revises them",
+    "Map behaviours from the boards are not built: stop pins with their next departure and the 5-minute ring (Home), every option drawn at once (Choose), the side-of-road pin (Step), a stop's lines fanning out (Stop), the wide-screen panel. Departure items also lack operator and mode (API-C3)",
+    "Chips, the search field, status tags and the segmented control stay pill-shaped (the boards draw 6-8 px corners); radius-pill also shapes round icon buttons",
+    "Basemap is OpenFreeMap recoloured, not a purpose-made style"
+  ],
+  "knownGaps": [
+    "Not human-reviewed: the user's verdict on a phone is pending",
+    "Operator colours other than Egged are unverified examples",
+    "The built client carries no third-party notices file for the fonts yet",
+    "Design system artifact still teal"
+  ]
+}

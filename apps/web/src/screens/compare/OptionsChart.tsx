@@ -3,6 +3,7 @@ import type { Journey } from "../../api/types";
 import { Bdi } from "../../components/states";
 import { useI18n } from "../../i18n/I18nProvider";
 import { formatDistance } from "../../lib/format";
+import { operatorColour } from "../../lib/lines";
 import { formatClock } from "../../lib/time";
 import { layoutChart, RESERVED_ROWS, type ChartSegment } from "../../plan/chartLayout";
 import { isWalkOnly, rankLabels } from "../../plan/rank";
@@ -47,15 +48,19 @@ export function Duration({ seconds }: { seconds: number }) {
  * train says "רכבת"), walks a dotted rule, waits a thin one. Placed by its share of the
  * axis from the inline start, with the design's 2 px gap at its end.
  */
-function Segment({ segment, trainLabel }: { segment: ChartSegment; trainLabel: string }) {
+function Segment({ segment, trainLabel, journey }: { segment: ChartSegment; trainLabel: string; journey: Journey | undefined }) {
   const kind = segment.kind === "transit" ? (segment.mode === "bus" ? "bus" : "rail") : segment.kind;
   const label = segment.rail ? trainLabel : segment.label;
+  // A ride in its operator's colour (look of 11 November 2026), else its mode token.
+  const leg = segment.kind === "transit" && segment.legIndex !== null ? journey?.legs[segment.legIndex] : undefined;
+  const colour = leg ? operatorColour({ mode: leg.mode, operatorId: leg.transit?.operatorId, operatorName: leg.transit?.operatorName }) : null;
   return (
     <span
       className={`ot-lbar__seg ot-lbar__seg--${kind}`}
       style={{
         insetInlineStart: `${segment.start * 100}%`,
         inlineSize: `max(2px, calc(${Math.max(segment.width * 100, 0.6)}% - 2px))`,
+        ...(colour ? { background: colour.badge.bg, color: colour.badge.ink } : {}),
       }}
     >
       {segment.kind === "transit" && segment.showLabel && label && <Bdi>{label}</Bdi>}
@@ -136,7 +141,7 @@ export function OptionsChart({
                   </span>
                   <span className="ot-lbar compare-lbar">
                     {row.segments.map((segment, index) => (
-                      <Segment key={index} segment={segment} trainLabel={t("compare.train")} />
+                      <Segment key={index} segment={segment} trainLabel={t("compare.train")} journey={journeys[row.index]} />
                     ))}
                   </span>
                 </span>

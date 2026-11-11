@@ -16,7 +16,7 @@ describe("design tokens", () => {
 
   it("dark is the default; light only under data-theme=light", () => {
     const css = (generate(readTokens()) as Record<string, string>)["src/styles/tokens.css"]!;
-    expect(css).toMatch(/:root \{\n {2}color-scheme: dark;[\s\S]*--bg: #0d1618;/);
-    expect(css).toMatch(/:root\[data-theme="light"\] \{\n {2}color-scheme: light;[\s\S]*--bg: #f4f7f7;/);
+    expect(css).toMatch(/:root \{\n {2}color-scheme: dark;[\s\S]*--bg: #131210;/);
+    expect(css).toMatch(/:root\[data-theme="light"\] \{\n {2}color-scheme: light;[\s\S]*--bg: #f2f2ee;/);
   });
 });

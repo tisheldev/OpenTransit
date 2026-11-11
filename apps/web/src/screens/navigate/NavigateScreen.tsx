@@ -23,7 +23,7 @@ import { usePlan } from "../../plan/PlanProvider";
 import type { Endpoint } from "../../plan/draft";
 import { go, hrefFor } from "../../router";
 import { useSheet } from "../../shell/sheet";
-import { badgeLabel, badgeMode, isolate, isSameStop, placeName, rowText, stepSummary, type EndLabels } from "./describe";
+import { badgeLabel, badgeMode, isolate, rideLine, isSameStop, placeName, rowText, stepSummary, type EndLabels } from "./describe";
 import { navScene } from "./navScene";
 import { RideProgress } from "./RideProgress";
 import { StepCard } from "./StepCard";
@@ -71,7 +71,7 @@ function NoTrip() {
 /** A checklist row's mode: the line's badge for a ride, an icon for walking and arriving. */
 function RowIcon({ step }: { step: NavStep }) {
   const { t } = useI18n();
-  if (step.kind === "ride") return <LineBadge mode={badgeMode(step)} label={badgeLabel(step, t)} />;
+  if (step.kind === "ride") return <LineBadge mode={badgeMode(step)} label={badgeLabel(step, t)} line={rideLine(step)} />;
   if (step.kind === "arrive") return <Icon name="pin" />;
   if (step.kind === "transfer_walk" && isSameStop(step)) return <Icon name="stop" />;
   return <Icon name="walk" />;

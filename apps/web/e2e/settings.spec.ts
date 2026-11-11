@@ -59,12 +59,12 @@ test("dark by default; light chosen in Settings applies before first paint after
   await page.goto(appPath("#/settings"));
   const html = page.locator("html");
   await expect(html).toHaveAttribute("data-theme", "dark");
-  await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute("content", "#0d1618");
+  await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute("content", "#131210");
   expect(await page.evaluate(() => getComputedStyle(document.documentElement).colorScheme)).toBe("dark");
 
   await page.getByRole("radio", { name: "בהירה" }).check();
   await expect(html).toHaveAttribute("data-theme", "light");
-  await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute("content", "#f4f7f7");
+  await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute("content", "#f2f2ee");
 
   // Before any app script runs, theme.js has already applied the stored choice.
   await page.addInitScript(() => {

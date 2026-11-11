@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { createQueryClient } from "./api/queries";
 import { App } from "./App";
 import { applyTheme, getTheme } from "./lib/theme";
+import "./styles/fonts.css";
 import "./styles/tokens.css";
 import "./styles/design-system/bundle.css";
 import "./styles/global.css";

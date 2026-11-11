@@ -66,6 +66,8 @@ export function journeyToScene(journey: Journey, options: JourneySceneOptions = 
     to: lonLat(leg.to),
     label: legLabel(leg),
     active: options.activeLeg === index,
+    operatorId: leg.transit?.operatorId ?? null,
+    operatorName: leg.transit?.operatorName ?? null,
   }));
 
   const pins: MapPin[] = [];

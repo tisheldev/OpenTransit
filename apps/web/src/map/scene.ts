@@ -18,6 +18,9 @@ export interface MapRouteLeg {
   label: string | null;
   /** Highlighted leg (the current step while navigating). */
   active?: boolean;
+  /** The ride's operator, for its line colour (look of 11 November 2026). */
+  operatorId?: string | null;
+  operatorName?: string | null;
 }
 
 export interface MapPin {
