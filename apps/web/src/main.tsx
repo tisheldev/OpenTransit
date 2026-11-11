@@ -8,6 +8,7 @@ import "./styles/tokens.css";
 import "./styles/design-system/bundle.css";
 import "./styles/global.css";
 import "./styles/shell.css";
+import "./styles/boards.css";
 
 async function start() {
   // public/theme.js set it before first paint; this keeps it right if that script failed.

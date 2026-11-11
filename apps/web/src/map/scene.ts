@@ -21,6 +21,57 @@ export interface MapRouteLeg {
   /** The ride's operator, for its line colour (look of 11 November 2026). */
   operatorId?: string | null;
   operatorName?: string | null;
+  /**
+   * How the leg is drawn (boards, 11 November 2026): "normal" in its colour with a pale
+   * outline; "faded" thinner at .6 in its own colour (an option not chosen, a line not
+   * picked); "travelled" in grey (the part of a ride already behind the passenger).
+   */
+  tone?: "normal" | "faded" | "travelled";
+}
+
+/** A line badge on a map tag (the operator picks its colour, the mode its vehicle icon). */
+export interface MapTagLine {
+  mode: string;
+  label: string;
+  operatorId?: string | null;
+  operatorName?: string | null;
+}
+
+/**
+ * A label pinned to a place on the map (boards: a stop's next departure, an option's
+ * arrival time, a destination name, "יורדים כאן"). "strong" is ink on the page colour
+ * (the one that matters), "plain" an outlined tag, "faded" a muted one for options not
+ * chosen. With onSelect it is a button (tap a faded option to choose it).
+ */
+export interface MapTag {
+  id: string;
+  position: LonLat;
+  kind: "strong" | "plain" | "faded";
+  text?: string;
+  line?: MapTagLine;
+  /** A CSS colour for the outline (a faded option's own line colour). */
+  accent?: string;
+  /** Spoken name when the visible text alone is not enough. */
+  ariaLabel?: string;
+  onSelect?: () => void;
+  /** Where the tag sits relative to its point: above it (default) or centred on it. */
+  anchor?: "above" | "center" | "below";
+}
+
+/** A stop drawn as a large round pin with a stop sign (boards: Home, Stop, Bus didn't come). */
+export interface MapStopPin {
+  id: string;
+  position: LonLat;
+  /** The stop the panel is about: ink filled; others are outlined. */
+  selected?: boolean;
+  ariaLabel: string;
+  onSelect?: () => void;
+}
+
+/** A dashed circle around a place: Home's 5-minute walk around the passenger. */
+export interface MapRing {
+  center: LonLat;
+  radiusMeters: number;
 }
 
 export interface MapPin {
@@ -59,6 +110,17 @@ export interface MapScene {
   pick: boolean;
   /** Optional: where a "fit" camera goes when there are no route or pins to frame. */
   focus?: MapFocus | null;
+  /** Labels pinned to places (boards); drawn over the map as buttons or text. */
+  tags?: MapTag[];
+  /** Large stop pins (boards: Home's nearby stops, a tapped stop, Bus didn't come). */
+  stopPins?: MapStopPin[];
+  /** A dashed walking ring (Home). */
+  ring?: MapRing | null;
+  /**
+   * Optional: a "fit" camera frames only these points (a tapped step's leg, the stretch
+   * before the exit stop) instead of the whole scene; null or empty frames everything.
+   */
+  fitTo?: LonLat[] | null;
 }
 
 export const emptyScene: MapScene = { route: [], pins: [], user: null, camera: "keep", pick: false };

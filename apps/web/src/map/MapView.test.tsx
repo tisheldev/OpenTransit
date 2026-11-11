@@ -79,6 +79,10 @@ const fake = vi.hoisted(() => {
       (this.handlers[event] ??= []).push(handler);
       return this;
     }
+    off(event: string, handler: Handler) {
+      this.handlers[event] = (this.handlers[event] ?? []).filter((h) => h !== handler);
+      return this;
+    }
     fire(event: string) {
       for (const handler of this.handlers[event] ?? []) handler({});
     }
@@ -145,6 +149,10 @@ const fake = vi.hoisted(() => {
     }
     getCenter() {
       return this.center;
+    }
+    /** The inverse of unproject (map tags are placed with it). */
+    project([lng, lat]: [number, number]) {
+      return { x: 180 + (lng - this.center.lng) / 0.001, y: 320 - (lat - this.center.lat) / 0.001 };
     }
     /** Pretend 1 px = 0.001 degree around the centre, y growing southwards. */
     unproject([x, y]: [number, number]) {
@@ -231,6 +239,7 @@ describe("MapView", () => {
     expect(map.options.attributionControl).toBe(false);
     expect(map.layers.map((layer) => layer.id)).toEqual([
       "ot-accuracy",
+      "ot-ring",
       "ot-route-casing",
       "ot-route-walk",
       "ot-route-transit",
@@ -358,6 +367,40 @@ describe("MapView", () => {
       [34.78, 32.07],
       [34.81, 32.1],
     ]);
+  });
+
+  it("draws tags and stop pins over the map at their points; the tappable ones are buttons (boards)", async () => {
+    renderWith(<MapView />);
+    const map = await loadedMap();
+    const chose = vi.fn();
+    const picked = vi.fn();
+    act(() =>
+      setMapScene({
+        ...emptyScene,
+        camera: "keep",
+        tags: [
+          { id: "arrive", position: [34.79, 32.08], kind: "faded", text: "18:41", ariaLabel: "האפשרות שמגיעה ב־18:41", onSelect: chose },
+          { id: "dest", position: [34.8, 32.09], kind: "strong", text: "מרכז הרצליה" },
+          { id: "next", position: [34.78, 32.07], kind: "plain", text: "2 דק׳", line: { mode: "bus", label: "5", operatorId: "5" } },
+        ],
+        stopPins: [{ id: "s1", position: [34.78, 32.07], ariaLabel: "דיזנגוף / המלך ג׳ורג׳", selected: true, onSelect: picked }],
+        ring: { center: [34.78, 32.07], radiusMeters: 400 },
+      }),
+    );
+    expect((map.getSource("ot-ring")!.data as { features: unknown[] }).features).toHaveLength(1);
+    const option = screen.getByRole("button", { name: "האפשרות שמגיעה ב־18:41" });
+    option.click();
+    expect(chose).toHaveBeenCalledTimes(1);
+    const stop = screen.getByRole("button", { name: "דיזנגוף / המלך ג׳ורג׳" });
+    expect(stop).toHaveAttribute("aria-pressed", "true");
+    stop.click();
+    expect(picked).toHaveBeenCalledTimes(1);
+    // A tag without an action is text, not a button; a line badge carries its operator's colour.
+    expect(screen.getByText("מרכז הרצליה").closest("button")).toBeNull();
+    const badge = screen.getByTestId("map-overlay").querySelector<HTMLElement>(".ot-line")!;
+    expect(badge.style.getPropertyValue("--line-bg")).toBe("#1565c0");
+    act(() => setMapScene(emptyScene));
+    expect(screen.queryByTestId("map-overlay")).toBeNull();
   });
 
   it("keeps the sheet's height (clamped) out of fitting, and follows / recentres on the user above it", async () => {

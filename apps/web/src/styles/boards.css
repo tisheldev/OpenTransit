@@ -1,0 +1,406 @@
+/* Shared panel pieces of the approved boards (user, 11 November 2026; canvas "OpenTransit
+   UX Upgrade", row "Map as the interface, printed-map look"). Screens compose these
+   classes (prefix b-); colours only from tokens; logical properties only, so every piece
+   mirrors under dir="rtl". Line badges are the design system's .ot-line (LineBadge). */
+
+/* Muted secondary text (boards: .mu) and the large figure (boards: .big). */
+.b-mu {
+  color: var(--ink-muted);
+  font-size: 13px;
+  line-height: 18px;
+}
+.b-big {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+/* An inline tag: outlined; strong is ink with page-coloured text (a countdown, "יורדים");
+   faded is muted. 30 px high, 6 px corners. */
+.b-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  block-size: 30px;
+  padding-inline: 8px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 13px;
+  line-height: 1;
+  font-weight: 600;
+  white-space: nowrap;
+  flex: none;
+}
+.b-tag--strong {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--surface);
+}
+.b-tag--faded {
+  border-color: var(--border-strong);
+  color: var(--ink-muted);
+}
+button.b-tag {
+  cursor: pointer;
+  min-block-size: var(--tap-min);
+  block-size: auto;
+}
+
+/* Buttons: the main one in action colours (never white), the plain one outlined in ink. */
+.b-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-block-size: 48px;
+  padding-inline: 18px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--ink);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.b-btn--main {
+  border-color: var(--action);
+  background: var(--action);
+  color: var(--on-action);
+}
+.b-btn--main:active {
+  border-color: var(--action-pressed);
+  background: var(--action-pressed);
+}
+.b-btn--icon {
+  inline-size: 48px;
+  padding: 0;
+}
+.b-link {
+  min-block-size: 48px;
+  padding-inline: 4px;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  cursor: pointer;
+}
+.b-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-block-start: auto;
+  padding-block-start: var(--space-3);
+}
+
+/* The search field as a button (Home: "לאן נוסעים?"). */
+.b-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  inline-size: 100%;
+  min-block-size: 50px;
+  padding-inline: 14px;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--surface-sunken);
+  color: var(--ink-muted);
+  font-size: 16px;
+  text-align: start;
+  cursor: pointer;
+}
+
+/* Saved-place cards (Home: בית / עבודה with the next departure). */
+.b-cards {
+  display: flex;
+  gap: var(--space-2);
+  margin-block-start: 10px;
+}
+.b-card {
+  flex: 1;
+  min-inline-size: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--ink);
+  text-align: start;
+  cursor: pointer;
+}
+.b-card__title {
+  font-weight: 700;
+}
+.b-card__next {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-block-size: 24px;
+}
+
+/* A list row: line badge, name, minutes (Home's nearest stop, a tapped stop's lines). */
+.b-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  inline-size: 100%;
+  min-block-size: var(--tap-min);
+  padding-inline: 4px;
+  border: 0;
+  border-block-start: 1px solid var(--hairline);
+  background: none;
+  color: var(--ink);
+  text-align: start;
+}
+button.b-row {
+  cursor: pointer;
+}
+.b-row--on {
+  background: var(--surface-sunken);
+  border-radius: var(--radius-md);
+  border-block-start-color: transparent;
+}
+.b-row__name {
+  flex: 1;
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.b-row--on .b-row__name {
+  font-weight: 700;
+}
+
+/* A panel heading with a figure at the inline end (stop name · 200 מ׳). */
+.b-head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  margin-block: 14px 8px;
+}
+.b-head > :first-child {
+  flex: 1;
+  min-inline-size: 0;
+  margin: 0;
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: 700;
+}
+
+/* An option row (Choose): departure ← arrival, a tag, then the legs and the duration. */
+.b-op {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  inline-size: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid transparent;
+  border-radius: var(--radius-md);
+  background: none;
+  color: var(--ink);
+  text-align: start;
+  cursor: pointer;
+}
+.b-op--on {
+  background: var(--surface-sunken);
+}
+.b-op__l1 {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.b-op__time {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 22px;
+  line-height: 26px;
+  font-weight: 600;
+}
+.b-op--on .b-op__time {
+  font-weight: 700;
+}
+.b-op__l2 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--ink-muted);
+}
+.b-op__dur {
+  margin-inline-start: auto;
+}
+
+/* A timeline (Step, the wide panel): time, a marker column, the text. Rows with a time are
+   stops; rows without are the legs between them (a coloured bar for a ride, ink dots for a
+   walk). A leg row can be a button: tapping it zooms the map to that leg. */
+.b-tl {
+  display: grid;
+  grid-template-columns: 44px 20px minmax(0, 1fr);
+  column-gap: 8px;
+  align-items: center;
+  min-block-size: 32px;
+  padding-inline: 4px;
+}
+button.b-tl {
+  inline-size: 100%;
+  min-block-size: var(--tap-min);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: none;
+  color: var(--ink);
+  text-align: start;
+  cursor: pointer;
+}
+.b-tl--on {
+  background: var(--surface-sunken);
+  border-radius: var(--radius-md);
+}
+.b-tl__time {
+  font-weight: 600;
+  font-size: 13px;
+}
+.b-tl__stop {
+  font-weight: 600;
+}
+.b-tl__leg {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-inline-size: 0;
+}
+.b-tl__leg > .b-mu:last-child {
+  margin-inline-start: auto;
+}
+.b-dot {
+  inline-size: 12px;
+  block-size: 12px;
+  border-radius: 50%;
+  border: 2.5px solid var(--ink);
+  background: var(--surface);
+  justify-self: center;
+}
+.b-dot--filled {
+  background: var(--ink);
+}
+.b-dot--end {
+  border-radius: 3px;
+  background: var(--ink);
+}
+.b-dot--here {
+  background: var(--ink);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--ink) 18%, transparent);
+}
+.b-bar {
+  inline-size: 4px;
+  align-self: stretch;
+  background: var(--bar, var(--mode-bus));
+  justify-self: center;
+}
+.b-dots {
+  inline-size: 0;
+  align-self: stretch;
+  border-inline-start: 3px dotted var(--ink);
+  justify-self: center;
+}
+
+/* A choice card (Bus didn't come): what to do, when it leaves, and the arrival time. */
+.b-choice {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 10px;
+  row-gap: 2px;
+  align-items: center;
+  inline-size: 100%;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  color: var(--ink);
+  text-align: start;
+  cursor: pointer;
+}
+.b-choice--on {
+  border-color: var(--ink);
+  background: var(--surface-sunken);
+}
+.b-choice__title {
+  font-weight: 700;
+}
+.b-choice__arrive {
+  grid-row: 1 / span 2;
+  grid-column: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 12px;
+  color: var(--ink-muted);
+}
+.b-choice__arrive b {
+  font-size: 18px;
+  color: var(--ink);
+}
+
+/* Stop rows while riding (On board): time, a marker on the line, the stop. */
+.b-sr {
+  display: grid;
+  grid-template-columns: 44px 20px minmax(0, 1fr);
+  column-gap: 8px;
+  align-items: center;
+  min-block-size: 40px;
+  padding-inline: 4px;
+  border-radius: 6px;
+}
+.b-sr--exit {
+  background: var(--surface-sunken);
+  font-weight: 700;
+}
+
+/* One large answer (Walking, On board): a kicker, the figure, a line under it. */
+.b-answer {
+  display: flex;
+  flex-direction: column;
+}
+.b-answer__figure {
+  margin: 0;
+  font-size: 38px;
+  line-height: 44px;
+  font-weight: 700;
+}
+.b-answer__title {
+  margin: 0;
+  font-size: 20px;
+  line-height: 26px;
+  font-weight: 700;
+}
+
+/* Controls floating over the map (close navigation, "כל המסלול", arrival time). */
+.b-float {
+  position: absolute;
+  inset-block-start: calc(var(--map-attribution-top, 0px) + 12px);
+  z-index: 3;
+}
+.b-float--start {
+  inset-inline-start: 12px;
+}
+.b-float--end {
+  inset-inline-end: 12px;
+}
+.b-close {
+  display: grid;
+  place-items: center;
+  inline-size: 44px;
+  block-size: 44px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--ink);
+  cursor: pointer;
+}

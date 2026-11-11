@@ -105,3 +105,102 @@
   pointer-events: none;
   z-index: 1;
 }
+
+/* Tags and stop pins over the map (MapOverlay; boards, 11 November 2026). Each item sits at
+   its point's projected pixel; the tag itself is placed above (or centred on) that point. */
+.map-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+.map-overlay__item {
+  position: absolute;
+  inset-block-start: 0;
+  left: 0;
+  inline-size: 0;
+  block-size: 0;
+}
+.map-tag {
+  position: absolute;
+  left: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  block-size: 30px;
+  padding-inline: 8px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1;
+  font-weight: 600;
+  white-space: nowrap;
+  pointer-events: auto;
+  transform: translate(-50%, calc(-100% - 10px));
+}
+.map-tag--center {
+  transform: translate(-50%, -50%);
+}
+.map-tag--below {
+  transform: translate(-50%, 10px);
+}
+.map-tag--strong {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--surface);
+}
+.map-tag--faded {
+  border-color: var(--tag-accent, var(--border-strong));
+  color: var(--ink-muted);
+}
+.map-tag--plain {
+  border-color: var(--tag-accent, var(--border));
+}
+.map-tag .ot-line {
+  box-shadow: 0 0 0 2px var(--surface);
+}
+button.map-tag {
+  cursor: pointer;
+  min-block-size: 30px;
+}
+/* A 44 px hit area around the 30 px tag. */
+button.map-tag::after {
+  content: "";
+  position: absolute;
+  inset: -7px -4px;
+}
+.map-stop {
+  position: absolute;
+  left: 0;
+  display: grid;
+  place-items: center;
+  inline-size: 26px;
+  block-size: 26px;
+  padding: 0;
+  border-radius: 50%;
+  border: 2px solid var(--ink);
+  background: var(--surface);
+  color: var(--ink);
+  pointer-events: auto;
+  transform: translate(-50%, -50%);
+}
+.map-stop svg {
+  inline-size: 26px;
+  block-size: 26px;
+}
+.map-stop--selected {
+  border-color: var(--surface);
+  background: var(--ink);
+  color: var(--surface);
+}
+button.map-stop {
+  cursor: pointer;
+}
+button.map-stop::after {
+  content: "";
+  position: absolute;
+  inset: -9px;
+}

@@ -23,6 +23,7 @@ import {
   nameExpression,
   overlayLayers,
   pinFeatures,
+  ringFeatures,
   routeFeatures,
   sceneBounds,
   themeBasemap,
@@ -30,6 +31,7 @@ import {
   withOverlay,
   type StyleJson,
 } from "./layers";
+import { MapOverlay } from "./MapOverlay";
 import { setMapCenter, useMapState, type MapScene, type MapUser } from "./scene";
 
 // The lazy map chunk: everything that imports MapLibre lives here (MapHost loads it after
@@ -100,6 +102,7 @@ function drawScene(map: MapLibreMap, scene: MapScene, located: MapUser | null): 
     (map.getSource(id) as GeoJSONSource | undefined)?.setData(data as never);
   const user = scene.user ?? located;
   set("ot-route", routeFeatures(scene.route));
+  set("ot-ring", ringFeatures(scene.ring));
   set("ot-pins", pinFeatures(scene.pins, scene.route));
   set("ot-user", userFeatures(user));
   set("ot-accuracy", accuracyFeatures(user));
@@ -297,6 +300,9 @@ export default function MapView() {
   return (
     <div className="map-view" data-testid="map-view">
       <div ref={container} className="map-canvas" data-testid="map-canvas" />
+      {loaded && mapRef.current && (
+        <MapOverlay map={mapRef.current} tags={scene.tags ?? []} stopPins={scene.stopPins ?? []} dir={lang === "he" ? "rtl" : "ltr"} />
+      )}
       {scene.pick && (
         <div
           className="map-pick-pin"
