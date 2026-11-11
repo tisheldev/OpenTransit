@@ -11,6 +11,7 @@ import type { NavStep } from "../../nav/steps";
 import {
   badgeLabel,
   badgeMode,
+  rideLine,
   countdownMinutes,
   isolate,
   isRail,
@@ -96,7 +97,7 @@ function vehicleFact(ride: NavStep, t: T): Fact {
     if (name && hasLetters(name)) return { key: "train", label: t("nav.fact.train"), value: name, name: true };
     return { key: "train", label: t("nav.fact.train"), value: name ? <Bdi>{name}</Bdi> : <Unknown /> };
   }
-  return { key: "line", label: t("nav.fact.line"), value: <LineBadge mode={badgeMode(ride)} label={badgeLabel(ride, t)} /> };
+  return { key: "line", label: t("nav.fact.line"), value: <LineBadge mode={badgeMode(ride)} label={badgeLabel(ride, t)} line={rideLine(ride)} /> };
 }
 
 /** Before boarding R. Bus: line · departs · get off. Train: train · platform · departs. */

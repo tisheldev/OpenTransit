@@ -49,6 +49,11 @@ export function badgeMode(step: NavStep): "bus" | "rail" {
   return m === "rail" || m === "light_rail" || m === "tram" || m === "subway" ? "rail" : "bus";
 }
 
+/** The ride's mode and operator, for the LineBadge's vehicle icon and operator colour. */
+export function rideLine(step: NavStep): { mode: string; operatorId?: string; operatorName?: string } {
+  return { mode: step.ride?.mode ?? "", operatorId: step.ride?.operatorId, operatorName: step.ride?.operatorName };
+}
+
 /** The LineBadge label: the line number, or the mode's name when there is none (a train: "רכבת"). */
 export function badgeLabel(step: NavStep, t: T): string {
   return step.ride?.lineLabel ?? modeLabel(step.ride?.mode ?? "", t);

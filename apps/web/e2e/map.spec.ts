@@ -204,12 +204,13 @@ test("a theme switch keeps the drawn journey", async ({ page }) => {
   const darkShare = await drawnShare(page, band, THEME_COLORS.dark["map-land"]);
   expect(darkShare).toBeLessThan(0.2); // mostly land, with the journey drawn on it
   await page.getByTestId("harness-theme").click();
-  // Light land everywhere the journey is not, none of the dark land left, and about as
-  // much drawn as before.
+  // Light land everywhere the journey is not, no dark land left, and about as much drawn
+  // as before. The light theme draws walking dots and pins in near-black ink, whose
+  // anti-aliased edges pass through dark land's colour: a few such pixels are not land.
   await expect
     .poll(async () => {
       const { total, near } = await countColours(page, band, [THEME_COLORS.light["map-land"], THEME_COLORS.dark["map-land"]]);
-      return near[1] === 0 && (total - near[0]!) / total > darkShare / 2 && (total - near[0]!) / total < 0.2;
+      return near[1]! / total < 0.002 && (total - near[0]!) / total > darkShare / 2 && (total - near[0]!) / total < 0.2;
     }, poll)
     .toBe(true);
 });

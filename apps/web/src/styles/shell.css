@@ -277,17 +277,18 @@
   cursor: default;
   transform: none;
 }
+/* The main button is never white (look of 11 November 2026): action, a warm dark grey in dark. */
 .button-primary {
   min-block-size: var(--tap-primary);
   padding-inline: var(--space-5);
-  border-color: var(--brand);
-  background: var(--brand);
-  color: var(--on-brand);
+  border-color: var(--action);
+  background: var(--action);
+  color: var(--on-action);
   font-size: var(--body-size);
 }
 .button-primary:active {
-  border-color: var(--brand-strong);
-  background: var(--brand-strong);
+  border-color: var(--action-pressed);
+  background: var(--action-pressed);
 }
 .button-quiet {
   padding-inline: var(--space-3);
@@ -308,8 +309,8 @@
     background: var(--surface-pressed);
   }
   .button-primary:hover {
-    border-color: var(--brand-strong);
-    background: var(--brand-strong);
+    border-color: var(--action-pressed);
+    background: var(--action-pressed);
   }
   .button-quiet:hover {
     background: var(--surface-sunken);
@@ -407,8 +408,8 @@
 
 /* --- Home --------------------------------------------------------------------- */
 
-/* The resume card leads, in the navigation hero's colours (design: NavStep hero),
-   fully visible at half (G8). */
+/* The resume card leads, fully visible at half (G8). It is a button, so it takes the main
+   button's colours (look of 11 November 2026: never white), not the NavStep hero's. */
 .active-trip {
   display: flex;
   align-items: center;
@@ -420,8 +421,8 @@
   padding-inline: var(--space-4);
   border: 0;
   border-radius: var(--radius-lg);
-  background: var(--hero);
-  color: var(--on-hero);
+  background: var(--action);
+  color: var(--on-action);
   text-align: start;
   cursor: pointer;
 }
@@ -429,7 +430,7 @@
   transform: scale(0.98);
 }
 .active-trip-icon {
-  color: var(--hero-accent);
+  color: var(--on-action);
 }
 .active-trip-text {
   flex: 1;
@@ -443,7 +444,8 @@
   font-weight: var(--title-weight);
 }
 .active-trip-detail {
-  color: var(--on-hero-muted);
+  color: var(--on-action);
+  opacity: 0.85;
   font-size: var(--body-sm-size);
   line-height: var(--body-sm-line);
   overflow: hidden;
@@ -451,7 +453,7 @@
   white-space: nowrap;
 }
 .active-trip-go {
-  color: var(--on-hero-muted);
+  color: var(--on-action);
 }
 
 /* PlaceChips (ot-chips): room above and below for the focus ring inside the scroller, and

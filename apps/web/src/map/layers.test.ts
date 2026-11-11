@@ -63,12 +63,33 @@ describe("scene to GeoJSON", () => {
   it("draws lines only for legs with geometry, each with its mode's line", () => {
     const { features } = routeFeatures([walk, bus]);
     expect(features).toHaveLength(1);
-    expect(features[0]!.properties).toEqual({ kind: "transit", mode: "bus", line: "bus", active: true, dimmed: false, label: "8" });
+    expect(features[0]!.properties).toEqual({
+      kind: "transit",
+      mode: "bus",
+      line: "bus",
+      active: true,
+      dimmed: false,
+      label: "8",
+      vehicle: "bus",
+      colorDark: "",
+      colorLight: "",
+    });
     expect(routeFeatures([walkLine, { ...bus, active: false }, train]).features.map((f) => f.properties.line)).toEqual([
       "walk",
       "bus",
       "rail",
     ]);
+  });
+
+  it("carries the operator's line colour per theme and the vehicle (look of 11 November 2026)", () => {
+    const egged = { ...bus, operatorId: "3", operatorName: "אגד" };
+    const [eggedLine, trainLine] = routeFeatures([egged, { ...train, operatorId: "2", operatorName: "רכבת ישראל" }]).features;
+    expect(eggedLine!.properties).toMatchObject({ vehicle: "bus", colorDark: "#3fbf7a", colorLight: "#0b8043" });
+    expect(trainLine!.properties).toMatchObject({ vehicle: "train", colorDark: "#9a8fff", colorLight: "#4a3fb0" });
+    const lightRail = routeFeatures([{ ...bus, mode: "light_rail", operatorId: "99" }]).features[0]!;
+    expect(lightRail.properties).toMatchObject({ vehicle: "light-rail", colorDark: "#ff6259", colorLight: "#d32f2f" });
+    // An operator the table does not know: no colour of its own, the mode token applies.
+    expect(routeFeatures([{ ...bus, operatorId: "16", operatorName: "סופרבוס" }]).features[0]!.properties.colorDark).toBe("");
   });
 
   it("fades every other leg while one is the current step, and none otherwise", () => {
@@ -127,25 +148,45 @@ describe("our layers in the theme's colours", () => {
       "ot-route-casing",
       "ot-route-walk",
       "ot-route-transit",
+      "ot-route-train",
       "ot-pins",
       "ot-destination",
       "ot-user-halo",
       "ot-user",
     ]);
-    // Bus and rail 5 px solid in their mode colours; walking 3 px dotted in mode-walk.
+    // Rides 7.5 px (5 px faded) in the operator's colour for this theme, else the mode token.
+    const own = theme === "dark" ? "colorDark" : "colorLight";
     const transit = layer(layers, "ot-route-transit").paint!;
-    expect(transit["line-width"]).toBe(5);
-    expect(transit["line-color"]).toEqual(["match", ["get", "line"], "rail", c["mode-rail"], "walk", c["mode-walk"], c["mode-bus"]]);
+    expect(transit["line-width"]).toEqual(["case", ["get", "dimmed"], 5, 7.5]);
+    expect(transit["line-color"]).toEqual([
+      "case",
+      ["!=", ["coalesce", ["get", own], ""], ""],
+      ["get", own],
+      ["match", ["get", "line"], "rail", c["mode-rail"], "walk", c.ink, c["mode-bus"]],
+    ]);
     expect(transit["line-dasharray"]).toBeUndefined();
+    // The pale outline (a land-coloured edge on a faded leg) and the train's dashed centre.
+    expect(layer(layers, "ot-route-casing").paint).toEqual({
+      "line-color": ["case", ["get", "dimmed"], c["map-land"], c["map-casing"]],
+      "line-width": ["case", ["get", "dimmed"], 7, 11.5],
+    });
+    const trainCentre = layer(layers, "ot-route-train");
+    expect(trainCentre.filter).toEqual([
+      "all",
+      ["==", ["get", "kind"], "transit"],
+      ["==", ["get", "vehicle"], "train"],
+      ["!", ["get", "dimmed"]],
+    ]);
+    expect(trainCentre.paint).toMatchObject({ "line-color": c["map-casing"], "line-width": 3.6 });
+    // Walking: round ink dots.
     const walkPaint = layer(layers, "ot-route-walk").paint!;
-    expect(walkPaint).toMatchObject({ "line-color": c["mode-walk"], "line-width": 3 });
-    expect(walkPaint["line-dasharray"]).toEqual([2 / 3, 2]);
+    expect(walkPaint).toMatchObject({ "line-color": c.ink, "line-width": 4.5 });
+    expect(walkPaint["line-dasharray"]).toEqual([0.02, 2]);
     expect(layer(layers, "ot-route-walk").layout).toMatchObject({ "line-cap": "round" });
-    expect(layer(layers, "ot-route-casing").paint!["line-color"]).toBe(c["map-land"]);
-    // Origin: an origin circle with a surface edge; stops: surface with the line's ring.
+    // Origin: an ink dot with a surface edge; stops: ringed in ink on surface.
     const pins = layer(layers, "ot-pins").paint!;
     expect(pins["circle-color"]).toEqual(["match", ["get", "role"], "origin", c.origin, c.surface]);
-    expect(pins["circle-stroke-color"]).toEqual(["match", ["get", "role"], "origin", c.surface, transit["line-color"]]);
+    expect(pins["circle-stroke-color"]).toEqual(["match", ["get", "role"], "origin", c.surface, c.ink]);
     expect(layer(layers, "ot-pins").filter).toEqual(["!=", ["get", "role"], "destination"]);
     // Destination: the square image, only for the destination pin.
     expect(layer(layers, "ot-destination")).toMatchObject({
@@ -164,10 +205,10 @@ describe("our layers in the theme's colours", () => {
     for (const colour of colours) expect(tokens, colour).toContain(colour);
   });
 
-  it("fades the other legs to .55, and labels lines only when the style has glyphs", () => {
+  it("fades the other legs to .6, and labels lines only when the style has glyphs", () => {
     const layers = overlayLayers("dark", { labels: true });
-    for (const id of ["ot-route-casing", "ot-route-walk", "ot-route-transit"]) {
-      expect(layer(layers, id).paint!["line-opacity"]).toEqual(["case", ["get", "dimmed"], 0.55, 1]);
+    for (const id of ["ot-route-walk", "ot-route-transit"]) {
+      expect(layer(layers, id).paint!["line-opacity"]).toEqual(["case", ["get", "dimmed"], 0.6, 1]);
     }
     expect(layer(layers, "ot-route-label").paint).toMatchObject({ "text-halo-color": THEME_COLORS.dark.surface });
     expect(overlayLayers("dark", { labels: false }).some((l) => l.id === "ot-route-label")).toBe(false);
@@ -175,8 +216,9 @@ describe("our layers in the theme's colours", () => {
 
   it("the two themes differ where their tokens differ", () => {
     expect(mapPalette("dark")).not.toEqual(mapPalette("light"));
-    expect(mapPalette("light")).toMatchObject({ land: "#e8eff0", road: "#ffffff", water: "#cfe3ea", bus: "#3673ba", rail: "#8656b7" });
-    expect(mapPalette("dark")).toMatchObject({ land: "#111c1f", road: "#22343a", water: "#0f2730", bus: "#7fb0ee", rail: "#bf9ae8" });
+    // The printed-map palette read from the approved boards (client design, visual direction).
+    expect(mapPalette("light")).toMatchObject({ land: "#f2f2ee", road: "#e2e1db", water: "#cfe0ea", park: "#dbe6d3", casing: "#ffffff" });
+    expect(mapPalette("dark")).toMatchObject({ land: "#242321", road: "#2f2d2a", water: "#1c2b33", park: "#262d22", casing: "#f4f1ea" });
   });
 
   it("draws the destination as a rounded square in destination with a surface edge", () => {
@@ -229,6 +271,8 @@ const base: StyleJson = {
       paint: { "text-color": "#656565" },
     },
     { id: "highway_ref", type: "symbol", source: "openmaptiles", "source-layer": "transportation_name", layout: { "text-field": ["get", "ref"] } },
+    { id: "building", type: "fill", source: "openmaptiles", "source-layer": "building", paint: { "fill-color": "#444" } },
+    { id: "poi_r1", type: "symbol", source: "openmaptiles", "source-layer": "poi", layout: { "text-field": ["get", "name"] } },
   ],
 };
 
@@ -248,17 +292,17 @@ describe("basemap styles", () => {
   });
 
   it("the offline style is the theme's land colour", () => {
-    expect(offlineStyle("dark").layers).toEqual([{ id: "background", type: "background", paint: { "background-color": "#111c1f" } }]);
+    expect(offlineStyle("dark").layers).toEqual([{ id: "background", type: "background", paint: { "background-color": "#242321" } }]);
     expect(offlineStyle("light").layers[0]!.paint!["background-color"]).toBe(THEME_COLORS.light["map-land"]);
   });
 
-  it("knows land, water and roads in an OpenMapTiles style; leaves rail, parks and labels alone", () => {
+  it("knows land, water, parks and roads in an OpenMapTiles style; leaves rail and labels alone", () => {
     const roles = Object.fromEntries(base.layers.map((l) => [l.id, basemapRole(l)]));
     expect(roles).toEqual({
       background: "land",
       water: "water",
       waterway: "water",
-      landuse_park: null,
+      landuse_park: "park",
       road_pier: "land",
       highway_major_casing: "land",
       highway_major_inner: "road",
@@ -266,6 +310,8 @@ describe("basemap styles", () => {
       railway_transit: null,
       place_city: null,
       highway_ref: null,
+      building: "land",
+      poi_r1: null,
     });
   });
 
@@ -285,8 +331,11 @@ describe("basemap styles", () => {
     // Labels read on land in either theme: ink-muted on a land halo.
     expect(paint("place_city")).toEqual({ "text-color": c["ink-muted"], "text-halo-color": c["map-land"] });
     expect(paint("highway_ref")).toEqual({ "text-color": c["ink-muted"], "text-halo-color": c["map-land"] });
+    // Parks in map-park; buildings melt into the land; points of interest are hidden (few labels).
+    expect(paint("landuse_park")).toEqual({ "fill-color": c["map-park"] });
+    expect(paint("building")).toEqual({ "fill-color": c["map-land"] });
+    expect(layer(themed.layers, "poi_r1").layout).toMatchObject({ visibility: "none" });
     // Everything else keeps the base style's own paint.
-    expect(paint("landuse_park")).toEqual({ "fill-color": "rgb(32,32,32)" });
     expect(paint("railway_transit")).toEqual({ "line-color": "#232323" });
     expect(themed.sources).toEqual(base.sources);
     expect(themed.glyphs).toBe(base.glyphs);

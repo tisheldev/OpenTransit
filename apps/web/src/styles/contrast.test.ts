@@ -33,6 +33,9 @@ const TEXT: Pair[] = [
   ["brand-strong", "brand-tint"],
   ["on-brand", "brand"],
   ["on-brand", "brand-strong"],
+  // The main button (look of 11 November 2026: never white).
+  ["on-action", "action"],
+  ["on-action", "action-pressed"],
   ["on-brand", "destination"],
   ["on-brand", "mode-bus"],
   ["on-brand", "mode-rail"],

@@ -5,7 +5,7 @@
 .ot { font-family: var(--font-sans); color: var(--ink); -webkit-font-smoothing: antialiased; -webkit-tap-highlight-color: transparent; }
 .ot button { font: inherit; color: inherit; }
 .ot :focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
-.ot .num, .ot time { font-variant-numeric: tabular-nums; }
+.ot .num, .ot time { font-family: var(--font-numerals); font-variant-numeric: tabular-nums; }
 .ot-stage { background: var(--bg); padding: var(--space-4); display: flex; flex-direction: column; gap: var(--space-3); min-height: 100%; }
 .ot-stage--row { flex-direction: row; flex-wrap: wrap; align-items: center; }
 .ot-note { font-size: 12px; line-height: 16px; color: var(--ink-muted); margin: 0; }
@@ -19,11 +19,11 @@
 /* Button */
 .ot-btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2); min-height: var(--tap-min); padding: 0 var(--space-4); border-radius: var(--radius-md); border: 1.5px solid transparent; background: transparent; font-size: 14px; line-height: 18px; font-weight: 650; cursor: pointer; text-decoration: none; white-space: nowrap; transition: background-color 120ms ease, transform 120ms ease; }
 .ot-btn:active { transform: scale(.98); }
-.ot-btn--primary { background: var(--brand); color: var(--on-brand); min-height: var(--tap-primary); font-size: 16px; padding: 0 var(--space-5); }
-.ot-btn--primary:active { background: var(--brand-strong); }
+.ot-btn--primary { background: var(--action); color: var(--on-action); min-height: var(--tap-primary); font-size: 16px; padding: 0 var(--space-5); }
+.ot-btn--primary:active { background: var(--action-pressed); }
 .ot-btn--secondary { background: var(--surface); color: var(--ink); border-color: var(--border-strong); }
 .ot-btn--secondary:active, .ot-btn--ghost:active { background: var(--surface-pressed); }
-.ot-btn--ghost { color: var(--link); padding: 0 var(--space-3); }
+.ot-btn--ghost { color: var(--link); padding: 0 var(--space-3); text-decoration: underline; text-underline-offset: 4px; }
 .ot-btn--icon { width: var(--tap-min); padding: 0; border-radius: var(--radius-pill); background: var(--surface); color: var(--ink); box-shadow: var(--shadow-float); }
 .ot-btn--block { display: flex; width: 100%; }
 .ot-btn[disabled] { opacity: .55; cursor: default; }
@@ -60,15 +60,18 @@
 .ot-row__title { display: block; font-size: 16px; line-height: 22px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .ot-row__sub { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-1) var(--space-2); font-size: 14px; line-height: 20px; color: var(--ink-muted); }
 .ot-row__end { flex: none; display: flex; flex-direction: column; align-items: flex-end; gap: 2px; font-size: 14px; color: var(--ink-muted); font-variant-numeric: tabular-nums; }
-.ot-row__action { flex: none; display: inline-flex; align-items: center; gap: var(--space-1); min-height: 36px; padding: 0 var(--space-3); border-radius: var(--radius-pill); background: var(--brand); color: var(--on-brand); font-size: 14px; font-weight: 650; border: 0; }
+.ot-row__action { flex: none; display: inline-flex; align-items: center; gap: var(--space-1); min-height: 36px; padding: 0 var(--space-3); border-radius: var(--radius-md); background: var(--action); color: var(--on-action); font-size: 14px; font-weight: 650; border: 0; }
 mark.ot-hl { background: none; color: inherit; font-weight: 750; }
 
-/* Line badge. GTFS route_color overrides via style="--line-bg:#…; --line-ink:#…" */
-.ot-line { display: inline-flex; align-items: center; justify-content: center; gap: 3px; flex: none; min-width: 34px; height: var(--badge-height); padding: 0 7px; border-radius: var(--radius-sm); background: var(--line-bg, var(--mode-bus)); color: var(--line-ink, var(--on-brand)); font-size: 15px; line-height: 18px; font-weight: 750; font-variant-numeric: tabular-nums; white-space: nowrap; }
-.ot-line .ot-i { width: 15px; height: 15px; }
+/* Line badge in its operator's colour (src/lib/lines.ts) via style="--line-bg:#…; --line-ink:#…",
+   with a solid vehicle icon; signage numerals (look of 11 November 2026). */
+.ot-line { display: inline-flex; align-items: center; justify-content: center; gap: 3px; flex: none; min-width: 34px; height: var(--badge-height); padding-inline: 5px 6px; border-radius: 5px; background: var(--line-bg, var(--mode-bus)); color: var(--line-ink, var(--on-brand)); font-family: var(--font-numerals); font-size: 15px; line-height: 1; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ot-line .ot-i, .ot-line .ot-vehicle { width: 14px; height: 14px; flex: none; }
+.ot-line bdi:not(.num) { font-family: var(--font-sans); font-size: 12px; font-weight: 600; }
 .ot-line--rail { --line-bg: var(--mode-rail); }
 .ot-line--walk { background: transparent; color: var(--mode-walk); padding: 0 2px; min-width: 0; font-size: 14px; font-weight: 650; }
-.ot-line--lg { height: 32px; min-width: 42px; font-size: 18px; border-radius: var(--radius-md); }
+.ot-line--lg { height: 32px; min-width: 42px; font-size: 18px; border-radius: 6px; }
+.ot-line--lg .ot-i, .ot-line--lg .ot-vehicle { width: 18px; height: 18px; }
 .ot-legs { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-1); }
 .ot-legs > .ot-sep { color: var(--ink-subtle); width: 14px; height: 14px; }
 

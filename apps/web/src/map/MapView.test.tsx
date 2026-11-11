@@ -234,6 +234,7 @@ describe("MapView", () => {
       "ot-route-casing",
       "ot-route-walk",
       "ot-route-transit",
+      "ot-route-train",
       "ot-pins",
       "ot-destination",
       "ot-user-halo",
@@ -300,7 +301,7 @@ describe("MapView", () => {
     const light = THEME_COLORS.light;
     expect(backgroundOf(map)).toBe(light["map-land"]);
     expect(JSON.stringify(paintOf(map, "ot-route-transit")["line-color"])).toContain(light["mode-bus"]);
-    expect(paintOf(map, "ot-route-casing")["line-color"]).toBe(light["map-land"]);
+    expect(JSON.stringify(paintOf(map, "ot-route-casing")["line-color"])).toContain(light["map-casing"]);
     expect(paintOf(map, "ot-user")["circle-color"]).toBe(light.brand);
     // Scene: still drawn, the same features; camera: not moved; inset: unchanged.
     expect(map.getSource("ot-route")!.data).toEqual(drawn);

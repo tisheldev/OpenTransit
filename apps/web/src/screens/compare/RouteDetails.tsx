@@ -1,10 +1,11 @@
-import { Fragment, type ReactNode } from "react";
+import { Fragment, type CSSProperties, type ReactNode } from "react";
 import type { Trip } from "../../api/schemas";
 import type { Journey, Leg } from "../../api/types";
 import { Icon, LineBadge } from "../../components/ds";
 import { Bdi } from "../../components/states";
 import { useI18n } from "../../i18n/I18nProvider";
 import { formatDistance, formatDuration } from "../../lib/format";
+import { operatorColour } from "../../lib/lines";
 import { formatClock } from "../../lib/time";
 import { isRail, type TransitMode } from "../../plan/chartLayout";
 import { isWalkOnly, type RankLabel } from "../../plan/rank";
@@ -70,6 +71,17 @@ function badgeOf(leg: Leg, mode: TransitMode, train: string): { mode: "bus" | "r
   return { mode: "rail", label: chipLabel(leg) ?? train };
 }
 
+/** The leg's mode and operator, for the badge's vehicle icon and colour. */
+function rideLine(leg: Leg) {
+  return { mode: leg.mode, operatorId: leg.transit?.operatorId, operatorName: leg.transit?.operatorName };
+}
+
+/** A boarding stop's ring in the line's operator colour (light map shade, readable in both themes). */
+function stopDotStyle(leg: Leg): CSSProperties | undefined {
+  const colour = operatorColour(rideLine(leg));
+  return colour ? { borderColor: colour.badge.bg } : undefined;
+}
+
 function RideStep({
   step,
   trip,
@@ -95,7 +107,7 @@ function RideStep({
       <div className="ot-steps__row">
         <StepTime instant={step.time} startDate={startDate} />
         <span className="ot-steps__icon" aria-hidden="true">
-          <LineBadge mode={badge.mode} label={badge.label} />
+          <LineBadge mode={badge.mode} label={badge.label} line={rideLine(leg)} />
         </span>
         <span className="ot-steps__text">
           <span className="visually-hidden">{rideSpeech(leg, ends, t)}. </span>
@@ -118,7 +130,7 @@ function RideStep({
         <div className="ot-steps__row compare-exit">
           <StepTime instant={step.exit.time} startDate={startDate} />
           <span className="ot-steps__icon" aria-hidden="true">
-            <span className={`compare-stopdot compare-stopdot--${badge.mode}`} />
+            <span className={`compare-stopdot compare-stopdot--${badge.mode}`} style={stopDotStyle(leg)} />
           </span>
           <span className="ot-steps__text compare-place">
             {t("route.role.exit")} · <bdi>{step.exit.name}</bdi>
