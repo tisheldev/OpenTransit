@@ -78,7 +78,7 @@ test("first launch (Hebrew): the search field, Home and Work to set, the nearest
   await expect(page.getByText("זמנים לפי לוח הזמנים")).toBeAttached();
   await expect(page.getByText("נתוני בדיקה — לא לוח הזמנים האמיתי")).toBeVisible();
   // The stops are pins on the map, the selected one carrying its next departure.
-  await expect(page.getByRole("button", { name: `פתיחת התחנה ${nearest}` })).toBeAttached({ timeout: MAP_READY_MS });
+  await expect(page.getByRole("button", { name: `פתיחת התחנה ${nearest}, קו 172 בעוד 2 דק׳` })).toBeAttached({ timeout: MAP_READY_MS });
   await expect(page.getByRole("button", { name: "172 2 דק׳", exact: true })).toBeVisible({ timeout: MAP_READY_MS });
   expect(prompted).toBe(false);
   await expectNoSeriousAxeViolations(page, "Home, first launch (he)");
@@ -109,7 +109,7 @@ test("with saved places (English): a card goes straight to Compare", async ({ pa
   expect(page.url()).not.toContain("32.07");
 });
 
-test("location allowed: the stop's distance; a pin switches the board, the selected pin opens its stop (axe)", async ({ page }) => {
+test("location allowed: the stop's distance; one tap on a pin opens its stop (axe)", async ({ page }) => {
   await allowLocation(page);
   await page.goto(appPath("#/"));
   const head = page.locator(".home-stop .b-head");
@@ -118,10 +118,7 @@ test("location allowed: the stop's distance; a pin switches the board, the selec
   await expectNoSeriousAxeViolations(page, "Home, location allowed (he)");
 
   // Pins sit close together and under tags: use the keyboard, as a screen reader would.
-  await page.getByRole("button", { name: /^תחנה דיזנגוף סנטר\/טשרניחובסקי, קו 66 בעוד \d+ דק׳$/ }).press("Enter");
-  await expect(page.getByRole("heading", { level: 2, name: "דיזנגוף סנטר/טשרניחובסקי" })).toBeVisible();
-  await expect(stopSection(page).getByRole("button").first()).toContainText("66");
-  await page.getByRole("button", { name: "פתיחת התחנה דיזנגוף סנטר/טשרניחובסקי" }).press("Enter");
+  await page.getByRole("button", { name: /^פתיחת התחנה דיזנגוף סנטר\/טשרניחובסקי, קו 66 בעוד \d+ דק׳$/ }).press("Enter");
   await expect(page).toHaveURL(/#\/stop\/mot%3Astop%3A13560$/);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("דיזנגוף סנטר/טשרניחובסקי");
 });

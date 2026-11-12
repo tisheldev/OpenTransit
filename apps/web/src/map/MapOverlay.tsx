@@ -95,7 +95,7 @@ function StopPin({ pin }: { pin: MapStopPin }) {
   const className = `map-stop${pin.selected ? " map-stop--selected" : ""}`;
   if (pin.onSelect) {
     return (
-      <button type="button" className={className} aria-label={pin.ariaLabel} aria-pressed={pin.selected ?? false} onClick={pin.onSelect}>
+      <button type="button" className={className} aria-label={pin.ariaLabel} onClick={pin.onSelect}>
         <StopSign />
       </button>
     );
