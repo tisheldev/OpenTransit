@@ -143,6 +143,7 @@ def test_schema_2_reference_loads_searches_and_verifies_by_its_own_version(schem
     assert results
     # Ordinary reads are unaffected.
     assert store.stop("station")["name"]
+    assert "mode" in store.stops_near(32.08, 34.78, radius_m=500)["items"][0]
 
 
 def test_schema_2_identity_equals_the_schema_3_identity_of_a_build_without_localities(tmp_path):

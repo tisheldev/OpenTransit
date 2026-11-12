@@ -205,6 +205,21 @@ def test_nearby_and_bbox_pagination_are_bound_to_generation_and_query(reference)
     assert len(rest["items"]) == 2
 
 
+def test_listed_stops_carry_mode_and_direction(reference):
+    database, _ = reference
+    store = ReferenceStore(database)
+    items = {i["source_id"]: i for i in store.stops_in_bbox(32.07, 34.77, 32.09, 34.79)["items"]}
+    assert items["platform_b"]["mode"] == "bus"
+    assert items["platform_b"]["bearing_degrees"] == pytest.approx(220.3, abs=0.2)
+    assert items["platform_b"]["bearing_source"] == "next_stop"
+    assert items["platform_a"]["bearing_degrees"] is None
+    near = store.stops_near(32.08, 34.78, radius_m=500)["items"]
+    assert all({"mode", "bearing_degrees", "bearing_source"} <= set(i) for i in near)
+    detail = store.stop("platform_b")
+    assert detail["bearing_source"] == "next_stop"
+    assert detail["parent"]["mode"] == "bus"
+
+
 def test_route_filters_and_cursor_pagination(reference):
     database, _ = reference
     store = ReferenceStore(database)

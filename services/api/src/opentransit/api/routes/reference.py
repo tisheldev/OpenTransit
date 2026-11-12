@@ -42,6 +42,8 @@ def _public(value):
         "serves_stop": "servesStop",
         "stop_index": "stopIndex",
         "geometry_source": "geometrySource",
+        "bearing_degrees": "bearingDegrees",
+        "bearing_source": "bearingSource",
     }
     if isinstance(value, dict):
         return {names.get(key, key): _public(item) for key, item in value.items()}
