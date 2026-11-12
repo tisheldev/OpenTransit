@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import math
-from collections.abc import Iterable, Sequence
+import sqlite3
+from collections import defaultdict
+from collections.abc import Callable, Iterable, Sequence
 from dataclasses import dataclass
 
 MIN_BEARING_AGREEMENT = 0.8
@@ -68,3 +70,66 @@ def mean_bearing(
     if math.hypot(east, north) / len(bearings) < min_agreement:
         return None
     return round(math.degrees(math.atan2(east, north)), 1) % 360.0
+
+
+def load_stop_facets(
+    connection: sqlite3.Connection, mode_of: Callable[[int | None], str]
+) -> dict[str, StopFacets]:
+    """Mode and direction of travel for every row of ``stops``, keyed by ``stop_id``.
+
+    Columns are read by position, so the connection's ``row_factory`` does not matter.
+    ``mode_of`` maps a GTFS ``route_type`` to a mode string (``route_type_mode``).
+    """
+    positions: dict[str, tuple[float | None, float | None]] = {}
+    children: dict[str, list[str]] = defaultdict(list)
+    for stop_id, latitude, longitude, parent_station in connection.execute(
+        "SELECT stop_id, latitude, longitude, parent_station FROM stops"
+    ):
+        positions[stop_id] = (latitude, longitude)
+        if parent_station is not None:
+            children[parent_station].append(stop_id)
+
+    route_modes = {
+        route_id: mode_of(route_type)
+        for route_id, route_type in connection.execute("SELECT route_id, route_type FROM routes")
+    }
+    unknown_route_mode = mode_of(None)
+    stop_modes: dict[str, set[str]] = defaultdict(set)
+    for route_id, stop_id in connection.execute("SELECT route_id, stop_id FROM route_stops"):
+        stop_modes[stop_id].add(route_modes.get(route_id, unknown_route_mode))
+
+    leaving: dict[str, list[float]] = defaultdict(list)
+    arriving: dict[str, list[float]] = defaultdict(list)
+    previous_pattern = previous_stop = None
+    for pattern_id, stop_id in connection.execute(
+        "SELECT pattern_id, stop_id FROM pattern_stops ORDER BY pattern_id, sequence"
+    ):
+        if pattern_id == previous_pattern and stop_id != previous_stop:
+            bearing = _bearing_between(positions.get(previous_stop), positions.get(stop_id))
+            if bearing is not None:
+                leaving[previous_stop].append(bearing)
+                arriving[stop_id].append(bearing)
+        previous_pattern, previous_stop = pattern_id, stop_id
+
+    facets: dict[str, StopFacets] = {}
+    for stop_id in positions:
+        modes = stop_modes.get(stop_id)
+        if not modes:
+            modes = set().union(*(stop_modes.get(child, ()) for child in children.get(stop_id, ())))
+        if leaving.get(stop_id):
+            bearing, source = mean_bearing(leaving[stop_id]), "next_stop"
+        else:
+            bearing, source = mean_bearing(arriving.get(stop_id, ())), "previous_stop"
+        facets[stop_id] = StopFacets(
+            dominant_mode(modes), bearing, source if bearing is not None else None
+        )
+    return facets
+
+
+def _bearing_between(
+    origin: tuple[float | None, float | None] | None,
+    destination: tuple[float | None, float | None] | None,
+) -> float | None:
+    if origin is None or destination is None or None in origin or None in destination:
+        return None
+    return initial_bearing(*origin, *destination)
