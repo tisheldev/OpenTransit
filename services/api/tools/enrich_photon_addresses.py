@@ -510,7 +510,7 @@ def _house_record(
         not isinstance(tags, dict)
         or not isinstance(address, dict)
         or not _valid_lon_lat(centroid)
-        or target.get("object_type") != "N"
+        or target.get("object_type") not in {"N", "W"}  # address node or building outline
         or target.get("address_type") != "house"
     ):
         raise ValueError("Input house record does not match the frozen Photon house schema")
@@ -575,7 +575,8 @@ def _house_record(
     linkage = None
     if locality is not None or street_ids or conflicts or added:
         linkage = {
-            "sourceHouseNodeId": house_id,
+            "sourceHouseOsmType": target["object_type"],
+            "sourceHouseId": house_id,
             "localitySourceIds": (
                 [{"osmType": locality.osm_type, "osmId": locality.osm_id}] if locality else []
             ),
@@ -723,7 +724,8 @@ def transform_dump(
                             if len(ambiguity_examples) < 200:
                                 ambiguity_examples.append(
                                     {
-                                        "sourceHouseNodeId": str(place["object_id"]),
+                                        "sourceHouseOsmType": str(place["object_type"]),
+                                        "sourceHouseId": str(place["object_id"]),
                                         "localityStatus": locality_status,
                                     }
                                 )

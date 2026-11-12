@@ -1,0 +1,732 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-11-12",
+  "task": "SEARCH-REL",
+  "scope": "Mechanical before/after comparison of /v1/places on one live local stack. Not an H4 verdict and not a full acceptance run; no timings were taken.",
+  "trigger": "User report, 12 November: on a phone, the query for a street address in Herzliya (street, house number 13, city) listed a stop on another street first and loosely related stops in every other place.",
+  "method": {
+    "generation": "nov11a (C:/ot/generations/nov11a), stack ot-acc-boards1-* (MOTIS, Photon)",
+    "generationId": "fc11ddbc27cecc78f749d06d9643e2dd9bc6d25b1a755c5548217f103dd58cfb",
+    "old": "API container of that stack, source a44bd38 (PR #35 branch; places ranking identical to main 170dd97)",
+    "new": "A second API process in the same network namespace running this branch's source (main 170dd97 plus the SEARCH-REL changes), same MOTIS and Photon",
+    "scoring": "tools/evaluate_search.py load_cases, request_params and score_response over the frozen corpora (183 variants), each case sent to both processes",
+    "modes": {
+      "corpus-types": "Each case asks only for its category's result types, as the H4 evaluation does",
+      "all-types": "Every case asks for stops, stations, places and addresses together, as the web client does"
+    }
+  },
+  "corporaSha256": {
+    "places.json": "ffddc758d03f5acc8dc5e97d697b31400e4bbb8d4d8c44b9c3d1280356530cf8",
+    "places-venues.json": "e9356230c11145f5c954b04356d454eae43857e3984e407b837f931c1c81c58b",
+    "m4-api-search-language-variants-20260930.json": "f4e8f6f66276a56a2ec1b31d64c228a96f9e0f0a396898f2beff59db47f3b233"
+  },
+  "results": {
+    "corpus-types": {
+      "old": {
+        "top1": 147,
+        "top5": 165
+      },
+      "new": {
+        "top1": 147,
+        "top5": 165
+      },
+      "byCategory": {
+        "address": {
+          "total": 22,
+          "old": {
+            "top1": 16,
+            "top5": 16
+          },
+          "new": {
+            "top1": 16,
+            "top5": 16
+          }
+        },
+        "misspelling": {
+          "total": 10,
+          "old": {
+            "top1": 7,
+            "top5": 9
+          },
+          "new": {
+            "top1": 7,
+            "top5": 9
+          }
+        },
+        "near_dependent": {
+          "total": 6,
+          "old": {
+            "top1": 4,
+            "top5": 5
+          },
+          "new": {
+            "top1": 4,
+            "top5": 5
+          }
+        },
+        "neighborhood": {
+          "total": 10,
+          "old": {
+            "top1": 7,
+            "top5": 10
+          },
+          "new": {
+            "top1": 7,
+            "top5": 10
+          }
+        },
+        "poi_hospital": {
+          "total": 5,
+          "old": {
+            "top1": 4,
+            "top5": 4
+          },
+          "new": {
+            "top1": 4,
+            "top5": 4
+          }
+        },
+        "poi_landmark": {
+          "total": 12,
+          "old": {
+            "top1": 9,
+            "top5": 11
+          },
+          "new": {
+            "top1": 9,
+            "top5": 11
+          }
+        },
+        "poi_mall": {
+          "total": 4,
+          "old": {
+            "top1": 4,
+            "top5": 4
+          },
+          "new": {
+            "top1": 4,
+            "top5": 4
+          }
+        },
+        "poi_university": {
+          "total": 9,
+          "old": {
+            "top1": 7,
+            "top5": 8
+          },
+          "new": {
+            "top1": 7,
+            "top5": 8
+          }
+        },
+        "station": {
+          "total": 20,
+          "old": {
+            "top1": 20,
+            "top5": 20
+          },
+          "new": {
+            "top1": 20,
+            "top5": 20
+          }
+        },
+        "translated_stop": {
+          "total": 2,
+          "old": {
+            "top1": 1,
+            "top5": 2
+          },
+          "new": {
+            "top1": 1,
+            "top5": 2
+          }
+        },
+        "translit": {
+          "total": 9,
+          "old": {
+            "top1": 9,
+            "top5": 9
+          },
+          "new": {
+            "top1": 9,
+            "top5": 9
+          }
+        },
+        "venue": {
+          "total": 74,
+          "old": {
+            "top1": 59,
+            "top5": 67
+          },
+          "new": {
+            "top1": 59,
+            "top5": 67
+          }
+        }
+      },
+      "changed": [
+        {
+          "id": "P085",
+          "query": "Machne Yehuda",
+          "category": "misspelling",
+          "oldTop1": false,
+          "oldRank": 5,
+          "newTop1": false,
+          "newRank": 2
+        }
+      ]
+    },
+    "all-types": {
+      "old": {
+        "top1": 107,
+        "top5": 148
+      },
+      "new": {
+        "top1": 131,
+        "top5": 162
+      },
+      "byCategory": {
+        "address": {
+          "total": 22,
+          "old": {
+            "top1": 10,
+            "top5": 19
+          },
+          "new": {
+            "top1": 16,
+            "top5": 19
+          }
+        },
+        "misspelling": {
+          "total": 10,
+          "old": {
+            "top1": 7,
+            "top5": 9
+          },
+          "new": {
+            "top1": 7,
+            "top5": 9
+          }
+        },
+        "near_dependent": {
+          "total": 6,
+          "old": {
+            "top1": 4,
+            "top5": 5
+          },
+          "new": {
+            "top1": 4,
+            "top5": 5
+          }
+        },
+        "neighborhood": {
+          "total": 10,
+          "old": {
+            "top1": 2,
+            "top5": 7
+          },
+          "new": {
+            "top1": 5,
+            "top5": 10
+          }
+        },
+        "poi_hospital": {
+          "total": 5,
+          "old": {
+            "top1": 3,
+            "top5": 3
+          },
+          "new": {
+            "top1": 3,
+            "top5": 3
+          }
+        },
+        "poi_landmark": {
+          "total": 12,
+          "old": {
+            "top1": 8,
+            "top5": 10
+          },
+          "new": {
+            "top1": 10,
+            "top5": 11
+          }
+        },
+        "poi_mall": {
+          "total": 4,
+          "old": {
+            "top1": 4,
+            "top5": 4
+          },
+          "new": {
+            "top1": 4,
+            "top5": 4
+          }
+        },
+        "poi_university": {
+          "total": 9,
+          "old": {
+            "top1": 7,
+            "top5": 9
+          },
+          "new": {
+            "top1": 7,
+            "top5": 9
+          }
+        },
+        "station": {
+          "total": 20,
+          "old": {
+            "top1": 20,
+            "top5": 20
+          },
+          "new": {
+            "top1": 19,
+            "top5": 20
+          }
+        },
+        "translated_stop": {
+          "total": 2,
+          "old": {
+            "top1": 1,
+            "top5": 2
+          },
+          "new": {
+            "top1": 1,
+            "top5": 2
+          }
+        },
+        "translit": {
+          "total": 9,
+          "old": {
+            "top1": 9,
+            "top5": 9
+          },
+          "new": {
+            "top1": 9,
+            "top5": 9
+          }
+        },
+        "venue": {
+          "total": 74,
+          "old": {
+            "top1": 32,
+            "top5": 51
+          },
+          "new": {
+            "top1": 46,
+            "top5": 61
+          }
+        }
+      },
+      "changed": [
+        {
+          "id": "P020",
+          "query": "Petah Tikva Kiryat Arye",
+          "category": "station",
+          "oldTop1": true,
+          "oldRank": 1,
+          "newTop1": false,
+          "newRank": 2
+        },
+        {
+          "id": "P023",
+          "query": "Tel Aviv University",
+          "category": "poi_university",
+          "oldTop1": false,
+          "oldRank": 5,
+          "newTop1": false,
+          "newRank": 2
+        },
+        {
+          "id": "P042",
+          "query": "Jaffa Clock Tower",
+          "category": "poi_landmark",
+          "oldTop1": false,
+          "oldRank": 2,
+          "newTop1": true,
+          "newRank": 1
+        },
+        {
+          "id": "P043",
+          "query": "מגדל השעון יפו",
+          "category": "poi_landmark",
+          "oldTop1": false,
+          "oldRank": null,
+          "newTop1": true,
+          "newRank": 1
+        },
+        {
+          "id": "P051",
+          "query": "Dizengoff 100 Tel Aviv",
+          "category": "address",
+          "oldTop1": false,
+          "oldRank": 2,
+          "newTop1": true,
+          "newRank": 1
+        },
+        {
+          "id": "P052",
+          "query": "דיזנגוף 100 תל אביב",
+          "category": "address",
+          "oldTop1": false,
+          "oldRank": 2,
+          "newTop1": true,
+          "newRank": 1
+        },
+        {
+          "id": "P053",
+          "query": "Rothschild Boulevard 1 Tel Aviv",
+          "category": "address",
+          "oldTop1": false,
+          "oldRank": 2,
+          "newTop1": true,
+          "newRank": 1
+        },
+        {
+          "id": "P054",
+          "query": "שדרות רוטשילד 1 תל אביב",
+          "category": "address",
+          "oldTop1": false,
+          "oldRank": 2,
+          "newTop1": true,
+          "newRank": 1
+        },
+        {
+          "id": "P057",
+          "query": "יפו 97 ירושלים",
+          "category": "address",
+          "oldTop1": false,
+          "oldRank": 2,
+          "newTop1": true,
+          "newRank": 1
+        },
+        {
+          "id": "P062",
+          "query": "HaNevi'im 20 Jerusalem",
+          "category": "address",
+          "oldTop1": false,
+          "oldRank": 3,
+          "newTop1": false,
+          "newRank": 2
+        },
+        {
+          "id": "P065",
+          "query": "הרצל 50 חיפה",
+          "category": "address",
+          "oldTop1": true,
+          "oldRank": 1,
+          "newTop1": false,
+          "newRank": 2
+        },
+        {
+          "id": "P070",
+          "query": "Rehavia",
+          "category": "neighborhood",
+          "oldTop1": false,
+          "oldRank": null,
+          "newTop1": false,
+          "newRank": 2
+        },
+        {
+          "id": "P072",
+          "query": "Hadar HaCarmel",
+          "category": "neighborhood",
+          "oldTop1": false,
+          "oldRank": 3,
+          "newTop1": true,
+          "newRank": 1
+        },
+        {
+          "id": "P074",
+          "query": "Old City Jerusalem",
+          "category": "neighborhood",
+          "oldTop1": false,
+          "oldRank": null,
+          "newTop1": true,
+          "newRank": 1
+        },
+        {
+          "id": "P075",
+          "query": "העיר העתיקה ירושלים",
+          "category": "neighborhood",
+          "oldTop1": false,
+          "oldRank": null,
+          "newTop1": true,
+          "newRank": 1
+        },
+        {
+          "id": "P085",
+          "query": "Machne Yehuda",
+          "category": "misspelling",
+          "oldTop1": false,
+          "oldRank": 5,
+          "newTop1": false,
+          "newRank": 2
+        },
+        {
+          "id": "V005",
+          "query": "HaShdera",
+          "category": "venue",
+          "oldTop1": false,
+          "oldRank": null,
+          "newTop1": false,
+          "newRank": 2
+        },
+        {
+          "id": "V010",
+          "query": "בית קפה הפינה",
+          "category": "venue",
+          "oldTop1": false,
+          "oldRank": 2,
+          "newTop1": true,
+          "newRank": 1
+        },
+        {
+          "id": "V011",
+          "query": "דדה",
+          "category": "venue",
+          "oldTop1": false,
+          "oldRank": null,
+          "newTop1": false,
+          "newRank": 2
+        },
+        {
+          "id": "V012",
+          "query": "דה לה פה",
+          "category": "venue",
+          "oldTop1": false,
+          "oldRank": 3,
+          "newTop1": true,
+          "newRank": 1
+        },
+        {
+          "id": "V014",
+          "query": "Cafeneto",
+          "category": "venue",
+          "oldTop1": false,
+          "oldRank": 2,
+          "newTop1": true,
+          "newRank": 1
+        },
+        {
+          "id": "V027",
+          "query": "דלי קרים",
+          "category": "venue",
+          "oldTop1": false,
+          "oldRank": 3,
+          "newTop1": false,
+          "newRank": 2
+        },
+        {
+          "id": "V028",
+          "query": "מוסלין",
+          "category": "venue",
+          "oldTop1": false,
+          "oldRank": null,
+          "newTop1": true,
+          "newRank": 1
+        },
+        {
+          "id": "V031",
+          "query": "studio B",
+          "category": "venue",
+          "oldTop1": false,
+          "oldRank": null,
+          "newTop1": true,
+          "newRank": 1
+        },
+        {
+          "id": "V034",
+          "query": "רודיאו",
+          "category": "venue",
+          "oldTop1": false,
+          "oldRank": 2,
+          "newTop1": true,
+          "newRank": 1
+        },
+        {
+          "id": "V037",
+          "query": "בית הפנקייק המקורי",
+          "category": "venue",
+          "oldTop1": false,
+          "oldRank": 3,
+          "newTop1": false,
+          "newRank": 2
+        },
+        {
+          "id": "V038",
+          "query": "הלב הרחב",
+          "category": "venue",
+          "oldTop1": false,
+          "oldRank": null,
+          "newTop1": true,
+          "newRank": 1
+        },
+        {
+          "id": "V039",
+          "query": "לנדוור",
+          "category": "venue",
+          "oldTop1": false,
+          "oldRank": 5,
+          "newTop1": false,
+          "newRank": 3
+        },
+        {
+          "id": "V043",
+          "query": "Alibi",
+          "category": "venue",
+          "oldTop1": false,
+          "oldRank": null,
+          "newTop1": false,
+          "newRank": 2
+        },
+        {
+          "id": "V045",
+          "query": "Nafoura",
+          "category": "venue",
+          "oldTop1": false,
+          "oldRank": 2,
+          "newTop1": true,
+          "newRank": 1
+        },
+        {
+          "id": "V048",
+          "query": "الرضا",
+          "category": "venue",
+          "oldTop1": false,
+          "oldRank": null,
+          "newTop1": true,
+          "newRank": 1
+        },
+        {
+          "id": "V007:alt_query_he",
+          "query": "סאצ'מו",
+          "category": "venue",
+          "oldTop1": false,
+          "oldRank": 2,
+          "newTop1": true,
+          "newRank": 1
+        },
+        {
+          "id": "V011:alt_query_en",
+          "query": "Dede",
+          "category": "venue",
+          "oldTop1": false,
+          "oldRank": 3,
+          "newTop1": false,
+          "newRank": 2
+        },
+        {
+          "id": "V012:alt_query_en",
+          "query": "de la Paix",
+          "category": "venue",
+          "oldTop1": false,
+          "oldRank": null,
+          "newTop1": true,
+          "newRank": 1
+        },
+        {
+          "id": "V022:alt_query_en",
+          "query": "Red Meat",
+          "category": "venue",
+          "oldTop1": false,
+          "oldRank": 3,
+          "newTop1": true,
+          "newRank": 1
+        },
+        {
+          "id": "V038:alt_query_en",
+          "query": "Halev harahav",
+          "category": "venue",
+          "oldTop1": false,
+          "oldRank": null,
+          "newTop1": true,
+          "newRank": 1
+        },
+        {
+          "id": "V039:alt_query_en",
+          "query": "Landwer",
+          "category": "venue",
+          "oldTop1": false,
+          "oldRank": null,
+          "newTop1": false,
+          "newRank": 5
+        },
+        {
+          "id": "V046:alt_query_he",
+          "query": "אואזיס",
+          "category": "venue",
+          "oldTop1": false,
+          "oldRank": 3,
+          "newTop1": false,
+          "newRank": 2
+        },
+        {
+          "id": "V048:alt_query_en",
+          "query": "Al Reda",
+          "category": "venue",
+          "oldTop1": false,
+          "oldRank": 4,
+          "newTop1": true,
+          "newRank": 1
+        },
+        {
+          "id": "OSM-ADDR-HE-001",
+          "query": "י.ל. גורדון 24 תל אביב",
+          "category": "address",
+          "oldTop1": false,
+          "oldRank": 2,
+          "newTop1": true,
+          "newRank": 1
+        },
+        {
+          "id": "OSM-ADDR-EN-006",
+          "query": "5 Nahal Gila",
+          "category": "address",
+          "oldTop1": false,
+          "oldRank": 2,
+          "newTop1": true,
+          "newRank": 1
+        }
+      ]
+    }
+  },
+  "rootCauses": [
+    "The endpoint alternated the stop list and the geocoder list by position with no relevance check, stop first.",
+    "With no full match the stop search falls back to stops sharing any two query words; a house number and a city were enough, and '5' counted as found in '55'.",
+    "The feed's abbreviation for central bus stations was expanded only to the construct form, so the spoken form found only stops that spell it out."
+  ],
+  "openFinding": {
+    "summary": "The address index holds only house numbers mapped as OSM nodes. Numbers mapped on building outlines (ways) are not indexed.",
+    "pbf": "C:/ot/src/snapshots/20261111T123753Z-9d2a2f89/israel-and-palestine-latest.osm.pbf",
+    "counts": {
+      "nodesWithHouseNumberAndStreet": 126234,
+      "waysWithHouseNumberAndStreet": 43466,
+      "relationsWithHouseNumberAndStreet": 63,
+      "interpolationWays": 416,
+      "herzliyaBoundingBox": {
+        "box": [
+          32.14,
+          34.76,
+          32.2,
+          34.87
+        ],
+        "nodesWithHouseNumber": 383,
+        "waysWithHouseNumber": 1762
+      }
+    },
+    "reportedStreet": "No node or way in the Herzliya box carries a house number on the reported street, so the street itself is the best available answer there.",
+    "status": "Not fixed here: it changes the address build, the catalog and the precision contract, and needs a generation rebuild."
+  },
+  "limits": [
+    "One generation and one stack; scores are structural, not human judgements.",
+    "Two all-types cases lost first place: P020 (a neighbourhood place now precedes the rail station, rank 2) and P065 (the queried house address now precedes the stop nearest the corpus point, rank 2).",
+    "English address queries still receive mixed-script labels from Photon (English street, Hebrew city).",
+    "Not deployed: H-1 serves the previous ranking until a build-host run publishes a main commit that contains this change."
+  ],
+  "validation": {
+    "pytest": "1033 passed, 21 skipped",
+    "ruff": "check and format clean"
+  }
+}

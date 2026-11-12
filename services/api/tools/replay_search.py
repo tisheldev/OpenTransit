@@ -42,7 +42,7 @@ except ImportError:  # pragma: no cover - script execution
     sys.path.insert(0, str(Path(__file__).resolve().parent))
     from evaluate_search import SearchCase, load_cases, score_response
 
-from opentransit.api.routes.places import _merge_candidates
+from opentransit.place_ranking import merge_candidates
 from opentransit.reference import ReferenceStore
 from opentransit.stop_search import _distance_m, _search_index, search_stops
 
@@ -242,7 +242,13 @@ def replay_case(
     for item in stop_items:
         item["locationRef"] = {"kind": "stop", "stopId": item["id"]}
     payload = {
-        "data": _merge_candidates(stop_items, geocoder_items, API_LIMIT),
+        "data": merge_candidates(
+            case.query,
+            stop_items,
+            geocoder_items,
+            API_LIMIT,
+            stop_fallback=result.get("coverage_fallback"),
+        ),
         "matchedTypes": sorted(case.api_types),
         "unavailableTypes": [],
         "partial": False,

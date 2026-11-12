@@ -195,3 +195,66 @@ def test_near_bias_orders_full_token_matches_by_distance():
     assert result["items"][0]["id"] == STOP_PREFIX + "near_close"
     without_near = search_stops(reference, "Central Station", language="en")
     assert without_near["items"][0]["id"] == STOP_PREFIX + "near_far"
+
+
+def test_central_station_abbreviation_is_found_by_its_spoken_name():
+    # The feed writes "ת. מרכזית"; passengers type "תחנה מרכזית" (reported 12 November:
+    # the query found only the taxi stand, whose name spells the words out).
+    def stop(source_id, name):
+        row = _hub_rows()[0]
+        return {**row, "source_id": source_id, "stop_id": STOP_PREFIX + source_id, "name": name}
+
+    reference = _ReferenceFixture(
+        [
+            stop("taxi", "תחנת מוניות ירושלים תחנה מרכזית"),
+            stop("cbs_street", "ת. מרכזית ירושלים/יפו"),
+            stop("cbs_joined", "ת.מרכזית ירושלים קומה 3/רציפים"),
+            stop("rail", "ת. רכבת ירושלים"),
+        ]
+    )
+    result = search_stops(reference, "תחנה מרכזית ירושלים", language="he")
+    assert [item["id"] for item in result["items"]] == [
+        STOP_PREFIX + "cbs_street",
+        STOP_PREFIX + "cbs_joined",
+        STOP_PREFIX + "taxi",
+    ]
+    # The construct form the abbreviation already expanded to still works.
+    rail = search_stops(reference, "תחנת רכבת ירושלים", language="he")
+    assert [item["id"] for item in rail["items"]] == [STOP_PREFIX + "rail"]
+
+
+def test_result_says_when_stops_come_from_the_partial_coverage_fallback():
+    reference = _ReferenceFixture(_hub_rows())
+    assert search_stops(reference, "Central Station", language="en")["coverage_fallback"] is None
+    fallback = search_stops(reference, "Tel Aviv Savidor Center", language="en")
+    labels = fallback["coverage_fallback"][fallback["items"][0]["id"]]
+    assert "tel aviv savidor train stations" in labels["name"]
+    assert labels["context"] == ""
+
+
+def test_partial_coverage_prefers_the_street_name_to_a_number_and_matches_numbers_exactly():
+    def stop(source_id, name, description, routes):
+        row = _hub_rows()[0]
+        return {
+            **row,
+            "source_id": source_id,
+            "stop_id": STOP_PREFIX + source_id,
+            "name": name,
+            "description": description,
+            "translations": {},
+            "route_count": routes,
+        }
+
+    reference = _ReferenceFixture(
+        [
+            stop("road55", "כביש 55/דרך המוביל", "רחוב: 55 עיר: כפר סבא רציף:  קומה: ", 90),
+            stop("school", "בית ספר רמז", "רחוב: השיקמה 5 עיר: כפר סבא רציף:  קומה: ", 40),
+            stop("weizmann", "ויצמן/הרצל", "רחוב: ויצמן 30 עיר: כפר סבא רציף:  קומה: ", 3),
+        ]
+    )
+    result = search_stops(reference, "ויצמן 5 כפר סבא", language="he")
+    assert [item["id"] for item in result["items"]] == [
+        STOP_PREFIX + "weizmann",
+        STOP_PREFIX + "school",
+        STOP_PREFIX + "road55",
+    ]

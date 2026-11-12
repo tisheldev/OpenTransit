@@ -1,0 +1,95 @@
+{
+  "departAt": "2026-11-12T08:00:00+02:00",
+  "apiUrl": "http://127.0.0.1:8540",
+  "toleranceSeconds": 60,
+  "violationCount": 0,
+  "errors": 0,
+  "cases": [
+    {
+      "pair": "dizengoff-technion",
+      "capMinutes": 1,
+      "status": 200,
+      "outcome": "no_route",
+      "journeys": 0,
+      "violations": [],
+      "generationId": "fbab648bdbeace9e69e9c089bdeeffd86d32a516d34b8198a7f5a38f5923fb75",
+      "warnings": []
+    },
+    {
+      "pair": "dizengoff-technion",
+      "capMinutes": 5,
+      "status": 200,
+      "outcome": "routes_found",
+      "journeys": 5,
+      "violations": [],
+      "generationId": "fbab648bdbeace9e69e9c089bdeeffd86d32a516d34b8198a7f5a38f5923fb75",
+      "warnings": [
+        "TRANSFER_STREET_PATH_UNAVAILABLE"
+      ]
+    },
+    {
+      "pair": "dizengoff-technion",
+      "capMinutes": 15,
+      "status": 200,
+      "outcome": "routes_found",
+      "journeys": 5,
+      "violations": [],
+      "generationId": "fbab648bdbeace9e69e9c089bdeeffd86d32a516d34b8198a7f5a38f5923fb75",
+      "warnings": [
+        "TRANSFER_STREET_PATH_UNAVAILABLE"
+      ]
+    },
+    {
+      "pair": "dizengoff-technion",
+      "capMinutes": 30,
+      "status": 200,
+      "outcome": "routes_found",
+      "journeys": 5,
+      "violations": [],
+      "generationId": "fbab648bdbeace9e69e9c089bdeeffd86d32a516d34b8198a7f5a38f5923fb75",
+      "warnings": [
+        "TRANSFER_STREET_PATH_UNAVAILABLE"
+      ]
+    },
+    {
+      "pair": "dizengoff-rabin-square",
+      "capMinutes": 1,
+      "status": 200,
+      "outcome": "no_route",
+      "journeys": 0,
+      "violations": [],
+      "generationId": "fbab648bdbeace9e69e9c089bdeeffd86d32a516d34b8198a7f5a38f5923fb75",
+      "warnings": []
+    },
+    {
+      "pair": "dizengoff-rabin-square",
+      "capMinutes": 5,
+      "status": 200,
+      "outcome": "routes_found",
+      "journeys": 5,
+      "violations": [],
+      "generationId": "fbab648bdbeace9e69e9c089bdeeffd86d32a516d34b8198a7f5a38f5923fb75",
+      "warnings": []
+    },
+    {
+      "pair": "dizengoff-rabin-square",
+      "capMinutes": 15,
+      "status": 200,
+      "outcome": "routes_found",
+      "journeys": 5,
+      "violations": [],
+      "generationId": "fbab648bdbeace9e69e9c089bdeeffd86d32a516d34b8198a7f5a38f5923fb75",
+      "warnings": []
+    },
+    {
+      "pair": "dizengoff-rabin-square",
+      "capMinutes": 30,
+      "status": 200,
+      "outcome": "routes_found",
+      "journeys": 5,
+      "violations": [],
+      "generationId": "fbab648bdbeace9e69e9c089bdeeffd86d32a516d34b8198a7f5a38f5923fb75",
+      "warnings": []
+    }
+  ]
+}

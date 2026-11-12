@@ -80,7 +80,7 @@ def test_default_search_reports_disabled_geocoder_categories_as_partial(manifest
     assert body["matchedTypes"] == ["stop", "station"]
     assert body["unavailableTypes"] == ["poi", "address"]
     assert body["partial"] is True
-    assert body["rankingPolicy"] == "alternating-stop-and-geocoder-order-v1"
+    assert body["rankingPolicy"] == "query-coverage-tiers-v1"
 
 
 def test_geocoder_results_include_generation_bound_refs_and_merge_after_stop(

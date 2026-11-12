@@ -64,8 +64,14 @@ def _clean(value: str | None) -> str | None:
     return " ".join(value.split()) or None
 
 
-def house_record(node_id: int, lon: float, lat: float, tags: dict[str, str]) -> dict:
-    """One Photon 0.1.0 house place preserving the node ID, coordinates and addr:* tags."""
+def house_record(
+    object_type: str, object_id: int, lon: float, lat: float, tags: dict[str, str]
+) -> dict:
+    """One Photon 0.1.0 house place preserving the OSM identity, coordinates and addr:* tags.
+
+    ``object_type`` is ``N`` for an address node (its own coordinates) or ``W`` for a
+    building outline (the centre of its outline).
+    """
     address: dict[str, str] = {}
     for source_key, dump_key in (("addr:street", "street"), ("addr:city", "city")):
         value = tags.get(source_key)
@@ -77,9 +83,9 @@ def house_record(node_id: int, lon: float, lat: float, tags: dict[str, str]) -> 
                 address[f"{dump_key}:{language}"] = localized
     house_number = tags["addr:housenumber"]
     place = {
-        "place_id": f"N{node_id}",
-        "object_type": "N",
-        "object_id": int(node_id),
+        "place_id": f"{object_type}{object_id}",
+        "object_type": object_type,
+        "object_id": int(object_id),
         "osm_key": "addr:housenumber",
         "osm_value": house_number,
         "address_type": "house",
@@ -89,6 +95,31 @@ def house_record(node_id: int, lon: float, lat: float, tags: dict[str, str]) -> 
         "centroid": [lon, lat],
     }
     return {"type": "Place", "content": [place]}
+
+
+def _outline_centre(way: Any) -> tuple[float, float] | None:
+    """Mean of a way's distinct nodes (a closed outline repeats its first node at the end).
+
+    For a building this is within a few metres of any other centre definition, which is
+    all a routing origin or destination needs. ``None`` when a node has no coordinates.
+    """
+    points: list[tuple[float, float]] = []
+    try:
+        for node in way.nodes:
+            location = node.location
+            if not location.valid():
+                return None
+            points.append((float(location.lon), float(location.lat)))
+    except AttributeError, RuntimeError, ValueError, TypeError:
+        return None
+    if len(points) > 1 and points[0] == points[-1]:
+        points.pop()
+    if not points:
+        return None
+    return (
+        round(sum(point[0] for point in points) / len(points), 7),
+        round(sum(point[1] for point in points) / len(points), 7),
+    )
 
 
 def _new_output(path: Path):
@@ -103,17 +134,30 @@ def _new_output(path: Path):
 def export_house_dump(
     pbf_path: Path, output_path: Path, *, reader_path: Path | None = None, osmium: Any = None
 ) -> dict:
-    """Exclusive-create a Photon house dump of every node with addr:housenumber and addr:street."""
+    """Exclusive-create a Photon house dump of every addr:housenumber + addr:street object.
+
+    Address nodes are written at their own coordinates. Ways (mappers often put the address
+    on the building outline instead of a node) are written at the centre of their outline.
+    A way that is also a named highway is left out: the context scan writes it as a street
+    document under the same way identity. Relations and interpolation ways are not exported.
+    """
     osmium = osmium or load_osmium(reader_path)
     pbf = Path(pbf_path).resolve(strict=True)
     pbf_sha256 = sha256_file(pbf)
     started = datetime.now(UTC).isoformat()
     counts: Counter[str] = Counter()
+    skipped: Counter[str] = Counter()
 
     class Exporter(osmium.SimpleHandler):
         def __init__(self, target) -> None:
             super().__init__()
             self.target = target
+
+        def _write(self, record: dict, kind: str) -> None:
+            self.target.write(json.dumps(record, ensure_ascii=False, separators=(",", ":")))
+            self.target.write("\n")
+            counts["houseRecords"] += 1
+            counts[kind] += 1
 
         def node(self, node) -> None:
             tags = {tag.k: tag.v for tag in node.tags}
@@ -121,10 +165,21 @@ def export_house_dump(
                 return
             if not node.location.valid():
                 return
-            record = house_record(node.id, node.location.lon, node.location.lat, tags)
-            self.target.write(json.dumps(record, ensure_ascii=False, separators=(",", ":")))
-            self.target.write("\n")
-            counts["houseRecords"] += 1
+            record = house_record("N", node.id, node.location.lon, node.location.lat, tags)
+            self._write(record, "houseNodeRecords")
+
+        def way(self, way) -> None:
+            tags = {tag.k: tag.v for tag in way.tags}
+            if not _clean(tags.get("addr:housenumber")) or not _clean(tags.get("addr:street")):
+                return
+            if tags.get("highway", "").strip() and _has_name(tags):
+                skipped["namedHighway"] += 1
+                return
+            centre = _outline_centre(way)
+            if centre is None:
+                skipped["unlocatedNode"] += 1
+                return
+            self._write(house_record("W", way.id, centre[0], centre[1], tags), "houseWayRecords")
 
     output, target = _new_output(output_path)
     with target:
@@ -138,17 +193,21 @@ def export_house_dump(
             },
         }
         target.write(json.dumps(header, ensure_ascii=False, separators=(",", ":")) + "\n")
-        Exporter(target).apply_file(str(pbf), locations=False)
+        # Way nodes carry coordinates only when the reader resolves them through a node index.
+        Exporter(target).apply_file(str(pbf), locations=True, idx="flex_mem")
         target.flush()
         os.fsync(target.fileno())
     if counts["houseRecords"] <= 0:
-        raise RuntimeError("PBF contains no eligible address nodes; preserved empty dump")
+        raise RuntimeError("PBF contains no eligible address objects; preserved empty dump")
     return {
         "output": str(output),
         "outputSha256": sha256_file(output),
         "outputBytes": output.stat().st_size,
         "sourcePbfSha256": pbf_sha256,
         "houseRecords": counts["houseRecords"],
+        "houseNodeRecords": counts["houseNodeRecords"],
+        "houseWayRecords": counts["houseWayRecords"],
+        "waysSkipped": dict(sorted(skipped.items())),
         "startedAtUtc": started,
         "finishedAtUtc": datetime.now(UTC).isoformat(),
     }

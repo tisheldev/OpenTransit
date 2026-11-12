@@ -46,6 +46,10 @@ _ABBREVIATIONS = {
     "נתבג": "נמל תעופה בן גוריון",
     "רקל": "רכבת קלה",
 }
+# An abbreviation whose spelled-out form depends on the next word. "ת" stands for the
+# construct form before a noun ("תחנת רכבת") but passengers say and type the absolute
+# form before an adjective: the feed's "ת. מרכזית" is "תחנה מרכזית". Both forms are kept.
+_ABBREVIATION_PHRASES = {("ת", "מרכזית"): "תחנה מרכזית"}
 # Curated aliases for hubs whose GTFS stop has no usable English translation.
 # Not source data: "Ben Gurion Airport" is Israel Railways' published English
 # name for the נתב"ג station. Each entry needs a cited public source.
@@ -60,6 +64,8 @@ _FOLDS = (("tz", "z"), ("ts", "z"), ("ch", "h"), ("kh", "h"), ("ck", "k"), ("q",
 _FOLDS += (("w", "v"), ("ph", "f"), ("y", "i"))
 _REPEATED = re.compile(r"(.)\1+")
 _PARTIAL_MIN_TOKENS = 2
+# In partial matching a house or road number is worth this fraction of a word.
+_NUMBER_WORTH = 1 / 3
 # Shorter compact keys are too ambiguous to match across word boundaries.
 _COMPACT_MIN_CHARS = 4
 # Transliteration-only matches rank half a tier below the same literal match.
@@ -140,11 +146,23 @@ def compact_key(normalized: str) -> str:
     return fold_transliteration(normalized).replace(" ", "").replace("b", "v")
 
 
-def _expand_abbreviations(normalized: str) -> str | None:
+def _expand_abbreviations(normalized: str) -> list[str]:
+    """Spelled-out forms of a label or query that holds an abbreviation, if any."""
     words = normalized.split()
     if not any(word in _ABBREVIATIONS for word in words):
-        return None
-    return " ".join(_ABBREVIATIONS.get(word, word) for word in words)
+        return []
+    expanded = [" ".join(_ABBREVIATIONS.get(word, word) for word in words)]
+    phrased: list[str] = []
+    index = 0
+    while index < len(words):
+        phrase = _ABBREVIATION_PHRASES.get(tuple(words[index : index + 2]))
+        if phrase:
+            phrased.append(phrase)
+            index += 2
+        else:
+            phrased.append(_ABBREVIATIONS.get(words[index], words[index]))
+            index += 1
+    return list(dict.fromkeys([*expanded, " ".join(phrased)]))
 
 
 def _rail_variants(raw_names: list[str]) -> list[str]:
@@ -171,7 +189,7 @@ def _label_variants(normalized: list[str], rail_names: list[str] | None = None) 
     labels = list(normalized)
     if rail_names:
         labels.extend(_rail_variants(rail_names))
-    labels.extend(e for label in normalized if (e := _expand_abbreviations(label)))
+    labels.extend(e for label in normalized for e in _expand_abbreviations(label))
     for label in list(labels):
         for token, aliases in _ALIASES.items():
             if token in label.split():
@@ -184,10 +202,7 @@ def _folded_labels(labels: list[str]) -> list[str]:
 
 
 def _query_variants(normalized: str) -> list[str]:
-    variants = [normalized]
-    if expanded := _expand_abbreviations(normalized):
-        variants.append(expanded)
-    return list(dict.fromkeys(variants))
+    return list(dict.fromkeys([normalized, *_expand_abbreviations(normalized)]))
 
 
 def _language(value: str) -> str:
@@ -250,6 +265,30 @@ def _coverage(tokens: list[str], labels: list[str]) -> int:
             if best == len(needles):
                 break
     return best
+
+
+def _weighted_coverage(tokens: list[str], labels: list[str]) -> tuple[int, float]:
+    """Coverage of one label as ``_coverage`` counts it, and its worth for ranking.
+
+    The count decides whether a row qualifies and is unchanged. For ranking, a number is
+    worth a third of a word and only when it is the same number: "5" is not found in "55",
+    and a stop sharing the street name precedes one sharing only a house number.
+    """
+    best_count, best_worth = 0, 0.0
+    for label in labels:
+        padded = " " + label + " "
+        count, worth = 0, 0.0
+        for token in tokens:
+            if " " + token not in padded:
+                continue
+            count += 1
+            if not token[0].isdigit():
+                worth += 1.0
+            elif " " + token + " " in padded:
+                worth += _NUMBER_WORTH
+        if (worth, count) > (best_worth, best_count):
+            best_count, best_worth = count, worth
+    return best_count, best_worth
 
 
 def _stop_city(row: dict[str, Any]) -> str | None:
@@ -864,9 +903,12 @@ class _SearchIndex:
             if score + _FOLDED_PENALTY < best.get(row_index, 5):
                 best[row_index] = score + _FOLDED_PENALTY
 
-    def partial_matches(self, query: str) -> dict[int, int]:
-        """Rows covering most significant tokens when no row matches all of them."""
-        result: dict[int, int] = {}
+    def partial_matches(self, query: str) -> dict[int, float]:
+        """Rows covering most significant tokens when no row matches all of them.
+
+        The value is the row's coverage worth (words 1, an exact number a third).
+        """
+        result: dict[int, float] = {}
         variants = _query_variants(query)
         variants += [fold_transliteration(variant) for variant in variants]
         for variant in dict.fromkeys(variants):
@@ -889,9 +931,9 @@ class _SearchIndex:
                         hits[row_index] = hits.get(row_index, 0) + 1
                 pool = [row for row, count in hits.items() if count >= required]
             for row_index in pool:
-                covered = _coverage(tokens, self.coverage_labels[row_index])
-                if covered >= need and covered > result.get(row_index, 0):
-                    result[row_index] = covered
+                covered, worth = _weighted_coverage(tokens, self.coverage_labels[row_index])
+                if covered >= need and worth > result.get(row_index, 0):
+                    result[row_index] = worth
         return result
 
 
@@ -1146,6 +1188,18 @@ def _search_uncached(
         return (score, distance, name, item["id"])
 
     candidates.sort(key=rank)
+    fallback: dict[str, dict[str, Any]] | None = None
+    if partial:
+        # These stops cover only some of the query's words. The caller ranks them against
+        # other sources (``place_ranking``) and needs what the index matched them by.
+        fallback = {}
+        for candidate in candidates[:limit]:
+            row_index = index.position[candidate["matched_source_id"]]
+            context = normalize_label(rows[row_index].get("description") or "")
+            fallback[candidate["id"]] = {
+                "name": [label for label in index.coverage_labels[row_index] if label != context],
+                "context": context,
+            }
     for candidate in candidates:
         candidate.pop("score", None)
         candidate.pop("matched_source_id", None)
@@ -1159,6 +1213,8 @@ def _search_uncached(
         "matched_types": sorted(requested),
         "unavailable_types": list(unsupported),
         "partial": bool(unsupported),
+        # ``None`` for full matches; otherwise the searchable labels of each returned stop.
+        "coverage_fallback": fallback,
     }
 
 

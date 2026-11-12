@@ -228,7 +228,8 @@ class PhotonGeocoder:
         if source is None:
             raise PhotonUnavailable("Photon returned a source absent from its pinned catalog")
         address_type = source.get("address_type")
-        if (osm_type, address_type) not in {("N", "house"), ("W", "street")}:
+        # A house is an address node or a building outline (way); a street is always a way.
+        if (osm_type, address_type) not in {("N", "house"), ("W", "house"), ("W", "street")}:
             raise PhotonUnavailable("Photon source has a mutated address type")
         expected_layer = address_type
         returned_layer = properties.get("layer")
@@ -311,7 +312,13 @@ class PhotonGeocoder:
             "street": street,
             "houseNumber": house_number,
             "addressLevel": "house_number" if address_type == "house" else "street",
-            "precision": "address_node" if address_type == "house" else "street_way_midpoint",
+            "precision": (
+                "street_way_midpoint"
+                if address_type == "street"
+                else "address_node"
+                if osm_type == "N"
+                else "building_centroid"
+            ),
             "osmType": osm_type,
             "osmId": osm_id,
             "candidateIdentityHash": identity_hash,

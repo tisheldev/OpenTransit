@@ -17,11 +17,11 @@ from fastapi.responses import JSONResponse
 from opentransit.api.responses import metadata
 from opentransit.geocoding import geocode_places
 from opentransit.motis_geocoder import GeocoderUnavailable
+from opentransit.place_ranking import RANKING_POLICY, merge_candidates
 from opentransit.runtime import capture_snapshot
 from opentransit.stop_search import search_stops
 
 _VALID_TYPES = ("stop", "station", "poi", "address")
-_RANKING_POLICY = "alternating-stop-and-geocoder-order-v1"
 _STOP_SEARCH_LOGGER = logging.getLogger("opentransit.requests.stopsearch")
 _REQUEST_ID_PATTERN = re.compile(r"[0-9a-fA-F]{32}\Z")
 _GENERATION_ID_PATTERN = re.compile(r"[0-9a-fA-F]{64}\Z")
@@ -126,6 +126,7 @@ def places_router(clock, problem) -> APIRouter:
         matched_types: list[str] = []
         unavailable_types: list[str] = []
         stop_items: list[dict] = []
+        stop_fallback = None
         geocoder_items: list[dict] = []
 
         # Geocoder backends are started first and awaited last: their network waits
@@ -191,6 +192,7 @@ def places_router(clock, problem) -> APIRouter:
                             limit=limit,
                         )
                         stop_items = result["items"]
+                        stop_fallback = result.get("coverage_fallback")
                         matched_types.extend(requested_stops)
                         for item in stop_items:
                             item["locationRef"] = {"kind": "stop", "stopId": item["id"]}
@@ -238,34 +240,15 @@ def places_router(clock, problem) -> APIRouter:
             )
 
         payload = {
-            "data": _merge_candidates(stop_items, geocoder_items, limit),
+            "data": merge_candidates(
+                q, stop_items, geocoder_items, limit, stop_fallback=stop_fallback
+            ),
             "meta": metadata(request, snapshot, now),
             "matchedTypes": [kind for kind in _VALID_TYPES if kind in matched_types],
             "unavailableTypes": [kind for kind in _VALID_TYPES if kind in unavailable_types],
             "partial": bool(unavailable_types),
-            "rankingPolicy": _RANKING_POLICY,
+            "rankingPolicy": RANKING_POLICY,
         }
         return JSONResponse(jsonable_encoder(payload))
 
     return router
-
-
-def _merge_candidates(stops: list[dict], geocoders: list[dict], limit: int) -> list[dict]:
-    """Alternate incomparable backend orders and deduplicate before the final bound."""
-    merged = []
-    seen = set()
-    for index in range(max(len(stops), len(geocoders))):
-        for pool in (stops, geocoders):
-            if index >= len(pool):
-                continue
-            item = pool[index]
-            location_ref = item.get("locationRef") or {}
-            identity = location_ref.get("stopId", location_ref.get("placeRef"))
-            key = (location_ref.get("kind"), identity)
-            if key in seen:
-                continue
-            seen.add(key)
-            merged.append(item)
-            if len(merged) >= limit:
-                return merged
-    return merged

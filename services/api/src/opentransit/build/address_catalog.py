@@ -36,8 +36,9 @@ def _source_identity(place: dict[str, Any]) -> tuple[str, str]:
     osm_id_text = str(osm_id)
     if address_type == "house":
         house_number = place.get("housenumber")
-        if osm_type != "N" or not isinstance(house_number, str) or not house_number.strip():
-            raise ValueError("Photon house record lacks node identity or house number")
+        # A house is an address node or a building outline (way); both need their number.
+        if not isinstance(house_number, str) or not house_number.strip():
+            raise ValueError("Photon house record lacks a house number")
     elif address_type == "street":
         if osm_type != "W" or place.get("housenumber") is not None:
             raise ValueError("Photon street record has invalid way identity or house number")

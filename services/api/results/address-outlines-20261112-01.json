@@ -1,0 +1,108 @@
+{
+ "schemaVersion": 1,
+ "recordedAt": "2026-11-12",
+ "task": "SEARCH-REL",
+ "scope": "Local build and live check of house numbers mapped on OSM ways (building outlines) in the address index. Mechanical only: not an H4 verdict, not a build-host or H-1 measurement.",
+ "trigger": "Open finding in search-relevance-20261112-01.json: the address index held only OSM nodes with addr:housenumber and addr:street, while many house numbers are mapped on the building outline.",
+ "change": "The house export also writes ways that carry addr:housenumber and addr:street, placed at the mean of their distinct outline nodes; a way that is also a named highway stays a street. Enrichment, the address catalog and the search adapter accept them; results carry precision building_centroid.",
+ "source": {
+  "commit": "170dd9790fdab01c7babe2b4f4458cab5026e0a3",
+  "branch": "claude/search-relevance",
+  "dirtyApiSource": true,
+  "treeOfApiSource": "060fa096c3a3872eca88b97fed7c23ebbcdd3db7"
+ },
+ "build": {
+  "baseline": {
+   "generation": "nov11a (C:/ot/generations/nov11a)",
+   "generationId": "fc11ddbc27cecc78f749d06d9643e2dd9bc6d25b1a755c5548217f103dd58cfb",
+   "houseRecords": 126234,
+   "housesWithUniqueLocality": 125630,
+   "housesAmbiguousLocality": 360,
+   "housesNoContainingLocality": 244,
+   "housesWithStreetWay": 107915,
+   "photonDocuments": 240776,
+   "photonEnrichSeconds": 2564.42,
+   "wallClock": "2026-11-11T12:45:48Z to 13:50:28Z (64 min 40 s)"
+  },
+  "withOutlines": {
+   "generation": "nov12a (C:/ot/generations/nov12a)",
+   "generationId": "fbab648bdbeace9e69e9c089bdeeffd86d32a516d34b8198a7f5a38f5923fb75",
+   "manifestSha256": "4336c16548b88466923421fae4e21b891d30ff369288b478d0ae355d0042aa13",
+   "houseRecords": 169700,
+   "houseNodeRecords": 126234,
+   "houseWayRecords": 43466,
+   "waysSkipped": {},
+   "housesWithUniqueLocality": 166850,
+   "housesAmbiguousLocality": 1496,
+   "housesNoContainingLocality": 1354,
+   "housesWithStreetWay": 148387,
+   "photonDocuments": 284242,
+   "photonEnrichSeconds": 3193.02,
+   "wallClock": "2026-11-12T09:47:34Z to 11:01:39Z (74 min 5 s)"
+  },
+  "sameInputs": "Both from snapshot 20261111T123753Z-9d2a2f89, first day 2026-11-11, 30 days, MOTIS import 6 GiB, Photon import 2 GiB, Photon 1.3.0, same engine digest",
+  "notes": [
+   "Of the 43,466 outline houses, 41,220 received a unique containing locality; 1,136 were ambiguous between localities and 1,110 had none. Those 2,246 are indexed without a city.",
+   "photon_enrich took 629 s longer (+24.5%); the whole build took 9 min 25 s longer. Other stage differences are run-to-run variation on a shared PC.",
+   "Both builds ran on the Administrator PC, not on the build host; build-host cost and time were not measured."
+  ]
+ },
+ "acceptance": {
+  "run": "services/api/results/acceptance-nov12a-20261112-01/ (acceptance_run.py, port 8540, stack kept)",
+  "status": "PASS",
+  "checks": {
+   "stack": "PASS",
+   "probe": "PASS",
+   "api_start": "PASS",
+   "readyz": "PASS",
+   "walk_caps": "PASS",
+   "demo": "PASS",
+   "h3_review": "PASS",
+   "search_cold_start": "PASS",
+   "search": "PASS",
+   "motis_verify_fail": "PASS"
+  },
+  "humanH3Approval": false,
+  "humanH4Approval": false,
+  "search": {
+   "overall": {"top1": 147, "top5": 165, "total": 183},
+   "address": {"top1": 16, "top5": 16, "total": 22},
+   "comparison": "Identical to this branch's ranking on nov11a (search-relevance-20261112-01.json, corpus-types): the frozen corpora do not exercise outline-only addresses.",
+   "addressMisses": "P059, P061, P062, P063, P064, P065. In each the first result is the typed address or street; it lies 716 m to 1,328 m from the corpus reference point, outside the case's 700 m to 900 m tolerance.",
+   "apiProcessFirstPassMs": {"p50": 15.3, "p95": 82.9, "max": 318.1}
+  },
+  "servingMemoryAfterRun": {
+   "photon": "436 MiB of a 1 GiB cap (nov11a stack beside it: 448 MiB)",
+   "api": "296 MiB of 1 GiB",
+   "motis": "484 MiB of 2 GiB",
+   "note": "One docker stats sample after the run, not a capacity measurement"
+  }
+ },
+ "spotCheck": {
+  "method": "GET /v1/places, all result types, limit 5. Before: nov11a stack on port 8500 (old ranking, node-only index). After: nov12a stack on port 8540 (this branch, index with outlines). The house numbers were picked from the nov12a house dump as mapped on an outline and on no node.",
+  "rows": [
+   {"query": "סוקולוב 29 הרצליה", "before": "stop סוקולוב/הניצנים", "after": "סוקולוב 29, הרצליה (W171525922, building_centroid)"},
+   {"query": "הרב קוק 65 הרצליה", "before": "stop הרב קוק/בן גוריון", "after": "הרב קוק 65, הרצליה (W386258920, building_centroid)"},
+   {"query": "הנדיב 6 הרצליה", "before": "stop בן גוריון/חומה ומגדל", "after": "הנדיב 6, הרצליה (W171532874, building_centroid)"},
+   {"query": "העצמאות 27 הרצליה", "before": "stop בית משפט/בן גוריון", "after": "העצמאות 27, הרצליה (W171529517, building_centroid)"},
+   {"query": "בן גוריון 18 הרצליה", "before": "stop בן גוריון/חומה ומגדל", "after": "בן גוריון 18, הרצליה (W171532883, building_centroid)"},
+   {"query": "ויצמן 32 הרצליה", "before": "stop הרב קוק/שמשון הגיבור", "after": "ויצמן 32, הרצליה (W383526097, building_centroid)"},
+   {"query": "Sokolov 29 Herzliya", "before": "street סוקולוב, הרצליה", "after": "סוקולוב 29, הרצליה (W171525922, building_centroid)"},
+   {"query": "דיזנגוף 50 תל אביב", "before": "stop דיזנגוף סנטר/דיזנגוף", "after": "דיזנגוף 50, תל אביב-יפו (W90843678, building_centroid)"},
+   {"query": "הרצל 10 רמת גן", "before": "station מסוף אלוף שדה", "after": "הרצל 10, רמת גן (N1697402193, address_node)"},
+   {"query": "הפועל 13 הרצליה", "before": "stop ארלוזורוב/בן יהודה", "after": "street הפועל, הרצליה (no house numbers are mapped on this street)"},
+   {"query": "ויצמן 5 כפר סבא", "before": "stop כביש 55/דרך המוביל", "after": "street ויצמן, כפר סבא (this house number is not mapped)"},
+   {"query": "אוסישקין 37 הרצליה", "before": "stop מועדון רעים/אוסישקין (חדרה)", "after": "street אוסישקין, הרצליה (the outline picked lies in a neighbouring town)"},
+   {"query": "השלום 11 הרצליה", "before": "stop דרך השלום/מרכז תל חנן (נשר)", "after": "poi בית משפט השלום, הרצליה; השלום 11, רעננה third (the outline picked lies in Raanana)"}
+  ],
+  "summary": "All six picked house numbers that lie in Herzliya were not findable before and are the first result after. Where the house number is not mapped, the street in the typed city leads."
+ },
+ "limits": [
+  "House numbers on relations (63 nationally) and on interpolation ways (416) are still not indexed.",
+  "A house number that OSM does not map cannot be found; the street is returned instead.",
+  "An address mapped on both a node and an outline yields two documents; the ranking merges same street, number and locality into one result.",
+  "A building centroid is the mean of the outline's nodes, not the entrance.",
+  "Not published: H-1 serves the node-only index until a build-host run on a main commit containing this change."
+ ],
+ "validation": "services/api: 1038 passed, 21 skipped; ruff check and format clean for src, tests and tools"
+}
