@@ -138,16 +138,18 @@ The request (user, 12 November): "I want stops and lines to be a bigger part of 
 | Motion | As on the motion sheet (rules below) | "Feels right" |
 | Next-line tag | Attached to the sign as one flag; the user asked for it to be added to G and approved G afterwards | "can you add the 'closet line' example to G?" |
 | API additions | Approved, after the write-up: a mode (bus stop or station) and a direction of travel on stop items, a way to list stations over a large area, lines in search results, and a journey pinned to one trip. Additive; not yet designed or built. This approves the additions, not the proposal as a whole | "Yes, approve them" |
+| Home's "Near you" list | Lines across nearby stops, each row naming its stop. Replaces the nearest-stop list of approved board 1 | "Lines nearby" |
+| Screens 3 to 6 | All four as drawn: the Stop actions, the Line screen, "Ride it", and a line opened inside a journey | "All four" |
+| A tapped group | The map zooms in and the group opens into its list | "open its list and zoom in" |
+| Order of work | The API first (a mode and a direction on stop items), then stops on the map with their poles, then Search, then the Line screen | "API first" |
 
 ### Drawn, not confirmed
 
 The user saw these and did not comment, or they are this session's suggestions. Each needs a yes before it is built.
 
-1. **Home lists lines, not one stop.** "Near you" shows the next departure of each line within a 5-minute walk, each row naming its stop. This departs from approved board 1, which lists the nearest stop's departures.
-2. **Saved stops and lines on Home**, beside Home and Work, each with its next departure.
-3. **Screens 3 to 6** (the Stop actions, the Line screen, "Ride it", a line opened inside a journey). Shown first; the conversation then moved to the map.
-4. **Zoom levels** and the thresholds between them.
-5. **Light-theme colours** (picked by eye, contrast not measured) and the **crowded-junction rules**.
+1. **Saved stops and lines on Home**, beside Home and Work, each with its next departure. Drawn on screen 1 and never asked about.
+2. **Zoom levels** and the thresholds between them.
+3. **Light-theme colours** (picked by eye, contrast not measured) and the **crowded-junction rules**.
 
 ### Where it departs from the requirements
 
@@ -157,11 +159,13 @@ These requirements in the [client PRD](client-prd.md#6-functional-requirements) 
 - **C06 Secondary screens:** stop and line screens are outside the first release's acceptance and "never add a control to the core screens beyond the tappable names". The proposal makes them part of the main flow and adds controls to Home, Search and the Stop screen.
 - **Approved board 1 (Home):** the nearest stop's departures would become lines across nearby stops.
 
+On 12 November the user chose the Home list and all of screens 3 to 6, and approved lines in search results, after being told of these departures. As with the boards on 11 November, the PRD keeps its text for history. Whether the stop and line screens join the first release's acceptance, and whether a one-character query may search, were not asked.
+
 ### The ten screens
 
 | # | Screen | What it adds to today's client |
 | --- | --- | --- |
-| 1 | Home | The search field hints "place, stop or line". Saved stops and lines sit beside Home and Work. "Near you" lists lines (item 1 above) |
+| 1 | Home | The search field hints "place, stop or line". Saved stops and lines sit beside Home and Work. "Near you" lists the next departure of each line within a 5-minute walk, each row naming its stop |
 | 2 | Search | One field finds places, stops and lines. A stop row still sets the journey end when tapped; a second button on the row opens its departures. A line row opens the line. Operators that share a line number are listed separately |
 | 3 | Stop | Two buttons, "travel from here" and "get here" (open Search or Choose with that end filled), and save. A chosen line shows its next three times and a link to all its stops |
 | 4 | Line | New. The whole route on the map, a switch between its two directions, and every stop with its time, opening at the stop nearest the passenger with the earlier stops folded. Stops where a train can be caught carry the train badge |
@@ -169,7 +173,7 @@ These requirements in the [client PRD](client-prd.md#6-functional-requirements) 
 | 6 | In a journey | In route details, a line's row opens in place: the next departures of that line from the boarding stop (choosing one re-plans with it) and a link to the line. Stop names open the stop |
 | 7 | Map, far out | Train and light-rail stations only, with a "zoom in to see bus stops" hint |
 | 8 | Map, neighbourhood | Bus stops appear; stops whose markers would touch merge into a count |
-| 9 | Map, group opened | Tapping a count opens it into its stops; the sheet lists them by direction of travel with their lines and next departure; the row picked is highlighted and its marker becomes the chosen one |
+| 9 | Map, group opened | Tapping a count zooms the map in and opens it into its stops; the sheet lists them by direction of travel with their lines and next departure; the row picked is highlighted and its marker becomes the chosen one |
 | 10 | Map, close up | Every stop on its own, anywhere the passenger pans. A few carry a next-line tag. The sheet's "Near you" becomes "In this area" with the distance from the passenger, and a button returns the map to them |
 
 ### Stops on the map
@@ -240,12 +244,18 @@ The grouping method and its exact pixel threshold, the caching scheme for stops 
 
 ### Open questions for the user
 
-1. Does Home list lines across nearby stops (as drawn), or stay with the nearest stop's departures?
-2. Are screens 3 to 6 wanted as drawn, in particular "Ride it"?
+1. Answered on 12 November: Home lists lines across nearby stops.
+2. Answered on 12 November: all four of screens 3 to 6, "Ride it" included.
 3. Answered on 12 November: the API may gain the additions above (a mode and a direction on stop items, stations over a large area, lines in search results, a pinned journey). Whether line search also returns lines that merely start with the typed digits was not asked separately and stays open.
-4. Does a tapped group open its list (as drawn), or only zoom in? Asked once and not answered.
-5. Which slice comes first? The suggestion is stops on the map with marker G, then Search, then the Line screen.
-6. Marker G's pole needs the direction approved in question 3. Does the API work come first, so the first slice ships with poles, or may stops show the sign without its pole until then?
+4. Answered on 12 November: a tapped group zooms in and opens its list.
+5. Answered on 12 November: the API work comes first, then stops on the map, then Search, then the Line screen.
+6. Answered with question 5: the first map slice ships with poles. The pole-less sign remains only for a stop whose side is unknown.
+
+Still open:
+
+7. Saved stops and lines on Home: drawn, never asked about.
+8. Should line search also return lines that merely start with the typed digits, and may a one-character query search?
+9. The zoom thresholds, the light-theme colours and the crowded-junction rules are suggestions, to be confirmed when the first map slice can be seen on a phone.
 
 ## Constraints from the current API
 
