@@ -113,7 +113,7 @@ The user's instruction of 11 November ("fix the data gaps" for the eight boards)
 
 ## Stops and lines proposal (12 November 2026)
 
-**Proposal. Not accepted as a whole, not built.** Drawn with the user on 12 November on the private canvas "OpenTransit Stops and Lines" (`https://claude.ai/artifact/9NtBZm7ETSMS3XrumrzZuE`): ten phone screens, two sheets of stop-marker options, a motion sheet and a tuning sheet. Sample data throughout. The session that drew them never saw them rendered, so positions and sizes on the canvas are indicative. Nothing here changes the client, the API or a phase gate until the user approves it; the parts the user did decide are listed separately below.
+**Approved by the user on 12 November 2026 ("Approve it"), with the items under "Still open" left open. Not built.** The build order and the first slice's plan are in the [continuation plan](next-steps.md#stops-and-lines-build-order-and-slice-1). Drawn with the user on 12 November on the private canvas "OpenTransit Stops and Lines" (`https://claude.ai/artifact/9NtBZm7ETSMS3XrumrzZuE`): ten phone screens, two sheets of stop-marker options, a motion sheet and a tuning sheet. Sample data throughout. The session that drew them never saw them rendered, so positions and sizes on the canvas are indicative. The approval covers the design as written here. It changes no phase gate, and it does not make the unconfirmed items below decided.
 
 The request (user, 12 November): "I want stops and lines to be a bigger part of the app … integrate well alongside route planning. I want it to feel seamless and compliment the current flows"; later, "I also want to be able to look for stops on the maps always, not only close ones".
 
