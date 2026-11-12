@@ -204,7 +204,7 @@ The [stops and lines design](client-design.md#stops-and-lines-proposal-12-novemb
 | Slice | Delivers | Plan |
 | --- | --- | --- |
 | 1 (API-C6) | Each stop says whether it is a bus, rail or light-rail stop and which way vehicles leave it | Below |
-| 2 | A way to list stations over a large area (API), then stops on the map at every zoom with marker G, groups, tags and motion (client) | When slice 1 is done |
+| 2 | A way to list stations over a large area (API), then stops on the map at every zoom with marker G, groups, tags and motion (client). The pole points at the nearest street on the map, with slice 1's `bearingDegrees` as the fallback (user, 12 November) | When slice 1 is done |
 | 3 | Lines in search results (API), then one mixed search list (client) | Later |
 | 4 | The Line screen, the Stop screen's actions, a line opened inside a journey (client) | Later |
 | 5 | "Ride it": a journey pinned to one trip (API), then the screen (client) | Later |
@@ -404,6 +404,8 @@ Files: create `services/api/results/api-stop-facets-<generation>-<YYYYMMDD>-01.j
 - [ ] Step 4: judge against these limits, which are this plan's own and not measured requirements: loading adds at most 3 seconds to startup and 30 MiB of memory; at least 18 of the 20 pairs differ by less than 45 degrees; every stop the feed's rail routes serve reports `"rail"`. If a limit is missed, stop and report instead of adjusting it.
 - [ ] Step 5: in `docs/client-design.md`, change the gap column of the two stop-item rows to "Supplied by API-C6" with the evidence link. Update `PROJECT_STATUS.md`: the API-C6 row and a recent outcome with the evidence date and link, labelled mechanical, not human-reviewed.
 - [ ] Step 6: commit: "API-C6: live evidence and status".
+
+**Outcome, 12 November 2026.** Tasks 1 to 3 were built and reviewed on branch `claude/api-c6-stop-facets`. The live check on `nov11a` met two of step 4's limits (rail 70 of 70; the lookup keeps 6.7 MiB, with a 38 MiB peak while loading) and missed two (loading takes 4.8–6.1 s in the container and 1.6–1.9 s natively; 9 of 20 pairs agreed, with 8 boarding stops having no direction, 6 of them rail stations served both ways) ([evidence](../services/api/results/api-stop-facets-nov11a-20261112-01.json)). A comparison of five other estimates on 301 real boardings found none better than the current one beyond sampling noise ([evidence](../services/api/results/api-stop-bearing-estimates-nov11a-20261112-01.json), tool `services/api/tools/compare_stop_bearing_estimates.py`). The user then accepted the current estimate and the load time ("Yes, keep it"): the direction stays in the API as a fallback, and slice 2 takes the pole's side from the map. Step 4's limits were this plan's own numbers and were not adjusted; they were set aside by that decision.
 
 ### Client tasks
 
