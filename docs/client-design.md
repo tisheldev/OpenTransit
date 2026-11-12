@@ -137,6 +137,7 @@ The request (user, 12 November): "I want stops and lines to be a bigger part of 
 | Search results | One list ordered by best match, not sections by kind; stops marked differently | "I'm not sure if I want the stops to show up before places always" |
 | Motion | As on the motion sheet (rules below) | "Feels right" |
 | Next-line tag | Attached to the sign as one flag; the user asked for it to be added to G and approved G afterwards | "can you add the 'closet line' example to G?" |
+| API additions | Approved, after the write-up: a mode (bus stop or station) and a direction of travel on stop items, a way to list stations over a large area, lines in search results, and a journey pinned to one trip. Additive; not yet designed or built. This approves the additions, not the proposal as a whole | "Yes, approve them" |
 
 ### Drawn, not confirmed
 
@@ -205,7 +206,7 @@ One list, ordered by best match whatever the kind. A stop leads with the stop si
 
 ### What the API has and lacks
 
-Read from the code at `main` `170dd97` on 12 November; nothing was run.
+Read from the code at `main` `170dd97` on 12 November; nothing was run. The user approved the additions in the Gap column the same day; none is designed or built yet, and each still needs its contract written before it is implemented.
 
 | Need | Today | Gap |
 | --- | --- | --- |
@@ -241,10 +242,10 @@ The grouping method and its exact pixel threshold, the caching scheme for stops 
 
 1. Does Home list lines across nearby stops (as drawn), or stay with the nearest stop's departures?
 2. Are screens 3 to 6 wanted as drawn, in particular "Ride it"?
-3. May the API gain the additions above (a mode and a direction on stop items, stations over a large area, lines in search results including those that start with the typed digits, a pinned journey)? These are additive but have not been approved.
+3. Answered on 12 November: the API may gain the additions above (a mode and a direction on stop items, stations over a large area, lines in search results, a pinned journey). Whether line search also returns lines that merely start with the typed digits was not asked separately and stays open.
 4. Does a tapped group open its list (as drawn), or only zoom in? Asked once and not answered.
 5. Which slice comes first? The suggestion is stops on the map with marker G, then Search, then the Line screen.
-6. Marker G's pole needs the direction from question 3. Until the API supplies it, may stops show the sign without its pole, or should the first slice wait?
+6. Marker G's pole needs the direction approved in question 3. Does the API work come first, so the first slice ships with poles, or may stops show the sign without its pole until then?
 
 ## Constraints from the current API
 
