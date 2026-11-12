@@ -150,7 +150,7 @@ Stop fields added by API-C6, on every stop item of `GET /v1/stops` and `GET /v1/
 
 - `mode` is `"rail"`, `"light_rail"`, `"bus"`, `"other"` or `null` (no line serves the stop). A stop served by several modes takes the first of rail, light rail, bus.
 - `bearingDegrees` is degrees clockwise from north, `0 <= x < 360`, one decimal, the same convention as `boarding.bearingDegrees`. It is the straight line to the next stop, not the street's geometry. A stop served in opposing directions gets `bearingDegrees: null`, not an average.
-- `bearingSource` is `"next_stop"`, `"previous_stop"` (a stop that is only ever a last call) or `null`.
+- `bearingSource` is `"next_stop"`, `"previous_stop"` (the stop has no usable onward hop: it is only ever a last call, or every next stop after it is less than a metre away or has no coordinates) or `null`.
 
 No `/vehicles` or `/alerts` handler is required in v1. Capability status documents the deferral; future endpoints are added only when the source is usable. Route/pattern lists use default page size 20, maximum 100.
 
