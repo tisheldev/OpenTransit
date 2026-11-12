@@ -218,6 +218,9 @@ def test_listed_stops_carry_mode_and_direction(reference):
     detail = store.stop("platform_b")
     assert detail["bearing_source"] == "next_stop"
     assert detail["parent"]["mode"] == "bus"
+    children = store.stop("station")["children"]
+    assert children
+    assert all({"mode", "bearing_degrees", "bearing_source"} <= set(c) for c in children)
 
 
 def test_route_filters_and_cursor_pagination(reference):

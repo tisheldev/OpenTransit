@@ -90,6 +90,26 @@ def test_a_repeated_call_gives_no_direction_of_its_own():
     assert facets["x"].bearing_degrees == pytest.approx(0.0, abs=0.1)
 
 
+def test_missing_coordinates_give_no_direction_and_do_not_raise():
+    connection = tiny(
+        stops=[
+            ("unplaced", None, None, None),
+            ("before_unplaced", 32.0, 34.0, None),
+            ("unplaced_neighbour", None, None, None),
+        ],
+        pattern_stops=[
+            ("p", 1, "unplaced"),
+            ("p", 2, "before_unplaced"),
+            ("q", 1, "before_unplaced"),
+            ("q", 2, "unplaced_neighbour"),
+        ],
+    )
+    facets = load_stop_facets(connection, route_type_mode)
+    for stop_id in ("unplaced", "before_unplaced", "unplaced_neighbour"):
+        assert facets[stop_id].bearing_degrees is None
+        assert facets[stop_id].bearing_source is None
+
+
 def test_rail_wins_and_a_parent_takes_its_platforms_mode():
     connection = tiny(
         stops=[

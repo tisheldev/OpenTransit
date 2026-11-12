@@ -261,7 +261,10 @@ def post_journey(client, body, state, max_requests, interval, log):
             return None
         log.append({**body_summary(body), "status": response.status_code})
         if response.status_code == 429:
-            retry = float(response.headers.get("Retry-After", "10"))
+            try:
+                retry = float(response.headers.get("Retry-After", "10"))
+            except ValueError:  # the HTTP-date form: fall back to the normal pacing
+                retry = interval
             time.sleep(max(retry, interval))
             continue
         return response
@@ -384,6 +387,9 @@ def main(argv=None) -> int:
         "entry may carry 'count' when it stands for several requests",
     )
     args = parser.parse_args(argv)
+    if args.out.exists():
+        # Previous evidence is preserved: refuse before any request is sent.
+        parser.error(f"--out {args.out} already exists; choose a new results path")
     # Read before any request is sent, so a bad file cannot waste the request budget.
     prior = json.loads(args.prior_requests.read_text("utf-8-sig")) if args.prior_requests else []
     prior_count = sum(int(entry.get("count", 1)) for entry in prior)
