@@ -394,7 +394,7 @@ describe("MapView", () => {
     option.click();
     expect(chose).toHaveBeenCalledTimes(1);
     const stop = screen.getByRole("button", { name: "דיזנגוף / המלך ג׳ורג׳" });
-    expect(stop).toHaveAttribute("aria-pressed", "true");
+    expect(stop).not.toHaveAttribute("aria-pressed");
     stop.click();
     expect(picked).toHaveBeenCalledTimes(1);
     // A tag without an action is text, not a button; a line badge carries its operator's colour.

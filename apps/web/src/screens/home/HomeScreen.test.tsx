@@ -122,9 +122,9 @@ describe("Home", () => {
       ["next-mot:stop:13560", "plain", "below"],
     ]);
     expect(tags[0]).toMatchObject({ text: "2 דק׳", line: { label: "172", operatorId: "5" } });
-    // A tag covers its pin, so tapping it does what the pin does.
+    // A tag covers its pin, so tapping it does what the pin does: open that stop.
     act(() => tags[1]!.onSelect!());
-    expect(await screen.findByRole("heading", { level: 2, name: "דיזנגוף סנטר/טשרניחובסקי" })).toBeInTheDocument();
+    await waitFor(() => expect(window.location.hash).toBe("#/stop/mot%3Astop%3A13560"));
   });
 
   it("with a fix already allowed: the walking ring and the puck around the passenger, and the stop's distance", async () => {
@@ -137,18 +137,16 @@ describe("Home", () => {
     expect(heading.parentElement).toHaveTextContent(/40 מ׳$/);
   });
 
-  it("tapping a pin switches the board to that stop; tapping the selected pin opens its stop", async () => {
+  it("one tap on any pin opens its stop; the nearest stop's pin opens too", async () => {
     renderApp("#/");
     const pin = (id: string) => getMapState().scene.stopPins?.find((item) => item.id === id);
-    await waitFor(() => expect(pin("mot:stop:13560")?.ariaLabel).toMatch(/^תחנה דיזנגוף סנטר\/טשרניחובסקי, קו 66 בעוד \d+ דק׳$/));
-    const third = pin("mot:stop:13560")!;
-    act(() => third.onSelect!());
-    expect(await screen.findByRole("heading", { level: 2, name: "דיזנגוף סנטר/טשרניחובסקי" })).toBeInTheDocument();
-    const selected = getMapState().scene.stopPins!.find((pin) => pin.selected)!;
-    expect(selected.id).toBe("mot:stop:13560");
-    expect(selected.ariaLabel).toBe(he["home.stop.open"].replace("{stop}", "דיזנגוף סנטר/טשרניחובסקי"));
-    act(() => selected.onSelect!());
+    await waitFor(() => expect(pin("mot:stop:13560")?.ariaLabel).toMatch(/^פתיחת התחנה דיזנגוף סנטר\/טשרניחובסקי, קו 66 בעוד \d+ דק׳$/));
+    const selected = getMapState().scene.stopPins!.find((item) => item.selected)!;
+    expect(selected.id).toBe("mot:stop:13583");
+    act(() => pin("mot:stop:13560")!.onSelect!());
     await waitFor(() => expect(window.location.hash).toBe("#/stop/mot%3Astop%3A13560"));
+    act(() => selected.onSelect!());
+    await waitFor(() => expect(window.location.hash).toBe("#/stop/mot%3Astop%3A13583"));
   });
 
   it("a departure row opens its stop with that line's route shown", async () => {

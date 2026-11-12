@@ -159,8 +159,9 @@ export function HomeScreen() {
   const nearby = useHomeStops(centre, painted);
   const { stops, departures } = nearby;
   const stopIds = useMemo(() => stops.map((stop) => stop.stopId), [stops]);
-  const [picked, setPicked] = useState<string | null>(null);
-  const selectedIndex = Math.max(0, stops.findIndex((stop) => stop.stopId === picked));
+  // The panel lists the nearest stop's departures; any pin or tag opens its own stop in one
+  // tap (user, 12 November 2026).
+  const selectedIndex = 0;
   const selected = stops[selectedIndex] ?? null;
 
   // One row per line. Departures are asked from "now" and refreshed every minute, so a
@@ -191,16 +192,14 @@ export function HomeScreen() {
       const next = lines[index]?.[0] ?? null;
       const minutes = next ? minutesTo(next.next, now) : null;
       const position: [number, number] = [stop.longitude, stop.latitude];
-      const select = isSelected ? () => openStop(stop.stopId) : () => setPicked(stop.stopId);
+      const select = () => openStop(stop.stopId);
       stopPins.push({
         id: stop.stopId,
         position,
         selected: isSelected,
-        ariaLabel: isSelected
-          ? t("home.stop.open", { stop: name })
-          : next
-            ? t("home.stop.pinNext", { stop: name, line: next.label, minutes: minutes ?? 0 })
-            : t("home.stop.pin", { stop: name }),
+        ariaLabel: next
+          ? t("home.stop.openNext", { stop: name, line: next.label, minutes: minutes ?? 0 })
+          : t("home.stop.open", { stop: name }),
         onSelect: select,
       });
       const roomy = tagged.every((other) => haversineMeters(other, stop) >= TAG_SPACING_METERS);
