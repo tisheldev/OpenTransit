@@ -1,0 +1,659 @@
+{
+  "recordedAt": "2026-11-12",
+  "purpose": "Live mechanical check of API-C6 (stop items carry mode, bearingDegrees, bearingSource) on the nov11a national generation. Mechanical, not human-reviewed.",
+  "humanReview": "None. This is a mechanical check, not human review.",
+  "commit": "390b1b67e4f35828ef5a298a3597c15b827cc4b2",
+  "branch": "claude/api-c6-stop-facets",
+  "generation": {
+    "path": "C:/ot/generations/nov11a",
+    "publicGenerationId": "fc11ddbc27cecc78f749d06d9643e2dd9bc6d25b1a755c5548217f103dd58cfb",
+    "referenceComponentGenerationId": "2d8916c176bfe7341ac459b3c9d7454755a38ac3d3fbf89e6cc213f6f4c3cbfd",
+    "referenceSchemaVersion": 3
+  },
+  "method": {
+    "newApi": "Temporary container ot-c6-nov11a-api-tmp (image opentransit-api:latest, --network container:ot-acc-nov11a-motis, --memory 1g, --user 10001), this branch's services/api/src mounted read-only at /src, generation read-only at /generation, the stack's /run/opentransit work directory read-only, same OPENTRANSIT_* environment as ot-acc-nov11a-api, uvicorn on 127.0.0.1:8001. Removed after the check.",
+    "oldApi": "ot-acc-nov11a-api on 127.0.0.1:8000 (pre-API-C6 code, up about 23 hours), queried read-only.",
+    "lookupCost": "One-off Python process opening reference.sqlite with ?mode=ro&immutable=1, row_factory None, timing load_stop_facets(connection, route_type_mode) three times per process; the third run under tracemalloc (retained = traced memory still held after the call returns, peak = traced high-water mark during the call; sqlite's own C allocations are not traced). Run natively on the host (uv, Windows) and inside the temporary container (Linux, generation read through the Docker Desktop bind mount).",
+    "residentMemory": "docker stats --no-stream for both containers after both answered the same five stop requests (and the new one the journey and rail checks). The old process has served traffic for about 23 hours, the new one for minutes, so the difference is not a clean measure of the lookup.",
+    "journeys": "The 10 cases of acceptance-nov11a-boards-20261111-01-probe-queries.json (request built as board_data_check.py does, departAt = probeTime, results 3), then the cases of ...-h3-review-raw.json not already used, with their recorded request bodies, in file order, until 20 journeys had a transit leg. POST /v1/journeys on :8001; first journey with a transit leg; its first transit leg's boarding.bearingDegrees against GET /v1/stops/{from.stopId} bearingDegrees on :8001. Difference = smallest angle between them. A null stop bearing is 'no direction', not an agreement.",
+    "rail": "Distinct stop_id in route_stops joined to routes with route_type = 2 (cross-checked through patterns/pattern_stops), each checked in the loader output and via GET /v1/stops/{stopId} on :8001."
+  },
+  "stops": {
+    "total": 35402,
+    "byMode": {
+      "bus": 30678,
+      "null": 4445,
+      "light_rail": 196,
+      "rail": 70,
+      "other": 13
+    },
+    "byBearingSource": {
+      "next_stop": {
+        "count": 28343,
+        "percent": 80.1
+      },
+      "null": {
+        "count": 6847,
+        "percent": 19.3
+      },
+      "previous_stop": {
+        "count": 212,
+        "percent": 0.6
+      }
+    },
+    "withBearingPercent": 80.7,
+    "withoutBearingPercent": 19.3,
+    "routeTypesInReference": {
+      "0": 11,
+      "2": 1437,
+      "3": 6609,
+      "5": 4,
+      "8": 4,
+      "715": 14
+    }
+  },
+  "lookupCost": {
+    "hostSecondsUntraced": [
+      1.862,
+      1.626
+    ],
+    "hostPlatform": "Windows 11, CPython 3.14.6, native file access",
+    "containerSecondsUntraced": [
+      4.831,
+      6.148,
+      5.459,
+      5.071
+    ],
+    "containerPlatform": "Linux (WSL2) CPython 3.14.6, generation via Docker Desktop bind mount",
+    "tracedSecondsHost": 5.893,
+    "retainedMiB": 6.66,
+    "peakMiB": 38.0,
+    "sameTracedMiBInContainer": [
+      6.66,
+      38.0
+    ]
+  },
+  "residentMemory": {
+    "oldApi8000MiB": 348.0,
+    "newApi8001MiB": 322.1,
+    "newApi8001AfterLookupProcessesMiB": 324.3,
+    "oldApiBeforeNewContainerStartedMiB": 347.4,
+    "note": "Container-level docker stats (cgroup), 1 GiB cap each; not a like-for-like lookup measurement."
+  },
+  "additiveCheck": [
+    {
+      "path": "/v1/stops?near=32.0757,34.7748&radius=300&limit=20",
+      "oldStatus": 200,
+      "oldMs": 21.0,
+      "newStatus": 200,
+      "newMs": 24.7,
+      "items": 12,
+      "additiveOnly": true,
+      "newFacets": [
+        [
+          "mot:stop:13583",
+          "bus",
+          357.6,
+          "next_stop"
+        ],
+        [
+          "mot:stop:13561",
+          "bus",
+          null,
+          null
+        ],
+        [
+          "mot:stop:13560",
+          "bus",
+          15.0,
+          "next_stop"
+        ],
+        [
+          "mot:stop:49938",
+          "bus",
+          197.5,
+          "next_stop"
+        ],
+        [
+          "mot:stop:49952",
+          "bus",
+          80.2,
+          "next_stop"
+        ],
+        [
+          "mot:stop:13557",
+          "bus",
+          266.7,
+          "next_stop"
+        ],
+        [
+          "mot:stop:13562",
+          "bus",
+          228.5,
+          "next_stop"
+        ],
+        [
+          "mot:stop:13582",
+          "bus",
+          136.7,
+          "next_stop"
+        ],
+        [
+          "mot:stop:13581",
+          "bus",
+          349.3,
+          "next_stop"
+        ],
+        [
+          "mot:stop:13141",
+          "bus",
+          27.2,
+          "next_stop"
+        ],
+        [
+          "mot:stop:13142",
+          null,
+          null,
+          null
+        ],
+        [
+          "mot:stop:13588",
+          "bus",
+          212.3,
+          "next_stop"
+        ]
+      ]
+    },
+    {
+      "path": "/v1/stops?near=32.0838,34.8044&radius=300&limit=20",
+      "oldStatus": 200,
+      "oldMs": 4.7,
+      "newStatus": 200,
+      "newMs": 4.0,
+      "items": 12,
+      "additiveOnly": true,
+      "newFacets": [
+        [
+          "mot:stop:12911",
+          null,
+          null,
+          null
+        ],
+        [
+          "mot:stop:13916",
+          "bus",
+          37.5,
+          "next_stop"
+        ],
+        [
+          "mot:stop:13198",
+          "bus",
+          67.2,
+          "next_stop"
+        ],
+        [
+          "mot:stop:14509",
+          "bus",
+          9.8,
+          "next_stop"
+        ],
+        [
+          "mot:stop:48531",
+          "light_rail",
+          null,
+          null
+        ],
+        [
+          "mot:stop:49101",
+          "light_rail",
+          255.5,
+          "next_stop"
+        ],
+        [
+          "mot:stop:49150",
+          "light_rail",
+          63.0,
+          "next_stop"
+        ],
+        [
+          "mot:stop:13332",
+          "bus",
+          260.1,
+          "next_stop"
+        ],
+        [
+          "mot:stop:13918",
+          "bus",
+          291.3,
+          "next_stop"
+        ],
+        [
+          "mot:stop:50332",
+          "bus",
+          264.4,
+          "next_stop"
+        ],
+        [
+          "mot:stop:13917",
+          "bus",
+          97.8,
+          "next_stop"
+        ],
+        [
+          "mot:stop:52016",
+          null,
+          null,
+          null
+        ]
+      ]
+    },
+    {
+      "path": "/v1/stops/mot:stop:13583",
+      "oldStatus": 200,
+      "oldMs": 7.5,
+      "newStatus": 200,
+      "newMs": 8.8,
+      "items": 1,
+      "additiveOnly": true,
+      "newFacets": [
+        [
+          "mot:stop:13583",
+          "bus",
+          357.6,
+          "next_stop"
+        ]
+      ]
+    },
+    {
+      "path": "/v1/stops/mot:stop:37358",
+      "oldStatus": 200,
+      "oldMs": 68.7,
+      "newStatus": 200,
+      "newMs": 39.3,
+      "items": 1,
+      "additiveOnly": true,
+      "newFacets": [
+        [
+          "mot:stop:37358",
+          "rail",
+          null,
+          null
+        ]
+      ]
+    },
+    {
+      "path": "/v1/stops/mot:stop:43264",
+      "oldStatus": 200,
+      "oldMs": 4.6,
+      "newStatus": 200,
+      "newMs": 2.8,
+      "items": 1,
+      "additiveOnly": true,
+      "newFacets": [
+        [
+          "mot:stop:43264",
+          null,
+          null,
+          null
+        ]
+      ]
+    }
+  ],
+  "journeyPairs": {
+    "usable": 20,
+    "withDirectionAtStop": 12,
+    "agreeUnder45": 9,
+    "disagree45OrMore": 3,
+    "noDirectionAtStop": 8,
+    "skippedCasesWithoutTransitLeg": [
+      {
+        "case": "J23",
+        "corpus": "probe-queries",
+        "reason": "no transit leg"
+      },
+      {
+        "case": "J09",
+        "corpus": "h3-review-raw",
+        "reason": "no transit leg"
+      }
+    ],
+    "pairs": [
+      {
+        "case": "J01",
+        "corpus": "probe-queries",
+        "mode": "bus",
+        "route": "82",
+        "stopId": "mot:stop:49952",
+        "stopName": "דיזנגוף סנטר/המלך ג'ורג'",
+        "boardingBearingDegrees": 30.8,
+        "boardingBearingSource": "leg_geometry",
+        "stopBearingDegrees": 80.2,
+        "stopBearingSource": "next_stop",
+        "stopMode": "bus",
+        "differenceDegrees": 49.4,
+        "result": "disagree"
+      },
+      {
+        "case": "J04",
+        "corpus": "probe-queries",
+        "mode": "bus",
+        "route": "63",
+        "stopId": "mot:stop:13561",
+        "stopName": "דיזנגוף סנטר/דיזנגוף",
+        "boardingBearingDegrees": 135.4,
+        "boardingBearingSource": "leg_geometry",
+        "stopBearingDegrees": null,
+        "stopBearingSource": null,
+        "stopMode": "bus",
+        "differenceDegrees": null,
+        "result": "no_direction_at_stop"
+      },
+      {
+        "case": "J11",
+        "corpus": "probe-queries",
+        "mode": "rail",
+        "route": "",
+        "stopId": "mot:stop:37358",
+        "stopName": "תל אביב מרכז",
+        "boardingBearingDegrees": 10.4,
+        "boardingBearingSource": "leg_geometry",
+        "stopBearingDegrees": null,
+        "stopBearingSource": null,
+        "stopMode": "rail",
+        "differenceDegrees": null,
+        "result": "no_direction_at_stop"
+      },
+      {
+        "case": "J12",
+        "corpus": "probe-queries",
+        "mode": "rail",
+        "route": "",
+        "stopId": "mot:stop:37358",
+        "stopName": "תל אביב מרכז",
+        "boardingBearingDegrees": 200.3,
+        "boardingBearingSource": "leg_geometry",
+        "stopBearingDegrees": null,
+        "stopBearingSource": null,
+        "stopMode": "rail",
+        "differenceDegrees": null,
+        "result": "no_direction_at_stop"
+      },
+      {
+        "case": "J15",
+        "corpus": "probe-queries",
+        "mode": "rail",
+        "route": "",
+        "stopId": "mot:stop:37332",
+        "stopName": "רחובות",
+        "boardingBearingDegrees": 322.8,
+        "boardingBearingSource": "leg_geometry",
+        "stopBearingDegrees": null,
+        "stopBearingSource": null,
+        "stopMode": "rail",
+        "differenceDegrees": null,
+        "result": "no_direction_at_stop"
+      },
+      {
+        "case": "J16",
+        "corpus": "probe-queries",
+        "mode": "rail",
+        "route": "",
+        "stopId": "mot:stop:37358",
+        "stopName": "תל אביב מרכז",
+        "boardingBearingDegrees": 16.8,
+        "boardingBearingSource": "leg_geometry",
+        "stopBearingDegrees": null,
+        "stopBearingSource": null,
+        "stopMode": "rail",
+        "differenceDegrees": null,
+        "result": "no_direction_at_stop"
+      },
+      {
+        "case": "J19",
+        "corpus": "probe-queries",
+        "mode": "bus",
+        "route": "91",
+        "stopId": "mot:stop:14175",
+        "stopName": "גלגלי הפלדה/יוחנן הסנדלר",
+        "boardingBearingDegrees": 206.2,
+        "boardingBearingSource": "leg_geometry",
+        "stopBearingDegrees": 196.7,
+        "stopBearingSource": "next_stop",
+        "stopMode": "bus",
+        "differenceDegrees": 9.5,
+        "result": "agree"
+      },
+      {
+        "case": "J21",
+        "corpus": "probe-queries",
+        "mode": "rail",
+        "route": "",
+        "stopId": "mot:stop:37358",
+        "stopName": "תל אביב מרכז",
+        "boardingBearingDegrees": 200.3,
+        "boardingBearingSource": "leg_geometry",
+        "stopBearingDegrees": null,
+        "stopBearingSource": null,
+        "stopMode": "rail",
+        "differenceDegrees": null,
+        "result": "no_direction_at_stop"
+      },
+      {
+        "case": "J22",
+        "corpus": "probe-queries",
+        "mode": "bus",
+        "route": "445",
+        "stopId": "mot:stop:13561",
+        "stopName": "דיזנגוף סנטר/דיזנגוף",
+        "boardingBearingDegrees": 135.4,
+        "boardingBearingSource": "leg_geometry",
+        "stopBearingDegrees": null,
+        "stopBearingSource": null,
+        "stopMode": "bus",
+        "differenceDegrees": null,
+        "result": "no_direction_at_stop"
+      },
+      {
+        "case": "J02",
+        "corpus": "h3-review-raw",
+        "mode": "bus",
+        "route": "24",
+        "stopId": "mot:stop:13051",
+        "stopName": "האוניברסיטה/חיים לבנון",
+        "boardingBearingDegrees": 178.6,
+        "boardingBearingSource": "leg_geometry",
+        "stopBearingDegrees": 192.8,
+        "stopBearingSource": "next_stop",
+        "stopMode": "bus",
+        "differenceDegrees": 14.2,
+        "result": "agree"
+      },
+      {
+        "case": "J03",
+        "corpus": "h3-review-raw",
+        "mode": "bus",
+        "route": "44",
+        "stopId": "mot:stop:43281",
+        "stopName": "יפת/לואי פסטר",
+        "boardingBearingDegrees": 38.5,
+        "boardingBearingSource": "leg_geometry",
+        "stopBearingDegrees": 48.4,
+        "stopBearingSource": "next_stop",
+        "stopMode": "bus",
+        "differenceDegrees": 9.9,
+        "result": "agree"
+      },
+      {
+        "case": "J05",
+        "corpus": "h3-review-raw",
+        "mode": "light_rail",
+        "route": "1",
+        "stopId": "mot:stop:35149",
+        "stopName": "מחנה יהודה",
+        "boardingBearingDegrees": 289.5,
+        "boardingBearingSource": "leg_geometry",
+        "stopBearingDegrees": 295.7,
+        "stopBearingSource": "next_stop",
+        "stopMode": "light_rail",
+        "differenceDegrees": 6.2,
+        "result": "agree"
+      },
+      {
+        "case": "J06",
+        "corpus": "h3-review-raw",
+        "mode": "bus",
+        "route": "18",
+        "stopId": "mot:stop:10754",
+        "stopName": "ת. מרכזית ירושלים/יפו",
+        "boardingBearingDegrees": 91.9,
+        "boardingBearingSource": "leg_geometry",
+        "stopBearingDegrees": 129.9,
+        "stopBearingSource": "next_stop",
+        "stopMode": "bus",
+        "differenceDegrees": 38.0,
+        "result": "agree"
+      },
+      {
+        "case": "J07",
+        "corpus": "h3-review-raw",
+        "mode": "bus",
+        "route": "31",
+        "stopId": "mot:stop:40026",
+        "stopName": "שדרות שז''ר/בנייני האומה",
+        "boardingBearingDegrees": 88.8,
+        "boardingBearingSource": "leg_geometry",
+        "stopBearingDegrees": 134.5,
+        "stopBearingSource": "next_stop",
+        "stopMode": "bus",
+        "differenceDegrees": 45.7,
+        "result": "disagree"
+      },
+      {
+        "case": "J08",
+        "corpus": "h3-review-raw",
+        "mode": "bus",
+        "route": "3",
+        "stopId": "mot:stop:3588",
+        "stopName": "המגינים/ככר ההגנה",
+        "boardingBearingDegrees": 102.8,
+        "boardingBearingSource": "leg_geometry",
+        "stopBearingDegrees": 129.0,
+        "stopBearingSource": "next_stop",
+        "stopMode": "bus",
+        "differenceDegrees": 26.2,
+        "result": "agree"
+      },
+      {
+        "case": "J10",
+        "corpus": "h3-review-raw",
+        "mode": "bus",
+        "route": "136",
+        "stopId": "mot:stop:1873",
+        "stopName": "מוריה/ספקטור",
+        "boardingBearingDegrees": 341.8,
+        "boardingBearingSource": "leg_geometry",
+        "stopBearingDegrees": 344.3,
+        "stopBearingSource": "next_stop",
+        "stopMode": "bus",
+        "differenceDegrees": 2.5,
+        "result": "agree"
+      },
+      {
+        "case": "J13",
+        "corpus": "h3-review-raw",
+        "mode": "rail",
+        "route": "",
+        "stopId": "mot:stop:37350",
+        "stopName": "השלום",
+        "boardingBearingDegrees": 142.9,
+        "boardingBearingSource": "leg_geometry",
+        "stopBearingDegrees": null,
+        "stopBearingSource": null,
+        "stopMode": "rail",
+        "differenceDegrees": null,
+        "result": "no_direction_at_stop"
+      },
+      {
+        "case": "J14",
+        "corpus": "h3-review-raw",
+        "mode": "rail",
+        "route": "",
+        "stopId": "mot:stop:37382",
+        "stopName": "נהריה",
+        "boardingBearingDegrees": 186.6,
+        "boardingBearingSource": "leg_geometry",
+        "stopBearingDegrees": 189.8,
+        "stopBearingSource": "next_stop",
+        "stopMode": "rail",
+        "differenceDegrees": 3.2,
+        "result": "agree"
+      },
+      {
+        "case": "J17",
+        "corpus": "h3-review-raw",
+        "mode": "bus",
+        "route": "58",
+        "stopId": "mot:stop:22189",
+        "stopName": "עמק איילון/תלתן",
+        "boardingBearingDegrees": 205.5,
+        "boardingBearingSource": "leg_geometry",
+        "stopBearingDegrees": 247.7,
+        "stopBearingSource": "next_stop",
+        "stopMode": "bus",
+        "differenceDegrees": 42.2,
+        "result": "agree"
+      },
+      {
+        "case": "J18",
+        "corpus": "h3-review-raw",
+        "mode": "bus",
+        "route": "5",
+        "stopId": "mot:stop:26669",
+        "stopName": "מרפאות חוץ סורוקה/אוניברסיטת בן גוריון",
+        "boardingBearingDegrees": 271.0,
+        "boardingBearingSource": "leg_geometry",
+        "stopBearingDegrees": 222.9,
+        "stopBearingSource": "next_stop",
+        "stopMode": "bus",
+        "differenceDegrees": 48.1,
+        "result": "disagree"
+      }
+    ]
+  },
+  "rail": {
+    "railRouteStops": 70,
+    "loaderNotRail": [],
+    "apiChecked": 70,
+    "apiByMode": {
+      "rail": 70
+    },
+    "apiNotRail": []
+  },
+  "limits": [
+    {
+      "limit": "loading adds at most 3 seconds to startup",
+      "measured": "host 1.626-1.862 s; container 4.831-6.148 s",
+      "verdict": "MISSED on the container runtime the stack serves from; met natively on the host"
+    },
+    {
+      "limit": "loading adds at most 30 MiB of memory",
+      "measured": "retained 6.66 MiB, transient peak 38.0 MiB (tracemalloc)",
+      "verdict": "MET on retained size (the lookup's own size, per the ruling); the transient peak exceeds 30 MiB"
+    },
+    {
+      "limit": "at least 18 of 20 pairs differ by less than 45 degrees",
+      "measured": "9 of 20 agree; 3 differ by 45 or more; 8 have no direction at the stop",
+      "verdict": "MISSED"
+    },
+    {
+      "limit": "every stop the feed's rail routes serve reports rail",
+      "measured": "70 of 70 via API and loader",
+      "verdict": "MET"
+    }
+  ],
+  "summary": {
+    "limitsMet": 2,
+    "limitsMissed": 2,
+    "documentationChanged": false
+  }
+}
