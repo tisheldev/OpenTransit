@@ -400,6 +400,39 @@ Also: contact Hasadna (`#open-bus` Slack) about data terms for the archive and s
 
 Not yet done: widen or calibrate the intervals (pooling or a conformal margin) and re-check them on January; drop frozen-distance tracks; flag rest-stop and terminal segments; human review of the outliers; a second season. Public display still needs Phase 4 and data terms.
 
+## Proposed: personal trip preferences
+
+**PROPOSAL, 12 November 2026 — brainstormed with the user, not designed in detail, not scheduled.** The user wants the same search to give each person a first choice suited to how they like to travel: walking further to catch an earlier train, accepting a somewhat longer trip that is mostly by train, walking rather than changing. This is the ranking layer of [PRD §28](../PRD.md#28-route-ranking) ("preferred modes, walking preference"). The [client PRD](client-prd.md) excludes "route preferences beyond depart/arrive time" from the first client; that line stands until the user revises it, and this section changes no gate. A written design comes before any code (user, 12 November: "for now just add this feature to the plan").
+
+Decided by the user on 12 November:
+
+- Each person sorts the parts of a trip (train, light rail, bus, walking, waiting, changing vehicles) into four rows: Like / Fine / Rather not / Avoid. Nobody sets or sees numbers or percentages.
+- A preference has a limit, and the limit grows with the length of the trip. A preferred trip that is far slower must not come first.
+- With no row set, results and their order are exactly today's. H3 verdicts were given on that order and are untouched while no row is set.
+- First version: the settings screen; personal ordering with a short reason on the first option and the fastest option always marked; per-trip switches on the Choose screen ("less walking today", "in a hurry") that apply to one search only.
+- Not in the first version: offering to move a row when the person picks a lower option; a one-time nudge to set the rows; ordering the "bus didn't come" choices by the rows; a pace setting; "avoid this line"; anything that needs data the app lacks (stairs, crowding, weather); accounts or trip history.
+
+Proposed by the session, for the design to settle:
+
+- Each row stands for a hidden weight per minute (per change for changing) and options are ordered by the weighted total. Once any row is set, the others take typical-person weights. A research pass on 12 November reported published ranges of about 1.5–2 ride minutes per walking minute, 1.5–2.5 per waiting minute and 5–15 minutes per change; its sources were not re-checked and must be before any value is chosen.
+- The rows are stored on the device only and travel with each journey request as weights; the server neither stores nor logs them. "Avoid" is a strong preference, never a silent exclusion.
+- The API gathers a wider set of alternatives (two or three engine requests), merges and orders them, returns the reason, and names a ranking policy distinct from the engine-order policy.
+
+Exploratory probe, 12 November (local stack `nov11a`, 10 journeys, Sunday 08:00, read-only engine requests on the developer PC). **Not recorded evidence:** the script and output were not kept in Git; PREF-01 repeats it properly.
+
+- Asked as the API asks today, the engine returned 3–6 alternatives. With a two-hour window and 30-minute first and last walks it returned 15–58, with 6–30 distinct line sequences, in 0.01–0.4 s per request.
+- A rail-only request surfaced train trips the normal request did not (Kfar Saba → Azrieli: buses only at 44 minutes; rail-only 56 minutes with about 24 minutes of walking).
+- Transfer links between stops reach 14 minutes (median 4) over 80 sampled stops; walks between rides in the returned trips were at most 6 minutes. `useRoutedTransfers=true` changed nothing. Longer walks between rides would need a build change.
+- The engine keeps only alternatives that win on departure, arrival or number of changes, so "bus to the station, then a slower train" is absent unless asked for separately. The engine's `via` parameter may cover it (untested).
+
+| ID | Work | Gate | Done when |
+| --- | --- | --- | --- |
+| PREF-01 | Record the candidate-gathering evidence: repeat the probe as a versioned tool and result, add a request via the nearest station, and measure the extra engine requests under the hosted task's limits | Before the design is accepted | Result file with generation, inputs and counts per request type; cost measured under the one-core task limits, not on the developer PC; the 8 GiB ceiling unchanged |
+| PREF-02 | Written design, approved by the user; the client PRD's exclusion revised or kept | User decision | Design linked from the dashboard; the PRD line decided and recorded |
+| PREF-03 | API: optional weights on the journey request, candidate gathering, personal ordering, reason, policy disclosure | PREF-02; additive API change approved by the user | With no weights, every response on the acceptance corpus is identical to today's, order included; fixed sample profiles get the expected first option on a fixed corpus; walking caps and other constraints are never relaxed; weights appear in no log |
+| PREF-04 | Web test client: four-row settings stored on the device, reason and "fastest" mark on Choose, per-trip switches | PREF-03 | Unit and mocked e2e tests; no number shown anywhere; the user tests it on a phone |
+| PREF-05 | The later options listed above | After PREF-04 is in use | Each proposed and decided separately |
+
 ## Non-code workstream
 
 Run these alongside coding. Several are release requirements that no amount of code satisfies.
