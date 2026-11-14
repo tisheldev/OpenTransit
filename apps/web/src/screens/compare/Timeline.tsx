@@ -242,15 +242,17 @@ export function Timeline({
             {stops === null && trip?.status === "error" && <span className="b-mu compare-stops">{t("route.stopsUnavailable")}</span>}
           </LegRow>
         );
-        if (!open) return row;
+        // Always in a fragment, so opening the row does not remount it (focus stays on it).
         return (
           <Fragment key={index}>
             {row}
-            <div className="b-tl compare-tl-open" style={{ "--bar": barColour(leg, theme) } as CSSProperties}>
-              <span />
-              <span className="b-bar" aria-hidden="true" />
-              <RideDepartures leg={leg} onChoose={(departure) => onReplan!(item.legIndex, departure)} />
-            </div>
+            {open && (
+              <div className="b-tl compare-tl-open" style={{ "--bar": barColour(leg, theme) } as CSSProperties}>
+                <span />
+                <span className="b-bar" aria-hidden="true" />
+                <RideDepartures leg={leg} onChoose={(departure) => onReplan!(item.legIndex, departure)} />
+              </div>
+            )}
           </Fragment>
         );
       })}
