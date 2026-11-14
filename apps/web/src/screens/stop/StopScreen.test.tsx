@@ -48,7 +48,7 @@ describe("Stop", () => {
     // the stop along its next stops, with a faded tag at its end.
     await waitFor(() => expect(getMapState().scene.route).toHaveLength(6));
     const scene = getMapState().scene;
-    expect(scene.route.every((leg) => leg.tone === "faded" && leg.kind === "transit")).toBe(true);
+    expect(scene.route.every((leg) => leg.tone === "quiet" && leg.kind === "transit")).toBe(true);
     expect(scene.route.map((leg) => leg.operatorId)).toEqual(["5", "15", "5", "5", "5", "5"]);
     expect(scene.route.every((leg) => leg.coordinates![0]![0] === 34.77512 && leg.coordinates![0]![1] === 32.075566)).toBe(true);
     expect(scene.tags!.map((tag) => [tag.kind, tag.line?.label, tag.text])).toEqual([
@@ -80,7 +80,7 @@ describe("Stop", () => {
     // The whole pattern, end to end (line 8 calls at 42 stops), and the camera frames it.
     expect(chosen.coordinates).toHaveLength(42);
     expect(scene.fitTo).toHaveLength(43);
-    expect(scene.route.filter((leg) => leg.tone === "faded")).toHaveLength(5);
+    expect(scene.route.filter((leg) => leg.tone === "quiet")).toHaveLength(5);
     // A small ring at each of its other stops.
     expect(scene.pins).toHaveLength(41);
     expect(scene.pins.every((pin) => pin.role === "stop")).toBe(true);
@@ -95,7 +95,7 @@ describe("Stop", () => {
     expect(end.position).toEqual(chosen.coordinates![chosen.coordinates!.length - 1]);
     await userEvent.click(row);
     expect(row).toHaveAttribute("aria-pressed", "false");
-    expect(getMapState().scene.route.every((leg) => leg.tone === "faded")).toBe(true);
+    expect(getMapState().scene.route.every((leg) => leg.tone === "quiet")).toBe(true);
   });
 
   it("a faded tag on the map chooses its line too", async () => {
@@ -127,7 +127,7 @@ describe("Stop", () => {
     await waitFor(() => expect(getMapState().scene.route).toHaveLength(2));
     await userEvent.click(lineRows()[0]!);
     const scene = getMapState().scene;
-    expect(scene.route.every((leg) => leg.tone === "faded")).toBe(true);
+    expect(scene.route.every((leg) => leg.tone === "quiet")).toBe(true);
     expect(scene.tags!.find((tag) => tag.kind === "strong")).toMatchObject({ line: { label: "172" }, text: "מסוף רדינג" });
     expect(scene.tags!.find((tag) => tag.id === "direction")).toBeUndefined();
   });

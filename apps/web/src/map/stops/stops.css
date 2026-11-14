@@ -1,0 +1,495 @@
+/* The stops layer (stops and lines design, 12 November 2026): marker G exactly as drawn on
+   the canvas (boards Main, MapFar, MapGroups, MapGroupOpen, MapClose; sheets Markers G,
+   MarkerTuning, MarkerMotion). Every marker is placed at its kerb point (.ot-stop at 0 0,
+   moved by a transform each frame); the parts below are offset from that point in
+   physical pixels, since the map is never mirrored. Colours are tokens (stop-*), light
+   values from MarkerTuning. */
+
+.ot-stops {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.ot-stop {
+  position: absolute;
+  left: 0;
+  top: 0;
+  inline-size: 0;
+  block-size: 0;
+  will-change: transform;
+}
+.ot-stop--top {
+  z-index: 3;
+}
+.ot-stop--station {
+  z-index: 2;
+}
+
+/* The animated part, scaled around the kerb point. */
+.ot-stop__body {
+  position: absolute;
+  left: 0;
+  top: 0;
+  inline-size: 0;
+  block-size: 0;
+  transform-origin: 0 0;
+}
+
+/* --- the sign ------------------------------------------------------------------------ */
+
+.ot-stop-hit {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  inline-size: 44px;
+  block-size: 44px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  pointer-events: auto;
+  cursor: pointer;
+  z-index: 2;
+  -webkit-tap-highlight-color: transparent;
+}
+span.ot-stop-hit {
+  cursor: default;
+}
+.ot-stop-hit:focus-visible {
+  outline: none;
+}
+.ot-stop-hit:focus-visible > .ot-stop-sign,
+.ot-stop-hit:focus-visible > .ot-stop-square,
+.ot-stop-hit:focus-visible > .ot-stop-group {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
+/* 20 px, corner 5, mustard, a 1.5 px dark edge, the 12 px bus (boards' .sg). */
+.ot-stop-sign {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 20px;
+  block-size: 20px;
+  border-radius: 5px;
+  background: var(--stop-sign);
+  border: var(--stop-edge-width, 1.5px) solid var(--stop-sign-edge);
+}
+.ot-stop-sign svg {
+  display: block;
+  inline-size: 12px;
+  block-size: 12px;
+  fill: var(--stop-sign-edge);
+}
+/* The chosen stop: 28 px, corner 8, bright, a 2.5 px edge and a 3 px pale outline (on the
+   light map a white outline with a thin dark rim). */
+.ot-stop-sign--chosen {
+  inline-size: 28px;
+  block-size: 28px;
+  border-radius: 8px;
+  background: var(--stop-chosen);
+  border-width: 2.5px;
+  box-shadow:
+    0 0 0 3px var(--stop-chosen-ring),
+    0 0 0 4.5px var(--stop-chosen-rim);
+}
+.ot-stop-sign--chosen svg {
+  inline-size: 17px;
+  block-size: 17px;
+}
+/* A train or light-rail station: the same sign, 22 px, purple, a white 13 px train. */
+.ot-stop-sign--station {
+  inline-size: 22px;
+  block-size: 22px;
+  border-radius: 6px;
+  background: var(--stop-station);
+  border-width: 1.5px;
+}
+.ot-stop-sign--station svg {
+  inline-size: 13px;
+  block-size: 13px;
+  fill: var(--stop-station-icon);
+}
+
+/* Where the 44 px hit area (and so the sign at its centre) sits around the kerb point:
+   the sign's near edge 12 px from the kerb (pole 10 px, dot 6 px on the kerb). */
+.ot-stop--up .ot-stop-hit { left: -22px; top: -44px; transform-origin: 22px 44px; }
+.ot-stop--down .ot-stop-hit { left: -22px; top: 0; transform-origin: 22px 0; }
+.ot-stop--left .ot-stop-hit { left: -44px; top: -22px; transform-origin: 44px 22px; }
+.ot-stop--right .ot-stop-hit { left: 0; top: -22px; transform-origin: 0 22px; }
+.ot-stop--centre .ot-stop-hit { left: -22px; top: -22px; transform-origin: 22px 22px; }
+.ot-stop--chosen.ot-stop--up .ot-stop-hit { top: -48px; transform-origin: 22px 48px; }
+.ot-stop--chosen.ot-stop--down .ot-stop-hit { top: 4px; transform-origin: 22px -4px; }
+.ot-stop--chosen.ot-stop--left .ot-stop-hit { left: -48px; transform-origin: 48px 22px; }
+.ot-stop--chosen.ot-stop--right .ot-stop-hit { left: 4px; transform-origin: -4px 22px; }
+
+/* The pole (2.5 × 10 px) and the kerb dot (6 px), in the sign's mustard (ochre on light). */
+.ot-stop-pole,
+.ot-stop-dot {
+  position: absolute;
+  background: var(--stop-pole);
+  pointer-events: none;
+}
+.ot-stop-pole--up { left: -1.25px; top: -12px; inline-size: 2.5px; block-size: 10px; }
+.ot-stop-pole--down { left: -1.25px; top: 2px; inline-size: 2.5px; block-size: 10px; }
+.ot-stop-pole--left { left: -12px; top: -1.25px; inline-size: 10px; block-size: 2.5px; }
+.ot-stop-pole--right { left: 2px; top: -1.25px; inline-size: 10px; block-size: 2.5px; }
+.ot-stop-dot {
+  left: -3px;
+  top: -3px;
+  inline-size: 6px;
+  block-size: 6px;
+  border-radius: 50%;
+}
+
+/* Neighbourhood zoom: a 12 px square, no pole, no icon (board 8). */
+.ot-stop-square {
+  box-sizing: border-box;
+  inline-size: 12px;
+  block-size: 12px;
+  border-radius: 4px;
+  background: var(--stop-sign);
+  border: var(--stop-edge-width, 1.5px) solid var(--stop-sign-edge);
+}
+
+/* A group: a pale circle with the count, 30 px (36 px from five), a 3 px dark edge and a
+   2 px pale ring (board 8). */
+.ot-stop-group {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 30px;
+  block-size: 30px;
+  border-radius: 50%;
+  background: var(--stop-group);
+  color: var(--stop-group-ink);
+  border: 3px solid var(--stop-group-ink);
+  box-shadow: 0 0 0 2px var(--stop-group);
+  font-family: var(--font-numerals);
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1;
+}
+.ot-stop-group--large {
+  inline-size: 36px;
+  block-size: 36px;
+  font-size: 18px;
+}
+/* At street zoom a group stands on its stops' kerb dots (MarkerTuning, crowded junction). */
+.ot-stop-legs {
+  position: absolute;
+  left: 0;
+  top: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+.ot-stop-legs line {
+  stroke: var(--stop-pole);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}
+.ot-stop-legs circle {
+  fill: var(--stop-pole);
+}
+
+/* A station's name (boards 7 and 8): 13 px bold, haloed in the page colour. */
+.ot-stop-label {
+  position: absolute;
+  top: -9px;
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 700;
+  white-space: nowrap;
+  text-shadow:
+    0 0 3px var(--bg),
+    0 0 3px var(--bg),
+    0 0 6px var(--bg);
+  pointer-events: none;
+}
+.ot-stop-label--left { right: 15px; }
+.ot-stop-label--right { left: 15px; }
+
+/* The open group's dashed ring (board 9). */
+.ot-stop-ring {
+  position: absolute;
+  overflow: visible;
+  pointer-events: none;
+}
+.ot-stop-ring circle {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.5;
+  stroke-dasharray: 3 6;
+  opacity: 0.7;
+}
+
+/* --- the next-line tag (boards Main and MapClose: .fl) -------------------------------- */
+
+.ot-stop-tag {
+  box-sizing: border-box;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  block-size: 20px;
+  margin: 0;
+  padding-block: 0;
+  padding-inline: 10px 7px;
+  border-radius: 5px;
+  background: var(--stop-tag);
+  border: 1px solid var(--stop-tag-edge);
+  color: var(--stop-tag-ink);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  line-height: 1;
+  font-weight: 700;
+  white-space: nowrap;
+  pointer-events: auto;
+  cursor: pointer;
+  z-index: 1;
+  transition: opacity 140ms linear;
+}
+/* Left of its sign the badge sits by the sign (the boards' default in Hebrew); right of it, the same mirrored. */
+.ot-stop-tag--left {
+  flex-direction: row-reverse;
+  padding-inline: 7px 10px;
+}
+.ot-stop-tag::after {
+  content: "";
+  position: absolute;
+  inset: -12px 0;
+}
+.ot-stop-tag--measure {
+  visibility: hidden;
+  pointer-events: none;
+}
+.ot-stop-tag--chosen {
+  block-size: 28px;
+  padding-inline: 13px 9px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--stop-tag-chosen);
+  color: var(--stop-tag-chosen-ink);
+  font-size: 13px;
+}
+.ot-stop-tag--chosen.ot-stop-tag--left {
+  padding-inline: 9px 13px;
+}
+.ot-stop-tag::after {
+  border-radius: inherit;
+}
+.ot-stop-tag:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.ot-tag-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  block-size: 16px;
+  padding-inline: 4px;
+  border-radius: 4px;
+  background: var(--line-bg, var(--mode-bus));
+  color: var(--line-ink, var(--on-brand));
+  font-family: var(--font-numerals);
+  font-size: 12px;
+  line-height: 14px;
+  font-weight: 700;
+  flex: none;
+}
+.ot-tag-badge--rail {
+  --line-bg: var(--mode-rail);
+}
+.ot-tag-badge svg {
+  display: block;
+  inline-size: 9px;
+  block-size: 9px;
+  fill: currentColor;
+}
+.ot-tag-badge bdi:not(.num) {
+  font-family: var(--font-sans);
+}
+.ot-stop-tag--chosen .ot-tag-badge {
+  block-size: 20px;
+  padding-inline: 5px;
+  font-size: 14px;
+}
+.ot-stop-tag--chosen .ot-tag-badge svg {
+  inline-size: 11px;
+  block-size: 11px;
+}
+
+/* Tags fade out the moment the map moves (about 100 ms) and return a quarter-second after it stops. */
+.ot-stops--moving .ot-stop-tag {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 100ms linear;
+}
+
+/* --- far out: the hint (board 7) ------------------------------------------------------ */
+
+.ot-stops-hint {
+  box-sizing: border-box;
+  position: absolute;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  block-size: 36px;
+  margin: 0;
+  padding-inline: 12px;
+  border-radius: 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 700;
+  white-space: nowrap;
+  box-shadow: var(--shadow-float);
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 4;
+}
+.ot-stops-hint svg {
+  inline-size: 16px;
+  block-size: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex: none;
+}
+
+/* --- the quiet layer (Choose, Route details) ------------------------------------------ */
+
+.ot-stops--quiet .ot-stop {
+  opacity: 0.5;
+}
+.ot-stops--quiet .ot-stop-hit {
+  pointer-events: none;
+}
+
+/* --- light map (MarkerTuning): a firmer 2 px edge ---------------------------------------- */
+
+:root[data-theme="light"] .ot-stop {
+  --stop-edge-width: 2px;
+}
+
+/* --- motion (MarkerMotion: the loops are slowed for reading; these are the timings) ----- */
+
+/* A stop coming into view grows out of its kerb dot in at most 180 ms. */
+@keyframes ot-stop-grow {
+  0% { opacity: 0; transform: scale(0.3); }
+  62.5% { opacity: 1; transform: scale(1.12); }
+  100% { opacity: 1; transform: scale(1); }
+}
+.ot-stop__body--grow {
+  animation: ot-stop-grow 180ms ease-out both;
+}
+
+/* Zooming through a group: each stop slides from the count to its own kerb, about 220 ms;
+   zooming out they slide back into it. Nothing pops in from nowhere. */
+@keyframes ot-stop-split {
+  0% { opacity: 0; transform: translate(var(--from-x, 0), var(--from-y, 0)) scale(0.4); }
+  100% { opacity: 1; transform: translate(0, 0) scale(1); }
+}
+@keyframes ot-stop-merge {
+  0% { opacity: 1; transform: translate(0, 0) scale(1); }
+  100% { opacity: 0; transform: translate(var(--to-x, 0), var(--to-y, 0)) scale(0.4); }
+}
+@keyframes ot-group-in {
+  0% { opacity: 0; transform: scale(0.4); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@keyframes ot-group-out {
+  0% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0.4); }
+}
+.ot-stop__body--split { animation: ot-stop-split 220ms ease-in-out both; }
+.ot-stop__body--merge { animation: ot-stop-merge 220ms ease-in-out both; }
+.ot-stop__body--group-in { animation: ot-group-in 220ms ease-in-out both; }
+.ot-stop__body--group-out { animation: ot-group-out 220ms ease-in-out both; }
+
+/* Choosing a stop: the sign grows where it stands and turns bright, about 160 ms; its tag
+   turns pale and slides out from behind it; no other stop changes. */
+@keyframes ot-choose-out {
+  0% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.35); }
+}
+@keyframes ot-choose-in {
+  0% { opacity: 0; transform: scale(0.7); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@keyframes ot-stop-ripple {
+  0% { opacity: 0.9; transform: scale(0.3); }
+  100% { opacity: 0; transform: scale(1.4); }
+}
+@keyframes ot-tag-slide-left {
+  0% { opacity: 0; transform: translateX(12px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+@keyframes ot-tag-slide-right {
+  0% { opacity: 0; transform: translateX(-12px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+.ot-stop-was {
+  pointer-events: none;
+  animation: ot-choose-out 160ms ease-in-out both;
+}
+.ot-stop--choosing .ot-stop-hit:not(.ot-stop-was) {
+  animation: ot-choose-in 160ms ease-in-out both;
+}
+.ot-stop-ripple {
+  position: absolute;
+  inline-size: 36px;
+  block-size: 36px;
+  margin: -18px 0 0 -18px;
+  border-radius: 50%;
+  border: 2px solid var(--stop-chosen-ring);
+  pointer-events: none;
+  animation: ot-stop-ripple 290ms ease-out both;
+}
+.ot-stop--choosing .ot-stop-tag--left { animation: ot-tag-slide-left 160ms ease-in-out both; }
+.ot-stop--choosing .ot-stop-tag--right { animation: ot-tag-slide-right 160ms ease-in-out both; }
+
+@keyframes ot-stop-fade-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+@keyframes ot-stop-fade-out {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* Reduce motion: markers only fade. */
+@media (prefers-reduced-motion: reduce) {
+  .ot-stop__body--grow,
+  .ot-stop__body--split,
+  .ot-stop__body--group-in,
+  .ot-stop--choosing .ot-stop-hit:not(.ot-stop-was),
+  .ot-stop--choosing .ot-stop-tag--left,
+  .ot-stop--choosing .ot-stop-tag--right {
+    animation-name: ot-stop-fade-in;
+  }
+  .ot-stop__body--merge,
+  .ot-stop__body--group-out,
+  .ot-stop-was {
+    animation-name: ot-stop-fade-out;
+  }
+  .ot-stop-ripple {
+    display: none;
+  }
+}

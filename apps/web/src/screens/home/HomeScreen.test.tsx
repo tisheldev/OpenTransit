@@ -112,28 +112,16 @@ describe("Home", () => {
     ]);
     expect(screen.getByText(he["home.near.walk"].replace("{minutes}", "5"))).toBeInTheDocument();
     // No fix: no ring, no puck; the map frames the stops.
-    await waitFor(() => expect(getMapState().scene.stopPins).toHaveLength(4));
+    await waitFor(() => expect(getMapState().scene.stops?.known).toHaveLength(4));
     const scene = getMapState().scene;
     expect(scene).toMatchObject({ camera: "fit", ring: null, user: null, focus: { center: [34.7748, 32.0757], zoom: 16 } });
-    // Nearest first, the selected (nearest) stop last so it is drawn on top.
-    expect(scene.stopPins!.map((pin) => [pin.id, pin.selected])).toEqual([
-      ["mot:stop:13561", false],
-      ["mot:stop:13560", false],
-      ["mot:stop:49938", false],
-      ["mot:stop:13583", true],
-    ]);
-    // Two tags carry the next departure: the selected stop's (strong, above its pin) and the
-    // nearest other stop with room for one (below its pin); 13561 is across the street from
-    // 13583, too close for a tag of its own.
-    await waitFor(() => expect(getMapState().scene.tags?.length).toBe(2));
-    const tags = getMapState().scene.tags!;
-    expect(tags.map((tag) => [tag.id, tag.kind, tag.anchor])).toEqual([
-      ["next-mot:stop:13583", "strong", "above"],
-      ["next-mot:stop:13560", "plain", "below"],
-    ]);
-    expect(tags[0]).toMatchObject({ text: "2 דק׳", line: { label: "172", operatorId: "5" } });
-    // A tag covers its pin, so tapping it does what the pin does: open that stop.
-    act(() => tags[1]!.onSelect!());
+    // The stops layer draws them (marker G); the nearest is the chosen one.
+    expect(scene.stops).toMatchObject({ mode: "full", chosenStopId: "mot:stop:13583" });
+    expect(scene.stops!.known!.map((stop) => stop.stopId)).toEqual(["mot:stop:13583", "mot:stop:13561", "mot:stop:13560", "mot:stop:49938"]);
+    // Each stop's next line for its tag (the layer shows a couple, the chosen stop's first).
+    expect(scene.stops!.next!["mot:stop:13583"]).toMatchObject({ text: "2 דק׳", minutes: 2, line: { label: "172", operatorId: "5" } });
+    // A sign or a tag opens its own stop.
+    act(() => scene.stops!.onSelectStop!("mot:stop:13560"));
     await waitFor(() => expect(window.location.hash).toBe("#/stop/mot%3Astop%3A13560"));
   });
 
@@ -147,15 +135,14 @@ describe("Home", () => {
     expect(rows[0]).toHaveTextContent(/^172מסוף רדינגדיזנגוף סנטר\/דיזנגוף · 1 דק׳ הליכה/);
   });
 
-  it("one tap on any pin opens its stop; the nearest stop's pin opens too", async () => {
+  it("one tap on any stop opens it; the nearest stop is the chosen one", async () => {
     renderApp("#/");
-    const pin = (id: string) => getMapState().scene.stopPins?.find((item) => item.id === id);
-    await waitFor(() => expect(pin("mot:stop:13560")?.ariaLabel).toMatch(/^פתיחת התחנה דיזנגוף סנטר\/טשרניחובסקי, קו 66 בעוד \d+ דק׳$/));
-    const selected = getMapState().scene.stopPins!.find((item) => item.selected)!;
-    expect(selected.id).toBe("mot:stop:13583");
-    act(() => pin("mot:stop:13560")!.onSelect!());
+    await waitFor(() => expect(getMapState().scene.stops?.next?.["mot:stop:13560"]?.line.label).toBe("66"));
+    const layer = getMapState().scene.stops!;
+    expect(layer.chosenStopId).toBe("mot:stop:13583");
+    act(() => layer.onSelectStop!("mot:stop:13560"));
     await waitFor(() => expect(window.location.hash).toBe("#/stop/mot%3Astop%3A13560"));
-    act(() => selected.onSelect!());
+    act(() => layer.onSelectStop!("mot:stop:13583"));
     await waitFor(() => expect(window.location.hash).toBe("#/stop/mot%3Astop%3A13583"));
   });
 
@@ -276,7 +263,7 @@ describe("Home", () => {
     expect(nearbyCalls).toBe(1);
     expect([...departureCalls].sort()).toEqual(["mot:stop:13560", "mot:stop:13561", "mot:stop:13583", "mot:stop:49938"]);
     // The operator comes from each stop's routes when departures do not carry it.
-    await waitFor(() => expect(getMapState().scene.tags?.[0]?.line).toMatchObject({ label: "172", operatorId: "5" }));
+    await waitFor(() => expect(getMapState().scene.stops?.next?.["mot:stop:13583"]?.line).toMatchObject({ label: "172", operatorId: "5" }));
   });
 
   it("says so when the nearby stops cannot be read, with a retry", async () => {

@@ -174,6 +174,15 @@ export function SavedLineCard({ line, next, now }: { line: SavedLine; next: Stop
   );
 }
 
+/**
+ * Board 10: panned away from the passenger, "Near you" becomes "In this area" around the
+ * map's centre, with the distance from the passenger (when there is a fix); rows name
+ * their stop only (a walk from the map's centre means nothing).
+ */
+export interface NearArea {
+  distanceText: string | null;
+}
+
 /** "Near you": each line's next departure within the walk, naming its stop and the walk. */
 export function NearLinesSection({
   rows,
@@ -181,20 +190,26 @@ export function NearLinesSection({
   error,
   onRetry,
   now,
+  area = null,
 }: {
   rows: readonly NearLine[];
   pending: boolean;
   error: unknown;
   onRetry: () => void;
   now: Date;
+  area?: NearArea | null;
 }) {
   const { t } = useI18n();
   const headingId = useId();
   return (
     <section className="hs-near" aria-labelledby={headingId}>
       <div className="hs-near__head">
-        <h2 id={headingId}>{t("home.near.title")}</h2>
-        <span className="hs-mu">{t("home.near.walk", { minutes: NEAR_WALK_MINUTES })}</span>
+        <h2 id={headingId}>{area ? t("stops.area") : t("home.near.title")}</h2>
+        {area ? (
+          area.distanceText && <span className="hs-mu">{t("stops.area.distance", { distance: area.distanceText })}</span>
+        ) : (
+          <span className="hs-mu">{t("home.near.walk", { minutes: NEAR_WALK_MINUTES })}</span>
+        )}
       </div>
       {pending ? null : error ? (
         <ErrorState state={failureState(error)} onRetry={onRetry} />
@@ -209,7 +224,7 @@ export function NearLinesSection({
                 <span className="hs-row__text">
                   <bdi className="hs-row__name">{row.line.headsign ?? row.line.label}</bdi>
                   <span className="hs-mu hs-ellipsis">
-                    <bdi>{t("home.near.from", { stop: row.stopName, minutes: row.walkMinutes })}</bdi>
+                    <bdi>{area ? row.stopName : t("home.near.from", { stop: row.stopName, minutes: row.walkMinutes })}</bdi>
                   </span>
                 </span>
                 <NearDue instant={row.line.next} now={now} />
@@ -236,6 +251,7 @@ export function HomeSheet({
   savedStops,
   savedLines,
   onTravel,
+  area = null,
 }: {
   nearby: HomeStops;
   centre: LatLon;
@@ -246,6 +262,8 @@ export function HomeSheet({
   savedStops: readonly SavedStop[];
   savedLines: readonly SavedLine[];
   onTravel: (saved: SavedPlace) => void;
+  /** Board 10: the map is away from the passenger (NearLinesSection). */
+  area?: NearArea | null;
 }) {
   const { t } = useI18n();
   const now = useNow();
@@ -284,6 +302,7 @@ export function HomeSheet({
         error={nearby.error}
         onRetry={() => nearby.refetch()}
         now={now}
+        area={area}
       />
 
       <p className="hs-mu hs-note">{t("stop.scheduled")}</p>

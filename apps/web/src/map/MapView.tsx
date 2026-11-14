@@ -8,6 +8,7 @@ import {
 import "maplibre-gl/dist/maplibre-gl.css";
 import workerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs?url";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { createPortal } from "react-dom";
 import { useI18n } from "../i18n/I18nProvider";
 import { useTheme, type ThemeName } from "../lib/theme";
 import {
@@ -32,6 +33,7 @@ import {
   type StyleJson,
 } from "./layers";
 import { MapOverlay } from "./MapOverlay";
+import { StopsLayer } from "./stops/StopsLayer";
 import { setMapCenter, useMapState, type MapScene, type MapUser } from "./scene";
 
 // The lazy map chunk: everything that imports MapLibre lives here (MapHost loads it after
@@ -343,6 +345,15 @@ export default function MapView() {
   return (
     <div className="map-view" data-testid="map-view">
       <div ref={container} className="map-canvas" data-testid="map-canvas" />
+      {/* Inside MapLibre's own container (as its markers are), so a pan that starts on a
+          stop still pans the map. */}
+      {loaded &&
+        overlayMap &&
+        scene.stops &&
+        createPortal(
+          <StopsLayer map={overlayMap} layer={scene.stops} topInset={overlayTopHeight(overlayMap)} bottomInset={inset} />,
+          overlayMap.getCanvasContainer(),
+        )}
       {loaded && overlayMap && (
         <MapOverlay map={overlayMap} tags={scene.tags ?? []} stopPins={scene.stopPins ?? []} dir={lang === "he" ? "rtl" : "ltr"} />
       )}

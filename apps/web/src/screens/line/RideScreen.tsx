@@ -144,10 +144,12 @@ function Ride({ ride, onChange }: { ride: RideIntent; onChange: (ride: RideInten
       operatorId: item.operatorId,
       operatorName: item.operatorName,
       tone,
+      // Board 5 (Ride) draws the line beyond the ride at .4.
+      quietOpacity: tone === "quiet" ? 0.4 : undefined,
     });
     const route: MapRouteLeg[] = [];
-    if (board > 0) route.push(leg(coordinates.slice(0, board + 1), "faded"));
-    if (exit < stops.length - 1) route.push(leg(coordinates.slice(exit), "faded"));
+    if (board > 0) route.push(leg(coordinates.slice(0, board + 1), "quiet"));
+    if (exit < stops.length - 1) route.push(leg(coordinates.slice(exit), "quiet"));
     const ridden = (rideLeg?.geometry?.coordinates as LonLat[] | undefined) ?? coordinates.slice(board, exit + 1);
     route.push(leg(ridden, "normal"));
     const fitTo: LonLat[] = [...ridden];

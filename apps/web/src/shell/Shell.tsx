@@ -16,6 +16,7 @@ import { useI18n } from "../i18n/I18nProvider";
 import { locationSource } from "../lib/geolocation";
 import { MapAttribution, MapHost } from "../map/MapHost";
 import { getMapState, requestLocate, setBottomInset, setSideInset, showLocated, useMapSelector } from "../map/scene";
+import { closeStopGroup, useMapAway, useOpenGroup } from "../map/stops/view";
 import { isMedia, WIDE_QUERY } from "../lib/media";
 import { back, hrefFor, useRoute, type Route } from "../router";
 import { prefetchScreens, Screen } from "../screens/screens";
@@ -196,6 +197,7 @@ function Sheet({
  */
 function LocateButton() {
   const { t } = useI18n();
+  const away = useMapAway();
   const [busy, setBusy] = useState(false);
   const [failed, setFailed] = useState(false);
   useEffect(() => {
@@ -228,15 +230,23 @@ function LocateButton() {
           {t("shell.locate.failed")}
         </p>
       )}
-      <button
-        type="button"
-        className="ot-btn ot-btn--icon"
-        aria-label={t("nav.locate")}
-        aria-busy={busy || undefined}
-        onClick={() => void locate()}
-      >
-        {busy ? <span className="spinner" aria-hidden="true" /> : <Icon name="locate" />}
-      </button>
+      {away ? (
+        // Board 10: panned away from the passenger, Locate says where it goes ("אליי").
+        <button type="button" className="locate-pill" title={t("stops.toMe.label")} aria-busy={busy || undefined} onClick={() => void locate()}>
+          {busy ? <span className="spinner" aria-hidden="true" /> : <Icon name="locate" />}
+          {t("stops.toMe")}
+        </button>
+      ) : (
+        <button
+          type="button"
+          className="ot-btn ot-btn--icon"
+          aria-label={t("nav.locate")}
+          aria-busy={busy || undefined}
+          onClick={() => void locate()}
+        >
+          {busy ? <span className="spinner" aria-hidden="true" /> : <Icon name="locate" />}
+        </button>
+      )}
     </div>
   );
 }
@@ -263,6 +273,7 @@ export function Shell({ fixtureMode }: { fixtureMode: boolean }) {
   }, [painted]);
   const location = useLocationAvailability();
   const picking = useMapSelector((state) => state.scene.pick);
+  const stopGroup = useOpenGroup();
   const mainRef = useRef<HTMLElement>(null);
   const shellRef = useRef<HTMLDivElement>(null);
   const topRef = useRef<HTMLDivElement>(null);
@@ -352,6 +363,12 @@ export function Shell({ fixtureMode }: { fixtureMode: boolean }) {
         <div className="overlay-top" ref={topRef}>
           <Banners fixtureMode={fixtureMode} status={status} />
           <div className="top-row">
+            {route.name === "home" && stopGroup && (
+              // Board 9: an opened group of stops goes back to Home's own sheet.
+              <button type="button" className="ot-btn ot-btn--icon back-button" aria-label={t("nav.back")} onClick={() => closeStopGroup()}>
+                <Icon name="back" />
+              </button>
+            )}
             {/* Search draws its own Back beside its field (stops-and-lines canvas, board 2). */}
             {route.name !== "home" && route.name !== "search" && (
               <button type="button" className="ot-btn ot-btn--icon back-button" aria-label={t("nav.back")} onClick={() => back(backFallback(route))}>

@@ -42,6 +42,9 @@ export interface RouteProps {
   dimmed: boolean;
   /** Already travelled: drawn grey (boards: On board). */
   travelled: boolean;
+  /** Drawn quiet: 5 px at `opacity`, no edge (boards Stop and Ride). */
+  quiet: boolean;
+  opacity: number;
   label: string;
   /** The vehicle: a train gets a dashed centre. */
   vehicle: Vehicle;
@@ -66,7 +69,9 @@ export function routeFeatures(route: MapRouteLeg[]): FeatureCollection<LineStrin
         mode: leg.mode,
         line: leg.kind === "walk" ? "walk" : lineMode(leg.mode),
         active,
-        dimmed: (anyActive && !active) || leg.tone === "faded",
+        dimmed: (anyActive && !active) || leg.tone === "faded" || leg.tone === "quiet",
+        quiet: leg.tone === "quiet",
+        opacity: leg.tone === "quiet" ? (leg.quietOpacity ?? QUIET_OPACITY) : 1,
         travelled: leg.tone === "travelled",
         label: leg.label ?? "",
         vehicle: vehicleOf(leg.mode),
@@ -173,6 +178,8 @@ export function sceneBounds(scene: MapScene): [LonLat, LonLat] | null {
   } else {
     for (const pin of scene.pins) add(pin.position);
     for (const pin of scene.stopPins ?? []) add(pin.position);
+    // The stops the screen is about (Home's nearby stops on the stops layer).
+    for (const stop of scene.stops?.known ?? []) add([stop.longitude, stop.latitude]);
     for (const tag of scene.tags ?? []) add(tag.position);
     for (const point of ringFeatures(scene.ring, 8).features[0]?.geometry.coordinates ?? []) add(point);
   }
@@ -380,7 +387,9 @@ export const MARKER_PIXEL_RATIO = 2;
 
 /** Faded legs while another is the current step (the boards: a faded line at .6). */
 const DIMMED_OPACITY = 0.6;
-const dimmable = ["case", ["get", "dimmed"], DIMMED_OPACITY, 1];
+/** A quiet line (boards Stop and Ride): its own opacity, .45 unless the screen says. */
+export const QUIET_OPACITY = 0.45;
+const dimmable = ["case", ["==", ["get", "quiet"], true], ["get", "opacity"], ["get", "dimmed"], DIMMED_OPACITY, 1];
 
 /**
  * Our layers, bottom to top, in the theme's colours. Sizes follow the approved boards
@@ -421,7 +430,8 @@ export function overlayLayers(theme: ThemeName, { labels }: { labels: boolean })
       id: "ot-route-casing",
       type: "line",
       source: "ot-route",
-      filter: transit,
+      // A quiet line has no edge at all (boards Stop and Ride).
+      filter: ["all", transit, ["!=", ["get", "quiet"], true]],
       layout: { "line-cap": "round", "line-join": "round" },
       paint: {
         "line-color": ["case", ["any", ["get", "dimmed"], ["==", ["get", "travelled"], true]], p.land, p.casing],

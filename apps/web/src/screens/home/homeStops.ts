@@ -58,10 +58,19 @@ export interface NearStopDepartures {
 
 const notFound = (error: unknown) => error instanceof ApiFailure && error.state === "not_found";
 
-export function useHomeStops(centre: { latitude: number; longitude: number }, enabled: boolean): HomeStops {
+/**
+ * `centre` is the passenger (or the last place), the map's settled centre when panned away
+ * ("In this area", board 10), or an opened group's centre (board 9). `radiusMeters` widens
+ * the look for a group spread wider than the walk. Always one nearby-departures request.
+ */
+export function useHomeStops(
+  centre: { latitude: number; longitude: number },
+  enabled: boolean,
+  radiusMeters: number = WALK_RING_METERS,
+): HomeStops {
   const nearby = useNearbyDepartures(
     centre,
-    { radiusMeters: WALK_RING_METERS, stops: NEARBY_STOPS, perStop: NEARBY_PER_STOP, horizonMinutes: HORIZON_MINUTES },
+    { radiusMeters, stops: NEARBY_STOPS, perStop: NEARBY_PER_STOP, horizonMinutes: HORIZON_MINUTES },
     enabled,
   );
   const legacy = nearby.isError && notFound(nearby.error);

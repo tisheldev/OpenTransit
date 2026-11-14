@@ -124,6 +124,12 @@ const StopItem = z.looseObject({
   parentStationId: z.string().nullable(),
   wheelchairBoarding: z.number().int().nullable(),
   platformCode: z.string().nullable(),
+  // API-C6 (12 November 2026): optional until every API has them; null when it cannot tell.
+  // `mode` is "rail", "light_rail", "bus" or "other"; kept a string so a mode added later
+  // does not fail a whole page of stops.
+  mode: z.string().nullish(),
+  bearingDegrees: z.number().nullish(),
+  bearingSource: z.string().nullish(),
 });
 
 const RouteItem = z.looseObject({

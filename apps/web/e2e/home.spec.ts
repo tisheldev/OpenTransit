@@ -256,7 +256,11 @@ test("light theme: saved places, location allowed and an active trip (axe)", asy
   await expect(page.getByRole("button", { name: "חזרה לניווט" })).toBeVisible();
   await expect(page.getByRole("button", { name: "בית", exact: true })).toBeVisible();
   await expect(nearRows(page).first()).toContainText(/דק׳ הליכה/);
-  await expect(page.getByRole("button", { name: "172 2 דק׳", exact: true })).toBeVisible({ timeout: MAP_READY_MS });
+  // The chosen stop's sign names its next line. Its tag shows only where it covers no other
+  // stop (stops layer, MarkerTuning), which this short map above a tall sheet may not allow.
+  await expect(page.getByRole("button", { name: /^פתיחת התחנה דיזנגוף סנטר\/דיזנגוף, קו 172 בעוד \d+ דק׳$/ })).toBeAttached({
+    timeout: MAP_READY_MS,
+  });
   await expectNoSeriousAxeViolations(page, "Home, saved places, location and active trip, light (he)");
 });
 

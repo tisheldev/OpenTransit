@@ -1,9 +1,12 @@
 import { useEffect, useId, useMemo, useState } from "react";
 import { Icon } from "../../components/ds";
 import { useI18n } from "../../i18n/I18nProvider";
+import { formatDistance } from "../../lib/format";
 import { formatClock } from "../../lib/time";
 import { DEFAULT_CENTER } from "../../map/layers";
-import { emptyScene, usePublishScene, type MapScene, type MapStopPin, type MapTag } from "../../map/scene";
+import { emptyScene, usePublishScene, type MapKnownStop, type MapScene, type MapStopNext } from "../../map/scene";
+import { ZOOM_STOPS } from "../../map/stops/geometry";
+import { closeStopGroup, openStopGroup, setMapAway, useOpenGroup, useSettledView } from "../../map/stops/view";
 import { useActiveTrip, type ActiveTrip } from "../../nav/activeTrip";
 import { haversineMeters } from "../../nav/geo";
 import { choiceFromSaved } from "../../plan/draft";
@@ -15,9 +18,10 @@ import { openStop } from "../stop/intent";
 import { groupLines, minutesTo, tagLine } from "../stop/lines";
 import { useNow } from "../stop/parts";
 import { usePassengerFix } from "../stop/passenger";
-import { HOME_ROWS, useHomeStops, WALK_RING_METERS, type NearStop } from "./homeStops";
+import { useHomeStops, WALK_RING_METERS } from "./homeStops";
 import { HomeSheet } from "./HomeSheet";
 import { type RideOrigin } from "./nextRide";
+import { StopGroupList } from "./StopGroupList";
 import "./home.css";
 
 // Home — board 1 (user, 11 November 2026: "Stops near you are pins that carry their next
@@ -28,13 +32,13 @@ import "./home.css";
 // nothing waits for a location fix (without one, Home centres on the last place).
 
 /**
- * Departure tags on the map: the selected stop's and the nearest other stop's at least this
- * far from it (as on the board: two). Stops come in pairs across a street a few dozen
- * metres apart, and the map is at most at zoom 16 (about 2 m a pixel), so every stop's tag
- * would bury the pins; each stop's next departure is still in its pin's name.
+ * Board 10: the map counts as panned away from the passenger (or Home's centre) once the
+ * centre it settled on is farther than the 5-minute walk; then "Near you" becomes "In this
+ * area" around that centre. A smaller move keeps the area where it was, so a nudge does
+ * not ask again.
  */
-const MAX_TAGS = 2;
-const TAG_SPACING_METERS = 60;
+const AWAY_METERS = WALK_RING_METERS;
+const AREA_STEP_METERS = 150;
 
 /** True after the first paint, so Home renders from storage before any request. */
 function useAfterFirstPaint(): boolean {
@@ -84,10 +88,9 @@ function ActiveTripCard({ trip }: { trip: ActiveTrip }) {
   );
 }
 
-const stopName = (stop: NearStop) => stop.name ?? stop.code ?? stop.stopId;
 
 export function HomeScreen() {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const painted = useAfterFirstPaint();
   // Minutes on the map's tags: once a minute, so the map is not reframed more often.
   const now = useNow(60_000);
@@ -109,83 +112,77 @@ export function HomeScreen() {
   );
   const origin: RideOrigin | null = fix ? { latitude: fix.latitude, longitude: fix.longitude, stopId: null } : fallback;
 
-  const nearby = useHomeStops(centre, painted);
-  const { stops, departures } = nearby;
+  // Board 10: panned away from the passenger, the sheet's stops follow the map ("In this
+  // area"); board 9: an opened group asks around its stops. Still one nearby request.
+  const settled = useSettledView();
+  const group = useOpenGroup();
+  const awayNow =
+    !group &&
+    settled !== null &&
+    settled.zoom >= ZOOM_STOPS &&
+    haversineMeters({ latitude: settled.center[1], longitude: settled.center[0] }, centre) > AWAY_METERS;
+  const [area, setArea] = useState<{ latitude: number; longitude: number } | null>(null);
+  if (!awayNow && area !== null) setArea(null);
+  if (awayNow && settled) {
+    const at = { latitude: settled.center[1], longitude: settled.center[0] };
+    if (area === null || haversineMeters(area, at) > AREA_STEP_METERS) setArea(at);
+  }
+  const away = awayNow && area !== null;
+  useEffect(() => setMapAway(away), [away]);
+  useEffect(
+    () => () => {
+      setMapAway(false);
+      closeStopGroup();
+    },
+    [],
+  );
+  const groupCentre = useMemo(() => (group ? { latitude: group.center[1], longitude: group.center[0] } : null), [group]);
+  const groupRadius =
+    group && groupCentre ? Math.min(1000, Math.max(...group.stops.map((stop) => haversineMeters(stop, groupCentre))) + 60) : null;
+  // The one request: around the group, else the map's area, else the passenger.
+  const nearby = useHomeStops(groupCentre ?? (away && area ? area : centre), painted, groupRadius !== null ? Math.round(groupRadius) : undefined);
+  const { stops } = nearby;
   const stopIds = useMemo(() => stops.map((stop) => stop.stopId), [stops]);
   // The nearest stop's pin is the selected one; any pin or tag opens its own stop in one tap
   // (user, 12 November 2026). The sheet lists lines across the nearby stops (HomeSheet).
   const selectedIndex = 0;
+  const selected = stops[selectedIndex] ?? null;
 
-  // One row per line. Departures are asked from "now" and refreshed every minute, so a
-  // departure already gone drops out with the next answer.
-  const lines = useMemo(
-    () =>
-      stops.map((_, index) =>
-        groupLines(departures[index] ?? [], nearby.routes[index] ?? [], {
-          trainLabel: t("stop.train"),
-          now: new Date(0),
-          max: HOME_ROWS,
-        }),
-      ),
-    [stops, departures, nearby.routes, t],
-  );
-  const names = useMemo(() => stops.map(stopName), [stops]);
-
+  // The stops layer draws every stop (marker G); Home names the chosen one (the stop the
+  // panel is about, or the row picked in an opened group) and gives the tags their next
+  // line, from its one nearby answer. Any sign or tag opens its own stop in one tap.
   const scene = useMemo<MapScene>(() => {
-    const stopPins: MapStopPin[] = [];
-    const tags: MapTag[] = [];
-    const tagged: NearStop[] = [];
-    // The selected stop's tag first, then the nearest others that have room for theirs.
-    const order = stops.map((_, index) => index).sort((a, b) => Number(b === selectedIndex) - Number(a === selectedIndex));
-    for (const index of order) {
-      const stop = stops[index]!;
-      const isSelected = index === selectedIndex;
-      const name = names[index]!;
-      const next = lines[index]?.[0] ?? null;
-      const minutes = next ? minutesTo(next.next, now) : null;
-      const position: [number, number] = [stop.longitude, stop.latitude];
-      const select = () => openStop(stop.stopId);
-      stopPins.push({
-        id: stop.stopId,
-        position,
-        selected: isSelected,
-        ariaLabel: next
-          ? t("home.stop.openNext", { stop: name, line: next.label, minutes: minutes ?? 0 })
-          : t("home.stop.open", { stop: name }),
-        onSelect: select,
-      });
-      const roomy = tagged.every((other) => haversineMeters(other, stop) >= TAG_SPACING_METERS);
-      if (next && minutes !== null && roomy && tags.length < MAX_TAGS) {
-        tagged.push(stop);
-        // A tag sits over its stop's pin, so it does what the pin does. The selected stop's
-        // tag is above its pin and the other one below its own, so the two never meet.
-        tags.push({
-          id: `next-${stop.stopId}`,
-          position,
-          anchor: isSelected ? "above" : "below",
-          kind: isSelected ? "strong" : "plain",
-          line: tagLine(next),
-          text: minutes <= 0 ? t("time.now") : t("stop.minutes", { minutes }),
-          onSelect: select,
-        });
-      }
+    // Every stop of the one nearby answer may carry a tag (the layer shows a couple).
+    const next: Record<string, MapStopNext> = {};
+    for (const entry of nearby.all) {
+      const line = groupLines(entry.departures ?? [], entry.routes, { trainLabel: t("stop.train"), now: new Date(0), max: 1 })[0];
+      if (!line) continue;
+      const minutes = minutesTo(line.next, now);
+      next[entry.stop.stopId] = { line: tagLine(line), minutes, text: minutes <= 0 ? t("time.now") : t("stop.minutes", { minutes }) };
     }
-    // Pins nearest first, the selected one last so it is drawn over its neighbours.
-    stopPins.sort((a, b) => Number(a.selected) - Number(b.selected) || stopIds.indexOf(a.id) - stopIds.indexOf(b.id));
+    const known: MapKnownStop[] = nearby.all.map(({ stop }) => ({ stopId: stop.stopId, name: stop.name, latitude: stop.latitude, longitude: stop.longitude }));
     const user = fix ? { position: [fix.longitude, fix.latitude] as [number, number], accuracyMeters: fix.accuracyMeters } : null;
     return {
       ...emptyScene,
       user,
       ring: fix ? { center: [fix.longitude, fix.latitude], radiusMeters: WALK_RING_METERS } : null,
-      stopPins,
-      tags,
-      camera: "fit",
+      // Panned away or into a group, the camera is the passenger's: never reframed.
+      camera: away || group ? "keep" : "fit",
       // Frame once per set of stops and position: the minutes on the tags tick every minute
       // and must not undo the passenger's own panning.
       cameraKey: `home:${stopIds.join(",")}:${fix ? `${fix.latitude.toFixed(4)},${fix.longitude.toFixed(4)}` : "none"}`,
       focus: { center: [centre.longitude, centre.latitude], zoom: 16 },
+      stops: {
+        mode: "full",
+        chosenStopId: group ? group.picked : (selected?.stopId ?? null),
+        next,
+        known,
+        onSelectStop: (stopId) => openStop(stopId),
+        onOpenGroup: (members) => openStopGroup(members),
+        openGroup: group ? group.stops.map((stop) => stop.stopId) : null,
+      },
     };
-  }, [stops, stopIds, selectedIndex, names, lines, fix, centre, now, t]);
+  }, [nearby.all, stopIds, selected, fix, centre, now, t, away, group]);
   usePublishScene(scene);
 
   const travelTo = (saved: SavedPlace) => {
@@ -193,6 +190,9 @@ export function HomeScreen() {
     // Without a start yet, ask for it next (Search From then opens Compare).
     go(draft.from === null ? { name: "search", field: "from" } : { name: "compare" });
   };
+
+  // Board 9: an opened group fills the sheet with its stops (Back closes it).
+  if (group) return <StopGroupList group={group} nearby={nearby} now={now} />;
 
   return (
     <div className="home">
@@ -202,7 +202,7 @@ export function HomeScreen() {
 
       <HomeSheet
         nearby={nearby}
-        centre={centre}
+        centre={away && area ? area : centre}
         origin={origin}
         painted={painted}
         homePlace={local.home}
@@ -210,6 +210,7 @@ export function HomeScreen() {
         savedStops={local.savedStops}
         savedLines={local.savedLines}
         onTravel={travelTo}
+        area={away && area ? { distanceText: fix ? formatDistance(haversineMeters(fix, area), lang) : null } : null}
       />
     </div>
   );

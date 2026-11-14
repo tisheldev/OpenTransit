@@ -4,6 +4,7 @@ import { derivedEngineTimeout, derivedJourneyFixtures, derivedTrip } from "../sc
 import { derivedDepartures, derivedNearbyDepartures, derivedNearbyStop, derivedStopLines, derivedStopsNear } from "./stopFixtures";
 import { derivedLine, derivedLineSearch, invalidLineSearch } from "./lineFixtures";
 import { derivedMissedDepartures, derivedMissedJourneys, MISSED_STOP_ID } from "./navigateMissed";
+import { derivedAreaStops } from "./areaStops";
 import {
   derivedLineTrip,
   derivedPinnedJourney,
@@ -226,9 +227,21 @@ export const handlers = [
 
   http.get("*/v1/stops", ({ request }) => {
     const url = new URL(request.url);
-    // Stations only (contract A1, synthetic: src/mocks/rideFixtures.ts).
-    if (url.searchParams.has("bbox") && /rail/.test(url.searchParams.get("mode") ?? "")) return respond(derivedRailStations());
-    if (url.searchParams.has("bbox")) return send("synthetic-stops-bbox");
+    // Stops by area (A1's mode filter, the area limits and paging): derived,
+    // src/mocks/areaStops.ts. A station-only request also gets the made-up stations beside
+    // the recorded "ת. רכבת" stops (src/mocks/rideFixtures.ts) that the Line screen badges.
+    if (url.searchParams.has("bbox")) {
+      const found = derivedAreaStops(url);
+      const modes = (url.searchParams.get("mode") ?? "").split(",");
+      if (found.status !== 200 || !modes.includes("rail") || url.searchParams.has("cursor")) return respond(found);
+      const [west, south, east, north] = (url.searchParams.get("bbox") ?? "").split(",").map(Number) as [number, number, number, number];
+      const body = found.body as { data: Array<{ stopId: string; latitude: number; longitude: number }> };
+      const extra = (derivedRailStations().body as typeof body).data.filter(
+        (stop) =>
+          stop.longitude >= west && stop.longitude <= east && stop.latitude >= south && stop.latitude <= north && !body.data.some((other) => other.stopId === stop.stopId),
+      );
+      return respond({ ...found, body: { ...body, data: [...body.data, ...extra] } });
+    }
     if (url.searchParams.has("cursor")) return send("synthetic-stops-near-page-2");
     // Home's nearby stops: the recorded stops around Dizengoff Center, wherever it asks.
     return respond(derivedStopsNear());

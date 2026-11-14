@@ -1,7 +1,8 @@
 import type { Map as MapLibreMap } from "maplibre-gl";
 import { useEffect, useReducer, type CSSProperties } from "react";
 import { LineBadge } from "../components/ds";
-import { GSign } from "../components/GSign";
+import { GMarker } from "./stops/markers";
+import { poleSideOf } from "./stops/StopsLayer";
 import { lineMode } from "./layers";
 import type { MapStopPin, MapTag } from "./scene";
 
@@ -104,17 +105,18 @@ function Chevron({ tag, bearing }: { tag: MapTag; bearing: number }) {
   );
 }
 
-function StopPin({ pin }: { pin: MapStopPin }) {
+function StopPin({ pin, map }: { pin: MapStopPin; map: MapLibreMap }) {
   if (pin.look === "sign") {
-    const sign = <GSign chosen={pin.selected === true} rail={pin.rail === true} />;
-    return pin.onSelect ? (
-      <button type="button" className="map-gsign" aria-label={pin.ariaLabel} onClick={pin.onSelect}>
-        {sign}
-      </button>
-    ) : (
-      <span className="map-gsign" role="img" aria-label={pin.ariaLabel}>
-        {sign}
-      </span>
+    // Marker G, the same as the stops layer's (src/map/stops): its pole snapped away from
+    // the road when the side is known, else centred with no pole.
+    return (
+      <GMarker
+        side={pin.rail ? null : poleSideOf(pin.id, pin.bearingDegrees, map.getBearing())}
+        chosen={pin.selected === true}
+        station={pin.rail === true}
+        label={pin.ariaLabel}
+        onSelect={pin.onSelect}
+      />
     );
   }
   const className = `map-stop${pin.selected ? " map-stop--selected" : ""}`;
@@ -149,7 +151,7 @@ export function MapOverlay({
     <div className="map-overlay" data-testid="map-overlay">
       {stopPins.map((pin) => (
         <div key={`stop-${pin.id}`} className="map-overlay__item" style={position(map, pin.position)}>
-          <StopPin pin={pin} />
+          <StopPin pin={pin} map={map} />
         </div>
       ))}
       {tags.map((tag) => (
