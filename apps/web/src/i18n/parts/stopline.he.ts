@@ -44,6 +44,8 @@ export const he_stopline = {
   "ride.pick": "הקישו על התחנה שבה יורדים",
   "ride.missed": "ההליכה לתחנה ארוכה מהזמן עד היציאה הזו",
   "ride.expired": "הנסיעה הזו כבר לא זמינה. בחרו קו ותחנה שוב.",
+  "ride.walkUnavailable": "אין דרך הליכה לתחנה הזו בטווח ההליכה. בחרו נסיעה מתחנה קרובה יותר.",
+  "ride.noJourney": "לא נמצאה נסיעה כזו. בחרו נסיעה אחרת.",
 
   // A line opened inside a journey (board 6)
   "route.lineHere": "קו {line} מהתחנה הזו · אפשר לבחור נסיעה אחרת",

@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState, type CSSProperties } from "react";
-import { planPinnedJourney, PINNED_TRIP_MISSED_BY_WALK, type PinnedJourneyRequest } from "../../api/lines";
+import { planPinnedJourney, PINNED_TRIP_MISSED_BY_WALK, PINNED_TRIP_WALK_UNAVAILABLE, type PinnedJourneyRequest } from "../../api/lines";
 import { ApiFailure, unwrap } from "../../api/result";
 import type { LocationInput } from "../../api/types";
 import { LineBadge } from "../../components/ds";
@@ -333,8 +333,13 @@ function Ride({ ride, onChange }: { ride: RideIntent; onChange: (ride: RideInten
           <p className="b-mu">{t("ride.pick")}</p>
         ) : journeyQuery.isError ? (
           <ErrorState state={failureState(journeyQuery.error)} onRetry={() => void journeyQuery.refetch()} />
-        ) : !journey ? (
+        ) : !answer ? (
           <Loading />
+        ) : !journey ? (
+          // No walk to the board stop within the walking limit (PINNED_TRIP_WALK_UNAVAILABLE).
+          <p className="b-mu ride-warning" role="status">
+            {answer.meta.warnings?.includes(PINNED_TRIP_WALK_UNAVAILABLE) ? t("ride.walkUnavailable") : t("ride.noJourney")}
+          </p>
         ) : (
           <>
             <div className="ride-bar__times">

@@ -1,4 +1,7 @@
-import type { CSSProperties, ReactNode } from "react";
+import { Fragment, useState, type CSSProperties, type ReactNode } from "react";
+import { StrokeIcon } from "../line/icons";
+import { openStop } from "../stop/intent";
+import { RideDepartures, type Departure } from "./RideDepartures";
 import type { Journey, Leg } from "../../api/types";
 import { LineBadge } from "../../components/ds";
 import { useI18n } from "../../i18n/I18nProvider";
@@ -49,7 +52,14 @@ function StopRow({ place, startDate }: { place: Place; startDate: string }) {
       <StopTime instant={place.time} startDate={startDate} />
       <span className={dot} aria-hidden="true" />
       <span className="b-tl__stop compare-place">
-        <bdi>{place.name}</bdi>
+        {/* Board 6: a stop's name opens the stop. */}
+        {place.stopId ? (
+          <button type="button" className="compare-stop-link" onClick={() => openStop(place.stopId!)}>
+            <bdi>{place.name}</bdi>
+          </button>
+        ) : (
+          <bdi>{place.name}</bdi>
+        )}
         {place.platform && (
           <span className="b-mu compare-platform">
             {" · "}
@@ -72,6 +82,7 @@ function LegRow({
   marker,
   focused,
   onFocus,
+  expanded,
   style,
   children,
 }: {
@@ -79,6 +90,8 @@ function LegRow({
   marker: ReactNode;
   focused: boolean;
   onFocus?: (legIndex: number) => void;
+  /** A ride that opens in place (board 6): whether it is open. */
+  expanded?: boolean;
   style?: CSSProperties;
   children: ReactNode;
 }) {
@@ -90,6 +103,7 @@ function LegRow({
       <span className="b-tl__leg">
         {children}
         {focused && <span className="b-mu">{t("route.shown")}</span>}
+        {expanded !== undefined && <StrokeIcon name={expanded ? "up" : "down"} className="compare-ride-chevron" />}
       </span>
     </>
   );
@@ -106,6 +120,7 @@ function LegRow({
       className={`b-tl compare-tl-leg${focused ? " b-tl--on" : ""}`}
       style={style}
       aria-pressed={focused}
+      aria-expanded={expanded}
       onClick={() => onFocus(legIndex)}
     >
       {body}
@@ -119,6 +134,7 @@ export function Timeline({
   trips,
   focused = null,
   onFocus,
+  onReplan,
 }: {
   journey: Journey;
   ends: EndLabels;
@@ -126,9 +142,15 @@ export function Timeline({
   /** The leg shown on the map (index into journey.legs), or null for the whole route. */
   focused?: number | null;
   onFocus?: (legIndex: number) => void;
+  /**
+   * Board 6: with it, a ride's row opens in place to that line's next departures from its
+   * boarding stop; choosing one calls this to re-plan with it.
+   */
+  onReplan?: (legIndex: number, departure: Departure) => void;
 }) {
   const { t, lang } = useI18n();
   const theme = useTheme();
+  const [openLeg, setOpenLeg] = useState<number | null>(null);
   const items = buildItinerary(journey, ends);
   const startDate = israelDate(journey.timing.scheduledDeparture);
   return (
@@ -181,13 +203,23 @@ export function Timeline({
         const boarding = boardingOf(leg);
         // The side of the road is drawn by the map's stop pin; here it is said in words.
         const side = boarding.side ? t(boarding.side === "right" ? "route.side.right" : "route.side.left") : null;
-        return (
+        const opens = onReplan !== undefined && onFocus !== undefined && leg.transit != null && leg.from.stopId != null;
+        const open = opens && openLeg === item.legIndex;
+        const row = (
           <LegRow
             key={index}
             legIndex={item.legIndex}
             marker={<span className="b-bar" aria-hidden="true" />}
             focused={focused === item.legIndex}
-            onFocus={onFocus}
+            onFocus={
+              opens
+                ? (legIndex) => {
+                    setOpenLeg(open ? null : legIndex);
+                    onFocus(legIndex);
+                  }
+                : onFocus
+            }
+            expanded={opens ? open : undefined}
             style={{ "--bar": barColour(leg, theme) } as CSSProperties}
           >
             <span className="visually-hidden">
@@ -209,6 +241,17 @@ export function Timeline({
             )}
             {stops === null && trip?.status === "error" && <span className="b-mu compare-stops">{t("route.stopsUnavailable")}</span>}
           </LegRow>
+        );
+        if (!open) return row;
+        return (
+          <Fragment key={index}>
+            {row}
+            <div className="b-tl compare-tl-open" style={{ "--bar": barColour(leg, theme) } as CSSProperties}>
+              <span />
+              <span className="b-bar" aria-hidden="true" />
+              <RideDepartures leg={leg} onChoose={(departure) => onReplan!(item.legIndex, departure)} />
+            </div>
+          </Fragment>
         );
       })}
     </div>

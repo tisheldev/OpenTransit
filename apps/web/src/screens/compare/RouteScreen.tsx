@@ -1,10 +1,10 @@
-import { useMemo, useRef, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import type { Journey } from "../../api/types";
 import { TestDataBanner } from "../../components/states";
 import { useI18n } from "../../i18n/I18nProvider";
 import { useTheme } from "../../lib/theme";
-import { formatClock } from "../../lib/time";
+import { formatClock, israelWallTime } from "../../lib/time";
 import { usePublishScene } from "../../map/scene";
 import type { Endpoint, PlaceChoice } from "../../plan/draft";
 import { hrefFor } from "../../router";
@@ -14,6 +14,7 @@ import { OptionsSkeleton } from "./OptionRow";
 import { draftScene, stepScene } from "./journeyScene";
 import { daysBetween, israelDate, untilText, type EndLabels } from "./labels";
 import { Duration, NextDay, Nums, TimeArrow } from "./text";
+import type { Departure } from "./RideDepartures";
 import { Timeline } from "./Timeline";
 import { useCompare, useNow, useScrollPadding, type TripState } from "./useCompare";
 
@@ -46,7 +47,19 @@ function WholeRouteButton({ onClick }: { onClick: () => void }) {
   return shell ? createPortal(button, shell) : button;
 }
 
-function Details({ journey, ends, trips, fixture }: { journey: Journey; ends: EndLabels; trips: Record<string, TripState>; fixture: boolean }) {
+function Details({
+  journey,
+  ends,
+  trips,
+  fixture,
+  onReplan,
+}: {
+  journey: Journey;
+  ends: EndLabels;
+  trips: Record<string, TripState>;
+  fixture: boolean;
+  onReplan: (legIndex: number, departure: Departure) => void;
+}) {
   const { t, lang } = useI18n();
   const theme = useTheme();
   const now = useNow();
@@ -93,7 +106,7 @@ function Details({ journey, ends, trips, fixture }: { journey: Journey; ends: En
       </div>
       {fixture && <TestDataBanner />}
       <section className="route-details" aria-label={t("screen.route")}>
-        <Timeline journey={journey} ends={ends} trips={trips} focused={focused} onFocus={setFocused} />
+        <Timeline journey={journey} ends={ends} trips={trips} focused={focused} onFocus={setFocused} onReplan={onReplan} />
       </section>
     </>
   );
@@ -102,9 +115,35 @@ function Details({ journey, ends, trips, fixture }: { journey: Journey; ends: En
 export function RouteScreen() {
   const { t } = useI18n();
   const compare = useCompare();
-  const { plan, ends, answer, chosen, trips, refreshing, start, resume, built, planned, journeys } = compare;
+  const { plan, ends, answer, chosen, trips, refreshing, start, resume, built, planned, journeys, list, choose } = compare;
   const rootRef = useRef<HTMLDivElement>(null);
   useScrollPadding(rootRef);
+
+  // Board 6: another departure of a ride's line was chosen. Re-plan by time rather than by
+  // pinning the trip: `pinnedTrip` answers one walk and one ride, which would drop the rest
+  // of a journey with a transfer or a final walk, and `excludeTripRefs` alone cannot say
+  // which later trip to take. So the journey now leaves when the passenger must leave to
+  // reach that departure (its departure less the time from the journey's start to the
+  // boarding stop): the earlier trips can no longer be caught. The option that rides the
+  // chosen trip is then selected when the engine returns one; otherwise its own best.
+  const wanted = useRef<{ tripRef: string; asked: unknown } | null>(null);
+  const replan = (legIndex: number, departure: Departure) => {
+    if (!chosen) return;
+    const leg = chosen.legs[legIndex];
+    if (!leg) return;
+    const lead = Date.parse(leg.timing.scheduledDeparture) - Date.parse(chosen.timing.scheduledDeparture);
+    const leave = new Date(Date.parse(departure.scheduledDeparture) - Math.max(0, lead));
+    wanted.current = { tripRef: departure.tripRef, asked: answer?.sent ?? null };
+    plan.setWhen({ mode: "depart_at", wall: israelWallTime(leave), offset: "auto" });
+  };
+  useEffect(() => {
+    const want = wanted.current;
+    // The new answer only (not the one on screen when the departure was chosen).
+    if (!want || !answer || refreshing || answer.sent === want.asked) return;
+    wanted.current = null;
+    const index = list.findIndex((journey) => journey.legs.some((leg) => leg.transit?.engineTripId === want.tripRef));
+    if (index > 0) choose(index);
+  }, [answer, refreshing, list, choose]);
 
   // Without an answer (a deep link still loading, or nothing found) the map shows the ends.
   const fallbackScene = useMemo(() => draftScene(plan.draft.from, plan.draft.to, ends), [plan.draft.from, plan.draft.to, ends]);
@@ -118,6 +157,7 @@ export function RouteScreen() {
         ends={ends}
         trips={trips}
         fixture={answer.response.meta.mode === "fixture"}
+        onReplan={replan}
       />
     );
   } else if (built.isPending || (planned && journeys.isPending)) {

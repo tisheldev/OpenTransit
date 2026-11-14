@@ -42,6 +42,8 @@ export const en_stopline: Record<keyof typeof he_stopline, string> = {
   "ride.pick": "Tap the stop where you get off",
   "ride.missed": "The walk to the stop takes longer than the time until this departure",
   "ride.expired": "This ride is no longer available. Choose a line and a stop again.",
+  "ride.walkUnavailable": "There is no walk to this stop within the walking limit. Choose a ride from a closer stop.",
+  "ride.noJourney": "No such ride was found. Choose another departure.",
 
   "route.lineHere": "Line {line} from this stop · you can choose another departure",
   "route.allStopsOf": "All stops of line {line}",

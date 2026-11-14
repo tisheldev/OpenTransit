@@ -3,6 +3,7 @@ import { apiFetch } from "./http";
 import { encodePathRef } from "./pathRef";
 import { failure, type Result } from "./result";
 import { JourneyResponseSchema, MetaSchema } from "./schemas";
+import type { components } from "./generated/openapi";
 import type { JourneyRequest, JourneyResponse } from "./types";
 
 // Lines and "Ride it" (stops-and-lines contracts A2 and A3, 14 November 2026). Additive
@@ -25,8 +26,9 @@ export const LineDirectionSchema = z.looseObject({
 export const LineItemSchema = z.looseObject({
   lineKey: z.string(),
   shortName: z.string(),
-  operatorId: z.string(),
+  operatorId: z.string().nullable(),
   operatorName: z.string().nullable(),
+  // An enum in the API (bus, rail, light_rail, cable_car, funicular, ferry, other); read as a string.
   mode: z.string(),
   routeIds: z.array(z.string()),
   directions: z.array(LineDirectionSchema),
@@ -73,16 +75,19 @@ export async function lineKeyForRoute(routeId: string, shortName: string, signal
 }
 
 /** A3: the trip to ride, where to board it and where to get off. */
-export interface PinnedTrip {
-  tripRef: string;
-  boardStopId: string;
-  alightStopId: string;
-}
+export type PinnedTrip = components["schemas"]["PinnedTrip"];
 
 export type PinnedJourneyRequest = JourneyRequest & { pinnedTrip: PinnedTrip };
 
-/** The warning a pinned journey carries when the walk cannot make the departure. */
+/** The walk cannot make the departure: the journey is still returned. */
 export const PINNED_TRIP_MISSED_BY_WALK = "PINNED_TRIP_MISSED_BY_WALK";
+/** No walk to the board stop within the walking limit: outcome `no_route`, no journey. */
+export const PINNED_TRIP_WALK_UNAVAILABLE = "PINNED_TRIP_WALK_UNAVAILABLE";
+
+// Compile-time guard: what zod accepts must satisfy the OpenAPI-generated line types.
+type Satisfies<T extends U, U> = T;
+type ApiLineItem = Omit<components["schemas"]["LineItem"], "mode"> & { mode: string };
+export type _LineMatchesOpenApi = Satisfies<LineItem, ApiLineItem>;
 
 export function planPinnedJourney(request: PinnedJourneyRequest, signal?: AbortSignal): Promise<Result<JourneyResponse>> {
   return apiFetch({ method: "POST", path: "/v1/journeys", body: request, signal }, JourneyResponseSchema);

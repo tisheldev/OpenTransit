@@ -211,7 +211,7 @@ export function LineScreen({ lineKey }: { lineKey: string }) {
             toggleSavedLine({
               lineKey,
               shortName: item.shortName,
-              operatorId: item.operatorId,
+              operatorId: item.operatorId ?? "",
               operatorName: item.operatorName ?? "",
               mode: item.mode,
               headsign: direction.towards,

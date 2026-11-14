@@ -5,7 +5,7 @@ import { haversineMeters } from "../nav/geo";
 // one trip), built in code from recorded-live-stop-lines (the lines through Dizengoff
 // Center, 13583). Not recorded and not real API responses; for the MSW mock only. What is
 // made up:
-// - A line per recorded route there. Its key ("<operator>:derived-<number>") is invented:
+// - A line per recorded route there. Its key ("<operator>:9<number>", shaped like the real "5:55008") is invented:
 //   the real key holds the MOT line code, which the recorded answers do not carry.
 // - Each line's other direction: the recorded pattern reversed, on route
 //   "<routeId>-back" (line 8's is "mot:route:16076", the id its recorded journeys use).
@@ -47,7 +47,7 @@ function lines(): DerivedLine[] {
       headsign: forward.stops[0]?.name ?? null,
       stops,
     };
-    return { lineKey: `${route.operatorId}:derived-${route.routeShortName}`, route, patterns: [{ ...forward, routeId: route.routeId }, back] };
+    return { lineKey: `${route.operatorId}:9${String(route.routeShortName).padStart(4, "0")}`, route, patterns: [{ ...forward, routeId: route.routeId }, back] };
   });
 }
 
@@ -363,6 +363,10 @@ export function derivedPinnedJourney(request: PinnedBody): Fixture {
       serviceDate: `${parts.year}-${parts.month}-${parts.day}`,
       startTime: `${parts.hour}:${parts.minute}`,
     },
+    intermediateStops: pattern.stops.slice(board + 1, alight).map((stop, offset) => {
+      const at = iso(minute(atStop(parsed.start, board + 1 + offset)));
+      return { name: stop.name ?? "", stopId: stop.stopId, latitude: stop.latitude, longitude: stop.longitude, scheduledArrival: at, scheduledDeparture: at };
+    }),
     boarding: { bearingDegrees: null, stopSide: null, towards: pattern.stops[board + 1]?.name ?? null, stopCount: alight - board },
   });
   const first = legs[0] as { timing: { scheduledDeparture: string } };
@@ -378,6 +382,6 @@ export function derivedPinnedJourney(request: PinnedBody): Fixture {
   return {
     request: { method: "POST", path: "/v1/journeys", params: null, body: request },
     status: 200,
-    body: { data: { outcome: "routes_found", journeys: [journey], alerts: null }, meta: { ...meta(), warnings } },
+    body: { data: { outcome: "routes_found", journeys: [journey], alerts: null }, meta: { ...meta(), rankingPolicy: "pinned-trip-v1", warnings } },
   };
 }
