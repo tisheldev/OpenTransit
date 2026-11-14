@@ -384,7 +384,7 @@ span.ot-stop-hit {
 
 /* --- light map (MarkerTuning): a firmer 2 px edge ---------------------------------------- */
 
-:root[data-theme="light"] .ot-stops {
+:root[data-theme="light"] .ot-stop {
   --stop-edge-width: 2px;
 }
 

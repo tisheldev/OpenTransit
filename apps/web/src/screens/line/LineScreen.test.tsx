@@ -159,7 +159,7 @@ describe("Ride it", () => {
     // On the map: the board stop's sign, the ride drawn, the walk, the exit tagged.
     const scene = getMapState().scene;
     expect(scene.stopPins![0]).toMatchObject({ id: "mot:stop:13583", look: "sign", selected: true });
-    expect(scene.route.filter((leg) => leg.tone === "faded")).toHaveLength(2);
+    expect(scene.route.filter((leg) => leg.tone === "quiet")).toHaveLength(2);
     expect(scene.route.find((leg) => leg.kind === "walk")).toBeDefined();
     expect(scene.tags!.find((tag) => tag.id === "exit-tag")!.text).toMatch(/^יורדים כאן \d\d:\d\d$/);
 

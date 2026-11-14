@@ -150,6 +150,18 @@ function readStreetSides(map: MapLibreMap, stops: readonly AreaStop[], zoom: num
   }
 }
 
+/**
+ * A single stop's side outside the layer (a sign pin on the Stop, Line or Ride map): the
+ * streets read for it, else the direction the session's stops by area hold for it, else
+ * the screen's own, else none (drawn centred).
+ */
+export function poleSideOf(stopId: string, bearingDegrees: number | null | undefined, mapBearing: number): PoleSide | null {
+  const street = streetSides.get(stopId)?.side;
+  if (street) return street;
+  const held = source.find(stopId);
+  return sideFromBearing(held?.bearingDegrees ?? bearingDegrees, mapBearing);
+}
+
 /** The side a stop's pole points to: the map's streets, else the API's direction, else none. */
 function sideOf(stop: AreaStop, mapBearing: number): PoleSide | null {
   return streetSides.get(stop.stopId)?.side ?? sideFromBearing(stop.bearingDegrees, mapBearing);

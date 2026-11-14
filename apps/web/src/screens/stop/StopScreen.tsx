@@ -155,7 +155,7 @@ export function StopScreen({ stopId }: { stopId: string }) {
     const tags: MapTag[] = [];
     const pins: MapPin[] = [];
     const fitTo: LonLat[] = [[point.longitude, point.latitude]];
-    const leg = (line: StopLine, coordinates: LonLat[], tone: "normal" | "faded"): MapRouteLeg => ({
+    const leg = (line: StopLine, coordinates: LonLat[], tone: "normal" | "quiet"): MapRouteLeg => ({
       kind: "transit",
       mode: line.mode,
       coordinates,
@@ -195,7 +195,7 @@ export function StopScreen({ stopId }: { stopId: string }) {
         }
       }
       if (fan) {
-        route.push(leg(line, fan, "faded"));
+        route.push(leg(line, fan, "quiet"));
         fitTo.push(...fan);
       }
       if (chosen) {
@@ -274,12 +274,12 @@ export function StopScreen({ stopId }: { stopId: string }) {
       route,
       pins,
       tags,
-      stopPins: [{ id: stopId, position: [point.longitude, point.latitude], selected: true, look: "sign", ariaLabel: t("stop.pin", { stop: name }) }],
+      stopPins: [{ id: stopId, position: [point.longitude, point.latitude], selected: true, look: "sign", bearingDegrees: detail?.bearingDegrees, ariaLabel: t("stop.pin", { stop: name }) }],
       user: fix ? { position: [fix.longitude, fix.latitude], accuracyMeters: fix.accuracyMeters } : null,
       camera: "fit",
       fitTo,
     };
-  }, [point, lines, patterns, tripRefs, trips, chosen, chosenIndex, chosenPattern, nextCalls, lookedUp, fix, name, stopId, t]);
+  }, [point, detail?.bearingDegrees, lines, patterns, tripRefs, trips, chosen, chosenIndex, chosenPattern, nextCalls, lookedUp, fix, name, stopId, t]);
   usePublishScene(scene);
 
   if (stop.isError) {

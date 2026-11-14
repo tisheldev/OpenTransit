@@ -304,6 +304,17 @@ export class AreaStops {
     return foldPlatforms([...out.values()]);
   }
 
+  /** One held stop by id (any kind), or undefined. */
+  find(stopId: string): AreaStop | undefined {
+    for (const kind of ["stops", "stations"] as const) {
+      for (const stops of this.tiles[kind].values()) {
+        const found = stops.find((stop) => stop.stopId === stopId);
+        if (found) return found;
+      }
+    }
+    return undefined;
+  }
+
   /** True while anything is queued or running. */
   get busy(): boolean {
     return this.queue.length > 0;

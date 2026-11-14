@@ -79,6 +79,44 @@ export function Hit({
   );
 }
 
+/**
+ * One marker G at its kerb point (0, 0 of its positioned parent), for a single stop drawn
+ * outside the stops layer (the Stop, Line and Ride maps: MapOverlay's sign pins). The same
+ * parts, sizes, tokens and pole rule as the layer's signs; a station is the centred purple sign.
+ */
+export function GMarker({
+  side,
+  chosen = false,
+  station = false,
+  label,
+  onSelect,
+}: {
+  side: PoleSide | null;
+  chosen?: boolean;
+  station?: boolean;
+  label: string;
+  onSelect?: () => void;
+}) {
+  const shown: SignSide = station ? "centre" : (side ?? "centre");
+  const className = ["ot-stop", `ot-stop--${shown}`, chosen && !station ? "ot-stop--chosen" : "", station ? "ot-stop--station" : ""].filter(Boolean).join(" ");
+  return (
+    <div className={className}>
+      <div className="ot-stop__body">
+        {!station && <Pole side={shown} />}
+        {onSelect ? (
+          <Hit className="ot-stop-hit--sign" label={label} onSelect={onSelect}>
+            <SignFace kind={station ? "station" : "stop"} chosen={chosen && !station} />
+          </Hit>
+        ) : (
+          <span className="ot-stop-hit ot-stop-hit--sign" role="img" aria-label={label}>
+            <SignFace kind={station ? "station" : "stop"} chosen={chosen && !station} />
+          </span>
+        )}
+      </div>
+    </div>
+  );
+}
+
 /** A line's badge on a tag: the operator's colour and the canvas bus or train. */
 export function TagBadge({ line }: { line: MapTagLine }) {
   const rail = lineMode(line.mode) === "rail";

@@ -26,7 +26,12 @@ export interface MapRouteLeg {
    * outline; "faded" thinner at .6 in its own colour (an option not chosen, a line not
    * picked); "travelled" in grey (the part of a ride already behind the passenger).
    */
-  tone?: "normal" | "faded" | "travelled";
+  tone?: "normal" | "faded" | "travelled" | "quiet";
+  /**
+   * "quiet" (stops-and-lines boards Stop and Ride, 14 November 2026): the lines not chosen
+   * at a stop, 5 px in their own colour at `quietOpacity` (Stop .45, Ride .4) with no edge.
+   */
+  quietOpacity?: number;
 }
 
 /** A line badge on a map tag (the operator picks its colour, the mode its vehicle icon). */
@@ -73,10 +78,14 @@ export interface MapStopPin {
   onSelect?: () => void;
   /**
    * "sign": the stops-and-lines marker G (a sign on a pole, its kerb dot on the point;
-   * src/components/GSign.tsx) instead of the round pin. `rail` draws a station's sign.
+   * src/map/stops/markers.tsx, the stops layer's own) instead of the round pin. `rail`
+   * draws a station's sign. The pole points away from the road as the stops layer knows
+   * it (the map's streets, the stop's direction from stops by area), else from
+   * `bearingDegrees` (the stop item's, API-C6); with neither, the sign is centred.
    */
   look?: "sign";
   rail?: boolean;
+  bearingDegrees?: number | null;
 }
 
 /** A stop the screen already knows (Home's nearby answer), drawn before the area request answers. */
