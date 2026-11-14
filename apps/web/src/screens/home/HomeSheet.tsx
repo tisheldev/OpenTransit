@@ -42,23 +42,17 @@ const badgeOf = (line: Pick<StopLine, "mode" | "label" | "operatorId" | "operato
   operatorName: line.operatorName,
 });
 
-/** The field as a button (canvas `.fld`): "לאן נוסעים?" with the hint "מקום, תחנה או קו". */
+/**
+ * The field as a button (canvas `.fld`): "לאן נוסעים?" with the hint "מקום, תחנה או קו".
+ * Named by both, as shown (WCAG 2.5.3: the visible text is in the name).
+ */
 export function HomeSearchField() {
   const { t } = useI18n();
-  const hintId = useId();
   return (
-    <button
-      type="button"
-      className="hs-field"
-      aria-label={t("home.search")}
-      aria-describedby={hintId}
-      onClick={() => go({ name: "search", field: "to" })}
-    >
+    <button type="button" className="hs-field" onClick={() => go({ name: "search", field: "to" })}>
       <CanvasIcon name="search" />
-      <span className="hs-field__text">{t("home.search")}</span>
-      <span id={hintId} className="hs-mu">
-        {t("home.search.hint")}
-      </span>
+      <span className="hs-field__text">{t("home.search")}</span>{" "}
+      <span className="hs-mu">{t("home.search.hint")}</span>
     </button>
   );
 }

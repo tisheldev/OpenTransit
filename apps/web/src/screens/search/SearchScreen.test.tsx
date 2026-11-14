@@ -360,7 +360,7 @@ describe("Lines, stops and places in one list (board 2, 14 November 2026)", () =
     });
     renderApp("#/");
     await screen.findByRole("list", { name: he["home.near.list"] });
-    await userEvent.click(screen.getByRole("button", { name: he["home.search"] }));
+    await userEvent.click(screen.getByRole("button", { name: `${he["home.search"]} ${he["home.search.hint"]}` }));
     await userEvent.type(await screen.findByRole("searchbox"), "דיזנגוף");
     const results = await screen.findByTestId("search-results");
     const stop = named(results, "דיזנגוף סנטר/דיזנגוף", "stop");

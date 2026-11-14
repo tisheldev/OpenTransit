@@ -74,7 +74,7 @@ describe("Home", () => {
     renderApp("#/");
     expect(calls).toBe(0);
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(he["home.title"]);
-    expect(screen.getByRole("button", { name: he["home.search"] })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: `${he["home.search"]} ${he["home.search.hint"]}` })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: new RegExp(he["home.setHome"]) })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: new RegExp(he["home.setWork"]) })).toBeInTheDocument();
     expect(screen.getByText(he["stop.scheduled"])).toBeInTheDocument();
@@ -84,7 +84,7 @@ describe("Home", () => {
 
   it("the search field opens Where to; an unset card opens Search to save that place", async () => {
     renderApp("#/");
-    await userEvent.click(screen.getByRole("button", { name: he["home.search"] }));
+    await userEvent.click(screen.getByRole("button", { name: `${he["home.search"]} ${he["home.search.hint"]}` }));
     expect(window.location.hash).toBe("#/search/to");
     for (const [name, hash] of [
       [new RegExp(he["home.setHome"]), "#/search/home"],
