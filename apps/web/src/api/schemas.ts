@@ -1,4 +1,5 @@
 import { z } from "zod";
+import type { components } from "./generated/openapi";
 import type { JourneyResponse, Problem } from "./types";
 
 z.config({ jitless: true });
@@ -286,6 +287,44 @@ export const StopLinesSchema = z.looseObject({
   meta: MetaSchema,
 });
 
+// --- lines (API contract A2, stops and lines overhaul, 14 November 2026) ----------
+// A line is an operator plus its MOT line code (route_desc before the first "-"): the key
+// the API already uses to find a line's other direction. `lineKey` is opaque and stable
+// across generations; route ids are not (M2.8).
+
+export const LineItemSchema = z.looseObject({
+  lineKey: z.string().min(1),
+  shortName: z.string(),
+  operatorId: z.string().nullable(),
+  operatorName: z.string().nullable(),
+  mode: z.string(),
+  routeIds: z.array(z.string()),
+  directions: z.array(
+    z.looseObject({
+      routeId: z.string(),
+      headsign: z.string().nullable(),
+      originName: z.string().nullable(),
+      destinationName: z.string().nullable(),
+    }),
+  ),
+  area: z.string().nullable(),
+  /** Only when the request gave lat/lon: the nearest stop any direction serves, within 2 km. */
+  nearestStop: z.looseObject({ stopId: z.string(), name: z.string().nullable(), distanceM: z.number() }).nullish(),
+});
+
+/** GET /v1/lines?q=…: lines whose number starts with q, exact matches first. */
+export const LinesPageSchema = z.looseObject({
+  data: z.array(LineItemSchema),
+  page: PageSchema,
+  meta: MetaSchema,
+});
+
+/** GET /v1/lines/{lineKey}: one line. */
+export const LineSchema = z.looseObject({
+  data: LineItemSchema,
+  meta: MetaSchema,
+});
+
 // --- journeys (typed by OpenAPI; validated here too) --------------------------
 
 const Timing = z.looseObject({
@@ -354,6 +393,9 @@ export const JourneyResponseSchema = z.looseObject({
 type Satisfies<T extends U, U> = T;
 export type _JourneyMatchesOpenApi = Satisfies<z.infer<typeof JourneyResponseSchema>, JourneyResponse>;
 export type _ProblemMatchesOpenApi = Satisfies<z.infer<typeof ProblemSchema>, Problem>;
+// Lines (contract A2): every item the API documents must parse here (mode is read as a
+// plain string, so a mode the client does not know yet still parses).
+export type _LineItemFromOpenApi = Satisfies<components["schemas"]["LineItem"], z.infer<typeof LineItemSchema>>;
 
 export type Status = z.infer<typeof StatusSchema>;
 export type Places = z.infer<typeof PlacesSchema>;
@@ -367,4 +409,7 @@ export type Trip = z.infer<typeof TripSchema>;
 export type DeparturesPage = z.infer<typeof DeparturesPageSchema>;
 export type NearbyDepartures = z.infer<typeof NearbyDeparturesSchema>;
 export type StopLines = z.infer<typeof StopLinesSchema>;
+export type LineItem = z.infer<typeof LineItemSchema>;
+export type LinesPage = z.infer<typeof LinesPageSchema>;
+export type LineDetail = z.infer<typeof LineSchema>;
 export type Meta = z.infer<typeof MetaSchema>;

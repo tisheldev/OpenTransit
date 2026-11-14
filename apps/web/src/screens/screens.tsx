@@ -77,6 +77,9 @@ export function Screen({ route }: { route: Route }) {
       return <StopScreen stopId={route.stopId} />;
     case "trip":
       return <TripScreen tripRef={route.tripRef} />;
+    case "line":
+      // The Line screen (board 4) is another builder's; until it lands, an honest placeholder.
+      return <Placeholder title={t("screen.line")} />;
     case "nearby":
       return <NearbyScreen />;
     case "lines":
