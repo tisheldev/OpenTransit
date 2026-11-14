@@ -48,6 +48,8 @@ describe("hash router", () => {
     ["#/search/bogus", { name: "notFound", path: "/search/bogus" }],
     ["#/settings", { name: "settings" }],
     ["#/route", { name: "route" }],
+    ["#/line/5%3A10008", { name: "line", lineKey: "5:10008" }],
+    ["#/line/5%3Aroute%3A12345", { name: "line", lineKey: "5:route:12345" }],
     ["#/stop/mot%3Astop%3A13583", { name: "stop", stopId: "mot:stop:13583" }],
     ["#/trip/20260930_23%3A50_mot60day_584668860_300926", { name: "trip", tripRef: "20260930_23:50_mot60day_584668860_300926" }],
     ["#/line/5%3A8008", { name: "line", lineKey: "5:8008" }],

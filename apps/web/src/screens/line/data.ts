@@ -1,7 +1,7 @@
 import { keepPreviousData, useQuery, type QueryClient } from "@tanstack/react-query";
 import { getRoutePatterns } from "../../api/endpoints";
 import { apiFetch } from "../../api/http";
-import { getLine, lineKeyForRoute } from "../../api/lines";
+import { lineKeyForRoute } from "../../api/lines";
 import { encodePathRef } from "../../api/pathRef";
 import { unwrap } from "../../api/result";
 import { DeparturesPageSchema, StopLinesSchema, StopsPageSchema } from "../../api/schemas";
@@ -14,15 +14,8 @@ import { toIsraelIso } from "../../lib/time";
 const GENERATION_MS = 60 * 60_000;
 const DEPARTURES_REFRESH_MS = 60_000;
 
-/** A2: one line by its key. */
-export function useLine(lineKey: string) {
-  return useQuery({
-    queryKey: ["line", lineKey],
-    queryFn: async ({ signal }) => unwrap(await getLine(lineKey, null, signal)),
-    staleTime: GENERATION_MS,
-    retry: false,
-  });
-}
+/** A2: one line by its key (queries.ts). */
+export { useLine } from "../../api/queries";
 
 /** The first stop of a route's first pattern: where to read the line's patterns from when no stop was given. */
 export function useRouteFirstStop(routeId: string | null) {

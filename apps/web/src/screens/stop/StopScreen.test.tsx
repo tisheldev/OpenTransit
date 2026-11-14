@@ -164,7 +164,7 @@ describe("Stop", () => {
     );
     renderApp(STOP);
     await waitFor(() => expect(lineRows()).toHaveLength(2));
-    expect(lineRows()[0]!.querySelector(".ot-line")).toHaveAttribute("data-vehicle", "train");
+    expect(lineRows()[0]!.querySelector(".cv-bdg")).toHaveAttribute("data-vehicle", "rail");
   });
 
   it("with a fix already allowed: the distance to the stop and the passenger on the map", async () => {

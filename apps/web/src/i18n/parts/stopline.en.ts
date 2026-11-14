@@ -2,7 +2,6 @@ import type { he_stopline } from "./stopline.he";
 
 // English strings of the stops-and-lines screens; keys and placeholders mirror stopline.he.ts.
 export const en_stopline: Record<keyof typeof he_stopline, string> = {
-  "screen.line": "Line",
   "screen.ride": "Ride a line",
 
   "stop.walkMinutes": "{minutes} min walk",

@@ -1,4 +1,4 @@
-import { VEHICLE_ICONS } from "./ds";
+import { CanvasVehicleIcon } from "./canvas";
 import "./gsign.css";
 
 // Stop marker "G" (user, 12 November 2026: "I like G and want to apply it to everything"):
@@ -10,13 +10,10 @@ import "./gsign.css";
 // (the boards); which side of the road it points to is M's.
 
 export function GSign({ chosen = false, rail = false }: { chosen?: boolean; rail?: boolean }) {
-  const icon = VEHICLE_ICONS[rail ? "train" : "bus"];
   const className = ["ot-gsign", chosen ? "ot-gsign--chosen" : "", rail ? "ot-gsign--rail" : ""].filter(Boolean).join(" ");
   return (
     <span className={className} aria-hidden="true">
-      <svg viewBox={icon.viewBox} aria-hidden="true" focusable="false">
-        <path fillRule="evenodd" d={icon.d} />
-      </svg>
+      <CanvasVehicleIcon vehicle={rail ? "rail" : "bus"} />
     </span>
   );
 }

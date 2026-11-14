@@ -1,14 +1,13 @@
 import { useMemo, useState, type CSSProperties } from "react";
 import { ApiFailure } from "../../api/result";
-import { LineBadge } from "../../components/ds";
+import { CanvasBadge } from "../../components/canvas";
 import { ErrorState, Loading } from "../../components/states";
 import { useI18n } from "../../i18n/I18nProvider";
 import { formatClock } from "../../lib/time";
-import { lineMode } from "../../map/layers";
 import { emptyScene, usePublishScene, type LonLat, type MapPin, type MapScene, type MapTag } from "../../map/scene";
 import { haversineMeters, type LatLon } from "../../nav/geo";
 import { useTrip } from "../../plan/queries";
-import { toggleSavedLine, useSavedLines } from "../../storage/saved";
+import { toggleSavedLine, useIsLineSaved } from "../../storage/saved";
 import { directionChevron, minutesTo, shortHeadsign } from "../stop/lines";
 import { openStop } from "../stop/intent";
 import { useNow, withFigure } from "../stop/parts";
@@ -95,7 +94,7 @@ export function LineScreen({ lineKey }: { lineKey: string }) {
   const stations = useRailStations(useMemo(() => paddedBounds(stops), [stops]));
   const rail = useMemo(() => railAt(stops, stations.data?.data ?? []), [stops, stations.data]);
 
-  const saved = useSavedLines().some((entry) => entry.lineKey === lineKey);
+  const saved = useIsLineSaved(lineKey);
   const colour = useLineColour(item);
   const modeName = useModeName(item?.mode ?? "bus");
 
@@ -190,12 +189,7 @@ export function LineScreen({ lineKey }: { lineKey: string }) {
   return (
     <div className="line" style={{ "--sl-line": colour } as CSSProperties}>
       <div className="sl-head">
-        <LineBadge
-          className="sl-badge-xl"
-          mode={lineMode(item.mode) === "rail" ? "rail" : "bus"}
-          label={item.shortName}
-          line={{ mode: item.mode, operatorId: item.operatorId, operatorName: item.operatorName }}
-        />
+        <CanvasBadge className="sl-badge-xl" line={{ label: item.shortName, mode: item.mode, operatorId: item.operatorId, operatorName: item.operatorName }} />
         <div className="sl-head__text">
           <h1>{t("line.title", { line: item.shortName })}</h1>
           <span className="b-mu">
@@ -211,11 +205,16 @@ export function LineScreen({ lineKey }: { lineKey: string }) {
             toggleSavedLine({
               lineKey,
               shortName: item.shortName,
-              operatorId: item.operatorId ?? "",
-              operatorName: item.operatorName ?? "",
+              operatorId: item.operatorId,
+              operatorName: item.operatorName,
               mode: item.mode,
-              headsign: direction.towards,
-              savedAt: new Date().toISOString(),
+              destinationName: direction.towards,
+              originName: direction.origin,
+              routeIdHint: direction.routeId,
+              area: item.area,
+              // Home names the stop the line is saved from ("מ<stop>").
+              stopId: anchorStop?.stopId ?? null,
+              stopName: anchorStop?.name ?? null,
             })
           }
         >

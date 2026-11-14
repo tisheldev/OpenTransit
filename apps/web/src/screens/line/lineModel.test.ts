@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { LineItem } from "../../api/lines";
+import type { LineItem } from "../../api/schemas";
 import type { DeparturesPage, StopLines, StopsPage } from "../../api/schemas";
 import { anchorIndex, directionsOf, headwayMinutes, lineDepartures, railAt, rideRows, stopRows, stopTimes, walkMinutes, type PatternStop } from "./lineModel";
 

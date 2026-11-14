@@ -7,7 +7,7 @@ import { setLocationSource } from "../../lib/geolocation";
 import { getMapState } from "../../map/scene";
 import { getActiveTrip } from "../../nav/activeTrip";
 import { respond } from "../../mocks/handlers";
-import { derivedPinnedJourney } from "../../mocks/lineFixtures";
+import { derivedPinnedJourney } from "../../mocks/rideFixtures";
 import { server } from "../../mocks/node";
 import { renderApp, storedDraft } from "../../shell/testUtils";
 
@@ -15,7 +15,7 @@ import { renderApp, storedDraft } from "../../shell/testUtils";
 // recorded lines through Dizengoff Center (src/mocks/lineFixtures.ts): line 8 of Dan, its
 // recorded direction (to Tel Aviv University) and that direction reversed (to מסוף הטייסים).
 
-const LINE = "#/line/5%3A90008";
+const LINE = "#/line/5%3A10008";
 const stopsList = () => screen.getByRole("list", { name: he["line.stops"] });
 const rowTexts = () => within(stopsList()).getAllByRole("button").map((row) => row.textContent);
 
@@ -52,15 +52,15 @@ describe("Line", () => {
     expect(await screen.findByRole("heading", { level: 1, name: "קו 8" })).toBeInTheDocument();
     const directions = within(await screen.findByRole("group", { name: he["line.directions"] })).getAllByRole("button");
     expect(directions.map((button) => [button.textContent, button.getAttribute("aria-pressed")])).toEqual([
-      ["לאוניברסיטת ת\"א", "true"],
-      ["למסוף הטייסים", "false"],
+      ["למסוף הטייסים", "true"],
+      ["לאוניברסיטת ת\"א", "false"],
     ]);
     await waitFor(() => expect(screen.getByText("דן · אוטובוס · כל 12 דק׳ בערך")).toBeInTheDocument());
     const rows = rowTexts();
-    expect(rows[0]).toMatch(/^מסוף הטייסים/);
+    expect(rows[0]).toMatch(/^מסוף אוניברסיטת ת''א\/הורדה/);
     expect(rows).toHaveLength(7);
     expect(rows[5]).toBe("36 תחנות נוספות");
-    await waitFor(() => expect(rowTexts()[6]).toMatch(/^מסוף אוניברסיטת ת''א\/הורדה\d\d:\d\d$/));
+    await waitFor(() => expect(rowTexts()[6]).toMatch(/^מסוף הטייסים\d\d:\d\d$/));
     expect(screen.getByText(he["line.note"])).toBeInTheDocument();
 
     // The whole route on the map, its stops, the end as a square, the first stop's sign and a chevron.
@@ -70,49 +70,52 @@ describe("Line", () => {
     expect(scene.route[0]!.coordinates).toHaveLength(42);
     expect(scene.pins).toHaveLength(41);
     expect(scene.pins[scene.pins.length - 1]).toMatchObject({ role: "destination" });
-    expect(scene.stopPins).toEqual([expect.objectContaining({ look: "sign", selected: true, ariaLabel: "התחנה מסוף הטייסים" })]);
+    expect(scene.stopPins).toEqual([expect.objectContaining({ look: "sign", selected: true, ariaLabel: "התחנה מסוף אוניברסיטת ת''א/הורדה" })]);
     expect(scene.tags!.find((tag) => tag.id === "direction")!.glyph).toMatchObject({ kind: "chevron" });
-    expect(scene.tags!.find((tag) => tag.id === "end")).toMatchObject({ kind: "strong", text: "אוניברסיטת ת\"א", line: { label: "8" } });
+    expect(scene.tags!.find((tag) => tag.id === "end")).toMatchObject({ kind: "strong", text: "מסוף הטייסים", line: { label: "8" } });
   });
 
-  it("near the passenger: opens at the nearest stop with earlier stops folded; the other direction; a train badge", async () => {
+  it("near the passenger: opens at the nearest stop with earlier stops folded; a train badge; the other direction", async () => {
     nearDizengoff();
     const user = userEvent.setup();
     renderApp(LINE);
-    await waitFor(() => expect(rowTexts()[0]).toBe("22 תחנות קודמות · ממסוף הטייסים"));
+    await waitFor(() => expect(rowTexts()[0]).toBe("19 תחנות קודמות · ממסוף אוניברסיטת ת''א/הורדה"));
     const here = within(stopsList()).getAllByRole("button")[1]!;
     expect(here).toHaveClass("sl-sr--on");
     await waitFor(() => expect(here).toHaveTextContent(/^דיזנגוף סנטר\/דיזנגוףהכי קרובה אליך · 1 דק׳ הליכהבעוד \d דק׳\d\d:\d\d · \d\d:\d\d$/));
     expect(getMapState().scene.stopPins![0]).toMatchObject({ id: "mot:stop:13583", look: "sign" });
+    // Four stops to the station with its train badge, 17 folded, the terminus (as board 4).
+    await waitFor(() => expect(within(stopsList()).getAllByRole("button")[5]).toHaveTextContent(/^ת\. רכבת השלוםרכבת\d\d:\d\d$/));
+    const rows = rowTexts();
+    expect(rows[6]).toBe("17 תחנות נוספות");
+    expect(rows[7]).toMatch(/^מסוף הטייסים\d\d:\d\d$/);
 
     // The earlier stops open in place.
     await user.click(within(stopsList()).getAllByRole("button")[0]!);
-    expect(rowTexts()[0]).toMatch(/^מסוף הטייסים/);
-    expect(rowTexts()).toHaveLength(22 + 1 + 4 + 1 + 1);
+    expect(rowTexts()[0]).toMatch(/^מסוף אוניברסיטת ת''א\/הורדה/);
+    expect(rowTexts()).toHaveLength(19 + 1 + 4 + 1 + 1);
 
-    // The other direction: its own nearest stop, four stops to the station with its train badge, 17 folded, the terminus.
-    await user.click(screen.getByRole("button", { name: "למסוף הטייסים" }));
-    expect(screen.getByRole("button", { name: "למסוף הטייסים" })).toHaveAttribute("aria-pressed", "true");
-    await waitFor(() => expect(rowTexts()[0]).toBe("19 תחנות קודמות · ממסוף אוניברסיטת ת''א/הורדה"));
-    const rows = rowTexts();
-    expect(rows[1]).toMatch(/^דיזנגוף סנטר\/דיזנגוף/);
-    await waitFor(() => expect(within(stopsList()).getAllByRole("button")[5]).toHaveTextContent(/^ת\. רכבת השלוםרכבת\d\d:\d\d$/));
-    expect(rows[6]).toBe("17 תחנות נוספות");
-    expect(rows[7]).toMatch(/^מסוף הטייסים\d\d:\d\d$/);
+    // The other direction: its own nearest stop, the earlier ones folded again.
+    await user.click(screen.getByRole("button", { name: "לאוניברסיטת ת\"א" }));
+    expect(screen.getByRole("button", { name: "לאוניברסיטת ת\"א" })).toHaveAttribute("aria-pressed", "true");
+    await waitFor(() => expect(rowTexts()[0]).toBe("22 תחנות קודמות · ממסוף הטייסים"));
+    expect(rowTexts()[1]).toMatch(/^דיזנגוף סנטר\/דיזנגוף/);
   });
 
-  it("saves the line on the device with its star", async () => {
+  it("saves the line on the device with its star, with the stop it was saved from", async () => {
+    nearDizengoff();
     const user = userEvent.setup();
     renderApp(LINE);
-    const star = await screen.findByRole("button", { name: he["line.save"] });
+    await waitFor(() => expect(rowTexts()[0]).toMatch(/תחנות קודמות/));
+    const star = screen.getByRole("button", { name: he["line.save"] });
     expect(star).toHaveAttribute("aria-pressed", "false");
     await user.click(star);
     expect(star).toHaveAttribute("aria-pressed", "true");
-    expect(JSON.parse(localStorage.getItem("opentransit:saved")!).lines).toEqual([
-      expect.objectContaining({ lineKey: "5:90008", shortName: "8", operatorId: "5", operatorName: "דן", mode: "bus", headsign: "אוניברסיטת ת\"א" }),
+    expect(JSON.parse(localStorage.getItem("opentransit")!).savedLines).toEqual([
+      expect.objectContaining({ lineKey: "5:10008", shortName: "8", operatorId: "5", destinationName: "מסוף הטייסים", stopId: "mot:stop:13583" }),
     ]);
     await user.click(star);
-    expect(JSON.parse(localStorage.getItem("opentransit:saved")!).lines).toEqual([]);
+    expect(star).toHaveAttribute("aria-pressed", "false");
   });
 
   it("an unknown line says so", async () => {
@@ -175,7 +178,7 @@ describe("Ride it", () => {
   it("ולהמשיך משם… plans on from the exit stop", async () => {
     sessionStorage.setItem(
       "opentransit:ride",
-      JSON.stringify({ lineKey: "5:90008", routeId: "mot:route:16076", boardStopId: "mot:stop:13583", alightStopId: "mot:stop:12823", tripRef: null }),
+      JSON.stringify({ lineKey: "5:10008", routeId: "mot:route:16076", boardStopId: "mot:stop:13583", alightStopId: "mot:stop:12823", tripRef: null }),
     );
     const user = userEvent.setup();
     renderApp("#/ride");
@@ -187,7 +190,7 @@ describe("Ride it", () => {
   it("a walk the API cannot route: no journey, a message, no start", async () => {
     sessionStorage.setItem(
       "opentransit:ride",
-      JSON.stringify({ lineKey: "5:90008", routeId: "mot:route:16076", boardStopId: "mot:stop:13583", alightStopId: "mot:stop:12823", tripRef: null }),
+      JSON.stringify({ lineKey: "5:10008", routeId: "mot:route:16076", boardStopId: "mot:stop:13583", alightStopId: "mot:stop:12823", tripRef: null }),
     );
     server.use(
       http.post("*/v1/journeys", async ({ request }) => {

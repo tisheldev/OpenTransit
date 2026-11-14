@@ -79,7 +79,7 @@ describe("Route details: a ride opened in place", () => {
     await waitFor(() => expect(rides().length).toBeGreaterThan(0));
     await user.click(rides()[0]!);
     await user.click(await screen.findByRole("button", { name: "כל התחנות של קו 8" }));
-    await waitFor(() => expect(window.location.hash).toBe("#/line/5%3A90008"));
+    await waitFor(() => expect(window.location.hash).toBe("#/line/5%3A10008"));
     expect(await screen.findByRole("heading", { level: 1, name: "קו 8" })).toBeInTheDocument();
 
     window.history.back();

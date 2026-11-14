@@ -3,12 +3,11 @@ import { useMemo, useState, type CSSProperties } from "react";
 import { planPinnedJourney, PINNED_TRIP_MISSED_BY_WALK, PINNED_TRIP_WALK_UNAVAILABLE, type PinnedJourneyRequest } from "../../api/lines";
 import { ApiFailure, unwrap } from "../../api/result";
 import type { LocationInput } from "../../api/types";
-import { LineBadge } from "../../components/ds";
+import { CanvasBadge } from "../../components/canvas";
 import { ErrorState, Loading, TestDataBanner } from "../../components/states";
 import { useI18n } from "../../i18n/I18nProvider";
 import { formatDuration } from "../../lib/format";
 import { formatClock, toIsraelIso } from "../../lib/time";
-import { lineMode } from "../../map/layers";
 import { emptyScene, usePublishScene, type LonLat, type MapPin, type MapRouteLeg, type MapScene, type MapTag } from "../../map/scene";
 import { haversineMeters } from "../../nav/geo";
 import { startActiveTrip } from "../../nav/activeTrip";
@@ -231,12 +230,7 @@ function Ride({ ride, onChange }: { ride: RideIntent; onChange: (ride: RideInten
   return (
     <div className="ride" style={{ "--sl-line": colour } as CSSProperties}>
       <div className="sl-head">
-        <LineBadge
-          className="sl-badge-xl"
-          mode={lineMode(item.mode) === "rail" ? "rail" : "bus"}
-          label={item.shortName}
-          line={{ mode: item.mode, operatorId: item.operatorId, operatorName: item.operatorName }}
-        />
+        <CanvasBadge className="sl-badge-xl" line={{ label: item.shortName, mode: item.mode, operatorId: item.operatorId, operatorName: item.operatorName }} />
         <div className="sl-head__text">
           <h1>{t("line.towards", { place: direction.towards })}</h1>
           <span className="b-mu">

@@ -1,4 +1,4 @@
-import type { LineItem } from "../../api/lines";
+import type { LineItem } from "../../api/schemas";
 import type { DeparturesPage, StopLines, StopsPage, Trip } from "../../api/schemas";
 import { haversineMeters, type LatLon } from "../../nav/geo";
 import { shortHeadsign } from "../stop/lines";

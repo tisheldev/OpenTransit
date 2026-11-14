@@ -1,7 +1,6 @@
 // Hebrew strings of the stops-and-lines screens (canvas boards Stop 3, Line 4, Ride 5 and
 // Journey 6, 14 November 2026; copy text from the boards); merged into he.ts.
 export const he_stopline = {
-  "screen.line": "קו",
   "screen.ride": "נסיעה בקו",
 
   // Stop (board 3)

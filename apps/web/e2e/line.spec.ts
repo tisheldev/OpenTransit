@@ -29,7 +29,7 @@ test("Stop: save, a line opened in place, all its stops; travel from here (axe)"
   await expect(times.locator(".sl-chip").first()).toHaveText(/^\d\d:\d\d$/);
   await expectNoSeriousAxeViolations(page, "Stop, a line opened (he)");
   await times.getByRole("button", { name: "כל התחנות" }).click();
-  await expect(page).toHaveURL(/#\/line\/5%3A90008$/);
+  await expect(page).toHaveURL(/#\/line\/5%3A10008$/);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("קו 8");
 
   await page.goBack();
@@ -39,7 +39,7 @@ test("Stop: save, a line opened in place, all its stops; travel from here (axe)"
 });
 
 test("Line: opens at the nearest stop, folds, switches direction, train badge (axe, light too)", async ({ page }) => {
-  await page.goto(appPath("#/line/5%3A90008"));
+  await page.goto(appPath("#/line/5%3A10008"));
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("קו 8");
   await expect(page.getByText("דן · אוטובוס · כל 12 דק׳ בערך")).toBeVisible();
   const list = page.getByRole("list", { name: "התחנות של הקו" });
@@ -59,13 +59,13 @@ test("Line: opens at the nearest stop, folds, switches direction, train badge (a
 
 test("Line, light theme (axe)", async ({ page }) => {
   await useTheme(page, "light");
-  await page.goto(appPath("#/line/5%3A90008"));
+  await page.goto(appPath("#/line/5%3A10008"));
   await expect(page.getByRole("list", { name: "התחנות של הקו" }).getByRole("button").first()).toHaveText(/תחנות קודמות/);
   await expectNoSeriousAxeViolations(page, "Line, light (he)");
 });
 
 test("Ride it: tap a stop, a pinned journey, choose another departure, start (axe)", async ({ page }) => {
-  await page.goto(appPath("#/line/5%3A90008"));
+  await page.goto(appPath("#/line/5%3A10008"));
   await page.getByRole("button", { name: "למסוף הטייסים" }).click();
   const list = page.getByRole("list", { name: "התחנות של הקו" });
   await expect(list.getByRole("button").nth(5)).toContainText("ת. רכבת השלום");

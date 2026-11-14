@@ -13,7 +13,7 @@ import type { PlaceChoice } from "../../plan/draft";
 import { usePlan } from "../../plan/PlanProvider";
 import { planKeys, TRIP_STALE_MS } from "../../plan/queries";
 import { go } from "../../router";
-import { toggleSavedStop, useSavedStops } from "../../storage/saved";
+import { toggleSavedStop, useIsStopSaved } from "../../storage/saved";
 import { useBoardSheet } from "../line/boardSheet";
 import { useLineKeyFor } from "../line/data";
 import { StrokeIcon } from "../line/icons";
@@ -103,7 +103,7 @@ export function StopScreen({ stopId }: { stopId: string }) {
   const stop = useStopDetail(stopId);
   const departures = useStopDepartures(stopId, STOP_WINDOW);
   const [chosenKey, setChosenKey] = useState<string | null>(() => initialLine(stopId));
-  const saved = useSavedStops().some((item) => item.stopId === stopId);
+  const saved = useIsStopSaved(stopId);
   useBoardSheet(SHEET_SHARE);
 
   const detail = stop.data?.data ?? null;
@@ -329,7 +329,10 @@ export function StopScreen({ stopId }: { stopId: string }) {
           aria-label={t("stop.save")}
           aria-pressed={saved}
           disabled={!detail}
-          onClick={() => detail && toggleSavedStop({ stopId, name, savedAt: new Date().toISOString() })}
+          onClick={() =>
+            detail &&
+            toggleSavedStop({ stopId, name, code: detail.code, latitude: detail.latitude, longitude: detail.longitude, mode: (detail as { mode?: string | null }).mode ?? null })
+          }
         >
           <StrokeIcon name="star" filled={saved} />
         </button>

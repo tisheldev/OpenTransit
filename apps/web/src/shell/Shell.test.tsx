@@ -147,7 +147,7 @@ describe("shell", () => {
 
   it("Home's search field opens Where to, focused, and a result plans to it", async () => {
     renderApp("#/", { lang: "en" });
-    await userEvent.click(screen.getByRole("button", { name: en["home.search"] }));
+    await userEvent.click(screen.getByRole("button", { name: `${en["home.search"]} ${en["home.search.hint"]}` }));
     expect(window.location.hash).toBe("#/search/to");
     await waitFor(() => expect(screen.getByRole("searchbox")).toHaveFocus());
     await userEvent.type(screen.getByRole("searchbox"), "Dizengoff");
@@ -157,7 +157,7 @@ describe("shell", () => {
     await waitFor(() => expect(storedDraft()?.to).toMatchObject({ type: "place" }));
     act(() => go({ name: "home" }));
     await screen.findByRole("heading", { level: 1, name: en["home.title"] });
-    expect(screen.getByRole("button", { name: en["home.search"] })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: `${en["home.search"]} ${en["home.search.hint"]}` })).toBeInTheDocument();
   });
 
   it("the skip link focuses the screen", async () => {
@@ -174,7 +174,7 @@ describe("history (Home → Search → Compare → Search → Compare)", () => {
       await userEvent.type(await screen.findByRole("searchbox"), text);
       await userEvent.click((await screen.findByTestId("search-results")).querySelector("button")!);
     };
-    await userEvent.click(screen.getByRole("button", { name: he["home.search"] }));
+    await userEvent.click(screen.getByRole("button", { name: `${he["home.search"]} ${he["home.search.hint"]}` }));
     await pick("דיזנגוף");
     await waitFor(() => expect(window.location.hash).toBe("#/compare"));
     // Compare → Search(from) → Back returns to Compare.

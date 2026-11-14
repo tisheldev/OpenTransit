@@ -1,6 +1,6 @@
-import { VEHICLE_ICONS } from "../../components/ds";
+import { CanvasVehicleIcon } from "../../components/canvas";
 import { useI18n } from "../../i18n/I18nProvider";
-import type { LineItem } from "../../api/lines";
+import type { LineItem } from "../../api/schemas";
 import { operatorColour } from "../../lib/lines";
 import { useTheme } from "../../lib/theme";
 import { lineMode } from "../../map/layers";
@@ -9,12 +9,9 @@ import type { RailKind } from "./lineModel";
 /** "רכבת" with the train: a stop where rail can be caught (board 4, `.bdg.rail`). */
 export function RailBadge({ kind }: { kind: RailKind }) {
   const { t } = useI18n();
-  const icon = VEHICLE_ICONS.train;
   return (
     <span className="sl-rail">
-      <svg viewBox={icon.viewBox} aria-hidden="true" focusable="false">
-        <path fillRule="evenodd" d={icon.d} />
-      </svg>
+      <CanvasVehicleIcon vehicle="rail" />
       <bdi>{kind === "light_rail" ? t("line.lightRail") : t("stop.train")}</bdi>
     </span>
   );

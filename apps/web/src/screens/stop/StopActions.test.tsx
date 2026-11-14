@@ -38,7 +38,7 @@ describe("Stop actions", () => {
     expect(star).toHaveAttribute("aria-pressed", "false");
     await user.click(star);
     expect(star).toHaveAttribute("aria-pressed", "true");
-    expect(JSON.parse(localStorage.getItem("opentransit:saved")!).stops).toEqual([
+    expect(JSON.parse(localStorage.getItem("opentransit")!).savedStops).toEqual([
       expect.objectContaining({ stopId: "mot:stop:13583", name: "דיזנגוף סנטר/דיזנגוף" }),
     ]);
     await user.click(star);
@@ -58,7 +58,7 @@ describe("Stop actions", () => {
     const all = times.getByRole("button", { name: he["stop.allStops"] });
     await waitFor(() => expect(all).toBeEnabled());
     await user.click(all);
-    await waitFor(() => expect(window.location.hash).toBe("#/line/5%3A90008"));
+    await waitFor(() => expect(window.location.hash).toBe("#/line/5%3A10008"));
     // The line opens at the stop the passenger came from, in that line's direction.
     await waitFor(() => expect(within(screen.getByRole("list", { name: he["line.stops"] })).getAllByRole("button")[0]).toHaveTextContent("22 תחנות קודמות · ממסוף הטייסים"));
     expect(screen.getByRole("button", { name: "לאוניברסיטת ת\"א" })).toHaveAttribute("aria-pressed", "true");

@@ -61,10 +61,10 @@ export function hrefFor(route: Route): string {
       return `#/search/${route.field}`;
     case "stop":
       return `#/stop/${encodeURIComponent(route.stopId)}`;
-    case "trip":
-      return `#/trip/${encodeURIComponent(route.tripRef)}`;
     case "line":
       return `#/line/${encodeURIComponent(route.lineKey)}`;
+    case "trip":
+      return `#/trip/${encodeURIComponent(route.tripRef)}`;
     case "notFound":
       return `#${route.path}`;
     default:
