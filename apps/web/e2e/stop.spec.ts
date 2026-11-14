@@ -36,7 +36,7 @@ test("every line through the stop: a row and a faded tag each; a tag chooses its
 test("light theme: a line chosen from its row (axe); Back returns Home", async ({ page }) => {
   await useTheme(page, "light");
   await page.goto(appPath("#/"));
-  await page.locator(".home-stop").getByRole("button").first().click();
+  await page.getByRole("list", { name: "הקווים הקרובים אליך" }).getByRole("button").first().click();
   await expect(page).toHaveURL(/#\/stop\/mot%3Astop%3A13583$/);
   await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
   const chosen = page.getByRole("button", { pressed: true });

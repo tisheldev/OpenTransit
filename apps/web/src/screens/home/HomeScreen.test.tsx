@@ -52,7 +52,11 @@ afterEach(() => {
 });
 
 const sheetContent = () => document.querySelector<HTMLElement>(".home")!;
-const nearestStop = "דיזנגוף סנטר/דיזנגוף";
+/** "Near you" (board 1): each line's next departure across the stops within the walk. */
+async function nearRows(): Promise<HTMLElement[]> {
+  const list = await screen.findByRole("list", { name: he["home.near.list"] });
+  return within(list).getAllByRole("button");
+}
 
 describe("Home", () => {
   it("first paint from storage only: the search field, unset Home and Work, no request before paint", async () => {
@@ -70,7 +74,7 @@ describe("Home", () => {
     renderApp("#/");
     expect(calls).toBe(0);
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(he["home.title"]);
-    expect(screen.getByRole("button", { name: he["home.search"] })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: `${he["home.search"]} ${he["home.search.hint"]}` })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: new RegExp(he["home.setHome"]) })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: new RegExp(he["home.setWork"]) })).toBeInTheDocument();
     expect(screen.getByText(he["stop.scheduled"])).toBeInTheDocument();
@@ -80,7 +84,7 @@ describe("Home", () => {
 
   it("the search field opens Where to; an unset card opens Search to save that place", async () => {
     renderApp("#/");
-    await userEvent.click(screen.getByRole("button", { name: he["home.search"] }));
+    await userEvent.click(screen.getByRole("button", { name: `${he["home.search"]} ${he["home.search.hint"]}` }));
     expect(window.location.hash).toBe("#/search/to");
     for (const [name, hash] of [
       [new RegExp(he["home.setHome"]), "#/search/home"],
@@ -93,15 +97,21 @@ describe("Home", () => {
     }
   });
 
-  it("without a fix: the stops around the last place, the nearest selected, its departures as rows, no ring", async () => {
+  it("without a fix: lines near the last place, each naming its stop and walk, and the stops as pins, no ring", async () => {
     saveLocalState({ ...defaultLocalState(), recents: [place("r0", "Recent 0", 32.0757, 34.7748)] });
     renderApp("#/");
-    const heading = await screen.findByRole("heading", { level: 2, name: nearestStop });
-    const section = heading.closest("section")!;
-    const rows = await within(section).findAllByRole("button");
-    expect(rows.map((row) => row.textContent)).toEqual(["172מסוף רדינג2 דק׳", "115מסוף רדינג5 דק׳", "8אוניברסיטת ת\"א9 דק׳", "5רכבת מרכז11 דק׳"]);
-    // No fix: no distance, no ring, no puck; the map frames the stops.
-    expect(within(section).queryByText(/מ׳/)).toBeNull();
+    const rows = await nearRows();
+    // Each line once, at the stop where it leaves first, earliest first (six rows).
+    expect(rows.map((row) => row.textContent)).toEqual([
+      "172מסוף רדינגדיזנגוף סנטר/דיזנגוף · 1 דק׳ הליכה2 דק׳",
+      "39מסוף עמידרדיזנגוף סנטר/דיזנגוף · 2 דק׳ הליכה2 דק׳",
+      "66מסוף משה ארנסדיזנגוף סנטר/טשרניחובסקי · 2 דק׳ הליכה2 דק׳",
+      "125מרכז הספורטדיזנגוף סנטר/המלך ג'ורג' · 2 דק׳ הליכה2 דק׳",
+      "115מסוף רדינגדיזנגוף סנטר/דיזנגוף · 1 דק׳ הליכה5 דק׳",
+      "8מסוף הטייסיםדיזנגוף סנטר/דיזנגוף · 2 דק׳ הליכה5 דק׳",
+    ]);
+    expect(screen.getByText(he["home.near.walk"].replace("{minutes}", "5"))).toBeInTheDocument();
+    // No fix: no ring, no puck; the map frames the stops.
     await waitFor(() => expect(getMapState().scene.stops?.known).toHaveLength(4));
     const scene = getMapState().scene;
     expect(scene).toMatchObject({ camera: "fit", ring: null, user: null, focus: { center: [34.7748, 32.0757], zoom: 16 } });
@@ -115,14 +125,14 @@ describe("Home", () => {
     await waitFor(() => expect(window.location.hash).toBe("#/stop/mot%3Astop%3A13560"));
   });
 
-  it("with a fix already allowed: the walking ring and the puck around the passenger, and the stop's distance", async () => {
+  it("with a fix already allowed: the walking ring and the puck around the passenger, and each row's walk from them", async () => {
     restore = grantFix();
     renderApp("#/");
     await waitFor(() => expect(getMapState().scene.ring).toEqual({ center: [34.7749, 32.0753], radiusMeters: 400 }));
     expect(getMapState().scene.user).toEqual({ position: [34.7749, 32.0753], accuracyMeters: 20 });
-    const heading = await screen.findByRole("heading", { level: 2, name: nearestStop });
-    // About 36 m from the fix, rounded to tens.
-    expect(heading.parentElement).toHaveTextContent(/40 מ׳$/);
+    const rows = await nearRows();
+    // 13583 is about 36 m from the fix: a one-minute walk.
+    expect(rows[0]).toHaveTextContent(/^172מסוף רדינגדיזנגוף סנטר\/דיזנגוף · 1 דק׳ הליכה/);
   });
 
   it("one tap on any stop opens it; the nearest stop is the chosen one", async () => {
@@ -136,14 +146,14 @@ describe("Home", () => {
     await waitFor(() => expect(window.location.hash).toBe("#/stop/mot%3Astop%3A13583"));
   });
 
-  it("a departure row opens its stop with that line's route shown", async () => {
+  it("a row opens its stop with that line's route shown", async () => {
     renderApp("#/");
-    const heading = await screen.findByRole("heading", { level: 2, name: nearestStop });
-    const rows = await within(heading.closest("section")!).findAllByRole("button");
-    await userEvent.click(rows[2]!);
+    const rows = await nearRows();
+    // Line 172 leaves first from the nearest stop, 13583.
+    await userEvent.click(rows.find((row) => row.textContent?.startsWith("172"))!);
     await waitFor(() => expect(window.location.hash).toBe("#/stop/mot%3Astop%3A13583"));
     const chosen = await screen.findByRole("button", { pressed: true });
-    expect(chosen).toHaveTextContent(/^8אוניברסיטת ת"א/);
+    expect(chosen).toHaveTextContent(/^172מסוף רדינג/);
   });
 
   it("with saved places (English): a card plans to it, with the next ride toward it", async () => {
@@ -179,9 +189,58 @@ describe("Home", () => {
     restore = grantFix();
     renderApp("#/");
     const card = screen.getByRole("button", { name: he["place.home"] });
-    await screen.findByRole("heading", { level: 2, name: nearestStop });
+    await nearRows();
     expect(card).toHaveTextContent(/^בית$/);
     expect(screen.queryByRole("alert")).toBeNull();
+  });
+
+  it("saved stops and lines sit after Home and Work with their next departure; a stop in the nearby answer costs no request", async () => {
+    const departureCalls: string[] = [];
+    server.use(
+      http.get("*/v1/stops/:stopId/departures", ({ request, params }) => {
+        departureCalls.push(decodeURIComponent(String(params.stopId)));
+        return respond(derivedDepartures(String(params.stopId), new URL(request.url).searchParams.get("from"), 30));
+      }),
+    );
+    saveLocalState({
+      ...defaultLocalState(),
+      savedStops: [
+        { stopId: "mot:stop:13583", name: "דיזנגוף סנטר", code: "25609", latitude: 32.075566, longitude: 34.77512, mode: "bus", savedAt: "2026-11-14T10:00:00Z" },
+        // Not in the nearby answer: one departures request for it.
+        { stopId: "mot:stop:49952", name: "המלך ג'ורג'", code: "20785", latitude: 32.075533, longitude: 34.776404, mode: null, savedAt: "2026-11-14T10:00:00Z" },
+      ],
+      savedLines: [
+        {
+          lineKey: "5:10008",
+          shortName: "8",
+          operatorId: "5",
+          operatorName: "דן",
+          mode: "bus",
+          destinationName: "מסוף הטייסים",
+          originName: "מסוף רידינג",
+          routeIdHint: null,
+          area: "תל אביב-יפו",
+          stopId: "mot:stop:13561",
+          stopName: "דיזנגוף סנטר",
+          savedAt: "2026-11-14T10:00:00Z",
+        },
+      ],
+    });
+    renderApp("#/");
+    const saved = screen.getByRole("region", { name: he["home.saved"] });
+    // Storage renders first: the names are there before any answer.
+    const cards = within(saved).getAllByRole("button");
+    expect(cards.map((card) => card.textContent)).toEqual([he["place.home"] + he["home.setHome"], he["place.work"] + he["home.setWork"], "דיזנגוף סנטר", "המלך ג'ורג'", "8מסוף הטייסיםמדיזנגוף סנטר"]);
+    // The next two lines of the stop, the unit said once; the line from its stop.
+    await waitFor(() => expect(cards[2]).toHaveTextContent(/^דיזנגוף סנטר17221155 דק׳$/));
+    await waitFor(() => expect(cards[4]).toHaveTextContent(/^8מסוף הטייסים5 דק׳ · מדיזנגוף סנטר$/));
+    await waitFor(() => expect(cards[3]).toHaveTextContent(/^המלך ג'ורג'\d+\d+\d+ דק׳$/));
+    expect(departureCalls).toEqual(["mot:stop:49952"]);
+    await userEvent.click(cards[4]!);
+    expect(window.location.hash).toBe("#/line/5%3A10008");
+    window.history.back();
+    await userEvent.click(await screen.findByRole("button", { name: /^דיזנגוף סנטר172/ }));
+    await waitFor(() => expect(window.location.hash).toBe("#/stop/mot%3Astop%3A13583"));
   });
 
   it("one request for the stops and their departures; without that endpoint, the stops list and each stop's departures", async () => {
@@ -198,9 +257,9 @@ describe("Home", () => {
       }),
     );
     renderApp("#/");
-    const heading = await screen.findByRole("heading", { level: 2, name: nearestStop });
-    const rows = await within(heading.closest("section")!).findAllByRole("button");
-    expect(rows.map((row) => row.textContent)).toEqual(["172מסוף רדינג2 דק׳", "115מסוף רדינג5 דק׳", "8אוניברסיטת ת\"א9 דק׳", "5רכבת מרכז11 דק׳"]);
+    const rows = await nearRows();
+    // Every stop answers 13583's recorded departures here: each line once, at the nearest stop.
+    expect(rows[0]).toHaveTextContent(/^172מסוף רדינגדיזנגוף סנטר\/דיזנגוף · 1 דק׳ הליכה2 דק׳$/);
     expect(nearbyCalls).toBe(1);
     expect([...departureCalls].sort()).toEqual(["mot:stop:13560", "mot:stop:13561", "mot:stop:13583", "mot:stop:49938"]);
     // The operator comes from each stop's routes when departures do not carry it.
@@ -214,7 +273,7 @@ describe("Home", () => {
     expect(screen.getByRole("button", { name: he["state.retry"] })).toBeInTheDocument();
   });
 
-  it("says so when there are no stops near the place", async () => {
+  it("says so when no line leaves near the place", async () => {
     server.use(
       http.get("*/v1/departures/nearby", () => {
         const base = fixture("recorded-live-departures-nearby");
@@ -222,7 +281,7 @@ describe("Home", () => {
       }),
     );
     renderApp("#/");
-    expect(await screen.findByText(he["home.stops.none"])).toBeInTheDocument();
+    expect(await screen.findByText(he["home.near.none"])).toBeInTheDocument();
   });
 
   it("shows a resume card first when a trip is active", async () => {
@@ -245,7 +304,7 @@ describe("Home", () => {
       renderApp("#/", { location: "insecure" });
       expect(screen.queryByRole("button", { name: he["nav.locate"] })).toBeNull();
       expect(storedDraft()?.from).toBeNull();
-      await screen.findByRole("heading", { level: 2, name: nearestStop });
+      await nearRows();
       expect(getMapState().scene.ring).toBeNull();
       await userEvent.click(screen.getByRole("button", { name: he["place.home"] }));
       expect(window.location.hash).toBe("#/search/from");

@@ -1,11 +1,12 @@
 import { useEffect, useId, useMemo } from "react";
+import { CanvasBadge } from "../../components/canvas";
 import { useI18n } from "../../i18n/I18nProvider";
 import { BUS_PATH, CanvasIcon } from "../../map/stops/markers";
 import { compassOf } from "../../map/stops/geometry";
 import { pickInGroup, type OpenGroup } from "../../map/stops/view";
 import { openStop } from "../stop/intent";
 import { groupLines, type StopLine } from "../stop/lines";
-import { Badge, Due } from "../stop/parts";
+import { Due } from "../stop/parts";
 import type { HomeStops } from "./homeStops";
 import "./stopGroup.css";
 
@@ -37,11 +38,8 @@ export function StopGroupList({ group, nearby, now }: { group: OpenGroup; nearby
   const hintId = useId();
   const rows = useMemo<Row[]>(() => {
     const list = group.stops.map((stop) => {
-      const index = nearby.stops.findIndex((item) => item.stopId === stop.stopId);
-      const lines =
-        index >= 0
-          ? groupLines(nearby.departures[index] ?? [], nearby.routes[index] ?? [], { trainLabel: t("stop.train"), now: new Date(0) })
-          : [];
+      const entry = nearby.all.find((item) => item.stop.stopId === stop.stopId);
+      const lines = entry ? groupLines(entry.departures ?? [], entry.routes, { trainLabel: t("stop.train"), now: new Date(0) }) : [];
       const compass = compassOf(stop.bearingDegrees);
       return {
         stopId: stop.stopId,
@@ -53,7 +51,7 @@ export function StopGroupList({ group, nearby, now }: { group: OpenGroup; nearby
     });
     // Soonest departure first; stops without one keep their order at the end.
     return list.sort((a, b) => (a.next === null ? 1 : 0) - (b.next === null ? 1 : 0) || (a.next && b.next ? Date.parse(a.next) - Date.parse(b.next) : 0));
-  }, [group.stops, nearby.stops, nearby.departures, nearby.routes, t]);
+  }, [group.stops, nearby.all, t]);
 
   // The first row is picked when the group opens (as drawn).
   const first = rows[0]?.stopId ?? null;
@@ -94,7 +92,7 @@ export function StopGroupList({ group, nearby, now }: { group: OpenGroup; nearby
                   <span className="stop-group__lines">
                     {row.direction && <span className="b-mu">{row.direction}</span>}
                     {badges.map((line) => (
-                      <Badge key={line.key} line={line} />
+                      <CanvasBadge key={line.key} line={line} />
                     ))}
                   </span>
                 </span>

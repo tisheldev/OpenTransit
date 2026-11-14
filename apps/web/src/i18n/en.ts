@@ -1,5 +1,6 @@
 import type { MessageKey } from "./he";
 import { en_compare } from "./parts/compare.en";
+import { en_homeSearch } from "./parts/homeSearch.en";
 import { en_map } from "./parts/map.en";
 import { en_nav } from "./parts/nav.en";
 import { en_secondary } from "./parts/secondary.en";
@@ -81,4 +82,4 @@ const core = {
   "place.address": "Address",
 };
 
-export const en: Record<MessageKey, string> = { ...core, ...en_map, ...en_shell, ...en_compare, ...en_nav, ...en_secondary, ...en_stops };
+export const en: Record<MessageKey, string> = { ...core, ...en_map, ...en_shell, ...en_compare, ...en_nav, ...en_secondary, ...en_homeSearch, ...en_stops };

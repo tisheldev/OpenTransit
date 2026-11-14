@@ -63,9 +63,19 @@ describe("loadLocalState()", () => {
 });
 
 describe("migration", () => {
-  // Version 1 is the first shipped shape, so the runner is exercised with a test schema
-  // two versions ahead: v1 -> v2 lifts settings.lang to `language`; v2 -> v3 moves it
-  // back under settings and adds `pinned`.
+  const version1 = (change: Record<string, unknown> = {}) =>
+    JSON.stringify({ version: 1, settings: { lang: "en" }, home: null, work: null, favourites: [], recents: [place("a")], ...change });
+
+  it("version 1 (before saved stops and lines) gains empty saved stops and lines, and is written back", () => {
+    localStorage.setItem(STORAGE_KEY, version1({ home: place("home") }));
+    const result = loadLocalState();
+    expect(result.source).toBe("migrated");
+    expect(result.state).toMatchObject({ version: 2, settings: { lang: "en" }, home: { id: "home" }, savedStops: [], savedLines: [] });
+    expect(JSON.parse(localStorage.getItem(STORAGE_KEY)!)).toMatchObject({ version: 2, savedStops: [], savedLines: [] });
+  });
+
+  // The runner itself, with a test schema two versions ahead of a version-1 store: v1 -> v2
+  // lifts settings.lang to `language`; v2 -> v3 moves it back under settings and adds `pinned`.
   const V3 = z.object({
     version: z.literal(3),
     settings: z.object({ lang: z.enum(["he", "en"]) }),
@@ -81,7 +91,7 @@ describe("migration", () => {
   };
 
   it("upgrades step by step, validates and writes the result back", () => {
-    saveLocalState({ ...defaultLocalState(), settings: { lang: "en" }, recents: [place("a")] });
+    localStorage.setItem(STORAGE_KEY, version1());
     const result = loadLocalState({ migrations, version: 3, schema: V3 as unknown as z.ZodType<LocalState> });
     expect(result.source).toBe("migrated");
     expect(result.state).toMatchObject({ version: 3, settings: { lang: "en" }, pinned: [] });
@@ -89,7 +99,7 @@ describe("migration", () => {
   });
 
   it("resets when a migration step is missing", () => {
-    saveLocalState(defaultLocalState());
+    localStorage.setItem(STORAGE_KEY, version1());
     const result = loadLocalState({ migrations: { 2: migrations[2] }, version: 3, schema: V3 as unknown as z.ZodType<LocalState> });
     expect(result.source).toBe("reset");
   });

@@ -14,6 +14,13 @@ export const WALK_RING_METERS = 400;
 export const NEAR_STOPS = 4;
 /** Departure rows under the selected stop (one per line and direction). */
 export const HOME_ROWS = 4;
+/**
+ * "Near you" lists each line across the stops within the walk (user, 12 November 2026:
+ * "Lines nearby"): the one nearby request asks for every stop it may (the API's cap) and
+ * a few more lines from each, so a line served only by the fifth-nearest stop still shows.
+ */
+export const NEARBY_STOPS = 12;
+export const NEARBY_PER_STOP = 6;
 const HORIZON_MINUTES = 60;
 
 export interface NearStop {
@@ -39,22 +46,33 @@ export interface HomeStops {
   errors: unknown[];
   /** Per stop, the routes through it (operators of departures that do not carry theirs). */
   routes: Array<StopDetail["data"]["routes"]>;
+  /** Every stop the answer holds within the walk (more than the pins), for "Near you". */
+  all: NearStopDepartures[];
+}
+
+export interface NearStopDepartures {
+  stop: NearStop;
+  departures: Departure[] | null;
+  routes: StopDetail["data"]["routes"];
 }
 
 const notFound = (error: unknown) => error instanceof ApiFailure && error.state === "not_found";
 
 /**
- * `around`: a wider look than the 5-minute walk (an opened group of stops, board 9): its
- * radius and how many stops. Still one nearby-departures request.
+ * `centre` is the passenger (or the last place), the map's settled centre when panned away
+ * ("In this area", board 10), or an opened group's centre (board 9). `radiusMeters` widens
+ * the look for a group spread wider than the walk. Always one nearby-departures request.
  */
 export function useHomeStops(
   centre: { latitude: number; longitude: number },
   enabled: boolean,
-  around: { radiusMeters: number; stops: number } | null = null,
+  radiusMeters: number = WALK_RING_METERS,
 ): HomeStops {
-  const radiusMeters = around?.radiusMeters ?? WALK_RING_METERS;
-  const count = around?.stops ?? NEAR_STOPS;
-  const nearby = useNearbyDepartures(centre, { radiusMeters, stops: count, perStop: HOME_ROWS, horizonMinutes: HORIZON_MINUTES }, enabled);
+  const nearby = useNearbyDepartures(
+    centre,
+    { radiusMeters, stops: NEARBY_STOPS, perStop: NEARBY_PER_STOP, horizonMinutes: HORIZON_MINUTES },
+    enabled,
+  );
   const legacy = nearby.isError && notFound(nearby.error);
 
   const list = useNearbyStops(centre, { radiusMeters: WALK_RING_METERS, limit: NEAR_STOPS, enabled: enabled && legacy });
@@ -65,7 +83,8 @@ export function useHomeStops(
 
   const fromNearby = useMemo<HomeStops | null>(() => {
     if (legacy) return null;
-    const entries = (nearby.data?.data ?? []).slice(0, count);
+    const every = nearby.data?.data ?? [];
+    const entries = every.slice(0, NEAR_STOPS);
     return {
       pending: nearby.isPending,
       error: nearby.isError ? nearby.error : null,
@@ -75,8 +94,13 @@ export function useHomeStops(
       states: entries.map((entry) => (entry.departuresState === "available" ? "ready" : "unavailable")),
       errors: entries.map(() => null),
       routes: entries.map(() => []),
+      all: every.map((entry) => ({
+        stop: entry.stop,
+        departures: entry.departuresState === "available" ? (entry.departures ?? []) : null,
+        routes: [],
+      })),
     };
-  }, [legacy, count, nearby.data, nearby.isPending, nearby.isError, nearby.error, nearby.refetch]);
+  }, [legacy, nearby.data, nearby.isPending, nearby.isError, nearby.error, nearby.refetch]);
 
   const fromLists = useMemo<HomeStops | null>(() => {
     if (!legacy) return null;
@@ -93,6 +117,11 @@ export function useHomeStops(
       }),
       errors: legacyStops.map((_, index) => legacyDepartures[index]?.error ?? null),
       routes: legacyStops.map((_, index) => details[index]?.routes ?? []),
+      all: legacyStops.map((stop, index) => ({
+        stop,
+        departures: legacyDepartures[index]?.data ?? null,
+        routes: details[index]?.routes ?? [],
+      })),
     };
   }, [legacy, list.isPending, list.isError, list.error, list.refetch, legacyStops, legacyDepartures, details]);
 

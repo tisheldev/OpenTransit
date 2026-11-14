@@ -1,4 +1,5 @@
 import type { CSSProperties, ReactNode } from "react";
+import { CANVAS_VEHICLE_PATHS } from "../../components/canvas";
 import { badgeStyle } from "../../lib/lines";
 import type { MapTagLine } from "../scene";
 import { lineMode } from "../layers";
@@ -9,12 +10,10 @@ import type { PoleSide } from "./geometry";
 // train; the neighbourhood square; a group's count; the next-line flag tag. Every shape is
 // placed around its stop's kerb point (0, 0); stops.css holds the sizes and colours.
 
-/** The canvas bus icon (16 × 16), verbatim. */
-export const BUS_PATH =
-  "M3 3a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v9h-1v2h-2v-2H6v2H4v-2H3zm2 0v4h6V3zm0 6v1.5h1.5V9zm4.5 0v1.5H11V9z";
+/** The canvas bus icon (16 × 16), verbatim (shared with the sheet: src/components/canvas.tsx). */
+export const BUS_PATH = CANVAS_VEHICLE_PATHS.bus;
 /** The canvas train icon (16 × 16), verbatim. */
-export const TRAIN_PATH =
-  "M4 1h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2l1.5 2h-2L10 13H6l-1.5 2h-2L4 13a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2zm0 2.5V7h8V3.5zM5 9v1.5h1.5V9zm4.5 0v1.5H11V9z";
+export const TRAIN_PATH = CANVAS_VEHICLE_PATHS.rail;
 /** The canvas zoom-in magnifier (20 × 20, stroked), for the far-out hint. */
 export const ZOOM_IN_PATH = "m14 14 4 4M9 6.500v5M6.500 9h5";
 

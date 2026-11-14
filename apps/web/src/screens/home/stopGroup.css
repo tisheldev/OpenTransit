@@ -92,16 +92,11 @@
   white-space: nowrap;
   overflow: hidden;
 }
-.stop-group__lines .ot-line {
+/* Board 9's badges are a size down from the list's: 22 px, 14 px figures. */
+.stop-group__lines .cv-bdg {
   block-size: 22px;
-  min-inline-size: 0;
-  padding-inline: 6px;
-  border-radius: 6px;
   font-size: 14px;
-}
-.stop-group__lines .ot-line .ot-vehicle {
-  inline-size: 12px;
-  block-size: 12px;
+  line-height: 18px;
 }
 
 .stop-group .b-due {
@@ -120,4 +115,8 @@
 .home-area > h2 {
   font-size: 17px;
   line-height: 24px;
+}
+/* Board 9 draws these badges with the number only. */
+.stop-group__lines .cv-bdg svg {
+  display: none;
 }

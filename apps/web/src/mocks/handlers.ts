@@ -2,6 +2,7 @@ import { delay, http, HttpResponse } from "msw";
 import { fixture, fixtures, type Fixture } from "../api/fixtures";
 import { derivedEngineTimeout, derivedJourneyFixtures, derivedTrip } from "../screens/compare/derivedFixtures";
 import { derivedDepartures, derivedNearbyDepartures, derivedNearbyStop, derivedStopLines, derivedStopsNear } from "./stopFixtures";
+import { derivedLine, derivedLineSearch, invalidLineSearch } from "./lineFixtures";
 import { derivedMissedDepartures, derivedMissedJourneys, MISSED_STOP_ID } from "./navigateMissed";
 import { derivedAreaStops } from "./areaStops";
 
@@ -212,6 +213,15 @@ export const handlers = [
     // Home's nearby stops: the recorded stops around Dizengoff Center, wherever it asks.
     return respond(derivedStopsNear());
   }),
+
+  // Line search and one line (contract A2), from the synthetic catalogue (lineFixtures.ts).
+  http.get("*/v1/lines", ({ request }) => {
+    const url = new URL(request.url);
+    if (invalidLineSearch(url)) return send("synthetic-problem-invalid-request");
+    if (scenario() === "lines-unavailable") return send("recorded-problem-not-ready");
+    return respond(derivedLineSearch(url));
+  }),
+  http.get("*/v1/lines/:lineKey", ({ request, params }) => respond(derivedLine(decoded(params.lineKey), new URL(request.url)))),
 
   http.get("*/v1/routes/:routeId/patterns", () => send("synthetic-route-patterns")),
   http.get("*/v1/routes/:routeId", () => send("synthetic-route")),

@@ -15,6 +15,8 @@ export type Route =
   | { name: "route" }
   | { name: "navigate" }
   | { name: "stop"; stopId: string }
+  /** A line (operator + MOT line code, contract A2's lineKey): the Line screen. */
+  | { name: "line"; lineKey: string }
   | { name: "trip"; tripRef: string }
   | { name: "nearby" }
   | { name: "lines" }
@@ -40,6 +42,7 @@ export function parseHash(hash: string): Route {
   if (second !== undefined) {
     try {
       if (first === "stop") return { name: "stop", stopId: decodeURIComponent(second) };
+      if (first === "line") return { name: "line", lineKey: decodeURIComponent(second) };
       if (first === "trip") return { name: "trip", tripRef: decodeURIComponent(second) };
     } catch {
       // malformed escape: not a route
@@ -56,6 +59,8 @@ export function hrefFor(route: Route): string {
       return `#/search/${route.field}`;
     case "stop":
       return `#/stop/${encodeURIComponent(route.stopId)}`;
+    case "line":
+      return `#/line/${encodeURIComponent(route.lineKey)}`;
     case "trip":
       return `#/trip/${encodeURIComponent(route.tripRef)}`;
     case "notFound":

@@ -4,6 +4,8 @@ import { fixtureManifest, fixtures } from "./fixtures";
 import {
   DeparturesPageSchema,
   JourneyResponseSchema,
+  LineSchema,
+  LinesPageSchema,
   NearbyDeparturesSchema,
   PatternsPageSchema,
   PlacesSchema,
@@ -35,6 +37,8 @@ function schemaFor(name: string): z.ZodType {
   if (path === "/v1/stops") return StopsPageSchema;
   if (path.startsWith("/v1/stops/")) return StopSchema;
   if (path.endsWith("/patterns")) return PatternsPageSchema;
+  if (path === "/v1/lines") return LinesPageSchema;
+  if (path.startsWith("/v1/lines/")) return LineSchema;
   if (path === "/v1/routes") return RoutesPageSchema;
   if (path.startsWith("/v1/routes/")) return RouteSchema;
   throw new Error(`no schema for ${name} (${path})`);
@@ -58,6 +62,8 @@ describe("fixtures", () => {
       PatternsPageSchema,
       NearbyDeparturesSchema,
       StopLinesSchema,
+      LinesPageSchema,
+      LineSchema,
       ProblemSchema,
     ]) {
       expect(schemas.has(schema)).toBe(true);

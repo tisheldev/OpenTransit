@@ -33,6 +33,11 @@ export function useLocalState(): LocalState {
   return useSyncExternalStore(subscribe, get, get);
 }
 
+/** The same state outside React (event handlers). */
+export function currentLocalState(): LocalState {
+  return get();
+}
+
 /** Apply a change and persist it. False when the result is invalid (e.g. outside Israel). */
 export function changeLocal(change: (state: LocalState) => LocalState): boolean {
   try {
