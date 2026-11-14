@@ -352,7 +352,8 @@ export function Shell({ fixtureMode }: { fixtureMode: boolean }) {
         <div className="overlay-top" ref={topRef}>
           <Banners fixtureMode={fixtureMode} status={status} />
           <div className="top-row">
-            {route.name !== "home" && (
+            {/* Search draws its own Back beside its field (stops-and-lines canvas, board 2). */}
+            {route.name !== "home" && route.name !== "search" && (
               <button type="button" className="ot-btn ot-btn--icon back-button" aria-label={t("nav.back")} onClick={() => back(backFallback(route))}>
                 {/* Points the way back: right in Hebrew, mirrored by the icon set under RTL. */}
                 <Icon name="back" />

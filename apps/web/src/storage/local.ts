@@ -1,13 +1,17 @@
 import { z } from "zod";
 
-// Versioned localStorage for settings, saved places and at most 10 recents (design:
-// Privacy). No location history, journey results or account data live here. Saved
-// places keep coordinates and a label; a placeRef is only a hint because it is bound
-// to one generation (INVALID_PLACE_REF after a refresh).
+// Versioned localStorage for settings, saved places, saved stops and lines, and at most 10
+// recents (design: Privacy). No location history, journey results or account data live
+// here. Saved places keep coordinates and a label; a placeRef is only a hint because it is
+// bound to one generation (INVALID_PLACE_REF after a refresh). Saved stops are keyed by
+// stop id (stable across generations); saved lines by operator + MOT line code (`lineKey`),
+// never by route id, which can disappear and return (M2.8). Both keep what Home shows, so
+// a card renders offline before any request.
 
 export const STORAGE_KEY = "opentransit";
 export const SESSION_PREFIX = "opentransit:";
-export const STORAGE_VERSION = 1;
+export const STORAGE_VERSION = 2;
+export const MAX_SAVED_ITEMS = 50;
 export const MAX_RECENTS = 10;
 
 const SavedPlaceSchema = z.object({
@@ -20,6 +24,43 @@ const SavedPlaceSchema = z.object({
   savedAt: z.string(),
 });
 
+const latitude = z.number().min(29).max(34);
+const longitude = z.number().min(34).max(36);
+
+/** A stop the passenger starred (Stop screen; Home shows it with its next lines). */
+const SavedStopSchema = z.object({
+  stopId: z.string().min(1).max(200),
+  name: z.string().min(1).max(200),
+  code: z.string().max(40).nullable().default(null),
+  latitude,
+  longitude,
+  /** API stop mode ("bus", "rail", "light_rail", "other") when known: picks the sign. */
+  mode: z.string().max(20).nullable().default(null),
+  savedAt: z.string(),
+});
+
+/**
+ * A line the passenger starred (Line screen): operator + MOT line code, with the display
+ * fields Home needs offline, and the stop and direction it was saved from, if any.
+ */
+const SavedLineSchema = z.object({
+  lineKey: z.string().min(1).max(200),
+  shortName: z.string().max(40),
+  operatorId: z.string().max(40).nullable().default(null),
+  operatorName: z.string().max(120).nullable().default(null),
+  mode: z.string().max(20).default("bus"),
+  /** The direction saved: where it goes (and comes from), as the line answer named it. */
+  destinationName: z.string().max(200).nullable().default(null),
+  originName: z.string().max(200).nullable().default(null),
+  /** The direction's route id in the generation it was saved under: a hint only. */
+  routeIdHint: z.string().max(200).nullable().default(null),
+  area: z.string().max(120).nullable().default(null),
+  /** The stop the passenger catches it at ("מ<stop>" on Home); null when saved without one. */
+  stopId: z.string().max(200).nullable().default(null),
+  stopName: z.string().max(200).nullable().default(null),
+  savedAt: z.string(),
+});
+
 const LocalStateSchema = z.object({
   version: z.literal(STORAGE_VERSION),
   // theme: absent means the default (dark); optional so version-1 data stays readable.
@@ -28,20 +69,42 @@ const LocalStateSchema = z.object({
   work: SavedPlaceSchema.nullable(),
   favourites: z.array(SavedPlaceSchema).max(50),
   recents: z.array(SavedPlaceSchema).max(MAX_RECENTS),
+  savedStops: z.array(SavedStopSchema).max(MAX_SAVED_ITEMS),
+  savedLines: z.array(SavedLineSchema).max(MAX_SAVED_ITEMS),
 });
 
 export type SavedPlace = z.infer<typeof SavedPlaceSchema>;
+export type SavedStop = z.infer<typeof SavedStopSchema>;
+export type SavedLine = z.infer<typeof SavedLineSchema>;
+/** What a caller passes to save: defaults filled by the schema. */
+export type SavedStopInput = z.input<typeof SavedStopSchema>;
+export type SavedLineInput = z.input<typeof SavedLineSchema>;
+export { SavedLineSchema, SavedStopSchema };
 export type LocalState = z.infer<typeof LocalStateSchema>;
 
 export function defaultLocalState(): LocalState {
-  return { version: STORAGE_VERSION, settings: { lang: "he" }, home: null, work: null, favourites: [], recents: [] };
+  return {
+    version: STORAGE_VERSION,
+    settings: { lang: "he" },
+    home: null,
+    work: null,
+    favourites: [],
+    recents: [],
+    savedStops: [],
+    savedLines: [],
+  };
 }
 
 /** migrations[n] upgrades a stored version-n object to version n+1. */
 export type Migrations = Record<number, (stored: Record<string, unknown>) => Record<string, unknown>>;
 
-/** Version 1 is the first released shape, so there is nothing to migrate from yet. */
-export const MIGRATIONS: Migrations = {};
+/**
+ * Version 2 (14 November 2026) adds saved stops and lines, empty for existing data. An
+ * older app reads version 2 as "newer" and never writes over it (see LoadResult.writable).
+ */
+export const MIGRATIONS: Migrations = {
+  1: (stored) => ({ ...stored, savedStops: [], savedLines: [] }),
+};
 
 export interface LoadResult {
   state: LocalState;
