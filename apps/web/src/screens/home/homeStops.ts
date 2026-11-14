@@ -43,12 +43,18 @@ export interface HomeStops {
 
 const notFound = (error: unknown) => error instanceof ApiFailure && error.state === "not_found";
 
-export function useHomeStops(centre: { latitude: number; longitude: number }, enabled: boolean): HomeStops {
-  const nearby = useNearbyDepartures(
-    centre,
-    { radiusMeters: WALK_RING_METERS, stops: NEAR_STOPS, perStop: HOME_ROWS, horizonMinutes: HORIZON_MINUTES },
-    enabled,
-  );
+/**
+ * `around`: a wider look than the 5-minute walk (an opened group of stops, board 9): its
+ * radius and how many stops. Still one nearby-departures request.
+ */
+export function useHomeStops(
+  centre: { latitude: number; longitude: number },
+  enabled: boolean,
+  around: { radiusMeters: number; stops: number } | null = null,
+): HomeStops {
+  const radiusMeters = around?.radiusMeters ?? WALK_RING_METERS;
+  const count = around?.stops ?? NEAR_STOPS;
+  const nearby = useNearbyDepartures(centre, { radiusMeters, stops: count, perStop: HOME_ROWS, horizonMinutes: HORIZON_MINUTES }, enabled);
   const legacy = nearby.isError && notFound(nearby.error);
 
   const list = useNearbyStops(centre, { radiusMeters: WALK_RING_METERS, limit: NEAR_STOPS, enabled: enabled && legacy });
@@ -59,7 +65,7 @@ export function useHomeStops(centre: { latitude: number; longitude: number }, en
 
   const fromNearby = useMemo<HomeStops | null>(() => {
     if (legacy) return null;
-    const entries = (nearby.data?.data ?? []).slice(0, NEAR_STOPS);
+    const entries = (nearby.data?.data ?? []).slice(0, count);
     return {
       pending: nearby.isPending,
       error: nearby.isError ? nearby.error : null,
@@ -70,7 +76,7 @@ export function useHomeStops(centre: { latitude: number; longitude: number }, en
       errors: entries.map(() => null),
       routes: entries.map(() => []),
     };
-  }, [legacy, nearby.data, nearby.isPending, nearby.isError, nearby.error, nearby.refetch]);
+  }, [legacy, count, nearby.data, nearby.isPending, nearby.isError, nearby.error, nearby.refetch]);
 
   const fromLists = useMemo<HomeStops | null>(() => {
     if (!legacy) return null;

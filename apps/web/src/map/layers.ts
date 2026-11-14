@@ -173,6 +173,8 @@ export function sceneBounds(scene: MapScene): [LonLat, LonLat] | null {
   } else {
     for (const pin of scene.pins) add(pin.position);
     for (const pin of scene.stopPins ?? []) add(pin.position);
+    // The stops the screen is about (Home's nearby stops on the stops layer).
+    for (const stop of scene.stops?.known ?? []) add([stop.longitude, stop.latitude]);
     for (const tag of scene.tags ?? []) add(tag.position);
     for (const point of ringFeatures(scene.ring, 8).features[0]?.geometry.coordinates ?? []) add(point);
   }

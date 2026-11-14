@@ -159,6 +159,31 @@
   align-items: center;
   gap: var(--space-2);
 }
+/* Board 10: away from the passenger, Locate is a pill that says "אליי" (44 px, 13 px bold). */
+.locate-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  block-size: 44px;
+  margin: 0;
+  padding-block: 0;
+  padding-inline: 12px;
+  border-radius: 22px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: var(--shadow-float);
+}
+.locate-pill:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
 .sheet-locate .spinner {
   inline-size: 20px;
   block-size: 20px;
