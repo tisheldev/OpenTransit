@@ -15,6 +15,8 @@ from opentransit.api.schemas import (
 )
 from opentransit.core.place_ref import decode_place_ref
 from opentransit.motis import EngineFailure
+from opentransit.motis_timetable import TimetableFailure
+from opentransit.pinned_trip import InvalidPinnedTrip, pinned_journey
 from opentransit.runtime import capture_snapshot
 
 
@@ -28,10 +30,11 @@ def journeys_router(settings, clock, problem) -> APIRouter:
             status: {
                 "content": {"application/problem+json": {"schema": Problem.model_json_schema()}}
             }
-            for status in (413, 422, 503, 504)
+            for status in (404, 413, 422, 503, 504)
         },
     )
     async def plan(query: JourneyRequest, request: Request):
+        """Scheduled journey alternatives, or with `pinnedTrip` one journey on that trip."""
         app = request.app
         snapshot = capture_snapshot(app.state)  # Engine/reference/generation stay together.
         now = clock()
@@ -62,7 +65,24 @@ def journeys_router(settings, clock, problem) -> APIRouter:
         try:
             async with asyncio.timeout(settings.journey_deadline_seconds):
                 async with semaphore:
-                    result = await snapshot.motis.plan(query, generation, snapshot.reference)
+                    if query.pinned_trip is not None:
+                        result = await pinned_journey(snapshot, query)
+                    else:
+                        result = await snapshot.motis.plan(query, generation, snapshot.reference)
+        except InvalidPinnedTrip:
+            return problem(
+                request,
+                422,
+                "INVALID_PINNED_TRIP",
+                "The trip does not ride from the board stop to a later alight stop.",
+            )
+        except TimetableFailure as exc:
+            detail = (
+                "The trip is absent from this generation."
+                if exc.code == "TRIP_NOT_FOUND"
+                else "The scheduled trip is temporarily unavailable."
+            )
+            return problem(request, exc.status, exc.code, detail)
         except (EngineFailure, TimeoutError) as exc:
             code = exc.code if isinstance(exc, EngineFailure) else "ENGINE_TIMEOUT"
             status = exc.status if isinstance(exc, EngineFailure) else 504
