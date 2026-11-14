@@ -32,6 +32,7 @@ import {
   type StyleJson,
 } from "./layers";
 import { MapOverlay } from "./MapOverlay";
+import { StopsLayer } from "./stops/StopsLayer";
 import { setMapCenter, useMapState, type MapScene, type MapUser } from "./scene";
 
 // The lazy map chunk: everything that imports MapLibre lives here (MapHost loads it after
@@ -343,6 +344,9 @@ export default function MapView() {
   return (
     <div className="map-view" data-testid="map-view">
       <div ref={container} className="map-canvas" data-testid="map-canvas" />
+      {loaded && overlayMap && scene.stops && (
+        <StopsLayer map={overlayMap} layer={scene.stops} topInset={overlayTopHeight(overlayMap)} bottomInset={inset} />
+      )}
       {loaded && overlayMap && (
         <MapOverlay map={overlayMap} tags={scene.tags ?? []} stopPins={scene.stopPins ?? []} dir={lang === "he" ? "rtl" : "ltr"} />
       )}

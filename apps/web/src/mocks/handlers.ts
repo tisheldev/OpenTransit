@@ -3,6 +3,7 @@ import { fixture, fixtures, type Fixture } from "../api/fixtures";
 import { derivedEngineTimeout, derivedJourneyFixtures, derivedTrip } from "../screens/compare/derivedFixtures";
 import { derivedDepartures, derivedNearbyDepartures, derivedNearbyStop, derivedStopLines, derivedStopsNear } from "./stopFixtures";
 import { derivedMissedDepartures, derivedMissedJourneys, MISSED_STOP_ID } from "./navigateMissed";
+import { derivedAreaStops } from "./areaStops";
 
 // MSW handlers that answer every public endpoint from fixtures. Used by Vitest (node)
 // and by the dev server's `fixtures` mode (browser), so mocked e2e needs no API.
@@ -205,7 +206,8 @@ export const handlers = [
 
   http.get("*/v1/stops", ({ request }) => {
     const url = new URL(request.url);
-    if (url.searchParams.has("bbox")) return send("synthetic-stops-bbox");
+    // The stops layer (A1's mode filter, the area limits and paging): derived, src/mocks/areaStops.ts.
+    if (url.searchParams.has("bbox")) return respond(derivedAreaStops(url));
     if (url.searchParams.has("cursor")) return send("synthetic-stops-near-page-2");
     // Home's nearby stops: the recorded stops around Dizengoff Center, wherever it asks.
     return respond(derivedStopsNear());

@@ -52,6 +52,21 @@
   --map-water: #1c2b33;
   --map-park: #262d22;
   --map-casing: #f4f1ea;
+  --stop-sign: #d6b55e;
+  --stop-sign-edge: #1a1917;
+  --stop-pole: var(--stop-sign);
+  --stop-chosen: #f0c94a;
+  --stop-chosen-ring: #f4f1ea;
+  --stop-chosen-rim: var(--stop-chosen-ring);
+  --stop-station: #7b72cf;
+  --stop-station-icon: #ffffff;
+  --stop-tag: #1a1917;
+  --stop-tag-edge: #45413b;
+  --stop-tag-ink: #f4f1ea;
+  --stop-tag-chosen: #f4f1ea;
+  --stop-tag-chosen-ink: #1a1917;
+  --stop-group: #f4f1ea;
+  --stop-group-ink: #1a1917;
 
   --shadow-float: 0 2px 10px rgba(0, 0, 0, 0.5);
   --shadow-sheet: 0 -6px 24px rgba(0, 0, 0, 0.6);
@@ -155,6 +170,21 @@
   --map-water: #cfe0ea;
   --map-park: #dbe6d3;
   --map-casing: #ffffff;
+  --stop-sign: #e2b84a;
+  --stop-sign-edge: #1b1a17;
+  --stop-pole: #8f7120;
+  --stop-chosen: #f0c94a;
+  --stop-chosen-ring: #ffffff;
+  --stop-chosen-rim: #1b1a17;
+  --stop-station: #7b72cf;
+  --stop-station-icon: #ffffff;
+  --stop-tag: #ffffff;
+  --stop-tag-edge: #d0cdc5;
+  --stop-tag-ink: #1b1a17;
+  --stop-tag-chosen: #1b1a17;
+  --stop-tag-chosen-ink: #ffffff;
+  --stop-group: #ffffff;
+  --stop-group-ink: #1b1a17;
 
   --shadow-float: 0 2px 9px rgba(23, 45, 54, 0.125);
   --shadow-sheet: 0 -6px 24px rgba(23, 45, 54, 0.14);

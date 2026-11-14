@@ -145,15 +145,25 @@ export function getStopLines(stopId: string, signal?: AbortSignal): Promise<Resu
   );
 }
 
+/** A stop item's mode (API-C6); the `mode` filter of GET /v1/stops takes a list of these (A1). */
+export type StopMode = "rail" | "light_rail" | "bus" | "other";
+
 export type StopArea =
   | { near: { latitude: number; longitude: number }; radiusMeters?: number }
-  | { bbox: { west: number; south: number; east: number; north: number } };
+  | {
+      bbox: { west: number; south: number; east: number; north: number };
+      /** A1: only these modes. Rail and light rail alone lift the area limit from 100 to 120,000 km². */
+      modes?: readonly StopMode[] | null;
+    };
 
 export function listStops(area: StopArea, paging: Paging = {}, signal?: AbortSignal): Promise<Result<StopsPage>> {
   const query =
     "near" in area
       ? { near: latLon(area.near), radius: area.radiusMeters }
-      : { bbox: `${area.bbox.west},${area.bbox.south},${area.bbox.east},${area.bbox.north}` };
+      : {
+          bbox: `${area.bbox.west},${area.bbox.south},${area.bbox.east},${area.bbox.north}`,
+          mode: area.modes && area.modes.length > 0 ? area.modes.join(",") : null,
+        };
   return apiFetch({ path: "/v1/stops", query: { ...query, ...paging }, signal }, StopsPageSchema);
 }
 

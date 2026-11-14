@@ -68,6 +68,48 @@ export interface MapStopPin {
   onSelect?: () => void;
 }
 
+/** A stop the screen already knows (Home's nearby answer), drawn before the area request answers. */
+export interface MapKnownStop {
+  stopId: string;
+  name: string | null;
+  latitude: number;
+  longitude: number;
+  /** API-C6; undefined from an API without it. */
+  mode?: string | null;
+  bearingDegrees?: number | null;
+}
+
+/** A stop's next line, for the flag tag on its sign (Home: from its one nearby-departures answer). */
+export interface MapStopNext {
+  line: MapTagLine;
+  /** Whole minutes until it leaves (0: now). */
+  minutes: number;
+  /** What the tag says after the badge: "4 דק׳", "עכשיו". */
+  text: string;
+}
+
+/**
+ * The stops layer (stops and lines design, 12 November 2026: marker G at three zoom levels,
+ * groups, next-line tags). Absent: no stops layer and no request for it (Navigate, Search,
+ * Settings). "full": every level, tags, tappable (Home). "quiet": only when zoomed in close,
+ * drawn quieter, never tappable, no tags, so it never competes with a route (Choose and
+ * Route details).
+ */
+export interface MapStopsLayer {
+  mode: "full" | "quiet";
+  /** The stop the panel is about: drawn bright and larger, its tag pale. */
+  chosenStopId?: string | null;
+  /** Next lines by stop id, for the tags (a couple at most show, the chosen stop's first). */
+  next?: Readonly<Record<string, MapStopNext>>;
+  known?: readonly MapKnownStop[];
+  /** A sign or tag tapped (a full layer without it draws stops that cannot be tapped). */
+  onSelectStop?: (stopId: string) => void;
+  /** A group tapped: the map has zoomed in on it; the screen may list its stops (board 9). */
+  onOpenGroup?: (stops: MapKnownStop[]) => void;
+  /** The stops of the group opened (board 9): ringed on the map. */
+  openGroup?: readonly string[] | null;
+}
+
 /** A dashed circle around a place: Home's 5-minute walk around the passenger. */
 export interface MapRing {
   center: LonLat;
@@ -129,7 +171,12 @@ export interface MapScene {
   cameraKey?: string;
   /** Controls float over the top of the map (close, "כל המסלול"): fitting keeps clear of them. */
   topControls?: boolean;
+  /** The stops layer; absent, none is drawn or requested. */
+  stops?: MapStopsLayer | null;
 }
+
+/** Choose and Route details: the stops layer only zoomed in close, quieter (design, "During a journey"). */
+export const QUIET_STOPS: MapStopsLayer = { mode: "quiet" };
 
 export const emptyScene: MapScene = { route: [], pins: [], user: null, camera: "keep", pick: false };
 
