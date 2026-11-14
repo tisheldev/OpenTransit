@@ -25,14 +25,15 @@ export interface Box {
  * 15, stops with grouping; from about 16, every stop on its own"). MapLibre zooms, where a
  * level is one less than the common 256-pixel web-map zoom at the same scale. The design
  * calls its thresholds suggestions (open question 9); these follow the boards:
- * - Signs from 14: board 1 draws Home's 5-minute-walk ring (800 m across) 236 px wide,
- *   about 3.4 m a pixel, which is MapLibre zoom 14.3, with every stop as its own sign.
- * - Stations only below 13: from 13 a phone-sized view holds about 18 km² of stops (a few
- *   hundred in central Tel Aviv, 100 to a page), which keeps a settle within the request
- *   limits; at 12 it would be four times as many.
+ * - Signs from 13.5: board 1 draws Home's 5-minute-walk ring (800 m across) 236 px wide,
+ *   about 3.4 m a pixel, which is MapLibre zoom 14.3, with every stop as its own sign; on
+ *   a 360 × 640 phone with the sheet at half, the same ring frames at about 13.8.
+ * - Stations only below 12.5: from there a phone-sized view holds about 35 km² of stops
+ *   (several hundred in central Tel Aviv, 100 to a page), still within a settle's request
+ *   budget; at 12 it would be half as many again.
  */
-export const ZOOM_STOPS = 13;
-export const ZOOM_SIGNS = 14;
+export const ZOOM_STOPS = 12.5;
+export const ZOOM_SIGNS = 13.5;
 
 export type StopsLevel = "stations" | "grouped" | "signs";
 
@@ -352,6 +353,8 @@ export function groupMarkers(items: readonly GroupInput[], level: "grouped" | "s
 export const TAG_TUCK_PX = 5;
 /** At most this many tags at once, the chosen stop's first (design; Home limited them to two). */
 export const MAX_TAGS = 2;
+/** A tag may graze another marker by this much (anti-aliased edges), never cover it. */
+export const TAG_GRAZE_PX = 2;
 
 export interface TagRequest {
   id: string;
@@ -408,7 +411,7 @@ export function placeTags(
       const inside = box.left >= visible.left && box.right <= visible.right && box.top >= visible.top && box.bottom <= visible.bottom;
       if (!inside) continue;
       const blocked =
-        obstacles.some((other) => other.id !== request.id && overlaps(box, other.box)) || placed.some((other) => overlaps(box, other.box, 2));
+        obstacles.some((other) => other.id !== request.id && overlaps(box, other.box, -TAG_GRAZE_PX)) || placed.some((other) => overlaps(box, other.box, 2));
       if (blocked) continue;
       placed.push({ id: request.id, box, toward });
       break;

@@ -237,7 +237,14 @@ function layoutStops(
       const p = project(anchorOf(chosen));
       const side = sideOf(chosen, bearing);
       at.set(`s:${chosen.stopId}`, p);
-      items.push({ kind: "sign", key: `s:${chosen.stopId}`, id: chosen.stopId, anchor: anchorOf(chosen), side, chosen: true, box: signBox(p, side, CHOSEN_PX), dot: dotBox(p, side) });
+      const box = signBox(p, side, CHOSEN_PX);
+      // Signs never touch: a stop or count the chosen sign would cover is left out (the
+      // sheet still lists it), rather than drawn half under it.
+      for (let index = items.length - 1; index >= 0; index -= 1) {
+        const item = items[index]!;
+        if (item.kind !== "station" && overlaps(item.box, box, 2)) items.splice(index, 1);
+      }
+      items.push({ kind: "sign", key: `s:${chosen.stopId}`, id: chosen.stopId, anchor: anchorOf(chosen), side, chosen: true, box, dot: dotBox(p, side) });
     }
   }
 
@@ -641,7 +648,7 @@ export function StopsLayer({
   // Order: groups and squares, signs, stations, the chosen stop last (on top).
   const ordered = [...layout.items].sort((a, b) => rank(a) - rank(b));
   return (
-    <div className={className} data-testid="stops-layer" data-level={layout.level ?? "off"} aria-hidden={layer.mode === "quiet" || undefined}>
+    <div className={className} data-testid="stops-layer" data-level={layout.level ?? "off"} data-zoom={view.zoom.toFixed(2)} aria-hidden={layer.mode === "quiet" || undefined}>
       {ring && (
         <div key={`ring-${ring.anchor.join(",")}`} ref={register("ring", ring.anchor, 0)} className="ot-stop" style={{ transform: transformAt(map, ring.anchor) }}>
           <svg
