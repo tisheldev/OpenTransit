@@ -43,18 +43,19 @@ test("Line: opens at the nearest stop, folds, switches direction, train badge (a
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("קו 8");
   await expect(page.getByText("דן · אוטובוס · כל 12 דק׳ בערך")).toBeVisible();
   const list = page.getByRole("list", { name: "התחנות של הקו" });
-  await expect(list.getByRole("button").first()).toHaveText("22 תחנות קודמות · ממסוף הטייסים");
-  await expect(list.locator(".sl-sr--on")).toContainText("הכי קרובה אליך · 1 דק׳ הליכה");
-  await expectNoSeriousAxeViolations(page, "Line (he)");
-
-  await page.getByRole("button", { name: "למסוף הטייסים" }).click();
+  await expect(page.getByRole("button", { name: "למסוף הטייסים" })).toHaveAttribute("aria-pressed", "true");
   await expect(list.getByRole("button").first()).toHaveText("19 תחנות קודמות · ממסוף אוניברסיטת ת''א/הורדה");
+  await expect(list.locator(".sl-sr--on")).toContainText("הכי קרובה אליך · 1 דק׳ הליכה");
   await expect(list.getByRole("button").nth(5)).toContainText("ת. רכבת השלום");
   await expect(list.getByRole("button").nth(5).locator(".sl-rail")).toHaveText("רכבת");
   await expect(list.getByRole("button").nth(6)).toHaveText("17 תחנות נוספות");
+  await expectNoSeriousAxeViolations(page, "Line (he)");
   await list.getByRole("button").nth(6).click();
   await expect(list.getByRole("button")).toHaveCount(1 + 1 + 21 + 1);
   await expect(page.getByText("הקישו על תחנה כדי לרדת בה · זמנים לפי לוח הזמנים")).toBeAttached();
+
+  await page.getByRole("button", { name: "לאוניברסיטת ת\"א" }).click();
+  await expect(list.getByRole("button").first()).toHaveText("22 תחנות קודמות · ממסוף הטייסים");
 });
 
 test("Line, light theme (axe)", async ({ page }) => {
