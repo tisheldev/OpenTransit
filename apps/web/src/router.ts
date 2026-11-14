@@ -15,13 +15,17 @@ export type Route =
   | { name: "route" }
   | { name: "navigate" }
   | { name: "stop"; stopId: string }
+  /** A line (operator + MOT line code): its whole route, both directions, every stop. */
+  | { name: "line"; lineKey: string }
+  /** "Ride it" (board 5): a departure of a line chosen on its screen and the stop to get off at. */
+  | { name: "ride" }
   | { name: "trip"; tripRef: string }
   | { name: "nearby" }
   | { name: "lines" }
   | { name: "settings" }
   | { name: "notFound"; path: string };
 
-const STATIC = ["compare", "route", "navigate", "nearby", "lines", "settings"] as const;
+const STATIC = ["compare", "route", "navigate", "nearby", "lines", "settings", "ride"] as const;
 
 export function parseHash(hash: string): Route {
   const path = hash.replace(/^#/, "") || "/";
@@ -40,6 +44,7 @@ export function parseHash(hash: string): Route {
   if (second !== undefined) {
     try {
       if (first === "stop") return { name: "stop", stopId: decodeURIComponent(second) };
+      if (first === "line") return { name: "line", lineKey: decodeURIComponent(second) };
       if (first === "trip") return { name: "trip", tripRef: decodeURIComponent(second) };
     } catch {
       // malformed escape: not a route
@@ -58,6 +63,8 @@ export function hrefFor(route: Route): string {
       return `#/stop/${encodeURIComponent(route.stopId)}`;
     case "trip":
       return `#/trip/${encodeURIComponent(route.tripRef)}`;
+    case "line":
+      return `#/line/${encodeURIComponent(route.lineKey)}`;
     case "notFound":
       return `#${route.path}`;
     default:

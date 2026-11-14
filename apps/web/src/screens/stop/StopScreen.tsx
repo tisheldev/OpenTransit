@@ -6,14 +6,25 @@ import { ApiFailure, unwrap } from "../../api/result";
 import type { Trip } from "../../api/schemas";
 import { Empty, ErrorState, Loading } from "../../components/states";
 import { useI18n } from "../../i18n/I18nProvider";
+import { formatClock } from "../../lib/time";
 import { emptyScene, usePublishScene, type LonLat, type MapPin, type MapRouteLeg, type MapScene, type MapTag } from "../../map/scene";
 import { fromPosition, haversineMeters } from "../../nav/geo";
+import type { PlaceChoice } from "../../plan/draft";
+import { usePlan } from "../../plan/PlanProvider";
 import { planKeys, TRIP_STALE_MS } from "../../plan/queries";
+import { go } from "../../router";
+import { toggleSavedStop, useSavedStops } from "../../storage/saved";
+import { useBoardSheet } from "../line/boardSheet";
+import { useLineKeyFor } from "../line/data";
+import { StrokeIcon } from "../line/icons";
+import { openLine } from "../line/intent";
+import { walkMinutes } from "../line/lineModel";
+import "../line/stopline.css";
 import { initialLine } from "./intent";
 import {
   callPosition,
   callsAhead,
-  directionMark,
+  directionChevron,
   firstStretch,
   groupLines,
   patternAhead,
@@ -23,24 +34,27 @@ import {
   routesOfLines,
   spotAround,
   tagLine,
+  type Departure,
   type StopLine,
 } from "./lines";
-import { Badge, Distance, Due, useNow } from "./parts";
+import { Badge, Distance, Due, useNow, withFigure } from "./parts";
 import { usePassengerFix } from "./passenger";
 import "./stop.css";
 
-// A stop — board 7 (user, 11 November 2026: "Tap any stop and every line through it fans
-// out. Tap a line and its whole route shows, with its direction. No typing."). The map:
-// every line out of the stop along its pattern's stops, faded in its own colour with a
-// faded tag at the end of its fan; the chosen line's whole pattern drawn in full with its
-// outline, an arrow for its direction, rings at its stops and a strong tag at its far end.
-// The panel: the stop and its distance, then each line as a row with its next departure;
-// the same facts as the map, as text.
+// A stop — board 7 (11 November 2026), reworked to the stops-and-lines canvas board Stop
+// (3), 14 November 2026: the stop's name with its distance and walk, a star to save it, and
+// "לנסוע מכאן" / "להגיע לכאן", which open Search or Choose with that end filled. Each line
+// through the stop is a row with its next departure; a chosen line opens in place to its
+// next three times and "כל התחנות" (the Line screen). The map: the stop's sign (marker G,
+// bright), every line out of it faded along its pattern, the chosen line's whole pattern in
+// full with its outline, its stops, a chevron for its direction and a tag at its far end.
 
 /** The departures read: enough for every line in the next hour and a half. */
 const STOP_WINDOW = { limit: 40, horizonMinutes: 90 };
 /** Rows at most (one per line and direction). */
 const MAX_LINES = 12;
+/** Times shown under a chosen line (board 3: three). */
+const NEXT_TIMES = 3;
 /**
  * How far each line fans out of the stop before its tag (boards: to the map's edge), and
  * the shorter fans tried when that end is taken by another line's tag.
@@ -49,17 +63,48 @@ const FAN_LENGTHS = [900, 600, 1200, 350];
 const TAG_SPACING_METERS = 180;
 /** Next stops ringed along the chosen line (each a stop lookup until trips carry coordinates). */
 const RINGED_CALLS = 8;
+/** The sheet's share of the screen on board 3 (548 of 844 px). */
+const SHEET_SHARE = 548 / 844;
 
 const failureState = (error: unknown) => (error instanceof ApiFailure ? error.state : "unexpected");
 const tripData = (results: ReadonlyArray<{ data?: Trip }>) => results.map((result) => result.data?.data ?? null);
+
+/** A chosen line's next times and the link to all its stops (board 3, opened in place). */
+function LineTimes({ line, departures, stopId }: { line: StopLine; departures: readonly Departure[]; stopId: string }) {
+  const { t, lang } = useI18n();
+  const lineKey = useLineKeyFor(line.routeId, line.label);
+  const key = lineKey.data ?? null;
+  const times = departures
+    .filter((item) => `${item.routeId ?? item.routeShortName}|${item.headsign ?? ""}` === line.key && Date.parse(item.scheduledDeparture) >= Date.parse(line.next))
+    .slice(0, NEXT_TIMES);
+  const open = (tripRef: string | null) => {
+    if (key) openLine({ lineKey: key, stopId, routeId: line.routeId, tripRef });
+  };
+  return (
+    <div className="stop-times" role="group" aria-label={t("stop.nextTimes", { line: line.label })}>
+      {times.map((item) => (
+        <button key={item.tripRef} type="button" className="sl-chip num" disabled={!key} onClick={() => open(item.tripRef)}>
+          {formatClock(item.scheduledDeparture, lang)}
+        </button>
+      ))}
+      <button type="button" className="sl-link stop-times__all" disabled={!key} onClick={() => open(null)}>
+        {t("stop.allStops")}
+        <StrokeIcon name="forward" />
+      </button>
+    </div>
+  );
+}
 
 export function StopScreen({ stopId }: { stopId: string }) {
   const { t, lang } = useI18n();
   const now = useNow();
   const fix = usePassengerFix();
+  const plan = usePlan();
   const stop = useStopDetail(stopId);
   const departures = useStopDepartures(stopId, STOP_WINDOW);
   const [chosenKey, setChosenKey] = useState<string | null>(() => initialLine(stopId));
+  const saved = useSavedStops().some((item) => item.stopId === stopId);
+  useBoardSheet(SHEET_SHARE);
 
   const detail = stop.data?.data ?? null;
   const name = detail ? (lang === "en" ? detail.translations.en : null) || detail.name || detail.code || t("screen.stop") : t("screen.stop");
@@ -156,7 +201,7 @@ export function StopScreen({ stopId }: { stopId: string }) {
       if (chosen) {
         // While a line's whole route is shown the map is framed on it, many kilometres
         // across: the other lines' tags would pile up on the stop and hide it and the
-        // direction arrow. Their fans stay, faded; their rows stay in the panel.
+        // direction chevron. Their fans stay, faded; their rows stay in the panel.
         if (!fan) spot += 1;
         return;
       }
@@ -193,14 +238,14 @@ export function StopScreen({ stopId }: { stopId: string }) {
         });
       }
       if (ahead) {
-        const mark = directionMark(ahead);
+        const mark = directionChevron(ahead);
         if (mark) {
           tags.push({
             id: "direction",
             position: mark.position,
             kind: "plain",
             anchor: "center",
-            text: mark.arrow,
+            glyph: { kind: "chevron", bearing: mark.bearing },
             ariaLabel: t("stop.direction", { line: chosen.label }),
           });
         }
@@ -229,7 +274,7 @@ export function StopScreen({ stopId }: { stopId: string }) {
       route,
       pins,
       tags,
-      stopPins: [{ id: stopId, position: [point.longitude, point.latitude], selected: true, ariaLabel: t("stop.pin", { stop: name }) }],
+      stopPins: [{ id: stopId, position: [point.longitude, point.latitude], selected: true, look: "sign", ariaLabel: t("stop.pin", { stop: name }) }],
       user: fix ? { position: [fix.longitude, fix.latitude], accuracyMeters: fix.accuracyMeters } : null,
       camera: "fit",
       fitTo,
@@ -246,13 +291,56 @@ export function StopScreen({ stopId }: { stopId: string }) {
     );
   }
 
+  const meters = fix && point ? haversineMeters(fix, point) : null;
+  const place: PlaceChoice | null = detail
+    ? { label: name, locality: null, kind: "stop", latitude: detail.latitude, longitude: detail.longitude, stopId, placeRef: null, refGenerationId: null }
+    : null;
+  // Board 3: "לנסוע מכאן" sets the start and asks where to (Search); "להגיע לכאן" sets the
+  // destination and compares from the start already chosen (or asks where from).
+  const travelFrom = () => {
+    if (!place) return;
+    plan.setFrom({ type: "place", place });
+    go({ name: "search", field: "to" });
+  };
+  const travelTo = () => {
+    if (!place) return;
+    plan.setTo({ type: "place", place });
+    go(plan.draft.from ? { name: "compare" } : { name: "search", field: "from" });
+  };
+
   return (
     <div className="stop">
-      <div className="b-head stop-head">
-        <h1 className="stop-title">
-          <bdi>{name}</bdi>
-        </h1>
-        {fix && point && <Distance meters={haversineMeters(fix, point)} />}
+      <div className="stop-head">
+        <div className="stop-head__text">
+          <h1 className="stop-title">
+            <bdi>{name}</bdi>
+          </h1>
+          {meters !== null && (
+            <span className="b-mu stop-walk">
+              <Distance meters={meters} />
+              {" · "}
+              {withFigure(t("stop.walkMinutes"), <bdi className="num">{walkMinutes(meters)}</bdi>)}
+            </span>
+          )}
+        </div>
+        <button
+          type="button"
+          className="sl-icbtn"
+          aria-label={t("stop.save")}
+          aria-pressed={saved}
+          disabled={!detail}
+          onClick={() => detail && toggleSavedStop({ stopId, name, savedAt: new Date().toISOString() })}
+        >
+          <StrokeIcon name="star" filled={saved} />
+        </button>
+      </div>
+      <div className="stop-actions">
+        <button type="button" className="sl-btn" disabled={!place} onClick={travelFrom}>
+          {t("stop.travelFrom")}
+        </button>
+        <button type="button" className="sl-btn sl-btn--secondary" disabled={!place} onClick={travelTo}>
+          {t("stop.travelTo")}
+        </button>
       </div>
       {stop.isPending || departures.isPending ? (
         <Loading />
@@ -265,7 +353,7 @@ export function StopScreen({ stopId }: { stopId: string }) {
           {lines.map((line) => {
             const on = line.key === chosen?.key;
             return (
-              <li key={line.key}>
+              <li key={line.key} className={on ? "stop-line stop-line--open" : "stop-line"}>
                 <button
                   type="button"
                   className={on ? "b-row b-row--on" : "b-row"}
@@ -278,6 +366,7 @@ export function StopScreen({ stopId }: { stopId: string }) {
                   </span>
                   <Due instant={line.next} now={now} />
                 </button>
+                {on && <LineTimes line={line} departures={departures.data?.data ?? []} stopId={stopId} />}
               </li>
             );
           })}

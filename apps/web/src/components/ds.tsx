@@ -36,20 +36,29 @@ export function Icon({ name, size, className }: { name: IconName; size?: "sm" | 
 
 export type LineMode = "bus" | "rail" | "walk";
 
-/** Solid vehicle shapes on a 24 px grid (look of 11 November 2026: a simple vehicle icon on every line). */
-const VEHICLE_PATHS: Record<Vehicle, string> = {
-  bus: "M6 3h12a3 3 0 0 1 3 3v10a2 2 0 0 1-2 2v1.5a1.5 1.5 0 0 1-3 0V18H8v1.5a1.5 1.5 0 0 1-3 0V18a2 2 0 0 1-2-2V6a3 3 0 0 1 3-3zm0 3.5v5h12v-5H6zm1.6 9.2a1.2 1.2 0 1 0 0-2.4 1.2 1.2 0 0 0 0 2.4zm8.8 0a1.2 1.2 0 1 0 0-2.4 1.2 1.2 0 0 0 0 2.4z",
-  train:
-    "M8 2.5h8a4 4 0 0 1 4 4V15a3 3 0 0 1-3 3l1.6 3h-2.2l-1.1-2H8.7l-1.1 2H5.4L7 18a3 3 0 0 1-3-3V6.5a4 4 0 0 1 4-4zm-1 4.5v4h10V7H7zm1.5 8.2a1.2 1.2 0 1 0 0-2.4 1.2 1.2 0 0 0 0 2.4zm7 0a1.2 1.2 0 1 0 0-2.4 1.2 1.2 0 0 0 0 2.4z",
-  "light-rail":
-    "M9 1.5h6v1.4h-2.2v1.6H16a3 3 0 0 1 3 3V16a3 3 0 0 1-3 3l1.3 2.5h-2.1l-1-2H9.8l-1 2H6.7L8 19a3 3 0 0 1-3-3V7.5a3 3 0 0 1 3-3h3.2V2.9H9V1.5zM7.5 8v4.5h9V8h-9zM12 16.9a1.3 1.3 0 1 0 0-2.6 1.3 1.3 0 0 0 0 2.6z",
+/**
+ * Solid vehicle shapes (look of 11 November 2026: a simple vehicle icon on every line). Bus
+ * and train are the stops-and-lines canvas's own 16 px paths, copied verbatim (user, 14
+ * November 2026: "exactly like the claude design"); light rail keeps its 24 px drawing.
+ */
+export const VEHICLE_ICONS: Record<Vehicle, { viewBox: string; d: string }> = {
+  bus: { viewBox: "0 0 16 16", d: "M3 3a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v9h-1v2h-2v-2H6v2H4v-2H3zm2 0v4h6V3zm0 6v1.5h1.5V9zm4.5 0v1.5H11V9z" },
+  train: {
+    viewBox: "0 0 16 16",
+    d: "M4 1h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2l1.5 2h-2L10 13H6l-1.5 2h-2L4 13a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2zm0 2.5V7h8V3.5zM5 9v1.5h1.5V9zm4.5 0v1.5H11V9z",
+  },
+  "light-rail": {
+    viewBox: "0 0 24 24",
+    d: "M9 1.5h6v1.4h-2.2v1.6H16a3 3 0 0 1 3 3V16a3 3 0 0 1-3 3l1.3 2.5h-2.1l-1-2H9.8l-1 2H6.7L8 19a3 3 0 0 1-3-3V7.5a3 3 0 0 1 3-3h3.2V2.9H9V1.5zM7.5 8v4.5h9V8h-9zM12 16.9a1.3 1.3 0 1 0 0-2.6 1.3 1.3 0 0 0 0 2.6z",
+  },
 };
 
 /** A solid vehicle icon in currentColor; decorative (the badge text carries the meaning). */
 export function VehicleIcon({ vehicle, className }: { vehicle: Vehicle; className?: string }) {
+  const icon = VEHICLE_ICONS[vehicle];
   return (
-    <svg className={["ot-vehicle", className ?? ""].filter(Boolean).join(" ")} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false" data-vehicle={vehicle}>
-      <path fillRule="evenodd" d={VEHICLE_PATHS[vehicle]} />
+    <svg className={["ot-vehicle", className ?? ""].filter(Boolean).join(" ")} viewBox={icon.viewBox} fill="currentColor" aria-hidden="true" focusable="false" data-vehicle={vehicle}>
+      <path fillRule="evenodd" d={icon.d} />
     </svg>
   );
 }

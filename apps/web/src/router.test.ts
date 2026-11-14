@@ -50,6 +50,8 @@ describe("hash router", () => {
     ["#/route", { name: "route" }],
     ["#/stop/mot%3Astop%3A13583", { name: "stop", stopId: "mot:stop:13583" }],
     ["#/trip/20260930_23%3A50_mot60day_584668860_300926", { name: "trip", tripRef: "20260930_23:50_mot60day_584668860_300926" }],
+    ["#/line/5%3A8008", { name: "line", lineKey: "5:8008" }],
+    ["#/ride", { name: "ride" }],
     ["#/nope", { name: "notFound", path: "/nope" }],
     ["#/settings/extra", { name: "notFound", path: "/settings/extra" }],
     ["#/stop/%E0%A4%A", { name: "notFound", path: "/stop/%E0%A4%A" }],
@@ -64,6 +66,8 @@ describe("hash router", () => {
       { name: "route" },
       { name: "stop", stopId: "mot:stop:13583" },
       { name: "trip", tripRef: "20261025_00:00_mot60day_463093_081026" },
+      { name: "line", lineKey: "5:8008 / x" },
+      { name: "ride" },
     ];
     for (const route of routes) expect(parseHash(hrefFor(route))).toEqual(route);
   });

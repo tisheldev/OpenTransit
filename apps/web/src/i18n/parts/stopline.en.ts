@@ -1,0 +1,48 @@
+import type { he_stopline } from "./stopline.he";
+
+// English strings of the stops-and-lines screens; keys and placeholders mirror stopline.he.ts.
+export const en_stopline: Record<keyof typeof he_stopline, string> = {
+  "screen.line": "Line",
+  "screen.ride": "Ride a line",
+
+  "stop.walkMinutes": "{minutes} min walk",
+  "stop.save": "Save stop",
+  "stop.travelFrom": "Travel from here",
+  "stop.travelTo": "Get here",
+  "stop.allStops": "All stops",
+  "stop.nextTimes": "Next times of line {line}",
+
+  "line.title": "Line {line}",
+  "line.every": "about every {minutes} min",
+  "line.mode.bus": "Bus",
+  "line.mode.rail": "Train",
+  "line.mode.lightRail": "Light rail",
+  "line.save": "Save line",
+  "line.towards": "To {place}",
+  "line.directions": "Direction of travel",
+  "line.stops": "The line's stops",
+  "line.earlier": "{n} earlier stops · from {origin}",
+  "line.earlier.one": "1 earlier stop · from {origin}",
+  "line.more": "{n} more stops",
+  "line.more.one": "1 more stop",
+  "line.nearest": "Nearest to you · {minutes} min walk",
+  "line.in": "in {minutes} min",
+  "line.lightRail": "Light rail",
+  "line.note": "Tap a stop to get off there · Times from the timetable",
+  "line.notFound": "This line is not in the timetable.",
+
+  "ride.when": "When do you board at {stop}?",
+  "ride.departures": "Departures",
+  "ride.board": "Board here",
+  "ride.boardWalk": "Board here · {minutes} min walk",
+  "ride.alight": "Get off here · {stops} · {minutes} min ride",
+  "ride.getOff": "Get off here",
+  "ride.summaryWalk": "{duration} · including a {walk} walk to the stop",
+  "ride.continue": "And continue from there…",
+  "ride.pick": "Tap the stop where you get off",
+  "ride.missed": "The walk to the stop takes longer than the time until this departure",
+  "ride.expired": "This ride is no longer available. Choose a line and a stop again.",
+
+  "route.lineHere": "Line {line} from this stop · you can choose another departure",
+  "route.allStopsOf": "All stops of line {line}",
+};

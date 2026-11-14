@@ -87,7 +87,9 @@ describe("Stop", () => {
     expect(scene.pins[0]).toMatchObject({ label: "מסוף הטייסים", position: [34.813778, 32.047685] });
     const direction = scene.tags!.find((tag) => tag.id === "direction")!;
     expect(direction).toMatchObject({ kind: "plain", anchor: "center", ariaLabel: "כיוון הנסיעה של קו 8" });
-    expect(direction.text).toMatch(/^[↑↗→↘↓↙←↖]$/);
+    // A chevron turned to the line's bearing (board Stop), not a text arrow.
+    expect(direction.glyph).toMatchObject({ kind: "chevron" });
+    expect(direction.glyph!.bearing).toBeGreaterThanOrEqual(0);
     const end = scene.tags!.find((tag) => tag.kind === "strong")!;
     expect(end).toMatchObject({ text: "אוניברסיטת ת\"א", line: { label: "8" }, ariaLabel: "קו 8 נוסע אל אוניברסיטת ת\"א" });
     expect(end.position).toEqual(chosen.coordinates![chosen.coordinates!.length - 1]);
@@ -172,7 +174,7 @@ describe("Stop", () => {
     });
     renderApp(STOP);
     const heading = await screen.findByRole("heading", { level: 1, name: "דיזנגוף סנטר/דיזנגוף" });
-    await waitFor(() => expect(heading.parentElement).toHaveTextContent(/40 מ׳$/));
+    await waitFor(() => expect(heading.parentElement).toHaveTextContent(/40 מ׳ · 1 דק׳ הליכה$/));
     expect(getMapState().scene.user).toEqual({ position: [34.7749, 32.0753], accuracyMeters: 20 });
   });
 

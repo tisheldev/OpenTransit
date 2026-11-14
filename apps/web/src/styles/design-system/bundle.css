@@ -65,8 +65,8 @@ mark.ot-hl { background: none; color: inherit; font-weight: 750; }
 
 /* Line badge in its operator's colour (src/lib/lines.ts) via style="--line-bg:#…; --line-ink:#…",
    with a solid vehicle icon; signage numerals (look of 11 November 2026). */
-.ot-line { display: inline-flex; align-items: center; justify-content: center; gap: 3px; flex: none; min-width: 34px; height: var(--badge-height); padding-inline: 5px 6px; border-radius: 5px; background: var(--line-bg, var(--mode-bus)); color: var(--line-ink, var(--on-brand)); font-family: var(--font-numerals); font-size: 15px; line-height: 1; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
-.ot-line .ot-i, .ot-line .ot-vehicle { width: 14px; height: 14px; flex: none; }
+.ot-line { display: inline-flex; align-items: center; justify-content: center; gap: 4px; flex: none; min-width: 0; height: var(--badge-height); padding-inline: 6px; border-radius: 6px; background: var(--line-bg, var(--mode-bus)); color: var(--line-ink, var(--on-brand)); font-family: var(--font-numerals); font-size: 15px; line-height: 1; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ot-line .ot-i, .ot-line .ot-vehicle { width: 13px; height: 13px; flex: none; }
 .ot-line bdi:not(.num) { font-family: var(--font-sans); font-size: 12px; font-weight: 600; }
 .ot-line--rail { --line-bg: var(--mode-rail); }
 .ot-line--walk { background: transparent; color: var(--mode-walk); padding: 0 2px; min-width: 0; font-size: 14px; font-weight: 650; }
