@@ -351,6 +351,13 @@ def normalize(
     if not legs:
         raise ValueError("Empty itinerary")
     transfers = raw.get("transfers", 0) if all(x.mode == "walk" for x in legs) else raw["transfers"]
+    return assemble_journey(legs, transfers)
+
+
+def assemble_journey(legs: list[Leg], transfers: int) -> Journey:
+    """A journey over ordered legs: its timing and walking totals (id still pending)."""
+    if not legs:
+        raise ValueError("Empty itinerary")
     if type(transfers) is not int or transfers < 0:
         raise ValueError("Invalid transfer count")
     times = Timing(
@@ -475,6 +482,48 @@ class MotisClient:
         except ValueError, KeyError, TypeError:
             pass
         return {"reason": "ENGINE_INVALID_RESPONSE"}
+
+    async def direct_walks(
+        self,
+        origin: str,
+        destination: str,
+        arrive_by: datetime,
+        *,
+        max_seconds: int,
+        language: str,
+    ) -> list[dict]:
+        """The engine's walk-only routes (``direct``) from origin to destination.
+
+        A plan with an empty ``transitModes`` computes no transit, only the street routing
+        the engine also uses for access walks. Places are engine places (``lat,lon`` or a
+        ``mot60day_`` stop ID); the raw itineraries are returned for ``normalize``.
+        """
+        params = {
+            "fromPlace": origin,
+            "toPlace": destination,
+            "time": engine_time(arrive_by),
+            "arriveBy": "true",
+            "numItineraries": "1",
+            "transitModes": "",
+            "directModes": "WALK",
+            "maxDirectTime": str(max_seconds),
+            "realtimeMode": "OFF",
+            "detailedLegs": "true",
+            "language": language,
+        }
+        try:
+            response = await self.client.get("/api/v6/plan", params=params)
+            response.raise_for_status()
+            direct = response.json()["direct"]
+            if not isinstance(direct, list):
+                raise ValueError("Invalid direct list")
+            return direct
+        except httpx.TimeoutException:
+            raise EngineFailure("ENGINE_TIMEOUT", 504) from None
+        except httpx.HTTPError:
+            raise EngineFailure() from None
+        except ValueError, KeyError, TypeError:
+            raise EngineFailure("ENGINE_INVALID_RESPONSE") from None
 
     async def plan(self, query, generation: Generation, reference=None) -> PlanResult:
         try:
