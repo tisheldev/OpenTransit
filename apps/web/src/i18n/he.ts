@@ -9,6 +9,7 @@ import { he_nav } from "./parts/nav.he";
 import { he_secondary } from "./parts/secondary.he";
 import { he_shell } from "./parts/shell.he";
 import { he_stops } from "./parts/stops.he";
+import { he_stopline } from "./parts/stopline.he";
 
 // Core strings below; each slice owns its own part file in ./parts (merged at the end).
 const core = {
@@ -85,6 +86,6 @@ const core = {
   "place.address": "כתובת",
 } as const;
 
-export const he = { ...core, ...he_map, ...he_shell, ...he_compare, ...he_nav, ...he_secondary, ...he_homeSearch, ...he_stops } as const;
+export const he = { ...core, ...he_map, ...he_shell, ...he_compare, ...he_nav, ...he_secondary, ...he_homeSearch, ...he_stopline, ...he_stops } as const;
 
 export type MessageKey = keyof typeof he;

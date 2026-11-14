@@ -203,6 +203,18 @@ export function directionMark(line: readonly LonLat[], atMeters = 260): { positi
 }
 
 /**
+ * The chosen line's direction chevron (stops-and-lines boards Stop and Line): a point a
+ * little way along the line and the bearing there, in degrees from north.
+ */
+export function directionChevron(line: readonly LonLat[], atMeters = 260): { position: LonLat; bearing: number } | null {
+  const a = pointAlongLine(line, atMeters - 40);
+  const b = pointAlongLine(line, atMeters + 40);
+  if (!a || !b || haversineMeters(a, b) < 1) return null;
+  const at = pointAlongLine(line, atMeters)!;
+  return { position: toLonLat(at), bearing: ((bearingDegrees(a, b) % 360) + 360) % 360 };
+}
+
+/**
  * A spot near the stop for the tag of a line with no route shape: `count` such tags are
  * spread evenly around it, starting north-north-east, far enough apart not to overlap.
  */

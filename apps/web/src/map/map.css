@@ -212,3 +212,48 @@ button.map-stop::after {
 .map-tag--center.map-tag--edge-right { transform: translate(calc(-100% + 14px), -50%); }
 .map-tag--below.map-tag--edge-left { transform: translate(-14px, 10px); }
 .map-tag--below.map-tag--edge-right { transform: translate(calc(-100% + 14px), 10px); }
+
+/* Stops-and-lines boards (14 November 2026): the stop marker G on a stop's point
+   (components/GSign.tsx draws it) and the chosen line's direction chevron. */
+.map-gsign {
+  position: absolute;
+  left: 0;
+  top: 0;
+  inline-size: 0;
+  block-size: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  pointer-events: auto;
+}
+button.map-gsign {
+  cursor: pointer;
+}
+/* A 44 px hit area around the sign and its pole. */
+button.map-gsign::after {
+  content: "";
+  position: absolute;
+  left: -22px;
+  top: -42px;
+  inline-size: 44px;
+  block-size: 48px;
+}
+.map-chevron {
+  position: absolute;
+  left: 0;
+  top: 0;
+  inline-size: 24px;
+  block-size: 24px;
+  margin: -12px 0 0 -12px;
+  pointer-events: none;
+}
+.map-chevron svg {
+  display: block;
+  inline-size: 24px;
+  block-size: 24px;
+  fill: none;
+  stroke: var(--map-casing);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
