@@ -39,7 +39,7 @@ export function RideDepartures({ leg, onChoose }: { leg: Leg; onChoose: (departu
           {formatClock(leg.timing.scheduledDeparture, lang)}
         </button>
         {later.map((item) => (
-          <button key={item.tripRef} type="button" className="sl-chip" aria-pressed={false} onClick={() => onChoose(item)}>
+          <button key={`${item.tripRef}|${item.scheduledDeparture}`} type="button" className="sl-chip" aria-pressed={false} onClick={() => onChoose(item)}>
             {formatClock(item.scheduledDeparture, lang)}
           </button>
         ))}

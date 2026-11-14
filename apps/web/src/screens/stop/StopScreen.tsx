@@ -83,7 +83,7 @@ function LineTimes({ line, departures, stopId }: { line: StopLine; departures: r
   return (
     <div className="stop-times" role="group" aria-label={t("stop.nextTimes", { line: line.label })}>
       {times.map((item) => (
-        <button key={item.tripRef} type="button" className="sl-chip num" disabled={!key} onClick={() => open(item.tripRef)}>
+        <button key={`${item.tripRef}|${item.scheduledDeparture}`} type="button" className="sl-chip num" disabled={!key} onClick={() => open(item.tripRef)}>
           {formatClock(item.scheduledDeparture, lang)}
         </button>
       ))}

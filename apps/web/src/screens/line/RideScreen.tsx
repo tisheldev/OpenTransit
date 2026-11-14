@@ -244,7 +244,7 @@ function Ride({ ride, onChange }: { ride: RideIntent; onChange: (ride: RideInten
       </div>
       <div className="ride-times" role="group" aria-label={t("ride.departures")}>
         {departures.map((item) => (
-          <button key={item.tripRef} type="button" className="sl-chip" aria-pressed={item.tripRef === tripRef} onClick={() => onChange({ ...ride, tripRef: item.tripRef })}>
+          <button key={`${item.tripRef}|${item.scheduledDeparture}`} type="button" className="sl-chip" aria-pressed={item.tripRef === tripRef} onClick={() => onChange({ ...ride, tripRef: item.tripRef })}>
             {formatClock(item.scheduledDeparture, lang)}
           </button>
         ))}
