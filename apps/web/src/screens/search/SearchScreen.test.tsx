@@ -13,6 +13,31 @@ import { lastOrigin } from "../../shell/localStore";
 import { loadLocalState } from "../../storage/local";
 import { renderApp, storedDraft, wholeText } from "../../shell/testUtils";
 import { readableLocality } from "./choice";
+import { setLocationSource } from "../../lib/geolocation";
+
+let restoreLocation: (() => void) | null = null;
+afterEach(() => {
+  restoreLocation?.();
+  restoreLocation = null;
+});
+
+/** Location already allowed (Search sends `near` only then), at Dizengoff Center. */
+async function grantedLocation(): Promise<void> {
+  const before = Object.getOwnPropertyDescriptor(navigator, "permissions");
+  Object.defineProperty(navigator, "permissions", {
+    configurable: true,
+    value: { query: async () => ({ state: "granted" }) },
+  });
+  const restoreSource = setLocationSource({
+    current: async () => ({ ok: true, fix: { latitude: 32.0753, longitude: 34.7749, accuracyMeters: 20, at: 0 } }),
+    watch: () => () => {},
+  });
+  restoreLocation = () => {
+    restoreSource();
+    if (before) Object.defineProperty(navigator, "permissions", before);
+    else delete (navigator as unknown as Record<string, unknown>).permissions;
+  };
+}
 
 const input = () => screen.getByRole("searchbox", { name: /חיפוש|Search/ });
 
@@ -29,6 +54,21 @@ function trackPlaces(answer: () => Response | Promise<Response> = () => respond(
 }
 
 afterEach(() => vi.restoreAllMocks());
+
+/** The rows' main buttons, in order (a stop row's second button opens its departures). */
+const choices = (results: HTMLElement) => within(results).getAllByRole("button").filter((button) => !button.classList.contains("sx-clock"));
+
+/** The first row whose name is exactly `name` (a stop's or another place's when `kind` says). */
+function named(results: HTMLElement, name: string, kind?: "poi" | "stop"): HTMLElement {
+  const found = choices(results).find((button) => {
+    if (button.querySelector(".sx-nm")?.textContent !== name) return false;
+    if (kind === "poi") return button.querySelector(".cv-lead") !== null;
+    if (kind === "stop") return button.querySelector(".cv-sign") !== null;
+    return true;
+  });
+  if (!found) throw new Error(`no result named ${name}`);
+  return found;
+}
 
 describe("Search before typing", () => {
   it("focuses the field and lists Choose on map first, then My location (From only)", () => {
@@ -151,7 +191,7 @@ describe("Search results and states", () => {
     renderApp("#/search/to");
     await userEvent.type(input(), "Dizengoff");
     const results = await screen.findByTestId("search-results");
-    const first = within(results).getAllByRole("button")[0]!;
+    const first = named(results, "Meir Dizengoff");
     expect(first).toHaveTextContent("Meir Dizengoff");
     expect(first).toHaveTextContent(he["place.poi"]);
     expect(first.querySelector("bdi[lang='en']")).not.toBeNull();
@@ -162,7 +202,7 @@ describe("Search results and states", () => {
     renderApp("#/search/to");
     await userEvent.type(input(), "דיזנגוף");
     const results = await screen.findByTestId("search-results");
-    const sub = within(results).getAllByRole("button")[0]!.querySelector(".ot-row__sub")!;
+    const sub = choices(results)[0]!.querySelector(".sx-sub")!;
     expect(sub.textContent).toMatch(/^תחנה \d+\s*·\s/);
     expect(sub.querySelector(".kind-label")).toBeNull();
   });
@@ -171,7 +211,7 @@ describe("Search results and states", () => {
     renderApp("#/search/to", { lang: "en" });
     await userEvent.type(input(), "Di");
     const clear = screen.getByRole("button", { name: en["search.clear"] });
-    expect(clear.closest(".search-field")).not.toBeNull();
+    expect(clear.closest(".sx-field")).not.toBeNull();
     await userEvent.click(clear);
     expect(input()).toHaveValue("");
     expect(input()).toHaveFocus();
@@ -231,12 +271,112 @@ describe("Search results and states", () => {
   });
 });
 
+describe("Lines, stops and places in one list (board 2, 14 November 2026)", () => {
+  /** Count /v1/lines requests and keep their URLs (answered by the default handler). */
+  function trackLines() {
+    const urls: URL[] = [];
+    server.events.on("request:start", ({ request }) => {
+      const url = new URL(request.url);
+      if (url.pathname === "/v1/lines") urls.push(url);
+    });
+    return urls;
+  }
+  afterEach(() => server.events.removeAllListeners());
+
+  it("one digit searches lines only: exact number first, operators sharing it apart, four shown, then 'N more lines'", async () => {
+    const places = trackPlaces();
+    const lines = trackLines();
+    renderApp("#/search/to");
+    await userEvent.type(input(), "8");
+    const results = await screen.findByTestId("search-results");
+    expect(places).toHaveLength(0);
+    expect(lines.map((url) => [url.searchParams.get("q"), url.searchParams.get("limit"), url.searchParams.has("lat")])).toEqual([["8", "50", false]]);
+    const rows = choices(results);
+    expect(rows.slice(0, 2).map((row) => row.textContent)).toEqual(["8מסוף רידינג ↔ מסוף הטייסיםדן · תל אביב-יפו", "8מרכזית המפרץ ↔ בת גליםאגד · חיפה"]);
+    expect(rows.slice(2, 4).every((row) => /^8\d/.test(row.textContent ?? ""))).toBe(true);
+    expect(rows[4]).toHaveTextContent(he["search.lines.more"].replace("{count}", "6"));
+    expect(screen.queryByText(he["search.minChars"])).toBeNull();
+    await userEvent.click(rows[4]!);
+    expect(choices(results)).toHaveLength(10);
+    expect(screen.queryByText(he["search.lines.more"].replace("{count}", "6"))).toBeNull();
+  });
+
+  it("a line row opens the line; with location already allowed it says how far its nearest stop is", async () => {
+    // renderApp stubs location as "not asked yet"; allow it before Search mounts.
+    renderApp("#/");
+    await grantedLocation();
+    act(() => go({ name: "search", field: "to" }));
+    await userEvent.type(await screen.findByRole("searchbox"), "8");
+    const first = () => choices(screen.getByTestId("search-results"))[0]!;
+    await waitFor(() => expect(first()).toHaveTextContent(/^8מסוף רידינג ↔ מסוף הטייסיםדן · תל אביב-יפו · עוצר 1 דק׳ הליכה ממך$/));
+    await userEvent.click(first());
+    expect(window.location.hash).toBe("#/line/5%3A10008");
+  });
+
+  it("two characters or more of a number: lines and places, lines first", async () => {
+    const places = trackPlaces();
+    const lines = trackLines();
+    renderApp("#/search/to");
+    await userEvent.type(input(), "82");
+    const results = await screen.findByTestId("search-results");
+    expect(places.map((url) => url.searchParams.get("q"))).toEqual(["82"]);
+    expect(lines.map((url) => url.searchParams.get("q"))).toEqual(["82"]);
+    const rows = choices(results);
+    expect(rows[0]).toHaveTextContent(/^82מסוף כרמלית ↔ חולון/);
+    expect(rows.length).toBeGreaterThan(1);
+  });
+
+  it("setting Home offers no lines (a line is not a place): one digit still asks for more", async () => {
+    const lines = trackLines();
+    renderApp("#/search/home");
+    await userEvent.type(input(), "8");
+    expect(screen.getByText(he["search.minChars"])).toBeInTheDocument();
+    await new Promise((resolve) => setTimeout(resolve, 350));
+    expect(lines).toHaveLength(0);
+  });
+
+  it("says so when only lines were asked and they failed", async () => {
+    server.use(http.get("*/v1/lines", () => respond(fixture("recorded-problem-not-ready"))));
+    renderApp("#/search/to");
+    await userEvent.type(input(), "8");
+    expect(await screen.findByRole("alert")).toBeInTheDocument();
+  });
+
+  it("a stop row: the stop sign, its code and street; no departures unless Home already holds them", async () => {
+    renderApp("#/search/to");
+    await userEvent.type(input(), "דיזנגוף");
+    const results = await screen.findByTestId("search-results");
+    const stop = named(results, "דיזנגוף סנטר/דיזנגוף", "stop");
+    expect(stop.querySelector(".sx-sub")).toHaveTextContent(/^תחנה 25609 · \S/);
+    expect(stop.querySelector(".sx-cs")).toBeNull();
+    const place = named(results, "דיזנגוף סנטר", "poi");
+    expect(place.querySelector(".sx-sub")).toHaveTextContent(/^מקום · תל־אביב–יפו$/);
+  });
+
+  it("after Home: a stop row shows its next lines from Home's answer (no request of its own), and its clock opens the stop", async () => {
+    const departures: string[] = [];
+    server.events.on("request:start", ({ request }) => {
+      if (/\/v1\/stops\/[^/]+\/departures/.test(new URL(request.url).pathname)) departures.push(request.url);
+    });
+    renderApp("#/");
+    await screen.findByRole("list", { name: he["home.near.list"] });
+    await userEvent.click(screen.getByRole("button", { name: `${he["home.search"]} ${he["home.search.hint"]}` }));
+    await userEvent.type(await screen.findByRole("searchbox"), "דיזנגוף");
+    const results = await screen.findByTestId("search-results");
+    const stop = named(results, "דיזנגוף סנטר/דיזנגוף", "stop");
+    expect(stop.querySelector(".sx-cs")).toHaveTextContent(/^1722115\d+ דק׳$/);
+    expect(departures).toEqual([]);
+    await userEvent.click(within(results).getAllByRole("button", { name: he["search.stop.departures"].replace("{stop}", "דיזנגוף סנטר/דיזנגוף") })[0]!);
+    await waitFor(() => expect(window.location.hash).toBe("#/stop/mot%3Astop%3A13583"));
+  });
+});
+
 describe("Choosing a place", () => {
   it("a stop fills To with its stopId, becomes a recent and opens Compare", async () => {
     renderApp("#/search/to");
     await userEvent.type(input(), "דיזנגוף");
     const results = await screen.findByTestId("search-results");
-    await userEvent.click(within(results).getAllByRole("button")[0]!);
+    await userEvent.click(choices(results)[0]!);
     expect(window.location.hash).toBe("#/compare");
     await waitFor(() =>
       expect(storedDraft()?.to).toMatchObject({
@@ -253,7 +393,7 @@ describe("Choosing a place", () => {
     renderApp("#/search/to");
     await userEvent.type(input(), "דיזנגוף 50");
     const results = await screen.findByTestId("search-results");
-    await userEvent.click(within(results).getAllByRole("button")[0]!);
+    await userEvent.click(choices(results)[0]!);
     const body = fixture("recorded-places-address-he").body as {
       data: Array<{ locationRef: { placeRef: string }; coordinates: { latitude: number } }>;
       meta: { generationId: string };
@@ -282,11 +422,11 @@ describe("Choosing a place", () => {
   it("without a start, a destination asks for the start next; the start is remembered for next time", async () => {
     renderApp("#/search/to", { location: "unsupported" });
     await userEvent.type(input(), "דיזנגוף");
-    await userEvent.click(within(await screen.findByTestId("search-results")).getAllByRole("button")[0]!);
+    await userEvent.click(choices(await screen.findByTestId("search-results"))[0]!);
     await waitFor(() => expect(window.location.hash).toBe("#/search/from"));
     expect(await screen.findByRole("heading", { level: 1 })).toHaveTextContent(he["search.title.from"]);
     await userEvent.type(input(), "דיזנגוף");
-    await userEvent.click(within(await screen.findByTestId("search-results")).getAllByRole("button")[1]!);
+    await userEvent.click(named(await screen.findByTestId("search-results"), "דיזנגוף סנטר", "poi"));
     await waitFor(() => expect(window.location.hash).toBe("#/compare"));
     await waitFor(() => expect(storedDraft()?.from).toMatchObject({ type: "place", place: { label: "דיזנגוף סנטר" } }));
     expect(lastOrigin()).toMatchObject({ label: expect.stringContaining("דיזנגוף סנטר") });
@@ -295,7 +435,7 @@ describe("Choosing a place", () => {
   it("Choose on map starts at the plan's place, at street level", async () => {
     renderApp("#/search/to");
     await userEvent.type(input(), "דיזנגוף");
-    await userEvent.click(within(await screen.findByTestId("search-results")).getAllByRole("button")[0]!);
+    await userEvent.click(choices(await screen.findByTestId("search-results"))[0]!);
     await waitFor(() => expect(window.location.hash).toBe("#/compare"));
     act(() => go({ name: "search", field: "to" }));
     await userEvent.click(await screen.findByRole("button", { name: he["search.pickOnMap"] }));
@@ -308,7 +448,7 @@ describe("Choosing a place", () => {
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(en["search.title.home"]);
     await userEvent.type(input(), "Dizengoff");
     const results = await screen.findByTestId("search-results");
-    await userEvent.click(within(results).getAllByRole("button")[0]!);
+    await userEvent.click(choices(results)[0]!);
     await waitFor(() => expect(window.location.hash).toBe("#/"));
     expect(loadLocalState().state.home).toMatchObject({ id: "home", stopId: "mot:stop:13583" });
     expect(storedDraft()?.to ?? null).toBeNull();
@@ -318,7 +458,7 @@ describe("Choosing a place", () => {
     renderApp("#/search/favourite");
     await userEvent.type(input(), "דיזנגוף");
     const results = await screen.findByTestId("search-results");
-    await userEvent.click(within(results).getAllByRole("button")[1]!);
+    await userEvent.click(named(results, "דיזנגוף סנטר", "poi"));
     const name = screen.getByLabelText(he["search.favourite.name"]);
     expect(name).toHaveValue("דיזנגוף סנטר");
     await userEvent.clear(name);

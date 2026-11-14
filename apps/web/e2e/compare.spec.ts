@@ -54,7 +54,8 @@ async function openCompare(
 const optionList = (page: Page) => page.getByRole("list", { name: /אפשרויות נסיעה|Trip options/ });
 
 const detailsButton = (page: Page) => page.getByRole("button", { name: "פרטי המסלול" });
-const legButtons = (page: Page) => page.getByRole("region", { name: /פרטי מסלול|Route details/ }).getByRole("button");
+// The leg rows (stop names are buttons too since board 6: they open the stop).
+const legButtons = (page: Page) => page.getByRole("region", { name: /פרטי מסלול|Route details/ }).locator("button.compare-tl-leg");
 
 test("Choose at the half sheet: the destination, the start, the time tag, every option and פרטי המסלול in view", async ({ page }) => {
   await openCompare(page);

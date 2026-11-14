@@ -1,6 +1,8 @@
 import type { Map as MapLibreMap } from "maplibre-gl";
 import { useEffect, useReducer, type CSSProperties } from "react";
 import { LineBadge } from "../components/ds";
+import { GMarker } from "./stops/markers";
+import { poleSideOf } from "./stops/StopsLayer";
 import { lineMode } from "./layers";
 import type { MapStopPin, MapTag } from "./scene";
 
@@ -91,7 +93,32 @@ function StopSign() {
   );
 }
 
-function StopPin({ pin }: { pin: MapStopPin }) {
+/** The chosen line's direction (boards Stop and Line: a chevron on the line, path copied verbatim). */
+function Chevron({ tag, bearing }: { tag: MapTag; bearing: number }) {
+  // The canvas path points north-east (45°); turned to the line's bearing.
+  return (
+    <span className="map-chevron" role={tag.ariaLabel ? "img" : undefined} aria-label={tag.ariaLabel} style={{ transform: `rotate(${Math.round(bearing - 45)}deg)` }}>
+      <svg viewBox="262 116 24 24" aria-hidden="true" focusable="false">
+        <path d="m268 126 12-4-4 12" />
+      </svg>
+    </span>
+  );
+}
+
+function StopPin({ pin, map }: { pin: MapStopPin; map: MapLibreMap }) {
+  if (pin.look === "sign") {
+    // Marker G, the same as the stops layer's (src/map/stops): its pole snapped away from
+    // the road when the side is known, else centred with no pole.
+    return (
+      <GMarker
+        side={pin.rail ? null : poleSideOf(pin.id, pin.bearingDegrees, map.getBearing())}
+        chosen={pin.selected === true}
+        station={pin.rail === true}
+        label={pin.ariaLabel}
+        onSelect={pin.onSelect}
+      />
+    );
+  }
   const className = `map-stop${pin.selected ? " map-stop--selected" : ""}`;
   if (pin.onSelect) {
     return (
@@ -124,12 +151,12 @@ export function MapOverlay({
     <div className="map-overlay" data-testid="map-overlay">
       {stopPins.map((pin) => (
         <div key={`stop-${pin.id}`} className="map-overlay__item" style={position(map, pin.position)}>
-          <StopPin pin={pin} />
+          <StopPin pin={pin} map={map} />
         </div>
       ))}
       {tags.map((tag) => (
         <div key={`tag-${tag.id}`} className="map-overlay__item" style={position(map, tag.position)}>
-          <Tag tag={tag} dir={dir} edge={edgeOf(map, tag.position)} />
+          {tag.glyph ? <Chevron tag={tag} bearing={tag.glyph.bearing} /> : <Tag tag={tag} dir={dir} edge={edgeOf(map, tag.position)} />}
         </div>
       ))}
     </div>

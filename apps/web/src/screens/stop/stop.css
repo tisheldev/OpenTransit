@@ -1,5 +1,6 @@
-/* A stop — board 7 (11 November 2026). The rows and heading are the shared board pieces
-   (styles/boards.css: b-head, b-row, b-mu); this file only places them. */
+/* A stop — canvas board Stop (3), 14 November 2026 (sizes from the board). The rows are
+   the shared board row (styles/boards.css: b-row, b-mu) restyled to the board; the
+   stops-and-lines pieces are in ../line/stopline.css. */
 
 .stop {
   display: flex;
@@ -7,14 +8,33 @@
   min-block-size: 100%;
 }
 
-/* The board's stop name is the screen's title: 18 px, and the panel starts with it.
-   (Scoped under .stop: boards.css loads after this file and sets .b-head's own.) */
-.stop .stop-head {
-  margin-block-start: 0;
+/* The stop's name over its distance and walk, the star at the end. */
+.stop-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-block-size: 52px;
 }
-.stop .stop-head > .stop-title {
-  font-size: 18px;
+.stop-head__text {
+  flex: 1;
+  min-inline-size: 0;
+  display: flex;
+  flex-direction: column;
+}
+/* (Scoped under .stop: the sheet's h1 rule would otherwise set its own size and margin.) */
+.stop .stop-title,
+.sheet-content .stop .stop-title {
+  margin: 0;
+  font-size: 17px;
   line-height: 24px;
+  font-weight: 700;
+}
+
+.stop-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-block: 12px 8px;
 }
 
 .stop-lines {
@@ -23,15 +43,46 @@
   padding: 0;
 }
 .stop-lines .b-row {
-  min-block-size: 46px;
-  padding-inline: var(--space-2);
+  gap: 10px;
+  min-block-size: 52px;
+  padding: 6px 8px;
+  border-block-start: 0;
+  border-block-end: 1px solid var(--hairline);
+}
+.stop-lines .b-row__name {
+  font-weight: 700;
+  font-size: 15px;
 }
 .stop-lines .b-row:focus-visible {
   outline-offset: -3px;
 }
-/* The row after the chosen one keeps no hairline against the chosen row's fill. */
-.stop-lines li:has(.b-row--on) + li .b-row {
-  border-block-start-color: transparent;
+.stop-lines .b-due {
+  font-size: 13px;
+}
+.stop-lines .b-due .b-big {
+  font-family: var(--font-numerals);
+  font-weight: 600;
+  font-size: 20px;
+}
+
+/* A chosen line opens in place: its row and its times on one sunken panel. */
+.stop-line--open {
+  background: var(--surface-sunken);
+  border-radius: var(--radius-lg);
+}
+.stop-line--open .b-row,
+.stop-line--open .b-row--on {
+  background: none;
+  border-block-end: 0;
+}
+.stop-times {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 8px 8px;
+}
+.stop-times__all {
+  margin-inline-start: auto;
 }
 
 .b-due {
@@ -39,6 +90,5 @@
 }
 
 .stop-note {
-  margin-block: auto 0;
-  padding-block-start: var(--space-3);
+  margin-block: 8px 0;
 }

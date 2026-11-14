@@ -113,7 +113,7 @@ The user's instruction of 11 November ("fix the data gaps" for the eight boards)
 
 ## Stops and lines proposal (12 November 2026)
 
-**Approved by the user on 12 November 2026 ("Approve it"), with the items under "Still open" left open. Not built.** The build order and the first slice's plan are in the [continuation plan](next-steps.md#stops-and-lines-build-order-and-slice-1). Drawn with the user on 12 November on the private canvas "OpenTransit Stops and Lines" (`https://claude.ai/artifact/9NtBZm7ETSMS3XrumrzZuE`): ten phone screens, two sheets of stop-marker options, a motion sheet and a tuning sheet. Sample data throughout. The session that drew them never saw them rendered, so positions and sizes on the canvas are indicative. The approval covers the design as written here. It changes no phase gate, and it does not make the unconfirmed items below decided.
+**Approved by the user on 12 November 2026 ("Approve it"), with the items under "Still open" left open. Built 14 November 2026 (slices 1–6, mechanically tested with fixtures, not human-reviewed, not on H-1); see the dashboard's CLIENT-UX row.** The build order and the first slice's plan are in the [continuation plan](next-steps.md#stops-and-lines-build-order-and-slice-1). Drawn with the user on 12 November on the private canvas "OpenTransit Stops and Lines" (`https://claude.ai/artifact/9NtBZm7ETSMS3XrumrzZuE`): ten phone screens, two sheets of stop-marker options, a motion sheet and a tuning sheet. Sample data throughout. The session that drew them never saw them rendered, so positions and sizes on the canvas are indicative. The approval covers the design as written here. It changes no phase gate, and it does not make the unconfirmed items below decided.
 
 The request (user, 12 November): "I want stops and lines to be a bigger part of the app … integrate well alongside route planning. I want it to feel seamless and compliment the current flows"; later, "I also want to be able to look for stops on the maps always, not only close ones".
 
@@ -216,14 +216,14 @@ Read from the code at `main` `170dd97` on 12 November; nothing was run. The user
 | Need | Today | Gap |
 | --- | --- | --- |
 | Stops in the visible area (screens 8 to 10) | `GET /v1/stops?bbox=…`, at most 100 km² per request, paged | None for these zooms. The zoom thresholds are the client's |
-| Stations only, far out (screen 7) | No filter by kind, and a city-wide view exceeds 100 km² | A way to list stations over a large area |
-| Which stops are train or light-rail stations (the purple sign, at every zoom) | Stop items carry no mode, and the feed gives rail stops no station type; the API's stop search infers rail from the lines that call there | Supplied by API-C6 as `mode`: on `nov11a` all 70 stops the rail routes serve report `rail` ([evidence](../services/api/results/api-stop-facets-nov11a-20261112-01.json), mechanical). Built on branch `claude/api-c6-stop-facets`, not merged |
+| Stations only, far out (screen 7) | No filter by kind, and a city-wide view exceeds 100 km² | Supplied 14 November: `GET /v1/stops?bbox&mode=rail,light_rail` folds platforms into stations and accepts up to 120,000 km² |
+| Which stops are train or light-rail stations (the purple sign, at every zoom) | Stop items carry no mode, and the feed gives rail stops no station type; the API's stop search infers rail from the lines that call there | Supplied by API-C6 as `mode`: on `nov11a` all 70 stops the rail routes serve report `rail` ([evidence](../services/api/results/api-stop-facets-nov11a-20261112-01.json), mechanical). Merged in PR #40 |
 | Which side of the stop the road is on (the pole) | Stop items carry no direction of travel; `boarding.bearingDegrees` exists only on journey legs | Partly supplied by API-C6. `bearingDegrees` is a rough direction of travel: within 45° of a journey's own boarding bearing for about 85% of the stops that have one, and absent for about 12% of the 301 sampled bus and light-rail boarding stops (19.3% of all stops and 7.5% of bus stops have none). It is too rough to place the pole alone: on those 301 real boardings the snapped pole matched the road side about 59% of the time for those with an estimate (52% of all 292 legs that have a road truth) and pointed the opposite way about 2% ([evidence](../services/api/results/api-stop-bearing-estimates-nov11a-20261112-01.json), mechanical; rail untested), and no other estimate from the timetable did better. User decision, 12 November ("Yes, keep it"): the API keeps it as a fallback, and the client takes the road side from the map's street geometry in slice 2. How well that works is unmeasured |
 | Next-line tags and "In this area" | `GET /v1/departures/nearby` around any point: at most 1 km and 12 stops, in the expensive rate-limit bucket | None for a couple of tags; a full screen of tags would exceed it |
-| Line search by number | `GET /v1/routes?routeShortName=…` matches the exact number only. A MOT route is one direction, so one number returns several routes | The routes are grouped into lines by operator and MOT line code, the key the API already uses to find a line's other direction; operator and number alone can merge unrelated lines in different towns. Lines that merely start with the typed digits (82 and 89 under "8", as drawn) are not available |
+| Line search by number | `GET /v1/routes?routeShortName=…` matches the exact number only. A MOT route is one direction, so one number returns several routes | The routes are grouped into lines by operator and MOT line code, the key the API already uses to find a line's other direction; operator and number alone can merge unrelated lines in different towns. Supplied 14 November by `GET /v1/lines`: one item per operator and MOT line code, prefix match from one character with exact numbers first (user, 14 November) |
 | Line screen | `GET /v1/routes/{id}`, its patterns, `GET /v1/stops/{id}/lines?patterns=all`, `GET /v1/stops/{id}/departures?routeId=…`, `GET /v1/trips/{tripRef}` | None found |
-| Ride it (screen 5) | `POST /v1/journeys` can exclude trips (`excludeTripRefs`) but cannot be pinned to one | Either a journey request pinned to one trip, or the client builds the journey from the trip and a walk to the stop. Undecided |
-| Saved stops and lines | The device store holds saved places only | A storage change. Stop ids are stable; route ids can disappear and return (M2.8), so a saved line is keyed by operator and MOT line code |
+| Ride it (screen 5) | `POST /v1/journeys` can exclude trips (`excludeTripRefs`) but cannot be pinned to one | Supplied 14 November: `pinnedTrip` on `POST /v1/journeys` returns the engine's walk to the stop and that trip's ride |
+| Saved stops and lines | The device store holds saved places only | A storage change. Stop ids are stable; route ids can disappear and return (M2.8), so a saved line is keyed by operator and MOT line code. Built 14 November (storage version 2, device only) |
 
 **Request limits (today's defaults).** Standard requests are limited to 60 a minute with a burst of 20, and expensive ones (journeys, nearby departures) to 30 a minute with a burst of 15, shared by everything the client does. Stops by area come 100 to a page. The design has to live within these; the calls below say how.
 
@@ -254,9 +254,9 @@ The grouping method and its exact pixel threshold, the caching scheme for stops 
 
 Still open:
 
-7. Saved stops and lines on Home: drawn, never asked about.
-8. Should line search also return lines that merely start with the typed digits, and may a one-character query search?
-9. The zoom thresholds, the light-theme colours and the crowded-junction rules are suggestions, to be confirmed when the first map slice can be seen on a phone.
+7. Answered on 14 November: build saved stops and lines on Home.
+8. Answered on 14 November: prefix match, and a one-character query searches lines.
+9. The zoom thresholds (built at MapLibre zoom 12.5 for groups and 13.5 for signs, lower than the ~13 and ~16 above, so that signs show at Home's framing on a phone), the light-theme colours and the crowded-junction rules are suggestions, to be confirmed when the first map slice can be seen on a phone.
 
 ## Constraints from the current API
 

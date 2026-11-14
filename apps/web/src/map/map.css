@@ -212,3 +212,25 @@ button.map-stop::after {
 .map-tag--center.map-tag--edge-right { transform: translate(calc(-100% + 14px), -50%); }
 .map-tag--below.map-tag--edge-left { transform: translate(-14px, 10px); }
 .map-tag--below.map-tag--edge-right { transform: translate(calc(-100% + 14px), 10px); }
+
+/* Stops-and-lines boards (14 November 2026): the chosen line's direction chevron. Sign
+   pins (MapStopPin look "sign") are the stops layer's marker G (stops/stops.css). */
+.map-chevron {
+  position: absolute;
+  left: 0;
+  top: 0;
+  inline-size: 24px;
+  block-size: 24px;
+  margin: -12px 0 0 -12px;
+  pointer-events: none;
+}
+.map-chevron svg {
+  display: block;
+  inline-size: 24px;
+  block-size: 24px;
+  fill: none;
+  stroke: var(--map-casing);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}

@@ -72,6 +72,8 @@ describe("scene to GeoJSON", () => {
       dimmed: false,
       label: "8",
       travelled: false,
+      quiet: false,
+      opacity: 1,
       vehicle: "bus",
       colorDark: "",
       colorLight: "",
@@ -221,10 +223,19 @@ describe("our layers in the theme's colours", () => {
   it("fades the other legs to .6, and labels lines only when the style has glyphs", () => {
     const layers = overlayLayers("dark", { labels: true });
     for (const id of ["ot-route-walk", "ot-route-transit"]) {
-      expect(layer(layers, id).paint!["line-opacity"]).toEqual(["case", ["get", "dimmed"], 0.6, 1]);
+      expect(layer(layers, id).paint!["line-opacity"]).toEqual(["case", ["==", ["get", "quiet"], true], ["get", "opacity"], ["get", "dimmed"], 0.6, 1]);
     }
     expect(layer(layers, "ot-route-label").paint).toMatchObject({ "text-halo-color": THEME_COLORS.dark.surface });
     expect(overlayLayers("dark", { labels: false }).some((l) => l.id === "ot-route-label")).toBe(false);
+  });
+
+  it("draws a quiet line (boards Stop and Ride) 5 px at its own opacity, with no edge", () => {
+    const [stop] = routeFeatures([{ ...bus, active: false, tone: "quiet" }]).features;
+    expect(stop!.properties).toMatchObject({ quiet: true, opacity: 0.45, dimmed: true });
+    const [ride] = routeFeatures([{ ...bus, active: false, tone: "quiet", quietOpacity: 0.4 }]).features;
+    expect(ride!.properties.opacity).toBe(0.4);
+    const layers = overlayLayers("dark", { labels: false });
+    expect(layer(layers, "ot-route-casing").filter).toEqual(["all", ["==", ["get", "kind"], "transit"], ["!=", ["get", "quiet"], true]]);
   });
 
   it("the two themes differ where their tokens differ", () => {

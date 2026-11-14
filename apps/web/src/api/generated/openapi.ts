@@ -58,6 +58,49 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/lines": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Lines
+         * @description Lines (operator + MOT line code) whose number starts with `q`.
+         *
+         *     The exact number first, then longer numbers; within each, lines with a stop nearest
+         *     `lat`/`lon` first (when given), then by number.
+         */
+        get: operations["lines_v1_lines_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/lines/{line_key}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Line
+         * @description One line by its `lineKey`; `nearestStop` only when `lat`/`lon` are given.
+         */
+        get: operations["line_v1_lines__line_key__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/routes": {
         parameters: {
             query?: never;
@@ -244,7 +287,10 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Plan */
+        /**
+         * Plan
+         * @description Scheduled journey alternatives, or with `pinnedTrip` one journey on that trip.
+         */
         post: operations["plan_v1_journeys_post"];
         delete?: never;
         options?: never;
@@ -501,6 +547,8 @@ export interface components {
              * @default 30
              */
             maxDirectWalkMinutes?: number;
+            /** @description Ride this one trip instead of searching. The answer is one journey: a walk from `from` to the board stop (the engine's walking route, arriving by the trip's departure there; omitted when `from` is a coordinate within 30 m of the stop), then one transit leg on the trip from board to alight stop, shaped like any transit leg (intermediate stops, boarding, geometry; times from the trip). `to` is still required (send the alight stop's coordinate). When the walk starting at `departAt` cannot reach the stop by the departure the journey is still returned with warning `PINNED_TRIP_MISSED_BY_WALK`; when no walk within `maxDirectWalkMinutes` exists the outcome is `no_route` with warning `PINNED_TRIP_WALK_UNAVAILABLE`. `modes`, `results` and `excludeTripRefs` do not apply. Errors: unknown trip `404 TRIP_NOT_FOUND`; board or alight stop not on the trip, or alight not after board, `422 INVALID_PINNED_TRIP`. */
+            pinnedTrip?: components["schemas"]["PinnedTrip"] | null;
         };
         /** JourneyResponse */
         JourneyResponse: {
@@ -535,6 +583,81 @@ export interface components {
             /** @description Where and which way to board; null for a walk. */
             boarding?: components["schemas"]["Boarding"] | null;
         };
+        /** LineDirection */
+        LineDirection: {
+            /**
+             * Routeid
+             * @description One MOT route: one direction (or variant) of the line.
+             */
+            routeId: string;
+            /**
+             * Headsign
+             * @description The headsign of its longest pattern, if any.
+             */
+            headsign: string | null;
+            /**
+             * Originname
+             * @description First stop of its longest pattern.
+             */
+            originName: string | null;
+            /**
+             * Destinationname
+             * @description Last stop of its longest pattern.
+             */
+            destinationName: string | null;
+        };
+        /** LineItem */
+        LineItem: {
+            /**
+             * Linekey
+             * @description Opaque and stable across generations: the operator (GTFS agency_id) and the MOT line code (route_desc before the first '-'), as `<agency_id>:<code>`. A route without a line code is a line of its own (`<agency_id>:route:<route source id>`).
+             */
+            lineKey: string;
+            /**
+             * Shortname
+             * @description The line number (`routeShortName`).
+             */
+            shortName: string;
+            /** Operatorid */
+            operatorId: string | null;
+            /** Operatorname */
+            operatorName: string | null;
+            /**
+             * Mode
+             * @description The same mode strings journey legs use (`bus`, `rail`, `light_rail`; rarer engine modes as `cable_car`, `funicular`, `ferry`, else `other`); null when the engine omits it. Derived from the GTFS route_type.
+             * @enum {string}
+             */
+            mode: "bus" | "rail" | "light_rail" | "cable_car" | "funicular" | "ferry" | "other";
+            /**
+             * Routeids
+             * @description Its routes, main directions first.
+             */
+            routeIds: string[];
+            /**
+             * Directions
+             * @description One per route, in `routeIds` order.
+             */
+            directions: components["schemas"]["LineDirection"][];
+            /**
+             * Area
+             * @description The locality (OSM admin level 8, Hebrew name) holding at least half of the line's stops; null for intercity lines or a reference without localities.
+             */
+            area: string | null;
+            /** @description Only when `lat`/`lon` are given: the line's stop (any direction) nearest them, within 2 km, else null. Absent without `lat`/`lon`. */
+            nearestStop?: components["schemas"]["LineNearestStop"] | null;
+        };
+        /** LineNearestStop */
+        LineNearestStop: {
+            /** Stopid */
+            stopId: string;
+            /** Name */
+            name: string | null;
+            /**
+             * Distancem
+             * @description Straight-line metres from `lat`/`lon`, rounded.
+             */
+            distanceM: number;
+        };
         /** LinePattern */
         LinePattern: {
             /** Patternid */
@@ -567,6 +690,11 @@ export interface components {
             /** Stops */
             stops: components["schemas"]["LineStop"][];
         };
+        /** LineResponse */
+        LineResponse: {
+            data: components["schemas"]["LineItem"];
+            meta: components["schemas"]["Metadata"];
+        };
         /** LineStop */
         LineStop: {
             /** Stopid */
@@ -581,6 +709,16 @@ export interface components {
             pickupType: number;
             /** Dropofftype */
             dropOffType: number;
+        };
+        /** LinesResponse */
+        LinesResponse: {
+            /**
+             * Data
+             * @description Exact number first, then longer numbers; within each, nearest first when `lat`/`lon` are given, then by number (8, 80, 82, 800).
+             */
+            data: components["schemas"]["LineItem"][];
+            page: components["schemas"]["Page"];
+            meta: components["schemas"]["Metadata"];
         };
         /** Location */
         Location: {
@@ -707,6 +845,27 @@ export interface components {
         Page: {
             /** Nextcursor */
             nextCursor: string | null;
+        };
+        /**
+         * PinnedTrip
+         * @description Ride one chosen trip ("Ride it", board 5): walk to its board stop, then ride it.
+         */
+        PinnedTrip: {
+            /**
+             * Tripref
+             * @description A dated trip reference (`tripRef` of a departure or trip).
+             */
+            tripRef: string;
+            /**
+             * Boardstopid
+             * @description Where to board: a stop the trip calls at (or its station).
+             */
+            boardStopId: string;
+            /**
+             * Alightstopid
+             * @description Where to get off: a stop the trip calls at after boarding (or its station).
+             */
+            alightStopId: string;
         };
         /** PlaceLocation */
         PlaceLocation: {
@@ -984,6 +1143,8 @@ export interface operations {
                 radius?: number;
                 limit?: number;
                 cursor?: string | null;
+                /** @description With `bbox` only: a comma list of `rail`, `light_rail`, `bus`, `other` (the stop item's `mode`). A list of only `rail`/`light_rail` lists stations: platforms fold into their parent station, each returned once, and the bbox may cover the whole country (up to 120,000 km²). Otherwise the 100 km² limit stays. */
+                mode?: string | null;
             };
             header?: never;
             path?: never;
@@ -1127,6 +1288,254 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["StopLinesResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": {
+                        /** Type */
+                        type: string;
+                        /** Title */
+                        title: string;
+                        /** Status */
+                        status: number;
+                        /** Code */
+                        code: string;
+                        /** Detail */
+                        detail: string;
+                        /** Requestid */
+                        requestId: string;
+                        /** Errors */
+                        errors?: {
+                            [key: string]: string;
+                        }[] | null;
+                    };
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": {
+                        /** Type */
+                        type: string;
+                        /** Title */
+                        title: string;
+                        /** Status */
+                        status: number;
+                        /** Code */
+                        code: string;
+                        /** Detail */
+                        detail: string;
+                        /** Requestid */
+                        requestId: string;
+                        /** Errors */
+                        errors?: {
+                            [key: string]: string;
+                        }[] | null;
+                    };
+                };
+            };
+            /** @description Per-client rate limit exceeded (`RATE_LIMITED`) */
+            429: {
+                headers: {
+                    /** @description Whole seconds until this client may retry */
+                    "Retry-After"?: number;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": {
+                        /** Type */
+                        type: string;
+                        /** Title */
+                        title: string;
+                        /** Status */
+                        status: number;
+                        /** Code */
+                        code: string;
+                        /** Detail */
+                        detail: string;
+                        /** Requestid */
+                        requestId: string;
+                        /**
+                         * Errors
+                         * @default null
+                         */
+                        errors?: {
+                            [key: string]: string;
+                        }[] | null;
+                    };
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": {
+                        /** Type */
+                        type: string;
+                        /** Title */
+                        title: string;
+                        /** Status */
+                        status: number;
+                        /** Code */
+                        code: string;
+                        /** Detail */
+                        detail: string;
+                        /** Requestid */
+                        requestId: string;
+                        /** Errors */
+                        errors?: {
+                            [key: string]: string;
+                        }[] | null;
+                    };
+                };
+            };
+        };
+    };
+    lines_v1_lines_get: {
+        parameters: {
+            query: {
+                /** @description The start of a line number (`routeShortName`), trimmed and case-insensitive; one character is enough. */
+                q: string;
+                /** @description With `lon`: rank lines near here first and add `nearestStop`. */
+                lat?: number | null;
+                /** @description With `lat`. */
+                lon?: number | null;
+                limit?: number;
+                cursor?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LinesResponse"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": {
+                        /** Type */
+                        type: string;
+                        /** Title */
+                        title: string;
+                        /** Status */
+                        status: number;
+                        /** Code */
+                        code: string;
+                        /** Detail */
+                        detail: string;
+                        /** Requestid */
+                        requestId: string;
+                        /** Errors */
+                        errors?: {
+                            [key: string]: string;
+                        }[] | null;
+                    };
+                };
+            };
+            /** @description Per-client rate limit exceeded (`RATE_LIMITED`) */
+            429: {
+                headers: {
+                    /** @description Whole seconds until this client may retry */
+                    "Retry-After"?: number;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": {
+                        /** Type */
+                        type: string;
+                        /** Title */
+                        title: string;
+                        /** Status */
+                        status: number;
+                        /** Code */
+                        code: string;
+                        /** Detail */
+                        detail: string;
+                        /** Requestid */
+                        requestId: string;
+                        /**
+                         * Errors
+                         * @default null
+                         */
+                        errors?: {
+                            [key: string]: string;
+                        }[] | null;
+                    };
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": {
+                        /** Type */
+                        type: string;
+                        /** Title */
+                        title: string;
+                        /** Status */
+                        status: number;
+                        /** Code */
+                        code: string;
+                        /** Detail */
+                        detail: string;
+                        /** Requestid */
+                        requestId: string;
+                        /** Errors */
+                        errors?: {
+                            [key: string]: string;
+                        }[] | null;
+                    };
+                };
+            };
+        };
+    };
+    line_v1_lines__line_key__get: {
+        parameters: {
+            query?: {
+                /** @description With `lon`: rank lines near here first and add `nearestStop`. */
+                lat?: number | null;
+                /** @description With `lat`. */
+                lon?: number | null;
+            };
+            header?: never;
+            path: {
+                line_key: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LineResponse"];
                 };
             };
             /** @description Not Found */
@@ -2068,6 +2477,32 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["JourneyResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": {
+                        /** Type */
+                        type: string;
+                        /** Title */
+                        title: string;
+                        /** Status */
+                        status: number;
+                        /** Code */
+                        code: string;
+                        /** Detail */
+                        detail: string;
+                        /** Requestid */
+                        requestId: string;
+                        /** Errors */
+                        errors?: {
+                            [key: string]: string;
+                        }[] | null;
+                    };
                 };
             };
             /** @description Content Too Large */

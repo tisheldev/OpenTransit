@@ -1,0 +1,309 @@
+/* Pieces shared by the stops-and-lines screens (canvas boards Stop 3, Line 4, Ride 5 and
+   Journey 6, 14 November 2026), sizes copied from the boards. Colours are design tokens
+   where a token equals the board's value; logical properties only. */
+
+/* Stroke icons: components/canvas.css (.cv-st). */
+
+/* A 44 px bordered icon button (.ic: the star). */
+.sl-icbtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 44px;
+  block-size: 44px;
+  flex: none;
+  padding: 0;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-strong);
+  background: none;
+  color: var(--ink);
+  cursor: pointer;
+}
+.sl-icbtn:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+/* Buttons (.btn): the main one in action colours, the second one outlined. */
+.sl-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  block-size: 48px;
+  padding-inline: 16px;
+  border-radius: var(--radius-lg);
+  border: 0;
+  background: var(--action);
+  color: var(--on-action);
+  font: inherit;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+}
+.sl-btn:active {
+  background: var(--action-pressed);
+}
+.sl-btn--secondary {
+  background: none;
+  border: 1px solid var(--border-strong);
+  color: var(--ink);
+}
+.sl-btn--secondary:active {
+  background: var(--surface-pressed);
+}
+.sl-btn:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+/* A time to choose (.chip): 44 px, outlined, signage numerals; chosen is ink-filled. */
+.sl-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  block-size: 44px;
+  padding-inline: 12px;
+  flex: none;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-strong);
+  background: none;
+  color: var(--ink);
+  font-family: var(--font-numerals);
+  font-weight: 600;
+  font-size: 17px;
+  cursor: pointer;
+}
+.sl-chip[aria-pressed="true"] {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--surface);
+}
+.sl-chip:disabled {
+  cursor: default;
+}
+
+/* A text link with a chevron ("כל התחנות ‹"). */
+.sl-link {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  min-block-size: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.sl-link:disabled {
+  cursor: default;
+  color: var(--ink-muted);
+}
+
+/* The train badge on a stop where rail can be caught (.bdg.rail). */
+.sl-rail {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  block-size: 24px;
+  padding-inline: 6px;
+  flex: none;
+  border-radius: 6px;
+  background: var(--sl-rail, #5b50c8);
+  color: #ffffff;
+  font-family: var(--font-numerals);
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 18px;
+}
+.sl-rail svg {
+  inline-size: 13px;
+  block-size: 13px;
+  fill: currentColor;
+}
+.sl-rail bdi {
+  font-family: var(--font-sans);
+  font-size: 13px;
+}
+
+/* The line's badge in a screen header (34 px, 22 px figures, 18 px icon). */
+.sl-badge-xl.cv-bdg {
+  block-size: 34px;
+  padding-inline: 9px;
+  font-size: 22px;
+  border-radius: 8px;
+}
+.sl-badge-xl.cv-bdg svg {
+  inline-size: 18px;
+  block-size: 18px;
+}
+
+/* A screen header: badge or nothing, the title over a muted line, then an action. */
+.sl-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-block-size: 48px;
+}
+.sl-head__text {
+  flex: 1;
+  min-inline-size: 0;
+  display: flex;
+  flex-direction: column;
+}
+.sheet-content .sl-head h1,
+.sl-head h1 {
+  margin: 0;
+  font-size: 17px;
+  line-height: 24px;
+  font-weight: 700;
+}
+
+/* --- the line's rail (.sr, .rl, .ln, .dt) ------------------------------------------ */
+
+.sl-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.sl-sr {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+  inline-size: 100%;
+  min-block-size: 44px;
+  padding-block: 0;
+  padding-inline: 60px 8px;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+div.sl-sr {
+  cursor: default;
+}
+.sl-sr--fold {
+  min-block-size: 40px;
+}
+.sl-sr--on {
+  background: var(--surface-sunken);
+  border-radius: var(--radius-lg);
+}
+.sl-rl {
+  position: relative;
+  inline-size: 18px;
+  flex: none;
+}
+/* The rail and the dots are drawn on a physical axis (symmetric, so it mirrors as is). */
+.sl-ln {
+  position: absolute;
+  left: 7px;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--sl-line, var(--mode-bus));
+}
+.sl-ln--start {
+  top: 50%;
+}
+.sl-ln--end {
+  bottom: 50%;
+}
+.sl-ln--faint {
+  opacity: 0.45;
+}
+.sl-ln--after {
+  opacity: 0.4;
+}
+.sl-dt {
+  position: absolute;
+  left: 2px;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  margin-top: -7px;
+  box-sizing: border-box;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 3px solid var(--ink);
+}
+/* The highlighted stop: 18 px, pale, dark edge. */
+.sl-dt--big {
+  left: 0;
+  width: 18px;
+  height: 18px;
+  margin-top: -9px;
+  background: var(--ink);
+  border-color: var(--surface);
+}
+/* The terminus (and the stop to get off at): a square. */
+.sl-dt--end {
+  border-radius: 3px;
+  background: var(--ink);
+  border-color: var(--surface);
+}
+.sl-dt--big.sl-dt--end {
+  border-radius: 4px;
+}
+.sl-dt--after {
+  border-color: var(--border-strong);
+}
+.sl-tx {
+  flex: 1;
+  min-inline-size: 0;
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+}
+.sl-tx--row {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+.sl-nm {
+  font-size: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sl-nm--strong {
+  font-weight: 700;
+}
+.sl-nm--after {
+  color: var(--ink-muted);
+}
+/* The time, at the inline start (the board's right side in Hebrew). */
+.sl-tm {
+  position: absolute;
+  inset-inline-start: 10px;
+  top: 50%;
+  margin-top: -11px;
+  color: var(--ink-muted);
+  font-family: var(--font-numerals);
+  font-weight: 600;
+  font-size: 17px;
+  line-height: 22px;
+}
+.sl-tm--strong {
+  color: var(--ink);
+}
+/* A folded run of stops: one line, like the board's. */
+.sl-sr--fold .b-mu {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sl-fold-icon {
+  align-self: center;
+  color: var(--ink-muted);
+}
+.sl-note {
+  margin: 10px 0 0;
+}

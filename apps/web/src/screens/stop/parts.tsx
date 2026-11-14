@@ -1,9 +1,8 @@
 import { useEffect, useState, type ReactNode } from "react";
-import { LineBadge } from "../../components/ds";
+import { CanvasBadge } from "../../components/canvas";
 import { useI18n } from "../../i18n/I18nProvider";
 import { formatDistance } from "../../lib/format";
 import { formatClock } from "../../lib/time";
-import { lineMode } from "../../map/layers";
 import { minutesTo } from "./lines";
 
 // Small pieces Home and the stop screen share (boards 1 and 7): a line's badge, "2 דק׳"
@@ -68,13 +67,7 @@ export interface BadgeLine {
   operatorName?: string | null;
 }
 
-/** A line's badge in its operator's colour, with its vehicle. */
+/** A line's badge as on the canvas (CanvasBadge): its operator's colour and vehicle. */
 export function Badge({ line }: { line: BadgeLine }) {
-  return (
-    <LineBadge
-      mode={lineMode(line.mode) === "rail" ? "rail" : "bus"}
-      label={line.label}
-      line={{ mode: line.mode, operatorId: line.operatorId, operatorName: line.operatorName }}
-    />
-  );
+  return <CanvasBadge line={line} />;
 }

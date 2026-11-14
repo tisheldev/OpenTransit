@@ -118,7 +118,7 @@ const renderRoute = (lang: Lang = "he", draft: PlanDraft = baseDraft, client?: Q
 
 const options = () => within(screen.getByRole("list", { name: /אפשרויות נסיעה|Trip options/ })).getAllByRole("button");
 const details = () => screen.getByRole("region", { name: /פרטי מסלול|Route details/ });
-const legButtons = () => within(details()).getAllByRole("button");
+const legButtons = () => [...details().querySelectorAll<HTMLElement>("button.compare-tl-leg")];
 /** Elements whose whole text (digits are in their own <bdi>) matches. */
 const withText = (root: HTMLElement, selector: string, text: string | RegExp) =>
   [...root.querySelectorAll<HTMLElement>(selector)].filter((el) => (typeof text === "string" ? el.textContent === text : text.test(el.textContent ?? "")));
@@ -520,7 +520,7 @@ describe("Route details (Hebrew)", () => {
     expect(timeline.querySelectorAll(".b-dots")).toHaveLength(3);
     expect(withText(route, ".compare-walk", "הליכה 5 דק׳ · 330 מ׳")).toHaveLength(1);
     expect(withText(route, ".compare-wait", "המתנה 7 דק׳")).toHaveLength(1);
-    // Every leg is a button; no links to the stop and trip screens (not built yet).
+    // Every leg is a button; stop names are buttons that open the stop (board 6), not links.
     expect(legButtons()).toHaveLength(6);
     expect(within(route).queryAllByRole("link")).toHaveLength(0);
     // Trip details arrive in the background: stop counts.

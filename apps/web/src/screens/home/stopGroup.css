@@ -1,0 +1,122 @@
+/* An opened group of stops in Home's sheet (board 9, MapGroupOpen). Logical properties;
+   sizes as drawn. */
+
+.stop-group {
+  display: flex;
+  flex-direction: column;
+  min-block-size: 100%;
+}
+
+.stop-group__head {
+  display: flex;
+  flex-direction: column;
+  min-block-size: 48px;
+}
+.stop-group__title {
+  margin: 0;
+  font-size: 17px;
+  line-height: 24px;
+  font-weight: 700;
+}
+
+.stop-group__rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.stop-group__row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  inline-size: 100%;
+  min-block-size: 72px;
+  margin: 0;
+  padding: 6px 4px;
+  border: 0;
+  border-block-end: 1px solid var(--hairline);
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+.stop-group__row--picked {
+  background: var(--surface-sunken);
+  border-radius: var(--radius-lg);
+  border-block-end-color: transparent;
+}
+.stop-group__row:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: -3px;
+}
+
+/* The stop sign as a 24 px mark (board 9: .np). */
+.stop-group__sign {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 24px;
+  block-size: 24px;
+  border-radius: 6px;
+  background: var(--stop-sign);
+  border: 1.5px solid var(--stop-sign-edge);
+  flex: none;
+}
+.stop-group__sign svg {
+  inline-size: 14px;
+  block-size: 14px;
+  fill: var(--stop-sign-edge);
+}
+
+.stop-group__text {
+  flex: 1;
+  min-inline-size: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.stop-group__name {
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 22px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.stop-group__lines {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+/* Board 9's badges are a size down from the list's: 22 px, 14 px figures. */
+.stop-group__lines .cv-bdg {
+  block-size: 22px;
+  font-size: 14px;
+  line-height: 18px;
+}
+
+.stop-group .b-due {
+  flex: none;
+}
+.stop-group .b-big {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.stop-group__note {
+  margin-block: 10px 0;
+}
+
+/* Board 10: "In this area" with the distance from the passenger, where "Near you" was. */
+.home-area > h2 {
+  font-size: 17px;
+  line-height: 24px;
+}
+/* Board 9 draws these badges with the number only. */
+.stop-group__lines .cv-bdg svg {
+  display: none;
+}

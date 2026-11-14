@@ -1,0 +1,60 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/lines/5%3A10008",
+    "params": null,
+    "body": null
+  },
+  "status": 200,
+  "body": {
+    "data": {
+      "lineKey": "5:10008",
+      "shortName": "8",
+      "operatorId": "5",
+      "operatorName": "דן",
+      "mode": "bus",
+      "routeIds": [
+        "mot:route:syn1a",
+        "mot:route:syn1b"
+      ],
+      "directions": [
+        {
+          "routeId": "mot:route:syn1a",
+          "headsign": "מסוף הטייסים",
+          "originName": "מסוף רידינג",
+          "destinationName": "מסוף הטייסים"
+        },
+        {
+          "routeId": "mot:route:syn1b",
+          "headsign": "מסוף רידינג",
+          "originName": "מסוף הטייסים",
+          "destinationName": "מסוף רידינג"
+        }
+      ],
+      "area": "תל אביב-יפו"
+    },
+    "meta": {
+      "requestId": "00000000000000000000000000000000",
+      "generationId": "synthetic-test",
+      "generatedAt": "2026-11-14T09:00:00Z",
+      "dataBuiltAt": "2026-11-14T09:00:00Z",
+      "mode": "fixture",
+      "coverage": {
+        "from": "2026-11-13T00:00:00+02:00",
+        "until": "2027-01-12T00:00:00+02:00"
+      },
+      "freshness": "current",
+      "capabilities": {
+        "realtime": "not_enabled",
+        "alerts": "not_enabled"
+      },
+      "attribution": [
+        "Israel Ministry of Transport",
+        "© OpenStreetMap contributors"
+      ],
+      "rankingPolicy": "synthetic-lines-prefix-v1",
+      "appliedConstraints": {},
+      "warnings": []
+    }
+  }
+}

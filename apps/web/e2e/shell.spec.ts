@@ -229,7 +229,7 @@ test("history: Home → Search → Compare → Search → Compare, then Back is 
   await page.getByRole("button", { name: /^מוצא:/ }).click();
   await expect(page).toHaveURL(/#\/search\/from$/);
   await page.getByRole("searchbox").fill("דיזנגוף");
-  await page.getByTestId("search-results").getByRole("button").nth(1).click();
+  await page.getByTestId("search-results").locator(".sx-main, .sx-row").nth(1).click();
   await expect(page).toHaveURL(/#\/compare$/);
   await page.getByRole("button", { name: "חזרה" }).click();
   await expect(page).toHaveURL(/#\/$/);

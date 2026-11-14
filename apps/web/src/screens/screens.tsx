@@ -33,13 +33,18 @@ const compare = preloadable(() => import("./compare/CompareScreen").then((m) => 
 // Route details share Compare's chunk (same module graph: one more export, no extra request).
 const routeDetails = preloadable(() => import("./compare/CompareScreen").then((m) => m.RouteScreen));
 const navigate = preloadable(() => import("./navigate/NavigateScreen").then((m) => m.NavigateScreen));
+// The Line screen and Ride it (stops and lines, 14 November 2026) share one chunk.
+const line = preloadable(() => import("./line/LineScreen").then((m) => m.LineScreen));
+const ride = preloadable(() => import("./line/RideScreen").then((m) => m.RideScreen));
+const LineScreen = line.Component;
+const RideScreen = ride.Component;
 const CompareScreen = compare.Component;
 const RouteScreen = routeDetails.Component;
 const NavigateScreen = navigate.Component;
 
 /** Warm the Compare and Navigate chunks (after first paint; in tests before rendering). */
 export function prefetchScreens(): Promise<unknown> {
-  return Promise.all([compare.preload(), routeDetails.preload(), navigate.preload()]);
+  return Promise.all([compare.preload(), routeDetails.preload(), navigate.preload(), line.preload(), ride.preload()]);
 }
 
 // The sheet's content for each route (design: Surface). Each screen owns its folder,
@@ -77,6 +82,18 @@ export function Screen({ route }: { route: Route }) {
       return <StopScreen stopId={route.stopId} />;
     case "trip":
       return <TripScreen tripRef={route.tripRef} />;
+    case "line":
+      return (
+        <Suspense fallback={<Loading />}>
+          <LineScreen key={route.lineKey} lineKey={route.lineKey} />
+        </Suspense>
+      );
+    case "ride":
+      return (
+        <Suspense fallback={<Loading />}>
+          <RideScreen />
+        </Suspense>
+      );
     case "nearby":
       return <NearbyScreen />;
     case "lines":

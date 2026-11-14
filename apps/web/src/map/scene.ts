@@ -26,7 +26,12 @@ export interface MapRouteLeg {
    * outline; "faded" thinner at .6 in its own colour (an option not chosen, a line not
    * picked); "travelled" in grey (the part of a ride already behind the passenger).
    */
-  tone?: "normal" | "faded" | "travelled";
+  tone?: "normal" | "faded" | "travelled" | "quiet";
+  /**
+   * "quiet" (stops-and-lines boards Stop and Ride, 14 November 2026): the lines not chosen
+   * at a stop, 5 px in their own colour at `quietOpacity` (Stop .45, Ride .4) with no edge.
+   */
+  quietOpacity?: number;
 }
 
 /** A line badge on a map tag (the operator picks its colour, the mode its vehicle icon). */
@@ -56,6 +61,11 @@ export interface MapTag {
   onSelect?: () => void;
   /** Where the tag sits relative to its point: above it (default) or centred on it. */
   anchor?: "above" | "center" | "below";
+  /**
+   * Drawn as a bare glyph centred on the point instead of a tag (stops-and-lines boards:
+   * the chosen line's direction chevron, turned to its bearing in degrees from north).
+   */
+  glyph?: { kind: "chevron"; bearing: number };
 }
 
 /** A stop drawn as a large round pin with a stop sign (boards: Home, Stop, Bus didn't come). */
@@ -66,6 +76,58 @@ export interface MapStopPin {
   selected?: boolean;
   ariaLabel: string;
   onSelect?: () => void;
+  /**
+   * "sign": the stops-and-lines marker G (a sign on a pole, its kerb dot on the point;
+   * src/map/stops/markers.tsx, the stops layer's own) instead of the round pin. `rail`
+   * draws a station's sign. The pole points away from the road as the stops layer knows
+   * it (the map's streets, the stop's direction from stops by area), else from
+   * `bearingDegrees` (the stop item's, API-C6); with neither, the sign is centred.
+   */
+  look?: "sign";
+  rail?: boolean;
+  bearingDegrees?: number | null;
+}
+
+/** A stop the screen already knows (Home's nearby answer), drawn before the area request answers. */
+export interface MapKnownStop {
+  stopId: string;
+  name: string | null;
+  latitude: number;
+  longitude: number;
+  /** API-C6; undefined from an API without it. */
+  mode?: string | null;
+  bearingDegrees?: number | null;
+}
+
+/** A stop's next line, for the flag tag on its sign (Home: from its one nearby-departures answer). */
+export interface MapStopNext {
+  line: MapTagLine;
+  /** Whole minutes until it leaves (0: now). */
+  minutes: number;
+  /** What the tag says after the badge: "4 דק׳", "עכשיו". */
+  text: string;
+}
+
+/**
+ * The stops layer (stops and lines design, 12 November 2026: marker G at three zoom levels,
+ * groups, next-line tags). Absent: no stops layer and no request for it (Navigate, Search,
+ * Settings). "full": every level, tags, tappable (Home). "quiet": only when zoomed in close,
+ * drawn quieter, never tappable, no tags, so it never competes with a route (Choose and
+ * Route details).
+ */
+export interface MapStopsLayer {
+  mode: "full" | "quiet";
+  /** The stop the panel is about: drawn bright and larger, its tag pale. */
+  chosenStopId?: string | null;
+  /** Next lines by stop id, for the tags (a couple at most show, the chosen stop's first). */
+  next?: Readonly<Record<string, MapStopNext>>;
+  known?: readonly MapKnownStop[];
+  /** A sign or tag tapped (a full layer without it draws stops that cannot be tapped). */
+  onSelectStop?: (stopId: string) => void;
+  /** A group tapped: the map has zoomed in on it; the screen may list its stops (board 9). */
+  onOpenGroup?: (stops: MapKnownStop[]) => void;
+  /** The stops of the group opened (board 9): ringed on the map. */
+  openGroup?: readonly string[] | null;
 }
 
 /** A dashed circle around a place: Home's 5-minute walk around the passenger. */
@@ -129,7 +191,12 @@ export interface MapScene {
   cameraKey?: string;
   /** Controls float over the top of the map (close, "כל המסלול"): fitting keeps clear of them. */
   topControls?: boolean;
+  /** The stops layer; absent, none is drawn or requested. */
+  stops?: MapStopsLayer | null;
 }
+
+/** Choose and Route details: the stops layer only zoomed in close, quieter (design, "During a journey"). */
+export const QUIET_STOPS: MapStopsLayer = { mode: "quiet" };
 
 export const emptyScene: MapScene = { route: [], pins: [], user: null, camera: "keep", pick: false };
 
