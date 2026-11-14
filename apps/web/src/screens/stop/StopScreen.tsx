@@ -8,7 +8,7 @@ import { Empty, ErrorState, Loading } from "../../components/states";
 import { useI18n } from "../../i18n/I18nProvider";
 import { formatClock } from "../../lib/time";
 import { emptyScene, usePublishScene, type LonLat, type MapPin, type MapRouteLeg, type MapScene, type MapTag } from "../../map/scene";
-import { fromPosition, haversineMeters } from "../../nav/geo";
+import { haversineMeters } from "../../nav/geo";
 import type { PlaceChoice } from "../../plan/draft";
 import { usePlan } from "../../plan/PlanProvider";
 import { planKeys, TRIP_STALE_MS } from "../../plan/queries";
@@ -32,6 +32,8 @@ import {
   patternLine,
   routeAhead,
   routesOfLines,
+  sameWayGroups,
+  splitOff,
   spotAround,
   tagLine,
   type Departure,
@@ -56,11 +58,14 @@ const MAX_LINES = 12;
 /** Times shown under a chosen line (board 3: three). */
 const NEXT_TIMES = 3;
 /**
- * How far each line fans out of the stop before its tag (boards: to the map's edge), and
- * the shorter fans tried when that end is taken by another line's tag.
+ * How far each line is drawn out of the stop, fading out over its far part, and how much of
+ * it the camera frames: the lines run out toward the map's edges, where each direction's tag
+ * is pinned (user review, 14 November 2026: a line's way out is a direction, not its end).
  */
-const FAN_LENGTHS = [900, 600, 1200, 350];
-const TAG_SPACING_METERS = 180;
+const FAN_METERS = 900;
+const FRAME_METERS = 600;
+/** A direction tapped on the map: its lines drawn stronger. */
+const LIT_OPACITY = 0.9;
 /** Next stops ringed along the chosen line (each a stop lookup until trips carry coordinates). */
 const RINGED_CALLS = 8;
 /** The sheet's share of the screen on board 3 (548 of 844 px). */
@@ -103,6 +108,8 @@ export function StopScreen({ stopId }: { stopId: string }) {
   const stop = useStopDetail(stopId);
   const departures = useStopDepartures(stopId, STOP_WINDOW);
   const [chosenKey, setChosenKey] = useState<string | null>(() => initialLine(stopId));
+  /** The lines of a direction tapped on the map (its tag lists several): the panel lists only them. */
+  const [way, setWay] = useState<readonly string[] | null>(null);
   const saved = useIsStopSaved(stopId);
   useBoardSheet(SHEET_SHARE);
 
@@ -176,49 +183,81 @@ export function StopScreen({ stopId }: { stopId: string }) {
     });
     // Lines without a shape: their tags spread around the stop instead of at a fan's end.
     const shapeless = aheads.filter((ahead) => ahead === null).length;
-    let spot = 0;
-    const placed: LonLat[] = [];
-    const roomAt = (at: LonLat) => placed.every((other) => haversineMeters(fromPosition(other), fromPosition(at)) >= TAG_SPACING_METERS);
-    lines.forEach((line, index) => {
-      if (line === chosen) {
-        if (!aheads[index]) spot += 1;
-        return;
-      }
-      const ahead = aheads[index];
-      // Lines often share a street out of the stop: a fan whose end would land on another
-      // tag is cut shorter, so each tag stays at its own fan's end and readable.
-      let fan: LonLat[] | null = null;
-      if (ahead) {
-        for (const meters of FAN_LENGTHS) {
-          fan = firstStretch(ahead, meters);
-          if (roomAt(fan[fan.length - 1]!)) break;
-        }
-      }
-      if (fan) {
-        route.push(leg(line, fan, "quiet"));
-        fitTo.push(...fan);
-      }
-      if (chosen) {
-        // While a line's whole route is shown the map is framed on it, many kilometres
-        // across: the other lines' tags would pile up on the stop and hide it and the
-        // direction chevron. Their fans stay, faded; their rows stay in the panel.
-        if (!fan) spot += 1;
-        return;
-      }
-      const position = fan ? fan[fan.length - 1]! : spotAround(point, spot++, shapeless);
-      placed.push(position);
-      if (!fan) fitTo.push(position);
-      tags.push({
-        id: `line-${line.key}`,
-        position,
-        anchor: anchorAt(position),
-        kind: "faded",
-        line: tagLine(line),
-        text: line.headsign ?? undefined,
-        // Named by what it shows ("5 רכבת מרכז"), like the line's row in the panel.
-        onSelect: () => setChosenKey(line.key),
-      });
+    // One way out per direction (lines sharing a street would stack into a solid line),
+    // in its soonest line's colour, fading toward the map's edge and drawn out from the stop.
+    // A direction that shares the street out with one already drawn starts where it turns off.
+    const groups = sameWayGroups(aheads);
+    const fanKeys: string[] = [];
+    const drawn: LonLat[][] = [];
+    groups.forEach((members) => {
+      const first = members.find((index) => lines[index] !== chosen && aheads[index]);
+      if (first === undefined) return;
+      const ahead = aheads[first]!;
+      const fan = firstStretch(ahead, FAN_METERS);
+      const own = splitOff(fan, drawn);
+      fitTo.push(...firstStretch(ahead, FRAME_METERS));
+      drawn.push(fan);
+      if (!own || own.length < 2) return;
+      const keys = members.map((index) => lines[index]!.key);
+      const lit = !chosen && way !== null && keys.every((key) => way.includes(key));
+      route.push({ ...leg(lines[first]!, own, "quiet"), fadeOut: true, grow: !chosen, quietOpacity: lit ? LIT_OPACITY : undefined });
+      fanKeys.push(keys.join("+"));
     });
+    // While a line's whole route is shown the map is framed on it, many kilometres across:
+    // the other lines' tags would pile up on the stop. Their ways out stay, faded; their
+    // rows stay in the panel. Otherwise one tag per direction, where its lines leave the map.
+    if (!chosen) {
+      let spot = 0;
+      groups.forEach((members) => {
+        const group = members.map((index) => lines[index]!);
+        const ahead = aheads[members[0]!];
+        if (!ahead) {
+          const line = group[0]!;
+          const position = spotAround(point, spot++, shapeless);
+          fitTo.push(position);
+          tags.push({
+            id: `line-${line.key}`,
+            position,
+            anchor: anchorAt(position),
+            kind: "faded",
+            line: tagLine(line),
+            text: line.headsign ?? undefined,
+            onSelect: () => {
+              setWay(null);
+              setChosenKey(line.key);
+            },
+          });
+          return;
+        }
+        const fan = firstStretch(ahead, FAN_METERS);
+        const end = fan[fan.length - 1]!;
+        const keys = group.map((line) => line.key);
+        const lit = way !== null && keys.every((key) => way.includes(key));
+        const pinned = { id: `way-${keys[0]}`, position: end, anchor: anchorAt(end), along: fan, late: true, kind: lit ? ("strong" as const) : ("faded" as const) };
+        if (group.length === 1) {
+          const line = group[0]!;
+          tags.push({
+            ...pinned,
+            line: tagLine(line),
+            text: line.headsign ? t("stop.towards", { place: line.headsign }) : undefined,
+            onSelect: () => {
+              setWay(null);
+              setChosenKey(line.key);
+            },
+          });
+          return;
+        }
+        tags.push({
+          ...pinned,
+          // Badges only (user, 14 November: no "לכיוון" without a place; the lines going this
+          // way have different ends): the tag's place at the map's edge and the fading line
+          // give the direction. Named by what it shows ("172 8 5 2 39"; lines past the fourth
+          // badge are "+N" on screen and named by number to a screen reader).
+          lines: group.map(tagLine),
+          onSelect: () => setWay(lit ? null : keys),
+        });
+      });
+    }
     if (chosen) {
       const ahead = aheads[chosenIndex] ?? null;
       // Its whole route is what the passenger asked to see: the pattern from end to end
@@ -278,8 +317,9 @@ export function StopScreen({ stopId }: { stopId: string }) {
       user: fix ? { position: [fix.longitude, fix.latitude], accuracyMeters: fix.accuracyMeters } : null,
       camera: "fit",
       fitTo,
+      growKey: !chosen && fanKeys.length > 0 ? `${stopId}|${fanKeys.join(",")}` : undefined,
     };
-  }, [point, detail?.bearingDegrees, lines, patterns, tripRefs, trips, chosen, chosenIndex, chosenPattern, nextCalls, lookedUp, fix, name, stopId, t]);
+  }, [point, detail?.bearingDegrees, lines, patterns, tripRefs, trips, chosen, chosenIndex, chosenPattern, nextCalls, lookedUp, fix, name, stopId, t, way]);
   usePublishScene(scene);
 
   if (stop.isError) {
@@ -352,8 +392,17 @@ export function StopScreen({ stopId }: { stopId: string }) {
       ) : lines.length === 0 ? (
         <Empty kind="noDepartures" />
       ) : (
+        <>
+        {way && (
+          <div className="stop-way">
+            <span className="b-mu">{t("stop.wayCount", { count: lines.filter((line) => way.includes(line.key)).length })}</span>
+            <button type="button" className="sl-link" onClick={() => setWay(null)}>
+              {t("stop.allLines")}
+            </button>
+          </div>
+        )}
         <ul className="stop-lines" aria-label={t("stop.lines")}>
-          {lines.map((line) => {
+          {(way ? lines.filter((line) => way.includes(line.key)) : lines).map((line) => {
             const on = line.key === chosen?.key;
             return (
               <li key={line.key} className={on ? "stop-line stop-line--open" : "stop-line"}>
@@ -374,6 +423,7 @@ export function StopScreen({ stopId }: { stopId: string }) {
             );
           })}
         </ul>
+        </>
       )}
       <p className="b-mu stop-note">{t("stop.scheduled")}</p>
     </div>

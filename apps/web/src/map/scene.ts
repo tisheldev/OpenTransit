@@ -32,6 +32,13 @@ export interface MapRouteLeg {
    * at a stop, 5 px in their own colour at `quietOpacity` (Stop .45, Ride .4) with no edge.
    */
   quietOpacity?: number;
+  /**
+   * Fades out over its far part (Stop, user review 14 November 2026): a line's way out of
+   * the stop goes on beyond what is drawn, so its end must not read as where it stops.
+   */
+  fadeOut?: boolean;
+  /** Drawn out from its start (about 300 ms) when the scene's `growKey` changes; not under reduced motion. */
+  grow?: boolean;
 }
 
 /** A line badge on a map tag (the operator picks its colour, the mode its vehicle icon). */
@@ -59,6 +66,16 @@ export interface MapTag {
   /** Spoken name when the visible text alone is not enough. */
   ariaLabel?: string;
   onSelect?: () => void;
+  /** Several line badges (a direction's lines at a stop), drawn after the text. */
+  lines?: MapTagLine[];
+  /**
+   * Pinned where this path leaves the visible map (above the sheet, below the top band),
+   * else at its end; hidden while its start is out of view (Stop: a direction's tag at the
+   * map's edge, user review 14 November 2026).
+   */
+  along?: LonLat[];
+  /** Appears once the lines have grown out (a short fade after `growKey` changes). */
+  late?: boolean;
   /** Where the tag sits relative to its point: above it (default) or centred on it. */
   anchor?: "above" | "center" | "below";
   /**
@@ -191,6 +208,8 @@ export interface MapScene {
   cameraKey?: string;
   /** Controls float over the top of the map (close, "כל המסלול"): fitting keeps clear of them. */
   topControls?: boolean;
+  /** Legs marked `grow` are drawn out from their start once per key (Stop: per stop and its lines). */
+  growKey?: string;
   /** The stops layer; absent, none is drawn or requested. */
   stops?: MapStopsLayer | null;
 }

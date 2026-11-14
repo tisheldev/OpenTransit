@@ -25,6 +25,7 @@ import {
   overlayLayers,
   pinFeatures,
   ringFeatures,
+  grownLeg,
   routeFeatures,
   sceneBounds,
   themeBasemap,
@@ -109,6 +110,14 @@ function drawScene(map: MapLibreMap, scene: MapScene, located: MapUser | null): 
   set("ot-user", userFeatures(user));
   set("ot-accuracy", accuracyFeatures(user));
 }
+
+/**
+ * How long lines take to draw out from the stop (Stop, user review 14 November 2026), after
+ * the camera's own move (CAMERA_MS) so the growth is not lost in it. Pinned tags fade in
+ * once both are done (map.css .map-tag--late).
+ */
+const GROW_MS = 300;
+const CAMERA_MS = 400;
 
 /** The top band's height (shell.css --overlay-top-h), 0 outside the shell. */
 function overlayTopHeight(map: MapLibreMap): number {
@@ -244,6 +253,43 @@ export default function MapView() {
     if (map && loaded) drawScene(map, scene, located);
   }, [scene, located, loaded]);
 
+  // Legs marked `grow` draw out from their start once per growKey (ease-out); the scene
+  // republished with the same key (times ticking) is drawn whole straight away.
+  const grownKey = useRef<string | undefined>(undefined);
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !loaded) return;
+    const key = scene.growKey;
+    if (!key || key === grownKey.current || !scene.route.some((leg) => leg.grow)) {
+      grownKey.current = key;
+      return;
+    }
+    grownKey.current = key;
+    if (prefersReducedMotion()) return;
+    const source = () => map.getSource("ot-route") as GeoJSONSource | undefined;
+    const draw = (share: number) => source()?.setData(routeFeatures(scene.route.map((leg) => grownLeg(leg, share))) as never);
+    let frame = 0;
+    let start = 0;
+    const step = (now: number) => {
+      const t = Math.min(1, (now - start) / GROW_MS);
+      draw(1 - Math.pow(1 - t, 3));
+      if (t < 1) frame = requestAnimationFrame(step);
+    };
+    draw(0);
+    const wait = window.setTimeout(
+      () => {
+        start = performance.now();
+        frame = requestAnimationFrame(step);
+      },
+      scene.camera === "fit" ? CAMERA_MS : 0,
+    );
+    return () => {
+      window.clearTimeout(wait);
+      cancelAnimationFrame(frame);
+      source()?.setData(routeFeatures(scene.route) as never);
+    };
+  }, [scene, loaded]);
+
   // The sheet covers the bottom, so fitting, following and the pick centre all use the
   // visible area above it. This is done per camera move (fit padding, centre offset)
   // rather than with map.setPadding: in MapLibre 6.14 a persistent bottom padding left
@@ -355,7 +401,13 @@ export default function MapView() {
           overlayMap.getCanvasContainer(),
         )}
       {loaded && overlayMap && (
-        <MapOverlay map={overlayMap} tags={scene.tags ?? []} stopPins={scene.stopPins ?? []} dir={lang === "he" ? "rtl" : "ltr"} />
+        <MapOverlay
+          map={overlayMap}
+          tags={scene.tags ?? []}
+          stopPins={scene.stopPins ?? []}
+          dir={lang === "he" ? "rtl" : "ltr"}
+          visible={{ top: overlayTopHeight(overlayMap), bottom: coveredHeight(overlayMap, inset), left: sideInset.left, right: sideInset.right }}
+        />
       )}
       {scene.pick && (
         <div

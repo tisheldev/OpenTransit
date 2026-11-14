@@ -13,6 +13,8 @@ import {
   routeAhead,
   shortHeadsign,
   type Departure,
+  sameWayGroups,
+  splitOff,
 } from "./lines";
 
 const departure = (routeShortName: string, minutes: number, extra: Record<string, unknown> = {}): Departure => ({
@@ -142,5 +144,43 @@ describe("a line's route out of the stop", () => {
     const ahead = callsAhead(trip, 2, 2);
     expect(ahead.map((call) => call.stopId)).toEqual(["s3", "s4"]);
     expect(ahead.map(callPosition)).toEqual([null, [34.8, 32.1]]);
+  });
+});
+
+describe("lines leaving a stop the same way (one map tag per direction)", () => {
+  // About 111 m per 0.001° of latitude; at 32° N about 94 m per 0.001° of longitude.
+  const north: LonLat[] = [[34.8, 32.1], [34.8, 32.11]];
+  const northEast: LonLat[] = [[34.8, 32.1], [34.8, 32.1036], [34.81, 32.1036]];
+  const east: LonLat[] = [[34.8, 32.1], [34.81, 32.1]];
+
+  it("groups lines whose ways out are together 300 m and 600 m out, in order of first appearance", () => {
+    expect(sameWayGroups([north, east, north, null, north])).toEqual([[0, 2, 4], [1], [3]]);
+  });
+
+  it("keeps apart a line that shares the street out and turns off before the map's edge", () => {
+    // Together for 400 m, then east: 600 m out they are hundreds of metres apart.
+    expect(sameWayGroups([north, northEast])).toEqual([[0], [1]]);
+  });
+});
+
+describe("a way out drawn from where it leaves the ways already drawn", () => {
+  const north: LonLat[] = [[34.8, 32.1], [34.8, 32.11]];
+  const turnsEast: LonLat[] = [[34.8, 32.1], [34.8, 32.1036], [34.81, 32.1036]];
+
+  it("starts a step before it turns off a shared street", () => {
+    const own = splitOff(turnsEast, [north])!;
+    // About 400 m north together, then east: it starts on the shared street, 20 m or so before the turn.
+    const back = haversineMeters({ latitude: own[0]![1], longitude: own[0]![0] }, { latitude: 32.1036, longitude: 34.8 });
+    expect(back).toBeGreaterThan(15);
+    expect(back).toBeLessThan(60);
+    expect(own.at(-1)).toEqual([34.81, 32.1036]);
+  });
+
+  it("is whole when it shares nothing, and null when it never leaves", () => {
+    const east: LonLat[] = [[34.8, 32.1], [34.81, 32.1]];
+    expect(splitOff(north, [])).toEqual(north);
+    expect(splitOff(north, [north])).toBeNull();
+    // Leaving the stop at once in another direction: drawn from the stop.
+    expect(splitOff(east, [north])![0]).toEqual([34.8, 32.1]);
   });
 });

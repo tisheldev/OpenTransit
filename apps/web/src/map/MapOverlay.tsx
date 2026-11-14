@@ -1,6 +1,7 @@
 import type { Map as MapLibreMap } from "maplibre-gl";
 import { useEffect, useReducer, type CSSProperties } from "react";
 import { LineBadge } from "../components/ds";
+import { edgePin, spreadPins, type EdgePin, type ScreenRect } from "./edgePin";
 import { GMarker } from "./stops/markers";
 import { poleSideOf } from "./stops/StopsLayer";
 import { lineMode } from "./layers";
@@ -40,16 +41,44 @@ function position(map: MapLibreMap, at: [number, number]): CSSProperties {
   return { transform: `translate(${Math.round(point.x)}px, ${Math.round(point.y)}px)` };
 }
 
+/** A direction's tag shows at most this many badges, then "+N". */
+const MAX_BADGES = 4;
+
+function Badge({ line }: { line: NonNullable<MapTag["line"]> }) {
+  return (
+    <LineBadge
+      mode={lineMode(line.mode) === "rail" ? "rail" : "bus"}
+      label={line.label}
+      line={{ mode: line.mode, operatorId: line.operatorId, operatorName: line.operatorName }}
+    />
+  );
+}
+
 function TagBody({ tag }: { tag: MapTag }) {
+  if (tag.lines && tag.lines.length > 0) {
+    const shown = tag.lines.slice(0, MAX_BADGES);
+    const more = tag.lines.length - shown.length;
+    return (
+      <>
+        {tag.text && <span className="map-tag__text">{tag.text}</span>}
+        {shown.map((line, index) => (
+          <Badge key={`${line.label}-${index}`} line={line} />
+        ))}
+        {more > 0 && (
+          <>
+            {/* "+N" on screen; the lines it stands for, by number, to a screen reader. */}
+            <span className="map-tag__more num" aria-hidden="true">
+              +{more}
+            </span>
+            <span className="visually-hidden">{tag.lines.slice(MAX_BADGES).map((line) => line.label).join(" ")}</span>
+          </>
+        )}
+      </>
+    );
+  }
   return (
     <>
-      {tag.line && (
-        <LineBadge
-          mode={lineMode(tag.line.mode) === "rail" ? "rail" : "bus"}
-          label={tag.line.label}
-          line={{ mode: tag.line.mode, operatorId: tag.line.operatorId, operatorName: tag.line.operatorName }}
-        />
-      )}
+      {tag.line && <Badge line={tag.line} />}
       {tag.text && <span className="map-tag__text">{tag.text}</span>}
     </>
   );
@@ -66,8 +95,10 @@ function edgeOf(map: MapLibreMap, at: [number, number]): "left" | "right" | null
   return null;
 }
 
-function Tag({ tag, dir, edge }: { tag: MapTag; dir: "rtl" | "ltr"; edge: "left" | "right" | null }) {
-  const className = `map-tag map-tag--${tag.kind} map-tag--${tag.anchor ?? "above"}${edge ? ` map-tag--edge-${edge}` : ""}`;
+function Tag({ tag, dir, edge, anchor }: { tag: MapTag; dir: "rtl" | "ltr"; edge: "left" | "right" | null; anchor?: MapTag["anchor"] }) {
+  const className = `map-tag map-tag--${tag.kind} map-tag--${anchor ?? tag.anchor ?? "above"}${edge ? ` map-tag--edge-${edge}` : ""}${
+    tag.late ? " map-tag--late" : ""
+  }${tag.along ? " map-tag--pinned" : ""}`;
   const style = tag.accent ? ({ "--tag-accent": tag.accent } as CSSProperties) : undefined;
   if (tag.onSelect) {
     return (
@@ -134,19 +165,50 @@ function StopPin({ pin, map }: { pin: MapStopPin; map: MapLibreMap }) {
   );
 }
 
+/** Pinned tags keep this far inside the visible map. */
+const PIN_MARGIN_PX = 8;
+
+/** How a tag hangs from the point where its path leaves the map: always inward. */
+function pinnedPlacement(map: MapLibreMap, pin: EdgePin, fallback: MapTag["anchor"]): { anchor: MapTag["anchor"]; edge: "left" | "right" | null } {
+  const at: [number, number] = map.unproject([pin.x, pin.y]).toArray() as [number, number];
+  switch (pin.side) {
+    case "top":
+      return { anchor: "below", edge: edgeOf(map, at) };
+    case "bottom":
+      return { anchor: "above", edge: edgeOf(map, at) };
+    case "left":
+      return { anchor: "center", edge: "left" };
+    case "right":
+      return { anchor: "center", edge: "right" };
+    default:
+      return { anchor: fallback, edge: edgeOf(map, at) };
+  }
+}
+
 export function MapOverlay({
   map,
   tags,
   stopPins,
   dir,
+  visible,
 }: {
   map: MapLibreMap;
   tags: readonly MapTag[];
   stopPins: readonly MapStopPin[];
   dir: "rtl" | "ltr";
+  /** Insets of the map covered by the top band, the sheet and a side panel, in pixels. */
+  visible?: { top: number; bottom: number; left: number; right: number };
 }) {
   useMapFrame(map);
   if (tags.length === 0 && stopPins.length === 0) return null;
+  const container = map.getContainer();
+  const rect: ScreenRect = {
+    left: (visible?.left ?? 0) + PIN_MARGIN_PX,
+    top: (visible?.top ?? 0) + PIN_MARGIN_PX,
+    right: container.clientWidth - (visible?.right ?? 0) - PIN_MARGIN_PX,
+    bottom: container.clientHeight - (visible?.bottom ?? 0) - PIN_MARGIN_PX,
+  };
+  const pins = spreadPins(tags.map((tag) => (tag.along ? edgePin(tag.along.map((at) => map.project(at)), rect) : null)));
   return (
     <div className="map-overlay" data-testid="map-overlay">
       {stopPins.map((pin) => (
@@ -154,11 +216,24 @@ export function MapOverlay({
           <StopPin pin={pin} map={map} />
         </div>
       ))}
-      {tags.map((tag) => (
-        <div key={`tag-${tag.id}`} className="map-overlay__item" style={position(map, tag.position)}>
-          {tag.glyph ? <Chevron tag={tag} bearing={tag.glyph.bearing} /> : <Tag tag={tag} dir={dir} edge={edgeOf(map, tag.position)} />}
-        </div>
-      ))}
+      {tags.map((tag, index) => {
+        if (tag.along) {
+          // Pinned where its lines leave the map; hidden while the stop is out of view.
+          const pin = pins[index];
+          if (!pin) return null;
+          const { anchor, edge } = pinnedPlacement(map, pin, tag.anchor);
+          return (
+            <div key={`tag-${tag.id}`} className="map-overlay__item" style={{ transform: `translate(${Math.round(pin.x)}px, ${Math.round(pin.y)}px)` }}>
+              <Tag tag={tag} dir={dir} edge={edge} anchor={anchor} />
+            </div>
+          );
+        }
+        return (
+          <div key={`tag-${tag.id}`} className="map-overlay__item" style={position(map, tag.position)}>
+            {tag.glyph ? <Chevron tag={tag} bearing={tag.glyph.bearing} /> : <Tag tag={tag} dir={dir} edge={edgeOf(map, tag.position)} />}
+          </div>
+        );
+      })}
     </div>
   );
 }

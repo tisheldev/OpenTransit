@@ -92,3 +92,12 @@
 .stop-note {
   margin-block: 8px 0;
 }
+
+/* A direction tapped on the map (user review, 14 November 2026): the panel lists its lines. */
+.stop-way {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-block: 4px 2px;
+}

@@ -168,7 +168,7 @@ On 12 November the user chose the Home list and all of screens 3 to 6, and appro
 | --- | --- | --- |
 | 1 | Home | The search field hints "place, stop or line". Saved stops and lines sit beside Home and Work. "Near you" lists the next departure of each line within a 5-minute walk, each row naming its stop |
 | 2 | Search | One field finds places, stops and lines. A stop row still sets the journey end when tapped; a second button on the row opens its departures. A line row opens the line. Operators that share a line number are listed separately |
-| 3 | Stop | Two buttons, "travel from here" and "get here" (open Search or Choose with that end filled), and save. A chosen line shows its next three times and a link to all its stops |
+| 3 | Stop | Two buttons, "travel from here" and "get here" (open Search or Choose with that end filled), and save. A chosen line shows its next three times and a link to all its stops. Revised on the map after the user's review on 14 November (see "Stop map: directions, not ends") |
 | 4 | Line | New. The whole route on the map, a switch between its two directions, and every stop with its time, opening at the stop nearest the passenger with the earlier stops folded. Stops where a train can be caught carry the train badge |
 | 5 | Ride it | On a line, the passenger picks a departure and taps the stop where they get off. The result is a journey (walk to the stop, the ride) with the usual start button, and a second button to continue from there |
 | 6 | In a journey | In route details, a line's row opens in place: the next departures of that line from the boarding stop (choosing one re-plans with it) and a link to the line. Stop names open the stop |
@@ -238,6 +238,18 @@ Not discussed with the user. Each can be overturned.
 - **Departures on search rows:** shown only for stops already covered by the nearby-departures answer Home holds. Other stop rows show none; there is no request per row.
 - **Fetching while the map moves:** stops by area are requested when the map settles and kept for the session; at most one nearby-departures request per settle, for the tags and "In this area".
 - **No tab bar**, and the stops layer never appears in Navigate.
+
+### Stop map: directions, not ends (user review, 14 November 2026)
+
+Trying the built client, the user found the Stop board's map confusing: each line's tag sat at the end of a short stretch of its route, and lines sharing a street were cut to different lengths so their tags would not overlap, which looked like the lines stopped at different points. Two sketches were compared in chat; the user dropped the arrows from the second ("the arrows are pretty weird") and asked for it with the draw-out animation ("build it with the animation"). Built, mechanically tested, not human-reviewed:
+
+- A line's way out of the stop fades out over its far part, so it reads as going on beyond the map rather than ending. No arrows.
+- Lines leaving the same way (together 300 m and 600 m out) share one way out and one tag showing only their badges (four, then "+N"): they have different destinations, and the user chose badges alone over naming a shared stop or a compass direction ("go with that"). A direction with one line says "לכיוון" and its destination. The tag is pinned where its lines leave the visible map, below the top band and above the sheet, and is hidden while the stop itself is out of view. A direction that shares the street with another is drawn from where it turns off, so two translucent colours never mix.
+- Tapping a direction's tag lists its lines in the panel, with "כל הקווים" to list all again; a one-line tag chooses its line. A chosen line still shows its whole route, its stops, the board's direction chevron and its end.
+- When the screen opens, the ways out draw out from the stop (300 ms, after the camera's 400 ms move) and the tags fade in after; with reduced motion, nothing moves.
+- Panning does not fade the lines: they are the streets the buses take and keep the map readable. Only the tags go while the stop is off screen.
+
+Not decided: whether the chosen line keeps the board's chevron, and the 300 m / 600 m and 25 m thresholds, which are unmeasured on real data.
 
 ### Left to the builder
 

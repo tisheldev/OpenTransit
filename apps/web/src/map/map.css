@@ -234,3 +234,22 @@ button.map-stop::after {
   stroke-linecap: round;
   stroke-linejoin: round;
 }
+
+/* Stop (user review, 14 November 2026): a direction's tag appears once the camera has
+   settled and its lines have drawn out from the stop (MapView CAMERA_MS + GROW_MS), and
+   "+N" when it has more lines than badges. */
+@keyframes map-tag-late {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.map-tag--late {
+  animation: map-tag-late 160ms ease-out 680ms both;
+}
+.map-tag__more {
+  font-size: 12px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .map-tag--late {
+    animation: none;
+  }
+}

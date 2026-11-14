@@ -11,7 +11,7 @@ test.beforeEach(async ({ page }) => {
   await blockExternal(page);
 });
 
-test("every line through the stop: a row and a faded tag each; a tag chooses its line (axe)", async ({ page }) => {
+test("every line through the stop: a row each, one tag per direction; a tag lists or chooses its lines (axe)", async ({ page }) => {
   await page.goto(appPath(STOP));
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("דיזנגוף סנטר/דיזנגוף");
   const rows = page.getByRole("list", { name: "הקווים בתחנה" }).getByRole("button");
@@ -19,11 +19,25 @@ test("every line through the stop: a row and a faded tag each; a tag chooses its
   await expect(rows.first()).toContainText(/172\s*מסוף רדינג\s*2 דק׳/);
   await expect(rows.first()).toHaveAttribute("aria-pressed", "false");
   await expect(page.getByText("זמנים לפי לוח הזמנים")).toBeAttached();
-  const tag = page.getByRole("button", { name: "5 רכבת מרכז", exact: true });
-  await expect(tag).toBeAttached({ timeout: 20_000 });
+  // Five lines leave north up the same street: one tag at the map's edge, badges only (four
+  // and "+1", the fifth named to a screen reader).
+  const north = page.getByRole("button", { name: /^172\s*8\s*5\s*2\s*39$/ });
+  await expect(north).toBeAttached({ timeout: 20_000 });
+  const west = page.getByRole("button", { name: /115\s*לכיוון מסוף רדינג/ });
+  await expect(west).toBeAttached();
+  // The tags fade in once the lines have drawn out; check them when fully shown.
+  await expect(north).toHaveCSS("opacity", "1");
+  await expect(west).toHaveCSS("opacity", "1");
   await expectNoSeriousAxeViolations(page, "Stop, every line (he)");
 
-  await tag.press("Enter");
+  // Tapping it lists that direction's lines in the panel; "כל הקווים" lists them all again.
+  await north.press("Enter");
+  await expect(rows).toHaveCount(5);
+  await expect(page.getByText("5 קווים בכיוון הזה")).toBeVisible();
+  await page.getByRole("button", { name: "כל הקווים" }).click();
+  await expect(rows).toHaveCount(6);
+
+  await rows.nth(3).click();
   await expect(rows.nth(3)).toHaveAttribute("aria-pressed", "true");
   await expect(page.getByRole("img", { name: "קו 5 נוסע אל רכבת מרכז" })).toBeAttached();
   await expect(page.getByRole("img", { name: "כיוון הנסיעה של קו 5" })).toBeAttached();

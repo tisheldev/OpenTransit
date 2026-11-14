@@ -45,12 +45,66 @@ export interface RouteProps {
   /** Drawn quiet: 5 px at `opacity`, no edge (boards Stop and Ride). */
   quiet: boolean;
   opacity: number;
+  /** A piece of a leg that fades out (drawn with flat ends so the pieces meet without overlap). */
+  segment: boolean;
   label: string;
   /** The vehicle: a train gets a dashed centre. */
   vehicle: Vehicle;
   /** The operator's line colour per theme; "" when the operator table has none (mode tokens). */
   colorDark: string;
   colorLight: string;
+}
+
+/** Rough metres between two points: enough to cut a line by share of its length. */
+function stepMeters(a: LonLat, b: LonLat): number {
+  const x = (b[0] - a[0]) * Math.cos(((a[1] + b[1]) / 2) * (Math.PI / 180));
+  const y = b[1] - a[1];
+  return Math.hypot(x, y) * 111_320;
+}
+
+/** The part of a line between two shares of its length (0 = start, 1 = end). */
+export function lineBetween(line: readonly LonLat[], from: number, to: number): LonLat[] {
+  const steps = line.slice(1).map((point, index) => stepMeters(line[index]!, point));
+  const total = steps.reduce((sum, step) => sum + step, 0);
+  if (line.length < 2 || total === 0) return [...line];
+  const at = (share: number): { index: number; point: LonLat } => {
+    let left = Math.min(1, Math.max(0, share)) * total;
+    for (let index = 0; index < steps.length; index += 1) {
+      const step = steps[index]!;
+      if (left <= step || index === steps.length - 1) {
+        const k = step === 0 ? 0 : Math.min(1, left / step);
+        const a = line[index]!;
+        const b = line[index + 1]!;
+        return { index, point: [a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k] };
+      }
+      left -= step;
+    }
+    return { index: steps.length - 1, point: line[line.length - 1]! };
+  };
+  const start = at(from);
+  const end = at(to);
+  return [start.point, ...line.slice(start.index + 1, end.index + 1), end.point];
+}
+
+/**
+ * How a leg that fades out is drawn: whole for its first 40 %, then in six steps down to a
+ * tenth of its opacity at its end, so the line reads as going on, not as ending there.
+ */
+export const FADE_STEPS: ReadonlyArray<readonly [from: number, to: number, opacity: number]> = [
+  [0, 0.4, 1],
+  [0.4, 0.5, 0.85],
+  [0.5, 0.6, 0.7],
+  [0.6, 0.7, 0.55],
+  [0.7, 0.8, 0.4],
+  [0.8, 0.9, 0.25],
+  [0.9, 1, 0.1],
+];
+
+/** A leg drawn out to a share of its length (the grow animation); a leg that does not grow is left whole. */
+export function grownLeg(leg: MapRouteLeg, share: number): MapRouteLeg {
+  if (!leg.grow || !leg.coordinates || leg.coordinates.length < 2 || share >= 1) return leg;
+  const coordinates = lineBetween(leg.coordinates, 0, Math.max(0.001, share));
+  return { ...leg, coordinates, to: coordinates[coordinates.length - 1]! };
 }
 
 /** One line per leg that has geometry; a time-only walk (coordinates null) adds nothing. */
@@ -61,24 +115,33 @@ export function routeFeatures(route: MapRouteLeg[]): FeatureCollection<LineStrin
     if (!leg.coordinates || leg.coordinates.length < 2) continue;
     const active = leg.active === true;
     const colour = leg.kind === "transit" ? operatorColour(leg) : null;
-    features.push({
-      type: "Feature",
-      geometry: { type: "LineString", coordinates: leg.coordinates },
-      properties: {
-        kind: leg.kind,
-        mode: leg.mode,
-        line: leg.kind === "walk" ? "walk" : lineMode(leg.mode),
-        active,
-        dimmed: (anyActive && !active) || leg.tone === "faded" || leg.tone === "quiet",
-        quiet: leg.tone === "quiet",
-        opacity: leg.tone === "quiet" ? (leg.quietOpacity ?? QUIET_OPACITY) : 1,
-        travelled: leg.tone === "travelled",
-        label: leg.label ?? "",
-        vehicle: vehicleOf(leg.mode),
-        colorDark: colour?.line.dark ?? "",
-        colorLight: colour?.line.light ?? "",
-      },
-    });
+    const opacity = leg.tone === "quiet" ? (leg.quietOpacity ?? QUIET_OPACITY) : 1;
+    const properties: RouteProps = {
+      kind: leg.kind,
+      mode: leg.mode,
+      line: leg.kind === "walk" ? "walk" : lineMode(leg.mode),
+      active,
+      dimmed: (anyActive && !active) || leg.tone === "faded" || leg.tone === "quiet",
+      quiet: leg.tone === "quiet",
+      opacity,
+      segment: false,
+      travelled: leg.tone === "travelled",
+      label: leg.label ?? "",
+      vehicle: vehicleOf(leg.mode),
+      colorDark: colour?.line.dark ?? "",
+      colorLight: colour?.line.light ?? "",
+    };
+    if (leg.fadeOut && leg.kind === "transit") {
+      for (const [from, to, share] of FADE_STEPS) {
+        features.push({
+          type: "Feature",
+          geometry: { type: "LineString", coordinates: lineBetween(leg.coordinates, from, to) },
+          properties: { ...properties, segment: true, opacity: Math.round(opacity * share * 1000) / 1000 },
+        });
+      }
+      continue;
+    }
+    features.push({ type: "Feature", geometry: { type: "LineString", coordinates: leg.coordinates }, properties });
   }
   return { type: "FeatureCollection", features };
 }
@@ -291,9 +354,14 @@ export function offlineStyle(theme: ThemeName): StyleJson {
   };
 }
 
-/** Which style to load: VITE_MAP_STYLE overrides ("offline" or a URL); fixtures and tests stay offline. */
+/**
+ * Which style to load: VITE_MAP_STYLE overrides ("offline", "openfreemap" for the theme's
+ * OpenFreeMap style, or a URL); otherwise fixtures and tests stay offline.
+ */
 export function chooseStyle(mode: string, override: string | undefined, theme: ThemeName): string | StyleJson {
-  if (override) return override === "offline" ? offlineStyle(theme) : override;
+  if (override === "offline") return offlineStyle(theme);
+  if (override === "openfreemap") return OPENFREEMAP_STYLES[theme];
+  if (override) return override;
   if (mode === "fixtures" || mode === "test") return offlineStyle(theme);
   return OPENFREEMAP_STYLES[theme];
 }
@@ -451,8 +519,21 @@ export function overlayLayers(theme: ThemeName, { labels }: { labels: boolean })
       id: "ot-route-transit",
       type: "line",
       source: "ot-route",
-      filter: transit,
+      filter: ["all", transit, ["!=", ["get", "segment"], true]],
       layout: { "line-cap": "round", "line-join": "round" },
+      paint: {
+        "line-color": byLine,
+        "line-width": ["case", ["any", ["get", "dimmed"], ["==", ["get", "travelled"], true]], 5, 7.5],
+        "line-opacity": dimmable,
+      },
+    },
+    {
+      // A line fading out (Stop): its pieces meet end to end, so their ends are flat.
+      id: "ot-route-fade",
+      type: "line",
+      source: "ot-route",
+      filter: ["all", transit, ["==", ["get", "segment"], true]],
+      layout: { "line-cap": "butt", "line-join": "round" },
       paint: {
         "line-color": byLine,
         "line-width": ["case", ["any", ["get", "dimmed"], ["==", ["get", "travelled"], true]], 5, 7.5],

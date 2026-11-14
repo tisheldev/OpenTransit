@@ -234,3 +234,81 @@ export function callPosition(call: Trip["data"]["calls"][number]): LonLat | null
   const lon = extra.longitude;
   return typeof lat === "number" && typeof lon === "number" ? [lon, lat] : null;
 }
+
+/**
+ * Where lines leaving a stop are compared: two points along their way out, the second near
+ * where the Stop map's frame ends (StopScreen FRAME_METERS), since a direction's tag sits
+ * where its lines leave the map. Lines sharing a street that turn off before then differ.
+ */
+const SAME_WAY_AT_METERS = [300, 600] as const;
+/** Two lines are going the same way when both points are this close. */
+const SAME_WAY_WITHIN_METERS = 60;
+
+/**
+ * Lines leaving a stop the same way (user review, 14 November 2026: one tag per direction):
+ * the indexes of `aheads` grouped, in order of first appearance. Lines are the same way
+ * when their ways out are within 60 m of each other 300 m and 600 m from the stop; a line
+ * without a way out (null) is a group of its own.
+ */
+export function sameWayGroups(aheads: ReadonlyArray<readonly LonLat[] | null>): number[][] {
+  const probes = aheads.map((ahead) => (ahead ? SAME_WAY_AT_METERS.map((meters) => pointAlongLine([...ahead], meters)) : null));
+  const groups: number[][] = [];
+  aheads.forEach((_, index) => {
+    const mine = probes[index];
+    const group = mine
+      ? groups.find((members) => {
+          const theirs = probes[members[0]!];
+          return (
+            !!theirs &&
+            mine.every((point, k) => {
+              const other = theirs[k];
+              if (!point || !other) return point === other;
+              return haversineMeters(point, other) <= SAME_WAY_WITHIN_METERS;
+            })
+          );
+        })
+      : undefined;
+    if (group) group.push(index);
+    else groups.push([index]);
+  });
+  return groups;
+}
+
+/** Two ways out closer than this share the street (drawn once). */
+const SHARED_WITHIN_METERS = 25;
+const SHARED_STEP_METERS = 20;
+
+/**
+ * The part of a way out from where it leaves the ways already drawn (user review, 14
+ * November 2026: a line that shares the street out with another direction is drawn from
+ * where it turns off, so two translucent colours never mix into a third on the shared
+ * stretch). The whole line when it shares nothing; null when it never leaves them.
+ */
+export function splitOff(line: readonly LonLat[], drawn: ReadonlyArray<readonly LonLat[]>): LonLat[] | null {
+  if (line.length < 2 || drawn.length === 0) return [...line];
+  const steps = line.slice(1).map((point, index) => haversineMeters(fromPosition(line[index]!), fromPosition(point)));
+  const total = steps.reduce((sum, step) => sum + step, 0);
+  const near = (meters: number) => {
+    const point = pointAlongLine([...line], meters);
+    return !!point && drawn.some((other) => (projectOntoLine(point, other)?.distanceMeters ?? Infinity) <= SHARED_WITHIN_METERS);
+  };
+  let from = 0;
+  while (from <= total && near(from)) from += SHARED_STEP_METERS;
+  if (from > total) return null;
+  // Every way out starts at the stop: one that parts at once is drawn from there.
+  if (from <= 2 * SHARED_STEP_METERS) return [...line];
+  // Start a step back, so the new colour meets the shared line rather than leaving a gap.
+  const start = Math.max(0, from - SHARED_STEP_METERS);
+  let walked = 0;
+  for (let index = 0; index < steps.length; index += 1) {
+    const step = steps[index]!;
+    if (walked + step >= start) {
+      const k = step === 0 ? 0 : (start - walked) / step;
+      const a = line[index]!;
+      const b = line[index + 1]!;
+      return [[a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k], ...line.slice(index + 1)];
+    }
+    walked += step;
+  }
+  return null;
+}
