@@ -63,6 +63,10 @@ const ENTER_CLEAR_MS = 320;
 
 const reducedMotion = () => typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+/** When each map last moved: a pan that started on a stop must not also open it. */
+const lastMove = new WeakMap<MapLibreMap, number>();
+const justMoved = (map: MapLibreMap) => performance.now() - (lastMove.get(map) ?? -Infinity) < 250;
+
 /** The side found from the map's streets, per stop, with the zoom it was read at. */
 const streetSides = new Map<string, { side: PoleSide | null; zoom: number }>();
 
@@ -315,6 +319,8 @@ export function StopsLayer({
   const [moving, setMoving] = useState(false);
   const [streetTick, setStreetTick] = useState(0);
   const elements = useRef(new Map<string, { element: HTMLElement; anchor: LonLat; lift: number; inside: boolean }>());
+
+
   const insets = useRef({ topInset, bottomInset });
   useEffect(() => {
     insets.current = { topInset, bottomInset };
@@ -473,6 +479,7 @@ export function StopsLayer({
       }
     };
     const schedule = () => {
+      lastMove.set(map, performance.now());
       if (!frame) frame = requestAnimationFrame(reposition);
     };
     map.on("move", schedule);
@@ -499,10 +506,19 @@ export function StopsLayer({
   );
 
   // --- taps ---------------------------------------------------------------------------------
-  const select = layer.mode === "full" ? layer.onSelectStop : undefined;
+  const onSelectStop = layer.mode === "full" ? layer.onSelectStop : undefined;
+  const guardedSelect = useCallback(
+    (stopId: string) => {
+      if (justMoved(map) === false) onSelectStop?.(stopId);
+    },
+    [map, onSelectStop],
+  );
+  const select = onSelectStop ? guardedSelect : undefined;
   const onOpenGroup = layer.onOpenGroup;
   const openGroup = useCallback(
     (ids: string[]) => {
+      // A pan that started on the count must not also open it.
+      if (justMoved(map)) return;
       const members = ids.map((id) => stopById.get(id)).filter((stop): stop is AreaStop => !!stop);
       if (members.length === 0) return;
       const west = Math.min(...members.map((stop) => stop.longitude));

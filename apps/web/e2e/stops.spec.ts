@@ -91,7 +91,12 @@ test("far out: stations only, with the hint to zoom in for bus stops", async ({ 
   await page.goto(appPath("#/"));
   await expect(layer(page)).toHaveAttribute("data-level", "signs", { timeout: MAP_READY_MS });
   await page.locator(".maplibregl-canvas").focus();
-  for (let i = 0; i < 5; i += 1) await page.keyboard.press("Minus");
+  // One zoom level a key press (each an eased step): press until the map is far out.
+  await expect(async () => {
+    await page.keyboard.press("Minus");
+    await page.waitForTimeout(400);
+    expect(Number(await layer(page).getAttribute("data-zoom"))).toBeLessThan(12);
+  }).toPass({ timeout: MAP_READY_MS });
   await expect(layer(page)).toHaveAttribute("data-level", "stations", { timeout: MAP_READY_MS });
   await expect(page.getByText("התקרבו כדי לראות תחנות אוטובוס")).toBeVisible();
   await expect(layer(page).locator(".ot-stop-sign:not(.ot-stop-sign--station)")).toHaveCount(0);
