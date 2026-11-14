@@ -1,7 +1,5 @@
 import { useEffect, useId, useMemo, useState } from "react";
-import { ApiFailure } from "../../api/result";
 import { Icon } from "../../components/ds";
-import { Empty, ErrorState, Loading } from "../../components/states";
 import { useI18n } from "../../i18n/I18nProvider";
 import { formatClock } from "../../lib/time";
 import { DEFAULT_CENTER } from "../../map/layers";
@@ -11,14 +9,15 @@ import { haversineMeters } from "../../nav/geo";
 import { choiceFromSaved } from "../../plan/draft";
 import { usePlan } from "../../plan/PlanProvider";
 import { go } from "../../router";
-import { lastOrigin, useLocalState, type SavedSlot } from "../../shell/localStore";
+import { lastOrigin, useLocalState } from "../../shell/localStore";
 import type { SavedPlace } from "../../storage/local";
 import { openStop } from "../stop/intent";
 import { groupLines, minutesTo, tagLine } from "../stop/lines";
-import { Badge, Distance, Due, useNow, withFigure } from "../stop/parts";
+import { useNow } from "../stop/parts";
 import { usePassengerFix } from "../stop/passenger";
 import { HOME_ROWS, useHomeStops, WALK_RING_METERS, type NearStop } from "./homeStops";
-import { useNextRide, type RideOrigin } from "./nextRide";
+import { HomeSheet } from "./HomeSheet";
+import { type RideOrigin } from "./nextRide";
 import "./home.css";
 
 // Home — board 1 (user, 11 November 2026: "Stops near you are pins that carry their next
@@ -36,8 +35,6 @@ import "./home.css";
  */
 const MAX_TAGS = 2;
 const TAG_SPACING_METERS = 60;
-
-const failureState = (error: unknown) => (error instanceof ApiFailure ? error.state : "unexpected");
 
 /** True after the first paint, so Home renders from storage before any request. */
 function useAfterFirstPaint(): boolean {
@@ -87,50 +84,6 @@ function ActiveTripCard({ trip }: { trip: ActiveTrip }) {
   );
 }
 
-/** Home or Work: plan to it, with the next departure toward it; unset, set it. */
-function PlaceCard({
-  slot,
-  saved,
-  origin,
-  enabled,
-  now,
-  onTravel,
-}: {
-  slot: SavedSlot;
-  saved: SavedPlace | null;
-  origin: RideOrigin | null;
-  enabled: boolean;
-  now: Date;
-  onTravel: (saved: SavedPlace) => void;
-}) {
-  const { t, lang } = useI18n();
-  const next = useNextRide(saved, origin, lang, t("stop.train"), enabled).data ?? null;
-  const title = t(slot === "home" ? "place.home" : "place.work");
-  // Each card is named by everything it shows ("בית 66 בעוד 4 דק׳"), so the name always
-  // holds the visible text (speech input, WCAG 2.5.3).
-  if (!saved) {
-    return (
-      <button type="button" className="b-card" onClick={() => go({ name: "search", field: slot })}>
-        <span className="b-card__title">{title}</span>
-        <span className="b-card__next b-mu">{t(slot === "home" ? "home.setHome" : "home.setWork")}</span>
-      </button>
-    );
-  }
-  const minutes = next ? minutesTo(next.departure, now) : null;
-  const shown = next && minutes !== null && minutes > 0 && minutes < 100;
-  return (
-    <button type="button" className="b-card" onClick={() => onTravel(saved)}>
-      <span className="b-card__title">{title}</span>
-      {shown && (
-        <span className="b-card__next">
-          <Badge line={next} />
-          <span className="b-mu">{withFigure(t("home.inMinutes"), <bdi className="num b-big">{minutes}</bdi>)}</span>
-        </span>
-      )}
-    </button>
-  );
-}
-
 const stopName = (stop: NearStop) => stop.name ?? stop.code ?? stop.stopId;
 
 export function HomeScreen() {
@@ -159,10 +112,9 @@ export function HomeScreen() {
   const nearby = useHomeStops(centre, painted);
   const { stops, departures } = nearby;
   const stopIds = useMemo(() => stops.map((stop) => stop.stopId), [stops]);
-  // The panel lists the nearest stop's departures; any pin or tag opens its own stop in one
-  // tap (user, 12 November 2026).
+  // The nearest stop's pin is the selected one; any pin or tag opens its own stop in one tap
+  // (user, 12 November 2026). The sheet lists lines across the nearby stops (HomeSheet).
   const selectedIndex = 0;
-  const selected = stops[selectedIndex] ?? null;
 
   // One row per line. Departures are asked from "now" and refreshed every minute, so a
   // departure already gone drops out with the next answer.
@@ -242,68 +194,23 @@ export function HomeScreen() {
     go(draft.from === null ? { name: "search", field: "from" } : { name: "compare" });
   };
 
-  const selectedLines = selected ? (lines[selectedIndex] ?? []) : [];
-  const stopHeadingId = useId();
-
   return (
     <div className="home">
       <h1 className="visually-hidden">{t("home.title")}</h1>
 
       {trip && <ActiveTripCard trip={trip} />}
 
-      <button type="button" className="b-field" onClick={() => go({ name: "search", field: "to" })}>
-        <Icon name="search" />
-        {t("home.search")}
-      </button>
-
-      <section aria-label={t("home.saved")}>
-        <div className="b-cards">
-          <PlaceCard slot="home" saved={local.home} origin={origin} enabled={painted} now={now} onTravel={travelTo} />
-          <PlaceCard slot="work" saved={local.work} origin={origin} enabled={painted} now={now} onTravel={travelTo} />
-        </div>
-      </section>
-
-      <section className="home-stop" aria-labelledby={selected ? stopHeadingId : undefined} aria-label={selected ? undefined : t("home.stops")}>
-        {!painted || nearby.pending ? null : nearby.error ? (
-          <ErrorState state={failureState(nearby.error)} onRetry={() => nearby.refetch()} />
-        ) : !selected ? (
-          <p className="b-mu home-none">{t("home.stops.none")}</p>
-        ) : (
-          <>
-            <div className="b-head">
-              <h2 id={stopHeadingId}>
-                <bdi>{names[selectedIndex]}</bdi>
-              </h2>
-              {fix && <Distance meters={haversineMeters(fix, selected)} />}
-            </div>
-            {nearby.states[selectedIndex] === "pending" ? (
-              <Loading />
-            ) : nearby.states[selectedIndex] === "error" ? (
-              <ErrorState state={failureState(nearby.errors[selectedIndex])} onRetry={() => nearby.refetch()} />
-            ) : nearby.states[selectedIndex] === "unavailable" ? (
-              <ErrorState state="temporarily_unavailable" />
-            ) : selectedLines.length === 0 ? (
-              <Empty kind="noDepartures" />
-            ) : (
-              <ul className="home-rows" aria-label={t("home.departures", { stop: names[selectedIndex]! })}>
-                {selectedLines.map((line) => (
-                  <li key={line.key}>
-                    <button type="button" className="b-row" onClick={() => openStop(selected.stopId, line.key)}>
-                      <Badge line={line} />
-                      <span className="b-row__name">
-                        <bdi>{line.headsign ?? ""}</bdi>
-                      </span>
-                      <Due instant={line.next} now={now} />
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </>
-        )}
-      </section>
-
-      <p className="b-mu home-note">{t("stop.scheduled")}</p>
+      <HomeSheet
+        nearby={nearby}
+        centre={centre}
+        origin={origin}
+        painted={painted}
+        homePlace={local.home}
+        workPlace={local.work}
+        savedStops={local.savedStops}
+        savedLines={local.savedLines}
+        onTravel={travelTo}
+      />
     </div>
   );
 }
