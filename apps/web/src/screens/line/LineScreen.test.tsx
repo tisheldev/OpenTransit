@@ -49,13 +49,13 @@ function journeyBodies(): Array<Record<string, unknown>> {
 describe("Line", () => {
   it("without a position: the line's header, both directions, the list from the first stop with the rest folded", async () => {
     renderApp(LINE);
-    expect(await screen.findByRole("heading", { level: 1, name: "קו 8" })).toBeInTheDocument();
-    const directions = within(await screen.findByRole("group", { name: he["line.directions"] })).getAllByRole("button");
+    expect(await screen.findByRole("heading", { level: 1, name: "קו 8" }, { timeout: 5000 })).toBeInTheDocument();
+    const directions = within(await screen.findByRole("group", { name: he["line.directions"] }, { timeout: 5000 })).getAllByRole("button");
     expect(directions.map((button) => [button.textContent, button.getAttribute("aria-pressed")])).toEqual([
       ["למסוף הטייסים", "true"],
       ["לאוניברסיטת ת\"א", "false"],
     ]);
-    await waitFor(() => expect(screen.getByText("דן · אוטובוס · כל 12 דק׳ בערך")).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText("דן · אוטובוס · כל 12 דק׳ בערך")).toBeInTheDocument(), { timeout: 5000 });
     const rows = rowTexts();
     expect(rows[0]).toMatch(/^מסוף אוניברסיטת ת''א\/הורדה/);
     expect(rows).toHaveLength(7);

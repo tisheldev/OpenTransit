@@ -4,7 +4,7 @@ import { planPinnedJourney, PINNED_TRIP_MISSED_BY_WALK, PINNED_TRIP_WALK_UNAVAIL
 import { ApiFailure, unwrap } from "../../api/result";
 import type { LocationInput } from "../../api/types";
 import { CanvasBadge } from "../../components/canvas";
-import { ErrorState, Loading, TestDataBanner } from "../../components/states";
+import { ErrorState, Loading } from "../../components/states";
 import { useI18n } from "../../i18n/I18nProvider";
 import { formatDuration } from "../../lib/format";
 import { formatClock, toIsraelIso } from "../../lib/time";
@@ -16,12 +16,12 @@ import { usePlan } from "../../plan/PlanProvider";
 import { useTrip } from "../../plan/queries";
 import { go, hrefFor } from "../../router";
 import { usePassengerFix } from "../stop/passenger";
-import { useLine, useRouteDepartures, useStopLinesAll } from "./data";
+import { useLine, useRailStations, useRouteDepartures, useStopLinesAll } from "./data";
 import { StrokeIcon } from "./icons";
 import { readRide, writeRide, type RideIntent } from "./intent";
 import { useBoardSheet } from "./boardSheet";
-import { directionsOf, lineDepartures, rideRows, stopTimes, walkMinutes } from "./lineModel";
-import { useLineColour } from "./parts";
+import { directionsOf, lineDepartures, paddedBounds, railAt, rideRows, stopTimes, walkMinutes } from "./lineModel";
+import { RailBadge, useLineColour } from "./parts";
 import "./line.css";
 import "./stopline.css";
 
@@ -127,6 +127,8 @@ function Ride({ ride, onChange }: { ride: RideIntent; onChange: (ride: RideInten
   const rideLeg = journey?.legs.find((leg) => leg.kind === "transit") ?? null;
   const walkToStop = walkLeg ? Math.max(1, Math.ceil(walkLeg.durationSeconds / 60)) : fix && boardStop ? walkMinutes(haversineMeters(fix, boardStop)) : null;
   const colour = useLineColour(item);
+  const stations = useRailStations(useMemo(() => paddedBounds(stops), [stops]));
+  const rail = useMemo(() => railAt(stops, stations.data?.data ?? []), [stops, stations.data]);
 
   const scene = useMemo<MapScene>(() => {
     if (!item || !boardStop || stops.length < 2) return { ...emptyScene, camera: "keep" };
@@ -162,11 +164,11 @@ function Ride({ ride, onChange }: { ride: RideIntent; onChange: (ride: RideInten
     const tags: MapTag[] = [];
     const departs = times[board];
     if (departs) {
-      tags.push({ id: "board", position: coordinates[board]!, anchor: "below", kind: "plain", line: { mode: item.mode, label: item.shortName, operatorId: item.operatorId, operatorName: item.operatorName }, text: formatClock(departs, lang) });
+      tags.push({ id: "board", position: coordinates[board]!, anchor: "below", kind: "strong", line: { mode: item.mode, label: item.shortName, operatorId: item.operatorId, operatorName: item.operatorName }, text: formatClock(departs, lang) });
     }
     if (alight !== null) {
       const arrives = times[alight];
-      tags.push({ id: "exit-tag", position: coordinates[alight]!, anchor: "below", kind: "strong", text: arrives ? `${t("ride.getOff")} ${formatClock(arrives, lang)}` : t("ride.getOff") });
+      tags.push({ id: "exit-tag", position: coordinates[alight]!, anchor: "above", kind: "strong", text: arrives ? `${t("ride.getOff")} ${formatClock(arrives, lang)}` : t("ride.getOff") });
     }
     return {
       ...emptyScene,
@@ -245,7 +247,6 @@ function Ride({ ride, onChange }: { ride: RideIntent; onChange: (ride: RideInten
           </button>
         ))}
       </div>
-      {answer?.meta.mode === "fixture" && <TestDataBanner compact />}
 
       <ol className="sl-list" aria-label={t("line.stops")}>
         {rows.map((row) => {
@@ -294,7 +295,10 @@ function Ride({ ride, onChange }: { ride: RideIntent; onChange: (ride: RideInten
                     <i className="sl-dt sl-dt--big sl-dt--end" />
                   </span>
                   <span className="sl-tx">
-                    <span className="sl-nm sl-nm--strong">{name}</span>
+                    <span className="sl-tx sl-tx--row">
+                      <span className="sl-nm sl-nm--strong">{name}</span>
+                      {rail.get(stop.stopId) && <RailBadge kind={rail.get(stop.stopId)!} />}
+                    </span>
                     <span className="b-mu">
                       {t("ride.alight", { stops: ridden === 1 ? t("route.stops.one") : t("route.stops", { n: ridden }), minutes: rideMinutes ?? "–" })}
                     </span>

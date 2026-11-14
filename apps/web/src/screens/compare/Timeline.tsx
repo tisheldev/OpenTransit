@@ -102,7 +102,7 @@ function LegRow({
       {marker}
       <span className="b-tl__leg">
         {children}
-        {focused && <span className="b-mu">{t("route.shown")}</span>}
+        {focused && <span className={expanded === undefined ? "b-mu" : "visually-hidden"}>{t("route.shown")}</span>}
         {expanded !== undefined && <StrokeIcon name={expanded ? "up" : "down"} className="compare-ride-chevron" />}
       </span>
     </>

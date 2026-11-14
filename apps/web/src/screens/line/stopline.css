@@ -294,6 +294,12 @@ div.sl-sr {
 .sl-tm--strong {
   color: var(--ink);
 }
+/* A folded run of stops: one line, like the board's. */
+.sl-sr--fold .b-mu {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .sl-fold-icon {
   align-self: center;
   color: var(--ink-muted);

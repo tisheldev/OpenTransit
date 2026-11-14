@@ -305,7 +305,7 @@ export function derivedPinnedJourney(request: PinnedBody): Fixture {
     walkSeconds = Math.max(60, Math.round(walkMeters / 1.1 / 60) * 60);
     const arriveAtStop = departs - 60_000;
     const leave = arriveAtStop - walkSeconds * 1000;
-    if (request.departAt && leave < Date.parse(request.departAt)) warnings.push("PINNED_TRIP_MISSED_BY_WALK");
+    if (request.departAt && leave + 60_000 < Date.parse(request.departAt)) warnings.push("PINNED_TRIP_MISSED_BY_WALK");
     legs.push({
       kind: "walk",
       mode: "walk",
