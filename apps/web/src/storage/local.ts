@@ -64,7 +64,12 @@ const SavedLineSchema = z.object({
 const LocalStateSchema = z.object({
   version: z.literal(STORAGE_VERSION),
   // theme: absent means the default (dark); optional so version-1 data stays readable.
-  settings: z.object({ lang: z.enum(["he", "en"]), theme: z.enum(["dark", "light"]).optional() }),
+  // mapStops: Home's map at neighbourhood zoom (src/lib/mapStops.ts); absent means "dots".
+  settings: z.object({
+    lang: z.enum(["he", "en"]),
+    theme: z.enum(["dark", "light"]).optional(),
+    mapStops: z.enum(["dots", "listed"]).optional(),
+  }),
   home: SavedPlaceSchema.nullable(),
   work: SavedPlaceSchema.nullable(),
   favourites: z.array(SavedPlaceSchema).max(50),

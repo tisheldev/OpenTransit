@@ -11,6 +11,7 @@ import { emptyScene, usePublishScene } from "../../map/scene";
 import { endActiveTrip } from "../../nav/activeTrip";
 import { isLocationPossible } from "../../lib/geolocation";
 import { setTheme, useTheme } from "../../lib/theme";
+import { MAP_STOPS, setMapStops, useMapStops } from "../../lib/mapStops";
 import { initialDraft, startingOrigin } from "../../plan/draft";
 import { usePlan } from "../../plan/PlanProvider";
 import { go } from "../../router";
@@ -260,6 +261,7 @@ export function SettingsScreen() {
   const { t, lang, setLang } = useI18n();
   const local = useLocalState();
   const theme = useTheme();
+  const mapStops = useMapStops();
   usePublishScene(emptyScene);
 
   return (
@@ -283,6 +285,14 @@ export function SettingsScreen() {
           value={theme}
           onChange={setTheme}
           optionLabel={(option) => t(`settings.theme.${option}`)}
+        />
+        <Choice
+          name="mapStops"
+          label={t("settings.mapStops")}
+          options={MAP_STOPS}
+          value={mapStops}
+          onChange={setMapStops}
+          optionLabel={(option) => t(`settings.mapStops.${option}`)}
         />
       </div>
 

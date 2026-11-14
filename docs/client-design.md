@@ -251,6 +251,15 @@ Trying the built client, the user found the Stop board's map confusing: each lin
 
 Not decided: whether the chosen line keeps the board's chevron, and the 300 m / 600 m and 25 m thresholds, which are unmeasured on real data.
 
+### Map below street zoom (user, 15 November 2026)
+
+On real data (a fresh local generation, 14 November) Home's neighbourhood view was dozens of count bubbles with legs to their stops; the user: "this way too bloated ... I want to see the map". Four sketches were compared in chat (today, quiet dots, fewer bigger groups, only the sheet's stops). The user could not choose between quiet dots and only the sheet's stops and asked for both behind a switch. Built, mechanically tested, not human-reviewed:
+
+- Every stop is a sign only from street zoom, 16 (it was 13.5; the proposal had suggested about 16). Stations only below 12.5, unchanged.
+- In between, the stops the sheet lists (an opened group: its stops) and the chosen stop are signs, with their next-line tags; signs that would touch still group, with legs. Every other stop is a small muted dot (6 px) that opens its stop, or is not drawn.
+- Settings, "תחנות במפה": "כל התחנות, כנקודות קטנות" (dots, the default) or "רק התחנות שברשימה" (only the listed stops), kept in local settings. The switch is temporary: once the user chooses, one behaviour stays and the switch goes.
+- The quiet layer (Choose, Route details) also waits for street zoom.
+
 ### Left to the builder
 
 The grouping method and its exact pixel threshold, the caching scheme for stops by area, list virtualisation, component structure, and where the shared modules for the native app sit.

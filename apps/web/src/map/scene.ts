@@ -136,6 +136,13 @@ export interface MapStopsLayer {
   mode: "full" | "quiet";
   /** The stop the panel is about: drawn bright and larger, its tag pale. */
   chosenStopId?: string | null;
+  /**
+   * Below street zoom (user, 15 November 2026): these stops are signs (Home: the stops its
+   * sheet lists); every other stop is a small muted dot ("dots", the default) or not drawn
+   * ("hidden"). From street zoom every stop is a sign.
+   */
+  featured?: readonly string[];
+  others?: "dots" | "hidden";
   /** Next lines by stop id, for the tags (a couple at most show, the chosen stop's first). */
   next?: Readonly<Record<string, MapStopNext>>;
   known?: readonly MapKnownStop[];

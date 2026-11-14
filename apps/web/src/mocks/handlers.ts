@@ -5,6 +5,7 @@ import { derivedDepartures, derivedNearbyDepartures, derivedNearbyStop, derivedS
 import { derivedLine, derivedLineSearch, invalidLineSearch } from "./lineFixtures";
 import { derivedMissedDepartures, derivedMissedJourneys, MISSED_STOP_ID } from "./navigateMissed";
 import { derivedAreaStops } from "./areaStops";
+import { outsideSpec } from "./specLimits";
 import {
   derivedLineTrip,
   derivedPinnedJourney,
@@ -140,6 +141,12 @@ function journeyAnswer(): HttpResponse<string> {
 }
 
 export const handlers = [
+  // First: a query parameter outside the API's own bounds gets the API's 422, whatever the
+  // endpoint (the resolver returns nothing otherwise, so the request falls through).
+  http.get("*/v1/*", ({ request }) => {
+    if (outsideSpec(new URL(request.url))) return send("synthetic-problem-invalid-request");
+    return undefined;
+  }),
   http.get("*/v1/status", () => {
     switch (scenario()) {
       case "status-expired":

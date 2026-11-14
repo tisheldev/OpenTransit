@@ -9,6 +9,7 @@ import {
   centredBox,
   CHOSEN_PX,
   dotBox,
+  QUIET_DOT_PX,
   groupMarkers,
   groupSize,
   overlaps,
@@ -18,7 +19,6 @@ import {
   sideFromStreets,
   signBox,
   SIGN_PX,
-  SQUARE_PX,
   STATION_PX,
   STREET_SEARCH_METRES,
   toLocalMetres,
@@ -193,6 +193,8 @@ function layoutStops(
   stations: readonly AreaStop[],
   chosenId: string | null,
   dir: "rtl" | "ltr",
+  featured: ReadonlySet<string> = new Set(),
+  dots = true,
 ): Layout {
   const items: Item[] = [];
   const at = new Map<string, Px>();
@@ -216,17 +218,17 @@ function layoutStops(
   if (level !== "stations") {
     const chosen = chosenId ? stops.find((stop) => stop.stopId === chosenId) : undefined;
     const others = stops.filter((stop) => stop !== chosen);
-    const inputs = others.map((stop) => ({ id: stop.stopId, at: project(anchorOf(stop)), side: level === "signs" ? sideOf(stop, bearing) : null }));
-    const byId = new Map(others.map((stop) => [stop.stopId, stop]));
-    const grouping = groupMarkers(inputs, level);
+    // Street zoom: every stop a sign. Neighbourhood zoom: the featured stops are signs, the
+    // rest small muted dots (or none), so the map stays readable (user, 15 November 2026).
+    const signed = level === "signs" ? others : others.filter((stop) => featured.has(stop.stopId));
+    const dotted = level === "signs" || !dots ? [] : others.filter((stop) => !featured.has(stop.stopId));
+    const inputs = signed.map((stop) => ({ id: stop.stopId, at: project(anchorOf(stop)), side: sideOf(stop, bearing) }));
+    const byId = new Map(signed.map((stop) => [stop.stopId, stop]));
+    const grouping = groupMarkers(inputs, "signs");
     for (const single of grouping.singles) {
       const stop = byId.get(single.id)!;
       at.set(`s:${single.id}`, single.at);
-      if (level === "grouped") {
-        items.push({ kind: "square", key: `s:${single.id}`, id: single.id, anchor: anchorOf(stop), box: centredBox(single.at, SQUARE_PX) });
-      } else {
-        items.push({ kind: "sign", key: `s:${single.id}`, id: single.id, anchor: anchorOf(stop), side: single.side, chosen: false, box: signBox(single.at, single.side), dot: dotBox(single.at, single.side) });
-      }
+      items.push({ kind: "sign", key: `s:${single.id}`, id: single.id, anchor: anchorOf(stop), side: single.side, chosen: false, box: signBox(single.at, single.side), dot: dotBox(single.at, single.side) });
     }
     for (const group of grouping.groups) {
       const members = group.ids.map((id) => byId.get(id)!);
@@ -234,7 +236,7 @@ function layoutStops(
         members.reduce((sum, stop) => sum + stop.longitude, 0) / members.length,
         members.reduce((sum, stop) => sum + stop.latitude, 0) / members.length,
       ];
-      const lifted = level === "signs";
+      const lifted = true;
       const key = `g:${[...group.ids].sort().join(",")}`;
       at.set(key, group.at);
       // The anchor is the members' centre; a lifted count stands 18 px above it on their kerb dots.
@@ -248,6 +250,15 @@ function layoutStops(
         legs: lifted ? group.kerbs.map((kerb) => ({ x: kerb.x - centre.x, y: kerb.y - centre.y })) : [],
         box: centredBox(group.at, groupSize(group.ids.length)),
       });
+    }
+    // Dots go under the signs: one a sign or count would cover is left out.
+    const signBoxes = items.filter((item) => item.kind === "sign" || item.kind === "group").map((item) => item.box);
+    for (const stop of dotted) {
+      const p = project(anchorOf(stop));
+      const box = centredBox(p, QUIET_DOT_PX);
+      if (signBoxes.some((other) => overlaps(box, other, 1))) continue;
+      at.set(`s:${stop.stopId}`, p);
+      items.push({ kind: "square", key: `s:${stop.stopId}`, id: stop.stopId, anchor: anchorOf(stop), box });
     }
     if (chosen) {
       const p = project(anchorOf(chosen));
@@ -376,6 +387,9 @@ export function StopsLayer({
   useEffect(() => () => setSettledView(null), []);
 
   const level = levelFor(layer, view.zoom);
+  const featuredKey = (layer.featured ?? []).join(",");
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- keyed by content, not identity
+  const featuredIds = useMemo(() => new Set(layer.featured ?? []), [featuredKey]);
 
   // Ask for what the settled view lacks (a little beyond it, so a short pan finds stops waiting).
   useEffect(() => {
@@ -403,20 +417,22 @@ export function StopsLayer({
   useMemo(() => {
     void streetTick;
     if (level === "signs") readStreetSides(map, stops, view.zoom);
-  }, [map, stops, level, view.zoom, streetTick]);
+    else if (level === "grouped") readStreetSides(map, stops.filter((stop) => featuredIds.has(stop.stopId) || stop.stopId === layer.chosenStopId), view.zoom);
+  }, [map, stops, level, view.zoom, streetTick, featuredIds, layer.chosenStopId]);
 
   const chosenId = layer.chosenStopId ?? null;
+  const dots = layer.others !== "hidden";
   const layout = useMemo(() => {
     void streetTick;
-    return layoutStops(map, view, level, stops, stations, chosenId, dir);
-  }, [map, view, level, stops, stations, chosenId, dir, streetTick]);
+    return layoutStops(map, view, level, stops, stations, chosenId, dir, featuredIds, dots);
+  }, [map, view, level, stops, stations, chosenId, dir, streetTick, featuredIds, dots]);
 
   const stopById = useMemo(() => new Map([...stops, ...stations].map((stop) => [stop.stopId, stop])), [stops, stations]);
 
   // --- tags: measured, then placed (the chosen stop's first) --------------------------------
   const full = layer.mode === "full";
   const candidates = useMemo(() => {
-    if (!full || layout.level !== "signs" || !layer.next) return [];
+    if (!full || layout.level === null || layout.level === "stations" || !layer.next) return [];
     const signs = layout.items.filter((item): item is Extract<Item, { kind: "sign" }> => item.kind === "sign" && !!layer.next?.[item.id]);
     const centre = { x: view.width / 2, y: (view.visible.top + view.visible.bottom) / 2 };
     return signs
@@ -629,7 +645,7 @@ export function StopsLayer({
         <div key={key} ref={ghost ? undefined : register(key, item.anchor, 0)} className="ot-stop ot-stop--centre" style={{ transform: transformAt(map, item.anchor) }} data-stop-id={item.id}>
           <div className={bodyClass.join(" ")} style={style}>
             <Hit className="ot-stop-hit--square" label={signLabel(item.id)} onSelect={tap ? () => tap(item.id) : undefined}>
-              <span className="ot-stop-square" aria-hidden="true" />
+              <span className="ot-stop-dot" aria-hidden="true" />
             </Hit>
           </div>
         </div>
@@ -892,4 +908,4 @@ function growIn(body: HTMLElement | null): void {
   body.animate(keyframes, { duration: 180, easing: "ease-out" });
 }
 
-export { toAreaStop, ZOOM_STOPS };
+export { layoutStops, toAreaStop, ZOOM_STOPS };

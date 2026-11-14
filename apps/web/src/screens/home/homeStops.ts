@@ -20,7 +20,8 @@ export const HOME_ROWS = 4;
  * a few more lines from each, so a line served only by the fifth-nearest stop still shows.
  */
 export const NEARBY_STOPS = 12;
-export const NEARBY_PER_STOP = 6;
+/** The API's maximum (openapi.json: perStop ≤ 5); 6 was refused with 422 on real data, 14 November. */
+export const NEARBY_PER_STOP = 5;
 const HORIZON_MINUTES = 60;
 
 export interface NearStop {

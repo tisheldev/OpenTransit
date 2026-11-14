@@ -27,9 +27,11 @@ describe("zoom levels", () => {
     expect(zoomLevel(18)).toBe("signs");
   });
 
-  it("Home's walking ring, framed on a phone (zoom 13.8 to 14.3), shows every stop as a sign (board 1)", () => {
-    expect(zoomLevel(13.8)).toBe("signs");
-    expect(zoomLevel(14.3)).toBe("signs");
+  it("Home's walking ring, framed on a phone (zoom 13.8 to 14.3), is neighbourhood zoom: only featured stops are signs (user, 15 November)", () => {
+    expect(zoomLevel(13.8)).toBe("grouped");
+    expect(zoomLevel(14.3)).toBe("grouped");
+    // Every stop a sign only from street zoom.
+    expect(ZOOM_SIGNS).toBe(16);
   });
 });
 

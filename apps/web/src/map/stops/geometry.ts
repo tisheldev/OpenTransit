@@ -33,7 +33,13 @@ export interface Box {
  *   budget; at 12 it would be half as many again.
  */
 export const ZOOM_STOPS = 12.5;
-export const ZOOM_SIGNS = 13.5;
+/**
+ * Every stop a sign only from street zoom (user, 15 November 2026, on real data: the
+ * neighbourhood view at 13.5 was "way too bloated"). Between ZOOM_STOPS and here the full
+ * layer draws the stops the screen features (Home: those its sheet lists) as signs and the
+ * others as small muted dots, or none (MapStopsLayer.others).
+ */
+export const ZOOM_SIGNS = 16;
 
 export type StopsLevel = "stations" | "grouped" | "signs";
 
@@ -157,6 +163,8 @@ export const POLE_PX = 10;
 export const DOT_PX = 6;
 /** Neighbourhood zoom: a 12 px square, no pole, no icon (board 8). */
 export const SQUARE_PX = 12;
+/** A stop that is not featured, at neighbourhood zoom: a small muted dot (the kerb dot's size). */
+export const QUIET_DOT_PX = 6;
 /** A train or light-rail station: the same sign, 22 px, centred (boards 7 and 8). */
 export const STATION_PX = 22;
 /** A group: a pale circle 30 px, 36 px for five or more (board 8). */

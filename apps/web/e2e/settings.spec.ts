@@ -32,7 +32,7 @@ test("English: save a favourite through Search, rename it, delete it (axe)", asy
   await name.fill("Mall");
   await page.getByRole("button", { name: "Save" }).click();
   await expect(page).toHaveURL(/#\/settings$/);
-  await expect(page.getByText("Mall")).toBeVisible();
+  await expect(page.getByText("Mall", { exact: true })).toBeVisible();
   await expectNoSeriousAxeViolations(page, "Settings with a favourite (en)");
 
   await page.getByRole("button", { name: "Rename Mall" }).click();
