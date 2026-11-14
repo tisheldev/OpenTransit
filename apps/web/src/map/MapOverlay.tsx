@@ -1,6 +1,7 @@
 import type { Map as MapLibreMap } from "maplibre-gl";
 import { useEffect, useReducer, type CSSProperties } from "react";
 import { LineBadge } from "../components/ds";
+import { GSign } from "../components/GSign";
 import { lineMode } from "./layers";
 import type { MapStopPin, MapTag } from "./scene";
 
@@ -91,7 +92,31 @@ function StopSign() {
   );
 }
 
+/** The chosen line's direction (boards Stop and Line: a chevron on the line, path copied verbatim). */
+function Chevron({ tag, bearing }: { tag: MapTag; bearing: number }) {
+  // The canvas path points north-east (45°); turned to the line's bearing.
+  return (
+    <span className="map-chevron" role={tag.ariaLabel ? "img" : undefined} aria-label={tag.ariaLabel} style={{ transform: `rotate(${Math.round(bearing - 45)}deg)` }}>
+      <svg viewBox="262 116 24 24" aria-hidden="true" focusable="false">
+        <path d="m268 126 12-4-4 12" />
+      </svg>
+    </span>
+  );
+}
+
 function StopPin({ pin }: { pin: MapStopPin }) {
+  if (pin.look === "sign") {
+    const sign = <GSign chosen={pin.selected === true} rail={pin.rail === true} />;
+    return pin.onSelect ? (
+      <button type="button" className="map-gsign" aria-label={pin.ariaLabel} onClick={pin.onSelect}>
+        {sign}
+      </button>
+    ) : (
+      <span className="map-gsign" role="img" aria-label={pin.ariaLabel}>
+        {sign}
+      </span>
+    );
+  }
   const className = `map-stop${pin.selected ? " map-stop--selected" : ""}`;
   if (pin.onSelect) {
     return (
@@ -129,7 +154,7 @@ export function MapOverlay({
       ))}
       {tags.map((tag) => (
         <div key={`tag-${tag.id}`} className="map-overlay__item" style={position(map, tag.position)}>
-          <Tag tag={tag} dir={dir} edge={edgeOf(map, tag.position)} />
+          {tag.glyph ? <Chevron tag={tag} bearing={tag.glyph.bearing} /> : <Tag tag={tag} dir={dir} edge={edgeOf(map, tag.position)} />}
         </div>
       ))}
     </div>

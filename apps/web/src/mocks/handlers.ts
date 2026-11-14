@@ -4,6 +4,16 @@ import { derivedEngineTimeout, derivedJourneyFixtures, derivedTrip } from "../sc
 import { derivedDepartures, derivedNearbyDepartures, derivedNearbyStop, derivedStopLines, derivedStopsNear } from "./stopFixtures";
 import { derivedLine, derivedLineSearch, invalidLineSearch } from "./lineFixtures";
 import { derivedMissedDepartures, derivedMissedJourneys, MISSED_STOP_ID } from "./navigateMissed";
+import {
+  derivedLineTrip,
+  derivedPinnedJourney,
+  derivedRailStations,
+  derivedRouteDepartures,
+  derivedRoutePatterns,
+  derivedStopLinesAll,
+  linkLine,
+  linkLineSearch,
+} from "./rideFixtures";
 
 // MSW handlers that answer every public endpoint from fixtures. Used by Vitest (node)
 // and by the dev server's `fixtures` mode (browser), so mocked e2e needs no API.
@@ -169,6 +179,9 @@ export const handlers = [
   }),
 
   http.post("*/v1/journeys", async ({ request }) => {
+    // "Ride it" (contract A3, synthetic: src/mocks/rideFixtures.ts).
+    const pinned = (await request.clone().json().catch(() => null)) as Parameters<typeof derivedPinnedJourney>[0] | null;
+    if (pinned?.pinnedTrip) return respond(derivedPinnedJourney(pinned));
     // Navigate's "Bus didn't come" re-plans (derived, src/mocks/navigateMissed.ts).
     if (scenario() === "navigate-missed") {
       const body = (await request.json().catch(() => null)) as Parameters<typeof derivedMissedJourneys>[0];
@@ -180,17 +193,24 @@ export const handlers = [
   http.get("*/v1/trips/:tripRef", ({ params }) => {
     if (scenario() === "compare-trip-failed") return send("recorded-problem-not-ready");
     const ref = decoded(params.tripRef);
-    const found = tripsByRef.get(ref) ?? derivedTrip(ref);
+    const found = tripsByRef.get(ref) ?? derivedLineTrip(ref) ?? derivedTrip(ref);
     return found ? respond(found) : send("recorded-problem-trip-not-found");
   }),
 
   // Boards 1 and 7 (API PR #35): Home's nearby departures and a stop's lines (stopFixtures.ts).
   http.get("*/v1/departures/nearby", ({ request }) => respond(derivedNearbyDepartures(new URL(request.url).searchParams.get("from")))),
-  http.get("*/v1/stops/:stopId/lines", ({ params }) => respond(derivedStopLines(decoded(params.stopId)))),
+  http.get("*/v1/stops/:stopId/lines", ({ request, params }) =>
+    new URL(request.url).searchParams.get("patterns") === "all"
+      ? respond(derivedStopLinesAll(decoded(params.stopId)))
+      : respond(derivedStopLines(decoded(params.stopId))),
+  ),
 
   http.get("*/v1/stops/:stopId/departures", ({ request, params }) => {
     if (scenario() === "navigate-missed" && decoded(params.stopId) === MISSED_STOP_ID) return respond(derivedMissedDepartures());
     const url = new URL(request.url);
+    // One line's departures (the Line screen, Ride it, a journey's ride): synthetic.
+    const routeId = url.searchParams.get("routeId");
+    if (routeId) return respond(derivedRouteDepartures(decoded(params.stopId), routeId, url.searchParams.get("from"), Number(url.searchParams.get("limit") ?? 20)));
     if (url.searchParams.get("cursor")) return send("recorded-departures-page-2");
     // Re-timed to the request (stopFixtures.ts), so Home and a stop count down.
     return respond(derivedDepartures(decoded(params.stopId), url.searchParams.get("from"), Number(url.searchParams.get("limit") ?? 20)));
@@ -206,22 +226,29 @@ export const handlers = [
 
   http.get("*/v1/stops", ({ request }) => {
     const url = new URL(request.url);
+    // Stations only (contract A1, synthetic: src/mocks/rideFixtures.ts).
+    if (url.searchParams.has("bbox") && /rail/.test(url.searchParams.get("mode") ?? "")) return respond(derivedRailStations());
     if (url.searchParams.has("bbox")) return send("synthetic-stops-bbox");
     if (url.searchParams.has("cursor")) return send("synthetic-stops-near-page-2");
     // Home's nearby stops: the recorded stops around Dizengoff Center, wherever it asks.
     return respond(derivedStopsNear());
   }),
 
-  // Line search and one line (contract A2), from the synthetic catalogue (lineFixtures.ts).
+  // Line search and one line (contract A2), from the synthetic catalogue (lineFixtures.ts);
+  // lines that match a recorded route are linked to it (rideFixtures.ts) so the Line screen
+  // has their stops, times and trips.
   http.get("*/v1/lines", ({ request }) => {
     const url = new URL(request.url);
     if (invalidLineSearch(url)) return send("synthetic-problem-invalid-request");
     if (scenario() === "lines-unavailable") return send("recorded-problem-not-ready");
-    return respond(derivedLineSearch(url));
+    return respond(linkLineSearch(derivedLineSearch(url)));
   }),
-  http.get("*/v1/lines/:lineKey", ({ request, params }) => respond(derivedLine(decoded(params.lineKey), new URL(request.url)))),
+  http.get("*/v1/lines/:lineKey", ({ request, params }) => respond(linkLine(derivedLine(decoded(params.lineKey), new URL(request.url))))),
 
-  http.get("*/v1/routes/:routeId/patterns", () => send("synthetic-route-patterns")),
+  http.get("*/v1/routes/:routeId/patterns", ({ params }) => {
+    const derived = derivedRoutePatterns(decoded(params.routeId));
+    return derived ? respond(derived) : send("synthetic-route-patterns");
+  }),
   http.get("*/v1/routes/:routeId", () => send("synthetic-route")),
   http.get("*/v1/routes", () => send("synthetic-routes")),
 ];

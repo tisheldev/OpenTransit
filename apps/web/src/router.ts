@@ -15,15 +15,17 @@ export type Route =
   | { name: "route" }
   | { name: "navigate" }
   | { name: "stop"; stopId: string }
-  /** A line (operator + MOT line code, contract A2's lineKey): the Line screen. */
+  /** A line (operator + MOT line code): its whole route, both directions, every stop. */
   | { name: "line"; lineKey: string }
+  /** "Ride it" (board 5): a departure of a line chosen on its screen and the stop to get off at. */
+  | { name: "ride" }
   | { name: "trip"; tripRef: string }
   | { name: "nearby" }
   | { name: "lines" }
   | { name: "settings" }
   | { name: "notFound"; path: string };
 
-const STATIC = ["compare", "route", "navigate", "nearby", "lines", "settings"] as const;
+const STATIC = ["compare", "route", "navigate", "nearby", "lines", "settings", "ride"] as const;
 
 export function parseHash(hash: string): Route {
   const path = hash.replace(/^#/, "") || "/";

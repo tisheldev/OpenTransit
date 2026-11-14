@@ -56,6 +56,11 @@ export interface MapTag {
   onSelect?: () => void;
   /** Where the tag sits relative to its point: above it (default) or centred on it. */
   anchor?: "above" | "center" | "below";
+  /**
+   * Drawn as a bare glyph centred on the point instead of a tag (stops-and-lines boards:
+   * the chosen line's direction chevron, turned to its bearing in degrees from north).
+   */
+  glyph?: { kind: "chevron"; bearing: number };
 }
 
 /** A stop drawn as a large round pin with a stop sign (boards: Home, Stop, Bus didn't come). */
@@ -66,6 +71,12 @@ export interface MapStopPin {
   selected?: boolean;
   ariaLabel: string;
   onSelect?: () => void;
+  /**
+   * "sign": the stops-and-lines marker G (a sign on a pole, its kerb dot on the point;
+   * src/components/GSign.tsx) instead of the round pin. `rail` draws a station's sign.
+   */
+  look?: "sign";
+  rail?: boolean;
 }
 
 /** A dashed circle around a place: Home's 5-minute walk around the passenger. */
