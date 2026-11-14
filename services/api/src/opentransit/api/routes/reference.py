@@ -8,9 +8,15 @@ from fastapi import APIRouter, Query, Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 
-from opentransit.api.docs import STOP_LINES_DOC
+from opentransit.api.docs import LINE_DOC, LINES_DOC, STOP_LINES_DOC
 from opentransit.api.responses import metadata
-from opentransit.reference import MAX_STOP_LINES_PAGE
+from opentransit.line_search import (
+    DEFAULT_LINES_PAGE,
+    MAX_LINES_PAGE,
+    MAX_QUERY_LENGTH,
+    line_index,
+)
+from opentransit.reference import MAX_STATION_BBOX_KM2, MAX_STOP_LINES_PAGE, STOP_MODES
 from opentransit.runtime import capture_snapshot
 
 PageLimit = Annotated[int, Query(ge=1, le=100)]
@@ -86,12 +92,32 @@ def reference_router(clock, problem) -> APIRouter:
         radius: Annotated[float, Query(gt=0, le=5000)] = 500,
         limit: PageLimit = 20,
         cursor: Cursor = None,
+        mode: Annotated[
+            str | None,
+            Query(
+                max_length=60,
+                description=(
+                    "With `bbox` only: a comma list of `rail`, `light_rail`, `bus`, `other` "
+                    "(the stop item's `mode`). A list of only `rail`/`light_rail` lists "
+                    "stations: platforms fold into their parent station, each returned once, "
+                    "and the bbox may cover the whole country (up to "
+                    f"{MAX_STATION_BBOX_KM2:,} km²). Otherwise the 100 km² limit stays."
+                ),
+            ),
+        ] = None,
     ):
         try:
             if (near is None) == (bbox is None) or (
                 bbox is not None and "radius" in request.query_params
             ):
                 raise ValueError
+            modes = None
+            if mode is not None:
+                if bbox is None:
+                    raise ValueError
+                modes = [item.strip() for item in mode.split(",")]
+                if any(item not in STOP_MODES for item in modes) or len(set(modes)) != len(modes):
+                    raise ValueError
             if near is not None:
                 lat, lon = [float(item) for item in near.split(",")]
                 if not (
@@ -110,10 +136,13 @@ def reference_router(clock, problem) -> APIRouter:
                     raise ValueError
 
                 def operation(ref):
-                    return ref.stops_in_bbox(south, west, north, east, limit, cursor)
+                    return ref.stops_in_bbox(south, west, north, east, limit, cursor, modes)
         except ValueError, TypeError:
             return problem(
-                request, 422, "INVALID_REQUEST", "Use near=lat,lon or bbox=west,south,east,north."
+                request,
+                422,
+                "INVALID_REQUEST",
+                "Use near=lat,lon or bbox=west,south,east,north (mode only with bbox).",
             )
         return serve(request, operation, paginated=True, cursor=cursor)
 
@@ -148,6 +177,67 @@ def reference_router(clock, problem) -> APIRouter:
             paginated=True,
             cursor=cursor,
         )
+
+    def position(request: Request, lat: float | None, lon: float | None):
+        """None when valid (both or neither, inside Israel), else the problem response."""
+        if (lat is None) != (lon is None) or (
+            lat is not None
+            and not (
+                math.isfinite(lat) and math.isfinite(lon) and 29 <= lat <= 34 and 34 <= lon <= 36
+            )
+        ):
+            return problem(request, 422, "INVALID_REQUEST", "Give both lat and lon inside Israel.")
+        return None
+
+    Latitude = Annotated[
+        float | None,
+        Query(description="With `lon`: rank lines near here first and add `nearestStop`."),
+    ]
+    Longitude = Annotated[float | None, Query(description="With `lat`.")]
+
+    @router.get("/v1/lines", responses=LINES_DOC)
+    def lines(
+        request: Request,
+        q: Annotated[
+            str,
+            Query(
+                min_length=1,
+                max_length=MAX_QUERY_LENGTH,
+                description=(
+                    "The start of a line number (`routeShortName`), trimmed and "
+                    "case-insensitive; one character is enough."
+                ),
+            ),
+        ],
+        lat: Latitude = None,
+        lon: Longitude = None,
+        limit: Annotated[int, Query(ge=1, le=MAX_LINES_PAGE)] = DEFAULT_LINES_PAGE,
+        cursor: Cursor = None,
+    ):
+        """Lines (operator + MOT line code) whose number starts with `q`.
+
+        The exact number first, then longer numbers; within each, lines with a stop nearest
+        `lat`/`lon` first (when given), then by number.
+        """
+        invalid = position(request, lat, lon)
+        if invalid is not None:
+            return invalid
+        return serve(
+            request,
+            lambda ref: line_index(ref).search(q, lat, lon, limit, cursor),
+            paginated=True,
+            cursor=cursor,
+        )
+
+    @router.get("/v1/lines/{line_key}", responses=LINE_DOC)
+    def line(line_key: str, request: Request, lat: Latitude = None, lon: Longitude = None):
+        """One line by its `lineKey`; `nearestStop` only when `lat`/`lon` are given."""
+        if not line_key or len(line_key) > 250:
+            return problem(request, 422, "INVALID_REQUEST", "Use a returned line key.")
+        invalid = position(request, lat, lon)
+        if invalid is not None:
+            return invalid
+        return serve(request, lambda ref: line_index(ref).line(line_key, lat, lon))
 
     @router.get("/v1/routes")
     def routes(

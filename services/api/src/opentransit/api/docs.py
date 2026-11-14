@@ -204,6 +204,64 @@ class StopLinesResponse(Model):
     meta: Metadata
 
 
+class LineDirection(Model):
+    routeId: str = Field(description="One MOT route: one direction (or variant) of the line.")
+    headsign: str | None = Field(description="The headsign of its longest pattern, if any.")
+    originName: str | None = Field(description="First stop of its longest pattern.")
+    destinationName: str | None = Field(description="Last stop of its longest pattern.")
+
+
+class LineNearestStop(Model):
+    stopId: str
+    name: str | None
+    distanceM: int = Field(description="Straight-line metres from `lat`/`lon`, rounded.")
+
+
+class LineItem(Model):
+    lineKey: str = Field(
+        description=(
+            "Opaque and stable across generations: the operator (GTFS agency_id) and the MOT "
+            "line code (route_desc before the first '-'), as `<agency_id>:<code>`. A route "
+            "without a line code is a line of its own (`<agency_id>:route:<route source id>`)."
+        )
+    )
+    shortName: str = Field(description="The line number (`routeShortName`).")
+    operatorId: str | None
+    operatorName: str | None
+    mode: PublicMode = Field(description=_MODE_DOC + " Derived from the GTFS route_type.")
+    routeIds: list[str] = Field(description="Its routes, main directions first.")
+    directions: list[LineDirection] = Field(description="One per route, in `routeIds` order.")
+    area: str | None = Field(
+        description=(
+            "The locality (OSM admin level 8, Hebrew name) holding at least half of the "
+            "line's stops; null for intercity lines or a reference without localities."
+        )
+    )
+    nearestStop: LineNearestStop | None = Field(
+        default=None,
+        description=(
+            "Only when `lat`/`lon` are given: the line's stop (any direction) nearest them, "
+            "within 2 km, else null. Absent without `lat`/`lon`."
+        ),
+    )
+
+
+class LinesResponse(Model):
+    data: list[LineItem] = Field(
+        description=(
+            "Exact number first, then longer numbers; within each, nearest first when "
+            "`lat`/`lon` are given, then by number (8, 80, 82, 800)."
+        )
+    )
+    page: Page
+    meta: Metadata
+
+
+class LineResponse(Model):
+    data: LineItem
+    meta: Metadata
+
+
 def _problems(*statuses: int) -> dict:
     return {
         status: {"content": {"application/problem+json": {"schema": Problem.model_json_schema()}}}
@@ -215,3 +273,5 @@ DEPARTURES_DOC = {200: {"model": DeparturesResponse}, **_problems(404, 422, 503,
 NEARBY_DOC = {200: {"model": NearbyDeparturesResponse}, **_problems(422, 503, 504)}
 TRIP_DOC = {200: {"model": TripResponse}, **_problems(404, 422, 503, 504)}
 STOP_LINES_DOC = {200: {"model": StopLinesResponse}, **_problems(404, 422, 503)}
+LINES_DOC = {200: {"model": LinesResponse}, **_problems(422, 503)}
+LINE_DOC = {200: {"model": LineResponse}, **_problems(404, 422, 503)}

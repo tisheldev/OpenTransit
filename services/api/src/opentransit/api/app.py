@@ -131,6 +131,10 @@ def create_app(
             "maxEgressWalkMinutes",
             "maxDirectWalkMinutes",
             "excludeTripRefs",
+            "pinnedTrip",
+            "tripRef",
+            "boardStopId",
+            "alightStopId",
         }
         fields = [
             {
