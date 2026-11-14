@@ -111,6 +111,152 @@ The user's instruction of 11 November ("fix the data gaps" for the eight boards)
 | 6 Bus didn't come | Wait for the same line, or walk to another stop | Wait: `GET /v1/stops/{id}/departures?routeId=…` gives the next trips of that line here; `GET /v1/trips/{tripRef}` gives the arrival at the exit stop (add the original egress walk). Walk elsewhere: `POST /v1/journeys` from the person's coordinate at "now" with `excludeTripRefs: [<missed engineTripId>]`, so the missed bus is not offered again at a later stop |
 | 7 Stop | Every line through the stop, fanning out; a chosen line's whole route | `GET /v1/stops/{id}/lines`: each route with operator, mode, and its patterns as ordered stops (name, position) with `stopIndex` where the stop sits. `patterns=all` adds the line's other direction (a MOT route is one direction; siblings share operator and line code). Lines are drawn through stops (`geometrySource: stop_sequence`); for the street path of one trip use the trip's `shape` |
 
+## Stops and lines proposal (12 November 2026)
+
+**Approved by the user on 12 November 2026 ("Approve it"), with the items under "Still open" left open. Not built.** The build order and the first slice's plan are in the [continuation plan](next-steps.md#stops-and-lines-build-order-and-slice-1). Drawn with the user on 12 November on the private canvas "OpenTransit Stops and Lines" (`https://claude.ai/artifact/9NtBZm7ETSMS3XrumrzZuE`): ten phone screens, two sheets of stop-marker options, a motion sheet and a tuning sheet. Sample data throughout. The session that drew them never saw them rendered, so positions and sizes on the canvas are indicative. The approval covers the design as written here. It changes no phase gate, and it does not make the unconfirmed items below decided.
+
+The request (user, 12 November): "I want stops and lines to be a bigger part of the app … integrate well alongside route planning. I want it to feel seamless and compliment the current flows"; later, "I also want to be able to look for stops on the maps always, not only close ones".
+
+### Intent
+
+- A place, a stop and a line are three things a passenger can open from the same map and sheet. Each links to the other two and into a journey, so browsing turns into planning without retyping.
+- The single map-and-sheet surface stays ([Surface](#surface)). No tab bar is added (this session's call, not discussed with the user).
+- **Not in this proposal:** realtime (every time stays scheduled and labelled), accounts or sync (saved items live on the device), a full timetable browser, any change to Navigate.
+- **Would make it a failure even if it works:** a number near a stop that can be read as a line number; a stop marker that reads as a button; stops competing with a planned route for attention.
+
+### Decided by the user on 12 November
+
+| Topic | Decision | The user's words |
+| --- | --- | --- |
+| Stop marker | Option "G": a small sign with a bus icon, on a short pole that ends in a dot on the kerb where the passenger waits | "I like G and want to apply it to everything" |
+| Marker colour | Soft mustard, with the pole and kerb dot in the same colour; only the chosen stop is bright | "make G a bit more chill with the colors … more balanced as a marker" |
+| No arrow | Rejected in turn: a ring with an arrow beside it, a pointed pin, a ring with an arrow inside | "the station markers are still pretty misleading … maybe no arrow is needed" |
+| Pole direction | Snaps to straight up, down, left or right, whichever points most directly away from the road; the sign stays upright and the kerb dot stays on the kerb | "Keep snapped" |
+| Groups of close stops | One circle with a count | "the numbers in groups is ok" |
+| Stops in an opened group | Not numbered | "the numbers are kind of misleading" |
+| Search results | One list ordered by best match, not sections by kind; stops marked differently | "I'm not sure if I want the stops to show up before places always" |
+| Motion | As on the motion sheet (rules below) | "Feels right" |
+| Next-line tag | Attached to the sign as one flag; the user asked for it to be added to G and approved G afterwards | "can you add the 'closet line' example to G?" |
+| API additions | Approved, after the write-up: a mode (bus stop or station) and a direction of travel on stop items, a way to list stations over a large area, lines in search results, and a journey pinned to one trip. Additive; not yet designed or built. This approves the additions, not the proposal as a whole | "Yes, approve them" |
+| Home's "Near you" list | Lines across nearby stops, each row naming its stop. Replaces the nearest-stop list of approved board 1 | "Lines nearby" |
+| Screens 3 to 6 | All four as drawn: the Stop actions, the Line screen, "Ride it", and a line opened inside a journey | "All four" |
+| A tapped group | The map zooms in and the group opens into its list | "open its list and zoom in" |
+| Order of work | The API first (a mode and a direction on stop items), then stops on the map with their poles, then Search, then the Line screen | "API first" |
+
+### Drawn, not confirmed
+
+The user saw these and did not comment, or they are this session's suggestions. Each needs a yes before it is built.
+
+1. **Saved stops and lines on Home**, beside Home and Work, each with its next departure. Drawn on screen 1 and never asked about.
+2. **Zoom levels** and the thresholds between them.
+3. **Light-theme colours** (picked by eye, contrast not measured) and the **crowded-junction rules**.
+
+### Where it departs from the requirements
+
+These requirements in the [client PRD](client-prd.md#6-functional-requirements) stand until the user revises them (open decision 15 there).
+
+- **C02 Search:** it lists places, addresses, stops and stations and searches from two characters. The proposal adds lines to the results, and a line number is often a single character.
+- **C06 Secondary screens:** stop and line screens are outside the first release's acceptance and "never add a control to the core screens beyond the tappable names". The proposal makes them part of the main flow and adds controls to Home, Search and the Stop screen.
+- **Approved board 1 (Home):** the nearest stop's departures would become lines across nearby stops.
+
+On 12 November the user chose the Home list and all of screens 3 to 6, and approved lines in search results, after being told of these departures. As with the boards on 11 November, the PRD keeps its text for history. Whether the stop and line screens join the first release's acceptance, and whether a one-character query may search, were not asked.
+
+### The ten screens
+
+| # | Screen | What it adds to today's client |
+| --- | --- | --- |
+| 1 | Home | The search field hints "place, stop or line". Saved stops and lines sit beside Home and Work. "Near you" lists the next departure of each line within a 5-minute walk, each row naming its stop |
+| 2 | Search | One field finds places, stops and lines. A stop row still sets the journey end when tapped; a second button on the row opens its departures. A line row opens the line. Operators that share a line number are listed separately |
+| 3 | Stop | Two buttons, "travel from here" and "get here" (open Search or Choose with that end filled), and save. A chosen line shows its next three times and a link to all its stops |
+| 4 | Line | New. The whole route on the map, a switch between its two directions, and every stop with its time, opening at the stop nearest the passenger with the earlier stops folded. Stops where a train can be caught carry the train badge |
+| 5 | Ride it | On a line, the passenger picks a departure and taps the stop where they get off. The result is a journey (walk to the stop, the ride) with the usual start button, and a second button to continue from there |
+| 6 | In a journey | In route details, a line's row opens in place: the next departures of that line from the boarding stop (choosing one re-plans with it) and a link to the line. Stop names open the stop |
+| 7 | Map, far out | Train and light-rail stations only, with a "zoom in to see bus stops" hint |
+| 8 | Map, neighbourhood | Bus stops appear; stops whose markers would touch merge into a count |
+| 9 | Map, group opened | Tapping a count zooms the map in and opens it into its stops; the sheet lists them by direction of travel with their lines and next departure; the row picked is highlighted and its marker becomes the chosen one |
+| 10 | Map, close up | Every stop on its own, anywhere the passenger pans. A few carry a next-line tag. The sheet's "Near you" becomes "In this area" with the distance from the passenger, and a button returns the map to them |
+
+### Stops on the map
+
+- **Three levels by zoom** (thresholds are this session's suggestion): below about zoom 13, stations only; from about 13 to 15, stops with grouping; from about 16, every stop on its own unless two signs would still touch.
+- **Grouping rule:** merge stops whose markers would touch on screen. Groups split as the passenger zooms in. Two stops too close to draw apart even at street zoom share one count that stands on both kerb dots.
+- **Signs never touch.** A tag never covers another stop or leaves the screen: it flips to the other side of its sign, or is not shown. Tags show on a couple of stops at most, the chosen stop's first (Home already limits tags to two).
+- **Tag side:** away from the road. Where the road is above or below the sign, the tag runs toward the reading direction's end (left in Hebrew).
+- **During a journey** (not drawn): on Choose and Route details the stops layer stays off unless the passenger zooms in close, and is drawn quieter, so it never competes with the route. Navigate is untouched: it shows no stops layer and still makes no server request.
+
+**Marker G, as drawn on the screens.** The option sheet shows the sign at 18 px; the screens use 20 px and 12 px tag text, because 9 px text is too small on a phone. The tap area is at least 44 px whatever the drawn size.
+
+| Part | Dark map | Light map (unconfirmed, contrast not measured) |
+| --- | --- | --- |
+| Sign | 20 × 20 px, corner 5, fill `#d6b55e`, edge `#1a1917` 1.5 px, bus icon 12 px in `#1a1917` | fill `#e2b84a`, edge `#1b1a17` 2 px |
+| Pole and kerb dot | 2.5 × 10 px pole, 6 px dot, both `#d6b55e` | both `#8f7120` |
+| Chosen stop | 28 × 28 px, corner 8, fill `#f0c94a`, edge 2.5 px, pale outline `#f4f1ea` 3 px | white outline with a thin dark rim |
+| Next-line tag | 20 px high, `#1a1917` with a `#45413b` hairline, the line badge and minutes | white with a `#d0cdc5` edge, dark text |
+| Chosen stop's tag | 28 px high, `#f4f1ea` with dark text | `#1b1a17` with white text |
+| Stop at neighbourhood zoom | 12 px square in `#d6b55e`, no pole, no icon | not drawn |
+| Group | Pale circle, 30 to 36 px, with the count | not drawn |
+| Train or light-rail station | The same sign in `#7b72cf` with a white train icon, 22 px | not drawn |
+
+**Motion.** The loops on the motion sheet are slowed for reading; these are the proposed timings.
+
+- Moving the map: stops stay fixed to the street, with no lag or bounce. Tags fade out when the map starts to move (about 100 ms) and return about 250 ms after it stops. A stop coming into view grows out of its kerb dot in at most 180 ms.
+- Zooming across a grouping threshold: the count opens and each stop slides to its own kerb, about 220 ms; zooming out reverses it.
+- Choosing a stop: the sign grows where it stands and turns bright, about 160 ms; its tag turns pale and slides out. No other stop changes.
+- With the device's reduce-motion setting, markers only fade.
+
+### Search
+
+One list, ordered by best match whatever the kind. A stop leads with the stop sign and shows its next departures; a place leads with a quiet pin and its kind in words; a line leads with its coloured badge. What "best match" means for the mixed list is open: the suggestion is text match first, then distance from the passenger. The API's own ordering of places and stops is being changed in parallel (task SEARCH-REL on the dashboard, not merged on 12 November); lines are not part of `/v1/places`, so either the client merges line results into the list or the API returns them, which is undecided.
+
+### What the API has and lacks
+
+Read from the code at `main` `170dd97` on 12 November; nothing was run. The user approved the additions in the Gap column the same day; none is designed or built yet, and each still needs its contract written before it is implemented.
+
+| Need | Today | Gap |
+| --- | --- | --- |
+| Stops in the visible area (screens 8 to 10) | `GET /v1/stops?bbox=…`, at most 100 km² per request, paged | None for these zooms. The zoom thresholds are the client's |
+| Stations only, far out (screen 7) | No filter by kind, and a city-wide view exceeds 100 km² | A way to list stations over a large area |
+| Which stops are train or light-rail stations (the purple sign, at every zoom) | Stop items carry no mode, and the feed gives rail stops no station type; the API's stop search infers rail from the lines that call there | A mode on stop items. Needed from the first slice |
+| Which side of the stop the road is on (the pole) | Stop items carry no direction of travel; `boarding.bearingDegrees` exists only on journey legs | A bearing or side on stop items. Deriving it per stop from `GET /v1/stops/{id}/lines` would be one request per stop |
+| Next-line tags and "In this area" | `GET /v1/departures/nearby` around any point: at most 1 km and 12 stops, in the expensive rate-limit bucket | None for a couple of tags; a full screen of tags would exceed it |
+| Line search by number | `GET /v1/routes?routeShortName=…` matches the exact number only. A MOT route is one direction, so one number returns several routes | The routes are grouped into lines by operator and MOT line code, the key the API already uses to find a line's other direction; operator and number alone can merge unrelated lines in different towns. Lines that merely start with the typed digits (82 and 89 under "8", as drawn) are not available |
+| Line screen | `GET /v1/routes/{id}`, its patterns, `GET /v1/stops/{id}/lines?patterns=all`, `GET /v1/stops/{id}/departures?routeId=…`, `GET /v1/trips/{tripRef}` | None found |
+| Ride it (screen 5) | `POST /v1/journeys` can exclude trips (`excludeTripRefs`) but cannot be pinned to one | Either a journey request pinned to one trip, or the client builds the journey from the trip and a walk to the stop. Undecided |
+| Saved stops and lines | The device store holds saved places only | A storage change. Stop ids are stable; route ids can disappear and return (M2.8), so a saved line is keyed by operator and MOT line code |
+
+**Request limits (today's defaults).** Standard requests are limited to 60 a minute with a burst of 20, and expensive ones (journeys, nearby departures) to 30 a minute with a burst of 15, shared by everything the client does. Stops by area come 100 to a page. The design has to live within these; the calls below say how.
+
+### Calls made by this session
+
+Not discussed with the user. Each can be overturned.
+
+- **What a line is:** an operator plus its MOT line code. The Line screen's switch offers the directions the API returns for that code; where a line has more than two patterns (alternatives, loops) it lists them instead of forcing a two-way switch.
+- **Stations:** platforms fold into their station on the map, as nearby departures already does.
+- **Road side unknown:** when the data cannot say which side the road is on (a station, a stop with no direction, or before the API supplies one), the sign is drawn centred on the stop with no pole and no kerb dot. The side is never guessed.
+- **Lines in search:** they come from the API in the same ranked list as places and stops (an additive change, after SEARCH-REL lands), so there is one ordering. The client does not interleave two lists.
+- **Departures on search rows:** shown only for stops already covered by the nearby-departures answer Home holds. Other stop rows show none; there is no request per row.
+- **Fetching while the map moves:** stops by area are requested when the map settles and kept for the session; at most one nearby-departures request per settle, for the tags and "In this area".
+- **No tab bar**, and the stops layer never appears in Navigate.
+
+### Left to the builder
+
+The grouping method and its exact pixel threshold, the caching scheme for stops by area, list virtualisation, component structure, and where the shared modules for the native app sit.
+
+### Open questions for the user
+
+1. Answered on 12 November: Home lists lines across nearby stops.
+2. Answered on 12 November: all four of screens 3 to 6, "Ride it" included.
+3. Answered on 12 November: the API may gain the additions above (a mode and a direction on stop items, stations over a large area, lines in search results, a pinned journey). Whether line search also returns lines that merely start with the typed digits was not asked separately and stays open.
+4. Answered on 12 November: a tapped group zooms in and opens its list.
+5. Answered on 12 November: the API work comes first, then stops on the map, then Search, then the Line screen.
+6. Answered with question 5: the first map slice ships with poles. The pole-less sign remains only for a stop whose side is unknown.
+
+Still open:
+
+7. Saved stops and lines on Home: drawn, never asked about.
+8. Should line search also return lines that merely start with the typed digits, and may a one-character query search?
+9. The zoom thresholds, the light-theme colours and the crowded-junction rules are suggestions, to be confirmed when the first map slice can be seen on a phone.
+
 ## Constraints from the current API
 
 - `Cache-Control: no-store` on every response; caching is the client's own (TanStack Query). CORS does not apply to a native app.

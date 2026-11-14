@@ -195,6 +195,215 @@ Small additive changes in `services/api`, each with tests, an updated OpenAPI sn
 | API-C3 | Response models for non-journey endpoints; one value for unavailable alerts; operator and mode on departures (existing M7 follow-ups) | OpenAPI snapshot covers every `/v1` response | S7 (non-blocking) |
 | API-C4 | Preview access for phones, as decided in PRE-12 | Phone on 4G reaches the preview; others do not | S8 |
 | API-C5 | Board data (11 November): nearby departures, a stop's lines, boarding bearing/side, intermediate stops, `routeId` on departures, `excludeTripRefs` on journeys ([design](client-design.md#data-the-boards-need-api-11-november-2026)) | Implemented 11 November with API-C1–C3 (C1 without per-language names); unit tests and a live check on `nov11a` | Boards 1, 3, 5, 6, 7 |
+| API-C6 | Stop items from `GET /v1/stops` and `GET /v1/stops/{stopId}` gain `mode`, `bearingDegrees` and `bearingSource` (user approval 12 November; plan below) | The plan's four tasks pass and the live evidence is recorded | Stops-and-lines slice 2 |
+
+### Stops and lines: build order and slice 1
+
+The [stops and lines design](client-design.md#stops-and-lines-proposal-12-november-2026) was approved by the user on 12 November 2026, with the order "API first". It is built one slice at a time. Each slice gets its own plan when it is reached; only slice 1 is planned here.
+
+| Slice | Delivers | Plan |
+| --- | --- | --- |
+| 1 (API-C6) | Each stop says whether it is a bus, rail or light-rail stop and which way vehicles leave it | Below |
+| 2 | A way to list stations over a large area (API), then stops on the map at every zoom with marker G, groups, tags and motion (client) | When slice 1 is done |
+| 3 | Lines in search results (API), then one mixed search list (client) | Later |
+| 4 | The Line screen, the Stop screen's actions, a line opened inside a journey (client) | Later |
+| 5 | "Ride it": a journey pinned to one trip (API), then the screen (client) | Later |
+| 6 | Home lists lines near the passenger; saved stops and lines if the user confirms them (client) | Later |
+
+#### API-C6 implementation plan: mode and direction on stop items
+
+> **For agentic workers:** REQUIRED SUB-SKILL: use superpowers:subagent-driven-development or superpowers:executing-plans to implement this plan task by task. Steps use checkbox (`- [ ]`) syntax for tracking.
+
+**Goal:** every stop item the API lists carries its mode and the direction vehicles leave it, so the client can draw a station differently from a bus stop and put the stop sign's pole on the road side.
+
+**Architecture:** both facts are derived when a reference is opened, from tables every supported reference already has (`route_stops` with `routes.route_type`, and `pattern_stops`), and held in memory beside the existing stop lookup. Listing and detail then add three keys to each stop item. No reference schema change, no generation rebuild.
+
+**Tech stack:** Python 3.14, SQLite, FastAPI, pytest, Ruff (`services/api`).
+
+**Spec:** [client-design.md, "What the API has and lacks"](client-design.md#what-the-api-has-and-lacks) and "Calls made by this session" in the same section.
+
+**Global constraints**
+
+- Additive only: no existing key changes name, type or meaning. Older clients ignore the new keys.
+- Never invented: a value that cannot be told is `null`. A stop served in opposing directions gets `bearingDegrees: null`, not an average.
+- HTTP names `mode`, `bearingDegrees`, `bearingSource`; store keys `mode`, `bearing_degrees`, `bearing_source`.
+- `mode` is `"rail"`, `"light_rail"`, `"bus"`, `"other"` or `null` (no line serves the stop). A stop served by several modes takes the first of rail, light rail, bus.
+- `bearingDegrees` is degrees clockwise from north, `0 <= x < 360`, one decimal, the same convention as `boarding.bearingDegrees`. It is the straight line to the next stop, not the street's geometry.
+- `bearingSource` is `"next_stop"`, `"previous_stop"` (a stop that is only ever a last call) or `null`.
+- No client change in this slice, and no change to `stop_search.py`, `api/routes/places.py` or `docs/data-contracts.md`: another session has uncommitted work in them (SEARCH-REL).
+- Branch from `main`. Checks before every commit: `uv run --project services/api --locked ruff check services/api/src services/api/tests`, the same with `ruff format --check`, and `uv run --project services/api --locked pytest services/api/tests -m 'not integration' -q`.
+
+**Review focus** (each has its test in the task named)
+
+1. A stop no line or pattern serves (a parent station, an unused stop): listing must still answer, with `mode` and both bearing keys `null` (task 2).
+2. A pattern that calls at the same stop twice in a row, or at two stops on the same point: no direction is taken from that hop, and nothing divides by zero (tasks 1 and 2).
+3. A stop used in both directions of a line: `bearingDegrees` is `null`, never a sideways average (tasks 1 and 2).
+4. A reference built under schema 2, which is still readable: it opens and lists stops with the new keys (task 3).
+5. A rail stop that buses also serve, and a route type the API does not name: `"rail"` wins, and the unknown type gives `"other"` (tasks 1 and 2).
+
+**Task 1: the pure helpers**
+
+Files: create `services/api/src/opentransit/stop_facets.py`; test `services/api/tests/test_stop_facets.py`.
+
+Produces:
+
+```python
+MIN_BEARING_AGREEMENT = 0.8
+MODE_PRIORITY = ("rail", "light_rail", "bus")
+
+@dataclass(frozen=True)
+class StopFacets:
+    mode: str | None
+    bearing_degrees: float | None
+    bearing_source: str | None
+
+def dominant_mode(modes: Iterable[str]) -> str | None: ...
+def initial_bearing(lat1: float, lon1: float, lat2: float, lon2: float) -> float | None: ...
+def mean_bearing(bearings: Sequence[float], min_agreement: float = MIN_BEARING_AGREEMENT) -> float | None: ...
+```
+
+- [ ] Step 1: write the failing tests.
+
+```python
+def test_dominant_mode_prefers_rail_then_light_rail_then_bus():
+    assert dominant_mode(["bus", "rail", "bus"]) == "rail"
+    assert dominant_mode(["bus", "light_rail"]) == "light_rail"
+    assert dominant_mode(["bus"]) == "bus"
+    assert dominant_mode(["ferry"]) == "other"
+    assert dominant_mode([]) is None
+
+def test_initial_bearing_points_the_way_of_travel():
+    assert initial_bearing(32.081, 34.781, 32.0801, 34.7801) == pytest.approx(220.3, abs=0.2)
+    assert initial_bearing(32.0, 34.0, 32.1, 34.0) == pytest.approx(0.0, abs=0.1)
+    assert initial_bearing(32.0, 34.0, 32.0, 34.1) == pytest.approx(90.0, abs=0.1)
+    assert initial_bearing(32.0, 34.0, 32.0, 34.0) is None
+
+def test_mean_bearing_crosses_north_and_refuses_disagreement():
+    assert mean_bearing([350.0, 10.0]) == 0.0
+    assert mean_bearing([80.0, 100.0]) == pytest.approx(90.0, abs=0.1)
+    assert mean_bearing([40.0, 40.0, 220.0]) is None
+    assert mean_bearing([0.0, 90.0]) is None
+    assert mean_bearing([]) is None
+```
+
+- [ ] Step 2: run `uv run --project services/api --locked pytest services/api/tests/test_stop_facets.py -q`. Expected: fails on import.
+- [ ] Step 3: implement the three functions and the dataclass. `initial_bearing` is the great-circle initial bearing and returns `None` when the points are less than one metre apart. `mean_bearing` sums unit vectors, returns `None` when the mean vector is shorter than `min_agreement`, and otherwise rounds to one decimal and then takes modulo 360, so `360.0` never appears.
+- [ ] Step 4: run the same command. Expected: 3 passed.
+- [ ] Step 5: commit `stop_facets.py` and its test: "API-C6: mode and bearing helpers".
+
+**Task 2: derive the facts from a reference**
+
+Files: modify `services/api/src/opentransit/stop_facets.py`; test `services/api/tests/test_stop_facets.py`.
+
+Consumes: task 1's names. Produces:
+
+```python
+def load_stop_facets(
+    connection: sqlite3.Connection, mode_of: Callable[[int | None], str]
+) -> dict[str, StopFacets]: ...
+```
+
+Keyed by `stops.stop_id`, with an entry for every row of `stops`. `mode_of` is `opentransit.reference.route_type_mode`, passed in so this module does not import `reference`.
+
+- [ ] Step 1: write the failing tests. The first builds the existing synthetic feed (`from test_reference import synthetic_feed`, `build_reference`) and looks stops up by `source_id`.
+
+```python
+def test_facets_of_the_synthetic_feed(tmp_path):
+    found = facets_by_source_id(tmp_path)
+    assert found["platform_b"] == StopFacets("bus", pytest.approx(220.3, abs=0.2), "next_stop")
+    assert found["stop_c"] == StopFacets("bus", pytest.approx(220.3, abs=0.2), "next_stop")
+    assert found["station"] == StopFacets("bus", pytest.approx(220.3, abs=0.2), "previous_stop")
+    assert found["platform_a"] == StopFacets("bus", None, None)
+```
+
+`platform_a` leaves toward `platform_b` and `stop_c` in one pattern and toward `station` in the other, so it has no direction. The next three use a small in-memory database holding only the columns the loader reads (`stops`: `stop_id`, `latitude`, `longitude`, `parent_station`; `routes`: `route_id`, `route_type`; `route_stops`; `pattern_stops`: `pattern_id`, `sequence`, `stop_id`).
+
+```python
+def test_a_stop_nothing_serves_has_no_facts():
+    connection = tiny(stops=[("lonely", 32.0, 34.0, None)])
+    assert load_stop_facets(connection, route_type_mode)["lonely"] == StopFacets(None, None, None)
+
+def test_a_repeated_call_gives_no_direction_of_its_own():
+    connection = tiny(
+        stops=[("x", 32.0, 34.0, None), ("y", 32.1, 34.0, None)],
+        pattern_stops=[("p", 1, "x"), ("p", 2, "x"), ("p", 3, "y")],
+    )
+    facets = load_stop_facets(connection, route_type_mode)
+    assert facets["x"].bearing_degrees == pytest.approx(0.0, abs=0.1)
+
+def test_rail_wins_and_a_parent_takes_its_platforms_mode():
+    connection = tiny(
+        stops=[
+            ("hub", 32.0, 34.0, None),
+            ("parent", 32.0, 34.0, None),
+            ("platform", 32.0, 34.0, "parent"),
+            ("odd", 32.0, 34.0, None),
+        ],
+        routes=[("bus", 3), ("train", 2), ("unknown", 9999)],
+        route_stops=[("bus", "hub"), ("train", "hub"), ("train", "platform"), ("unknown", "odd")],
+    )
+    facets = load_stop_facets(connection, route_type_mode)
+    assert (facets["hub"].mode, facets["parent"].mode, facets["odd"].mode) == ("rail", "rail", "other")
+```
+
+`facets_by_source_id(tmp_path) -> dict[str, StopFacets]` builds the synthetic reference and re-keys the loader's answer by `stops.source_id`. `tiny(stops=(), routes=(), route_stops=(), pattern_stops=()) -> sqlite3.Connection` creates the four tables in memory with the columns listed above, in that order, and inserts the rows given.
+
+- [ ] Step 2: run the test file. Expected: the four new tests fail.
+- [ ] Step 3: implement `load_stop_facets`. Mode: the dominant mode of the routes in `route_stops` for the stop; a stop with none takes the dominant mode of its children's routes. Direction: walk `pattern_stops` in `(pattern_id, sequence)` order; each call followed in the same pattern by a call at a different stop gives one bearing toward it (skip when `initial_bearing` is `None`). A stop with at least one such bearing gets `mean_bearing` of them and `"next_stop"`. A stop with none gets `mean_bearing` of the bearings arriving from its preceding calls and `"previous_stop"`. When `mean_bearing` is `None`, both bearing fields are `None`.
+- [ ] Step 4: run the test file. Expected: 7 passed.
+- [ ] Step 5: commit: "API-C6: derive stop mode and direction from a reference".
+
+**Task 3: serve the three keys**
+
+Files: modify `services/api/src/opentransit/reference.py` (load beside `_load_stop_refs` where the reference is opened; items in `stops_near`, `stops_in_bbox` and `_stop`), `services/api/src/opentransit/api/routes/reference.py` (`_public` names), `docs/api-prd.md` (the `GET /v1/stops` and `GET /v1/stops/{stopId}` rows); tests `services/api/tests/test_reference.py`, `test_reference_api.py`, `test_reference_schema_compat.py`.
+
+Consumes: `load_stop_facets`, `StopFacets`. Produces: every stop item from `ReferenceStore.stops_near`, `stops_in_bbox` and `stop` (the stop itself, each of `children`, and `parent`) carries `mode`, `bearing_degrees` and `bearing_source`. `stop_search_candidates` is unchanged.
+
+- [ ] Step 1: write the failing tests.
+
+```python
+def test_listed_stops_carry_mode_and_direction(reference):
+    database, _ = reference
+    store = ReferenceStore(database)
+    items = {i["source_id"]: i for i in store.stops_in_bbox(32.07, 34.77, 32.09, 34.79)["items"]}
+    assert items["platform_b"]["mode"] == "bus"
+    assert items["platform_b"]["bearing_degrees"] == pytest.approx(220.3, abs=0.2)
+    assert items["platform_b"]["bearing_source"] == "next_stop"
+    assert items["platform_a"]["bearing_degrees"] is None
+    near = store.stops_near(32.08, 34.78, radius_m=500)["items"]
+    assert all({"mode", "bearing_degrees", "bearing_source"} <= set(i) for i in near)
+    detail = store.stop("platform_b")
+    assert detail["bearing_source"] == "next_stop"
+    assert detail["parent"]["mode"] == "bus"
+```
+
+In `test_reference_api.py`, with `reference_client` as the neighbouring tests use it:
+
+```python
+    item = next(i for i in client.get("/v1/stops", params={"bbox": "34.77,32.07,34.79,32.09"}).json()["data"] if i["sourceId"] == "platform_b")
+    assert item["mode"] == "bus" and item["bearingSource"] == "next_stop"
+    assert item["bearingDegrees"] == pytest.approx(220.3, abs=0.2)
+    assert "bearing_degrees" not in item and "bearing_source" not in item
+```
+
+In `test_reference_schema_compat.py`, add to the test that opens a schema 2 reference one assertion that a stop from `stops_near` has a `mode` key.
+
+- [ ] Step 2: run the three test files. Expected: the new assertions fail with `KeyError`.
+- [ ] Step 3: implement. Load once into `self._stop_facets` on the connection that loads `_stop_refs`; add an instance method that returns `_stop_item(row)` plus the three keys, and use it at the call sites named above. Add `"bearing_degrees": "bearingDegrees"` and `"bearing_source": "bearingSource"` to `_public`.
+- [ ] Step 4: run the full offline suite and both Ruff commands. Expected: all pass, with no test removed or skipped that passed before.
+- [ ] Step 5: in `docs/api-prd.md`, add to both rows "each stop with `mode`, `bearingDegrees`, `bearingSource` (API-C6)" and, under the table, the meanings exactly as in the global constraints above.
+- [ ] Step 6: commit: "API-C6: stop items carry mode and direction of travel".
+
+**Task 4: check it on a real generation and record it**
+
+Files: create `services/api/results/api-stop-facets-<generation>-<YYYYMMDD>-01.json`; modify `docs/client-design.md` (the two gap rows), `PROJECT_STATUS.md`.
+
+- [ ] Step 1: run this branch's API beside a local stack on a current generation, as in [development.md](development.md) (a second API container on its own port; never the `ot-demo-*` stack). Record the generation id and the commit.
+- [ ] Step 2: measure, and write to the evidence file: the count of stops by `mode`; the share of stops with a bearing, by `bearingSource`, and the share with none; the time `load_stop_facets` takes and the API's resident memory before and after the change.
+- [ ] Step 3: compare with what the API already knows. For 20 journeys from the acceptance probe corpus, take the first transit leg's `boarding.bearingDegrees` and the boarding stop's `bearingDegrees` from `GET /v1/stops/{stopId}`. Record each pair and the difference.
+- [ ] Step 4: judge against these limits, which are this plan's own and not measured requirements: loading adds at most 3 seconds to startup and 30 MiB of memory; at least 18 of the 20 pairs differ by less than 45 degrees; every stop the feed's rail routes serve reports `"rail"`. If a limit is missed, stop and report instead of adjusting it.
+- [ ] Step 5: in `docs/client-design.md`, change the gap column of the two stop-item rows to "Supplied by API-C6" with the evidence link. Update `PROJECT_STATUS.md`: the API-C6 row and a recent outcome with the evidence date and link, labelled mechanical, not human-reviewed.
+- [ ] Step 6: commit: "API-C6: live evidence and status".
 
 ### Client tasks
 
