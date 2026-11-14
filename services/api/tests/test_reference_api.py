@@ -2,6 +2,7 @@ import json
 from datetime import UTC, datetime
 
 import httpx
+import pytest
 from fastapi.testclient import TestClient
 from test_reference import synthetic_feed
 
@@ -95,6 +96,20 @@ def test_reference_discovery_patterns_and_truthful_readiness(manifest, engine_ro
         assert loop["stops"][0]["stopId"] == loop["stops"][2]["stopId"]
         assert loop["stops"][1]["pickupType"] == 1
         assert client.get("/v1/routes/mot:route:missing/patterns").status_code == 404
+
+
+def test_listed_stops_serve_mode_and_direction_in_http_naming(manifest, engine_route):
+    with reference_client(manifest, engine_route) as client:
+        item = next(
+            i
+            for i in client.get("/v1/stops", params={"bbox": "34.77,32.07,34.79,32.09"}).json()[
+                "data"
+            ]
+            if i["sourceId"] == "platform_b"
+        )
+        assert item["mode"] == "bus" and item["bearingSource"] == "next_stop"
+        assert item["bearingDegrees"] == pytest.approx(220.3, abs=0.2)
+        assert "bearing_degrees" not in item and "bearing_source" not in item
 
 
 def test_bounds_safe_errors_and_empty_results(manifest, engine_route, caplog):

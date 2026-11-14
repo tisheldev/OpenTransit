@@ -38,6 +38,7 @@ from opentransit.core.trip_calls import (
 )
 from opentransit.localities import LocalityDataset, assign_stops
 from opentransit.search_cache import ResultCache
+from opentransit.stop_facets import StopFacets, load_stop_facets
 
 # 3: localities (OSM admin level 8), their names and the stop assignment.
 SCHEMA_VERSION = 3
@@ -128,6 +129,10 @@ def route_type_mode(route_type: int | None) -> str:
         if low <= route_type <= high:
             return mode
     return "other"
+
+
+# Facets for a stop_id the load did not see: nothing can be told, so nothing is invented.
+_NO_STOP_FACETS = StopFacets(None, None, None)
 
 
 def tables_for_schema(schema_version: int) -> tuple[str, ...]:
@@ -1104,6 +1109,7 @@ class ReferenceStore:
                 pair: _TranslationIndex(connection, *pair) for pair in SERVED_TRANSLATIONS
             }
             self._stop_refs = self._load_stop_refs(connection)
+            self._stop_facets = load_stop_facets(connection, route_type_mode)
         finally:
             connection.close()
         # A composed public generation can reuse these immutable bytes. Verify
@@ -1331,7 +1337,7 @@ class ReferenceStore:
             for row in candidates:
                 distance = _distance_m(latitude, longitude, row["latitude"], row["longitude"])
                 if distance <= radius_m:
-                    item = self._stop_item(row)
+                    item = self._listed_stop_item(row)
                     item["distance_m"] = distance
                     found.append(item)
         found.sort(key=lambda row: (row["distance_m"], row["stop_id"]))
@@ -1367,7 +1373,7 @@ class ReferenceStore:
                 "AND stop_id > ? ORDER BY stop_id LIMIT ?",
                 (south, north, west, east, after[0] if after else "", limit + 1),
             ).fetchall()
-            found = [self._stop_item(row) for row in rows]
+            found = [self._listed_stop_item(row) for row in rows]
         return self._page(found, limit, query, lambda row: [row["stop_id"]])
 
     @staticmethod
@@ -1386,6 +1392,16 @@ class ReferenceStore:
             "platform_code": row["platform_code"],
         }
 
+    def _listed_stop_item(self, row: sqlite3.Row) -> dict[str, Any]:
+        """A stop item plus its mode and direction of travel (API-C6)."""
+        facets = self._stop_facets.get(row["stop_id"], _NO_STOP_FACETS)
+        return {
+            **self._stop_item(row),
+            "mode": facets.mode,
+            "bearing_degrees": facets.bearing_degrees,
+            "bearing_source": facets.bearing_source,
+        }
+
     def stop(self, stop_id: str) -> dict[str, Any] | None:
         return self._cached("stop", (stop_id,), lambda: self._stop(stop_id))
 
@@ -1396,12 +1412,12 @@ class ReferenceStore:
             ).fetchone()
             if row is None:
                 return None
-            item = self._stop_item(row)
+            item = self._listed_stop_item(row)
             item["translations"] = self._translation_index[("stops", "stop_name")].resolve(
                 row["source_id"], row["name"]
             )
             item["children"] = [
-                self._stop_item(child)
+                self._listed_stop_item(child)
                 for child in connection.execute(
                     "SELECT * FROM stops WHERE parent_station=? ORDER BY stop_id",
                     (row["stop_id"],),
@@ -1420,7 +1436,7 @@ class ReferenceStore:
                 parent = connection.execute(
                     "SELECT * FROM stops WHERE stop_id=?", (row["parent_station"],)
                 ).fetchone()
-                item["parent"] = self._stop_item(parent) if parent else None
+                item["parent"] = self._listed_stop_item(parent) if parent else None
             return item
 
     def stop_search_candidates(self) -> list[dict[str, Any]]:

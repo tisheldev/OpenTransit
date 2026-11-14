@@ -133,8 +133,8 @@ D3 POST journey planning was accepted September 30. POST reduces coordinates in 
 | `GET /readyz` | None | 200 when usable; otherwise `503 NOT_READY` with safe reason codes (coverage, freshness, probe, engine, reference, search index, geocoder warm-up) | B/C / US10 |
 | `GET /openapi.json`, `GET /docs` | None | Implemented API reference | A / US09 |
 | `GET /v1/status` | None | Capabilities, coverage, safe health | B/C / US08 |
-| `GET /v1/stops` | `near` + radius OR `bbox`, limit/cursor | Stop page | B / US03 |
-| `GET /v1/stops/{stopId}` | Namespaced stop reference | Stop detail and serving routes | B / US03 |
+| `GET /v1/stops` | `near` + radius OR `bbox`, limit/cursor | Stop page; each stop with `mode`, `bearingDegrees`, `bearingSource` (API-C6) | B / US03 |
+| `GET /v1/stops/{stopId}` | Namespaced stop reference | Stop detail and serving routes; each stop with `mode`, `bearingDegrees`, `bearingSource` (API-C6) | B / US03 |
 | `GET /v1/routes` | At least one of stop/operator/line filter; cursor | Matching route page | B / US07 |
 | `GET /v1/routes/{routeId}` | Namespaced route reference | Metadata and pattern summaries | B / US07 |
 | `GET /v1/routes/{routeId}/patterns` | Limit/cursor | Patterns with ordered stops | B / US07 |
@@ -145,6 +145,12 @@ D3 POST journey planning was accepted September 30. POST reduces coordinates in 
 | `POST /v1/journeys` | Typed locations, time and constraints, optional `excludeTripRefs` | Journey alternatives; transit legs carry platforms (API-C2), intermediate stops and boarding direction/side | A basic; B complete / US01, US05 |
 | `GET /v1/places` | `q`, `lang`, optional `near`, types, limit | Place candidates | C / US02 |
 | `GET /metrics` (conditional) | Private operator access | Bounded metrics, only if a collector needs them | C / US10 |
+
+Stop fields added by API-C6, on every stop item of `GET /v1/stops` and `GET /v1/stops/{stopId}` (the stop, each of its `children` and its `parent`). They are additive: no existing key changes name, type or meaning, and older clients ignore the new keys. A value that cannot be told is `null`, never invented.
+
+- `mode` is `"rail"`, `"light_rail"`, `"bus"`, `"other"` or `null` (no line serves the stop). A stop served by several modes takes the first of rail, light rail, bus.
+- `bearingDegrees` is degrees clockwise from north, `0 <= x < 360`, one decimal, the same convention as `boarding.bearingDegrees`. It is the straight line to the next stop, not the street's geometry. A stop served in opposing directions gets `bearingDegrees: null`, not an average.
+- `bearingSource` is `"next_stop"`, `"previous_stop"` (the stop has no usable onward hop: it is only ever a last call, or every next stop after it is less than a metre away or has no coordinates) or `null`.
 
 No `/vehicles` or `/alerts` handler is required in v1. Capability status documents the deferral; future endpoints are added only when the source is usable. Route/pattern lists use default page size 20, maximum 100.
 
