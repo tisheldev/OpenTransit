@@ -44,24 +44,31 @@ describe("Stop", () => {
     expect(lineRows().every((row) => row.getAttribute("aria-pressed") === "false")).toBe(true);
     expect(screen.getByText(he["stop.scheduled"])).toBeInTheDocument();
 
-    // Every line's pattern through the stop (the lines endpoint): each fans out, faded, from
-    // the stop along its next stops, with a faded tag at its end.
-    await waitFor(() => expect(getMapState().scene.route).toHaveLength(6));
+    // Every line's pattern through the stop (the lines endpoint): one way out per direction,
+    // faded, fading toward the map's edge and drawn out from the stop (user review, 14
+    // November): five lines go north up the same street; 115 turns off west.
+    await waitFor(() => expect(getMapState().scene.route).toHaveLength(2));
     const scene = getMapState().scene;
-    expect(scene.route.every((leg) => leg.tone === "faded" && leg.kind === "transit")).toBe(true);
-    expect(scene.route.map((leg) => leg.operatorId)).toEqual(["5", "15", "5", "5", "5", "5"]);
-    expect(scene.route.every((leg) => leg.coordinates![0]![0] === 34.77512 && leg.coordinates![0]![1] === 32.075566)).toBe(true);
-    expect(scene.tags!.map((tag) => [tag.kind, tag.line?.label, tag.text])).toEqual([
-      ["faded", "172", "מסוף רדינג"],
-      ["faded", "115", "מסוף רדינג"],
-      ["faded", "8", "אוניברסיטת ת\"א"],
-      ["faded", "5", "רכבת מרכז"],
-      ["faded", "2", "נווה דן"],
-      ["faded", "39", "מסוף רדינג"],
+    expect(scene.route.every((leg) => leg.tone === "quiet" && leg.kind === "transit" && leg.fadeOut && leg.grow)).toBe(true);
+    expect(scene.route.map((leg) => leg.operatorId)).toEqual(["5", "15"]);
+    // North starts at the stop; 115 shares that street first, so it is drawn from where it
+    // turns off (two translucent colours on one street would mix into a third).
+    expect(scene.route[0]!.coordinates![0]).toEqual([34.77512, 32.075566]);
+    expect(scene.route[1]!.coordinates![0]).not.toEqual([34.77512, 32.075566]);
+    expect(scene.growKey!.startsWith("mot:stop:13583|")).toBe(true);
+    // One tag per direction, pinned where its lines leave the map.
+    expect(scene.tags!.map((tag) => [tag.kind, tag.line?.label ?? tag.lines?.map((line) => line.label), tag.text])).toEqual([
+      ["faded", ["172", "8", "5", "2", "39"], undefined],
+      ["faded", "115", "לכיוון מסוף רדינג"],
     ]);
-    // A fan's tag sits at the fan's end.
-    const fan8 = scene.route[2]!.coordinates!;
-    expect(scene.tags![2]!.position).toEqual(fan8[fan8.length - 1]);
+    expect(scene.tags![0]).toMatchObject({ late: true });
+    expect(scene.tags![0]!.ariaLabel).toBeUndefined();
+    // A tag follows its whole way out from the stop (to the map's edge, else to its end).
+    const fan115 = scene.route[1]!.coordinates!;
+    const along = scene.tags![1]!.along!;
+    expect(along[0]).toEqual([34.77512, 32.075566]);
+    expect(along.at(-1)).toEqual(fan115.at(-1));
+    expect(scene.tags![1]!.position).toEqual(fan115.at(-1));
     expect(scene.stopPins).toEqual([expect.objectContaining({ id: "mot:stop:13583", selected: true, position: [34.77512, 32.075566] })]);
     expect(scene).toMatchObject({ camera: "fit", user: null });
     expect(scene.fitTo!.length).toBeGreaterThan(2);
@@ -69,7 +76,7 @@ describe("Stop", () => {
 
   it("tapping a line shows its whole route with its direction, its stops and its end; tapping it again folds it back", async () => {
     renderApp(STOP);
-    await waitFor(() => expect(getMapState().scene.route).toHaveLength(6));
+    await waitFor(() => expect(getMapState().scene.route).toHaveLength(2));
     const row = lineRows()[2]!;
     await userEvent.click(row);
     expect(row).toHaveAttribute("aria-pressed", "true");
@@ -80,36 +87,50 @@ describe("Stop", () => {
     // The whole pattern, end to end (line 8 calls at 42 stops), and the camera frames it.
     expect(chosen.coordinates).toHaveLength(42);
     expect(scene.fitTo).toHaveLength(43);
-    expect(scene.route.filter((leg) => leg.tone === "faded")).toHaveLength(5);
+    expect(scene.route.filter((leg) => leg.tone === "quiet")).toHaveLength(2);
     // A small ring at each of its other stops.
     expect(scene.pins).toHaveLength(41);
     expect(scene.pins.every((pin) => pin.role === "stop")).toBe(true);
     expect(scene.pins[0]).toMatchObject({ label: "מסוף הטייסים", position: [34.813778, 32.047685] });
     const direction = scene.tags!.find((tag) => tag.id === "direction")!;
     expect(direction).toMatchObject({ kind: "plain", anchor: "center", ariaLabel: "כיוון הנסיעה של קו 8" });
-    expect(direction.text).toMatch(/^[↑↗→↘↓↙←↖]$/);
+    // A chevron turned to the line's bearing (board Stop), not a text arrow.
+    expect(direction.glyph).toMatchObject({ kind: "chevron" });
+    expect(direction.glyph!.bearing).toBeGreaterThanOrEqual(0);
     const end = scene.tags!.find((tag) => tag.kind === "strong")!;
     expect(end).toMatchObject({ text: "אוניברסיטת ת\"א", line: { label: "8" }, ariaLabel: "קו 8 נוסע אל אוניברסיטת ת\"א" });
     expect(end.position).toEqual(chosen.coordinates![chosen.coordinates!.length - 1]);
     await userEvent.click(row);
     expect(row).toHaveAttribute("aria-pressed", "false");
-    expect(getMapState().scene.route.every((leg) => leg.tone === "faded")).toBe(true);
+    expect(getMapState().scene.route.every((leg) => leg.tone === "quiet")).toBe(true);
   });
 
-  it("a faded tag on the map chooses its line too", async () => {
+  it("a direction's tag lists its lines in the panel and lights them; a one-line tag chooses its line", async () => {
     renderApp(STOP);
-    await waitFor(() => expect(getMapState().scene.tags).toHaveLength(6));
-    const tag = getMapState().scene.tags!.find((item) => item.line?.label === "5")!;
-    act(() => tag.onSelect!());
-    expect(lineRows()[3]).toHaveAttribute("aria-pressed", "true");
+    await waitFor(() => expect(getMapState().scene.tags).toHaveLength(2));
+    const [north, west] = getMapState().scene.tags!;
+    act(() => north!.onSelect!());
+    expect(lineRows().map((row) => row.textContent?.match(/^\d+/)?.[0])).toEqual(["172", "8", "5", "2", "39"]);
+    expect(screen.getByText("5 קווים בכיוון הזה")).toBeInTheDocument();
+    const lit = getMapState().scene;
+    expect(lit.tags![0]!.kind).toBe("strong");
+    expect(lit.route.map((leg) => leg.quietOpacity)).toEqual([0.9, undefined]);
+    // The direction's lines grow once only: the key is the same.
+    expect(lit.growKey).toBe(getMapState().scene.growKey);
+    await userEvent.click(screen.getByRole("button", { name: "כל הקווים" }));
+    expect(lineRows()).toHaveLength(6);
+    act(() => west!.onSelect!());
+    expect(lineRows()[1]).toHaveAttribute("aria-pressed", "true");
   });
 
   it("without the lines endpoint: the fans follow each line's next trip's shape", async () => {
     withoutLines();
     renderApp(STOP);
-    // Lines 8 and 5 have a recorded trip shape in the fixtures; the others have none.
-    await waitFor(() => expect(getMapState().scene.route).toHaveLength(2));
-    expect(getMapState().scene.tags).toHaveLength(6);
+    // Lines 8 and 5 have a recorded trip shape in the fixtures; the others have none. They
+    // leave the same way: one way out and one tag; the four lines without a shape get a tag each.
+    await waitFor(() => expect(getMapState().scene.route).toHaveLength(1));
+    expect(getMapState().scene.tags).toHaveLength(5);
+    expect(getMapState().scene.tags!.filter((tag) => tag.along).map((tag) => tag.lines?.map((line) => line.label))).toEqual([["8", "5"]]);
     await userEvent.click(lineRows()[2]!);
     const chosen = getMapState().scene.route.find((leg) => leg.tone === "normal")!;
     // From where the stop meets the trip's shape to the shape's end.
@@ -122,10 +143,10 @@ describe("Stop", () => {
   it("a line without a shape still gets its row and a tag, with no line drawn", async () => {
     withoutLines();
     renderApp(STOP);
-    await waitFor(() => expect(getMapState().scene.route).toHaveLength(2));
+    await waitFor(() => expect(getMapState().scene.route).toHaveLength(1));
     await userEvent.click(lineRows()[0]!);
     const scene = getMapState().scene;
-    expect(scene.route.every((leg) => leg.tone === "faded")).toBe(true);
+    expect(scene.route.every((leg) => leg.tone === "quiet")).toBe(true);
     expect(scene.tags!.find((tag) => tag.kind === "strong")).toMatchObject({ line: { label: "172" }, text: "מסוף רדינג" });
     expect(scene.tags!.find((tag) => tag.id === "direction")).toBeUndefined();
   });
@@ -162,7 +183,7 @@ describe("Stop", () => {
     );
     renderApp(STOP);
     await waitFor(() => expect(lineRows()).toHaveLength(2));
-    expect(lineRows()[0]!.querySelector(".ot-line")).toHaveAttribute("data-vehicle", "train");
+    expect(lineRows()[0]!.querySelector(".cv-bdg")).toHaveAttribute("data-vehicle", "rail");
   });
 
   it("with a fix already allowed: the distance to the stop and the passenger on the map", async () => {
@@ -172,7 +193,7 @@ describe("Stop", () => {
     });
     renderApp(STOP);
     const heading = await screen.findByRole("heading", { level: 1, name: "דיזנגוף סנטר/דיזנגוף" });
-    await waitFor(() => expect(heading.parentElement).toHaveTextContent(/40 מ׳$/));
+    await waitFor(() => expect(heading.parentElement).toHaveTextContent(/40 מ׳ · 1 דק׳ הליכה$/));
     expect(getMapState().scene.user).toEqual({ position: [34.7749, 32.0753], accuracyMeters: 20 });
   });
 

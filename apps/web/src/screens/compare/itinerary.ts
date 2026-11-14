@@ -24,6 +24,8 @@ export type ItineraryItem =
       time: string;
       name: string;
       platform: string | null;
+      /** The stop there, when the place is a stop (its name opens the stop screen). */
+      stopId: string | null;
       above: Track;
       below: Track;
     }
@@ -53,8 +55,8 @@ export function buildItinerary(journey: Journey, ends: EndLabels): ItineraryItem
   const items: ItineraryItem[] = [];
   const first = legs[0];
   if (!first) return items;
-  const place = (role: PlaceRole, time: string, name: string, leg: Leg | undefined, above: Track, below: Track) =>
-    items.push({ kind: "place", role, time, name: placeName(name, ends), platform: leg ? platformOf(leg) : null, above, below });
+  const place = (role: PlaceRole, time: string, name: string, leg: Leg | undefined, above: Track, below: Track, stopId: string | null = null) =>
+    items.push({ kind: "place", role, time, name: placeName(name, ends), platform: leg ? platformOf(leg) : null, stopId, above, below });
 
   place(
     "origin",
@@ -63,6 +65,7 @@ export function buildItinerary(journey: Journey, ends: EndLabels): ItineraryItem
     first.kind === "transit" ? first : undefined,
     null,
     track(first),
+    first.from.stopId,
   );
 
   legs.forEach((leg, index) => {
@@ -73,10 +76,10 @@ export function buildItinerary(journey: Journey, ends: EndLabels): ItineraryItem
       if (previous?.kind === "transit") {
         const wait = gap(previous.timing.scheduledArrival, leg.timing.scheduledDeparture);
         if (wait >= 60) items.push({ kind: "wait", seconds: wait });
-        place("board", leg.timing.scheduledDeparture, leg.from.name, leg, track(previous), track(leg));
+        place("board", leg.timing.scheduledDeparture, leg.from.name, leg, track(previous), track(leg), leg.from.stopId);
       }
       items.push({ kind: "ride", legIndex: index, leg, mode: transitMode(leg) });
-      place(next ? "exit" : "destination", leg.timing.scheduledArrival, leg.to.name, undefined, track(leg), track(next));
+      place(next ? "exit" : "destination", leg.timing.scheduledArrival, leg.to.name, undefined, track(leg), track(next), leg.to.stopId);
       return;
     }
     // A walk: the wait before it (after a ride) and before the next ride both belong here.
@@ -91,11 +94,11 @@ export function buildItinerary(journey: Journey, ends: EndLabels): ItineraryItem
       waitSeconds: before + after,
     });
     if (!next) {
-      place("destination", leg.timing.scheduledArrival, leg.to.name, undefined, "walk", null);
+      place("destination", leg.timing.scheduledArrival, leg.to.name, undefined, "walk", null, leg.to.stopId);
     } else if (next.kind === "transit") {
-      place("board", next.timing.scheduledDeparture, next.from.name, next, "walk", track(next));
+      place("board", next.timing.scheduledDeparture, next.from.name, next, "walk", track(next), next.from.stopId);
     } else {
-      place("transfer", leg.timing.scheduledArrival, leg.to.name, undefined, "walk", "walk");
+      place("transfer", leg.timing.scheduledArrival, leg.to.name, undefined, "walk", "walk", leg.to.stopId);
     }
   });
   return items;

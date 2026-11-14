@@ -51,6 +51,13 @@ MAX_SOURCE_PROFILE_CALLS = 10_000
 DEFAULT_RADIUS_M = 500
 MAX_RADIUS_M = 5000
 MAX_BBOX_KM2 = 100
+# Stations over a large area (board 7, MapFar): rail and light-rail stations are a few hundred
+# nationally, so a station-only bbox may cover any box the route accepts (29-34 N, 34-36 E,
+# at most about 108,000 km² by the area formula below; Israel's own bounding box is about
+# 70,000 km²). The result set, not the area, is what bounds the cost.
+MAX_STATION_BBOX_KM2 = 120_000
+STOP_MODES = ("rail", "light_rail", "bus", "other")
+STATION_MODES = frozenset({"rail", "light_rail"})
 EARTH_RADIUS_M = 6_371_008.8
 STOP_PREFIX = "mot:stop:"
 GTFS_RAIL_ROUTE_TYPE = 2
@@ -1075,6 +1082,8 @@ class ReferenceStore:
         self._idle: list[sqlite3.Connection] = []
         self._pool_lock = threading.Lock()
         self._closed = False
+        self._stations: list[tuple[dict[str, Any], frozenset[str]]] | None = None
+        self._station_lock = threading.Lock()
         self._details = {
             kind: ResultCache(DETAIL_CACHE_ENTRIES)
             for kind in ("stop", "route", "routes", "patterns", "lines")
@@ -1355,26 +1364,117 @@ class ReferenceStore:
         east: float,
         limit: int = DEFAULT_PAGE_SIZE,
         cursor: str | None = None,
+        modes: list[str] | tuple[str, ...] | None = None,
     ) -> dict[str, Any]:
+        """Stops inside a box, by stop ID; ``modes`` keeps only stops of those modes.
+
+        A filter of only ``rail``/``light_rail`` lists stations: each platform is folded
+        into its parent station (returned once), and the area limit rises to
+        ``MAX_STATION_BBOX_KM2``. Any other filter keeps the 100 km² limit and lists the
+        matching stops themselves. A stop's mode is its listed ``mode`` (API-C6).
+        """
         limit = _page_limit(limit)
         _validate_coordinates(south, west, north, east)
         if not (-90 <= south < north <= 90 and -180 <= west < east <= 180):
             raise ValueError("Bounding box coordinates are invalid")
+        selected = None
+        if modes is not None:
+            selected = tuple(sorted(set(modes)))
+            if not selected or any(mode not in STOP_MODES for mode in selected):
+                raise ValueError("Unknown stop mode")
+        stations_only = selected is not None and set(selected) <= STATION_MODES
         height = _distance_m(south, west, north, west) / 1000
         closest_to_equator = max(south, min(north, 0))
         width = _distance_m(closest_to_equator, west, closest_to_equator, east) / 1000
-        if height * width > MAX_BBOX_KM2:
-            raise ValueError("Bounding box exceeds 100 square kilometres")
-        query = {"kind": "bbox", "south": south, "west": west, "north": north, "east": east}
+        if height * width > (MAX_STATION_BBOX_KM2 if stations_only else MAX_BBOX_KM2):
+            raise ValueError("Bounding box exceeds the area limit")
+        query: dict[str, Any] = {
+            "kind": "bbox",
+            "south": south,
+            "west": west,
+            "north": north,
+            "east": east,
+        }
+        if selected is not None:
+            # Only when filtered, so cursors issued before the filter existed stay valid.
+            query["modes"] = list(selected)
         after = _cursor_decode(cursor, self.metadata.generation_id, query)
+        start = after[0] if after else ""
+        if stations_only:
+            found = []
+            for item, member_modes in self._station_items():
+                if item["stop_id"] <= start or not member_modes & set(selected):
+                    continue
+                lat, lon = item["latitude"], item["longitude"]
+                if (
+                    lat is None
+                    or lon is None
+                    or not (south <= lat <= north and west <= lon <= east)
+                ):
+                    continue
+                found.append(dict(item))
+                if len(found) > limit:
+                    break
+            return self._page(found, limit, query, lambda row: [row["stop_id"]])
         with self._connect() as connection:
             rows = connection.execute(
                 "SELECT * FROM stops WHERE latitude BETWEEN ? AND ? AND longitude BETWEEN ? AND ? "
-                "AND stop_id > ? ORDER BY stop_id LIMIT ?",
-                (south, north, west, east, after[0] if after else "", limit + 1),
-            ).fetchall()
-            found = [self._listed_stop_item(row) for row in rows]
+                "AND stop_id > ? ORDER BY stop_id" + ("" if selected else " LIMIT ?"),
+                (south, north, west, east, start) + (() if selected else (limit + 1,)),
+            )
+            found = []
+            for row in rows:
+                item = self._listed_stop_item(row)
+                if selected is not None and item["mode"] not in selected:
+                    continue
+                found.append(item)
+                if len(found) > limit:
+                    break
         return self._page(found, limit, query, lambda row: [row["stop_id"]])
+
+    def _station_items(self) -> list[tuple[dict[str, Any], frozenset[str]]]:
+        """Rail and light-rail stops folded into their stations, by stop ID (built once).
+
+        Each entry is the station's (or stand-alone stop's) listed item and the station
+        modes of the stops folded into it.
+        """
+        with self._station_lock:
+            if self._stations is not None:
+                return self._stations
+            parents: dict[str, str] = {}
+            for ref in self._stop_refs.values():
+                for child_id, _, _ in ref.children:
+                    parents[child_id] = ref.stop_id
+            members: dict[str, set[str]] = {}
+            for stop_id, facets in self._stop_facets.items():
+                if facets.mode in STATION_MODES:
+                    members.setdefault(parents.get(stop_id, stop_id), set()).add(facets.mode)
+            station_ids = sorted(members)
+            items = []
+            with self._connect() as connection:
+                for chunk_start in range(0, len(station_ids), 500):
+                    chunk = station_ids[chunk_start : chunk_start + 500]
+                    items.extend(
+                        self._listed_stop_item(row)
+                        for row in connection.execute(
+                            f"SELECT * FROM stops WHERE stop_id IN ({','.join('?' * len(chunk))})"
+                            " ORDER BY stop_id",
+                            chunk,
+                        )
+                    )
+            self._stations = [
+                (item, frozenset(members[item["stop_id"]]))
+                for item in sorted(items, key=lambda item: item["stop_id"])
+            ]
+            return self._stations
+
+    def read_rows(self, sql: str, parameters: tuple | list = ()) -> list[sqlite3.Row]:
+        """Rows of one read-only query, for modules that index this generation themselves.
+
+        The connection is query-only and the file immutable, so nothing can be written.
+        """
+        with self._connect() as connection:
+            return connection.execute(sql, parameters).fetchall()
 
     @staticmethod
     def _stop_item(row: sqlite3.Row) -> dict[str, Any]:

@@ -292,7 +292,8 @@ test.describe("in the app shell", () => {
     await blockExternal(page);
     for (const theme of ["dark", "light"] as const) {
       await setPageTheme(page, theme);
-      await page.goto(appPath("#/search/to"));
+      // A screen with Back in the top band (Search draws its own Back beside its field).
+      await page.goto(appPath("#/settings"));
       // Stand-in for a wide system font (DejaVu Sans on the Linux CI runner wraps it otherwise).
       await page.addStyleTag({ content: ".map-attribution { letter-spacing: 1.5px; }" });
       const attribution = page.getByTestId("map-attribution");

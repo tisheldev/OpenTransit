@@ -1,30 +1,170 @@
-/* Home — board 1 (11 November 2026). The field, cards, heading and rows are the shared
-   board pieces (styles/boards.css); this file only places them in the sheet. */
+/* Home — board 1 as drawn on the stops-and-lines canvas (14 November 2026; HomeSheet.tsx).
+   Sizes, radii and type are the canvas's (.fld, .card, .ct, .cs, .row, .due, .mu); colours
+   come from the tokens, which equal the canvas's dark values. Logical properties only. */
 
 .home {
   display: flex;
   flex-direction: column;
   min-block-size: 100%;
+  line-height: 22px;
 }
 
-.home .b-field .ot-i {
+.hs-mu {
   color: var(--ink-muted);
+  font-size: 13px;
+  line-height: 18px;
+}
+.hs-ellipsis {
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.home-rows {
+/* The search field as a button (canvas .fld): 52 px, corner 10, sunken. */
+.hs-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  inline-size: 100%;
+  block-size: 52px;
+  padding-block: 0;
+  padding-inline: 14px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--surface-sunken);
+  color: var(--ink);
+  font: inherit;
+  font-size: 16px;
+  line-height: 22px;
+  text-align: start;
+  cursor: pointer;
+}
+.hs-field .hs-mu {
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Cards: two columns, 8 px apart (canvas .card): 64 px, corner 10, a hairline edge. */
+.hs-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-block-start: 12px;
+}
+.hs-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  inline-size: 100%;
+  min-inline-size: 0;
+  min-block-size: 64px;
+  padding-block: 0;
+  padding-inline: 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  line-height: 22px;
+  text-align: start;
+  cursor: pointer;
+}
+.hs-card__title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-inline-size: 0;
+  font-weight: 700;
+  font-size: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.hs-card__sub {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-inline-size: 0;
+  color: var(--ink-muted);
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/* "Near you": the heading with the walk at its inline end, then the rows. */
+.hs-near {
+  margin-block-start: 14px;
+}
+.hs-near__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+.hs-near__head h2 {
+  margin: 0;
+  font-size: 17px;
+  line-height: 24px;
+  font-weight: 700;
+}
+.hs-rows {
   list-style: none;
   margin: 0;
   padding: 0;
 }
-.home-rows .b-row:focus-visible {
+/* A row (canvas .row): badge, destination over "stop · N min walk", minutes. */
+.hs-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  inline-size: 100%;
+  min-block-size: 52px;
+  padding-block: 6px;
+  padding-inline: 4px;
+  border: 0;
+  border-block-end: 1px solid var(--hairline);
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  line-height: 22px;
+  text-align: start;
+  cursor: pointer;
+}
+.hs-row:focus-visible {
   outline-offset: -3px;
 }
-
-.home-none {
-  margin-block: 14px 0;
+.hs-row__text {
+  flex: 1;
+  min-inline-size: 0;
+  display: flex;
+  flex-direction: column;
+}
+.hs-row__name {
+  font-weight: 700;
+  font-size: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* The minutes (canvas .due): the figure in Barlow 600 20 px, the unit muted 13 px. */
+.hs-due {
+  flex: none;
+  color: var(--ink-muted);
+  font-size: 13px;
+}
+.hs-due__n {
+  font-family: var(--font-numerals);
+  font-weight: 600;
+  font-size: 20px;
+  color: var(--ink);
 }
 
-.home-note {
-  margin-block: auto 0;
-  padding-block-start: var(--space-3);
+.hs-none {
+  margin-block: 8px 0;
+}
+.hs-note {
+  margin-block: 8px 0;
 }

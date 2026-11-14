@@ -57,13 +57,15 @@ function activeTrip() {
 const nearest = "דיזנגוף סנטר/דיזנגוף";
 /** Pins and tags are drawn once the map has loaded, which can take a while under parallel runs. */
 const MAP_READY_MS = 20_000;
-const stopSection = (page: Page) => page.locator(".home-stop");
+/** "Near you" (board 1, 14 November 2026): each line's next departure across the nearby stops. */
+const nearHeading = (page: Page) => page.getByRole("heading", { level: 2, name: "קרוב אליך" });
+const nearRows = (page: Page) => page.getByRole("list", { name: "הקווים הקרובים אליך" }).getByRole("button");
 
 test.beforeEach(async ({ page }) => {
   await blockExternal(page);
 });
 
-test("first launch (Hebrew): the search field, Home and Work to set, the nearest stop's departures, no prompts", async ({ page }) => {
+test("first launch (Hebrew): the search field, Home and Work to set, the lines near you, no prompts", async ({ page }) => {
   let prompted = false;
   page.on("dialog", () => void (prompted = true));
   await page.goto(appPath("#/"));
@@ -71,10 +73,12 @@ test("first launch (Hebrew): the search field, Home and Work to set, the nearest
   await expect(page.getByRole("button", { name: "לאן נוסעים?" })).toBeVisible();
   await expect(page.getByRole("button", { name: "הגדרת בית" })).toBeVisible();
   await expect(page.getByRole("button", { name: "הגדרת עבודה" })).toBeVisible();
-  await expect(page.getByRole("heading", { level: 2, name: nearest })).toBeVisible();
-  const rows = stopSection(page).getByRole("button");
-  await expect(rows).toHaveCount(4);
-  await expect(rows.first()).toContainText(/172\s*מסוף רדינג\s*2 דק׳/);
+  await expect(page.getByText("מקום, תחנה או קו")).toBeVisible();
+  await expect(nearHeading(page)).toBeVisible();
+  await expect(page.getByText("עד 5 דק׳ הליכה")).toBeVisible();
+  const rows = nearRows(page);
+  await expect(rows).toHaveCount(6);
+  await expect(rows.first()).toContainText(/172\s*מסוף רדינג\s*דיזנגוף סנטר\/דיזנגוף · 1 דק׳ הליכה\s*2 דק׳/);
   await expect(page.getByText("זמנים לפי לוח הזמנים")).toBeAttached();
   await expect(page.getByText("נתוני בדיקה — לא לוח הזמנים האמיתי")).toBeVisible();
   // The stops are pins on the map, the selected one carrying its next departure.
@@ -100,7 +104,7 @@ test("with saved places (English): a card goes straight to Compare", async ({ pa
   await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
   await expect(page.getByRole("button", { name: "Home", exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: "Set Work" })).toBeVisible();
-  await expect(page.getByRole("heading", { level: 2, name: nearest })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 2, name: "Near you" })).toBeVisible();
   await expectNoSeriousAxeViolations(page, "Home, saved places (en)");
   await page.getByRole("button", { name: "Home", exact: true }).click();
   await expect(page).toHaveURL(/#\/compare$/);
@@ -109,12 +113,10 @@ test("with saved places (English): a card goes straight to Compare", async ({ pa
   expect(page.url()).not.toContain("32.07");
 });
 
-test("location allowed: the stop's distance; one tap on a pin opens its stop (axe)", async ({ page }) => {
+test("location allowed: each line's walk to its stop; one tap on a pin opens its stop (axe)", async ({ page }) => {
   await allowLocation(page);
   await page.goto(appPath("#/"));
-  const head = page.locator(".home-stop .b-head");
-  await expect(head).toContainText(nearest);
-  await expect(head).toContainText(/\d+ מ׳/);
+  await expect(nearRows(page).first()).toContainText(new RegExp(`${nearest} · \\d+ דק׳ הליכה`));
   await expectNoSeriousAxeViolations(page, "Home, location allowed (he)");
 
   // Pins sit close together and under tags: use the keyboard, as a screen reader would.
@@ -123,14 +125,39 @@ test("location allowed: the stop's distance; one tap on a pin opens its stop (ax
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("דיזנגוף סנטר/טשרניחובסקי");
 });
 
-test("a departure row opens its stop with that line's route shown", async ({ page }) => {
+test("a line row opens its stop with that line's route shown", async ({ page }) => {
   await page.goto(appPath("#/"));
-  const row = stopSection(page).getByRole("button").nth(2);
-  await expect(row).toContainText(/^8/);
+  const row = nearRows(page).first();
+  await expect(row).toContainText(/^172/);
   await row.click();
   await expect(page).toHaveURL(/#\/stop\/mot%3Astop%3A13583$/);
-  await expect(page.getByRole("button", { pressed: true })).toContainText("אוניברסיטת ת\"א");
-  await expect(page.getByRole("img", { name: "קו 8 נוסע אל אוניברסיטת ת\"א" })).toBeAttached({ timeout: MAP_READY_MS });
+  await expect(page.getByRole("button", { pressed: true })).toContainText("מסוף רדינג");
+});
+
+test("saved stops and lines sit after Home and Work with their next departure; a line card opens the line", async ({ page }) => {
+  await page.addInitScript((value) => {
+    if (!sessionStorage.getItem("seeded")) {
+      localStorage.setItem("opentransit", value);
+      sessionStorage.setItem("seeded", "1");
+    }
+  }, JSON.stringify({
+    version: 2,
+    settings: { lang: "he" },
+    home: null,
+    work: null,
+    favourites: [],
+    recents: [],
+    savedStops: [{ stopId: "mot:stop:13583", name: "דיזנגוף סנטר", code: "25609", latitude: 32.075566, longitude: 34.77512, mode: "bus", savedAt: "2026-11-14T10:00:00Z" }],
+    savedLines: [{ lineKey: "5:10008", shortName: "8", operatorId: "5", operatorName: "דן", mode: "bus", destinationName: "מסוף הטייסים", originName: "מסוף רידינג", routeIdHint: null, area: "תל אביב-יפו", stopId: "mot:stop:13561", stopName: "דיזנגוף סנטר", savedAt: "2026-11-14T10:00:00Z" }],
+  }));
+  await page.goto(appPath("#/"));
+  const saved = page.getByRole("region", { name: "מקומות שמורים" }).getByRole("button");
+  await expect(saved).toHaveCount(4);
+  await expect(saved.nth(2)).toContainText(/^דיזנגוף סנטר\s*172\s*2\s*115\s*5 דק׳$/);
+  await expect(saved.nth(3)).toContainText(/^8\s*מסוף הטייסים\s*5 דק׳ · מדיזנגוף סנטר$/);
+  await expectNoSeriousAxeViolations(page, "Home, saved stops and lines (he)");
+  await saved.nth(3).click();
+  await expect(page).toHaveURL(/#\/line\/5%3A10008$/);
 });
 
 /** The browser refuses location for this origin (a real "Block", not a fake API). */
@@ -150,7 +177,7 @@ test("location refused: Locate is hidden, and a destination asks for the start n
   await page.goto(appPath("#/"));
   await denyLocation(page);
   await page.reload();
-  await expect(page.getByRole("heading", { level: 2, name: nearest })).toBeVisible();
+  await expect(nearHeading(page)).toBeVisible();
   await expect(page.getByRole("button", { name: "מרכוז המפה על המיקום שלי" })).toHaveCount(0);
   await expectNoSeriousAxeViolations(page, "Home, location refused (he)");
 
@@ -163,7 +190,7 @@ test("location refused: Locate is hidden, and a destination asks for the start n
   await expect(page.getByText("לא זמין: אין הרשאה למיקום. אפשר לאשר אותה בהגדרות הדפדפן")).toBeVisible();
   await expectNoSeriousAxeViolations(page, "Search From, location refused (he)");
   await page.getByRole("searchbox").fill("דיזנגוף");
-  await page.getByTestId("search-results").getByRole("button").nth(1).click();
+  await page.getByTestId("search-results").locator(".sx-main, .sx-row").nth(1).click();
   await expect(page).toHaveURL(/#\/compare$/);
   await page.getByRole("button", { name: "חזרה" }).click();
   await expect(page).toHaveURL(/#\/$/);
@@ -171,7 +198,7 @@ test("location refused: Locate is hidden, and a destination asks for the start n
   // Next visit: the plan starts from the start chosen last time.
   await page.evaluate(() => sessionStorage.removeItem("opentransit:plan"));
   await page.reload();
-  await expect(page.getByRole("heading", { level: 2, name: nearest })).toBeVisible();
+  await expect(nearHeading(page)).toBeVisible();
   const draft = await page.evaluate(() => JSON.parse(sessionStorage.getItem("opentransit:plan") ?? "null"));
   expect(draft.from.place.label).toMatch(/^דיזנגוף סנטר/);
 });
@@ -228,8 +255,12 @@ test("light theme: saved places, location allowed and an active trip (axe)", asy
   await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
   await expect(page.getByRole("button", { name: "חזרה לניווט" })).toBeVisible();
   await expect(page.getByRole("button", { name: "בית", exact: true })).toBeVisible();
-  await expect(page.locator(".home-stop .b-head")).toContainText(/\d+ מ׳/);
-  await expect(page.getByRole("button", { name: "172 2 דק׳", exact: true })).toBeVisible({ timeout: MAP_READY_MS });
+  await expect(nearRows(page).first()).toContainText(/דק׳ הליכה/);
+  // The chosen stop's sign names its next line. Its tag shows only where it covers no other
+  // stop (stops layer, MarkerTuning), which this short map above a tall sheet may not allow.
+  await expect(page.getByRole("button", { name: /^פתיחת התחנה דיזנגוף סנטר\/דיזנגוף, קו 172 בעוד \d+ דק׳$/ })).toBeAttached({
+    timeout: MAP_READY_MS,
+  });
   await expectNoSeriousAxeViolations(page, "Home, saved places, location and active trip, light (he)");
 });
 
@@ -237,7 +268,7 @@ test("light theme: first launch, an expired timetable, offline (axe)", async ({ 
   await useTheme(page, "light");
   await page.goto(appPath("#/"));
   await expect(page.getByRole("button", { name: "הגדרת בית" })).toBeVisible();
-  await expect(page.getByRole("heading", { level: 2, name: nearest })).toBeVisible();
+  await expect(nearHeading(page)).toBeVisible();
   await expect(page.getByText("נתוני בדיקה — לא לוח הזמנים האמיתי")).toBeVisible();
   await expectNoSeriousAxeViolations(page, "Home, first launch, light (he)");
 

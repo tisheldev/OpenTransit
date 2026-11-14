@@ -84,6 +84,25 @@
               ],
               "title": "Cursor"
             }
+          },
+          {
+            "name": "mode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 60
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "With `bbox` only: a comma list of `rail`, `light_rail`, `bus`, `other` (the stop item's `mode`). A list of only `rail`/`light_rail` lists stations: platforms fold into their parent station, each returned once, and the bbox may cover the whole country (up to 120,000 km²). Otherwise the 100 km² limit stays.",
+              "title": "Mode"
+            },
+            "description": "With `bbox` only: a comma list of `rail`, `light_rail`, `bus`, `other` (the stop item's `mode`). A list of only `rail`/`light_rail` lists stations: platforms fold into their parent station, each returned once, and the bbox may cover the whole country (up to 120,000 km²). Otherwise the 100 km² limit stays."
           }
         ],
         "responses": {
@@ -359,6 +378,632 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/StopLinesResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "type": {
+                      "title": "Type",
+                      "type": "string"
+                    },
+                    "title": {
+                      "title": "Title",
+                      "type": "string"
+                    },
+                    "status": {
+                      "title": "Status",
+                      "type": "integer"
+                    },
+                    "code": {
+                      "title": "Code",
+                      "type": "string"
+                    },
+                    "detail": {
+                      "title": "Detail",
+                      "type": "string"
+                    },
+                    "requestId": {
+                      "title": "Requestid",
+                      "type": "string"
+                    },
+                    "errors": {
+                      "anyOf": [
+                        {
+                          "items": {
+                            "additionalProperties": {
+                              "type": "string"
+                            },
+                            "type": "object"
+                          },
+                          "type": "array"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Errors"
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "code",
+                    "detail",
+                    "requestId"
+                  ],
+                  "title": "Problem",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "type": {
+                      "title": "Type",
+                      "type": "string"
+                    },
+                    "title": {
+                      "title": "Title",
+                      "type": "string"
+                    },
+                    "status": {
+                      "title": "Status",
+                      "type": "integer"
+                    },
+                    "code": {
+                      "title": "Code",
+                      "type": "string"
+                    },
+                    "detail": {
+                      "title": "Detail",
+                      "type": "string"
+                    },
+                    "requestId": {
+                      "title": "Requestid",
+                      "type": "string"
+                    },
+                    "errors": {
+                      "anyOf": [
+                        {
+                          "items": {
+                            "additionalProperties": {
+                              "type": "string"
+                            },
+                            "type": "object"
+                          },
+                          "type": "array"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Errors"
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "code",
+                    "detail",
+                    "requestId"
+                  ],
+                  "title": "Problem",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "503": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "type": {
+                      "title": "Type",
+                      "type": "string"
+                    },
+                    "title": {
+                      "title": "Title",
+                      "type": "string"
+                    },
+                    "status": {
+                      "title": "Status",
+                      "type": "integer"
+                    },
+                    "code": {
+                      "title": "Code",
+                      "type": "string"
+                    },
+                    "detail": {
+                      "title": "Detail",
+                      "type": "string"
+                    },
+                    "requestId": {
+                      "title": "Requestid",
+                      "type": "string"
+                    },
+                    "errors": {
+                      "anyOf": [
+                        {
+                          "items": {
+                            "additionalProperties": {
+                              "type": "string"
+                            },
+                            "type": "object"
+                          },
+                          "type": "array"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Errors"
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "code",
+                    "detail",
+                    "requestId"
+                  ],
+                  "title": "Problem",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "429": {
+            "description": "Per-client rate limit exceeded (`RATE_LIMITED`)",
+            "headers": {
+              "Retry-After": {
+                "description": "Whole seconds until this client may retry",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "type": {
+                      "title": "Type",
+                      "type": "string"
+                    },
+                    "title": {
+                      "title": "Title",
+                      "type": "string"
+                    },
+                    "status": {
+                      "title": "Status",
+                      "type": "integer"
+                    },
+                    "code": {
+                      "title": "Code",
+                      "type": "string"
+                    },
+                    "detail": {
+                      "title": "Detail",
+                      "type": "string"
+                    },
+                    "requestId": {
+                      "title": "Requestid",
+                      "type": "string"
+                    },
+                    "errors": {
+                      "anyOf": [
+                        {
+                          "items": {
+                            "additionalProperties": {
+                              "type": "string"
+                            },
+                            "type": "object"
+                          },
+                          "type": "array"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "default": null,
+                      "title": "Errors"
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "code",
+                    "detail",
+                    "requestId"
+                  ],
+                  "title": "Problem",
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/lines": {
+      "get": {
+        "summary": "Lines",
+        "description": "Lines (operator + MOT line code) whose number starts with `q`.\n\nThe exact number first, then longer numbers; within each, lines with a stop nearest\n`lat`/`lon` first (when given), then by number.",
+        "operationId": "lines_v1_lines_get",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 50,
+              "description": "The start of a line number (`routeShortName`), trimmed and case-insensitive; one character is enough.",
+              "title": "Q"
+            },
+            "description": "The start of a line number (`routeShortName`), trimmed and case-insensitive; one character is enough."
+          },
+          {
+            "name": "lat",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "With `lon`: rank lines near here first and add `nearestStop`.",
+              "title": "Lat"
+            },
+            "description": "With `lon`: rank lines near here first and add `nearestStop`."
+          },
+          {
+            "name": "lon",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "With `lat`.",
+              "title": "Lon"
+            },
+            "description": "With `lat`."
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 50,
+              "minimum": 1,
+              "default": 20,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 2048
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cursor"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LinesResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "type": {
+                      "title": "Type",
+                      "type": "string"
+                    },
+                    "title": {
+                      "title": "Title",
+                      "type": "string"
+                    },
+                    "status": {
+                      "title": "Status",
+                      "type": "integer"
+                    },
+                    "code": {
+                      "title": "Code",
+                      "type": "string"
+                    },
+                    "detail": {
+                      "title": "Detail",
+                      "type": "string"
+                    },
+                    "requestId": {
+                      "title": "Requestid",
+                      "type": "string"
+                    },
+                    "errors": {
+                      "anyOf": [
+                        {
+                          "items": {
+                            "additionalProperties": {
+                              "type": "string"
+                            },
+                            "type": "object"
+                          },
+                          "type": "array"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Errors"
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "code",
+                    "detail",
+                    "requestId"
+                  ],
+                  "title": "Problem",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "503": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "type": {
+                      "title": "Type",
+                      "type": "string"
+                    },
+                    "title": {
+                      "title": "Title",
+                      "type": "string"
+                    },
+                    "status": {
+                      "title": "Status",
+                      "type": "integer"
+                    },
+                    "code": {
+                      "title": "Code",
+                      "type": "string"
+                    },
+                    "detail": {
+                      "title": "Detail",
+                      "type": "string"
+                    },
+                    "requestId": {
+                      "title": "Requestid",
+                      "type": "string"
+                    },
+                    "errors": {
+                      "anyOf": [
+                        {
+                          "items": {
+                            "additionalProperties": {
+                              "type": "string"
+                            },
+                            "type": "object"
+                          },
+                          "type": "array"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Errors"
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "code",
+                    "detail",
+                    "requestId"
+                  ],
+                  "title": "Problem",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "429": {
+            "description": "Per-client rate limit exceeded (`RATE_LIMITED`)",
+            "headers": {
+              "Retry-After": {
+                "description": "Whole seconds until this client may retry",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "type": {
+                      "title": "Type",
+                      "type": "string"
+                    },
+                    "title": {
+                      "title": "Title",
+                      "type": "string"
+                    },
+                    "status": {
+                      "title": "Status",
+                      "type": "integer"
+                    },
+                    "code": {
+                      "title": "Code",
+                      "type": "string"
+                    },
+                    "detail": {
+                      "title": "Detail",
+                      "type": "string"
+                    },
+                    "requestId": {
+                      "title": "Requestid",
+                      "type": "string"
+                    },
+                    "errors": {
+                      "anyOf": [
+                        {
+                          "items": {
+                            "additionalProperties": {
+                              "type": "string"
+                            },
+                            "type": "object"
+                          },
+                          "type": "array"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "default": null,
+                      "title": "Errors"
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "code",
+                    "detail",
+                    "requestId"
+                  ],
+                  "title": "Problem",
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/lines/{line_key}": {
+      "get": {
+        "summary": "Line",
+        "description": "One line by its `lineKey`; `nearestStop` only when `lat`/`lon` are given.",
+        "operationId": "line_v1_lines__line_key__get",
+        "parameters": [
+          {
+            "name": "line_key",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Line Key"
+            }
+          },
+          {
+            "name": "lat",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "With `lon`: rank lines near here first and add `nearestStop`.",
+              "title": "Lat"
+            },
+            "description": "With `lon`: rank lines near here first and add `nearestStop`."
+          },
+          {
+            "name": "lon",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "With `lat`.",
+              "title": "Lon"
+            },
+            "description": "With `lat`."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LineResponse"
                 }
               }
             }
@@ -2485,6 +3130,7 @@
     "/v1/journeys": {
       "post": {
         "summary": "Plan",
+        "description": "Scheduled journey alternatives, or with `pinnedTrip` one journey on that trip.",
         "operationId": "plan_v1_journeys_post",
         "requestBody": {
           "content": {
@@ -2503,6 +3149,69 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/JourneyResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "title": "Type"
+                    },
+                    "title": {
+                      "type": "string",
+                      "title": "Title"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "title": "Status"
+                    },
+                    "code": {
+                      "type": "string",
+                      "title": "Code"
+                    },
+                    "detail": {
+                      "type": "string",
+                      "title": "Detail"
+                    },
+                    "requestId": {
+                      "type": "string",
+                      "title": "Requestid"
+                    },
+                    "errors": {
+                      "anyOf": [
+                        {
+                          "items": {
+                            "additionalProperties": {
+                              "type": "string"
+                            },
+                            "type": "object"
+                          },
+                          "type": "array"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Errors"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "type": "object",
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "code",
+                    "detail",
+                    "requestId"
+                  ],
+                  "title": "Problem"
                 }
               }
             }
@@ -3465,6 +4174,17 @@
             "title": "Maxdirectwalkminutes",
             "description": "Cap on a walk-only alternative, in whole minutes (1-30). Sent to the engine as maxDirectTime.",
             "default": 30
+          },
+          "pinnedTrip": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PinnedTrip"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Ride this one trip instead of searching. The answer is one journey: a walk from `from` to the board stop (the engine's walking route, arriving by the trip's departure there; omitted when `from` is a coordinate within 30 m of the stop), then one transit leg on the trip from board to alight stop, shaped like any transit leg (intermediate stops, boarding, geometry; times from the trip). `to` is still required (send the alight stop's coordinate). When the walk starting at `departAt` cannot reach the stop by the departure the journey is still returned with warning `PINNED_TRIP_MISSED_BY_WALK`; when no walk within `maxDirectWalkMinutes` exists the outcome is `no_route` with warning `PINNED_TRIP_WALK_UNAVAILABLE`. `modes`, `results` and `excludeTripRefs` do not apply. Errors: unknown trip `404 TRIP_NOT_FOUND`; board or alight stop not on the trip, or alight not after board, `422 INVALID_PINNED_TRIP`."
           }
         },
         "additionalProperties": false,
@@ -3604,6 +4324,194 @@
         ],
         "title": "Leg"
       },
+      "LineDirection": {
+        "properties": {
+          "routeId": {
+            "type": "string",
+            "title": "Routeid",
+            "description": "One MOT route: one direction (or variant) of the line."
+          },
+          "headsign": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Headsign",
+            "description": "The headsign of its longest pattern, if any."
+          },
+          "originName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Originname",
+            "description": "First stop of its longest pattern."
+          },
+          "destinationName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Destinationname",
+            "description": "Last stop of its longest pattern."
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "routeId",
+          "headsign",
+          "originName",
+          "destinationName"
+        ],
+        "title": "LineDirection"
+      },
+      "LineItem": {
+        "properties": {
+          "lineKey": {
+            "type": "string",
+            "title": "Linekey",
+            "description": "Opaque and stable across generations: the operator (GTFS agency_id) and the MOT line code (route_desc before the first '-'), as `<agency_id>:<code>`. A route without a line code is a line of its own (`<agency_id>:route:<route source id>`)."
+          },
+          "shortName": {
+            "type": "string",
+            "title": "Shortname",
+            "description": "The line number (`routeShortName`)."
+          },
+          "operatorId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Operatorid"
+          },
+          "operatorName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Operatorname"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "bus",
+              "rail",
+              "light_rail",
+              "cable_car",
+              "funicular",
+              "ferry",
+              "other"
+            ],
+            "title": "Mode",
+            "description": "The same mode strings journey legs use (`bus`, `rail`, `light_rail`; rarer engine modes as `cable_car`, `funicular`, `ferry`, else `other`); null when the engine omits it. Derived from the GTFS route_type."
+          },
+          "routeIds": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Routeids",
+            "description": "Its routes, main directions first."
+          },
+          "directions": {
+            "items": {
+              "$ref": "#/components/schemas/LineDirection"
+            },
+            "type": "array",
+            "title": "Directions",
+            "description": "One per route, in `routeIds` order."
+          },
+          "area": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Area",
+            "description": "The locality (OSM admin level 8, Hebrew name) holding at least half of the line's stops; null for intercity lines or a reference without localities."
+          },
+          "nearestStop": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LineNearestStop"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Only when `lat`/`lon` are given: the line's stop (any direction) nearest them, within 2 km, else null. Absent without `lat`/`lon`."
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "lineKey",
+          "shortName",
+          "operatorId",
+          "operatorName",
+          "mode",
+          "routeIds",
+          "directions",
+          "area"
+        ],
+        "title": "LineItem"
+      },
+      "LineNearestStop": {
+        "properties": {
+          "stopId": {
+            "type": "string",
+            "title": "Stopid"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "distanceM": {
+            "type": "integer",
+            "title": "Distancem",
+            "description": "Straight-line metres from `lat`/`lon`, rounded."
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "stopId",
+          "name",
+          "distanceM"
+        ],
+        "title": "LineNearestStop"
+      },
       "LinePattern": {
         "properties": {
           "patternId": {
@@ -3682,6 +4590,23 @@
         ],
         "title": "LinePattern"
       },
+      "LineResponse": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/LineItem"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/Metadata"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "data",
+          "meta"
+        ],
+        "title": "LineResponse"
+      },
       "LineStop": {
         "properties": {
           "stopId": {
@@ -3741,6 +4666,32 @@
           "dropOffType"
         ],
         "title": "LineStop"
+      },
+      "LinesResponse": {
+        "properties": {
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/LineItem"
+            },
+            "type": "array",
+            "title": "Data",
+            "description": "Exact number first, then longer numbers; within each, nearest first when `lat`/`lon` are given, then by number (8, 80, 82, 800)."
+          },
+          "page": {
+            "$ref": "#/components/schemas/Page"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/Metadata"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "data",
+          "page",
+          "meta"
+        ],
+        "title": "LinesResponse"
       },
       "Location": {
         "properties": {
@@ -4039,6 +4990,40 @@
           "nextCursor"
         ],
         "title": "Page"
+      },
+      "PinnedTrip": {
+        "properties": {
+          "tripRef": {
+            "type": "string",
+            "maxLength": 512,
+            "minLength": 1,
+            "title": "Tripref",
+            "description": "A dated trip reference (`tripRef` of a departure or trip)."
+          },
+          "boardStopId": {
+            "type": "string",
+            "maxLength": 250,
+            "minLength": 10,
+            "title": "Boardstopid",
+            "description": "Where to board: a stop the trip calls at (or its station)."
+          },
+          "alightStopId": {
+            "type": "string",
+            "maxLength": 250,
+            "minLength": 10,
+            "title": "Alightstopid",
+            "description": "Where to get off: a stop the trip calls at after boarding (or its station)."
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "tripRef",
+          "boardStopId",
+          "alightStopId"
+        ],
+        "title": "PinnedTrip",
+        "description": "Ride one chosen trip (\"Ride it\", board 5): walk to its board stop, then ride it."
       },
       "PlaceLocation": {
         "properties": {

@@ -1,0 +1,121 @@
+/* A line (canvas board Line 4) and Ride it (board 5), 14 November 2026; shared pieces in
+   stopline.css. */
+
+.line,
+.ride {
+  display: flex;
+  flex-direction: column;
+  min-block-size: 100%;
+}
+
+/* The two directions (.seg): a sunken track, the chosen one in action colours. More than
+   two directions are listed one under another. */
+.line-seg {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+  margin-block: 10px;
+  padding: 4px;
+  border-radius: var(--radius-lg);
+  background: var(--surface-sunken);
+}
+.line-seg--list {
+  grid-template-columns: minmax(0, 1fr);
+}
+.line-seg button {
+  block-size: 44px;
+  padding-inline: 8px;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: none;
+  color: var(--ink-muted);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+.line-seg button[aria-pressed="true"] {
+  background: var(--action);
+  color: var(--on-action);
+}
+
+/* The stop nearest the passenger: 68 px, sunken, with its next times at the end. */
+.line-here {
+  min-block-size: 68px;
+}
+.line-here__when {
+  align-self: center;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.line-here__figure {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.line-here__later {
+  font-size: 14px;
+}
+
+/* --- Ride it (board 5) ---------------------------------------------------------------- */
+
+.ride-times {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-block: 8px 10px;
+}
+.ride-times .sl-chip {
+  padding-inline: 0;
+}
+.ride-board {
+  min-block-size: 56px;
+}
+.ride-exit {
+  min-block-size: 64px;
+}
+.ride-bar {
+  position: sticky;
+  inset-block-end: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-block-start: auto;
+  padding-block: 12px 14px;
+  border-block-start: 1px solid var(--hairline);
+  background: var(--surface);
+}
+.ride-bar__times {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.ride-bar__figure {
+  font-family: var(--font-numerals);
+  font-weight: 600;
+  font-size: 22px;
+}
+.ride-bar__actions {
+  display: flex;
+  gap: 8px;
+}
+.ride-bar__actions .sl-btn {
+  block-size: 52px;
+  font-size: 16px;
+}
+.ride-bar__start {
+  flex: 1;
+}
+.ride-bar__actions .sl-btn--secondary {
+  font-size: 14px;
+}
+.ride-warning {
+  color: var(--warning-ink);
+}

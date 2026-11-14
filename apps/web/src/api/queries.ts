@@ -1,7 +1,7 @@
 import { QueryClient, useQueries, useQuery } from "@tanstack/react-query";
 import { toIsraelIso } from "../lib/time";
 import { isRetryable } from "./classify";
-import { getNearbyDepartures, getStatus, getStop, getStopDepartures, getStopLines, listStops, planJourney, searchPlaces, type Lang } from "./endpoints";
+import { getLine, getNearbyDepartures, getStatus, getStop, getStopDepartures, getStopLines, listStops, planJourney, searchLines, searchPlaces, type Lang } from "./endpoints";
 import { apiFetch } from "./http";
 import { encodePathRef } from "./pathRef";
 import { ApiFailure, unwrap } from "./result";
@@ -56,6 +56,42 @@ export function usePlaceSearch(q: string, lang: Lang, near: { latitude: number; 
       unwrap(await searchPlaces({ q: trimmed, lang, near, limit: PLACES_LIMIT }, signal)),
     enabled: trimmed.length >= PLACES_MIN_CHARS,
     staleTime: 60_000,
+  });
+}
+
+// --- lines (contract A2; board 2, 14 November 2026) ----------------------------------
+
+/** Lines asked per search: the first few are shown, the rest behind "N more lines". */
+export const LINES_LIMIT = 50;
+/** A line number is often one character (user, 14 November 2026: one character searches). */
+export const LINES_MIN_CHARS = 1;
+const LINE_STALE_MS = 60 * 60_000;
+
+/**
+ * Line search by number prefix. `q` is already debounced; `near` (only when the caller
+ * already holds a position) ranks nearby lines first and fills `nearestStop`.
+ */
+export function useLineSearch(q: string, near: { latitude: number; longitude: number } | null, enabled = true) {
+  const trimmed = q.trim();
+  const nearKey = near ? `${near.latitude.toFixed(3)},${near.longitude.toFixed(3)}` : null;
+  return useQuery({
+    queryKey: ["lines", trimmed, nearKey] as const,
+    queryFn: async ({ signal }) => unwrap(await searchLines({ q: trimmed, near, limit: LINES_LIMIT }, signal)),
+    enabled: enabled && trimmed.length >= LINES_MIN_CHARS,
+    staleTime: LINE_STALE_MS,
+    retry: false,
+  });
+}
+
+/** One line by key (fixed for a generation). Null keeps it idle. */
+export function useLine(lineKey: string | null, near: { latitude: number; longitude: number } | null = null) {
+  const nearKey = near ? `${near.latitude.toFixed(3)},${near.longitude.toFixed(3)}` : null;
+  return useQuery({
+    queryKey: ["line", lineKey ?? "idle", nearKey] as const,
+    queryFn: async ({ signal }) => unwrap(await getLine(lineKey!, near, signal)),
+    enabled: lineKey !== null,
+    staleTime: LINE_STALE_MS,
+    retry: false,
   });
 }
 

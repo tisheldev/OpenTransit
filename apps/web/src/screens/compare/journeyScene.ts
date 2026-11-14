@@ -2,7 +2,7 @@ import type { Journey, Leg } from "../../api/types";
 import { operatorColour } from "../../lib/lines";
 import { formatClock, type Lang } from "../../lib/time";
 import { journeyToScene } from "../../map/fromJourney";
-import { emptyScene, type LonLat, type MapPin, type MapRouteLeg, type MapScene, type MapTag } from "../../map/scene";
+import { emptyScene, QUIET_STOPS, type LonLat, type MapPin, type MapRouteLeg, type MapScene, type MapTag } from "../../map/scene";
 import { isRail } from "../../plan/chartLayout";
 import type { Endpoint } from "../../plan/draft";
 import type { ThemeName } from "../../styles/tokens";
@@ -121,12 +121,12 @@ export function chooseScene(
     });
   });
   const picked = journeys[chosen];
-  if (!picked) return { ...emptyScene, route, tags, camera: "fit" };
+  if (!picked) return { ...emptyScene, route, tags, camera: "fit", stops: QUIET_STOPS };
   // The chosen option is drawn last, over the faded ones.
   const own = journeyToScene(picked, { originLabel: ends.from, destinationLabel: ends.to });
   route.push(...unlabelled(own.route));
   tags.push(...rideBadges(picked, t), ...destinationTag(picked, ends));
-  return { route, pins: own.pins, user: null, camera: "fit", pick: false, tags, fitTo: null };
+  return { route, pins: own.pins, user: null, camera: "fit", pick: false, tags, fitTo: null, stops: QUIET_STOPS };
 }
 
 /** The ride a leg leads to: itself, or the ride right after a walk; none after the last ride. */
@@ -143,7 +143,7 @@ export function stepScene(journey: Journey, ends: EndLabels, focused: number | n
   const tags = rideBadges(journey, t);
   const leg = focused === null ? undefined : journey.legs[focused];
   if (!leg) {
-    return { route: unlabelled(own.route), pins: own.pins, user: null, camera: "fit", pick: false, tags: [...tags, ...destinationTag(journey, ends)], fitTo: null };
+    return { route: unlabelled(own.route), pins: own.pins, user: null, camera: "fit", pick: false, tags: [...tags, ...destinationTag(journey, ends)], fitTo: null, stops: QUIET_STOPS };
   }
   const ride = boardingRide(journey, focused!);
   const stopPins = ride
@@ -163,5 +163,7 @@ export function stepScene(journey: Journey, ends: EndLabels, focused: number | n
     fitTo: legPoints(leg),
     // "כל המסלול" floats over the top of the map while a leg is zoomed.
     topControls: true,
+    // Stops only zoomed in close, quieter, so they never compete with the route (design, "During a journey").
+    stops: QUIET_STOPS,
   };
 }

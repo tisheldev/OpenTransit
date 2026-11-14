@@ -4,6 +4,8 @@ import { failure, type Result } from "./result";
 import {
   DeparturesPageSchema,
   JourneyResponseSchema,
+  LineSchema,
+  LinesPageSchema,
   NearbyDeparturesSchema,
   PatternsPageSchema,
   PlacesSchema,
@@ -15,6 +17,8 @@ import {
   StopsPageSchema,
   TripSchema,
   type DeparturesPage,
+  type LineDetail,
+  type LinesPage,
   type NearbyDepartures,
   type StopLines,
   type PatternsPage,
@@ -145,15 +149,25 @@ export function getStopLines(stopId: string, signal?: AbortSignal): Promise<Resu
   );
 }
 
+/** A stop item's mode (API-C6); the `mode` filter of GET /v1/stops takes a list of these (A1). */
+export type StopMode = "rail" | "light_rail" | "bus" | "other";
+
 export type StopArea =
   | { near: { latitude: number; longitude: number }; radiusMeters?: number }
-  | { bbox: { west: number; south: number; east: number; north: number } };
+  | {
+      bbox: { west: number; south: number; east: number; north: number };
+      /** A1: only these modes. Rail and light rail alone lift the area limit from 100 to 120,000 km². */
+      modes?: readonly StopMode[] | null;
+    };
 
 export function listStops(area: StopArea, paging: Paging = {}, signal?: AbortSignal): Promise<Result<StopsPage>> {
   const query =
     "near" in area
       ? { near: latLon(area.near), radius: area.radiusMeters }
-      : { bbox: `${area.bbox.west},${area.bbox.south},${area.bbox.east},${area.bbox.north}` };
+      : {
+          bbox: `${area.bbox.west},${area.bbox.south},${area.bbox.east},${area.bbox.north}`,
+          mode: area.modes && area.modes.length > 0 ? area.modes.join(",") : null,
+        };
   return apiFetch({ path: "/v1/stops", query: { ...query, ...paging }, signal }, StopsPageSchema);
 }
 
@@ -178,5 +192,44 @@ export function getRoutePatterns(
 ): Promise<Result<PatternsPage>> {
   return withRef(routeId, (segment) =>
     apiFetch({ path: `/v1/routes/${segment}/patterns`, query: { ...paging }, signal }, PatternsPageSchema),
+  );
+}
+
+export interface LineSearch extends Paging {
+  /** One character or more (user, 14 November 2026: a one-character query searches). */
+  q: string;
+  /** The passenger's position: ranks lines with a nearby stop first and adds `nearestStop`. */
+  near?: { latitude: number; longitude: number } | null;
+}
+
+/** Contract A2: lines whose number starts with `q` (exact first), one item per operator + line code. */
+export function searchLines(search: LineSearch, signal?: AbortSignal): Promise<Result<LinesPage>> {
+  return apiFetch(
+    {
+      path: "/v1/lines",
+      query: {
+        q: search.q,
+        lat: search.near ? search.near.latitude : null,
+        lon: search.near ? search.near.longitude : null,
+        limit: search.limit,
+        cursor: search.cursor,
+      },
+      signal,
+    },
+    LinesPageSchema,
+  );
+}
+
+/** Contract A2: one line by its key (operator + MOT line code). */
+export function getLine(
+  lineKey: string,
+  near: { latitude: number; longitude: number } | null = null,
+  signal?: AbortSignal,
+): Promise<Result<LineDetail>> {
+  return withRef(lineKey, (segment) =>
+    apiFetch(
+      { path: `/v1/lines/${segment}`, query: { lat: near?.latitude ?? null, lon: near?.longitude ?? null }, signal },
+      LineSchema,
+    ),
   );
 }

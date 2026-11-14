@@ -1,0 +1,121 @@
+/* Pieces of the stops-and-lines canvas (14 November 2026), values copied from its boards:
+   the line badge (.bdg), the stop sign (.sg / .lead.sp), the quiet place lead (.lead) and
+   the stroke icons (.st). Dark values are the canvas's; light values follow the marker
+   table in docs/client-design.md (sign #e2b84a with a #1b1a17 edge) and the light tokens.
+   Logical properties only, so everything mirrors under dir="rtl". */
+
+.cv-st {
+  inline-size: 20px;
+  block-size: 20px;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.cv-st--16 {
+  inline-size: 16px;
+  block-size: 16px;
+}
+/* Drawn for Hebrew (back points right, onward points left); mirrored in English. */
+[dir="ltr"] .cv-st--dir {
+  transform: scaleX(-1);
+}
+
+/* Line badge: 24 px, corner 6, Barlow Semi Condensed 700 15/18, a 13 px vehicle. */
+.cv-bdg {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  block-size: 24px;
+  padding-block: 0;
+  padding-inline: 6px;
+  border-radius: 6px;
+  background: var(--line-bg, var(--mode-bus));
+  color: var(--line-ink, var(--on-brand));
+  font-family: var(--font-numerals);
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 18px;
+  white-space: nowrap;
+  flex: none;
+}
+.cv-bdg--rail {
+  background: var(--line-bg, var(--mode-rail));
+}
+.cv-bdg svg {
+  inline-size: 13px;
+  block-size: 13px;
+  fill: currentColor;
+  flex: none;
+}
+
+/* The stop sign off the map: mustard with a dark bus (marker G, dark map values). */
+.cv-sign {
+  --cv-sign-bg: #d6b55e;
+  --cv-sign-ink: #1a1917;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  background: var(--cv-sign-bg);
+  color: var(--cv-sign-ink);
+}
+.cv-sign svg {
+  fill: currentColor;
+}
+:root[data-theme="light"] .cv-sign {
+  --cv-sign-bg: #e2b84a;
+  --cv-sign-ink: #1b1a17;
+}
+.cv-sign--station {
+  --cv-sign-bg: #7b72cf;
+  --cv-sign-ink: #ffffff;
+}
+:root[data-theme="light"] .cv-sign--station {
+  --cv-sign-bg: #7b72cf;
+  --cv-sign-ink: #ffffff;
+}
+/* Beside a saved stop's name (Home card): 18 px, corner 5, a 12 px bus. */
+.cv-sign--chip {
+  inline-size: 18px;
+  block-size: 18px;
+  border-radius: 5px;
+}
+.cv-sign--chip svg {
+  inline-size: 12px;
+  block-size: 12px;
+}
+/* A stop row's lead (Search): 32 px, corner 8, a 1.5 px dark edge, an 18 px bus. */
+.cv-sign--lead {
+  inline-size: 32px;
+  block-size: 32px;
+  border-radius: 8px;
+  border: 1.5px solid var(--cv-sign-ink-edge, #1a1917);
+}
+:root[data-theme="light"] .cv-sign--lead {
+  --cv-sign-ink-edge: #1b1a17;
+}
+.cv-sign--lead svg {
+  inline-size: 18px;
+  block-size: 18px;
+}
+
+/* A badge and its minutes inside a flex row (canvas .cs): the row's gap falls between all. */
+.cv-pair {
+  display: contents;
+}
+
+/* A place row's quiet lead: a pin in a 32 px round on the sunken surface. */
+.cv-lead {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 32px;
+  block-size: 32px;
+  border-radius: 50%;
+  background: var(--surface-sunken);
+  color: var(--ink);
+  flex: none;
+}

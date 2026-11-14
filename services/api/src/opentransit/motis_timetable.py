@@ -240,6 +240,8 @@ def hydrate_trip(profile, engine_id: str, body: object) -> dict:
         "alerts": "not_enabled",
         "_reconciliation": result,
         "_engineCallPickupTypes": engine_pickup_types,
+        # Journey legs pinned to this trip carry the stop codes, as engine legs do.
+        "_engineStopCodes": [_text_or_none(call.get("stopCode")) for call in engine_calls],
     }
 
 

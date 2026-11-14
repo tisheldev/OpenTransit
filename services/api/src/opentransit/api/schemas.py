@@ -44,6 +44,40 @@ class PlaceLocation(Model):
 LocationInput = Annotated[Coordinate | StopLocation | PlaceLocation, Field(discriminator="kind")]
 
 
+class PinnedTrip(Model):
+    """Ride one chosen trip ("Ride it", board 5): walk to its board stop, then ride it."""
+
+    tripRef: str = Field(
+        min_length=1,
+        max_length=512,
+        description="A dated trip reference (`tripRef` of a departure or trip).",
+    )
+    boardStopId: str = Field(
+        min_length=10,
+        max_length=250,
+        description="Where to board: a stop the trip calls at (or its station).",
+    )
+    alightStopId: str = Field(
+        min_length=10,
+        max_length=250,
+        description="Where to get off: a stop the trip calls at after boarding (or its station).",
+    )
+
+    @field_validator("tripRef")
+    @classmethod
+    def dated_trip_ref(cls, value: str) -> str:
+        if not _DATED_TRIP.fullmatch(value):
+            raise ValueError("Use a returned dated trip reference")
+        return value
+
+    @field_validator("boardStopId", "alightStopId")
+    @classmethod
+    def public_stop_reference(cls, value: str) -> str:
+        if not value.startswith("mot:stop:") or len(value.removeprefix("mot:stop:")) == 0:
+            raise ValueError("Use a namespaced stop reference")
+        return value
+
+
 class JourneyRequest(Model):
     origin: LocationInput = Field(alias="from")
     destination: LocationInput = Field(alias="to")
@@ -108,6 +142,24 @@ class JourneyRequest(Model):
         description=(
             "Cap on a walk-only alternative, in whole minutes (1-30). Sent to the engine "
             "as maxDirectTime."
+        ),
+    )
+    pinned_trip: PinnedTrip | None = Field(
+        default=None,
+        alias="pinnedTrip",
+        description=(
+            "Ride this one trip instead of searching. The answer is one journey: a walk from "
+            "`from` to the board stop (the engine's walking route, arriving by the trip's "
+            "departure there; omitted when `from` is a coordinate within 30 m of the stop), "
+            "then one transit leg on the trip from board to alight stop, shaped like any "
+            "transit leg (intermediate stops, boarding, geometry; times from the trip). `to` "
+            "is still required (send the alight stop's coordinate). When the walk starting at "
+            "`departAt` cannot reach the stop by the departure the journey is still returned "
+            "with warning `PINNED_TRIP_MISSED_BY_WALK`; when no walk within "
+            "`maxDirectWalkMinutes` exists the outcome is `no_route` with warning "
+            "`PINNED_TRIP_WALK_UNAVAILABLE`. `modes`, `results` and `excludeTripRefs` do not "
+            "apply. Errors: unknown trip `404 TRIP_NOT_FOUND`; board or alight stop not on "
+            "the trip, or alight not after board, `422 INVALID_PINNED_TRIP`."
         ),
     )
 

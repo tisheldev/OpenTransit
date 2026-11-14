@@ -245,6 +245,7 @@ describe("MapView", () => {
       "ot-route-casing",
       "ot-route-walk",
       "ot-route-transit",
+      "ot-route-fade",
       "ot-route-train",
       "ot-pins",
       "ot-destination",

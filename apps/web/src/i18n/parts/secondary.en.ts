@@ -10,4 +10,7 @@ export const en_secondary: Record<keyof typeof he_secondary, string> = {
   "stop.line.endNoHeadsign": "Line {line}, end of the route",
   "stop.direction": "Direction of travel of line {line}",
   "stop.scheduled": "Times from the timetable",
+  "stop.towards": "Towards {place}",
+  "stop.wayCount": "{count} lines this way",
+  "stop.allLines": "All lines",
 };

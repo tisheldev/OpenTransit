@@ -204,11 +204,11 @@ The [stops and lines design](client-design.md#stops-and-lines-proposal-12-novemb
 | Slice | Delivers | Plan |
 | --- | --- | --- |
 | 1 (API-C6) | Each stop says whether it is a bus, rail or light-rail stop and which way vehicles leave it | Below |
-| 2 | A way to list stations over a large area (API), then stops on the map at every zoom with marker G, groups, tags and motion (client). The pole points at the nearest street on the map, with slice 1's `bearingDegrees` as the fallback (user, 12 November) | When slice 1 is done |
-| 3 | Lines in search results (API), then one mixed search list (client) | Later |
-| 4 | The Line screen, the Stop screen's actions, a line opened inside a journey (client) | Later |
-| 5 | "Ride it": a journey pinned to one trip (API), then the screen (client) | Later |
-| 6 | Home lists lines near the passenger; saved stops and lines if the user confirms them (client) | Later |
+| 2 | A way to list stations over a large area (API), then stops on the map at every zoom with marker G, groups, tags and motion (client). The pole points at the nearest street on the map, with slice 1's `bearingDegrees` as the fallback (user, 12 November) | Built 14 November on branch `claude/stops-lines-overhaul-22f028` (A1 `mode` filter) |
+| 3 | Lines in search results (API), then one mixed search list (client) | Built 14 November: `GET /v1/lines` (A2), prefix from one character (user, 14 November); the client merges it into one list |
+| 4 | The Line screen, the Stop screen's actions, a line opened inside a journey (client) | Built 14 November |
+| 5 | "Ride it": a journey pinned to one trip (API), then the screen (client) | Built 14 November: `pinnedTrip` on `POST /v1/journeys` (A3) |
+| 6 | Home lists lines near the passenger; saved stops and lines if the user confirms them (client) | Built 14 November; saved stops and lines confirmed by the user that day |
 
 #### API-C6 implementation plan: mode and direction on stop items
 

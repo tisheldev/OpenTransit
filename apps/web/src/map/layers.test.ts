@@ -7,6 +7,9 @@ import {
   accuracyFeatures,
   basemapRole,
   chooseStyle,
+  FADE_STEPS,
+  grownLeg,
+  lineBetween,
   destinationMarker,
   isNameTextField,
   lineMode,
@@ -72,6 +75,9 @@ describe("scene to GeoJSON", () => {
       dimmed: false,
       label: "8",
       travelled: false,
+      quiet: false,
+      opacity: 1,
+      segment: false,
       vehicle: "bus",
       colorDark: "",
       colorLight: "",
@@ -81,6 +87,41 @@ describe("scene to GeoJSON", () => {
       "bus",
       "rail",
     ]);
+  });
+
+  it("draws a line fading out (Stop, 14 November 2026) as flat-ended pieces, whole for 40 %, then down to a tenth", () => {
+    const fading: MapRouteLeg = { ...bus, active: false, tone: "quiet", fadeOut: true, coordinates: [[34.8, 32.1], [34.8, 32.11]] };
+    const { features } = routeFeatures([fading]);
+    expect(features).toHaveLength(FADE_STEPS.length);
+    expect(features.every((f) => f.properties.segment && f.properties.quiet)).toBe(true);
+    expect(features.map((f) => f.properties.opacity)).toEqual([0.45, 0.383, 0.315, 0.248, 0.18, 0.113, 0.045]);
+    // The pieces meet end to end and cover the whole line.
+    expect(features[0]!.geometry.coordinates[0]).toEqual([34.8, 32.1]);
+    expect(features[0]!.geometry.coordinates.at(-1)![1]).toBeCloseTo(32.104, 6);
+    features.slice(1).forEach((f, i) => expect(f.geometry.coordinates[0]).toEqual(features[i]!.geometry.coordinates.at(-1)));
+    expect(features.at(-1)!.geometry.coordinates.at(-1)![1]).toBeCloseTo(32.11, 9);
+    // A walk never fades.
+    expect(routeFeatures([{ ...walkLine, fadeOut: true }]).features).toHaveLength(1);
+  });
+
+  it("cuts a line by share of its length, through its bends", () => {
+    const bend: [number, number][] = [[0, 0], [0, 0.001], [0.001, 0.001]];
+    const half = lineBetween(bend, 0, 0.5);
+    expect(half).toHaveLength(2);
+    expect(half[1]![1]).toBeCloseTo(0.001, 4);
+    const tail = lineBetween(bend, 0.25, 1);
+    expect(tail[0]![1]).toBeCloseTo(0.0005, 4);
+    expect(tail.slice(1)).toEqual([[0, 0.001], [0.001, 0.001]]);
+  });
+
+  it("grows only legs marked to grow, from their start", () => {
+    const growing: MapRouteLeg = { ...bus, grow: true, coordinates: [[34.8, 32.1], [34.8, 32.12]] };
+    const part = grownLeg(growing, 0.5);
+    expect(part.coordinates![0]).toEqual([34.8, 32.1]);
+    expect(part.coordinates!.at(-1)![1]).toBeCloseTo(32.11, 6);
+    expect(part.to).toEqual(part.coordinates!.at(-1));
+    expect(grownLeg(growing, 1)).toBe(growing);
+    expect(grownLeg(bus, 0.2)).toBe(bus);
   });
 
   it("carries the operator's line colour per theme and the vehicle (look of 11 November 2026)", () => {
@@ -151,6 +192,7 @@ describe("our layers in the theme's colours", () => {
       "ot-route-casing",
       "ot-route-walk",
       "ot-route-transit",
+      "ot-route-fade",
       "ot-route-train",
       "ot-pins",
       "ot-destination",
@@ -221,10 +263,19 @@ describe("our layers in the theme's colours", () => {
   it("fades the other legs to .6, and labels lines only when the style has glyphs", () => {
     const layers = overlayLayers("dark", { labels: true });
     for (const id of ["ot-route-walk", "ot-route-transit"]) {
-      expect(layer(layers, id).paint!["line-opacity"]).toEqual(["case", ["get", "dimmed"], 0.6, 1]);
+      expect(layer(layers, id).paint!["line-opacity"]).toEqual(["case", ["==", ["get", "quiet"], true], ["get", "opacity"], ["get", "dimmed"], 0.6, 1]);
     }
     expect(layer(layers, "ot-route-label").paint).toMatchObject({ "text-halo-color": THEME_COLORS.dark.surface });
     expect(overlayLayers("dark", { labels: false }).some((l) => l.id === "ot-route-label")).toBe(false);
+  });
+
+  it("draws a quiet line (boards Stop and Ride) 5 px at its own opacity, with no edge", () => {
+    const [stop] = routeFeatures([{ ...bus, active: false, tone: "quiet" }]).features;
+    expect(stop!.properties).toMatchObject({ quiet: true, opacity: 0.45, dimmed: true });
+    const [ride] = routeFeatures([{ ...bus, active: false, tone: "quiet", quietOpacity: 0.4 }]).features;
+    expect(ride!.properties.opacity).toBe(0.4);
+    const layers = overlayLayers("dark", { labels: false });
+    expect(layer(layers, "ot-route-casing").filter).toEqual(["all", ["==", ["get", "kind"], "transit"], ["!=", ["get", "quiet"], true]]);
   });
 
   it("the two themes differ where their tokens differ", () => {
@@ -301,6 +352,9 @@ describe("basemap styles", () => {
     expect(chooseStyle("test", undefined, "light")).toEqual(offlineStyle("light"));
     expect(chooseStyle("production", "offline", "light")).toEqual(offlineStyle("light"));
     expect(chooseStyle("fixtures", "/my-style.json", "dark")).toBe("/my-style.json");
+    // Fixture data on the real basemap, each theme its own style.
+    expect(chooseStyle("fixtures", "openfreemap", "dark")).toBe(OPENFREEMAP_STYLES.dark);
+    expect(chooseStyle("fixtures", "openfreemap", "light")).toBe(OPENFREEMAP_STYLES.light);
     expect(JSON.stringify(offlineStyle("dark"))).not.toMatch(/https?:/);
   });
 

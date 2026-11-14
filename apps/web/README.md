@@ -31,6 +31,7 @@ npm run build          # dist/, base /app/ (served by the API when OPENTRANSIT_C
 npm run e2e            # Playwright, 360 × 640, fixtures mode; @real tests skip unless /readyz is 200
 ```
 
+- The map is blank in fixtures mode (an offline style, no requests leave the origin). For fixture data on the real OpenFreeMap basemap, set `VITE_MAP_STYLE=openfreemap` before `npm run dev:fixtures`.
 - Fixture scenarios: set `localStorage["ot-fixture-scenario"]` (for example `compare-no-route`, `compare-unavailable`, `compare-rate-limited`) to drive a state in fixtures mode; see `src/mocks/handlers.ts`.
 - Real end-to-end: `OPENTRANSIT_API_ORIGIN=<api> npx playwright test --grep @real` (dev-server mode), or against a build served by the API: `OPENTRANSIT_API_ORIGIN=<api> OT_E2E_BASE_URL=<api>/app/ npx playwright test`. `OT_E2E_PORT` gives each worktree its own dev server.
 - If Vitest misses newly added fixture files, clear `node_modules/.vite`, `node_modules/.vite-temp` and `node_modules/.vitest-cache`.

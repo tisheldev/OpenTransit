@@ -1,0 +1,713 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/lines",
+    "params": {
+      "q": "(any: src/mocks/lineFixtures.ts filters this catalogue by q)",
+      "lat": 32.0753,
+      "lon": 34.7749,
+      "limit": 50
+    },
+    "body": null
+  },
+  "status": 200,
+  "body": {
+    "data": [
+      {
+        "lineKey": "5:10008",
+        "shortName": "8",
+        "operatorId": "5",
+        "operatorName": "דן",
+        "mode": "bus",
+        "routeIds": [
+          "mot:route:syn1a",
+          "mot:route:syn1b"
+        ],
+        "directions": [
+          {
+            "routeId": "mot:route:syn1a",
+            "headsign": "מסוף הטייסים",
+            "originName": "מסוף רידינג",
+            "destinationName": "מסוף הטייסים"
+          },
+          {
+            "routeId": "mot:route:syn1b",
+            "headsign": "מסוף רידינג",
+            "originName": "מסוף הטייסים",
+            "destinationName": "מסוף רידינג"
+          }
+        ],
+        "area": "תל אביב-יפו",
+        "nearestStop": {
+          "stopId": "mot:stop:13561",
+          "name": "דיזנגוף סנטר/דיזנגוף",
+          "distanceM": 48
+        }
+      },
+      {
+        "lineKey": "3:20008",
+        "shortName": "8",
+        "operatorId": "3",
+        "operatorName": "אגד",
+        "mode": "bus",
+        "routeIds": [
+          "mot:route:syn2a",
+          "mot:route:syn2b"
+        ],
+        "directions": [
+          {
+            "routeId": "mot:route:syn2a",
+            "headsign": "בת גלים",
+            "originName": "מרכזית המפרץ",
+            "destinationName": "בת גלים"
+          },
+          {
+            "routeId": "mot:route:syn2b",
+            "headsign": "מרכזית המפרץ",
+            "originName": "בת גלים",
+            "destinationName": "מרכזית המפרץ"
+          }
+        ],
+        "area": "חיפה",
+        "nearestStop": null
+      },
+      {
+        "lineKey": "5:10082",
+        "shortName": "82",
+        "operatorId": "5",
+        "operatorName": "דן",
+        "mode": "bus",
+        "routeIds": [
+          "mot:route:syn3a",
+          "mot:route:syn3b"
+        ],
+        "directions": [
+          {
+            "routeId": "mot:route:syn3a",
+            "headsign": "חולון",
+            "originName": "מסוף כרמלית",
+            "destinationName": "חולון"
+          },
+          {
+            "routeId": "mot:route:syn3b",
+            "headsign": "מסוף כרמלית",
+            "originName": "חולון",
+            "destinationName": "מסוף כרמלית"
+          }
+        ],
+        "area": "תל אביב-יפו",
+        "nearestStop": {
+          "stopId": "mot:stop:49938",
+          "name": "דיזנגוף סנטר/המלך ג'ורג'",
+          "distanceM": 122
+        }
+      },
+      {
+        "lineKey": "15:30089",
+        "shortName": "89",
+        "operatorId": "15",
+        "operatorName": "מטרופולין",
+        "mode": "bus",
+        "routeIds": [
+          "mot:route:syn4a",
+          "mot:route:syn4b"
+        ],
+        "directions": [
+          {
+            "routeId": "mot:route:syn4a",
+            "headsign": "תל אביב",
+            "originName": "הוד השרון",
+            "destinationName": "תל אביב"
+          },
+          {
+            "routeId": "mot:route:syn4b",
+            "headsign": "הוד השרון",
+            "originName": "תל אביב",
+            "destinationName": "הוד השרון"
+          }
+        ],
+        "area": "השרון",
+        "nearestStop": null
+      },
+      {
+        "lineKey": "5:10080",
+        "shortName": "80",
+        "operatorId": "5",
+        "operatorName": "דן",
+        "mode": "bus",
+        "routeIds": [
+          "mot:route:syn5a",
+          "mot:route:syn5b"
+        ],
+        "directions": [
+          {
+            "routeId": "mot:route:syn5a",
+            "headsign": "מסוף הלוחמים",
+            "originName": "מסוף רידינג",
+            "destinationName": "מסוף הלוחמים"
+          },
+          {
+            "routeId": "mot:route:syn5b",
+            "headsign": "מסוף רידינג",
+            "originName": "מסוף הלוחמים",
+            "destinationName": "מסוף רידינג"
+          }
+        ],
+        "area": "תל אביב-יפו",
+        "nearestStop": null
+      },
+      {
+        "lineKey": "25:40085",
+        "shortName": "85",
+        "operatorId": "25",
+        "operatorName": "אלקטרה אפיקים",
+        "mode": "bus",
+        "routeIds": [
+          "mot:route:syn6a",
+          "mot:route:syn6b"
+        ],
+        "directions": [
+          {
+            "routeId": "mot:route:syn6a",
+            "headsign": "ת\"א מרכז",
+            "originName": "רמת השרון",
+            "destinationName": "ת\"א מרכז"
+          },
+          {
+            "routeId": "mot:route:syn6b",
+            "headsign": "רמת השרון",
+            "originName": "ת\"א מרכז",
+            "destinationName": "רמת השרון"
+          }
+        ],
+        "area": "השרון",
+        "nearestStop": null
+      },
+      {
+        "lineKey": "3:20086",
+        "shortName": "86",
+        "operatorId": "3",
+        "operatorName": "אגד",
+        "mode": "bus",
+        "routeIds": [
+          "mot:route:syn7a",
+          "mot:route:syn7b"
+        ],
+        "directions": [
+          {
+            "routeId": "mot:route:syn7a",
+            "headsign": "מרכזית המפרץ",
+            "originName": "קרית אתא",
+            "destinationName": "מרכזית המפרץ"
+          },
+          {
+            "routeId": "mot:route:syn7b",
+            "headsign": "קרית אתא",
+            "originName": "מרכזית המפרץ",
+            "destinationName": "קרית אתא"
+          }
+        ],
+        "area": "חיפה",
+        "nearestStop": null
+      },
+      {
+        "lineKey": "18:50087",
+        "shortName": "87",
+        "operatorId": "18",
+        "operatorName": "קווים",
+        "mode": "bus",
+        "routeIds": [
+          "mot:route:syn8a",
+          "mot:route:syn8b"
+        ],
+        "directions": [
+          {
+            "routeId": "mot:route:syn8a",
+            "headsign": "אוניברסיטת ת\"א",
+            "originName": "חולון",
+            "destinationName": "אוניברסיטת ת\"א"
+          },
+          {
+            "routeId": "mot:route:syn8b",
+            "headsign": "חולון",
+            "originName": "אוניברסיטת ת\"א",
+            "destinationName": "חולון"
+          }
+        ],
+        "area": "דן",
+        "nearestStop": null
+      },
+      {
+        "lineKey": "5:10088",
+        "shortName": "88",
+        "operatorId": "5",
+        "operatorName": "דן",
+        "mode": "bus",
+        "routeIds": [
+          "mot:route:syn9a",
+          "mot:route:syn9b"
+        ],
+        "directions": [
+          {
+            "routeId": "mot:route:syn9a",
+            "headsign": "מסוף רידינג",
+            "originName": "רמת גן",
+            "destinationName": "מסוף רידינג"
+          },
+          {
+            "routeId": "mot:route:syn9b",
+            "headsign": "רמת גן",
+            "originName": "מסוף רידינג",
+            "destinationName": "רמת גן"
+          }
+        ],
+        "area": "תל אביב-יפו",
+        "nearestStop": null
+      },
+      {
+        "lineKey": "3:20800",
+        "shortName": "800",
+        "operatorId": "3",
+        "operatorName": "אגד",
+        "mode": "bus",
+        "routeIds": [
+          "mot:route:syn10a",
+          "mot:route:syn10b"
+        ],
+        "directions": [
+          {
+            "routeId": "mot:route:syn10a",
+            "headsign": "קרית שמונה",
+            "originName": "רמת גן",
+            "destinationName": "קרית שמונה"
+          },
+          {
+            "routeId": "mot:route:syn10b",
+            "headsign": "רמת גן",
+            "originName": "קרית שמונה",
+            "destinationName": "רמת גן"
+          }
+        ],
+        "area": null,
+        "nearestStop": null
+      },
+      {
+        "lineKey": "5:10005",
+        "shortName": "5",
+        "operatorId": "5",
+        "operatorName": "דן",
+        "mode": "bus",
+        "routeIds": [
+          "mot:route:syn11a",
+          "mot:route:syn11b"
+        ],
+        "directions": [
+          {
+            "routeId": "mot:route:syn11a",
+            "headsign": "רכבת מרכז",
+            "originName": "מסוף הלוחמים",
+            "destinationName": "רכבת מרכז"
+          },
+          {
+            "routeId": "mot:route:syn11b",
+            "headsign": "מסוף הלוחמים",
+            "originName": "רכבת מרכז",
+            "destinationName": "מסוף הלוחמים"
+          }
+        ],
+        "area": "תל אביב-יפו",
+        "nearestStop": {
+          "stopId": "mot:stop:13583",
+          "name": "דיזנגוף סנטר/דיזנגוף",
+          "distanceM": 36
+        }
+      },
+      {
+        "lineKey": "5:10002",
+        "shortName": "2",
+        "operatorId": "5",
+        "operatorName": "דן",
+        "mode": "bus",
+        "routeIds": [
+          "mot:route:syn12a",
+          "mot:route:syn12b"
+        ],
+        "directions": [
+          {
+            "routeId": "mot:route:syn12a",
+            "headsign": "הארגזים",
+            "originName": "מסוף רידינג",
+            "destinationName": "הארגזים"
+          },
+          {
+            "routeId": "mot:route:syn12b",
+            "headsign": "מסוף רידינג",
+            "originName": "הארגזים",
+            "destinationName": "מסוף רידינג"
+          }
+        ],
+        "area": "תל אביב-יפו",
+        "nearestStop": {
+          "stopId": "mot:stop:13561",
+          "name": "דיזנגוף סנטר/דיזנגוף",
+          "distanceM": 48
+        }
+      },
+      {
+        "lineKey": "5:10039",
+        "shortName": "39",
+        "operatorId": "5",
+        "operatorName": "דן",
+        "mode": "bus",
+        "routeIds": [
+          "mot:route:syn13a",
+          "mot:route:syn13b"
+        ],
+        "directions": [
+          {
+            "routeId": "mot:route:syn13a",
+            "headsign": "מסוף עמידר",
+            "originName": "מסוף רידינג",
+            "destinationName": "מסוף עמידר"
+          },
+          {
+            "routeId": "mot:route:syn13b",
+            "headsign": "מסוף רידינג",
+            "originName": "מסוף עמידר",
+            "destinationName": "מסוף רידינג"
+          }
+        ],
+        "area": "תל אביב-יפו",
+        "nearestStop": {
+          "stopId": "mot:stop:13561",
+          "name": "דיזנגוף סנטר/דיזנגוף",
+          "distanceM": 48
+        }
+      },
+      {
+        "lineKey": "5:10066",
+        "shortName": "66",
+        "operatorId": "5",
+        "operatorName": "דן",
+        "mode": "bus",
+        "routeIds": [
+          "mot:route:syn14a",
+          "mot:route:syn14b"
+        ],
+        "directions": [
+          {
+            "routeId": "mot:route:syn14a",
+            "headsign": "מסוף משה ארנס",
+            "originName": "מסוף רידינג",
+            "destinationName": "מסוף משה ארנס"
+          },
+          {
+            "routeId": "mot:route:syn14b",
+            "headsign": "מסוף רידינג",
+            "originName": "מסוף משה ארנס",
+            "destinationName": "מסוף רידינג"
+          }
+        ],
+        "area": "תל אביב-יפו",
+        "nearestStop": {
+          "stopId": "mot:stop:13560",
+          "name": "דיזנגוף סנטר/טשרניחובסקי",
+          "distanceM": 101
+        }
+      },
+      {
+        "lineKey": "5:10072",
+        "shortName": "72",
+        "operatorId": "5",
+        "operatorName": "דן",
+        "mode": "bus",
+        "routeIds": [
+          "mot:route:syn15a",
+          "mot:route:syn15b"
+        ],
+        "directions": [
+          {
+            "routeId": "mot:route:syn15a",
+            "headsign": "רמת אביב",
+            "originName": "מסוף כרמלית",
+            "destinationName": "רמת אביב"
+          },
+          {
+            "routeId": "mot:route:syn15b",
+            "headsign": "מסוף כרמלית",
+            "originName": "רמת אביב",
+            "destinationName": "מסוף כרמלית"
+          }
+        ],
+        "area": "תל אביב-יפו",
+        "nearestStop": null
+      },
+      {
+        "lineKey": "15:30115",
+        "shortName": "115",
+        "operatorId": "15",
+        "operatorName": "מטרופולין",
+        "mode": "bus",
+        "routeIds": [
+          "mot:route:syn16a",
+          "mot:route:syn16b"
+        ],
+        "directions": [
+          {
+            "routeId": "mot:route:syn16a",
+            "headsign": "מסוף קרית אונו",
+            "originName": "מסוף רידינג",
+            "destinationName": "מסוף קרית אונו"
+          },
+          {
+            "routeId": "mot:route:syn16b",
+            "headsign": "מסוף רידינג",
+            "originName": "מסוף קרית אונו",
+            "destinationName": "מסוף רידינג"
+          }
+        ],
+        "area": "תל אביב-יפו",
+        "nearestStop": {
+          "stopId": "mot:stop:13583",
+          "name": "דיזנגוף סנטר/דיזנגוף",
+          "distanceM": 36
+        }
+      },
+      {
+        "lineKey": "5:10172",
+        "shortName": "172",
+        "operatorId": "5",
+        "operatorName": "דן",
+        "mode": "bus",
+        "routeIds": [
+          "mot:route:syn17a",
+          "mot:route:syn17b"
+        ],
+        "directions": [
+          {
+            "routeId": "mot:route:syn17a",
+            "headsign": "פתח תקווה",
+            "originName": "מסוף רידינג",
+            "destinationName": "פתח תקווה"
+          },
+          {
+            "routeId": "mot:route:syn17b",
+            "headsign": "מסוף רידינג",
+            "originName": "פתח תקווה",
+            "destinationName": "מסוף רידינג"
+          }
+        ],
+        "area": "תל אביב-יפו",
+        "nearestStop": {
+          "stopId": "mot:stop:13583",
+          "name": "דיזנגוף סנטר/דיזנגוף",
+          "distanceM": 36
+        }
+      },
+      {
+        "lineKey": "5:10018",
+        "shortName": "18",
+        "operatorId": "5",
+        "operatorName": "דן",
+        "mode": "bus",
+        "routeIds": [
+          "mot:route:syn18a",
+          "mot:route:syn18b"
+        ],
+        "directions": [
+          {
+            "routeId": "mot:route:syn18a",
+            "headsign": "בת ים",
+            "originName": "רכבת מרכז",
+            "destinationName": "בת ים"
+          },
+          {
+            "routeId": "mot:route:syn18b",
+            "headsign": "רכבת מרכז",
+            "originName": "בת ים",
+            "destinationName": "רכבת מרכז"
+          }
+        ],
+        "area": "תל אביב-יפו",
+        "nearestStop": {
+          "stopId": "mot:stop:13560",
+          "name": "דיזנגוף סנטר/טשרניחובסקי",
+          "distanceM": 101
+        }
+      },
+      {
+        "lineKey": "5:10125",
+        "shortName": "125",
+        "operatorId": "5",
+        "operatorName": "דן",
+        "mode": "bus",
+        "routeIds": [
+          "mot:route:syn19a",
+          "mot:route:syn19b"
+        ],
+        "directions": [
+          {
+            "routeId": "mot:route:syn19a",
+            "headsign": "פתח תקווה",
+            "originName": "מרכז הספורט",
+            "destinationName": "פתח תקווה"
+          },
+          {
+            "routeId": "mot:route:syn19b",
+            "headsign": "מרכז הספורט",
+            "originName": "פתח תקווה",
+            "destinationName": "מרכז הספורט"
+          }
+        ],
+        "area": "תל אביב-יפו",
+        "nearestStop": {
+          "stopId": "mot:stop:49938",
+          "name": "דיזנגוף סנטר/המלך ג'ורג'",
+          "distanceM": 122
+        }
+      },
+      {
+        "lineKey": "5:10128",
+        "shortName": "128",
+        "operatorId": "5",
+        "operatorName": "דן",
+        "mode": "bus",
+        "routeIds": [
+          "mot:route:syn20a",
+          "mot:route:syn20b"
+        ],
+        "directions": [
+          {
+            "routeId": "mot:route:syn20a",
+            "headsign": "בת ים",
+            "originName": "פארק עסקים ירקון",
+            "destinationName": "בת ים"
+          },
+          {
+            "routeId": "mot:route:syn20b",
+            "headsign": "פארק עסקים ירקון",
+            "originName": "בת ים",
+            "destinationName": "פארק עסקים ירקון"
+          }
+        ],
+        "area": "תל אביב-יפו",
+        "nearestStop": {
+          "stopId": "mot:stop:13560",
+          "name": "דיזנגוף סנטר/טשרניחובסקי",
+          "distanceM": 101
+        }
+      },
+      {
+        "lineKey": "5:10014",
+        "shortName": "14",
+        "operatorId": "5",
+        "operatorName": "דן",
+        "mode": "bus",
+        "routeIds": [
+          "mot:route:syn21a",
+          "mot:route:syn21b"
+        ],
+        "directions": [
+          {
+            "routeId": "mot:route:syn21a",
+            "headsign": "בת ים",
+            "originName": "מסוף הלוחמים",
+            "destinationName": "בת ים"
+          },
+          {
+            "routeId": "mot:route:syn21b",
+            "headsign": "מסוף הלוחמים",
+            "originName": "בת ים",
+            "destinationName": "מסוף הלוחמים"
+          }
+        ],
+        "area": "תל אביב-יפו",
+        "nearestStop": {
+          "stopId": "mot:stop:49938",
+          "name": "דיזנגוף סנטר/המלך ג'ורג'",
+          "distanceM": 122
+        }
+      },
+      {
+        "lineKey": "5:10001",
+        "shortName": "1",
+        "operatorId": "5",
+        "operatorName": "דן",
+        "mode": "bus",
+        "routeIds": [
+          "mot:route:syn22a",
+          "mot:route:syn22b"
+        ],
+        "directions": [
+          {
+            "routeId": "mot:route:syn22a",
+            "headsign": "בת ים",
+            "originName": "מסוף רידינג",
+            "destinationName": "בת ים"
+          },
+          {
+            "routeId": "mot:route:syn22b",
+            "headsign": "מסוף רידינג",
+            "originName": "בת ים",
+            "destinationName": "מסוף רידינג"
+          }
+        ],
+        "area": "תל אביב-יפו",
+        "nearestStop": null
+      },
+      {
+        "lineKey": "3:20001",
+        "shortName": "1",
+        "operatorId": "3",
+        "operatorName": "אגד",
+        "mode": "bus",
+        "routeIds": [
+          "mot:route:syn23a",
+          "mot:route:syn23b"
+        ],
+        "directions": [
+          {
+            "routeId": "mot:route:syn23a",
+            "headsign": "מרכזית ירושלים",
+            "originName": "הר נוף",
+            "destinationName": "מרכזית ירושלים"
+          },
+          {
+            "routeId": "mot:route:syn23b",
+            "headsign": "הר נוף",
+            "originName": "מרכזית ירושלים",
+            "destinationName": "הר נוף"
+          }
+        ],
+        "area": "ירושלים",
+        "nearestStop": null
+      }
+    ],
+    "meta": {
+      "requestId": "00000000000000000000000000000000",
+      "generationId": "synthetic-test",
+      "generatedAt": "2026-11-14T09:00:00Z",
+      "dataBuiltAt": "2026-11-14T09:00:00Z",
+      "mode": "fixture",
+      "coverage": {
+        "from": "2026-11-13T00:00:00+02:00",
+        "until": "2027-01-12T00:00:00+02:00"
+      },
+      "freshness": "current",
+      "capabilities": {
+        "realtime": "not_enabled",
+        "alerts": "not_enabled"
+      },
+      "attribution": [
+        "Israel Ministry of Transport",
+        "© OpenStreetMap contributors"
+      ],
+      "rankingPolicy": "synthetic-lines-prefix-v1",
+      "appliedConstraints": {},
+      "warnings": []
+    },
+    "page": {
+      "nextCursor": null
+    }
+  }
+}

@@ -49,7 +49,22 @@ export type ColorToken =
   | "map-road"
   | "map-water"
   | "map-park"
-  | "map-casing";
+  | "map-casing"
+  | "stop-sign"
+  | "stop-sign-edge"
+  | "stop-pole"
+  | "stop-chosen"
+  | "stop-chosen-ring"
+  | "stop-chosen-rim"
+  | "stop-station"
+  | "stop-station-icon"
+  | "stop-tag"
+  | "stop-tag-edge"
+  | "stop-tag-ink"
+  | "stop-tag-chosen"
+  | "stop-tag-chosen-ink"
+  | "stop-group"
+  | "stop-group-ink";
 
 /** Every colour token resolved to its literal value, per theme. */
 export const THEME_COLORS: Record<ThemeName, Record<ColorToken, string>> = {
@@ -98,7 +113,22 @@ export const THEME_COLORS: Record<ThemeName, Record<ColorToken, string>> = {
     "map-road": "#2f2d2a",
     "map-water": "#1c2b33",
     "map-park": "#262d22",
-    "map-casing": "#f4f1ea"
+    "map-casing": "#f4f1ea",
+    "stop-sign": "#d6b55e",
+    "stop-sign-edge": "#1a1917",
+    "stop-pole": "#d6b55e",
+    "stop-chosen": "#f0c94a",
+    "stop-chosen-ring": "#f4f1ea",
+    "stop-chosen-rim": "#f4f1ea",
+    "stop-station": "#7b72cf",
+    "stop-station-icon": "#ffffff",
+    "stop-tag": "#1a1917",
+    "stop-tag-edge": "#45413b",
+    "stop-tag-ink": "#f4f1ea",
+    "stop-tag-chosen": "#f4f1ea",
+    "stop-tag-chosen-ink": "#1a1917",
+    "stop-group": "#f4f1ea",
+    "stop-group-ink": "#1a1917"
   },
   "light": {
     "bg": "#f2f2ee",
@@ -145,6 +175,21 @@ export const THEME_COLORS: Record<ThemeName, Record<ColorToken, string>> = {
     "map-road": "#e2e1db",
     "map-water": "#cfe0ea",
     "map-park": "#dbe6d3",
-    "map-casing": "#ffffff"
+    "map-casing": "#ffffff",
+    "stop-sign": "#e2b84a",
+    "stop-sign-edge": "#1b1a17",
+    "stop-pole": "#8f7120",
+    "stop-chosen": "#f0c94a",
+    "stop-chosen-ring": "#ffffff",
+    "stop-chosen-rim": "#1b1a17",
+    "stop-station": "#7b72cf",
+    "stop-station-icon": "#ffffff",
+    "stop-tag": "#ffffff",
+    "stop-tag-edge": "#d0cdc5",
+    "stop-tag-ink": "#1b1a17",
+    "stop-tag-chosen": "#1b1a17",
+    "stop-tag-chosen-ink": "#ffffff",
+    "stop-group": "#ffffff",
+    "stop-group-ink": "#1b1a17"
   }
 };

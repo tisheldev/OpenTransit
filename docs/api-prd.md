@@ -133,7 +133,7 @@ D3 POST journey planning was accepted September 30. POST reduces coordinates in 
 | `GET /readyz` | None | 200 when usable; otherwise `503 NOT_READY` with safe reason codes (coverage, freshness, probe, engine, reference, search index, geocoder warm-up) | B/C / US10 |
 | `GET /openapi.json`, `GET /docs` | None | Implemented API reference | A / US09 |
 | `GET /v1/status` | None | Capabilities, coverage, safe health | B/C / US08 |
-| `GET /v1/stops` | `near` + radius OR `bbox`, limit/cursor | Stop page; each stop with `mode`, `bearingDegrees`, `bearingSource` (API-C6) | B / US03 |
+| `GET /v1/stops` | `near` + radius OR `bbox`, limit/cursor; with `bbox` an optional `mode` list (`rail`, `light_rail`, `bus`, `other`) | Stop page; each stop with `mode`, `bearingDegrees`, `bearingSource` (API-C6). A `rail`/`light_rail`-only `mode` lists stations (platforms folded into their parent, once) over any box up to the whole country; other filters keep the 100 km² limit | B / US03; stations over a large area (14 Nov) |
 | `GET /v1/stops/{stopId}` | Namespaced stop reference | Stop detail and serving routes; each stop with `mode`, `bearingDegrees`, `bearingSource` (API-C6) | B / US03 |
 | `GET /v1/routes` | At least one of stop/operator/line filter; cursor | Matching route page | B / US07 |
 | `GET /v1/routes/{routeId}` | Namespaced route reference | Metadata and pattern summaries | B / US07 |
@@ -143,6 +143,9 @@ D3 POST journey planning was accepted September 30. POST reduces coordinates in 
 | `GET /v1/departures/nearby` | `near`, `from`, radius ≤ 1 km, stops ≤ 12, perStop ≤ 5, horizon ≤ 180 min | Nearest stops, each with the next departure of each line | Client boards (11 Nov) |
 | `GET /v1/trips/{tripRef}` | Full source trip identity plus service date | Calls (with name, position and platform, API-C1), operator, mode and geometry | B / US06 |
 | `POST /v1/journeys` | Typed locations, time and constraints, optional `excludeTripRefs` | Journey alternatives; transit legs carry platforms (API-C2), intermediate stops and boarding direction/side | A basic; B complete / US01, US05 |
+| `POST /v1/journeys` with `pinnedTrip` | `tripRef`, `boardStopId`, `alightStopId`; `from`, `to` and the time as usual | One journey: the engine's walk to the board stop (arriving by the departure; none within 30 m), then that trip to the alight stop shaped like any transit leg. Warnings `PINNED_TRIP_MISSED_BY_WALK`, `PINNED_TRIP_WALK_UNAVAILABLE` (`no_route`); `404 TRIP_NOT_FOUND`, `422 INVALID_PINNED_TRIP` | "Ride it" (14 Nov) |
+| `GET /v1/lines` | `q` (start of the number, 1-50 characters), optional `lat`+`lon`, limit ≤ 50/cursor | Lines (operator + MOT line code, `lineKey`): exact number first, then longer numbers; nearest stop (2 km) first within each, then by number. Each with routes, directions (headsign, first and last stop), `area` and `nearestStop` | Line search (14 Nov) |
+| `GET /v1/lines/{lineKey}` | A returned `lineKey`, optional `lat`+`lon` | One line, the same item | Line search (14 Nov) |
 | `GET /v1/places` | `q`, `lang`, optional `near`, types, limit | Place candidates | C / US02 |
 | `GET /metrics` (conditional) | Private operator access | Bounded metrics, only if a collector needs them | C / US10 |
 

@@ -1,7 +1,8 @@
 import { useEffect, useId, useMemo, useRef, useState, type FormEvent, type ReactNode } from "react";
-import { usePlaceSearch, PLACES_MIN_CHARS } from "../../api/queries";
+import { LINES_MIN_CHARS, PLACES_MIN_CHARS, useLineSearch, usePlaceSearch } from "../../api/queries";
 import { ApiFailure } from "../../api/result";
-import type { Meta, PlaceCandidate, Places } from "../../api/schemas";
+import type { LinesPage, PlaceCandidate, Places } from "../../api/schemas";
+import { CanvasIcon } from "../../components/canvas";
 import { Icon, type IconName } from "../../components/ds";
 import { Banner, Empty, ErrorState } from "../../components/states";
 import { useI18n } from "../../i18n/I18nProvider";
@@ -14,12 +15,19 @@ import { addFavourite, addRecent, rememberOrigin, saveSlot, storable, useLocalSt
 import { useLocationAvailability } from "../../shell/location";
 import { useSheet } from "../../shell/sheet";
 import type { LocalState, SavedPlace } from "../../storage/local";
-import { candidateKey, choiceFromCandidate, choiceFromPin, isStreetLevel, readableLocality } from "./choice";
+import { useNow } from "../stop/parts";
+import { choiceFromPin } from "./choice";
+import { useHeldNearbyDepartures } from "./heldNearby";
+import { isLineQuery, mixResults, withMoreRow } from "./mixed";
 import { useNearIfGranted } from "./near";
+import { LineRow, MoreLinesRow, PlaceRow, StopRow } from "./rows";
+import "./search.css";
 
 // Where to / Where from — C02 (design: Screens 2; PlaceRow), also used to set Home, Work
-// and a favourite. Place IDs and coordinates never enter the URL: the choice goes to the
-// plan draft (session) or to saved places (local storage).
+// and a favourite; redrawn as board 2 of the stops-and-lines canvas (14 November 2026): one
+// list of places, stops and lines by best match (mixed.ts). Place IDs and coordinates never
+// enter the URL: the choice goes to the plan draft (session) or to saved places (local
+// storage); a line opens #/line/<lineKey>, a stop's clock button #/stop/<id>.
 
 export const SEARCH_DEBOUNCE_MS = 250;
 
@@ -38,12 +46,6 @@ interface RowIcon {
   tint?: "stop" | "rail" | "saved";
 }
 
-const KIND_ICON: Record<PlaceCandidate["kind"], RowIcon> = {
-  stop: { name: "stop", tint: "stop" },
-  station: { name: "train", tint: "rail" },
-  address: { name: "pin" },
-  poi: { name: "pin" },
-};
 const SKELETON_ROWS = 4;
 
 function RowIconBadge({ icon }: { icon: RowIcon }) {
@@ -51,94 +53,6 @@ function RowIconBadge({ icon }: { icon: RowIcon }) {
     <span className={icon.tint ? `ot-row__icon ot-row__icon--${icon.tint}` : "ot-row__icon"}>
       <Icon name={icon.name} />
     </span>
-  );
-}
-
-/** The typed text in bold inside a result's name (design: PlaceRow), first match only. */
-function Highlighted({ text, typed }: { text: string; typed: string }) {
-  const at = typed.length >= PLACES_MIN_CHARS ? text.toLocaleLowerCase().indexOf(typed.toLocaleLowerCase()) : -1;
-  if (at < 0) return <>{text}</>;
-  return (
-    <>
-      {text.slice(0, at)}
-      <mark className="ot-hl">{text.slice(at, at + typed.length)}</mark>
-      {text.slice(at + typed.length)}
-    </>
-  );
-}
-
-/**
- * Parts of a result's subtitle, on one line, joined by a quiet "·" that stays with the
- * part after it. A tag needs no separator.
- */
-function Parts({ children }: { children: Array<{ node: ReactNode; separated: boolean } | null> }) {
-  const parts = children.filter((part) => part !== null);
-  return (
-    <span className="ot-row__sub place-sub">
-      {parts.map((part, index) => (
-        <span key={index} className="place-part">
-          {index > 0 && part.separated && (
-            <span className="place-sep" aria-hidden="true">
-              ·{" "}
-            </span>
-          )}
-          {part.node}
-        </span>
-      ))}
-    </span>
-  );
-}
-
-function ResultRow({
-  candidate,
-  meta,
-  typed,
-  onChoose,
-}: {
-  candidate: PlaceCandidate;
-  meta: Meta;
-  typed: string;
-  onChoose: (choice: PlaceChoice) => void;
-}) {
-  const { t, lang } = useI18n();
-  const locality = readableLocality(candidate.locality);
-  const other = candidate.languageUsed !== lang && /^[a-z]{2}$/.test(candidate.languageUsed);
-  const stopCode = candidate.kind === "stop" || candidate.kind === "station" ? candidate.stopCode : null;
-  // A stop reads "Stop 43073 · street, city"; the code says what it is.
-  const kind =
-    candidate.kind === "stop" && stopCode ? (
-      <bdi className="tabular">{t("place.stopCode", { code: stopCode })}</bdi>
-    ) : (
-      <span className="kind-label">
-        {t(`place.${candidate.kind}`)}
-        {stopCode && (
-          <>
-            {" "}
-            <bdi className="tabular">{stopCode}</bdi>
-          </>
-        )}
-      </span>
-    );
-  return (
-    <li>
-      <button type="button" className="ot-row" onClick={() => onChoose(choiceFromCandidate(candidate, meta))}>
-        <RowIconBadge icon={KIND_ICON[candidate.kind]} />
-        <span className="ot-row__body">
-          <span className="ot-row__title">
-            <bdi lang={other ? candidate.languageUsed : undefined}>
-              <Highlighted text={candidate.displayName} typed={typed} />
-            </bdi>
-          </span>
-          <Parts>
-            {[
-              { node: kind, separated: true },
-              isStreetLevel(candidate) ? { node: <span className="place-tag">{t("place.streetLevel")}</span>, separated: false } : null,
-              locality ? { node: <bdi>{locality}</bdi>, separated: true } : null,
-            ]}
-          </Parts>
-        </span>
-      </button>
-    </li>
   );
 }
 
@@ -292,6 +206,25 @@ function MyLocationRow({ onChoose }: { onChoose: () => void }) {
   );
 }
 
+/**
+ * The header as drawn (board 2): Back, then the field with Clear inside it. The field's
+ * text is set large in the signage numerals when it is a number (a line).
+ */
+function SearchHeader({ children }: { children: ReactNode }) {
+  const { t } = useI18n();
+  return (
+    <div className="sx-head">
+      <button type="button" className="sx-back" aria-label={t("nav.back")} onClick={() => back({ name: "home" })}>
+        <CanvasIcon name="back" />
+      </button>
+      {children}
+    </div>
+  );
+}
+
+/** The fields a line row makes sense for: a journey end (a line opens the line instead). */
+const linesFor = (field: SearchField) => field === "to" || field === "from";
+
 export function SearchScreen({ field }: { field: SearchField }) {
   const { t, lang } = useI18n();
   const { draft, setFrom, setTo } = usePlan();
@@ -304,28 +237,56 @@ export function SearchScreen({ field }: { field: SearchField }) {
   const [mode, setMode] = useState<"search" | "pick">("search");
   const [naming, setNaming] = useState<PlaceChoice | null>(null);
   const [saveFailed, setSaveFailed] = useState(false);
+  const [linesOpen, setLinesOpen] = useState<string | null>(null);
+  const held = useHeldNearbyDepartures();
+  const now = useNow();
 
   const typed = q.trim();
   const debounced = useDebounced(typed, SEARCH_DEBOUNCE_MS);
+  // Places and stops from two characters (the API's minimum); lines from one, when the
+  // text starts with a digit (user, 14 November 2026: a one-character query searches).
+  const placesOn = (text: string) => text.length >= PLACES_MIN_CHARS;
+  const linesOn = (text: string) => linesFor(field) && text.length >= LINES_MIN_CHARS && isLineQuery(text);
   const query = usePlaceSearch(debounced, lang, near);
+  const lineQuery = useLineSearch(debounced, near, linesOn(debounced));
 
   // The pick-on-map start is fixed when picking begins, so the map is not moved under the pin.
   const [focus, setFocus] = useState<MapFocus | null>(null);
   const scene = useMemo(() => ({ ...emptyScene, pick: mode === "pick", camera: mode === "pick" ? ("fit" as const) : ("keep" as const), focus }), [mode, focus]);
   usePublishScene(scene);
 
-  const searching = typed.length >= PLACES_MIN_CHARS;
-  const loading = searching && (debounced !== typed || query.isPending || (query.isFetching && query.isError));
-  const failure = query.error instanceof ApiFailure ? query.error : null;
-  const answer = searching && !loading && query.data ? query.data : null;
+  const searching = placesOn(typed) || linesOn(typed);
+  const placesPending = placesOn(debounced) && (query.isPending || (query.isFetching && query.isError));
+  const linesPending = linesOn(debounced) && lineQuery.isPending;
+  const loading = searching && (debounced !== typed || placesPending || linesPending);
+  const failure = placesOn(debounced) && query.error instanceof ApiFailure ? query.error : null;
+  const lineFailure = linesOn(debounced) && lineQuery.error instanceof ApiFailure ? lineQuery.error : null;
+  const answer = useMemo<Answer | null>(() => {
+    if (!searching || loading) return null;
+    const places = placesOn(debounced) ? (query.data ?? null) : null;
+    const lines = linesOn(debounced) ? (lineQuery.data ?? null) : null;
+    if (places === null && lines === null) return null;
+    return { typed: debounced, places, lines };
+    // placesOn/linesOn read only `field`, which keys this screen.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searching, loading, debounced, query.data, lineQuery.data]);
   // While the next answer loads, the previous one stays (dimmed) instead of a skeleton:
   // no rows jump on every keystroke. Skeleton rows only when there is nothing to show.
-  const [kept, setKept] = useState<Places | null>(null);
+  const [kept, setKept] = useState<Answer | null>(null);
   if (answer && answer !== kept) setKept(answer);
   if (!searching && kept !== null) setKept(null);
   const shown = answer ?? (loading ? kept : null);
   const stale = shown !== null && shown !== answer;
   const skeleton = loading && shown === null;
+
+  const mixed = useMemo(
+    () =>
+      shown
+        ? mixResults({ typed: shown.typed, places: shown.places?.data ?? [], lines: shown.lines?.data ?? [], near })
+        : [],
+    [shown, near],
+  );
+  const list = withMoreRow(mixed, linesOpen === shown?.typed, Boolean(shown?.lines?.page.nextCursor));
 
   const choose = (choice: PlaceChoice | "myLocation") => {
     setSaveFailed(false);
@@ -368,7 +329,9 @@ export function SearchScreen({ field }: { field: SearchField }) {
   if (naming) {
     return (
       <div className="search">
-        <h1>{title}</h1>
+        <SearchHeader>
+          <h1 className="sx-title">{title}</h1>
+        </SearchHeader>
         <NameFavourite
           choice={naming}
           onSave={(label) => {
@@ -389,7 +352,9 @@ export function SearchScreen({ field }: { field: SearchField }) {
   if (mode === "pick") {
     return (
       <div className="search">
-        <h1>{t("search.pickOnMap")}</h1>
+        <SearchHeader>
+          <h1 className="sx-title">{t("search.pickOnMap")}</h1>
+        </SearchHeader>
         <PickOnMap
           onConfirm={choose}
           onCancel={() => {
@@ -403,48 +368,56 @@ export function SearchScreen({ field }: { field: SearchField }) {
   }
 
   const retryAfter = failure?.error.kind === "problem" ? failure.error.retryAfterSeconds : null;
+  const lineRetryAfter = lineFailure?.error.kind === "problem" ? lineFailure.error.retryAfterSeconds : null;
+  const count = list.filter((item) => item.kind !== "more").length;
 
   let live = "";
   if (loading) live = t("search.searching");
-  else if (answer && answer.data.length > 0) live = t("search.results", { count: answer.data.length });
+  else if (answer && count > 0) live = t("search.results", { count });
+
+  const unavailableTypes = shown?.places?.unavailableTypes ?? [];
+  // Only the lines were asked (one digit), and they failed: that is the screen's error.
+  const linesOnlyFailed = lineFailure !== null && !placesOn(debounced);
 
   return (
     <div className="search">
-      <h1>{title}</h1>
-      <div className="search-field">
-        <label htmlFor={inputId} className="visually-hidden">
-          {t("search.input")}
-        </label>
-        <Icon name="search" className="search-field-icon" />
-        <input
-          ref={inputRef}
-          id={inputId}
-          className="search-input"
-          type="search"
-          dir="auto"
-          inputMode="search"
-          enterKeyHint="search"
-          autoComplete="off"
-          spellCheck={false}
-          placeholder={t("search.placeholder")}
-          value={q}
-          onChange={(event) => setQ(event.target.value)}
-          data-autofocus=""
-        />
-        {q !== "" && (
-          <button
-            type="button"
-            className="search-clear"
-            aria-label={t("search.clear")}
-            onClick={() => {
-              setQ("");
-              inputRef.current?.focus();
-            }}
-          >
-            <Icon name="close" />
-          </button>
-        )}
-      </div>
+      {/* The canvas has no visible title for "Where to?": the field says it. */}
+      <h1 className={field === "to" ? "visually-hidden" : "sx-title"}>{title}</h1>
+      <SearchHeader>
+        <div className="sx-field">
+          <label htmlFor={inputId} className="visually-hidden">
+            {t("search.input")}
+          </label>
+          <input
+            ref={inputRef}
+            id={inputId}
+            className={isLineQuery(q) ? "sx-input sx-input--num" : "sx-input"}
+            type="search"
+            dir="auto"
+            inputMode="search"
+            enterKeyHint="search"
+            autoComplete="off"
+            spellCheck={false}
+            placeholder={t("search.placeholder")}
+            value={q}
+            onChange={(event) => setQ(event.target.value)}
+            data-autofocus=""
+          />
+          {q !== "" && (
+            <button
+              type="button"
+              className="sx-clear"
+              aria-label={t("search.clear")}
+              onClick={() => {
+                setQ("");
+                inputRef.current?.focus();
+              }}
+            >
+              <CanvasIcon name="close" />
+            </button>
+          )}
+        </div>
+      </SearchHeader>
 
       <p className="visually-hidden" role="status" aria-live="polite">
         {live}
@@ -478,7 +451,7 @@ export function SearchScreen({ field }: { field: SearchField }) {
       )}
 
       {skeleton && (
-        <ul className="ot-list place-list" aria-hidden="true" data-testid="search-skeleton">
+        <ul className="ot-list place-list sx-list" aria-hidden="true" data-testid="search-skeleton">
           {Array.from({ length: SKELETON_ROWS }, (_, index) => (
             <li key={index} className="ot-row row-skeleton">
               <span className="ot-skel skel-icon" />
@@ -501,25 +474,55 @@ export function SearchScreen({ field }: { field: SearchField }) {
           )}
         </>
       )}
+      {searching && !loading && linesOnlyFailed && (
+        <ErrorState state={lineFailure.state} retryAfterSeconds={lineRetryAfter} onRetry={() => void lineQuery.refetch()} />
+      )}
 
       {shown && (
         <>
-          {!stale && shown.data.length === 0 && shown.unavailableTypes.length === 0 && <Empty kind="noMatches" />}
+          {!stale && count === 0 && unavailableTypes.length === 0 && !failure && !linesOnlyFailed && <Empty kind="noMatches" />}
           <ul
-            className={stale ? "ot-list place-list rows-stale" : "ot-list place-list"}
+            className={stale ? "sx-list rows-stale" : "sx-list"}
             data-testid={stale ? "search-results-previous" : "search-results"}
             aria-busy={stale || undefined}
           >
-            {shown.data.map((candidate, index) => (
-              <ResultRow key={candidateKey(candidate, index)} candidate={candidate} meta={shown.meta} typed={typed} onChoose={choose} />
-            ))}
-            {shown.unavailableTypes.map((type) => (
+            {list.map((item) => {
+              if (item.kind === "more") {
+                return <MoreLinesRow key={item.key} count={item.count} atLeast={item.atLeast} onOpen={() => setLinesOpen(shown.typed)} />;
+              }
+              if (item.kind === "line") return <LineRow key={item.key} line={item.line} />;
+              const candidate = item.candidate;
+              const meta = shown.places!.meta;
+              if (candidate.kind === "stop" || candidate.kind === "station") {
+                return (
+                  <StopRow
+                    key={item.key}
+                    candidate={candidate}
+                    meta={meta}
+                    distance={item.distance}
+                    departures={held.get(candidate.id) ?? null}
+                    now={now}
+                    withDepartures={linesFor(field)}
+                    onChoose={choose}
+                  />
+                );
+              }
+              return <PlaceRow key={item.key} candidate={candidate as GeocodedCandidate} meta={meta} onChoose={choose} />;
+            })}
+            {unavailableTypes.map((type) => (
               <li key={type} className="place-note">
                 <Banner tone="warning" compact role="note">
                   {t("search.categoryUnavailable", { category: t(`place.${type}`) })}
                 </Banner>
               </li>
             ))}
+            {lineFailure && !linesOnlyFailed && (
+              <li className="place-note">
+                <Banner tone="warning" compact role="note">
+                  {t("search.lines.unavailable")}
+                </Banner>
+              </li>
+            )}
           </ul>
         </>
       )}
@@ -531,4 +534,14 @@ export function SearchScreen({ field }: { field: SearchField }) {
       )}
     </div>
   );
+}
+
+/** A place that is not a stop (a loose object's union does not narrow on `kind` alone). */
+type GeocodedCandidate = Extract<PlaceCandidate, { kind: "poi" | "address" }>;
+
+/** One settled answer: the text it answers and what each search returned. */
+interface Answer {
+  typed: string;
+  places: Places | null;
+  lines: LinesPage | null;
 }

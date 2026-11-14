@@ -373,6 +373,18 @@
     "generationId": "85691cd27b536acdab5ccab23d94019ad86d15c5fedf4cf25c5635fd07f92c1a",
     "recordedAt": "2026-09-30T19:16:01.793965+00:00"
   },
+  "synthetic-line": {
+    "provenance": "synthetic",
+    "source": "hand-written to API contract A2 (stops and lines overhaul, 14 November 2026) before the API implemented it; lines, codes, areas and route ids are invented, stop ids and names are the recorded stops around Dizengoff Center (recorded-live-stops-near)",
+    "sourceSha256": "0dbd9d74f8bffcc67b164d1cde1d0e956b57ae46379d311504fbd4e7ffa290da",
+    "sha256Of": "this fixture file itself"
+  },
+  "synthetic-lines": {
+    "provenance": "synthetic",
+    "source": "hand-written to API contract A2 (stops and lines overhaul, 14 November 2026) before the API implemented it; lines, codes, areas and route ids are invented, stop ids and names are the recorded stops around Dizengoff Center (recorded-live-stops-near)",
+    "sourceSha256": "3c166b215f21329ea8f6720fb3831415c516ab00cac286204360b1fc1621c278",
+    "sha256Of": "this fixture file itself"
+  },
   "synthetic-problem-feed-expired": {
     "provenance": "synthetic",
     "source": "services/api/tests/test_reference_api.py::reference_client (fixture mode, synthetic feed, mocked engine)",

@@ -9,4 +9,8 @@ export const he_secondary = {
   "stop.line.endNoHeadsign": "קו {line}, סוף המסלול",
   "stop.direction": "כיוון הנסיעה של קו {line}",
   "stop.scheduled": "זמנים לפי לוח הזמנים",
+  // The map's direction tags (user review, 14 November 2026): one per way out of the stop.
+  "stop.towards": "לכיוון {place}",
+  "stop.wayCount": "{count} קווים בכיוון הזה",
+  "stop.allLines": "כל הקווים",
 } as const;

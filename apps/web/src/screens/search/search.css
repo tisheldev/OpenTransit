@@ -1,0 +1,210 @@
+/* Search — board 2 of the stops-and-lines canvas (14 November 2026). Sizes, radii and type
+   are the canvas's (the header row, .fld, .row, .tx, .nm, .mu, .cs, .ic); colours come
+   from the tokens, which equal its dark values. Logical properties only. */
+
+.search {
+  line-height: 22px;
+}
+
+/* Back, then the field (canvas: 12 px from the start edge, 6 px apart). */
+.sx-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-block: 12px 4px;
+  margin-inline-start: -4px;
+}
+.sx-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 44px;
+  block-size: 44px;
+  flex: none;
+  padding: 0;
+  border: 0;
+  border-radius: 10px;
+  background: none;
+  color: var(--ink);
+  cursor: pointer;
+}
+.sx-title {
+  flex: 1;
+  min-inline-size: 0;
+  margin: 0;
+  font-size: 17px;
+  line-height: 24px;
+  font-weight: 700;
+}
+.search > .sx-title {
+  margin-block: 4px 0;
+}
+
+/* The field (canvas .fld): 52 px, corner 10, sunken, a strong 1 px edge; Clear inside. */
+.sx-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-inline-size: 0;
+  block-size: 52px;
+  padding-block: 0;
+  padding-inline: 14px;
+  border-radius: 10px;
+  background: var(--surface-sunken);
+  border: 1px solid var(--border-strong);
+}
+/* Focus: the edge turns to ink (canvas draws the field at rest; a ring around a field that
+   opens focused would always show). Keyboard focus on the input still reads clearly. */
+.sx-field:focus-within {
+  border-color: var(--focus);
+}
+.sx-input {
+  flex: 1;
+  min-inline-size: 0;
+  block-size: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 17px;
+  line-height: 22px;
+  appearance: none;
+}
+.sx-input:focus,
+.sx-input:focus-visible {
+  outline: none;
+}
+.sx-input::placeholder {
+  color: var(--ink-muted);
+  opacity: 1;
+}
+.sx-input::-webkit-search-cancel-button,
+.sx-input::-webkit-search-decoration {
+  appearance: none;
+  display: none;
+}
+/* A line number is set in the signage numerals (canvas: Barlow Semi Condensed 600 20 px). */
+.sx-input--num {
+  font-family: var(--font-numerals);
+  font-weight: 600;
+  font-size: 20px;
+}
+.sx-clear {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 28px;
+  block-size: 44px;
+  flex: none;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+/* The list (canvas: 8 px under the header) and its rows (.row: 60 px, a hairline under). */
+.sx-list {
+  list-style: none;
+  margin: 0;
+  padding-block: 8px 0;
+  padding-inline: 0;
+}
+.sx-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  inline-size: 100%;
+  min-block-size: 60px;
+  padding-block: 6px;
+  padding-inline: 4px;
+  border: 0;
+  border-block-end: 1px solid var(--hairline);
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  line-height: 22px;
+  text-align: start;
+  cursor: pointer;
+}
+.sx-row:focus-visible,
+.sx-main:focus-visible,
+.sx-clock:focus-visible {
+  outline-offset: -3px;
+}
+/* A stop: the row is two buttons, the stop (sets the journey end) and its departures. */
+.sx-row--stop {
+  min-block-size: 84px;
+  cursor: auto;
+}
+.sx-main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-inline-size: 0;
+  min-block-size: 72px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  line-height: 22px;
+  text-align: start;
+  cursor: pointer;
+}
+.sx-clock {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 44px;
+  block-size: 44px;
+  flex: none;
+  padding: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  background: none;
+  color: var(--ink);
+  cursor: pointer;
+}
+.sx-tx {
+  flex: 1;
+  min-inline-size: 0;
+  display: flex;
+  flex-direction: column;
+}
+.sx-nm {
+  font-weight: 700;
+  font-size: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sx-sub {
+  color: var(--ink-muted);
+  font-size: 13px;
+  line-height: 18px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sx-sub .place-tag {
+  margin-inline-start: 6px;
+}
+.sx-cs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-block-start: 4px;
+  color: var(--ink-muted);
+  font-size: 13px;
+  white-space: nowrap;
+}
+/* "N more lines" (canvas: 48 px, muted 14 px). */
+.sx-more {
+  min-block-size: 48px;
+  color: var(--ink-muted);
+  font-size: 14px;
+}

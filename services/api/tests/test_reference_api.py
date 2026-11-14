@@ -14,12 +14,20 @@ from opentransit.reference import build_reference
 
 
 def reference_client(
-    manifest, engine_route, *, now=None, corrupt=False, engine_down=False, engine=None
+    manifest,
+    engine_route,
+    *,
+    now=None,
+    corrupt=False,
+    engine_down=False,
+    engine=None,
+    feed_builder=synthetic_feed,
+    localities=None,
 ):
-    feed = synthetic_feed(manifest.parent / "feed.zip")
+    feed = feed_builder(manifest.parent / "feed.zip")
     info = json.loads(manifest.read_text(encoding="utf-8"))
     database = manifest.parent / "reference.sqlite"
-    build_reference(feed, database, info["generationId"])
+    build_reference(feed, database, info["generationId"], localities=localities)
     config = manifest.parent / "config.yml"
     config.write_text("synthetic config", encoding="utf-8")
     graph = manifest.parent / "motis"

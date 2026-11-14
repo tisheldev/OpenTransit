@@ -11,17 +11,17 @@ test("Hebrew: To opens focused, results arrive, and a stop opens Compare without
   await page.goto(appPath("#/"));
   await page.getByRole("button", { name: "לאן נוסעים?" }).click();
   await expect(page).toHaveURL(/#\/search\/to$/);
-  const field = page.getByRole("searchbox", { name: "חיפוש כתובת, תחנה או מקום" });
+  const field = page.getByRole("searchbox", { name: "חיפוש מקום, תחנה או קו" });
   await expect(field).toBeFocused();
   await expect(page.getByRole("button", { name: "בחירה במפה" })).toBeVisible();
   await expectNoSeriousAxeViolations(page, "Search, before typing (he)");
   await field.fill("דיזנגוף סנטר");
   const results = page.getByTestId("search-results");
-  await expect(results.getByRole("button").first()).toContainText("דיזנגוף סנטר/דיזנגוף");
-  await expect(results.getByRole("button").first()).toContainText("תחנה");
+  await expect(results.locator(".sx-main").first()).toContainText("דיזנגוף סנטר/דיזנגוף");
+  await expect(results.locator(".sx-main").first()).toContainText("תחנה");
   await expect(page.getByText("5 תוצאות")).toBeAttached();
   await expectNoSeriousAxeViolations(page, "Search, results (he)");
-  await results.getByRole("button").first().click();
+  await results.locator(".sx-main").first().click();
   await expect(page).toHaveURL(/#\/compare$/);
   expect(page.url()).not.toMatch(/mot|stop|32\.0/);
   const draft = await page.evaluate(() => JSON.parse(sessionStorage.getItem("opentransit:plan") ?? "null"));
@@ -34,13 +34,13 @@ test("one clear button inside the field; a stop reads 'stop code · street, city
   await field.fill("דיזנגוף סנטר");
   const clear = page.getByRole("button", { name: "ניקוי החיפוש" });
   await expect(clear).toHaveCount(1);
-  const fieldBox = (await field.boundingBox())!;
+  const fieldBox = (await page.locator(".sx-field").boundingBox())!;
   const clearBox = (await clear.boundingBox())!;
   // Inside the field's box, at its inline end (left in Hebrew).
   expect(clearBox.x).toBeGreaterThanOrEqual(fieldBox.x - 1);
   expect(clearBox.x + clearBox.width).toBeLessThan(fieldBox.x + fieldBox.width / 2);
-  const first = page.getByTestId("search-results").getByRole("button").first();
-  await expect(first.locator(".ot-row__sub")).toHaveText(/^תחנה \d+\s*·\s*\S/);
+  const first = page.getByTestId("search-results").locator(".sx-main").first();
+  await expect(first.locator(".sx-sub")).toHaveText(/^תחנה \d+\s*·\s*\S/);
   await clear.click();
   await expect(field).toHaveValue("");
   await expect(field).toBeFocused();
@@ -128,15 +128,41 @@ test("save mode: setting Home from Search fills the Home chip", async ({ page })
   await expect(page.getByRole("button", { name: "בית", exact: true })).toBeVisible();
 });
 
-test("results end with Choose on map, the typed text in bold", async ({ page }) => {
+test("results end with Choose on map", async ({ page }) => {
   await page.goto(appPath("#/search/to"));
   await page.getByRole("searchbox").fill("דיזנגוף");
-  const first = page.getByTestId("search-results").getByRole("button").first();
-  await expect(first.locator("mark")).toHaveText("דיזנגוף");
+  await expect(page.getByTestId("search-results").getByRole("button").first()).toContainText("דיזנגוף");
   const pick = page.getByRole("button", { name: "בחירה במפה" });
   await expect(pick).toHaveCount(1);
   const results = (await page.getByTestId("search-results").boundingBox())!;
   expect((await pick.boundingBox())!.y).toBeGreaterThanOrEqual(results.y + results.height - 1);
+});
+
+test("a number lists lines from one digit, exact first; a line opens the line (axe)", async ({ page }) => {
+  await page.goto(appPath("#/search/to"));
+  // Back sits beside the field, as drawn: one Back on the screen.
+  await expect(page.getByRole("button", { name: "חזרה" })).toHaveCount(1);
+  await page.getByRole("searchbox").fill("8");
+  const rows = page.getByTestId("search-results").getByRole("button");
+  await expect(rows.first()).toContainText(/^8\s*מסוף רידינג ↔ מסוף הטייסים\s*דן · תל אביב-יפו/);
+  await expect(rows.nth(1)).toContainText(/^8\s*מרכזית המפרץ ↔ בת גלים\s*אגד · חיפה/);
+  await expect(rows.nth(4)).toHaveText("עוד 6 קווים");
+  await expectNoSeriousAxeViolations(page, "Search, lines (he)");
+  await rows.nth(4).click();
+  await expect(rows).toHaveCount(10);
+  await rows.first().click();
+  await expect(page).toHaveURL(/#\/line\/5%3A10008$/);
+});
+
+test("a stop row's clock opens its departures; the row itself still sets the journey end", async ({ page }) => {
+  await page.goto(appPath("#/search/to"));
+  await page.getByRole("searchbox").fill("דיזנגוף סנטר");
+  const clock = page.getByRole("button", { name: "לוח היציאות של דיזנגוף סנטר/דיזנגוף" }).first();
+  const box = (await clock.boundingBox())!;
+  expect(box.width).toBeGreaterThanOrEqual(44);
+  expect(box.height).toBeGreaterThanOrEqual(44);
+  await clock.click();
+  await expect(page).toHaveURL(/#\/stop\/mot%3Astop%3A13583$/);
 });
 
 // Light theme (dark is the default, and what the tests above run in).
@@ -148,7 +174,7 @@ test("light theme: before typing, results, skeleton, empty, partial and error (a
   await expect(page.getByRole("button", { name: "בחירה במפה" })).toBeVisible();
   await expectNoSeriousAxeViolations(page, "Search, before typing, light (he)");
   await page.getByRole("searchbox").fill("דיזנגוף סנטר");
-  await expect(page.getByTestId("search-results").getByRole("button").first()).toContainText("דיזנגוף סנטר/דיזנגוף");
+  await expect(page.getByTestId("search-results").locator(".sx-main").first()).toContainText("דיזנגוף סנטר/דיזנגוף");
   await expectNoSeriousAxeViolations(page, "Search, results, light (he)");
   await page.getByRole("searchbox").fill("zzzz");
   await expect(page.getByText("לא נמצאו תוצאות. נסו לכתוב אחרת.")).toBeVisible();
