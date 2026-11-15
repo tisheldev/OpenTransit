@@ -18,10 +18,15 @@ test.beforeEach(async ({ page }) => {
   await blockExternal(page);
 });
 
-test("Home draws its stops as signs, the nearest one chosen, with a couple of next-line tags", async ({ page }) => {
+test("Home draws only the stops its sheet lists, as signs, the nearest one chosen, with a couple of next-line tags", async ({ page }) => {
   await allowLocation(page);
   await page.goto(appPath("#/"));
-  await expect(layer(page)).toHaveAttribute("data-level", "signs", { timeout: MAP_READY_MS });
+  // Home's framing is neighbourhood zoom: no counts, and no other stop drawn (user, 15 November;
+  // the dots are behind VITE_MAP_STOP_DOTS).
+  await expect(layer(page)).toHaveAttribute("data-level", "grouped", { timeout: MAP_READY_MS });
+  await expect(layer(page).locator(".ot-stop").first()).toBeAttached();
+  await expect(layer(page).locator(".ot-stop-hit--square")).toHaveCount(0);
+  await expect(layer(page).getByRole("button", { name: /תחנות צמודות/ })).toHaveCount(0);
   const chosen = layer(page).locator(".ot-stop--chosen");
   await expect(chosen).toHaveCount(1);
   await expect(chosen).toHaveAttribute("data-stop-id", "mot:stop:13583");
@@ -39,7 +44,7 @@ test("Home draws its stops as signs, the nearest one chosen, with a couple of ne
 });
 
 test("tapping a group zooms in and lists its stops; the picked row is the chosen stop; Back closes it", async ({ page }) => {
-  await allowLocation(page);
+  // Without a location Home opens on its default view at street zoom, where close stops group.
   await page.goto(appPath("#/"));
   await expect(layer(page)).toHaveAttribute("data-level", "signs", { timeout: MAP_READY_MS });
   const group = layer(page).getByRole("button", { name: /^\d+ תחנות צמודות, הקשה פותחת אותן$/ }).first();
@@ -58,6 +63,9 @@ test("tapping a group zooms in and lists its stops; the picked row is the chosen
   await expect(rows.first()).toHaveAttribute("aria-pressed", "true");
   const picked = await layer(page).locator(".ot-stop--chosen").getAttribute("data-stop-id");
   expect(picked).toBeTruthy();
+  // Tags fade while the map moves and return once it settles: check them when shown.
+  await expect(layer(page)).not.toHaveClass(/ot-stops--moving/);
+  for (const tag of await layer(page).locator(".ot-stop-tag:not(.ot-stop-tag--measure)").all()) await expect(tag).toHaveCSS("opacity", "1");
   await expectNoSeriousAxeViolations(page, "Home, a group opened (he)");
 
   // Picking another row makes it the chosen stop.
@@ -75,7 +83,7 @@ test("tapping a group zooms in and lists its stops; the picked row is the chosen
 });
 
 test("a picked row tapped again opens its stop", async ({ page }) => {
-  await allowLocation(page);
+  // Without a location Home opens on its default view at street zoom, where close stops group.
   await page.goto(appPath("#/"));
   await expect(layer(page)).toHaveAttribute("data-level", "signs", { timeout: MAP_READY_MS });
   const group = layer(page).getByRole("button", { name: /תחנות צמודות/ }).first();

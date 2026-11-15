@@ -493,3 +493,20 @@ span.ot-stop-hit {
     display: none;
   }
 }
+
+/* Neighbourhood zoom (user, 15 November 2026): a stop the screen does not feature is a
+   small muted dot, so the map stays readable; it still opens its stop (44 px hit area). */
+.ot-stop-dot {
+  display: block;
+  box-sizing: border-box;
+  inline-size: 6px;
+  block-size: 6px;
+  border-radius: 50%;
+  background: var(--stop-sign);
+  opacity: 0.55;
+}
+.ot-stop-hit:focus-visible > .ot-stop-dot {
+  opacity: 1;
+  outline: 2px solid var(--focus, currentColor);
+  outline-offset: 3px;
+}

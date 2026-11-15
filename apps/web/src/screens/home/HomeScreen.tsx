@@ -2,6 +2,7 @@ import { useEffect, useId, useMemo, useState } from "react";
 import { Icon } from "../../components/ds";
 import { useI18n } from "../../i18n/I18nProvider";
 import { formatDistance } from "../../lib/format";
+import { homeOtherStops } from "../../lib/mapStops";
 import { formatClock } from "../../lib/time";
 import { DEFAULT_CENTER } from "../../map/layers";
 import { emptyScene, usePublishScene, type MapKnownStop, type MapScene, type MapStopNext } from "../../map/scene";
@@ -20,6 +21,7 @@ import { useNow } from "../stop/parts";
 import { usePassengerFix } from "../stop/passenger";
 import { useHomeStops, WALK_RING_METERS } from "./homeStops";
 import { HomeSheet } from "./HomeSheet";
+import { nearLines } from "./nearLines";
 import { type RideOrigin } from "./nextRide";
 import { StopGroupList } from "./StopGroupList";
 import "./home.css";
@@ -161,6 +163,12 @@ export function HomeScreen() {
       next[entry.stop.stopId] = { line: tagLine(line), minutes, text: minutes <= 0 ? t("time.now") : t("stop.minutes", { minutes }) };
     }
     const known: MapKnownStop[] = nearby.all.map(({ stop }) => ({ stopId: stop.stopId, name: stop.name, latitude: stop.latitude, longitude: stop.longitude }));
+    // Below street zoom only the stops the sheet lists are signs (an opened group: its
+    // stops); the rest are not drawn until street zoom (user, 15 November 2026), or are
+    // small dots with the VITE_MAP_STOP_DOTS build flag (src/lib/mapStops.ts).
+    const featured = group
+      ? group.stops.map((stop) => stop.stopId)
+      : [...new Set(nearLines(nearby.all, centre, { trainLabel: t("stop.train"), now }).map((row) => row.stop.stopId))];
     const user = fix ? { position: [fix.longitude, fix.latitude] as [number, number], accuracyMeters: fix.accuracyMeters } : null;
     return {
       ...emptyScene,
@@ -175,6 +183,8 @@ export function HomeScreen() {
       stops: {
         mode: "full",
         chosenStopId: group ? group.picked : (selected?.stopId ?? null),
+        featured,
+        others: homeOtherStops(),
         next,
         known,
         onSelectStop: (stopId) => openStop(stopId),
