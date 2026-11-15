@@ -18,12 +18,14 @@ test.beforeEach(async ({ page }) => {
   await blockExternal(page);
 });
 
-test("Home draws the stops its sheet lists as signs, the nearest one chosen, the rest as dots, with a couple of next-line tags", async ({ page }) => {
+test("Home draws only the stops its sheet lists, as signs, the nearest one chosen, with a couple of next-line tags", async ({ page }) => {
   await allowLocation(page);
   await page.goto(appPath("#/"));
-  // Home's framing is neighbourhood zoom: no counts, the other stops small dots (user, 15 November).
+  // Home's framing is neighbourhood zoom: no counts, and no other stop drawn (user, 15 November;
+  // the dots are behind VITE_MAP_STOP_DOTS).
   await expect(layer(page)).toHaveAttribute("data-level", "grouped", { timeout: MAP_READY_MS });
-  await expect(layer(page).locator(".ot-stop-dot").first()).toBeAttached();
+  await expect(layer(page).locator(".ot-stop").first()).toBeAttached();
+  await expect(layer(page).locator(".ot-stop-hit--square")).toHaveCount(0);
   await expect(layer(page).getByRole("button", { name: /תחנות צמודות/ })).toHaveCount(0);
   const chosen = layer(page).locator(".ot-stop--chosen");
   await expect(chosen).toHaveCount(1);

@@ -1,43 +1,13 @@
-import { useSyncExternalStore } from "react";
-import { loadLocalState, updateLocalState } from "../storage/local";
+// Which stops Home's map draws below street zoom (user, 15 November 2026). On real data the
+// neighbourhood view was crowded ("this way too bloated ... I want to see the map"); the user
+// tried two options behind a Settings switch and chose "only the listed stops": the stops
+// Home's sheet lists and the chosen stop are signs, and no other stop is drawn until street
+// zoom. The other option, every other stop as a small muted dot that opens its stop, is kept
+// behind a build flag so it can come back: VITE_MAP_STOP_DOTS=1.
 
-// Which stops Home's map shows at neighbourhood zoom (user, 15 November 2026, trying the map
-// on real data: "this way too bloated ... I want to see the map"). Below street zoom the
-// stops the sheet lists are always full signs; "dots" draws every other stop as a small
-// muted dot (option A), "listed" draws none (option C). From street zoom every stop is a
-// sign either way. A switch in Settings while the user decides between the two; kept in
-// local settings, absent meaning "dots".
+export type HomeOtherStops = "dots" | "hidden";
 
-export type MapStops = "dots" | "listed";
-export const MAP_STOPS: readonly MapStops[] = ["dots", "listed"];
-export const DEFAULT_MAP_STOPS: MapStops = "dots";
-
-let current: MapStops | undefined;
-const listeners = new Set<() => void>();
-
-export function getMapStops(): MapStops {
-  current ??= loadLocalState().state.settings.mapStops ?? DEFAULT_MAP_STOPS;
-  return current;
-}
-
-/** Choose (Settings): stored locally, and the map redraws at once. */
-export function setMapStops(value: MapStops): void {
-  current = value;
-  updateLocalState((state) => ({ ...state, settings: { ...state.settings, mapStops: value } }));
-  for (const listener of listeners) listener();
-}
-
-/** Forget the in-memory choice (tests; clear all local data). */
-export function resetMapStops(): void {
-  current = undefined;
-  for (const listener of listeners) listener();
-}
-
-function subscribe(listener: () => void): () => void {
-  listeners.add(listener);
-  return () => listeners.delete(listener);
-}
-
-export function useMapStops(): MapStops {
-  return useSyncExternalStore(subscribe, getMapStops, getMapStops);
+/** How Home's map draws the stops its sheet does not list, below street zoom. */
+export function homeOtherStops(flag: string | undefined = import.meta.env.VITE_MAP_STOP_DOTS): HomeOtherStops {
+  return flag === "1" ? "dots" : "hidden";
 }
