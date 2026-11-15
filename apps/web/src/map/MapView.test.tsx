@@ -418,6 +418,43 @@ describe("MapView", () => {
     expect(fits()).toBe(first + 1);
   });
 
+  it("frames the first scene as soon as the map exists, without animation, and does not frame it again on load", async () => {
+    // Home publishes its scene before the map chunk arrives. Framing it only after "load",
+    // with the 400 ms move, meant the first tiles were fetched for the default view and the
+    // stops layer waited for the move to end (about 0.9 s more before the first stops).
+    act(() => setMapScene({ ...emptyScene, route: [bus], camera: "fit", cameraKey: "home:a" }));
+    renderWith(<MapView />);
+    await waitFor(() => expect(fake.state.instances.length).toBeGreaterThan(0));
+    const map = fake.state.instances.at(-1)!;
+    const fits = () => map.calls.filter((call) => call.method === "fitBounds");
+    expect(fits()).toHaveLength(1);
+    expect(fits()[0]!.args[1]).toMatchObject({ duration: 0 });
+    act(() => {
+      map.finishStyle();
+      map.fire("load");
+    });
+    expect(fits()).toHaveLength(1);
+    // Once the map is on screen, a new view is a move again.
+    act(() => setMapScene({ ...emptyScene, route: [bus], camera: "fit", cameraKey: "home:b" }));
+    expect(fits()).toHaveLength(2);
+    expect(fits()[1]!.args[1]).toMatchObject({ duration: 400 });
+  });
+
+  it("an unkeyed first scene is placed before load and not moved again when the map loads", async () => {
+    const focus = { center: [34.7749, 32.0753] as [number, number], zoom: 16 };
+    act(() => setMapScene({ ...emptyScene, camera: "fit", focus }));
+    renderWith(<MapView />);
+    await waitFor(() => expect(fake.state.instances.length).toBeGreaterThan(0));
+    const map = fake.state.instances.at(-1)!;
+    expect(cameraCalls(map)).toHaveLength(1);
+    expect(cameraCalls(map)[0]).toMatchObject({ method: "easeTo", args: [{ center: focus.center, zoom: 16, duration: 0 }] });
+    act(() => {
+      map.finishStyle();
+      map.fire("load");
+    });
+    expect(cameraCalls(map)).toHaveLength(1);
+  });
+
   it("on a wide screen frames the scene beside the side panel (board 8), and a phone layout clears it", async () => {
     renderWith(<MapView />);
     const map = await loadedMap();

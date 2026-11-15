@@ -169,6 +169,12 @@ export default function MapView() {
   /** The theme last asked for, and the theme of the style actually loaded. */
   const requestedTheme = useRef<ThemeName | null>(null);
   const styledTheme = useRef<ThemeName | null>(null);
+  /** The fit scene focused last and when, so a sheet settling just after it re-centres it. */
+  const focusedScene = useRef<{ scene: MapScene | null; at: number }>({ scene: null, at: 0 });
+  /** The camera key last framed (MapScene.cameraKey), so a keyed scene frames once. */
+  const framedKey = useRef<string | null>(null);
+  /** The scene placed before the map loaded, so "load" does not frame it a second time. */
+  const framedBeforeLoad = useRef<MapScene | null>(null);
   useEffect(() => {
     pickRef.current = scene.pick;
     sceneRef.current = scene;
@@ -227,6 +233,10 @@ export default function MapView() {
     loadStyle(map, themeRef.current, () => langRef.current, false, (applied) => (styledTheme.current = applied));
     return () => {
       mapRef.current = null;
+      // A new map frames its scene afresh.
+      framedKey.current = null;
+      framedBeforeLoad.current = null;
+      focusedScene.current = { scene: null, at: 0 };
       setLoaded(false);
       setOverlayMap(null);
       map.remove();
@@ -306,14 +316,19 @@ export default function MapView() {
   }, [sideInset]);
   /** Horizontal offset that centres content in the part of the map beside a side panel. */
   const sideOffset = (sideInset.left - sideInset.right) / 2;
-  const focusedScene = useRef<{ scene: MapScene | null; at: number }>({ scene: null, at: 0 });
-  /** The camera key last framed (MapScene.cameraKey), so a keyed scene frames once. */
-  const framedKey = useRef<string | null>(null);
 
   useEffect(() => {
     const map = mapRef.current;
-    if (!map || !loaded) return;
-    const duration = prefersReducedMotion() ? 0 : 400;
+    if (!map) return;
+    // The first view is placed as soon as the map exists, without a move: the first tiles
+    // are then fetched for it (not for the default view), and the stops layer, which mounts
+    // on "load", reads a settled view at once instead of waiting for a 400 ms move to end.
+    if (loaded && framedBeforeLoad.current === scene) {
+      framedBeforeLoad.current = null;
+      return;
+    }
+    framedBeforeLoad.current = loaded ? null : scene;
+    const duration = !loaded || prefersReducedMotion() ? 0 : 400;
     const bottom = coveredHeight(map, inset);
     if (scene.camera === "fit") {
       const bounds = sceneBounds(scene);
